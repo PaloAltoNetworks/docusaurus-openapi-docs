@@ -1,0 +1,193 @@
+/* stylelint-disable docusaurus/copyright-header */
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: #25c2a0;
+  --ifm-color-primary-dark: rgb(33, 175, 144);
+  --ifm-color-primary-darker: rgb(31, 165, 136);
+  --ifm-color-primary-darkest: rgb(26, 136, 112);
+  --ifm-color-primary-light: rgb(70, 203, 174);
+  --ifm-color-primary-lighter: rgb(102, 212, 189);
+  --ifm-color-primary-lightest: rgb(146, 224, 208);
+  --ifm-code-font-size: 95%;
+}
+
+.docusaurus-highlight-code-line {
+  background-color: rgb(72, 77, 91);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+
+/* overrides */
+:root {
+  --ifm-color-primary: #0f62fe;
+  --ifm-color-primary-hover: #0043ce;
+  --ifm-codeblock-background-color: #f6f8fa;
+
+  --code-blue: #2688fd;
+  --code-green: #35aa4c;
+  --code-orange: #f1710e;
+  --code-red: #ff037f;
+
+  --code-blue: #648bea;
+  --code-green: #39a351;
+  --code-orange: #eb662a;
+  --code-red: #f5003f;
+  --required: #f46679;
+
+  --input-background: var(--ifm-code-background);
+  --input-border: #0f62fe;
+  --button-dissabled: #c6c6c6;
+
+  --monaco-border-color: #dadde1;
+
+  --dropzone-color: rgba(0, 0, 0, 0.5);
+  --dropzone-background-color-hover: rgba(15, 98, 254, 0.2);
+
+  --inverse-color: var(--ifm-color-gray-100);
+}
+html[data-theme='dark'] {
+  --ifm-color-primary: #78a9ff;
+  --ifm-color-primary-hover: #a6c8ff;
+  --ifm-codeblock-background-color: #242526;
+
+  --code-blue: #a4cdfe;
+  --code-green: #85d996;
+  --code-orange: #f8b886;
+
+  /* --code-red: #ff83c0;
+  --code-red: #ec4949; */
+  --code-red: #fc929e;
+  --required: var(--code-red);
+
+  --input-background: #393939;
+  --input-border: white;
+  --button-dissabled: #525252;
+
+  --monaco-border-color: #606770;
+
+  --dropzone-color: rgba(255, 255, 255, 0.3);
+  --dropzone-background-color-hover: rgba(120, 169, 255, 0.2);
+
+  --inverse-color: var(--ifm-color-gray-900);
+}
+
+/* .token.arrow {
+  color: #d9a0f9 !important;
+} */
+
+table tr:nth-child(2n) {
+  background-color: var(--ifm-table-background);
+}
+
+table th {
+  background-color: var(--ifm-table-stripe-background);
+}
+
+.table-markdown > *:only-child {
+  margin-bottom: 0;
+}
+
+.admonition-icon svg {
+  fill: black;
+  stroke: black;
+}
+
+.alert,
+.alert a {
+  color: black;
+}
+
+.alert a {
+  padding: 3px;
+  margin: -3px;
+}
+
+.alert a:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 4px;
+}
+
+.admonition .admonition-heading:last-child h5 {
+  margin-bottom: 0;
+}
+
+.nick-is-deprecated:not(.nick-is-active) {
+  opacity: 0.3;
+  text-decoration: line-through;
+}
+
+.nick-monaco-padding {
+  margin-top: calc(var(--ifm-pre-padding) / 2);
+  border-radius: 4px;
+  padding: var(--ifm-pre-padding);
+  box-shadow: 0 0 0 1px var(--monaco-border-color);
+  border: 2px solid transparent;
+
+  background-color: #ffffff;
+}
+
+html[data-theme='dark'] .nick-monaco-padding {
+  background-color: #18191a;
+}
+
+.nick-monaco-padding-focus {
+  margin-top: calc(var(--ifm-pre-padding) / 2);
+  border-radius: 4px;
+  padding: var(--ifm-pre-padding);
+
+  background-color: #ffffff;
+  border: 2px solid #0f62fe;
+}
+
+html[data-theme='dark'] .nick-monaco-padding-focus {
+  background-color: #18191a;
+  border: 2px solid white;
+}
+
+.nick-floating-button {
+  position: relative;
+}
+
+.nick-floating-button button {
+  position: relative;
+  background: rgba(25, 26, 27, 0.9);
+  border: none;
+  border-radius: var(--ifm-global-radius);
+  color: var(--ifm-color-white);
+  cursor: pointer;
+  outline: none;
+  padding: 0.4rem 0.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out,
+    bottom 0.2s ease-in-out;
+  position: absolute;
+  top: calc(var(--ifm-pre-padding) / 2);
+  right: calc(var(--ifm-pre-padding) / 2);
+}
+
+.nick-floating-button:hover button {
+  visibility: visible;
+  opacity: 1;
+}
+
+.nick-form-item {
+  margin-top: calc(var(--ifm-pre-padding));
+}
+
+.nick-form-item:first-child {
+  margin-top: 0;
+}
+
+.nick-is-active .menu__link {
+  color: var(--ifm-menu-color-active);
+  background: var(--ifm-menu-color-background-active);
+}

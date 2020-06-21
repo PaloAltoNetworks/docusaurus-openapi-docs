@@ -1,0 +1,81 @@
+.buttonGroup {
+  background: var(--ifm-codeblock-background-color);
+  color: var(--ifm-pre-color);
+  font-family: var(--ifm-font-family-monospace);
+  /* font-size: var(--ifm-code-font-size); */
+  /* line-height: var(--ifm-pre-line-height); */
+  /* margin-bottom: calc(var(--ifm-spacing-vertical) / 4); */
+  margin-bottom: 1px;
+  margin-top: 0;
+  border-radius: var(--ifm-pre-border-radius) var(--ifm-pre-border-radius)
+    calc(var(--ifm-pre-border-radius) / 3)
+    calc(var(--ifm-pre-border-radius) / 3);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.buttonGroup button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  cursor: pointer;
+  /* font-size: calc(0.875rem * var(--ifm-button-size-multiplier)); */
+  /* line-height: 1.5; */
+  /* font-weight: var(--ifm-button-font-weight); */
+
+  /* font-size: var(--ifm-code-font-size); */
+  font-size: 13.3333px;
+  line-height: var(--ifm-pre-line-height);
+  font-weight: var(--ifm-font-weight-semibold);
+
+  padding: calc(
+      var(--ifm-button-padding-vertical) * var(--ifm-button-size-multiplier)
+    )
+    calc(
+      var(--ifm-button-padding-horizontal) * var(--ifm-button-size-multiplier)
+    );
+
+  text-align: center;
+
+  transition: color var(--ifm-button-transition-duration)
+      cubic-bezier(0.08, 0.52, 0.52, 1),
+    background var(--ifm-button-transition-duration)
+      cubic-bezier(0.08, 0.52, 0.52, 1),
+    border-color var(--ifm-button-transition-duration)
+      cubic-bezier(0.08, 0.52, 0.52, 1);
+  -webkit-user-select: none;
+  user-select: none;
+  white-space: nowrap;
+
+  background: transparent;
+
+  color: var(--ifm-menu-color);
+  border: 0px solid transparent;
+  /* border-radius: var(--ifm-pre-border-radius); */
+  border-radius: 0.25rem;
+
+  display: block;
+  width: 100%;
+
+  /* margin: 2px; */
+  margin: 0.25rem;
+  margin-right: 0;
+}
+
+.buttonGroup button:last-child {
+  margin-right: 0.25rem;
+}
+
+.buttonGroup button:hover {
+  background: var(--ifm-menu-color-background-active);
+}
+
+.buttonGroup button:focus {
+  outline: 0;
+}
+
+.buttonGroup button.selected {
+  background: var(--ifm-menu-color-background-active);
+  color: var(--ifm-menu-color-active);
+}
