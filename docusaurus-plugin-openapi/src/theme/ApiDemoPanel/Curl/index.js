@@ -1,12 +1,11 @@
 import React, { useRef, useState, useEffect } from "react";
 import Highlight, { defaultProps } from "prism-react-renderer";
-
 import codegen from "postman-code-generators";
-
 import { useSelector } from "react-redux";
 
+import { buildPostmanRequest } from "./../build-postman-request";
+
 import styles from "./styles.module.css";
-import { buildPostmanRequest } from "./../../build-postman-request";
 
 const globalOptions = {
   followRedirect: true,

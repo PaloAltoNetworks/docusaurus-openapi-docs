@@ -1,12 +1,12 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
 
 export const types = {
-  updateParam: 'UPDATE_PARAM',
-  setResponse: 'SET_RESPONSE',
-  setBody: 'SET_BODY',
-  setForm: 'SET_FORM',
-  setAccept: 'SET_ACCEPT',
-  setContentType: 'SET_CONTENT_TYPE',
+  updateParam: "UPDATE_PARAM",
+  setResponse: "SET_RESPONSE",
+  setBody: "SET_BODY",
+  setForm: "SET_FORM",
+  setAccept: "SET_ACCEPT",
+  setContentType: "SET_CONTENT_TYPE",
 };
 
 export function useActions() {

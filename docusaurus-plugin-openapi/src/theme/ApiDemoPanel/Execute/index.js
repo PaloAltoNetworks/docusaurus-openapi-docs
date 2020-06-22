@@ -1,10 +1,11 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React from "react";
+import { useSelector } from "react-redux";
 
-import styles from './styles.module.css';
-import { useActions } from './../../redux/actions';
-import { convert } from './util';
-import { buildPostmanRequest } from './../../build-postman-request';
+import { useActions } from "./../redux/actions";
+import { convert } from "./util";
+import { buildPostmanRequest } from "./../build-postman-request";
+
+import styles from "./styles.module.css";
 
 function isRequestComplete(params) {
   for (let paramList of Object.values(params)) {

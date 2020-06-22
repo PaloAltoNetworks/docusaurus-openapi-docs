@@ -1,8 +1,8 @@
-import React from 'react';
-import FormSelect from './../FormSelect';
-import { useSelector } from 'react-redux';
-import { useActions } from './../../redux/actions';
-import FormItem from './../FormItem';
+import React from "react";
+import FormSelect from "./../FormSelect";
+import { useSelector } from "react-redux";
+import { useActions } from "./../redux/actions";
+import FormItem from "./../FormItem";
 
 function Accept() {
   const acceptOptions = useSelector((state) => state.acceptOptions);

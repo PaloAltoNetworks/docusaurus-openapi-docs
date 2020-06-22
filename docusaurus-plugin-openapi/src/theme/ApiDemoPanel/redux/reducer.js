@@ -1,5 +1,5 @@
-import produce from 'immer';
-import { types } from './actions';
+import produce from "immer";
+import { types } from "./actions";
 
 const reducer = produce((draft, action) => {
   switch (action.type) {

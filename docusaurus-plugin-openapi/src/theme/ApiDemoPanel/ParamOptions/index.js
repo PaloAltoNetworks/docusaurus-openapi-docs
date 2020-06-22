@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
-import { useSelector } from 'react-redux';
-import { useActions } from './../../redux/actions';
-import FormMultiSelect from './../FormMultiSelect';
-import FormTextInput from './../FormTextInput';
+import { useSelector } from "react-redux";
+import { useActions } from "./../redux/actions";
+import FormMultiSelect from "./../FormMultiSelect";
+import FormTextInput from "./../FormTextInput";
 
-import styles from './styles.module.css';
-import FormSelect from './../FormSelect';
-import FormItem from './../FormItem';
+import styles from "./styles.module.css";
+import FormSelect from "./../FormSelect";
+import FormItem from "./../FormItem";
 
 function ParamOption({ param }) {
-  if (param.schema.type === 'array' && param.schema.items.enum) {
+  if (param.schema.type === "array" && param.schema.items.enum) {
     return <ParamMultiSelectFormItem param={param} />;
   }
 
-  if (param.schema.type === 'array') {
+  if (param.schema.type === "array") {
     return <ParamArrayFormItem param={param} />;
   }
 
@@ -22,7 +22,7 @@ function ParamOption({ param }) {
     return <ParamSelectFormItem param={param} />;
   }
 
-  if (param.schema.type === 'boolean') {
+  if (param.schema.type === "boolean") {
     return <ParamBooleanFormItem param={param} />;
   }
 
@@ -76,9 +76,9 @@ function ParamOptions() {
           >
             <span
               style={{
-                width: '1.5em',
-                display: 'inline-block',
-                textAlign: 'center',
+                width: "1.5em",
+                display: "inline-block",
+                textAlign: "center",
               }}
             >
               <span
@@ -87,9 +87,9 @@ function ParamOptions() {
                 <div>
                   <svg
                     style={{
-                      fill: 'currentColor',
-                      width: '10px',
-                      height: '10px',
+                      fill: "currentColor",
+                      width: "10px",
+                      height: "10px",
                     }}
                     height="16"
                     viewBox="0 0 16 16"
@@ -105,8 +105,8 @@ function ParamOptions() {
               </span>
             </span>
             {showOptional
-              ? 'Hide optional parameters'
-              : 'Show optional parameters'}
+              ? "Hide optional parameters"
+              : "Show optional parameters"}
           </button>
 
           <div
@@ -135,13 +135,13 @@ function uuidv4() {
 }
 
 function ArrayItem({ param, onChange }) {
-  if (param.schema.items.type === 'boolean') {
+  if (param.schema.items.type === "boolean") {
     return (
       <FormSelect
-        options={['---', 'true', 'false']}
+        options={["---", "true", "false"]}
         onChange={(e) => {
           const val = e.target.value;
-          onChange(val === '---' ? undefined : val);
+          onChange(val === "---" ? undefined : val);
         }}
       />
     );
@@ -202,7 +202,7 @@ function ParamArrayFormItem({ param }) {
   return (
     <>
       {items.map((item) => (
-        <div key={item.id} style={{ display: 'flex' }}>
+        <div key={item.id} style={{ display: "flex" }}>
           <ArrayItem param={param} onChange={handleChangeItem(item)} />
           <button
             className={styles.buttonDelete}
@@ -236,12 +236,12 @@ function ParamSelectFormItem({ param }) {
 
   return (
     <FormSelect
-      options={['---', ...param.schema.enum]}
+      options={["---", ...param.schema.enum]}
       onChange={(e) => {
         const val = e.target.value;
         updateParam({
           ...param,
-          value: val === '---' ? undefined : val,
+          value: val === "---" ? undefined : val,
         });
       }}
     />
@@ -253,12 +253,12 @@ function ParamBooleanFormItem({ param }) {
 
   return (
     <FormSelect
-      options={['---', 'true', 'false']}
+      options={["---", "true", "false"]}
       onChange={(e) => {
         const val = e.target.value;
         updateParam({
           ...param,
-          value: val === '---' ? undefined : val,
+          value: val === "---" ? undefined : val,
         });
       }}
     />

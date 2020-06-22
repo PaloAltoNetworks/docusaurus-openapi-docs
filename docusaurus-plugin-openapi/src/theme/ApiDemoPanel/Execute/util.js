@@ -3,12 +3,12 @@ async function loadImage(content) {
     const reader = new FileReader();
 
     reader.onabort = () => {
-      console.log('file reading was aborted');
+      console.log("file reading was aborted");
       reject();
     };
 
     reader.onerror = () => {
-      console.log('file reading has failed');
+      console.log("file reading has failed");
       reject();
     };
 
@@ -107,22 +107,22 @@ export async function convert(request, _body) {
   let myBody;
   if (body !== undefined && Object.keys(body).length > 0) {
     switch (body.mode) {
-      case 'urlencoded': {
+      case "urlencoded": {
         myBody = new URLSearchParams();
         body.urlencoded.forEach((data) => {
           myBody.append(data.key, data.value);
         });
         break;
       }
-      case 'raw': {
+      case "raw": {
         myBody = body.raw.toString();
         break;
       }
-      case 'formdata': {
+      case "formdata": {
         myBody = new FormData();
 
         body.formdata.forEach((data) => {
-          if (data.type === 'file') {
+          if (data.type === "file") {
             // TODO: implement.
             // const fileContent = await loadImage(_body.content)
             // myBody.append(data.key, );
@@ -132,7 +132,7 @@ export async function convert(request, _body) {
         });
         break;
       }
-      case 'file': {
+      case "file": {
         myBody = await loadImage(_body.content);
         break;
       }

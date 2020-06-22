@@ -1,11 +1,11 @@
-import React from 'react';
-import VSCode from './../VSCode';
-import FormTextInput from './../FormTextInput';
-import FormFileUpload from './../FormFileUpload';
-import { sampleFromSchema, createXMLExample } from './../../x-utils';
-import { useSelector } from 'react-redux';
-import { useActions } from './../../redux/actions';
-import FormItem from './../FormItem';
+import React from "react";
+import VSCode from "./../VSCode";
+import FormTextInput from "./../FormTextInput";
+import FormFileUpload from "./../FormFileUpload";
+import { sampleFromSchema, createXMLExample } from "./x-utils";
+import { useSelector } from "react-redux";
+import { useActions } from "./../redux/actions";
+import FormItem from "./../FormItem";
 
 function Body() {
   const contentType = useSelector((state) => state.contentType);
@@ -39,18 +39,18 @@ function Body() {
   }
 
   const schema = requestBodyMetadata?.content?.[contentType]?.schema;
-  if (schema.format === 'binary') {
+  if (schema.format === "binary") {
     return (
       <FormItem label="Body">
         <FormFileUpload
-          placeholder={schema.description || 'Body'}
+          placeholder={schema.description || "Body"}
           onChange={(file) => {
             if (file === undefined) {
               setBody(undefined);
               return;
             }
             setBody({
-              type: 'file',
+              type: "file",
               src: `/path/to/${file.name}`,
               content: file,
             });
@@ -61,25 +61,25 @@ function Body() {
   }
 
   if (
-    (contentType === 'multipart/form-data' ||
-      contentType === 'application/x-www-form-urlencoded') &&
-    requestBodyMetadata?.content?.[contentType]?.schema.type === 'object'
+    (contentType === "multipart/form-data" ||
+      contentType === "application/x-www-form-urlencoded") &&
+    requestBodyMetadata?.content?.[contentType]?.schema.type === "object"
   ) {
     return (
       <div className="nick-form-item">
         <code>Body</code>
         <div
           style={{
-            marginTop: 'calc(var(--ifm-pre-padding) / 2)',
-            borderRadius: '4px',
-            padding: 'var(--ifm-pre-padding)',
-            border: '1px solid var(--monaco-border-color)',
+            marginTop: "calc(var(--ifm-pre-padding) / 2)",
+            borderRadius: "4px",
+            padding: "var(--ifm-pre-padding)",
+            border: "1px solid var(--monaco-border-color)",
           }}
         >
           {Object.entries(
             requestBodyMetadata?.content?.[contentType]?.schema.properties
           ).map(([key, val]) => {
-            if (val.format === 'binary') {
+            if (val.format === "binary") {
               return (
                 <FormItem key={key} label={key}>
                   <FormFileUpload
@@ -92,7 +92,7 @@ function Body() {
                       setForm({
                         key: key,
                         value: {
-                          type: 'file',
+                          type: "file",
                           src: `/path/to/${file.name}`,
                           content: file,
                         },
@@ -119,25 +119,25 @@ function Body() {
     );
   }
 
-  let language = 'plaintext';
-  let exampleBodyString = 'body content';
+  let language = "plaintext";
+  let exampleBodyString = "body content";
 
-  if (contentType === 'application/json') {
+  if (contentType === "application/json") {
     exampleBodyString = JSON.stringify(
       sampleFromSchema(
-        requestBodyMetadata?.content?.['application/json']?.schema
+        requestBodyMetadata?.content?.["application/json"]?.schema
       ),
       null,
       2
     );
-    language = 'json';
+    language = "json";
   }
 
-  if (contentType === 'application/xml') {
+  if (contentType === "application/xml") {
     exampleBodyString = createXMLExample(
-      requestBodyMetadata?.content?.['application/xml']?.schema
-    ).replace(/\t/g, '  ');
-    language = 'xml';
+      requestBodyMetadata?.content?.["application/xml"]?.schema
+    ).replace(/\t/g, "  ");
+    language = "xml";
   }
 
   return (

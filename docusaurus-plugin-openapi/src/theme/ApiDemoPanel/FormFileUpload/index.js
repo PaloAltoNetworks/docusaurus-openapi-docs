@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import MagicDropzone from 'react-magic-dropzone';
+import MagicDropzone from "react-magic-dropzone";
 
-import styles from './styles.module.css';
+import styles from "./styles.module.css";
 
 function RenderPreview({ file }) {
   switch (file.type) {
-    case 'image/png':
-    case 'image/jpeg':
-    case 'image/jpg':
-    case 'image/svg+xml':
+    case "image/png":
+    case "image/jpeg":
+    case "image/jpg":
+    case "image/svg+xml":
       return (
         <img
           style={{
-            borderRadius: '4px',
+            borderRadius: "4px",
           }}
           src={file.preview}
           alt=""
@@ -23,12 +23,12 @@ function RenderPreview({ file }) {
       return (
         <div
           style={{
-            display: 'flex',
-            alignItems: 'center',
+            display: "flex",
+            alignItems: "center",
             minWidth: 0,
           }}
         >
-          <svg viewBox="0 0 100 120" style={{ width: '50px', height: '60px' }}>
+          <svg viewBox="0 0 100 120" style={{ width: "50px", height: "60px" }}>
             <path
               fillRule="evenodd"
               fill="#b3beca"
@@ -65,7 +65,7 @@ function FormFileUpload({ placeholder, onChange }) {
   return (
     <div
       className="nick-floating-button"
-      style={{ marginTop: 'calc(var(--ifm-pre-padding) / 2)' }}
+      style={{ marginTop: "calc(var(--ifm-pre-padding) / 2)" }}
     >
       <MagicDropzone
         className={hover ? styles.dropzoneHover : styles.dropzone}
