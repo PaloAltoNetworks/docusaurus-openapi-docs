@@ -1,8 +1,11 @@
 {
   "name": "docusaurus-plugin-openapi",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Docs content plugin for Docusaurus",
   "main": "lib/index.js",
+  "files": [
+    "/lib"
+  ],
   "scripts": {
     "build": "./scripts/build.ts",
     "watch": "./scripts/build.ts --watch"
