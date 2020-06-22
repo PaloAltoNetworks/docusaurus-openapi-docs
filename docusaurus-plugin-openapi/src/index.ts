@@ -20,7 +20,7 @@ import { PluginOptions, LoadedContent } from "./types";
 
 // @ts-ignore
 import { dereference } from "./x-dereference";
-import { sampleFromSchema } from "./x-utils";
+import { sampleFromSchema } from "./x-createExample";
 
 import importFresh from "import-fresh";
 

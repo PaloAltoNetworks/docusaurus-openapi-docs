@@ -4,8 +4,8 @@
   "description": "Docs content plugin for Docusaurus",
   "main": "lib/index.js",
   "scripts": {
-    "tsc": "tsc",
-    "watch": "tsc --watch"
+    "build": "./scripts/build.ts",
+    "watch": "./scripts/build.ts --watch"
   },
   "publishConfig": {
     "access": "public"
