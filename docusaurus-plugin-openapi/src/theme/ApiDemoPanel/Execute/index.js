@@ -2,8 +2,8 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 import { useActions } from "./../redux/actions";
-import { convert } from "./util";
-import { buildPostmanRequest } from "./../build-postman-request";
+import makeRequest from "./makeRequest";
+import buildPostmanRequest from "./../buildPostmanRequest";
 
 function isRequestComplete(params) {
   for (let paramList of Object.values(params)) {
@@ -50,7 +50,7 @@ function Execute() {
       style={{ height: "48px", marginBottom: "var(--ifm-spacing-vertical)" }}
       disabled={!finishedRequest}
       onClick={async () => {
-        const res = await convert(postmanRequest, body);
+        const res = await makeRequest(postmanRequest, body);
         setResponse(res);
       }}
     >

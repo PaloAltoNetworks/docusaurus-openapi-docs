@@ -21,7 +21,7 @@ async function loadImage(content) {
   });
 }
 
-export async function convert(request, _body) {
+async function makeRequest(request, _body) {
   const headers = request.toJSON().header;
 
   let myHeaders = new Headers();
@@ -151,3 +151,5 @@ export async function convert(request, _body) {
     response.text()
   );
 }
+
+export default makeRequest;

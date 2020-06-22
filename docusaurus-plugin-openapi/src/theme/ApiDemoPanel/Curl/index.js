@@ -4,7 +4,7 @@ import codegen from "postman-code-generators";
 import { useSelector } from "react-redux";
 
 import FloatingButton from "./../FloatingButton";
-import { buildPostmanRequest } from "./../build-postman-request";
+import buildPostmanRequest from "./../buildPostmanRequest";
 
 import styles from "./styles.module.css";
 

@@ -125,7 +125,7 @@ function setBody(clonedPostman, body) {
   }
 }
 
-export function buildPostmanRequest(
+function buildPostmanRequest(
   postman,
   {
     queryParams,
@@ -156,3 +156,5 @@ export function buildPostmanRequest(
 
   return clonedPostman;
 }
+
+export default buildPostmanRequest;
