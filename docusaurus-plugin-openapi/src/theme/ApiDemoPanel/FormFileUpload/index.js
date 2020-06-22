@@ -71,10 +71,12 @@ function FormFileUpload({ placeholder, onChange }) {
         onDragEnter={() => setHover(true)}
         onDragLeave={() => setHover(false)}
         multiple={false}
+        style={{ marginTop: "calc(var(--ifm-pre-padding) / 2)" }}
       >
         {file ? (
           <>
             <button
+              style={{ marginTop: "calc(var(--ifm-pre-padding) / 2)" }}
               onClick={(e) => {
                 e.stopPropagation();
                 setAndNotifyFile(undefined);

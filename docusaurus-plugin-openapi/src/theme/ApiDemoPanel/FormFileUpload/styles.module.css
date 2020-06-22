@@ -27,12 +27,21 @@
   padding: var(--ifm-pre-padding);
   font-size: var(--ifm-code-font-size);
   border: 2px dashed var(--ifm-color-primary);
-  background-color: var(--openapi-dropzone-background-color-hover);
+
+  background: linear-gradient(
+      var(--openapi-dropzone-hover-shim),
+      var(--openapi-dropzone-hover-shim)
+    ),
+    linear-gradient(var(--ifm-color-primary), var(--ifm-color-primary));
 }
 
 .dropzone:hover {
   border: 2px dashed var(--ifm-color-primary);
-  background-color: var(--openapi-dropzone-background-color-hover);
+  background: linear-gradient(
+      var(--openapi-dropzone-hover-shim),
+      var(--openapi-dropzone-hover-shim)
+    ),
+    linear-gradient(var(--ifm-color-primary), var(--ifm-color-primary));
 }
 
 .dropzoneContent {

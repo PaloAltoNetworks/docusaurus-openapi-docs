@@ -17,7 +17,7 @@
   --openapi-monaco-border-color: #dadde1;
 
   --openapi-dropzone-color: rgba(0, 0, 0, 0.5);
-  --openapi-dropzone-background-color-hover: rgba(15, 98, 254, 0.2);
+  --openapi-dropzone-hover-shim: rgba(235, 237, 240, 0.8);
 
   --openapi-inverse-color: var(--ifm-color-gray-100);
 }
@@ -39,7 +39,7 @@ html[data-theme="dark"] {
   --openapi-monaco-border-color: #606770;
 
   --openapi-dropzone-color: rgba(255, 255, 255, 0.3);
-  --openapi-dropzone-background-color-hover: rgba(120, 169, 255, 0.2);
+  --openapi-dropzone-hover-shim: rgba(57, 57, 57, 0.8);
 
   --openapi-inverse-color: var(--ifm-color-gray-900);
 }
