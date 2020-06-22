@@ -53,14 +53,16 @@
   border: 0px solid transparent;
   /* border-radius: var(--ifm-pre-border-radius); */
 
-  border-radius: calc(var(--openapi-card-border-radius) - 0.25rem);
+  --margin: 0.25rem;
+
+  border-radius: calc(var(--margin));
   /* border-radius: 0.25rem; */
 
   display: block;
   width: 100%;
 
   /* margin: 2px; */
-  margin: 0.25rem;
+  margin: var(--margin);
   margin-right: 0;
 }
 

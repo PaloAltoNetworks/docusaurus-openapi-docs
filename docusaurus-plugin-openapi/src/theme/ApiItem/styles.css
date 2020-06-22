@@ -6,8 +6,8 @@
   --openapi-required: #f46679;
 
   --openapi-card-background-color: #f6f8fa;
-  /* --openapi-card-border-radius: var(--ifm-pre-border-radius); */
-  --openapi-card-border-radius: var(--ifm-card-border-radius);
+  --openapi-card-border-radius: var(--ifm-pre-border-radius);
+  /* --openapi-card-border-radius: var(--ifm-card-border-radius); */
 
   --openapi-input-background: var(--ifm-code-background);
   --openapi-input-border: var(--ifm-color-primary);
