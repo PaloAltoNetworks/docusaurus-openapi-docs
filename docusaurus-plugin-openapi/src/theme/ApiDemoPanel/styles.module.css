@@ -3,8 +3,8 @@
 }
 
 .optionsPanel {
-  background: var(--ifm-codeblock-background-color);
-  border-radius: var(--ifm-pre-border-radius);
+  background: var(--openapi-card-background-color);
+  border-radius: var(--openapi-card-border-radius);
   color: var(--ifm-pre-color);
   line-height: var(--ifm-pre-line-height);
   margin-bottom: var(--ifm-spacing-vertical);

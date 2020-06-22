@@ -3,6 +3,7 @@ import Highlight, { defaultProps } from "prism-react-renderer";
 import codegen from "postman-code-generators";
 import { useSelector } from "react-redux";
 
+import FloatingButton from "./../FloatingButton";
 import { buildPostmanRequest } from "./../build-postman-request";
 
 import styles from "./styles.module.css";
@@ -62,111 +63,49 @@ const languageTheme = {
     color: "var(--ifm-code-color)",
   },
   styles: [
-    // {
-    //   types: ['changed'],
-    //   style: {
-    //     color: 'rgb(162, 191, 252)',
-    //     fontStyle: 'italic',
-    //   },
-    // },
-    // {
-    //   types: ['deleted'],
-    //   style: {
-    //     color: 'rgba(239, 83, 80, 0.56)',
-    //     fontStyle: 'italic',
-    //   },
-    // },
     {
       types: ["inserted", "attr-name"],
       style: {
-        color: "var(--code-green)",
-        // color: 'rgb(173, 219, 103)',
-        // fontStyle: 'italic',
+        color: "var(--openapi-code-green)",
       },
     },
-    // {
-    //   types: ['comment'],
-    //   style: {
-    //     color: 'rgb(99, 119, 119)',
-    //     fontStyle: 'italic',
-    //   },
-    // },
+
     {
       types: ["string", "url"],
       style: {
-        color: "var(--code-green)",
-        // color: 'rgb(173, 219, 103)',
+        color: "var(--openapi-code-green)",
       },
     },
-    // {
-    //   types: ['variable'],
-    //   style: {
-    //     color: 'rgb(214, 222, 235)',
-    //   },
-    // },
-    // {
-    //   types: ['number'],
-    //   style: {
-    //     color: 'rgb(247, 140, 108)',
-    //   },
-    // },
     {
       types: ["builtin", "char", "constant", "function"],
       style: {
-        // color: 'rgb(130, 170, 255)',
-        color: "var(--code-blue)",
+        color: "var(--openapi-code-blue)",
       },
     },
     {
-      // This was manually added after the auto-generation
-      // so that punctuations are not italicised
-      types: ["punctuation", "operator"], // +operator
+      types: ["punctuation", "operator"],
       style: {
-        // color: 'rgb(199, 146, 234)',
         color: "#7f7f7f",
       },
     },
-    // {
-    //   types: ['selector', 'doctype'],
-    //   style: {
-    //     color: 'rgb(199, 146, 234)',
-    //     fontStyle: 'italic',
-    //   },
-    // },
     {
       types: ["class-name"],
       style: {
-        // color: 'rgb(255, 203, 139)',
-        color: "var(--code-orange)",
+        color: "var(--openapi-code-orange)",
       },
     },
     {
-      types: ["tag", "arrow", "keyword"], // -operator, +arrow
+      types: ["tag", "arrow", "keyword"],
       style: {
-        // arrow is actually handled globally
-        // color: 'rgb(127, 219, 202)',
         color: "#d9a0f9",
       },
     },
     {
       types: ["boolean"],
       style: {
-        // color: 'rgb(255, 88, 116)',
-        color: "var(--code-red)",
+        color: "var(--openapi-code-red)",
       },
     },
-    // {
-    //   types: ['property'],
-    //   style: {
-    //     color: 'rgb(128, 203, 196)',
-    //   },
-    // },
-    // {
-    //   types: ['namespace'],
-    //   style: {
-    //     color: 'rgb(178, 204, 214)',
-    //   },
-    // },
   ],
 };
 
@@ -267,15 +206,14 @@ function Curl() {
         language={languageSet[language].highlight}
       >
         {({ className, tokens, getLineProps, getTokenProps }) => (
-          <div className="nick-floating-button">
-            <button onClick={handleCurlCopy}>{copyText}</button>
+          <FloatingButton onClick={handleCurlCopy} label={copyText}>
             <pre
               className={className}
               style={{
-                background: "var(--ifm-codeblock-background-color)",
+                background: "var(--openapi-card-background-color)",
                 paddingRight: "60px",
                 borderRadius:
-                  "calc(var(--ifm-pre-border-radius) / 3) calc(var(--ifm-pre-border-radius) / 3) var(--ifm-pre-border-radius) var(--ifm-pre-border-radius)",
+                  "2px 2px var(--openapi-card-border-radius) var(--openapi-card-border-radius)",
               }}
             >
               <code ref={ref}>
@@ -292,7 +230,7 @@ function Curl() {
                 ))}
               </code>
             </pre>
-          </div>
+          </FloatingButton>
         )}
       </Highlight>
     </>

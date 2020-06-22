@@ -1,5 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
+
+import FloatingButton from "./../FloatingButton";
 import { useActions } from "./../redux/actions";
 
 function Response() {
@@ -16,16 +18,16 @@ function Response() {
   } catch {}
 
   return (
-    <div className="nick-floating-button">
-      <button onClick={() => clearResponse()}>Clear</button>
+    <FloatingButton onClick={() => clearResponse()} label="Clear">
       <pre
         style={{
-          background: "var(--ifm-codeblock-background-color)",
+          background: "var(--openapi-card-background-color)",
+          borderRadius: "var(--openapi-card-border-radius)",
         }}
       >
         {prettyResponse || "No Response"}
       </pre>
-    </div>
+    </FloatingButton>
   );
 }
 

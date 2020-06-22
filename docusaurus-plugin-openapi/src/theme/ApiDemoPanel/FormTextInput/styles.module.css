@@ -1,7 +1,7 @@
 .inputBase {
   margin-top: calc(var(--ifm-pre-padding) / 2);
   /* height: 40px; */
-  background-color: var(--input-background);
+  background-color: var(--openapi-input-background);
   border: none;
   outline: none;
   width: 100%;
@@ -17,5 +17,5 @@
 }
 
 .input:focus {
-  box-shadow: inset 0px 0px 0px 2px var(--input-border);
+  box-shadow: inset 0px 0px 0px 2px var(--openapi-input-border);
 }

@@ -11,6 +11,7 @@ import StatusCodesTable from "@theme/ApiStatusCodesTable";
 import RequestBodyTable from "@theme/ApiRequestBodyTable";
 
 import styles from "./styles.module.css";
+import "./styles.css";
 
 function ApiItem({ openapi }) {
   const { siteConfig = {} } = useDocusaurusContext();
@@ -49,7 +50,7 @@ function ApiItem({ openapi }) {
                   <header>
                     <h1 className={styles.docTitle}>{summary}</h1>
                   </header>
-                  <div className="markdown">
+                  <div className={"markdown " + styles.markdown}>
                     {deprecated && (
                       <div className="admonition admonition-caution alert alert--warning">
                         <div className="admonition-heading">

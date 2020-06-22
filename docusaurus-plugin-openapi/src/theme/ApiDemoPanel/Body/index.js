@@ -68,14 +68,13 @@ function Body() {
     requestBodyMetadata?.content?.[contentType]?.schema.type === "object"
   ) {
     return (
-      <div className="nick-form-item">
-        <code>Body</code>
+      <FormItem label="Body">
         <div
           style={{
             marginTop: "calc(var(--ifm-pre-padding) / 2)",
             borderRadius: "4px",
             padding: "var(--ifm-pre-padding)",
-            border: "1px solid var(--monaco-border-color)",
+            border: "1px solid var(--openapi-monaco-border-color)",
           }}
         >
           {Object.entries(
@@ -117,7 +116,7 @@ function Body() {
             );
           })}
         </div>
-      </div>
+      </FormItem>
     );
   }
 

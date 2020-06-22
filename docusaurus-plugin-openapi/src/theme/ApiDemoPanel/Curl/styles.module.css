@@ -1,5 +1,5 @@
 .buttonGroup {
-  background: var(--ifm-codeblock-background-color);
+  background: var(--openapi-card-background-color);
   color: var(--ifm-pre-color);
   font-family: var(--ifm-font-family-monospace);
   /* font-size: var(--ifm-code-font-size); */
@@ -7,9 +7,8 @@
   /* margin-bottom: calc(var(--ifm-spacing-vertical) / 4); */
   margin-bottom: 1px;
   margin-top: 0;
-  border-radius: var(--ifm-pre-border-radius) var(--ifm-pre-border-radius)
-    calc(var(--ifm-pre-border-radius) / 3)
-    calc(var(--ifm-pre-border-radius) / 3);
+  border-radius: var(--openapi-card-border-radius)
+    var(--openapi-card-border-radius) 2px 2px;
   display: flex;
   justify-content: flex-end;
 }
@@ -53,7 +52,9 @@
   color: var(--ifm-menu-color);
   border: 0px solid transparent;
   /* border-radius: var(--ifm-pre-border-radius); */
-  border-radius: 0.25rem;
+
+  border-radius: calc(var(--openapi-card-border-radius) - 0.25rem);
+  /* border-radius: 0.25rem; */
 
   display: block;
   width: 100%;

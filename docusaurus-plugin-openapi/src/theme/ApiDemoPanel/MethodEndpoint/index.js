@@ -5,13 +5,13 @@ import { useSelector } from "react-redux";
 function colorForMethod(method) {
   switch (method.toLowerCase()) {
     case "get":
-      return "var(--code-blue)";
+      return "var(--openapi-code-blue)";
     case "put":
-      return "var(--code-orange)";
+      return "var(--openapi-code-orange)";
     case "post":
-      return "var(--code-green)";
+      return "var(--openapi-code-green)";
     case "delete":
-      return "var(--code-red)";
+      return "var(--openapi-code-red)";
     default:
       return undefined;
   }
@@ -25,7 +25,8 @@ function MethodEndpoint() {
     <pre
       style={{
         marginTop: "3.5em",
-        background: "var(--ifm-codeblock-background-color)",
+        background: "var(--openapi-card-background-color)",
+        borderRadius: "var(--openapi-card-border-radius)",
       }}
     >
       <span style={{ color: colorForMethod(method) }}>

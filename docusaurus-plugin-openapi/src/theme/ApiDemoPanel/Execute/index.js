@@ -5,8 +5,6 @@ import { useActions } from "./../redux/actions";
 import { convert } from "./util";
 import { buildPostmanRequest } from "./../build-postman-request";
 
-import styles from "./styles.module.css";
-
 function isRequestComplete(params) {
   for (let paramList of Object.values(params)) {
     for (let param of paramList) {
@@ -46,7 +44,8 @@ function Execute() {
 
   return (
     <button
-      className={styles.executeButton}
+      className="button button--block button--primary"
+      style={{ height: "48px", marginBottom: "var(--ifm-spacing-vertical)" }}
       disabled={!finishedRequest}
       onClick={async () => {
         const res = await convert(postmanRequest, body);

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import MagicDropzone from "react-magic-dropzone";
 
 import styles from "./styles.module.css";
+import FloatingButton from "../FloatingButton";
 
 function RenderPreview({ file }) {
   switch (file.type) {
@@ -63,10 +64,7 @@ function FormFileUpload({ placeholder, onChange }) {
   }
 
   return (
-    <div
-      className="nick-floating-button"
-      style={{ marginTop: "calc(var(--ifm-pre-padding) / 2)" }}
-    >
+    <FloatingButton>
       <MagicDropzone
         className={hover ? styles.dropzoneHover : styles.dropzone}
         onDrop={handleDrop}
@@ -90,7 +88,7 @@ function FormFileUpload({ placeholder, onChange }) {
           <div className={styles.dropzoneContent}>{placeholder}</div>
         )}
       </MagicDropzone>
-    </div>
+    </FloatingButton>
   );
 }
 

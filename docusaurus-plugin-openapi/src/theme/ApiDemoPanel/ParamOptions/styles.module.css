@@ -86,7 +86,7 @@
   padding: 0 12px;
 
   margin-top: calc(var(--ifm-pre-padding) / 2);
-  background-color: var(--input-background);
+  background-color: var(--openapi-input-background);
   border: none;
   outline: none;
   color: var(--ifm-pre-color);
@@ -99,7 +99,7 @@
 }
 
 .buttonDelete:active {
-  box-shadow: inset 0px 0px 0px 2px var(--input-border);
+  box-shadow: inset 0px 0px 0px 2px var(--openapi-input-border);
 }
 
 .buttonThin {
@@ -122,8 +122,8 @@
   white-space: nowrap;
 
   background-color: transparent;
-  color: var(--input-border);
-  border: 1px solid var(--input-border);
+  color: var(--openapi-input-border);
+  border: 1px solid var(--openapi-input-border);
   border-radius: var(--ifm-pre-border-radius);
   /* height: 48px; */
   padding: 3px 60px 3px 12px;
@@ -134,8 +134,8 @@
 }
 
 .buttonThin:hover {
-  color: var(--inverse-color);
-  background-color: var(--input-border);
+  color: var(--openapi-inverse-color);
+  background-color: var(--openapi-input-border);
 }
 
 .buttonThin:focus {
@@ -143,14 +143,14 @@
 }
 
 .buttonThin:active {
-  box-shadow: inset 0 0 0 1px var(--input-border),
-    inset 0 0 0 2px var(--inverse-color);
+  box-shadow: inset 0 0 0 1px var(--openapi-input-border),
+    inset 0 0 0 2px var(--openapi-inverse-color);
 }
 
 .inputBase {
   margin-top: calc(var(--ifm-pre-padding) / 2);
   /* height: 40px; */
-  background-color: var(--input-background);
+  background-color: var(--openapi-input-background);
   border: none;
   outline: none;
   width: 100%;
@@ -166,7 +166,7 @@
 }
 
 .input:focus {
-  box-shadow: inset 0px 0px 0px 2px var(--input-border);
+  box-shadow: inset 0px 0px 0px 2px var(--openapi-input-border);
 }
 
 .showOptions {

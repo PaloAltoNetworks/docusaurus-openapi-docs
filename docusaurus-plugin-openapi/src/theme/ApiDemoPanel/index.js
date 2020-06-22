@@ -35,7 +35,9 @@ function ApiDemoPanel({ item }) {
       </div>
 
       <Curl />
+
       <Execute />
+
       <Response />
     </Provider>
   );

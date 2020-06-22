@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Editor, { monaco } from "@monaco-editor/react";
+import useThemeContext from "@theme/hooks/useThemeContext";
+
+import styles from "./styles.module.css";
 
 function initMonaco(theme) {
   const BRIGHT = theme === "dark" ? "f5f6f7" : "1c1e21";
@@ -51,15 +54,14 @@ function initMonaco(theme) {
 function VSCode({ value, language, onChange }) {
   const [focused, setFocused] = useState(false);
 
+  const { isDarkTheme } = useThemeContext();
+
   useEffect(() => {
-    // TODO: theme.
-    initMonaco("dark");
-  }, []);
+    initMonaco(isDarkTheme ? "dark" : "light");
+  }, [isDarkTheme]);
 
   return (
-    <div
-      className={focused ? "nick-monaco-padding-focus" : "nick-monaco-padding"}
-    >
+    <div className={focused ? styles.monacoFocus : styles.monaco}>
       <Editor
         value={value}
         language={language}

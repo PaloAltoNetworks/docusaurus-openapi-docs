@@ -1,11 +1,11 @@
-import React from 'react';
-import MD from 'react-markdown';
+import React from "react";
+import MD from "react-markdown";
 
-import styles from './styles.module.css';
+import styles from "./styles.module.css";
 
 function parseFinalSchema(schema) {
   if (schema.$ref) {
-    return schema.$ref.replace('#/components/schemas/', '');
+    return schema.$ref.replace("#/components/schemas/", "");
   }
   if (schema.format) {
     return schema.format;
@@ -14,8 +14,8 @@ function parseFinalSchema(schema) {
 }
 
 function getSchemaName(schema) {
-  if (schema.type === 'array') {
-    return parseFinalSchema(schema.items) + '[]';
+  if (schema.type === "array") {
+    return parseFinalSchema(schema.items) + "[]";
   }
 
   return parseFinalSchema(schema);
@@ -31,10 +31,10 @@ function ParamsTable({ parameters, type }) {
   }
   return (
     <>
-      <table style={{ display: 'table' }}>
+      <table style={{ display: "table" }}>
         <thead>
           <tr>
-            <th style={{ textAlign: 'left' }}>
+            <th style={{ textAlign: "left" }}>
               {type.charAt(0).toUpperCase() + type.slice(1)} Parameters
             </th>
           </tr>
@@ -45,20 +45,20 @@ function ParamsTable({ parameters, type }) {
               <tr key={`${param.in}-${param.name}`}>
                 <td>
                   <code>{param.name}</code>
-                  <span style={{ opacity: '0.6' }}>
-                    {' '}
+                  <span style={{ opacity: "0.6" }}>
+                    {" "}
                     {getSchemaName(param.schema)}
                   </span>
                   {param.required && (
                     <>
-                      {<span style={{ opacity: '0.6' }}> — </span>}
+                      {<span style={{ opacity: "0.6" }}> — </span>}
                       <strong
                         style={{
-                          fontSize: 'var(--ifm-code-font-size)',
-                          color: 'var(--required)',
+                          fontSize: "var(--ifm-code-font-size)",
+                          color: "var(--openapi-required)",
                         }}
                       >
-                        {' '}
+                        {" "}
                         REQUIRED
                       </strong>
                     </>

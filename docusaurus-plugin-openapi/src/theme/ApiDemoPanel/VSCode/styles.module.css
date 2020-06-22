@@ -1,0 +1,19 @@
+.monacoBase {
+  margin-top: calc(var(--ifm-pre-padding) / 2);
+  border-radius: 4px;
+  padding: var(--ifm-pre-padding);
+  background-color: var(--openapi-monaco-background-color);
+}
+
+.monaco {
+  composes: monacoBase;
+
+  box-shadow: 0 0 0 1px var(--openapi-monaco-border-color);
+  border: 2px solid transparent;
+}
+
+.monacoFocus {
+  composes: monacoBase;
+
+  border: 2px solid var(--openapi-input-border);
+}
