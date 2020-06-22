@@ -11,16 +11,14 @@ import admonitions from "remark-admonitions";
 import { normalizeUrl, docuHash } from "@docusaurus/utils";
 import { LoadContext, Plugin } from "@docusaurus/types";
 
-// @ts-ignore
+// @ts-ignore - openapi-to-postmanv2 doesn't have types.
 import Converter from "openapi-to-postmanv2";
-// @ts-ignore
 import sdk from "postman-collection";
 
 import { PluginOptions, LoadedContent } from "./types";
 
-// @ts-ignore
 import { dereference } from "./x-dereference";
-import { sampleFromSchema } from "./x-createExample";
+import { sampleFromSchema } from "./createExample";
 
 import importFresh from "import-fresh";
 
@@ -93,7 +91,7 @@ export default function pluginContentDocs(
           // don't mutate.
           { type: "json", data: JSON.parse(JSON.stringify(openapiData)) },
           {},
-          // @ts-ignore
+
           (_, conversionResult) => {
             if (!conversionResult.result) {
               reject(conversionResult.reason);
@@ -102,13 +100,13 @@ export default function pluginContentDocs(
               const myCollection = new sdk.Collection(
                 conversionResult.output[0].data
               );
-              // @ts-ignore
+
               myCollection.forEachItem((item) => {
                 const method = item.request.method.toLowerCase();
                 const path =
                   "/" +
                   item.request.url.path
-                    // @ts-ignore
+
                     .map((p) => {
                       if (p.startsWith(":")) {
                         return `{${p.slice(1)}}`;
@@ -233,27 +231,6 @@ export default function pluginContentDocs(
       const docsBaseRoute = normalizeUrl([baseUrl, routeBasePath]);
       const pathx = docsBaseRoute === "/" ? "" : docsBaseRoute;
 
-      // const x = {
-      //   id: "doc2",
-      //   isDocsHomePage: false,
-      //   title: "Document Number 2",
-      //   description:
-      //     "This is a link to another document. This is a link to an external page.",
-      //   source: "@site/docs/doc2.md",
-      //   permalink: "/docs/doc2",
-      //   editUrl:
-      //     "https://github.com/facebook/docusaurus/edit/master/website/docs/doc2.md",
-      //   sidebar: "someSidebar",
-      //   previous: {
-      //     title: "Style Guide",
-      //     permalink: "/docs/",
-      //   },
-      //   next: {
-      //     title: "This is Document Number 3",
-      //     permalink: "/docs/doc3",
-      //   },
-      // };
-
       const promises = order
         .map((section) => {
           return section.items.map(async (item) => {
@@ -275,8 +252,6 @@ export default function pluginContentDocs(
         .flat();
 
       const routes = await Promise.all(promises);
-
-      // console.log(routes);
 
       const permalinkToSidebar = routes.reduce((acc, item) => {
         acc[item.path] = "sidebar";
@@ -307,105 +282,7 @@ export default function pluginContentDocs(
         },
       });
 
-      // addRoute({
-      //   path: normalizeUrl([baseUrl, routeBasePath]),
-      //   component: "@theme/FunThing",
-      //   modules: {
-      //     openapi: openapiDataPath,
-      //   },
-      //   exact: true,
-      // });
-
       return;
-
-      // if (!content || Object.keys(content.docsMetadata).length === 0) {
-      //   return;
-      // }
-
-      // const aliasedSource = (source: string) =>
-      //   `~docs/${path.relative(dataDir, source)}`;
-
-      // const createDocsBaseMetadata = (version?: string): DocsBaseMetadata => {
-      //   const { docsSidebars, permalinkToSidebar, versionToSidebars } = content;
-      //   const neededSidebars: Set<string> =
-      //     versionToSidebars[version!] || new Set();
-
-      //   return {
-      //     docsSidebars: version
-      //       ? pick(docsSidebars, Array.from(neededSidebars))
-      //       : docsSidebars,
-      //     permalinkToSidebar: version
-      //       ? pickBy(permalinkToSidebar, (sidebar) =>
-      //           neededSidebars.has(sidebar)
-      //         )
-      //       : permalinkToSidebar,
-      //     version,
-      //   };
-      // };
-
-      // const genRoutes = async (
-      //   metadataItems: Metadata[]
-      // ): Promise<RouteConfig[]> => {
-      //   const routes = await Promise.all(
-      //     metadataItems.map(async (metadataItem) => {
-      //       await createData(
-      //         // Note that this created data path must be in sync with
-      //         // metadataPath provided to mdx-loader.
-      //         `${docuHash(metadataItem.source)}.json`,
-      //         JSON.stringify(metadataItem, null, 2)
-      //       );
-
-      //       return {
-      //         path: metadataItem.permalink,
-      //         component: docItemComponent,
-      //         exact: true,
-      //         modules: {
-      //           content: metadataItem.source,
-      //         },
-      //       };
-      //     })
-      //   );
-
-      //   return routes.sort((a, b) =>
-      //     a.path > b.path ? 1 : b.path > a.path ? -1 : 0
-      //   );
-      // };
-
-      // // This is the base route of the document root (for a doc given version)
-      // // (/docs, /docs/next, /docs/1.0 etc...)
-      // // The component applies the layout and renders the appropriate doc
-      // const addBaseRoute = async (
-      //   docsBaseRoute: string,
-      //   docsBaseMetadata: DocsBaseMetadata,
-      //   routes: RouteConfig[],
-      //   priority?: number
-      // ) => {
-      //   const docsBaseMetadataPath = await createData(
-      //     `${docuHash(normalizeUrl([docsBaseRoute, ":route"]))}.json`,
-      //     JSON.stringify(docsBaseMetadata, null, 2)
-      //   );
-
-      //   // Important: the layout component should not end with /,
-      //   // as it conflicts with the home doc
-      //   // Workaround fix for https://github.com/facebook/docusaurus/issues/2917
-      //   const path = docsBaseRoute === "/" ? "" : docsBaseRoute;
-
-      //   addRoute({
-      //     path,
-      //     exact: false, // allow matching /docs/* as well
-      //     component: docLayoutComponent, // main docs component (DocPage)
-      //     routes, // subroute for each doc
-      //     modules: {
-      //       docsMetadata: aliasedSource(docsBaseMetadataPath),
-      //     },
-      //     priority,
-      //   });
-      // };
-
-      // const routes = await genRoutes(Object.values(content.docsMetadata));
-      // const docsBaseMetadata = createDocsBaseMetadata();
-      // const docsBaseRoute = normalizeUrl([baseUrl, routeBasePath]);
-      // return addBaseRoute(docsBaseRoute, docsBaseMetadata, routes);
     },
 
     async routesLoaded(routes) {

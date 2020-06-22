@@ -415,6 +415,13 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.0.13.tgz#ee1128e881b874c371374c1f72201893616417c9"
   integrity sha512-rouEWBImiRaSJsVA+ITTFM6ZxibuAlTuNOCyxVbwreu6k6+ujs7DfnU9o+PShFhET78pMBl3eH+AGSI5eOTkPA==
 
+"@types/postman-collection@^3.5.3":
+  version "3.5.3"
+  resolved "https://registry.yarnpkg.com/@types/postman-collection/-/postman-collection-3.5.3.tgz#0da86c20baa88c313db17ecd120bbd571b4e8b27"
+  integrity sha512-6JiuPKuakwA7YEucOWoTblPtCOAHD4Y42u79fvBPDPtFahMgfHb8T1Q1+CmMxwKykcuKmFOmAMQhYwL9kaHSfw==
+  dependencies:
+    "@types/node" "*"
+
 "@types/shelljs@^0.8.8":
   version "0.8.8"
   resolved "https://registry.yarnpkg.com/@types/shelljs/-/shelljs-0.8.8.tgz#e439c69929b88a2c8123c1a55e09eb708315addf"
