@@ -5,6 +5,7 @@ function init({
   requestBody = {},
   responses = {},
   postman,
+  jsonRequestBodyExample,
 }) {
   const { content = {} } = requestBody;
 
@@ -37,6 +38,7 @@ function init({
   });
 
   return {
+    jsonRequestBodyExample: jsonRequestBodyExample,
     requestBodyMetadata: requestBody, // TODO: no...
     acceptOptions: acceptArray,
     contentTypeOptions: contentTypeArray,

@@ -2,7 +2,6 @@ import React from "react";
 import VSCode from "./../VSCode";
 import FormTextInput from "./../FormTextInput";
 import FormFileUpload from "./../FormFileUpload";
-import { sampleFromSchema, createXMLExample } from "./x-utils";
 import { useSelector } from "react-redux";
 import { useActions } from "./../redux/actions";
 import FormItem from "./../FormItem";
@@ -10,6 +9,9 @@ import FormItem from "./../FormItem";
 function Body() {
   const contentType = useSelector((state) => state.contentType);
   const requestBodyMetadata = useSelector((state) => state.requestBodyMetadata);
+  const jsonRequestBodyExample = useSelector(
+    (state) => state.jsonRequestBodyExample
+  );
   const { setBody, setForm } = useActions();
 
   // Lot's of possible content-types:
@@ -123,20 +125,13 @@ function Body() {
   let exampleBodyString = "body content";
 
   if (contentType === "application/json") {
-    exampleBodyString = JSON.stringify(
-      sampleFromSchema(
-        requestBodyMetadata?.content?.["application/json"]?.schema
-      ),
-      null,
-      2
-    );
+    if (jsonRequestBodyExample) {
+      exampleBodyString = JSON.stringify(jsonRequestBodyExample, null, 2);
+    }
     language = "json";
   }
 
   if (contentType === "application/xml") {
-    exampleBodyString = createXMLExample(
-      requestBodyMetadata?.content?.["application/xml"]?.schema
-    ).replace(/\t/g, "  ");
     language = "xml";
   }
 

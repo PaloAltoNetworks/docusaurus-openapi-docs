@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "docusaurus start",
+    "start:watch": "nodemon --watch \"./docusaurus-plugin-openapi/lib/**/*.*\" --exec \"yarn start --no-open\"",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy"
@@ -26,5 +27,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
   }
 }

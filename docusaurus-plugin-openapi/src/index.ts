@@ -20,6 +20,7 @@ import { PluginOptions, LoadedContent } from "./types";
 
 // @ts-ignore
 import { dereference } from "./x-dereference";
+import { sampleFromSchema } from "./x-utils";
 
 import importFresh from "import-fresh";
 
@@ -197,6 +198,16 @@ export default function pluginContentDocs(
 
       const order = organizeSpec(dereference(postmanSpec));
 
+      order.forEach((x) => {
+        x.items.forEach((y) => {
+          if (y.requestBody?.content?.["application/json"]?.schema) {
+            y.jsonRequestBodyExample = sampleFromSchema(
+              y.requestBody.content["application/json"].schema
+            );
+          }
+        });
+      });
+
       const sidebar = order.map((x, i) => {
         return {
           collapsed: true,
@@ -264,7 +275,7 @@ export default function pluginContentDocs(
 
       const routes = await Promise.all(promises);
 
-      console.log(routes);
+      // console.log(routes);
 
       const permalinkToSidebar = routes.reduce((acc, item) => {
         acc[item.path] = "sidebar";
