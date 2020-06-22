@@ -26,6 +26,7 @@ function Execute() {
   const contentType = useSelector((state) => state.contentType);
   const body = useSelector((state) => state.body);
   const accept = useSelector((state) => state.accept);
+  const endpoint = useSelector((state) => state.endpoint);
 
   const params = useSelector((state) => state.params);
   const finishedRequest = isRequestComplete(params);
@@ -40,6 +41,7 @@ function Execute() {
     accept,
     headerParams,
     body,
+    endpoint,
   });
 
   return (

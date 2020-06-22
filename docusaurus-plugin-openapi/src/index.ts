@@ -257,6 +257,7 @@ export default function pluginContentDocs(
       const promises = order
         .map((section) => {
           return section.items.map(async (item) => {
+            item.servers = openapiData.servers;
             const openapiDataPath = await createData(
               `bloop-bleep-${item.hashId}.json`,
               JSON.stringify(item)

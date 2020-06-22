@@ -19,7 +19,7 @@ function colorForMethod(method) {
 
 function MethodEndpoint() {
   const method = useSelector((state) => state.method);
-  const endpoint = useSelector((state) => state.endpoint);
+  const path = useSelector((state) => state.path);
 
   return (
     <pre
@@ -32,7 +32,7 @@ function MethodEndpoint() {
       <span style={{ color: colorForMethod(method) }}>
         {method.toUpperCase()}
       </span>{" "}
-      <span>{endpoint.replace(/{([a-z0-9-_]+)}/gi, ":$1")}</span>
+      <span>{path.replace(/{([a-z0-9-_]+)}/gi, ":$1")}</span>
     </pre>
   );
 }

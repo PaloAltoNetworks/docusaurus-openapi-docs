@@ -30,6 +30,10 @@ const reducer = produce((draft, action) => {
       draft.accept = action.accept;
       break;
     }
+    case types.setEndpoint: {
+      draft.endpoint = action.endpoint;
+      break;
+    }
     case types.setContentType: {
       draft.contentType = action.contentType;
       break;

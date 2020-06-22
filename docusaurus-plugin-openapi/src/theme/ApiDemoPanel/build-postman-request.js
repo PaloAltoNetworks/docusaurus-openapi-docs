@@ -135,11 +135,16 @@ export function buildPostmanRequest(
     accept,
     headerParams,
     body,
+    endpoint,
   }
 ) {
   const clonedPostman = cloneDeep(postman);
 
-  clonedPostman.url.host = [window.location.origin];
+  if (endpoint) {
+    clonedPostman.url.host = [endpoint];
+  } else {
+    clonedPostman.url.host = [window.location.origin];
+  }
 
   setQueryParams(clonedPostman, queryParams);
   setPathParams(clonedPostman, pathParams);

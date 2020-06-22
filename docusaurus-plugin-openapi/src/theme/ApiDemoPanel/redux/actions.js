@@ -7,6 +7,7 @@ export const types = {
   setForm: "SET_FORM",
   setAccept: "SET_ACCEPT",
   setContentType: "SET_CONTENT_TYPE",
+  setEndpoint: "SET_ENDPOINT",
 };
 
 export function useActions() {
@@ -40,9 +41,14 @@ export function useActions() {
     dispatch({ type: types.setContentType, contentType });
   }
 
+  function setEndpoint(endpoint) {
+    dispatch({ type: types.setEndpoint, endpoint });
+  }
+
   return {
     setAccept,
     setContentType,
+    setEndpoint,
     updateParam,
     setResponse,
     clearResponse,

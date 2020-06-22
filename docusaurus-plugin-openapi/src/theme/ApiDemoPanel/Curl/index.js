@@ -121,6 +121,7 @@ function Curl() {
   const contentType = useSelector((state) => state.contentType);
   const body = useSelector((state) => state.body);
   const accept = useSelector((state) => state.accept);
+  const endpoint = useSelector((state) => state.endpoint);
   const postman = useSelector((state) => state.postman);
 
   const [codeText, setCodeText] = useState("");
@@ -134,6 +135,7 @@ function Curl() {
       accept,
       headerParams,
       body,
+      endpoint,
     });
 
     codegen.convert(
@@ -158,6 +160,7 @@ function Curl() {
     pathParams,
     postman,
     queryParams,
+    endpoint,
   ]);
 
   const ref = useRef(null);

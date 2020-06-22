@@ -15,6 +15,7 @@ import Accept from "./Accept";
 import ContentType from "./ContentType";
 
 import styles from "./styles.module.css";
+import Endpoint from "./Endpoint";
 
 function ApiDemoPanel({ item }) {
   const store = createStore(
@@ -26,6 +27,10 @@ function ApiDemoPanel({ item }) {
   return (
     <Provider store={store}>
       <MethodEndpoint />
+
+      <div className={styles.optionsPanel}>
+        <Endpoint />
+      </div>
 
       <div className={styles.optionsPanel}>
         <ParamOptions />

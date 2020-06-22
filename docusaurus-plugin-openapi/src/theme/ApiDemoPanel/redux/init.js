@@ -6,6 +6,7 @@ function init({
   responses = {},
   postman,
   jsonRequestBodyExample,
+  servers,
 }) {
   const { content = {} } = requestBody;
 
@@ -37,12 +38,16 @@ function init({
     });
   });
 
+  if (!servers) {
+    servers = [];
+  }
+
   return {
     jsonRequestBodyExample: jsonRequestBodyExample,
     requestBodyMetadata: requestBody, // TODO: no...
     acceptOptions: acceptArray,
     contentTypeOptions: contentTypeArray,
-    endpoint: path,
+    path: path,
     method: method,
     params: params,
     contentType: contentTypeArray[0],
@@ -50,6 +55,8 @@ function init({
     body: undefined,
     response: undefined,
     postman: postman,
+    servers: servers,
+    endpoint: servers[0]?.url,
   };
 }
 
