@@ -9,6 +9,13 @@ module.exports = {
   organizationName: "facebook", // Usually your GitHub org/user name.
   projectName: "docusaurus", // Usually your repo name.
   themeConfig: {
+    // languageTabs: [
+    //   {
+    //     tabName: "cURL",
+    //     language: "curl",
+    //     variant: "curl",
+    //   },
+    // ],
     navbar: {
       title: "My Site",
       logo: {

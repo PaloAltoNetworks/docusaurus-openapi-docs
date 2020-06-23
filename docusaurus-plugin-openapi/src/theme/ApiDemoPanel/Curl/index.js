@@ -110,11 +110,8 @@ function Curl() {
   const prismTheme = usePrismTheme();
 
   const { siteConfig } = useDocusaurusContext();
-  const [_, pluginConfig] = siteConfig.plugins.find((p) =>
-    p[0].endsWith("docusaurus-plugin-openapi")
-  );
 
-  const langs = pluginConfig.languageTabs || languageSet;
+  const langs = siteConfig?.themeConfig?.languageTabs || languageSet;
 
   const [language, setLanguage] = useState(langs[0]);
 
