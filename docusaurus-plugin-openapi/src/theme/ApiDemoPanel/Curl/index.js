@@ -2,61 +2,58 @@ import React, { useRef, useState, useEffect } from "react";
 import Highlight, { defaultProps } from "prism-react-renderer";
 import codegen from "postman-code-generators";
 import { useSelector } from "react-redux";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import usePrismTheme from "@theme/hooks/usePrismTheme";
 
 import FloatingButton from "./../FloatingButton";
 import buildPostmanRequest from "./../buildPostmanRequest";
 
 import styles from "./styles.module.css";
 
-const globalOptions = {
-  followRedirect: true,
-  trimRequestBody: true,
-};
-
-const languageSet = {
-  js: {
-    highlight: "javascript",
-    language: "javascript",
-    variant: "fetch",
-    options: {
-      ...globalOptions,
-    },
-  },
-  curl: {
+const languageSet = [
+  {
+    tabName: "cURL",
     highlight: "bash",
     language: "curl",
     variant: "curl",
     options: {
       longFormat: false,
-      ...globalOptions,
+      followRedirect: true,
+      trimRequestBody: true,
     },
   },
-  go: {
-    highlight: "go",
-    language: "go",
-    variant: "native",
-    options: {
-      ...globalOptions,
-    },
-  },
-  python: {
-    highlight: "python",
-    language: "python",
-    variant: "requests",
-    options: {
-      ...globalOptions,
-    },
-  },
-  node: {
+  {
+    tabName: "Node",
     highlight: "javascript",
     language: "nodejs",
     variant: "axios",
     options: {
       ES6_enabled: true,
-      ...globalOptions,
+      followRedirect: true,
+      trimRequestBody: true,
     },
   },
-};
+  {
+    tabName: "Go",
+    highlight: "go",
+    language: "go",
+    variant: "native",
+    options: {
+      followRedirect: true,
+      trimRequestBody: true,
+    },
+  },
+  {
+    tabName: "Python",
+    highlight: "python",
+    language: "python",
+    variant: "requests",
+    options: {
+      followRedirect: true,
+      trimRequestBody: true,
+    },
+  },
+];
 
 const languageTheme = {
   plain: {
@@ -69,7 +66,6 @@ const languageTheme = {
         color: "var(--openapi-code-green)",
       },
     },
-
     {
       types: ["string", "url"],
       style: {
@@ -110,7 +106,17 @@ const languageTheme = {
 };
 
 function Curl() {
-  const [language, setLanguage] = useState("curl");
+  // TODO: match theme for vscode.
+  const prismTheme = usePrismTheme();
+
+  const { siteConfig } = useDocusaurusContext();
+  const [_, pluginConfig] = siteConfig.plugins.find((p) =>
+    p[0].endsWith("docusaurus-plugin-openapi")
+  );
+
+  const langs = pluginConfig.languageTabs || languageSet;
+
+  const [language, setLanguage] = useState(langs[0]);
 
   const [copyText, setCopyText] = useState("Copy");
 
@@ -127,29 +133,31 @@ function Curl() {
   const [codeText, setCodeText] = useState("");
 
   useEffect(() => {
-    const postmanRequest = buildPostmanRequest(postman, {
-      queryParams,
-      pathParams,
-      cookieParams,
-      contentType,
-      accept,
-      headerParams,
-      body,
-      endpoint,
-    });
+    if (language) {
+      const postmanRequest = buildPostmanRequest(postman, {
+        queryParams,
+        pathParams,
+        cookieParams,
+        contentType,
+        accept,
+        headerParams,
+        body,
+        endpoint,
+      });
 
-    codegen.convert(
-      languageSet[language].language,
-      languageSet[language].variant,
-      postmanRequest,
-      languageSet[language].options,
-      (error, snippet) => {
-        if (error) {
-          return;
+      codegen.convert(
+        language.language,
+        language.variant,
+        postmanRequest,
+        language.options,
+        (error, snippet) => {
+          if (error) {
+            return;
+          }
+          setCodeText(snippet);
         }
-        setCodeText(snippet);
-      }
-    );
+      );
+    }
   }, [
     accept,
     body,
@@ -173,40 +181,30 @@ function Curl() {
     navigator.clipboard.writeText(ref.current.innerText);
   };
 
+  if (language === undefined) {
+    return null;
+  }
+
   return (
     <>
       <div className={styles.buttonGroup}>
-        <button
-          className={language === "curl" ? styles.selected : undefined}
-          onClick={() => setLanguage("curl")}
-        >
-          cURL
-        </button>
-        <button
-          className={language === "node" ? styles.selected : undefined}
-          onClick={() => setLanguage("node")}
-        >
-          Node
-        </button>
-        <button
-          className={language === "go" ? styles.selected : undefined}
-          onClick={() => setLanguage("go")}
-        >
-          Go
-        </button>
-        <button
-          className={language === "python" ? styles.selected : undefined}
-          onClick={() => setLanguage("python")}
-        >
-          Python
-        </button>
+        {langs.map((lang) => {
+          return (
+            <button
+              className={language === lang ? styles.selected : undefined}
+              onClick={() => setLanguage(lang)}
+            >
+              {lang.tabName}
+            </button>
+          );
+        })}
       </div>
 
       <Highlight
         {...defaultProps}
         theme={languageTheme}
         code={codeText}
-        language={languageSet[language].highlight}
+        language={language.highlight}
       >
         {({ className, tokens, getLineProps, getTokenProps }) => (
           <FloatingButton onClick={handleCurlCopy} label={copyText}>

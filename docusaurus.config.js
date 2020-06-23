@@ -94,14 +94,6 @@ module.exports = {
       },
     ],
   ],
-  // plugins: [
-  //   [
-  //     "docusaurus-plugin-openapi",
-  //     {
-  //       openapiPath: require.resolve("./openapi.json"),
-  //     },
-  //   ],
-  // ],
   presets: [
     [
       "@docusaurus/preset-classic",
