@@ -1,11 +1,9 @@
 import React from "react";
-import sdk from "postman-collection";
 import MD from "react-markdown";
 
 import Head from "@docusaurus/Head";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 
-import ApiDemoPanel from "@theme/ApiDemoPanel";
 import ParamsTable from "@theme/ApiParamsTable";
 import StatusCodesTable from "@theme/ApiStatusCodesTable";
 import RequestBodyTable from "@theme/ApiRequestBodyTable";
@@ -13,11 +11,17 @@ import RequestBodyTable from "@theme/ApiRequestBodyTable";
 import styles from "./styles.module.css";
 import "./styles.css";
 
+import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
+
+let ApiDemoPanel = () => <div />;
+
+if (ExecutionEnvironment.canUseDOM) {
+  ApiDemoPanel = require("@theme/ApiDemoPanel").default;
+}
+
 function ApiItem({ openapi }) {
   const { siteConfig = {} } = useDocusaurusContext();
   const { title: siteTitle } = siteConfig;
-
-  openapi.postman = new sdk.Request(openapi.postman);
 
   const {
     summary,

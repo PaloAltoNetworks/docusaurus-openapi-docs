@@ -2,6 +2,7 @@ import React from "react";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
+import sdk from "postman-collection";
 
 import reducer from "./redux/reducer";
 import init from "./redux/init";
@@ -18,6 +19,7 @@ import styles from "./styles.module.css";
 import Endpoint from "./Endpoint";
 
 function ApiDemoPanel({ item }) {
+  item.postman = new sdk.Request(item.postman);
   const store = createStore(
     reducer,
     init(item),
