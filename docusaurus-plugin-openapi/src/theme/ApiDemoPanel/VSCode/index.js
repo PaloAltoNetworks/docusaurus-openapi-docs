@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { monaco } from "@monaco-editor/react";
+import Editor, { monaco } from "@monaco-editor/react";
 import useThemeContext from "@theme/hooks/useThemeContext";
 
 import styles from "./styles.module.css";
