@@ -1,5 +1,7 @@
 # Docusaurus Plugin OpenAPI (WIP)
 
+![](https://user-images.githubusercontent.com/4212769/85324376-b9e3d900-b497-11ea-9765-c42a8ad1ff61.png)
+
 Install the plugin in your docusaurus project:
 ```
 yarn add docusaurus-plugin-openapi
