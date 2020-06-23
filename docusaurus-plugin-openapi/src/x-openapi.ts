@@ -2,8 +2,8 @@
 import Converter from "openapi-to-postmanv2";
 import sdk from "postman-collection";
 import importFresh from "import-fresh";
+import JsonRefs from "json-refs";
 
-import { dereference } from "./x-dereference";
 import { sampleFromSchema } from "./createExample";
 
 function getPaths(spec) {
@@ -98,6 +98,7 @@ export async function loadOpenapi(openapiPath) {
             const path =
               "/" +
               item.request.url.path
+                .filter((p) => p)
                 .map((p) => {
                   if (p.startsWith(":")) {
                     return `{${p.slice(1)}}`;
@@ -113,10 +114,17 @@ export async function loadOpenapi(openapiPath) {
     );
   });
 
-  const order = organizeSpec(dereference(postmanSpec));
+  const { resolved: dereffed } = await JsonRefs.resolveRefs(postmanSpec);
+
+  const order = organizeSpec(dereffed);
 
   order.forEach((x, i) => {
     x.items.forEach((y, ii) => {
+      // don't override already defined servers.
+      if (y.servers === undefined) {
+        y.servers = dereffed.servers;
+      }
+
       if (i === 0 && ii === 0) {
         y.hashId = "";
       }

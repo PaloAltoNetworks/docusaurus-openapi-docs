@@ -103,7 +103,6 @@ export default function pluginOpenAPI(
       const promises = openapiData
         .map((section) => {
           return section.items.map(async (item) => {
-            item.servers = openapiData.servers;
             const pageId = `site-${routeBasePath}-${item.hashId}`;
             const openapiDataPath = await createData(
               `${docuHash(pageId)}.json`,

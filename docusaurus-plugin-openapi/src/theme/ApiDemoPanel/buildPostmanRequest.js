@@ -142,7 +142,7 @@ function buildPostmanRequest(
   const clonedPostman = cloneDeep(postman);
 
   if (endpoint) {
-    clonedPostman.url.host = [endpoint];
+    clonedPostman.url.host = [endpoint.replace(/\/$/, "")];
   } else {
     clonedPostman.url.host = [window.location.origin];
   }

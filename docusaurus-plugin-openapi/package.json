@@ -38,6 +38,8 @@
     "dag-map": "^2.0.2",
     "fs-extra": "^9.0.1",
     "import-fresh": "^3.2.1",
+    "json-refs": "^3.0.15",
+    "json-schema-ref-parser": "^9.0.1",
     "md5": "^2.2.1",
     "openapi-to-postmanv2": "^1.2.1",
     "postman-code-generators": "^1.0.0",

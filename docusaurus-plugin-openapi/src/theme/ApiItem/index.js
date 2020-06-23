@@ -1,5 +1,5 @@
 import React from "react";
-import MD from "react-markdown";
+import MD from "react-markdown/with-html";
 
 import Head from "@docusaurus/Head";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
@@ -77,12 +77,15 @@ function ApiItem({ openapi }) {
                         </div>
                         {deprecatedDescription && (
                           <div className="admonition-content">
-                            <MD source={deprecatedDescription} />
+                            <MD
+                              escapeHtml={false}
+                              source={deprecatedDescription}
+                            />
                           </div>
                         )}
                       </div>
                     )}
-                    <MD source={description} />
+                    <MD escapeHtml={false} source={description} />
                     <ParamsTable parameters={parameters} type="path" />
                     <ParamsTable parameters={parameters} type="query" />
                     <ParamsTable parameters={parameters} type="header" />

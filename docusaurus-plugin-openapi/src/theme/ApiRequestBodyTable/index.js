@@ -1,5 +1,5 @@
 import React from "react";
-import MD from "react-markdown";
+import MD from "react-markdown/with-html";
 
 function getType(val) {
   if (val.type === "object") {
@@ -72,12 +72,16 @@ function RequestBodyTable({ body }) {
   }
 
   // TODO: support more than one content type.
+
   const randomFirstKey = Object.keys(body.content)[0];
 
-  // too lazy to descide how to handle all content types.
-  const firstBody = body.content[randomFirstKey];
+  let firstBody = body.content[randomFirstKey];
 
-  const [root, other] = flattenSchema(firstBody.schema);
+  let root = "";
+  let other = "";
+  try {
+    [root, other] = flattenSchema(firstBody.schema);
+  } catch {}
 
   // TODO: we don't handle arrays or primitives.
 
@@ -108,7 +112,11 @@ function RequestBodyTable({ body }) {
                 </>
               )}
               <div style={{ fontWeight: "normal" }}>
-                <MD className="table-markdown" source={body.description} />
+                <MD
+                  className="table-markdown"
+                  escapeHtml={false}
+                  source={body.description}
+                />
               </div>
             </th>
           </tr>
