@@ -47,6 +47,10 @@ export default function pluginOpenAPI(
       return path.resolve(__dirname, "./theme");
     },
 
+    getPathsToWatch() {
+      return [options.openapiPath];
+    },
+
     getClientModules() {
       const modules = [];
 
