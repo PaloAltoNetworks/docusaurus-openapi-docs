@@ -1,9 +1,14 @@
 :root {
-  --openapi-code-blue: #648bea;
-  --openapi-code-green: #39a351;
-  --openapi-code-orange: #eb662a;
-  --openapi-code-red: #f5003f;
-  --openapi-required: #f46679;
+  --openapi-code-dim: #aaaaaa;
+
+  --openapi-code-red: #f44336;
+  /* orange looks bad on white background */
+  --openapi-code-orange: var(--ifm-code-color);
+  --openapi-code-green: #388e3c;
+  --openapi-code-blue: #1976d2;
+  --openapi-code-purple: #ab47bc;
+
+  --openapi-required: var(--openapi-code-red);
 
   --openapi-card-background-color: #f6f8fa;
   --openapi-card-border-radius: var(--ifm-pre-border-radius);
@@ -23,10 +28,12 @@
 }
 
 html[data-theme="dark"] {
-  --openapi-code-blue: #a4cdfe;
-  --openapi-code-green: #85d996;
-  --openapi-code-orange: #f8b886;
+  --openapi-code-dim: #7f7f7f;
   --openapi-code-red: #fc929e;
+  --openapi-code-orange: #f8b886;
+  --openapi-code-green: #85d996;
+  --openapi-code-blue: #a4cdfe;
+  --openapi-code-purple: #d9a0f9;
   --openapi-required: var(--openapi-code-red);
 
   --openapi-card-background-color: var(--ifm-card-background-color);

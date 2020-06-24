@@ -81,7 +81,7 @@ const languageTheme = {
     {
       types: ["punctuation", "operator"],
       style: {
-        color: "#7f7f7f",
+        color: "var(--openapi-code-dim)",
       },
     },
     {
@@ -93,7 +93,7 @@ const languageTheme = {
     {
       types: ["tag", "arrow", "keyword"],
       style: {
-        color: "#d9a0f9",
+        color: "var(--openapi-code-purple)",
       },
     },
     {
