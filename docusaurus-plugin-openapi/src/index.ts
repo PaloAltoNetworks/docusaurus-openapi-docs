@@ -9,10 +9,10 @@ import fs from "fs-extra";
 import path from "path";
 import admonitions from "remark-admonitions";
 import { normalizeUrl, docuHash } from "@docusaurus/utils";
-import { LoadContext, Plugin } from "@docusaurus/types";
+import { LoadContext, Plugin, RouteConfig } from "@docusaurus/types";
 
-import { PluginOptions, LoadedContent } from "./types";
-import { loadOpenapi } from "./x-openapi";
+import { PluginOptions, LoadedContent, ApiSection } from "./types";
+import { loadOpenapi } from "./openapi";
 
 const DEFAULT_OPTIONS: PluginOptions = {
   routeBasePath: "api",
@@ -62,13 +62,17 @@ export default function pluginOpenAPI(
     },
 
     async loadContent() {
-      const { openapiPath } = options;
+      const { routeBasePath, openapiPath } = options;
 
       if (!openapiPath || !fs.existsSync(openapiPath)) {
         return null;
       }
 
-      const openapiData = await loadOpenapi(openapiPath);
+      const openapiData = await loadOpenapi(
+        openapiPath,
+        baseUrl,
+        routeBasePath
+      );
 
       return { openapiData };
     },
@@ -78,7 +82,7 @@ export default function pluginOpenAPI(
         return;
       }
 
-      const { openapiData } = content;
+      const openapiData = content.openapiData as ApiSection[];
       const { routeBasePath, apiLayoutComponent, apiItemComponent } = options;
       const { addRoute, createData } = actions;
 
@@ -89,7 +93,7 @@ export default function pluginOpenAPI(
           label: category.title,
           items: category.items.map((item) => {
             return {
-              href: `/${routeBasePath}/${item.hashId}`,
+              href: item.permalink,
               label: item.summary,
               type: "link",
               deprecated: item.deprecated,
@@ -97,12 +101,6 @@ export default function pluginOpenAPI(
           }),
         };
       });
-
-      // Important: the layout component should not end with /,
-      // as it conflicts with the home doc
-      // Workaround fix for https://github.com/facebook/docusaurus/issues/2917
-      const apiBaseRoute = normalizeUrl([baseUrl, routeBasePath]);
-      const pathx = apiBaseRoute === "/" ? "" : apiBaseRoute;
 
       const promises = openapiData
         .map((section) => {
@@ -113,7 +111,7 @@ export default function pluginOpenAPI(
               JSON.stringify(item)
             );
             return {
-              path: pathx + "/" + item.hashId,
+              path: item.permalink,
               component: apiItemComponent,
               exact: true,
               modules: {
@@ -124,12 +122,21 @@ export default function pluginOpenAPI(
         })
         .flat();
 
-      const routes = await Promise.all(promises);
+      const routes = (await Promise.all(promises)) as RouteConfig[];
 
-      const permalinkToSidebar = routes.reduce((acc, item) => {
-        acc[item.path] = "sidebar";
-        return acc;
-      }, {});
+      const permalinkToSidebar = routes.reduce(
+        (acc: { [key: string]: string }, item) => {
+          acc[item.path] = "sidebar";
+          return acc;
+        },
+        {}
+      );
+
+      // Important: the layout component should not end with /,
+      // as it conflicts with the home doc
+      // Workaround fix for https://github.com/facebook/docusaurus/issues/2917
+      const apiBaseRoute = normalizeUrl([baseUrl, routeBasePath]);
+      const basePath = apiBaseRoute === "/" ? "" : apiBaseRoute;
 
       const docsBaseMetadataPath = await createData(
         `${docuHash(normalizeUrl([apiBaseRoute, ":route"]))}.json`,
@@ -146,7 +153,7 @@ export default function pluginOpenAPI(
       );
 
       addRoute({
-        path: pathx,
+        path: basePath,
         exact: false, // allow matching /docs/* as well
         component: apiLayoutComponent, // main docs component (DocPage)
         routes, // subroute for each doc
