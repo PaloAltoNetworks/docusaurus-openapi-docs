@@ -7,6 +7,7 @@ import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import ParamsTable from "@theme/ApiParamsTable";
 import StatusCodesTable from "@theme/ApiStatusCodesTable";
 import RequestBodyTable from "@theme/ApiRequestBodyTable";
+import DocPaginator from "@theme/DocPaginator";
 
 import styles from "./styles.module.css";
 import "./styles.css";
@@ -31,6 +32,8 @@ function ApiItem({ openapi }) {
     requestBody,
     "x-deprecated-description": deprecatedDescription,
     responses,
+    next,
+    previous,
   } = openapi;
 
   const metaTitle = summary ? `${summary} | ${siteTitle}` : siteTitle;
@@ -106,7 +109,7 @@ function ApiItem({ openapi }) {
             <div className="col">
               <div className={styles.docItemContainer}>
                 <div className="margin-vert--lg">
-                  {/* <DocPaginator metadata={metadata} /> */}
+                  <DocPaginator metadata={{ next, previous }} />
                 </div>
               </div>
             </div>

@@ -344,7 +344,7 @@ export interface ApiItem extends OperationObject {
   summary: string;
   permalink: string;
   next: Page;
-  prev: Page;
+  previous: Page;
   jsonRequestBodyExample: string;
 }
 

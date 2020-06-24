@@ -190,7 +190,7 @@ export async function loadOpenapi(
       const next = order[i].items[ii + 1] || order[i + 1].items[0];
 
       if (prev) {
-        item.prev = {
+        item.previous = {
           title: prev.summary,
           permalink: normalizeUrl([baseUrl, routeBasePath, prev.hashId]),
         };
