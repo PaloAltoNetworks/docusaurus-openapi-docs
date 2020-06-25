@@ -129,7 +129,13 @@ function Rows({ schema }) {
   // object
   if (schema.properties !== undefined) {
     return (
-      <table style={{ display: "table" }}>
+      <table
+        style={{
+          display: "table",
+          marginTop: "var(--ifm-table-cell-padding)",
+          marginBottom: "0px",
+        }}
+      >
         <tbody>
           {Object.keys(schema.properties).map((key) => {
             return (
@@ -147,17 +153,53 @@ function Rows({ schema }) {
 
   // array
   if (schema.items !== undefined) {
-    return (
-      <table style={{ display: "table" }}>
-        <tbody>
-          <Rows schema={schema.items} />
-        </tbody>
-      </table>
-    );
+    return <Rows schema={schema.items} />;
   }
 
   // primitive
   return null;
+}
+
+function RowsRoot({ schema }) {
+  // object
+  if (schema.properties !== undefined) {
+    return (
+      <>
+        {Object.keys(schema.properties).map((key) => {
+          return (
+            <Row
+              name={key}
+              schema={schema.properties[key]}
+              required={schema.required?.includes(key)}
+            />
+          );
+        })}
+      </>
+    );
+  }
+
+  // array
+  if (schema.items !== undefined) {
+    return <Rows schema={schema.items} />;
+  }
+
+  // primitive
+  return (
+    <tr>
+      <td>
+        <span style={{ opacity: "0.6" }}> {schema.type}</span>
+        {schema.description && (
+          <div className={styles.description}>
+            <MD
+              escapeHtml={false}
+              className="table-markdown"
+              source={schema.description}
+            />
+          </div>
+        )}
+      </td>
+    </tr>
+  );
 }
 
 function RequestBodyTable({ body }) {
@@ -216,19 +258,7 @@ function RequestBodyTable({ body }) {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>
-              <pre
-                style={{
-                  marginBottom: 0,
-                  marginTop: "0",
-                }}
-              >
-                {JSON.stringify(firstBody, null, 2)}
-              </pre>
-            </td>
-          </tr>
-          <Rows schema={firstBody} />
+          <RowsRoot schema={firstBody} />
         </tbody>
       </table>
     </>
