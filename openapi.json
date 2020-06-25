@@ -16,6 +16,26 @@
   },
   "paths": {
     "/pet/{petId}": {
+      "put": {
+        "tags": [
+          "pet"
+        ],
+        "summary": "Recursive",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/A"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      },
       "get": {
         "tags": [
           "pet"
@@ -796,6 +816,31 @@
   },
   "components": {
     "schemas": {
+      "A": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "friend": {
+            "$ref": "#/components/schemas/A"
+          },
+          "friend2": {
+            "$ref": "#/components/schemas/B"
+          }
+        }
+      },
+      "B": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "friend": {
+            "$ref": "#/components/schemas/B"
+          }
+        }
+      },
       "Category": {
         "type": "object",
         "properties": {

@@ -1,6 +1,8 @@
 import React from "react";
 import MD from "react-markdown/with-html";
 
+import styles from "./styles.module.css";
+
 function getType(val) {
   if (val.type === "object") {
     return val.xml.name;
@@ -63,7 +65,99 @@ function flattenSchema(schema) {
     getType2(schema, other);
   }
 
-  return [JSON.stringify(rootObj, null, 2).replace(/[",]/g, ""), other];
+  // return [JSON.stringify(rootObj, null, 2).replace(/[",]/g, ""), other];
+  return [JSON.stringify(rootObj, null, 2), other];
+}
+
+function parseFinalSchema(schema) {
+  if (schema.$ref) {
+    return schema.$ref.replace("#/components/schemas/", "") + " (circular)";
+  }
+  if (schema.format) {
+    return schema.format;
+  }
+  if (schema.type === "object") {
+    return schema.xml?.name || schema.type;
+  }
+  return schema.type;
+}
+
+function getSchemaName(schema) {
+  if (schema.type === "array") {
+    return parseFinalSchema(schema.items) + "[]";
+  }
+
+  return parseFinalSchema(schema);
+}
+
+function Row({ name, schema, required }) {
+  return (
+    <tr>
+      <td>
+        <code>{name}</code>
+        <span style={{ opacity: "0.6" }}> {getSchemaName(schema)}</span>
+        {required && (
+          <>
+            {<span style={{ opacity: "0.6" }}> — </span>}
+            <strong
+              style={{
+                fontSize: "var(--ifm-code-font-size)",
+                color: "var(--openapi-required)",
+              }}
+            >
+              {" "}
+              REQUIRED
+            </strong>
+          </>
+        )}
+        {schema.description && (
+          <div className={styles.description}>
+            <MD
+              escapeHtml={false}
+              className="table-markdown"
+              source={schema.description}
+            />
+          </div>
+        )}
+        <Rows schema={schema} />
+      </td>
+    </tr>
+  );
+}
+
+function Rows({ schema }) {
+  // object
+  if (schema.properties !== undefined) {
+    return (
+      <table style={{ display: "table" }}>
+        <tbody>
+          {Object.keys(schema.properties).map((key) => {
+            return (
+              <Row
+                name={key}
+                schema={schema.properties[key]}
+                required={schema.required?.includes(key)}
+              />
+            );
+          })}
+        </tbody>
+      </table>
+    );
+  }
+
+  // array
+  if (schema.items !== undefined) {
+    return (
+      <table style={{ display: "table" }}>
+        <tbody>
+          <Rows schema={schema.items} />
+        </tbody>
+      </table>
+    );
+  }
+
+  // primitive
+  return null;
 }
 
 function RequestBodyTable({ body }) {
@@ -75,13 +169,13 @@ function RequestBodyTable({ body }) {
 
   const randomFirstKey = Object.keys(body.content)[0];
 
-  let firstBody = body.content[randomFirstKey];
+  const firstBody = body.content[randomFirstKey].schema;
 
-  let root = "";
-  let other = "";
-  try {
-    [root, other] = flattenSchema(firstBody.schema);
-  } catch {}
+  // let root = "";
+  // let other = "";
+  // try {
+  //   [root, other] = flattenSchema(firstBody.schema);
+  // } catch {}
 
   // TODO: we don't handle arrays or primitives.
 
@@ -130,38 +224,13 @@ function RequestBodyTable({ body }) {
                   marginTop: "0",
                 }}
               >
-                {root}
+                {JSON.stringify(firstBody, null, 2)}
               </pre>
             </td>
           </tr>
+          <Rows schema={firstBody} />
         </tbody>
       </table>
-
-      {Object.entries(other).map(([key, val]) => (
-        <table key={key} style={{ display: "table" }}>
-          <thead>
-            <tr>
-              <th style={{ textAlign: "left" }}>{key}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <pre
-                  style={{
-                    marginBottom: 0,
-                    marginTop: "0",
-                  }}
-                >
-                  {typeof val === "string"
-                    ? val
-                    : JSON.stringify(val, null, 2).replace(/[",]/g, "")}
-                </pre>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      ))}
     </>
   );
 }

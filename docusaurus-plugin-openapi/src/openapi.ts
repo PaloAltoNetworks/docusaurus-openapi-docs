@@ -141,10 +141,13 @@ export async function loadOpenapi(
   const postmanCollection = await convertToPostman(openapiData);
   postmanCollection.forEachItem((item) => {
     const method = item.request.method.toLowerCase();
-    item.request.url.variables.each((pathVar) => {
-      pathVar.value = `{${pathVar.key}}`;
-    });
-    const path = item.request.url.getPath();
+    // NOTE: This doesn't catch all variables for some reason...
+    // item.request.url.variables.each((pathVar) => {
+    //   pathVar.value = `{${pathVar.key}}`;
+    // });
+    const path = item.request.url
+      .getPath({ unresolved: true })
+      .replace(/:([a-z0-9-_]+)/gi, "{$1}");
 
     switch (method) {
       case "get":
