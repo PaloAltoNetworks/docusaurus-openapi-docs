@@ -21,6 +21,37 @@
           "pet"
         ],
         "summary": "Recursive",
+        "parameters": [
+          {
+            "name": "currency",
+            "in": "query",
+            "description": "The 3 character currency code.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "examples": {
+              "zero": {
+                "value": 0,
+                "summary": "A sample limit value"
+              },
+              "max": {
+                "value": 50,
+                "summary": "A sample limit value"
+              }
+            }
+          },
+          {
+            "name": "currency2",
+            "in": "query",
+            "description": "The 3 character currency code.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "approved"
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {

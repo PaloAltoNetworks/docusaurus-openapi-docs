@@ -72,6 +72,13 @@ function ParamsTable({ parameters, type }) {
                       />
                     </div>
                   )}
+                  {param.example && <div>Example: {param.example}</div>}
+                  {param.examples &&
+                    Object.keys(param.examples).map((key) => (
+                      <div>
+                        Example ({key}): {param.examples[key].value}
+                      </div>
+                    ))}
                 </td>
               </tr>
             );
