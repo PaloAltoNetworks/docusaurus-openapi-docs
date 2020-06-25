@@ -3,72 +3,6 @@ import MD from "react-markdown/with-html";
 
 import styles from "./styles.module.css";
 
-function getType(val) {
-  if (val.type === "object") {
-    return val.xml.name;
-  }
-  if (val.type === "array") {
-    return getType(val.items) + "[]";
-  }
-  return val.format || val.type;
-}
-
-function getType3(name, schema, other) {
-  for (let [key, val] of Object.entries(schema.properties)) {
-    if (other[name] === undefined) {
-      other[name] = {};
-    }
-    other[name][key] = getType(val);
-  }
-}
-
-function drillThroughArray(val, other) {
-  if (val.items.type === "object") {
-    getType3(val.items.xml.name, val.items, other);
-  } else if (val.items.type === "array") {
-    drillThroughArray(val.items, other);
-  } else {
-    // noop, primitive array covered in the root object already covered.
-  }
-}
-
-function getType2(schema, other) {
-  for (let val of Object.values(schema.properties)) {
-    if (val.type === "object") {
-      getType3(val.xml.name, val, other);
-    } else if (val.type === "array") {
-      drillThroughArray(val, other);
-    } else {
-      // noop, primitives of the root object already covered.
-    }
-  }
-}
-
-function flattenSchema(schema) {
-  if (schema.type === "array") {
-    // TODO: this will probably break for nested arrays...
-    const [x] = flattenSchema(schema.items);
-    return [schema.items.xml.name + "[]", { [schema.items.xml.name]: x }];
-  }
-
-  // build root object.
-  let rootObj = {};
-  if (schema.type === "object") {
-    Object.entries(schema.properties).forEach(([key, val]) => {
-      rootObj[key] = getType(val);
-    });
-  }
-
-  // other schemas.
-  let other = {};
-  if (schema.type === "object") {
-    getType2(schema, other);
-  }
-
-  // return [JSON.stringify(rootObj, null, 2).replace(/[",]/g, ""), other];
-  return [JSON.stringify(rootObj, null, 2), other];
-}
-
 function parseFinalSchema(schema) {
   if (schema.$ref) {
     return schema.$ref.replace("#/components/schemas/", "") + " (circular)";
@@ -207,19 +141,12 @@ function RequestBodyTable({ body }) {
     return null;
   }
 
-  // TODO: support more than one content type.
+  // NOTE: We just pick a random content-type.
+  // How common is it to have multiple?
 
   const randomFirstKey = Object.keys(body.content)[0];
 
   const firstBody = body.content[randomFirstKey].schema;
-
-  // let root = "";
-  // let other = "";
-  // try {
-  //   [root, other] = flattenSchema(firstBody.schema);
-  // } catch {}
-
-  // TODO: we don't handle arrays or primitives.
 
   return (
     <>
