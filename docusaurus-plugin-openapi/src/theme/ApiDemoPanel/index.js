@@ -13,7 +13,6 @@ import Curl from "./Curl";
 import Response from "./Response";
 import Execute from "./Execute";
 import Accept from "./Accept";
-import ContentType from "./ContentType";
 
 import styles from "./styles.module.css";
 import Endpoint from "./Endpoint";
@@ -40,9 +39,7 @@ function ApiDemoPanel({ item }) {
           <Accept />
         </div>
 
-        <div className={styles.optionsPanel}>
-          <Endpoint />
-        </div>
+        <Endpoint />
 
         <Curl />
 

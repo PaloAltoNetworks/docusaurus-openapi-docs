@@ -18,10 +18,10 @@ function Authorization() {
         <button
           className="button button--primary"
           style={{
-            marginBottom: "var(--ifm-spacing-vertical)",
             marginLeft: "auto",
             display: "flex",
             alignItems: "center",
+            marginBottom: "var(--ifm-spacing-vertical)",
           }}
           onClick={() => {
             clearSession();

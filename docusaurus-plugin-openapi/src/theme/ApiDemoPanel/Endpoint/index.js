@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import FormSelect from "./../FormSelect";
 import { useSelector } from "react-redux";
 import { useActions } from "./../redux/actions";
 import FormItem from "./../FormItem";
 
+import styles from "./styles.module.css";
+import FloatingButton from "../FloatingButton";
+
 function Endpoint() {
+  const [edit, setEdit] = useState(false);
   const servers = useSelector((state) => state.servers);
   const endpoint = useSelector((state) => state.endpoint);
   const { setEndpoint, setEndpointValue } = useActions();
@@ -17,8 +21,38 @@ function Endpoint() {
     return null;
   }
 
+  if (!edit) {
+    let url;
+    if (endpoint) {
+      url = endpoint.url.replace(/\/$/, "");
+      if (endpoint.variables) {
+        Object.keys(endpoint.variables).forEach((variable) => {
+          url = url.replace(
+            `{${variable}}`,
+            endpoint.variables[variable].default
+          );
+        });
+      }
+    }
+    return (
+      <FloatingButton onClick={() => setEdit(true)} label="Edit">
+        <pre
+          style={{
+            background: "var(--openapi-card-background-color)",
+            paddingRight: "60px",
+          }}
+        >
+          <code>{url}</code>
+        </pre>
+      </FloatingButton>
+    );
+  }
+
   return (
-    <>
+    <div className={styles.optionsPanel}>
+      <button className={styles.showMoreButton} onClick={() => setEdit(false)}>
+        Hide
+      </button>
       <FormItem label="Endpoint">
         <FormSelect
           options={servers.map((s) => s.url)}
@@ -41,7 +75,7 @@ function Endpoint() {
           }
           return null;
         })}
-    </>
+    </div>
   );
 }
 
