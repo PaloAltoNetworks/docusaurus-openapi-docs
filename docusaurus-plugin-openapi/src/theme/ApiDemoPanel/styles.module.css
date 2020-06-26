@@ -11,4 +11,7 @@
   margin-top: 0;
   overflow: auto;
   padding: var(--ifm-pre-padding);
+
+  /* hack for view calculation when monaco is hidden */
+  position: relative;
 }

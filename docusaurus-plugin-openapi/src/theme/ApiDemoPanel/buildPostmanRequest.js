@@ -96,6 +96,10 @@ function setBody(clonedPostman, body) {
 
   switch (clonedPostman.body.mode) {
     case "raw": {
+      if (body === "") {
+        clonedPostman.body = undefined;
+        return;
+      }
       clonedPostman.body.raw = body || "";
       return;
     }

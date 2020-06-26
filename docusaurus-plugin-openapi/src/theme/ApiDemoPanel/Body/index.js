@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import VSCode from "./../VSCode";
 import FormTextInput from "./../FormTextInput";
 import FormFileUpload from "./../FormFileUpload";
@@ -6,6 +6,74 @@ import { useSelector } from "react-redux";
 import { useActions } from "./../redux/actions";
 import FormItem from "./../FormItem";
 import FormSelect from "../FormSelect";
+
+import styles from "./styles.module.css";
+import ContentType from "../ContentType";
+
+function BodyWrap() {
+  const [showOptional, setShowOptional] = useState(false);
+  const contentType = useSelector((state) => state.contentType);
+  const required = useSelector((state) => state.requestBodyMetadata.required);
+
+  // No body
+  if (contentType === undefined) {
+    return null;
+  }
+
+  if (required) {
+    return (
+      <>
+        <ContentType />
+        <Body />
+      </>
+    );
+  }
+  return (
+    <>
+      <button
+        className={styles.showMoreButton}
+        onClick={() => setShowOptional((prev) => !prev)}
+      >
+        <span
+          style={{
+            width: "1.5em",
+            display: "inline-block",
+            textAlign: "center",
+          }}
+        >
+          <span className={showOptional ? styles.plusExpanded : styles.plus}>
+            <div>
+              <svg
+                style={{
+                  fill: "currentColor",
+                  width: "10px",
+                  height: "10px",
+                }}
+                height="16"
+                viewBox="0 0 16 16"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M9 7h6a1 1 0 0 1 0 2H9v6a1 1 0 0 1-2 0V9H1a1 1 0 1 1 0-2h6V1a1 1 0 1 1 2 0z"
+                  fillRule="evenodd"
+                ></path>
+              </svg>
+            </div>
+          </span>
+        </span>
+        {showOptional ? "Hide optional body" : "Show optional body"}
+      </button>
+
+      <div className={showOptional ? styles.showOptions : styles.hideOptions}>
+        <>
+          <ContentType />
+          <Body />
+        </>
+      </div>
+    </>
+  );
+}
 
 function Body() {
   const contentType = useSelector((state) => state.contentType);
@@ -139,7 +207,7 @@ function Body() {
   }
 
   let language = "plaintext";
-  let exampleBodyString = "body content";
+  let exampleBodyString = ""; //"body content";
 
   if (contentType === "application/json") {
     if (jsonRequestBodyExample) {
@@ -163,4 +231,4 @@ function Body() {
   );
 }
 
-export default Body;
+export default BodyWrap;

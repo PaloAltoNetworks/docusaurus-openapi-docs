@@ -3,6 +3,7 @@ import Converter from "openapi-to-postmanv2";
 import sdk, { Collection } from "postman-collection";
 import importFresh from "import-fresh";
 import JsonRefs from "json-refs";
+import kebabCase from "lodash.kebabcase";
 
 import { sampleFromSchema } from "./createExample";
 import {
@@ -40,7 +41,7 @@ function getPaths(spec: OpenApiObject): ApiItem[] {
           let method = key;
           let operationObject = val as OperationObject;
           const summary = operationObject.summary || "Missing summary";
-          const baseId = summary.toLowerCase().replace(/ /g, "-");
+          const baseId = kebabCase(summary);
           let count = seen[baseId];
 
           let hashId;

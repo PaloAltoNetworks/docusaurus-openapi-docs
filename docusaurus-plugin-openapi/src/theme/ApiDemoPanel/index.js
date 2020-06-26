@@ -40,7 +40,6 @@ function ApiDemoPanel({ item }) {
 
         <div className={styles.optionsPanel}>
           <ParamOptions />
-          <ContentType />
           <Body />
           <Accept />
         </div>
