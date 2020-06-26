@@ -8,6 +8,7 @@ export const types = {
   setAccept: "SET_ACCEPT",
   setContentType: "SET_CONTENT_TYPE",
   setEndpoint: "SET_ENDPOINT",
+  setEndpointValue: "SET_ENDPOINT_VALUE",
 };
 
 export function useActions() {
@@ -45,10 +46,15 @@ export function useActions() {
     dispatch({ type: types.setEndpoint, endpoint });
   }
 
+  function setEndpointValue(key, value) {
+    dispatch({ type: types.setEndpointValue, key, value });
+  }
+
   return {
     setAccept,
     setContentType,
     setEndpoint,
+    setEndpointValue,
     updateParam,
     setResponse,
     clearResponse,

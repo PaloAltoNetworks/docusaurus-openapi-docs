@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 
 import { useActions } from "./../redux/actions";
 import makeRequest from "./makeRequest";
@@ -17,6 +18,11 @@ function isRequestComplete(params) {
 }
 
 function Execute() {
+  const { siteConfig } = useDocusaurusContext();
+  const proxy = siteConfig?.plugins?.find((plugin) =>
+    plugin[0].includes("docusaurus-plugin-openapi")
+  )[1].proxy;
+
   const postman = useSelector((state) => state.postman);
 
   const pathParams = useSelector((state) => state.params.path);
@@ -50,7 +56,7 @@ function Execute() {
       style={{ height: "48px", marginBottom: "var(--ifm-spacing-vertical)" }}
       disabled={!finishedRequest}
       onClick={async () => {
-        const res = await makeRequest(postmanRequest, body);
+        const res = await makeRequest(postmanRequest, proxy, body);
         setResponse(res);
       }}
     >

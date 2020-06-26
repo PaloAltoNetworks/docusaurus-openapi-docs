@@ -29,6 +29,7 @@ function init({
 
   parameters.forEach((param) => {
     params[param.in].push({
+      ...param,
       name: param.name,
       value: undefined,
       description: param.description,
@@ -56,7 +57,7 @@ function init({
     response: undefined,
     postman: postman,
     servers: servers,
-    endpoint: servers[0]?.url,
+    endpoint: servers[0],
   };
 }
 

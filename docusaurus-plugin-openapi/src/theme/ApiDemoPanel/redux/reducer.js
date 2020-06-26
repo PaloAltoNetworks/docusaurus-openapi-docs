@@ -31,7 +31,11 @@ const reducer = produce((draft, action) => {
       break;
     }
     case types.setEndpoint: {
-      draft.endpoint = action.endpoint;
+      draft.endpoint = draft.servers.find((s) => s.url === action.endpoint);
+      break;
+    }
+    case types.setEndpointValue: {
+      draft.endpoint.variables[action.key].default = action.value;
       break;
     }
     case types.setContentType: {

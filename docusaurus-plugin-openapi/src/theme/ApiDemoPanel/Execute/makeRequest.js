@@ -21,7 +21,7 @@ async function loadImage(content) {
   });
 }
 
-async function makeRequest(request, _body) {
+async function makeRequest(request, proxy, _body) {
   const headers = request.toJSON().header;
 
   let myHeaders = new Headers();
@@ -146,6 +146,15 @@ async function makeRequest(request, _body) {
     headers: myHeaders,
     body: myBody,
   };
+
+  if (proxy) {
+    // Ensure the proxy ends with a slash.
+    let normalizedProxy = proxy.replace(/\/$/, "") + "/";
+    return await fetch(
+      normalizedProxy + request.url.toString(),
+      requestOptions
+    ).then((response) => response.text());
+  }
 
   return await fetch(request.url.toString(), requestOptions).then((response) =>
     response.text()

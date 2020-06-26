@@ -14,6 +14,18 @@ function setQueryParams(postman, queryParams) {
           value: param.value.join(","),
         });
       }
+
+      // Parameter allows empty value: "/hello?extended"
+      if (param.allowEmptyValue) {
+        if (param.value === "true") {
+          return new sdk.QueryParam({
+            key: param.name,
+            value: undefined,
+          });
+        }
+        return;
+      }
+
       return new sdk.QueryParam({
         key: param.name,
         value: param.value,
@@ -141,8 +153,19 @@ function buildPostmanRequest(
 ) {
   const clonedPostman = cloneDeep(postman);
 
+  clonedPostman.url.protocol = undefined;
+
   if (endpoint) {
-    clonedPostman.url.host = [endpoint.replace(/\/$/, "")];
+    let url = endpoint.url.replace(/\/$/, "");
+    if (endpoint.variables) {
+      Object.keys(endpoint.variables).forEach((variable) => {
+        url = url.replace(
+          `{${variable}}`,
+          endpoint.variables[variable].default
+        );
+      });
+    }
+    clonedPostman.url.host = [url];
   } else {
     clonedPostman.url.host = [window.location.origin];
   }

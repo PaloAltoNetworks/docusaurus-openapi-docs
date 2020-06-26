@@ -7,7 +7,7 @@
   width: 100%;
   font-size: var(--ifm-code-font-size);
   color: var(--ifm-pre-color);
-  padding: 12px var(--ifm-pre-padding);
+  padding: 12px 48px 12px var(--ifm-pre-padding);
 
   border-radius: 4px;
 }
@@ -21,7 +21,7 @@ html[data-theme="dark"] .selectInput {
   width: 100%;
   font-size: var(--ifm-code-font-size);
   color: var(--ifm-pre-color);
-  padding: 12px var(--ifm-pre-padding);
+  /* padding: 12px var(--ifm-pre-padding); */
 
   border-radius: 4px;
   -moz-appearance: none;

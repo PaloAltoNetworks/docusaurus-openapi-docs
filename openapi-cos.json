@@ -1,0 +1,91 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Cloud Object Storage",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "tags": [ "Bucket operations" ],
+        "summary": "List buckets",
+        "description": "A `GET` request sent to the endpoint root returns a list of buckets that are associated with the specified service instance. For more information about endpoints, see [Endpoints and storage locations](https://cloud.ibm.com/docs/cloud-object-storage?topic=cloud-object-storage-endpoints#endpoints).",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "extended",
+            "description": "Provides `LocationConstraint` metadata in the listing.",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            },
+            "allowEmptyValue": true
+          },
+          {
+            "in": "header",
+            "name": "ibm-service-instance-id",
+            "description": "List buckets that were created in this service instance.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ok"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    { "BearerAuth": []}
+  ],
+  "component": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "tags": [
+    { "name": "Bucket operations" },
+    { "name": "Object operations" }
+  ],
+  "servers": [
+    { 
+      "url": "https://s3.{region}.cloud-object-storage.appdomain.cloud",
+      "variables": {
+        "region": {
+          "enum": [
+            "us",
+            "eu",
+            "ap",
+            "us-south",
+            "us-east",
+            "eu-gb",
+            "eu-de",
+            "au-syd",
+            "jp-tok",
+            "ams03",
+            "che01",
+            "hkg02",
+            "mex01",
+            "mil01",
+            "mon01",
+            "osl01",
+            "par01",
+            "sjc04",
+            "sao01",
+            "seo01",
+            "sng01",
+            "tor01"
+          ],
+          "default": "us"
+        }
+      }
+    }
+  ]
+}
