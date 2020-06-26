@@ -52,12 +52,20 @@ function getPaths(spec: OpenApiObject): ApiItem[] {
             seen[baseId] = 1;
           }
 
+          const servers = operationObject.servers || pathObject.servers;
+
+          // NOTE: no security on the path level, only op level.
+          // The following line is unneeded, but is just for piece of mind.
+          const security = operationObject.security;
+
           return {
             ...operationObject,
             summary: summary,
             method: method,
             path: path,
             hashId: hashId,
+            servers: servers,
+            security: security,
           };
         }
         return undefined;
@@ -110,12 +118,29 @@ function organizeSpec(spec: OpenApiObject) {
 async function convertToPostman(
   openapiData: OpenApiObject
 ): Promise<Collection> {
+  // The conversions mutates whatever you pass here, create a new object.
+  const openapiClone = JSON.parse(JSON.stringify(openapiData));
+
+  // seems to be a weird bug with postman and servers...
+  delete openapiClone.servers;
+  for (let value of Object.values(openapiClone.paths)) {
+    let pathItemObject = value as PathItemObject;
+    delete pathItemObject.servers;
+    delete pathItemObject.get?.servers;
+    delete pathItemObject.put?.servers;
+    delete pathItemObject.post?.servers;
+    delete pathItemObject.delete?.servers;
+    delete pathItemObject.options?.servers;
+    delete pathItemObject.head?.servers;
+    delete pathItemObject.patch?.servers;
+    delete pathItemObject.trace?.servers;
+  }
+
   return await new Promise((resolve, reject) => {
     Converter.convert(
       {
         type: "json",
-        // The conversions mutates whatever you pass here, create a new object.
-        data: JSON.parse(JSON.stringify(openapiData)),
+        data: openapiClone,
       },
       {},
       (_: any, conversionResult: any) => {
@@ -179,6 +204,10 @@ export async function loadOpenapi(
       // don't override already defined servers.
       if (item.servers === undefined) {
         item.servers = dereffedSpec.servers;
+      }
+
+      if (item.security === undefined) {
+        item.security = dereffedSpec.security;
       }
 
       if (i === 0 && ii === 0) {

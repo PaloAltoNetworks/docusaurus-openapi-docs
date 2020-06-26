@@ -9,6 +9,8 @@ export const types = {
   setContentType: "SET_CONTENT_TYPE",
   setEndpoint: "SET_ENDPOINT",
   setEndpointValue: "SET_ENDPOINT_VALUE",
+  setBearerToken: "SET_BEARER_TOKEN",
+  clearSession: "CLEAR_SESSION",
 };
 
 export function useActions() {
@@ -50,6 +52,14 @@ export function useActions() {
     dispatch({ type: types.setEndpointValue, key, value });
   }
 
+  function setBearerToken(bearerToken) {
+    dispatch({ type: types.setBearerToken, bearerToken });
+  }
+
+  function clearSession() {
+    dispatch({ type: types.clearSession });
+  }
+
   return {
     setAccept,
     setContentType,
@@ -60,5 +70,7 @@ export function useActions() {
     clearResponse,
     setBody,
     setForm,
+    setBearerToken,
+    clearSession,
   };
 }

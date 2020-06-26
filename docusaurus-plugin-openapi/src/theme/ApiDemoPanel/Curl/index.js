@@ -3,7 +3,6 @@ import Highlight, { defaultProps } from "prism-react-renderer";
 import codegen from "postman-code-generators";
 import { useSelector } from "react-redux";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
-import usePrismTheme from "@theme/hooks/usePrismTheme";
 
 import FloatingButton from "./../FloatingButton";
 import buildPostmanRequest from "./../buildPostmanRequest";
@@ -107,7 +106,6 @@ const languageTheme = {
 
 function Curl() {
   // TODO: match theme for vscode.
-  const prismTheme = usePrismTheme();
 
   const { siteConfig } = useDocusaurusContext();
 
@@ -126,6 +124,8 @@ function Curl() {
   const accept = useSelector((state) => state.accept);
   const endpoint = useSelector((state) => state.endpoint);
   const postman = useSelector((state) => state.postman);
+  const security = useSelector((state) => state.security);
+  const bearerToken = useSelector((state) => state.bearerToken);
 
   const [codeText, setCodeText] = useState("");
 
@@ -140,6 +140,8 @@ function Curl() {
         headerParams,
         body,
         endpoint,
+        security,
+        bearerToken,
       });
 
       codegen.convert(
@@ -166,6 +168,8 @@ function Curl() {
     postman,
     queryParams,
     endpoint,
+    security,
+    bearerToken,
   ]);
 
   const ref = useRef(null);

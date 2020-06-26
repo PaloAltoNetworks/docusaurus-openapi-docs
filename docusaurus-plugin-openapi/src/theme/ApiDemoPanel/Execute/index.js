@@ -21,7 +21,7 @@ function Execute() {
   const { siteConfig } = useDocusaurusContext();
   const proxy = siteConfig?.plugins?.find((plugin) =>
     plugin[0].includes("docusaurus-plugin-openapi")
-  )[1].proxy;
+  )[1].corsProxy;
 
   const postman = useSelector((state) => state.postman);
 
@@ -33,6 +33,8 @@ function Execute() {
   const body = useSelector((state) => state.body);
   const accept = useSelector((state) => state.accept);
   const endpoint = useSelector((state) => state.endpoint);
+  const security = useSelector((state) => state.security);
+  const bearerToken = useSelector((state) => state.bearerToken);
 
   const params = useSelector((state) => state.params);
   const finishedRequest = isRequestComplete(params);
@@ -48,6 +50,8 @@ function Execute() {
     headerParams,
     body,
     endpoint,
+    security,
+    bearerToken,
   });
 
   return (
@@ -56,6 +60,7 @@ function Execute() {
       style={{ height: "48px", marginBottom: "var(--ifm-spacing-vertical)" }}
       disabled={!finishedRequest}
       onClick={async () => {
+        setResponse("loading...");
         const res = await makeRequest(postmanRequest, proxy, body);
         setResponse(res);
       }}

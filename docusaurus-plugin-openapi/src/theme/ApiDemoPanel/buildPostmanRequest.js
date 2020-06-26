@@ -23,7 +23,7 @@ function setQueryParams(postman, queryParams) {
             value: undefined,
           });
         }
-        return;
+        return undefined;
       }
 
       return new sdk.QueryParam({
@@ -59,7 +59,7 @@ function buildCookie(cookieParams) {
   return list.toString();
 }
 
-function setHeaders(postman, contentType, accept, cookie, headerParams) {
+function setHeaders(postman, contentType, accept, cookie, headerParams, other) {
   postman.headers.clear();
   if (contentType) {
     postman.addHeader({ key: "Content-Type", value: contentType });
@@ -72,6 +72,11 @@ function setHeaders(postman, contentType, accept, cookie, headerParams) {
       postman.addHeader({ key: param.name, value: param.value });
     }
   });
+
+  other.forEach((header) => {
+    postman.addHeader(header);
+  });
+
   if (cookie) {
     postman.addHeader({ key: "Cookie", value: cookie });
   }
@@ -149,6 +154,8 @@ function buildPostmanRequest(
     headerParams,
     body,
     endpoint,
+    security,
+    bearerToken,
   }
 ) {
   const clonedPostman = cloneDeep(postman);
@@ -174,7 +181,22 @@ function buildPostmanRequest(
   setPathParams(clonedPostman, pathParams);
 
   const cookie = buildCookie(cookieParams);
-  setHeaders(clonedPostman, contentType, accept, cookie, headerParams);
+  let otherHeaders = [];
+  if (bearerToken && security?.length > 0) {
+    otherHeaders.push({
+      key: "Authorization",
+      value: `Bearer ${bearerToken}`,
+    });
+  }
+
+  setHeaders(
+    clonedPostman,
+    contentType,
+    accept,
+    cookie,
+    headerParams,
+    otherHeaders
+  );
 
   setBody(clonedPostman, body);
 

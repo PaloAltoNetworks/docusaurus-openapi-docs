@@ -7,6 +7,7 @@ function init({
   postman,
   jsonRequestBodyExample,
   servers,
+  security,
 }) {
   const { content = {} } = requestBody;
 
@@ -58,6 +59,8 @@ function init({
     postman: postman,
     servers: servers,
     endpoint: servers[0],
+    security: security,
+    bearerToken: sessionStorage.getItem("bearerToken"),
   };
 }
 

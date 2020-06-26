@@ -42,6 +42,16 @@ const reducer = produce((draft, action) => {
       draft.contentType = action.contentType;
       break;
     }
+    case types.setBearerToken: {
+      sessionStorage.setItem("bearerToken", action.bearerToken);
+      draft.bearerToken = action.bearerToken;
+      break;
+    }
+    case types.clearSession: {
+      sessionStorage.clear();
+      draft.bearerToken = undefined;
+      break;
+    }
     default:
       break;
   }

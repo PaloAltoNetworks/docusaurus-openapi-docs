@@ -5,6 +5,7 @@ import FormFileUpload from "./../FormFileUpload";
 import { useSelector } from "react-redux";
 import { useActions } from "./../redux/actions";
 import FormItem from "./../FormItem";
+import FormSelect from "../FormSelect";
 
 function Body() {
   const contentType = useSelector((state) => state.contentType);
@@ -97,6 +98,23 @@ function Body() {
                           src: `/path/to/${file.name}`,
                           content: file,
                         },
+                      });
+                    }}
+                  />
+                </FormItem>
+              );
+            }
+
+            if (val.enum) {
+              return (
+                <FormItem key={key} label={key}>
+                  <FormSelect
+                    options={["---", ...val.enum]}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setForm({
+                        key: key,
+                        value: val === "---" ? undefined : val,
                       });
                     }}
                   />

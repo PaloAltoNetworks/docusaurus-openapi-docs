@@ -24,7 +24,6 @@ function MethodEndpoint() {
   return (
     <pre
       style={{
-        marginTop: "3.5em",
         background: "var(--openapi-card-background-color)",
         borderRadius: "var(--openapi-card-border-radius)",
       }}

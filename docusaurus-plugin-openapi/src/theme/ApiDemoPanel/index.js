@@ -17,6 +17,7 @@ import ContentType from "./ContentType";
 
 import styles from "./styles.module.css";
 import Endpoint from "./Endpoint";
+import Authorization from "./Authorization";
 
 function ApiDemoPanel({ item }) {
   item.postman = new sdk.Request(item.postman);
@@ -28,24 +29,28 @@ function ApiDemoPanel({ item }) {
 
   return (
     <Provider store={store}>
-      <MethodEndpoint />
+      <div style={{ marginTop: "3.5em" }}>
+        <Authorization />
 
-      <div className={styles.optionsPanel}>
-        <Endpoint />
+        <MethodEndpoint />
+
+        <div className={styles.optionsPanel}>
+          <Endpoint />
+        </div>
+
+        <div className={styles.optionsPanel}>
+          <ParamOptions />
+          <ContentType />
+          <Body />
+          <Accept />
+        </div>
+
+        <Curl />
+
+        <Execute />
+
+        <Response />
       </div>
-
-      <div className={styles.optionsPanel}>
-        <ParamOptions />
-        <ContentType />
-        <Body />
-        <Accept />
-      </div>
-
-      <Curl />
-
-      <Execute />
-
-      <Response />
     </Provider>
   );
 }
