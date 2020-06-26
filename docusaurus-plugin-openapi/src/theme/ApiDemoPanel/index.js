@@ -35,13 +35,13 @@ function ApiDemoPanel({ item }) {
         <MethodEndpoint />
 
         <div className={styles.optionsPanel}>
-          <Endpoint />
-        </div>
-
-        <div className={styles.optionsPanel}>
           <ParamOptions />
           <Body />
           <Accept />
+        </div>
+
+        <div className={styles.optionsPanel}>
+          <Endpoint />
         </div>
 
         <Curl />
