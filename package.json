@@ -5,6 +5,7 @@
   "scripts": {
     "start": "docusaurus start",
     "start:watch": "nodemon --watch \"./docusaurus-plugin-openapi/lib/*.*\" --exec \"yarn start --no-open\"",
+    "openapi": "nodemon -e yaml,yml,js,json --watch \"./openapi/**\" --exec \"openapi-comment-parser openapi openapi-gen.json\"",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy"
@@ -39,6 +40,7 @@
     "eslint-plugin-jsx-a11y": "6.x",
     "eslint-plugin-react": "7.x",
     "eslint-plugin-react-hooks": "2.x",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "openapi-comment-parser": "^0.3.7"
   }
 }

@@ -44,6 +44,11 @@ function init({
     servers = [];
   }
 
+  let bearerToken = sessionStorage.getItem("bearerToken");
+  if (!bearerToken) {
+    bearerToken = undefined;
+  }
+
   return {
     jsonRequestBodyExample: jsonRequestBodyExample,
     requestBodyMetadata: requestBody, // TODO: no...
@@ -60,7 +65,7 @@ function init({
     servers: servers,
     endpoint: servers[0],
     security: security,
-    bearerToken: sessionStorage.getItem("bearerToken"),
+    bearerToken: bearerToken,
   };
 }
 

@@ -14,13 +14,16 @@ import "./styles.css";
 
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 
+import { MDXProvider } from "@mdx-js/react";
+import MDXComponents from "@theme/MDXComponents";
+
 let ApiDemoPanel = () => <div />;
 
 if (ExecutionEnvironment.canUseDOM) {
   ApiDemoPanel = require("@theme/ApiDemoPanel").default;
 }
 
-function ApiItem({ openapi }) {
+function ApiItem({ openapi, content: DescriptionContent }) {
   const { siteConfig = {} } = useDocusaurusContext();
   const { title: siteTitle } = siteConfig;
 
@@ -88,7 +91,12 @@ function ApiItem({ openapi }) {
                         )}
                       </div>
                     )}
-                    <MD escapeHtml={false} source={description} />
+
+                    <MDXProvider components={MDXComponents}>
+                      <DescriptionContent />
+                    </MDXProvider>
+
+                    {/* <MD escapeHtml={false} source={description} /> */}
                     <ParamsTable parameters={parameters} type="path" />
                     <ParamsTable parameters={parameters} type="query" />
                     <ParamsTable parameters={parameters} type="header" />

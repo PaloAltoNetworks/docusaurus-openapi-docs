@@ -9,7 +9,13 @@ import fs from "fs-extra";
 import path from "path";
 import admonitions from "remark-admonitions";
 import { normalizeUrl, docuHash } from "@docusaurus/utils";
-import { LoadContext, Plugin, RouteConfig } from "@docusaurus/types";
+import {
+  LoadContext,
+  Plugin,
+  RouteConfig,
+  ConfigureWebpackUtils,
+} from "@docusaurus/types";
+import { Configuration, Loader } from "webpack";
 
 import { PluginOptions, LoadedContent, ApiSection } from "./types";
 import { loadOpenapi } from "./openapi";
@@ -28,6 +34,8 @@ export default function pluginOpenAPI(
   context: LoadContext,
   opts: Partial<PluginOptions>
 ): Plugin<LoadedContent | null> {
+  const name = "docusaurus-plugin-openapi";
+
   const options: PluginOptions = { ...DEFAULT_OPTIONS, ...opts };
   const homePageDocsRoutePath =
     options.routeBasePath === "" ? "/" : options.routeBasePath;
@@ -38,10 +46,12 @@ export default function pluginOpenAPI(
     ]);
   }
 
-  const { baseUrl } = context;
+  const { baseUrl, generatedFilesDir } = context;
+
+  const dataDir = path.join(generatedFilesDir, name);
 
   return {
-    name: "docusaurus-plugin-openapi",
+    name: name,
 
     getThemePath() {
       return path.resolve(__dirname, "./theme");
@@ -110,12 +120,21 @@ export default function pluginOpenAPI(
               `${docuHash(pageId)}.json`,
               JSON.stringify(item)
             );
+
+            const markdown = await createData(
+              `${docuHash(pageId)}-description.md`,
+              item.description
+            );
             return {
               path: item.permalink,
               component: apiItemComponent,
               exact: true,
               modules: {
                 openapi: openapiDataPath,
+                content: {
+                  __import: true,
+                  path: markdown,
+                },
               },
             };
           });
@@ -180,6 +199,41 @@ export default function pluginOpenAPI(
 
         delete routes[docsHomePageRouteIndex!];
       }
+    },
+
+    configureWebpack(
+      _config: Configuration,
+      isServer: boolean,
+      { getBabelLoader, getCacheLoader }: ConfigureWebpackUtils
+    ) {
+      const { rehypePlugins, remarkPlugins } = options;
+
+      return {
+        resolve: {
+          alias: {
+            "~api": dataDir,
+          },
+        },
+        module: {
+          rules: [
+            {
+              test: /(\.mdx?)$/,
+              include: [dataDir],
+              use: [
+                getCacheLoader(isServer),
+                getBabelLoader(isServer),
+                {
+                  loader: require.resolve("@docusaurus/mdx-loader"),
+                  options: {
+                    remarkPlugins,
+                    rehypePlugins,
+                  },
+                },
+              ] as Loader[],
+            },
+          ],
+        },
+      };
     },
   };
 }
