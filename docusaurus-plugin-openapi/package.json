@@ -1,6 +1,6 @@
 {
   "name": "docusaurus-plugin-openapi",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "Docs content plugin for Docusaurus",
   "main": "lib/index.js",
   "files": [
