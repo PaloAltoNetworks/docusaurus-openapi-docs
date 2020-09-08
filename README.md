@@ -25,3 +25,18 @@ Add it as a link in `docusaurus.config.js` to `themeConfig.navbar.links`:
   position: "left",
 }
 ```
+
+For more than one OpenAPI definition, add them as multiple plugins to `docusaurus.config.js`:
+```js
+plugins: [
+  ["docusaurus-plugin-openapi", {
+    id: 'plugin-1',
+    openapiPath: require.resolve("./openapi1.json"), routeBasePath: 'cars',
+  }],
+  ["docusaurus-plugin-openapi", {
+    id: 'plugin-2',
+    openapiPath: require.resolve("./openapi2.json"), routeBasePath: 'bikes',
+  }]
+]
+```
+This will be resolved at /cars and /bikes endpoints respectively.
