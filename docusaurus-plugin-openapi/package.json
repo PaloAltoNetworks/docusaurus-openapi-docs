@@ -24,6 +24,7 @@
     "@types/lodash.pick": "^4.4.6",
     "@types/lodash.pickby": "^4.6.6",
     "@types/postman-collection": "^3.5.3",
+    "@types/webpack-merge": "^4.1.5",
     "@types/shelljs": "^0.8.8",
     "commander": "^5.0.0",
     "concurrently": "^5.2.0",
