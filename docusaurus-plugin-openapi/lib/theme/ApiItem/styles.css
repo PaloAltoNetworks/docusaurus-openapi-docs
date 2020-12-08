@@ -1,0 +1,59 @@
+:root {
+  --openapi-code-dim: #aaaaaa;
+
+  --openapi-code-red: #f44336;
+  /* orange looks bad on white background */
+  --openapi-code-orange: var(--ifm-code-color);
+  --openapi-code-green: #388e3c;
+  --openapi-code-blue: #1976d2;
+  --openapi-code-purple: #ab47bc;
+
+  --openapi-required: var(--openapi-code-red);
+
+  --openapi-card-background-color: #f6f8fa;
+  --openapi-card-border-radius: var(--ifm-pre-border-radius);
+  /* --openapi-card-border-radius: var(--ifm-card-border-radius); */
+
+  --openapi-input-background: var(--ifm-code-background);
+  --openapi-input-border: var(--ifm-color-primary);
+  --openapi-button-dissabled: #c6c6c6;
+
+  --openapi-monaco-background-color: #ffffff;
+  --openapi-monaco-border-color: #dadde1;
+
+  --openapi-dropzone-color: rgba(0, 0, 0, 0.5);
+  --openapi-dropzone-hover-shim: rgba(235, 237, 240, 0.8);
+
+  --openapi-inverse-color: var(--ifm-color-gray-100);
+}
+
+html[data-theme="dark"] {
+  --openapi-code-dim: #7f7f7f;
+  --openapi-code-red: #fc929e;
+  --openapi-code-orange: #f8b886;
+  --openapi-code-green: #85d996;
+  --openapi-code-blue: #a4cdfe;
+  --openapi-code-purple: #d9a0f9;
+  --openapi-required: var(--openapi-code-red);
+
+  --openapi-card-background-color: var(--ifm-card-background-color);
+
+  --openapi-input-background: #393939;
+  --openapi-input-border: white;
+  --openapi-button-dissabled: #525252;
+
+  --openapi-monaco-background-color: #18191a;
+  --openapi-monaco-border-color: #606770;
+
+  --openapi-dropzone-color: rgba(255, 255, 255, 0.3);
+  --openapi-dropzone-hover-shim: rgba(57, 57, 57, 0.8);
+
+  --openapi-inverse-color: var(--ifm-color-gray-900);
+}
+
+/* Make disabled buttons way less bright */
+.button.disabled,
+.button:disabled,
+.button[disabled] {
+  opacity: 0.35;
+}

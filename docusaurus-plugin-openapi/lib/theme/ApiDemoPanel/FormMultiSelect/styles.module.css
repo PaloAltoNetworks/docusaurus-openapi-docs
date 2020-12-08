@@ -1,0 +1,38 @@
+.inputBase {
+  margin-top: calc(var(--ifm-pre-padding) / 2);
+  /* height: 40px; */
+  background-color: var(--openapi-input-background);
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: var(--ifm-code-font-size);
+  color: var(--ifm-pre-color);
+  padding: 12px var(--ifm-pre-padding);
+
+  border-radius: 4px;
+  border: 2px solid transparent;
+}
+
+.selectInput {
+  composes: inputBase;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.selectInput option {
+  border-radius: 0.25rem;
+  color: var(--ifm-menu-color);
+  margin: 0.25rem 0;
+  padding: var(--ifm-menu-link-padding-vertical)
+    var(--ifm-menu-link-padding-horizontal);
+}
+
+.selectInput:focus option:checked {
+  /* background: #0f62fe linear-gradient(0deg, #0f62fe 0%, #0f62fe 100%); */
+}
+
+.selectInput:focus {
+  /* box-shadow: inset 0px 0px 0px 2px white; */
+  border: 2px solid var(--openapi-input-border);
+}

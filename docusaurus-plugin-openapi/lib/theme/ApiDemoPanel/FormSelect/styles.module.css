@@ -1,0 +1,51 @@
+.inputBase {
+  margin-top: calc(var(--ifm-pre-padding) / 2);
+  /* height: 40px; */
+  background-color: var(--openapi-input-background);
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: var(--ifm-code-font-size);
+  color: var(--ifm-pre-color);
+  padding: 12px 48px 12px var(--ifm-pre-padding);
+
+  border-radius: 4px;
+}
+
+html[data-theme="dark"] .selectInput {
+  margin-top: calc(var(--ifm-pre-padding) / 2);
+  /* height: 40px; */
+  background-color: var(--openapi-input-background);
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: var(--ifm-code-font-size);
+  color: var(--ifm-pre-color);
+  /* padding: 12px var(--ifm-pre-padding); */
+
+  border-radius: 4px;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+
+  background-image: url('data:image/svg+xml;charset=US-ASCII,<svg focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" fill="white"><path d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"></path></svg>');
+  background-repeat: no-repeat;
+  background-position: right var(--ifm-pre-padding) top 50%;
+  background-size: auto auto;
+}
+
+.selectInput {
+  composes: inputBase;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+
+  background-image: url('data:image/svg+xml;charset=US-ASCII,<svg focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"></path></svg>');
+  background-repeat: no-repeat;
+  background-position: right var(--ifm-pre-padding) top 50%;
+  background-size: auto auto;
+}
+
+.selectInput:focus {
+  box-shadow: inset 0px 0px 0px 2px var(--openapi-input-border);
+}

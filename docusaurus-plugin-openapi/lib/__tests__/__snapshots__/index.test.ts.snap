@@ -1,0 +1,436 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`simple website content 1`] = `
+Object {
+  "docs": Array [
+    Object {
+      "collapsed": true,
+      "items": Array [
+        Object {
+          "collapsed": true,
+          "items": Array [
+            Object {
+              "href": "/docs/foo/bar",
+              "label": "Bar",
+              "type": "link",
+            },
+            Object {
+              "href": "/docs/foo/bazSlug.html",
+              "label": "baz",
+              "type": "link",
+            },
+          ],
+          "label": "foo",
+          "type": "category",
+        },
+        Object {
+          "href": "https://github.com",
+          "label": "Github",
+          "type": "link",
+        },
+        Object {
+          "href": "/docs/",
+          "label": "Hello, World !",
+          "type": "link",
+        },
+      ],
+      "label": "Test",
+      "type": "category",
+    },
+    Object {
+      "collapsed": true,
+      "items": Array [
+        Object {
+          "href": "/docs/",
+          "label": "Hello, World !",
+          "type": "link",
+        },
+      ],
+      "label": "Guides",
+      "type": "category",
+    },
+  ],
+}
+`;
+
+exports[`simple website content 2`] = `
+Array [
+  Object {
+    "component": "@theme/DocPage",
+    "exact": false,
+    "modules": Object {
+      "docsMetadata": "~docs/docs-route-ff2.json",
+    },
+    "path": "/docs",
+    "priority": undefined,
+    "routes": Array [
+      Object {
+        "component": "@theme/DocItem",
+        "exact": true,
+        "modules": Object {
+          "content": "@site/docs/hello.md",
+        },
+        "path": "/docs/",
+      },
+      Object {
+        "component": "@theme/DocItem",
+        "exact": true,
+        "modules": Object {
+          "content": "@site/docs/foo/bar.md",
+        },
+        "path": "/docs/foo/bar",
+      },
+      Object {
+        "component": "@theme/DocItem",
+        "exact": true,
+        "modules": Object {
+          "content": "@site/docs/foo/baz.md",
+        },
+        "path": "/docs/foo/bazSlug.html",
+      },
+      Object {
+        "component": "@theme/DocItem",
+        "exact": true,
+        "modules": Object {
+          "content": "@site/docs/ipsum.md",
+        },
+        "path": "/docs/ipsum",
+      },
+      Object {
+        "component": "@theme/DocItem",
+        "exact": true,
+        "modules": Object {
+          "content": "@site/docs/lorem.md",
+        },
+        "path": "/docs/lorem",
+      },
+    ],
+  },
+]
+`;
+
+exports[`site with wrong sidebar file 1`] = `
+"Bad sidebars file. The document id 'goku' was used in the sidebar, but no document with this id could be found.
+Available document ids=
+- foo/bar
+- foo/baz
+- hello
+- ipsum
+- lorem"
+`;
+
+exports[`versioned website content 1`] = `
+Array [
+  Object {
+    "component": "@theme/DocPage",
+    "exact": false,
+    "modules": Object {
+      "docsMetadata": "~docs/docs-1-0-0-route-660.json",
+    },
+    "path": "/docs/1.0.0",
+    "priority": undefined,
+    "routes": Array [
+      Object {
+        "component": "@theme/DocItem",
+        "exact": true,
+        "modules": Object {
+          "content": "@site/versioned_docs/version-1.0.0/hello.md",
+        },
+        "path": "/docs/1.0.0/",
+      },
+      Object {
+        "component": "@theme/DocItem",
+        "exact": true,
+        "modules": Object {
+          "content": "@site/versioned_docs/version-1.0.0/foo/bar.md",
+        },
+        "path": "/docs/1.0.0/foo/barSlug",
+      },
+      Object {
+        "component": "@theme/DocItem",
+        "exact": true,
+        "modules": Object {
+          "content": "@site/versioned_docs/version-1.0.0/foo/baz.md",
+        },
+        "path": "/docs/1.0.0/foo/baz",
+      },
+    ],
+  },
+  Object {
+    "component": "@theme/DocPage",
+    "exact": false,
+    "modules": Object {
+      "docsMetadata": "~docs/docs-next-route-1c8.json",
+    },
+    "path": "/docs/next",
+    "priority": undefined,
+    "routes": Array [
+      Object {
+        "component": "@theme/DocItem",
+        "exact": true,
+        "modules": Object {
+          "content": "@site/docs/hello.md",
+        },
+        "path": "/docs/next/",
+      },
+      Object {
+        "component": "@theme/DocItem",
+        "exact": true,
+        "modules": Object {
+          "content": "@site/docs/foo/bar.md",
+        },
+        "path": "/docs/next/foo/barSlug",
+      },
+    ],
+  },
+  Object {
+    "component": "@theme/DocPage",
+    "exact": false,
+    "modules": Object {
+      "docsMetadata": "~docs/docs-route-ff2.json",
+    },
+    "path": "/docs",
+    "priority": -1,
+    "routes": Array [
+      Object {
+        "component": "@theme/DocItem",
+        "exact": true,
+        "modules": Object {
+          "content": "@site/versioned_docs/version-1.0.1/hello.md",
+        },
+        "path": "/docs/",
+      },
+      Object {
+        "component": "@theme/DocItem",
+        "exact": true,
+        "modules": Object {
+          "content": "@site/versioned_docs/version-1.0.1/foo/bar.md",
+        },
+        "path": "/docs/foo/bar",
+      },
+    ],
+  },
+]
+`;
+
+exports[`versioned website content: all sidebars 1`] = `
+Object {
+  "docs": Array [
+    Object {
+      "collapsed": true,
+      "items": Array [
+        Object {
+          "href": "/docs/next/foo/barSlug",
+          "label": "bar",
+          "type": "link",
+        },
+      ],
+      "label": "Test",
+      "type": "category",
+    },
+    Object {
+      "collapsed": true,
+      "items": Array [
+        Object {
+          "href": "/docs/next/",
+          "label": "hello",
+          "type": "link",
+        },
+      ],
+      "label": "Guides",
+      "type": "category",
+    },
+  ],
+  "version-1.0.0/docs": Array [
+    Object {
+      "collapsed": true,
+      "items": Array [
+        Object {
+          "href": "/docs/1.0.0/foo/barSlug",
+          "label": "bar",
+          "type": "link",
+        },
+        Object {
+          "href": "/docs/1.0.0/foo/baz",
+          "label": "baz",
+          "type": "link",
+        },
+      ],
+      "label": "Test",
+      "type": "category",
+    },
+    Object {
+      "collapsed": true,
+      "items": Array [
+        Object {
+          "href": "/docs/1.0.0/",
+          "label": "hello",
+          "type": "link",
+        },
+      ],
+      "label": "Guides",
+      "type": "category",
+    },
+  ],
+  "version-1.0.1/docs": Array [
+    Object {
+      "collapsed": true,
+      "items": Array [
+        Object {
+          "href": "/docs/foo/bar",
+          "label": "bar",
+          "type": "link",
+        },
+      ],
+      "label": "Test",
+      "type": "category",
+    },
+    Object {
+      "collapsed": true,
+      "items": Array [
+        Object {
+          "href": "/docs/",
+          "label": "hello",
+          "type": "link",
+        },
+      ],
+      "label": "Guides",
+      "type": "category",
+    },
+  ],
+}
+`;
+
+exports[`versioned website content: base metadata for first version 1`] = `
+Object {
+  "docsSidebars": Object {
+    "version-1.0.0/docs": Array [
+      Object {
+        "collapsed": true,
+        "items": Array [
+          Object {
+            "href": "/docs/1.0.0/foo/barSlug",
+            "label": "bar",
+            "type": "link",
+          },
+          Object {
+            "href": "/docs/1.0.0/foo/baz",
+            "label": "baz",
+            "type": "link",
+          },
+        ],
+        "label": "Test",
+        "type": "category",
+      },
+      Object {
+        "collapsed": true,
+        "items": Array [
+          Object {
+            "href": "/docs/1.0.0/",
+            "label": "hello",
+            "type": "link",
+          },
+        ],
+        "label": "Guides",
+        "type": "category",
+      },
+    ],
+  },
+  "permalinkToSidebar": Object {
+    "/docs/1.0.0/": "version-1.0.0/docs",
+    "/docs/1.0.0/foo/barSlug": "version-1.0.0/docs",
+    "/docs/1.0.0/foo/baz": "version-1.0.0/docs",
+  },
+  "version": "1.0.0",
+}
+`;
+
+exports[`versioned website content: base metadata for latest version 1`] = `
+Object {
+  "docsSidebars": Object {
+    "version-1.0.1/docs": Array [
+      Object {
+        "collapsed": true,
+        "items": Array [
+          Object {
+            "href": "/docs/foo/bar",
+            "label": "bar",
+            "type": "link",
+          },
+        ],
+        "label": "Test",
+        "type": "category",
+      },
+      Object {
+        "collapsed": true,
+        "items": Array [
+          Object {
+            "href": "/docs/",
+            "label": "hello",
+            "type": "link",
+          },
+        ],
+        "label": "Guides",
+        "type": "category",
+      },
+    ],
+  },
+  "permalinkToSidebar": Object {
+    "/docs/": "version-1.0.1/docs",
+    "/docs/foo/bar": "version-1.0.1/docs",
+  },
+  "version": "1.0.1",
+}
+`;
+
+exports[`versioned website content: base metadata for next version 1`] = `
+Object {
+  "docsSidebars": Object {
+    "docs": Array [
+      Object {
+        "collapsed": true,
+        "items": Array [
+          Object {
+            "href": "/docs/next/foo/barSlug",
+            "label": "bar",
+            "type": "link",
+          },
+        ],
+        "label": "Test",
+        "type": "category",
+      },
+      Object {
+        "collapsed": true,
+        "items": Array [
+          Object {
+            "href": "/docs/next/",
+            "label": "hello",
+            "type": "link",
+          },
+        ],
+        "label": "Guides",
+        "type": "category",
+      },
+    ],
+  },
+  "permalinkToSidebar": Object {
+    "/docs/next/": "docs",
+    "/docs/next/foo/barSlug": "docs",
+  },
+  "version": "next",
+}
+`;
+
+exports[`versioned website content: sidebars needed for each version 1`] = `
+Object {
+  "1.0.0": Set {
+    "version-1.0.0/docs",
+  },
+  "1.0.1": Set {
+    "version-1.0.1/docs",
+  },
+  "next": Set {
+    "docs",
+  },
+}
+`;

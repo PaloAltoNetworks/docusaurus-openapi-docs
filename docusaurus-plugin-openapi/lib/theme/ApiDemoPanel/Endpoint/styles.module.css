@@ -1,0 +1,61 @@
+.showMoreButton {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  cursor: pointer;
+  font-size: var(--ifm-code-font-size);
+  /* font-weight: var(--ifm-button-font-weight); */
+  /* line-height: 1.5; */
+
+  padding: 0;
+
+  user-select: none;
+  white-space: nowrap;
+
+  border: 0px solid transparent;
+
+  display: block;
+  /* width: 100%; */
+
+  background-color: transparent;
+
+  color: var(--ifm-color-primary);
+  cursor: pointer;
+  margin-top: var(--ifm-pre-padding);
+  margin-bottom: 0;
+  text-align: left;
+  display: block;
+}
+
+.showMoreButton:focus {
+  outline: 0;
+}
+
+.showMoreButton:hover {
+  /* text-decoration: underline; */
+  /* background-color: red; */
+  color: var(--ifm-color-primary-hover);
+}
+
+.showMoreButton:first-child {
+  margin-top: 0;
+}
+
+.optionsPanel:empty {
+  display: none;
+}
+
+.optionsPanel {
+  background: var(--openapi-card-background-color);
+  border-radius: var(--openapi-card-border-radius);
+  color: var(--ifm-pre-color);
+  line-height: var(--ifm-pre-line-height);
+  margin-bottom: var(--ifm-spacing-vertical);
+  margin-top: 0;
+  overflow: auto;
+  padding: var(--ifm-pre-padding);
+
+  /* hack for view calculation when monaco is hidden */
+  position: relative;
+}
