@@ -1,7 +1,0 @@
-.formItem {
-  margin-top: var(--ifm-pre-padding);
-}
-
-.formItem:first-child {
-  margin-top: 0;
-}
