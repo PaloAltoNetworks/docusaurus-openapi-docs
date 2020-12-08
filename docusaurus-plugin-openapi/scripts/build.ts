@@ -1,4 +1,5 @@
-#!/usr/bin/env TS_NODE_COMPILER_OPTIONS={"module":"commonjs"} yarn -s ts-node
+#!/usr/bin/env ts-node-script
+
 // @ts-ignore
 import concurrently, { CommandObj, Options } from "concurrently";
 import glob from "glob";
