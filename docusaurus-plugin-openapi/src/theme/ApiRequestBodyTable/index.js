@@ -102,6 +102,7 @@ function RowsRoot({ schema }) {
         {Object.keys(schema.properties).map((key) => {
           return (
             <Row
+              key={key}
               name={key}
               schema={schema.properties[key]}
               required={schema.required?.includes(key)}

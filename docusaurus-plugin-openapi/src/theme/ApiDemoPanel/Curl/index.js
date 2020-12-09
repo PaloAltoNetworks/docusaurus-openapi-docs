@@ -192,6 +192,7 @@ function Curl() {
         {langs.map((lang) => {
           return (
             <button
+              key={lang.tabName}
               className={language === lang ? styles.selected : undefined}
               onClick={() => setLanguage(lang)}
             >

@@ -41,16 +41,7 @@ function getPaths(spec: OpenApiObject): ApiItem[] {
           let method = key;
           let operationObject = val as OperationObject;
 
-          let summary = operationObject.summary || operationObject.operationId || "Missing summary";
-          const sp = summary.split("\n");
-          if (sp.length > 1) {
-            summary = sp[0];
-          }
-
-          if (summary.length > 30) {
-            summary = summary.slice(0, 30);
-          }
-
+          const summary = operationObject.summary || operationObject.operationId || "Missing summary";
           if (!operationObject.description) {
             operationObject.description = operationObject.summary || operationObject.operationId;
           }
