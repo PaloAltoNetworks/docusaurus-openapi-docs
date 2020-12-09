@@ -219,7 +219,7 @@ export default function pluginOpenAPI(
             {
               test: /(\.mdx?)$/,
               include: [dataDir],
-              use: [
+              use: compact([ // compact because getCacheLoader may return nil on CI
                 getCacheLoader(isServer),
                 getBabelLoader(isServer),
                 {
@@ -229,7 +229,7 @@ export default function pluginOpenAPI(
                     rehypePlugins,
                   },
                 },
-              ] as Loader[],
+              ]) as Loader[],
             },
           ],
         },
@@ -240,4 +240,8 @@ export default function pluginOpenAPI(
       return wp;
     },
   };
+}
+
+function compact<T>(elems: T[]): T[] {
+  return elems.filter((t) => !!t);
 }
