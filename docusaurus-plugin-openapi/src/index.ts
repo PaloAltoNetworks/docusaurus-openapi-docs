@@ -37,8 +37,8 @@ export default function pluginOpenAPI(
   const name = "docusaurus-plugin-openapi";
 
   const options: PluginOptions = { ...DEFAULT_OPTIONS, ...opts };
-  // const homePageDocsRoutePath =
-  //   options.routeBasePath === "" ? "/" : options.routeBasePath;
+  const homePageDocsRoutePath =
+    options.routeBasePath === "" ? "/" : options.routeBasePath;
 
   if (options.admonitions) {
     options.remarkPlugins = options.remarkPlugins.concat([
@@ -184,22 +184,22 @@ export default function pluginOpenAPI(
       return;
     },
 
-    // async routesLoaded(routes) {
-    //   const homeDocsRoutes = routes.filter(
-    //     (routeConfig) => routeConfig.path === homePageDocsRoutePath
-    //   );
+    async routesLoaded(routes) {
+      const homeDocsRoutes = routes.filter(
+        (routeConfig) => routeConfig.path === homePageDocsRoutePath
+      );
 
-    //   // Remove the route for docs home page if there is a page with the same path (i.e. docs).
-    //   if (homeDocsRoutes.length > 1) {
-    //     const docsHomePageRouteIndex = routes.findIndex(
-    //       (route) =>
-    //         route.component === options.apiLayoutComponent &&
-    //         route.path === homePageDocsRoutePath
-    //     );
+      // Remove the route for docs home page if there is a page with the same path (i.e. docs).
+      if (homeDocsRoutes.length > 1) {
+        const docsHomePageRouteIndex = routes.findIndex(
+          (route) =>
+            route.component === options.apiLayoutComponent &&
+            route.path === homePageDocsRoutePath
+        );
 
-    //     delete routes[docsHomePageRouteIndex!];
-    //   }
-    // },
+        delete routes[docsHomePageRouteIndex!];
+      }
+    },
 
     configureWebpack(
       _config: Configuration,
