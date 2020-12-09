@@ -235,8 +235,6 @@ export default function pluginOpenAPI(
         },
       };
 
-      console.log(wp.module.rules[0]);
-
       return wp;
     },
   };
