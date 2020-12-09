@@ -208,7 +208,7 @@ export default function pluginOpenAPI(
     ) {
       const { rehypePlugins, remarkPlugins } = options;
 
-      return {
+      const wp = {
         resolve: {
           alias: {
             "~api": dataDir,
@@ -234,6 +234,10 @@ export default function pluginOpenAPI(
           ],
         },
       };
+
+      console.log(wp.module.rules[0]);
+
+      return wp;
     },
   };
 }
