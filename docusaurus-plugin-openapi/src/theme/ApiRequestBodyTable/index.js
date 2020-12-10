@@ -137,7 +137,7 @@ function RowsRoot({ schema }) {
   );
 }
 
-function RequestBodyTable({ body }) {
+function RequestBodyTable({ body, title }) {
   if (body === undefined) {
     return null;
   }
@@ -155,7 +155,7 @@ function RequestBodyTable({ body }) {
         <thead>
           <tr>
             <th style={{ textAlign: "left" }}>
-              Request Body{" "}
+              {title + " "}
               {body.required && (
                 <>
                   {
