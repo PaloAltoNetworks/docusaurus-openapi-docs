@@ -13,7 +13,7 @@ function parseFinalSchema(schema) {
   if (schema.type === "object") {
     return schema.xml?.name || schema.type;
   }
-  return schema.type;
+  return schema.title || schema.type;
 }
 
 function getSchemaName(schema) {
@@ -74,6 +74,7 @@ function Rows({ schema }) {
           {Object.keys(schema.properties).map((key) => {
             return (
               <Row
+                key={key}
                 name={key}
                 schema={schema.properties[key]}
                 required={schema.required?.includes(key)}
@@ -148,6 +149,11 @@ function RequestBodyTable({ body, title }) {
   const randomFirstKey = Object.keys(body.content)[0];
 
   const firstBody = body.content[randomFirstKey].schema;
+
+  // we don't show the table if there is no properties to show
+  if (Object.keys(firstBody.properties).length === 0) {
+    return null;
+  }
 
   return (
     <>

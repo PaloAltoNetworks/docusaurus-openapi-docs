@@ -14,14 +14,14 @@ function StatusCodesTable({ responses }) {
   return codes.map((code) => {
     const response = responses[code];
 
-    return <StatusCodeTable key={code} code={code} response={response} />;
+    return <StatusCodeTable key={code} response={response} />;
   })
 }
 
-function StatusCodeTable({ code, response }) {
+function StatusCodeTable({ response }) {
   const mappedResponse = {
     ...response,
-    description: ''
+    description: '' // remove description since we are describing the fields
   };
 
   return (
