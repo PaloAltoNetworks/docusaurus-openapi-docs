@@ -151,7 +151,7 @@ function RequestBodyTable({ body, title }) {
   const firstBody = body.content[randomFirstKey].schema;
 
   // we don't show the table if there is no properties to show
-  if (Object.keys(firstBody.properties).length === 0) {
+  if (Object.keys(firstBody.properties || {}).length === 0) {
     return null;
   }
 
