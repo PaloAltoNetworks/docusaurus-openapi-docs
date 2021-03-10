@@ -208,7 +208,7 @@ export default function pluginOpenAPI(
     ) {
       const { rehypePlugins, remarkPlugins } = options;
 
-      return {
+      const wp = {
         resolve: {
           alias: {
             "~api": dataDir,
@@ -219,7 +219,7 @@ export default function pluginOpenAPI(
             {
               test: /(\.mdx?)$/,
               include: [dataDir],
-              use: [
+              use: compact([ // compact because getCacheLoader may return nil on CI
                 getCacheLoader(isServer),
                 getBabelLoader(isServer),
                 {
@@ -229,11 +229,17 @@ export default function pluginOpenAPI(
                     rehypePlugins,
                   },
                 },
-              ] as Loader[],
+              ]) as Loader[],
             },
           ],
         },
       };
+
+      return wp;
     },
   };
+}
+
+function compact<T>(elems: T[]): T[] {
+  return elems.filter((t) => !!t);
 }

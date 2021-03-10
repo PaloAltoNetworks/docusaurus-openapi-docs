@@ -9,7 +9,7 @@ function ContentType() {
   const contentType = useSelector((state) => state.contentType);
   const { setContentType } = useActions();
 
-  if (contentTypeOptions.length === 0) {
+  if (contentTypeOptions.length <= 1) {
     return null;
   }
 

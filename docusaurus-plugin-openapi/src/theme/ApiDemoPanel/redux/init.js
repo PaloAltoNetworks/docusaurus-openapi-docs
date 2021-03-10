@@ -13,13 +13,13 @@ function init({
 
   const contentTypeArray = Object.keys(content);
 
-  const acceptArray = [
-    ...new Set(
+  const acceptArray = Array.from(
+    new Set(
       Object.values(responses)
         .map((response) => Object.keys(response.content || {}))
         .flat()
-    ),
-  ];
+    )
+  );
 
   let params = {
     path: [],

@@ -1,5 +1,5 @@
 import React from "react";
-import MD from "react-markdown";
+import RequestBodyTable from "../ApiRequestBodyTable";
 
 function StatusCodesTable({ responses }) {
   // openapi requires at least one response, so we shouldn't HAVE to check...
@@ -10,39 +10,23 @@ function StatusCodesTable({ responses }) {
   if (codes.length === 0) {
     return null;
   }
+
+  return codes.map((code) => {
+    const response = responses[code];
+
+    return <StatusCodeTable key={code} response={response} />;
+  })
+}
+
+function StatusCodeTable({ response }) {
+  const mappedResponse = {
+    ...response,
+    description: '' // remove description since we are describing the fields
+  };
+
   return (
     <>
-      <table style={{ display: "table" }}>
-        <thead>
-          <tr>
-            <th style={{ textAlign: "left" }}>Status Codes</th>
-          </tr>
-        </thead>
-        <tbody>
-          {codes.map((code) => {
-            return (
-              <tr key={code}>
-                <td>
-                  <div style={{ display: "flex" }}>
-                    <div
-                      style={{ marginRight: "var(--ifm-table-cell-padding)" }}
-                    >
-                      <code>{code}</code>
-                    </div>
-                    <div>
-                      <MD
-                        className="table-markdown"
-                        escapeHtml={false}
-                        source={responses[code].description}
-                      />
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      <RequestBodyTable body={mappedResponse} title="Response Body" />
     </>
   );
 }
