@@ -11,7 +11,6 @@ import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import useUserPreferencesContext from "@theme/hooks/useUserPreferencesContext";
 import useLockBodyScroll from "@theme/hooks/useLockBodyScroll";
 import useWindowSize, { windowSizes } from "@theme/hooks/useWindowSize";
-import useLogo from "@theme/hooks/useLogo";
 import useScrollPosition from "@theme/hooks/useScrollPosition";
 import Link from "@docusaurus/Link";
 import isInternalUrl from "@docusaurus/isInternalUrl";
@@ -195,7 +194,6 @@ function DocSidebar(props) {
     } = {},
     isClient,
   } = useDocusaurusContext();
-  const { logoLink, logoLinkProps, logoImageUrl, logoAlt } = useLogo();
   const { isAnnouncementBarClosed } = useUserPreferencesContext();
   const { scrollY } = useScrollPosition();
 
@@ -233,19 +231,6 @@ function DocSidebar(props) {
         [styles.sidebarWithHideableNavbar]: hideOnScroll,
       })}
     >
-      {hideOnScroll && (
-        <Link
-          tabIndex="-1"
-          className={styles.sidebarLogo}
-          to={logoLink}
-          {...logoLinkProps}
-        >
-          {logoImageUrl != null && (
-            <img key={isClient} src={logoImageUrl} alt={logoAlt} />
-          )}
-          {title != null && <strong>{title}</strong>}
-        </Link>
-      )}
       <div
         className={clsx("menu", "menu--responsive", styles.menu, {
           "menu--show": showResponsiveSidebar,

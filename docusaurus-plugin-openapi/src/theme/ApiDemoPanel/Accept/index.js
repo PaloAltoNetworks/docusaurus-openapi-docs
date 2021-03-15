@@ -9,7 +9,7 @@ function Accept() {
   const accept = useSelector((state) => state.accept);
   const { setAccept } = useActions();
 
-  if (acceptOptions.length === 0) {
+  if (acceptOptions.length <= 1) {
     return null;
   }
 
