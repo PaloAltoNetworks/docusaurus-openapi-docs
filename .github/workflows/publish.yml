@@ -11,16 +11,17 @@ jobs:
         with:
           node-version: 12
           registry-url: https://registry.npmjs.org/
-      - name: Autoincrement version
-        run: |
-          # from refs/tags/v1.2.3 get 1.2.3
-          VERSION=$(echo $GITHUB_REF | sed 's#.*/##')
-          npm version --no-git-tag-version $VERSION
-        shell: bash
       - run: |
           cd docusaurus-plugin-openapi
+
+          # from refs/tags/v1.2.3 get 1.2.3
+          VERSION=$(echo $GITHUB_REF | sed 's#.*/##')
+          echo "Tagging version $VERSION from $GITHUB_REF"
+          npm version --no-git-tag-version $VERSION
+
           npm install
           npm run build
           npm publish
+        shell: bash
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
