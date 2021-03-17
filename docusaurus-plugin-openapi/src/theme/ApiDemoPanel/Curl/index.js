@@ -109,10 +109,6 @@ function Curl() {
 
   const { siteConfig } = useDocusaurusContext();
 
-  const langs = siteConfig?.themeConfig?.languageTabs || languageSet;
-
-  const [language, setLanguage] = useState(langs[0]);
-
   const [copyText, setCopyText] = useState("Copy");
 
   const pathParams = useSelector((state) => state.params.path);
@@ -120,6 +116,7 @@ function Curl() {
   const cookieParams = useSelector((state) => state.params.cookie);
   const headerParams = useSelector((state) => state.params.header);
   const contentType = useSelector((state) => state.contentType);
+  const codeSamples = useSelector((state) => state.codeSamples);
   const body = useSelector((state) => state.body);
   const accept = useSelector((state) => state.accept);
   const endpoint = useSelector((state) => state.endpoint);
@@ -127,10 +124,14 @@ function Curl() {
   const security = useSelector((state) => state.security);
   const bearerToken = useSelector((state) => state.bearerToken);
 
+  const langs = !!codeSamples ? [languageSet[0], ...codeSamples] : (siteConfig?.themeConfig?.languageTabs || languageSet);
+
+  const [language, setLanguage] = useState(langs[0]);
+
   const [codeText, setCodeText] = useState("");
 
   useEffect(() => {
-    if (language) {
+    if (language && !!language.options) {
       const postmanRequest = buildPostmanRequest(postman, {
         queryParams,
         pathParams,
@@ -156,6 +157,10 @@ function Curl() {
           setCodeText(snippet);
         }
       );
+    } else if (language && !!language.source) {
+      setCodeText(language.source);
+    } else {
+      setCodeText("");
     }
   }, [
     accept,
@@ -192,11 +197,11 @@ function Curl() {
         {langs.map((lang) => {
           return (
             <button
-              key={lang.tabName}
+              key={lang.tabName || lang.label}
               className={language === lang ? styles.selected : undefined}
               onClick={() => setLanguage(lang)}
             >
-              {lang.tabName}
+              {lang.tabName || lang.label}
             </button>
           );
         })}
@@ -206,7 +211,7 @@ function Curl() {
         {...defaultProps}
         theme={languageTheme}
         code={codeText}
-        language={language.highlight}
+        language={language.highlight || language.lang}
       >
         {({ className, tokens, getLineProps, getTokenProps }) => (
           <FloatingButton onClick={handleCurlCopy} label={copyText}>

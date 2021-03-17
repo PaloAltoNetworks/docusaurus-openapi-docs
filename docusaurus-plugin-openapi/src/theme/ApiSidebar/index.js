@@ -279,9 +279,9 @@ function DocSidebar(props) {
           )}
         </button>
         <ul className="menu__list">
-          {sidebarData.map((item) => (
+          {sidebarData.map((item, idx) => (
             <DocSidebarItem
-              key={item.label}
+              key={idx}
               item={item}
               onItemClick={(e) => {
                 e.target.blur();

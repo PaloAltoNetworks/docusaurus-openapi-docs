@@ -189,7 +189,7 @@ function buildPostmanRequest(
   if (bearerToken && security?.length > 0) {
     otherHeaders.push({
       key: "Authorization",
-      value: `Bearer ${bearerToken}`,
+      value: bearerToken,
     });
   }
 

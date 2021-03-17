@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import FormSelect from "./../FormSelect";
+import FormTextInput from "./../FormTextInput";
 import { useSelector } from "react-redux";
 import { useActions } from "./../redux/actions";
 import FormItem from "./../FormItem";
@@ -72,6 +73,17 @@ function Endpoint() {
                 />
               </FormItem>
             );
+          } else {
+            return (
+              <FormItem label={key}>
+                <FormTextInput
+                  placeholder={endpoint.variables[key].default}
+                  onChange={(e) => {
+                    setEndpointValue(key, e.target.value);
+                  }}
+                />
+              </FormItem>
+            )
           }
           return null;
         })}

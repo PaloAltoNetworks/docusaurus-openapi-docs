@@ -31,6 +31,12 @@ function ApiDemoPanel({ item }) {
       <div style={{ marginTop: "3.5em" }}>
         <Authorization />
 
+        <div
+          style={{ marginBottom: "var(--ifm-table-cell-padding)" }}
+        >
+          <code><b>{item.operationId}</b></code>
+        </div>
+        
         <MethodEndpoint />
 
         <div className={styles.optionsPanel}>
