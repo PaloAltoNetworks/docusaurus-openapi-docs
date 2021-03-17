@@ -11,22 +11,37 @@ function StatusCodesTable({ responses }) {
     return null;
   }
 
-  return codes.map((code) => {
-    const response = responses[code];
-
-    return <StatusCodeTable key={code} response={response} />;
-  })
-}
-
-function StatusCodeTable({ response }) {
-  const mappedResponse = {
-    ...response,
-    description: '' // remove description since we are describing the fields
-  };
-
   return (
     <>
-      <RequestBodyTable body={mappedResponse} title="Response Body" />
+      <table style={{ display: "table" }}>
+        <thead>
+          <tr>
+            <th style={{ textAlign: "left" }}>Status Codes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {codes.map((code) => {
+            return (
+              <tr key={code}>
+                <td>
+                  <div style={{ display: "flex" }}>
+                    <div
+                      style={{ marginRight: "var(--ifm-table-cell-padding)" }}
+                    >
+                      <code>{code}</code>
+                    </div>
+                    <div>
+                      <RequestBodyTable
+                        body={{ ...responses[code], description: '' }}
+                        title={responses[code].description} />
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </>
   );
 }
