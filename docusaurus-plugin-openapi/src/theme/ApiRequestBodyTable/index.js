@@ -138,7 +138,7 @@ function RowsRoot({ schema }) {
 }
 
 function RequestBodyTable({ body, title }) {
-  if (body === undefined) {
+  if (body === undefined || body.content === undefined) {
     return null;
   }
 
