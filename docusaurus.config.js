@@ -97,7 +97,7 @@ module.exports = {
     [
       path.resolve(__dirname, "./docusaurus-plugin-openapi"),
       {
-        openapiPath: require.resolve("./openapi-cos.json"),
+        openapiPath: require.resolve("./openapi-issue-21.json"),
         corsProxy: "https://cors-anywhere.herokuapp.com",
       },
     ],

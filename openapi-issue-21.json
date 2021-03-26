@@ -1,0 +1,54 @@
+{
+  "openapi": "",
+  "info": {
+    "title": "",
+    "version": ""
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/account/links/{partnerId}": {
+      "post": {
+        "description": "This method receives an authorization token. That token will be used to get the user's tokens."
+      }
+    },
+    "/account/pairs/{pairId}/linking-caps": {
+      "get": {}
+    },
+    "/api/aoi/subscriptions": {
+      "post": {
+        "description": "This method will create a new AOI subscription"
+      }
+    },
+    "/api/aoi/subscriptions/pair/{pairId}": {
+      "get": {
+        "description": "This method will return the AOI subscription based on the user session and the linked account"
+      },
+      "delete": {
+        "description": "This method will delete the current aoi subscription for a given pair"
+      }
+    },
+    "/api/exchange/orders/{transactionId}": {
+      "get": {}
+    },
+    "/api/feedback/contact-us": {
+      "post": {}
+    },
+    "/maintenance/partners/{partnerId}/accounts/{accountId}/history": {
+      "delete": {}
+    },
+    "/partners/accounts/{accountId}/links/{partnerId}/exists": {
+      "get": {
+        "description": "Proxy to PAUL's check if link exists"
+      }
+    }
+  },
+  "components": {}
+}

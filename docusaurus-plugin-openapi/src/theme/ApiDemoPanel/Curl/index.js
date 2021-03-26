@@ -124,7 +124,10 @@ function Curl() {
   const security = useSelector((state) => state.security);
   const bearerToken = useSelector((state) => state.bearerToken);
 
-  const langs = !!codeSamples ? [languageSet[0], ...codeSamples] : (siteConfig?.themeConfig?.languageTabs || languageSet);
+  const langs = [
+    ...(siteConfig?.themeConfig?.languageTabs ?? languageSet),
+    ...codeSamples,
+  ];
 
   const [language, setLanguage] = useState(langs[0]);
 

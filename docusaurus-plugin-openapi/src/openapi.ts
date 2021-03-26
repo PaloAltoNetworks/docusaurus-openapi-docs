@@ -41,11 +41,15 @@ function getPaths(spec: OpenApiObject): ApiItem[] {
           let method = key;
           let operationObject = val as OperationObject;
 
-          const summary = operationObject.summary || operationObject.operationId || "Missing summary";
-          if (!operationObject.description) {
-            operationObject.description = operationObject.summary || operationObject.operationId;
+          const summary =
+            operationObject.summary ??
+            operationObject.operationId ??
+            "Missing summary";
+          if (operationObject.description === undefined) {
+            operationObject.description =
+              operationObject.summary ?? operationObject.operationId ?? "";
           }
-          
+
           const baseId = kebabCase(summary);
           let count = seen[baseId];
 
@@ -58,7 +62,8 @@ function getPaths(spec: OpenApiObject): ApiItem[] {
             seen[baseId] = 1;
           }
 
-          const servers = operationObject.servers || pathObject.servers || spec.servers;
+          const servers =
+            operationObject.servers || pathObject.servers || spec.servers;
 
           // NOTE: no security on the path level, only op level.
           // The following line is unneeded, but is just for piece of mind.
@@ -229,7 +234,8 @@ export async function loadOpenapi(
       const prev =
         order[i].items[ii - 1] ||
         order[i - 1]?.items[order[i - 1].items.length - 1];
-      const next = order[i].items[ii + 1] || (order[i+1] ? order[i + 1].items[0] : null);
+      const next =
+        order[i].items[ii + 1] || (order[i + 1] ? order[i + 1].items[0] : null);
 
       if (prev) {
         item.previous = {
