@@ -195,7 +195,8 @@ function DocSidebar(props) {
     isClient,
   } = useDocusaurusContext();
   const { isAnnouncementBarClosed } = useUserPreferencesContext();
-  const { scrollY } = useScrollPosition();
+  const [scrollY, setScrollY] = useState(0);
+  useScrollPosition(({ scrollY }) => { setScrollY(scrollY) });
 
   const {
     docsSidebars,
