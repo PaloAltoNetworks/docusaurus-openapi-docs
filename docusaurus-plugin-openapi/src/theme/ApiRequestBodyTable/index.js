@@ -1,5 +1,7 @@
 import React from "react";
-import MD from "react-markdown/with-html";
+import MD from "react-markdown";
+import rehypeRaw from 'rehype-raw'
+import rehypeSanitize from 'rehype-sanitize'
 
 import styles from "./styles.module.css";
 
@@ -47,9 +49,9 @@ function Row({ name, schema, required }) {
         {schema.description && (
           <div className={styles.description}>
             <MD
-              escapeHtml={false}
+              rehypePlugins={[rehypeRaw, rehypeSanitize]}
               className="table-markdown"
-              source={schema.description}
+              children={schema.description}
             />
           </div>
         )}
@@ -127,9 +129,9 @@ function RowsRoot({ schema }) {
         {schema.description && (
           <div className={styles.description}>
             <MD
-              escapeHtml={false}
+              rehypePlugins={[rehypeRaw, rehypeSanitize]}
               className="table-markdown"
-              source={schema.description}
+              children={schema.description}
             />
           </div>
         )}
@@ -183,9 +185,9 @@ function RequestBodyTable({ body, title }) {
               )}
               <div style={{ fontWeight: "normal" }}>
                 <MD
+                  rehypePlugins={[rehypeRaw, rehypeSanitize]}
                   className="table-markdown"
-                  escapeHtml={false}
-                  source={body.description}
+                  children={body.description}
                 />
               </div>
             </th>

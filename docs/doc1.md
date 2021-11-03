@@ -1,8 +1,8 @@
 ---
-id: doc1
-title: Style Guide
-sidebar_label: Style Guide
+slug: /
 ---
+
+# Style Guide
 
 You can write content using [GitHub-flavored Markdown syntax](https://github.github.com/gfm/).
 
@@ -63,7 +63,7 @@ Strikethrough uses two tildes. ~~Scratch this.~~
 
 [I'm a reference-style link][arbitrary case-insensitive reference text]
 
-[I'm a relative reference to a repository file](../blob/master/LICENSE)
+[I'm a relative reference to a repository file](../LICENSE)
 
 [You can use numbers for reference-style link definitions][1]
 

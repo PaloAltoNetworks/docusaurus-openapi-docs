@@ -10,8 +10,8 @@ import clsx from "clsx";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import useUserPreferencesContext from "@theme/hooks/useUserPreferencesContext";
 import useLockBodyScroll from "@theme/hooks/useLockBodyScroll";
-import useWindowSize, { windowSizes } from "@theme/hooks/useWindowSize";
-import useScrollPosition from "@theme/hooks/useScrollPosition";
+import useWindowSize from "@theme/hooks/useWindowSize";
+import { useScrollPosition } from "@docusaurus/theme-common";
 import Link from "@docusaurus/Link";
 import isInternalUrl from "@docusaurus/isInternalUrl";
 
@@ -209,7 +209,7 @@ function DocSidebar(props) {
   const windowSize = useWindowSize();
 
   useEffect(() => {
-    if (windowSize === windowSizes.desktop) {
+    if (windowSize === 'desktop') {
       setShowResponsiveSidebar(false);
     }
   }, [windowSize]);

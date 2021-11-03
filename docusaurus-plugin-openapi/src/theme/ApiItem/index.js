@@ -1,5 +1,7 @@
 import React from "react";
-import MD from "react-markdown/with-html";
+import MD from "react-markdown";
+import rehypeRaw from 'rehype-raw'
+import rehypeSanitize from 'rehype-sanitize'
 
 import Head from "@docusaurus/Head";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
@@ -84,8 +86,8 @@ function ApiItem({ openapi, content: DescriptionContent }) {
                         {deprecatedDescription && (
                           <div className="admonition-content">
                             <MD
-                              escapeHtml={false}
-                              source={deprecatedDescription}
+                              rehypePlugins={[rehypeRaw, rehypeSanitize]}
+                              children={deprecatedDescription}
                             />
                           </div>
                         )}
@@ -96,7 +98,7 @@ function ApiItem({ openapi, content: DescriptionContent }) {
                       <DescriptionContent />
                     </MDXProvider>
 
-                    {/* <MD escapeHtml={false} source={description} /> */}
+                    {/* <MD rehypePlugins={[rehypeRaw, rehypeSanitize]} children={description} /> */}
                     <ParamsTable parameters={parameters} type="path" />
                     <ParamsTable parameters={parameters} type="query" />
                     <ParamsTable parameters={parameters} type="header" />

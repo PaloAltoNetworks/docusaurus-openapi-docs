@@ -22,7 +22,7 @@ module.exports = {
         alt: "My Site Logo",
         src: "img/logo.svg",
       },
-      links: [
+      items: [
         {
           to: "docs/",
           activeBasePath: "docs",
@@ -97,7 +97,7 @@ module.exports = {
     [
       path.resolve(__dirname, "./docusaurus-plugin-openapi"),
       {
-        openapiPath: require.resolve("./openapi-issue-21.json"),
+        openapiPath: require.resolve("./openapi.json"),
         corsProxy: "https://cors-anywhere.herokuapp.com",
       },
     ],
@@ -107,8 +107,6 @@ module.exports = {
       "@docusaurus/preset-classic",
       {
         docs: {
-          // It is recommended to set document id as docs home page (`docs/` path).
-          homePageId: "doc1",
           sidebarPath: require.resolve("./sidebars.js"),
           // Please change this to your repo.
           editUrl:

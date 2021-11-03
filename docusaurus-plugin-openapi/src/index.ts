@@ -15,7 +15,7 @@ import {
   RouteConfig,
   ConfigureWebpackUtils,
 } from "@docusaurus/types";
-import { Configuration, Loader } from "webpack";
+import webpack, { Configuration } from "webpack";
 
 import { PluginOptions, LoadedContent, ApiSection } from "./types";
 import { loadOpenapi } from "./openapi";
@@ -37,8 +37,6 @@ export default function pluginOpenAPI(
   const name = "docusaurus-plugin-openapi";
 
   const options: PluginOptions = { ...DEFAULT_OPTIONS, ...opts };
-  const homePageDocsRoutePath =
-    options.routeBasePath === "" ? "/" : options.routeBasePath;
 
   if (options.admonitions) {
     options.remarkPlugins = options.remarkPlugins.concat([
@@ -184,44 +182,36 @@ export default function pluginOpenAPI(
       return;
     },
 
-    async routesLoaded(routes) {
-      const homeDocsRoutes = routes.filter(
-        (routeConfig) => routeConfig.path === homePageDocsRoutePath
-      );
-
-      // Remove the route for docs home page if there is a page with the same path (i.e. docs).
-      if (homeDocsRoutes.length > 1) {
-        const docsHomePageRouteIndex = routes.findIndex(
-          (route) =>
-            route.component === options.apiLayoutComponent &&
-            route.path === homePageDocsRoutePath
-        );
-
-        delete routes[docsHomePageRouteIndex!];
-      }
-    },
-
     configureWebpack(
       _config: Configuration,
       isServer: boolean,
-      { getBabelLoader, getCacheLoader }: ConfigureWebpackUtils
+      { getJSLoader }: ConfigureWebpackUtils
     ) {
       const { rehypePlugins, remarkPlugins } = options;
 
-      const wp = {
+      const wp: Configuration = {
         resolve: {
           alias: {
             "~api": dataDir,
           },
+          fallback: {
+            buffer: require.resolve('buffer/'),
+            process: require.resolve("process/browser"),
+          },
         },
+        plugins: [
+          new webpack.ProvidePlugin({
+            Buffer: [require.resolve("buffer/"), 'Buffer'],
+            process: require.resolve("process/browser"),
+          }),
+        ],
         module: {
           rules: [
             {
               test: /(\.mdx?)$/,
               include: [dataDir],
-              use: compact([ // compact because getCacheLoader may return nil on CI
-                getCacheLoader(isServer),
-                getBabelLoader(isServer),
+              use: compact([ 
+                getJSLoader({ isServer }),
                 {
                   loader: require.resolve("@docusaurus/mdx-loader"),
                   options: {
@@ -229,7 +219,7 @@ export default function pluginOpenAPI(
                     rehypePlugins,
                   },
                 },
-              ]) as Loader[],
+              ]),
             },
           ],
         },
@@ -240,6 +230,6 @@ export default function pluginOpenAPI(
   };
 }
 
-function compact<T>(elems: T[]): T[] {
-  return elems.filter((t) => !!t);
+function compact<T>(elems: (T | null)[]): T[] {
+  return elems.filter((t) => !!t) as T[];
 }

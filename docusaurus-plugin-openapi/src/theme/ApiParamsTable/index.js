@@ -1,5 +1,7 @@
 import React from "react";
-import MD from "react-markdown/with-html";
+import MD from "react-markdown";
+import rehypeRaw from 'rehype-raw'
+import rehypeSanitize from 'rehype-sanitize'
 
 import styles from "./styles.module.css";
 
@@ -66,9 +68,9 @@ function ParamsTable({ parameters, type }) {
                   {param.description && (
                     <div className={styles.description}>
                       <MD
-                        escapeHtml={false}
+                        rehypePlugins={[rehypeRaw, rehypeSanitize]}
                         className="table-markdown"
-                        source={param.description}
+                        children={param.description}
                       />
                     </div>
                   )}
