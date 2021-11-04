@@ -1,3 +1,4 @@
+#!/usr/bin/env ts-node
 /* ============================================================================
  * Copyright (c) Cloud Annotations
  *
@@ -74,9 +75,6 @@ function main() {
     `lerna version ${nextVersion} --no-git-tag-version --no-push --yes`,
     { stdio: "ignore" }
   );
-  execSync(`yarn version --new-version ${nextVersion} --no-git-tag-version`, {
-    stdio: "ignore",
-  });
 }
 
 main();
