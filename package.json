@@ -1,46 +1,62 @@
 {
-  "name": "my-website",
-  "version": "0.0.0",
   "private": true,
-  "scripts": {
-    "start": "docusaurus start",
-    "start:watch": "nodemon --watch \"./docusaurus-plugin-openapi/lib/*.*\" --exec \"yarn start --no-open\"",
-    "openapi": "nodemon -e yaml,yml,js,json --watch \"./openapi/**\" --exec \"openapi-comment-parser openapi openapi-gen.json\"",
-    "build": "docusaurus build",
-    "swizzle": "docusaurus swizzle",
-    "deploy": "docusaurus deploy"
-  },
-  "dependencies": {
-    "@docusaurus/core": "^2.0.0-beta.9",
-    "@docusaurus/preset-classic": "^2.0.0-beta.9",
-    "clsx": "^1.1.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
+  "name": "root",
+  "workspaces": {
+    "packages": [
+      "packages/*",
+      "demo"
     ]
   },
+  "scripts": {
+    "prepare": "husky install",
+    "watch": "lerna run watch --parallel",
+    "build": "lerna run build",
+    "serve": "yarn workspace demo serve",
+    "cy:run": "cypress run",
+    "cy:open": "cypress open",
+    "format": "prettier . --check --ignore-unknown --ignore-path .gitignore",
+    "lint": "eslint . --ignore-path .gitignore --ext .ts,.tsx,.js",
+    "test": "jest",
+    "test:cypress:dev": "start-server-and-test watch http://localhost:3000 cy:open",
+    "test:cypress": "start-server-and-test serve http://localhost:3000 cy:run",
+    "release:changelog": "scripts/changelog.ts",
+    "release:version": "scripts/version.ts",
+    "release:publish": "scripts/publish.ts"
+  },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "2.x",
-    "@typescript-eslint/parser": "2.x",
-    "babel-eslint": "10.x",
-    "eslint": "6.x",
-    "eslint-config-react-app": "^5.2.1",
-    "eslint-plugin-flowtype": "4.x",
-    "eslint-plugin-import": "2.x",
-    "eslint-plugin-jsx-a11y": "6.x",
-    "eslint-plugin-react": "7.x",
-    "eslint-plugin-react-hooks": "2.x",
-    "nodemon": "^2.0.4",
-    "openapi-comment-parser": "^0.3.7"
+    "@testing-library/cypress": "^8.0.1",
+    "@types/jest": "^27.0.2",
+    "@typescript-eslint/eslint-plugin": "^4.0.0",
+    "@typescript-eslint/parser": "^4.0.0",
+    "babel-eslint": "^10.0.0",
+    "cypress": "^8.7.0",
+    "eslint": "^7.5.0",
+    "eslint-config-react-app": "^6.0.0",
+    "eslint-plugin-cypress": "^2.12.1",
+    "eslint-plugin-flowtype": "^5.2.0",
+    "eslint-plugin-header": "^3.1.1",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jest": "^25.0.6",
+    "eslint-plugin-jest-dom": "^3.9.2",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-react": "^7.20.3",
+    "eslint-plugin-react-hooks": "^4.0.8",
+    "eslint-plugin-testing-library": "^4.12.4",
+    "husky": "^7.0.2",
+    "jest": "^27.3.1",
+    "lerna": "^4.0.0",
+    "lint-staged": "^11.2.3",
+    "prettier": "^2.4.1",
+    "semver": "^7.3.5",
+    "start-server-and-test": "^1.14.0",
+    "ts-jest": "^27.0.6",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.4.4"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  },
+  "engines": {
+    "node": ">=14"
   }
 }

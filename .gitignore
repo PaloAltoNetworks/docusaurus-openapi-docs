@@ -1,7 +1,14 @@
+# Cypress
+cypress/videos
+cypress/screenshots
+
+# Dist
+build
+dist
+
 # Dependencies
 /node_modules
 
-# Production
 /build
 
 # Generated files
