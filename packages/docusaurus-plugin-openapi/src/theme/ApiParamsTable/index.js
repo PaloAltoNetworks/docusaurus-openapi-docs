@@ -11,6 +11,7 @@ import MD from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize from "rehype-sanitize";
 
+import FullWidthTable from "../FullWidthTable";
 import styles from "./styles.module.css";
 
 function parseFinalSchema(schema) {
@@ -40,62 +41,60 @@ function ParamsTable({ parameters, type }) {
     return null;
   }
   return (
-    <>
-      <table style={{ display: "table" }}>
-        <thead>
-          <tr>
-            <th style={{ textAlign: "left" }}>
-              {type.charAt(0).toUpperCase() + type.slice(1)} Parameters
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {params.map((param) => {
-            return (
-              <tr key={`${param.in}-${param.name}`}>
-                <td>
-                  <code>{param.name}</code>
-                  <span style={{ opacity: "0.6" }}>
-                    {" "}
-                    {getSchemaName(param.schema)}
-                  </span>
-                  {param.required && (
-                    <>
-                      {<span style={{ opacity: "0.6" }}> — </span>}
-                      <strong
-                        style={{
-                          fontSize: "var(--ifm-code-font-size)",
-                          color: "var(--openapi-required)",
-                        }}
-                      >
-                        {" "}
-                        REQUIRED
-                      </strong>
-                    </>
-                  )}
-                  {param.description && (
-                    <div className={styles.description}>
-                      <MD
-                        rehypePlugins={[rehypeRaw, rehypeSanitize]}
-                        className="table-markdown"
-                        children={param.description}
-                      />
+    <FullWidthTable>
+      <thead>
+        <tr>
+          <th style={{ textAlign: "left" }}>
+            {type.charAt(0).toUpperCase() + type.slice(1)} Parameters
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {params.map((param) => {
+          return (
+            <tr key={`${param.in}-${param.name}`}>
+              <td>
+                <code>{param.name}</code>
+                <span style={{ opacity: "0.6" }}>
+                  {" "}
+                  {getSchemaName(param.schema)}
+                </span>
+                {param.required && (
+                  <>
+                    {<span style={{ opacity: "0.6" }}> — </span>}
+                    <strong
+                      style={{
+                        fontSize: "var(--ifm-code-font-size)",
+                        color: "var(--openapi-required)",
+                      }}
+                    >
+                      {" "}
+                      REQUIRED
+                    </strong>
+                  </>
+                )}
+                {param.description && (
+                  <div className={styles.description}>
+                    <MD
+                      rehypePlugins={[rehypeRaw, rehypeSanitize]}
+                      className="table-markdown"
+                      children={param.description}
+                    />
+                  </div>
+                )}
+                {param.example && <div>Example: {param.example}</div>}
+                {param.examples &&
+                  Object.keys(param.examples).map((key) => (
+                    <div>
+                      Example ({key}): {param.examples[key].value}
                     </div>
-                  )}
-                  {param.example && <div>Example: {param.example}</div>}
-                  {param.examples &&
-                    Object.keys(param.examples).map((key) => (
-                      <div>
-                        Example ({key}): {param.examples[key].value}
-                      </div>
-                    ))}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </>
+                  ))}
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </FullWidthTable>
   );
 }
 

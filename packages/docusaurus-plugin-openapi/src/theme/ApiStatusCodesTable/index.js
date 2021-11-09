@@ -8,6 +8,7 @@
 import React from "react";
 
 import RequestBodyTable from "../ApiRequestBodyTable";
+import FullWidthTable from "../FullWidthTable";
 
 function StatusCodesTable({ responses }) {
   // openapi requires at least one response, so we shouldn't HAVE to check...
@@ -20,38 +21,34 @@ function StatusCodesTable({ responses }) {
   }
 
   return (
-    <>
-      <table style={{ display: "table" }}>
-        <thead>
-          <tr>
-            <th style={{ textAlign: "left" }}>Status Codes</th>
-          </tr>
-        </thead>
-        <tbody>
-          {codes.map((code) => {
-            return (
-              <tr key={code}>
-                <td>
-                  <div style={{ display: "flex" }}>
-                    <div
-                      style={{ marginRight: "var(--ifm-table-cell-padding)" }}
-                    >
-                      <code>{code}</code>
-                    </div>
-                    <div>
-                      <RequestBodyTable
-                        body={{ ...responses[code], description: "" }}
-                        title={responses[code].description}
-                      />
-                    </div>
+    <FullWidthTable>
+      <thead>
+        <tr>
+          <th style={{ textAlign: "left" }}>Status Codes</th>
+        </tr>
+      </thead>
+      <tbody>
+        {codes.map((code) => {
+          return (
+            <tr key={code}>
+              <td>
+                <div style={{ display: "flex" }}>
+                  <div style={{ marginRight: "var(--ifm-table-cell-padding)" }}>
+                    <code>{code}</code>
                   </div>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </>
+                  <div>
+                    <RequestBodyTable
+                      body={{ ...responses[code], description: "" }}
+                      title={responses[code].description}
+                    />
+                  </div>
+                </div>
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </FullWidthTable>
   );
 }
 

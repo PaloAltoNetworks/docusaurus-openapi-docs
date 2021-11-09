@@ -11,6 +11,7 @@ import MD from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize from "rehype-sanitize";
 
+import FullWidthTable from "../FullWidthTable";
 import styles from "./styles.module.css";
 
 function parseFinalSchema(schema) {
@@ -73,9 +74,8 @@ function Rows({ schema }) {
   // object
   if (schema.properties !== undefined) {
     return (
-      <table
+      <FullWidthTable
         style={{
-          display: "table",
           marginTop: "var(--ifm-table-cell-padding)",
           marginBottom: "0px",
         }}
@@ -92,7 +92,7 @@ function Rows({ schema }) {
             );
           })}
         </tbody>
-      </table>
+      </FullWidthTable>
     );
   }
 
@@ -166,46 +166,44 @@ function RequestBodyTable({ body, title }) {
   }
 
   return (
-    <>
-      <table style={{ display: "table" }}>
-        <thead>
-          <tr>
-            <th style={{ textAlign: "left" }}>
-              {title + " "}
-              {body.required && (
-                <>
-                  {
-                    <span style={{ opacity: "0.6", fontWeight: "normal" }}>
-                      {" "}
-                      —{" "}
-                    </span>
-                  }
-                  <strong
-                    style={{
-                      fontSize: "var(--ifm-code-font-size)",
-                      color: "var(--openapi-required)",
-                    }}
-                  >
+    <FullWidthTable>
+      <thead>
+        <tr>
+          <th style={{ textAlign: "left" }}>
+            {title + " "}
+            {body.required && (
+              <>
+                {
+                  <span style={{ opacity: "0.6", fontWeight: "normal" }}>
                     {" "}
-                    REQUIRED
-                  </strong>
-                </>
-              )}
-              <div style={{ fontWeight: "normal" }}>
-                <MD
-                  rehypePlugins={[rehypeRaw, rehypeSanitize]}
-                  className="table-markdown"
-                  children={body.description}
-                />
-              </div>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <RowsRoot schema={firstBody} />
-        </tbody>
-      </table>
-    </>
+                    —{" "}
+                  </span>
+                }
+                <strong
+                  style={{
+                    fontSize: "var(--ifm-code-font-size)",
+                    color: "var(--openapi-required)",
+                  }}
+                >
+                  {" "}
+                  REQUIRED
+                </strong>
+              </>
+            )}
+            <div style={{ fontWeight: "normal" }}>
+              <MD
+                rehypePlugins={[rehypeRaw, rehypeSanitize]}
+                className="table-markdown"
+                children={body.description}
+              />
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <RowsRoot schema={firstBody} />
+      </tbody>
+    </FullWidthTable>
   );
 }
 

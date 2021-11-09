@@ -6,6 +6,7 @@
     "declaration": true,
     // "allowJs": true, // causing strange issue
     "skipLibCheck": true,
+    "jsx": "react-jsx",
 
     /* Strict Type-Checking Options */
     "strict": true,
