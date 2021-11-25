@@ -21,15 +21,10 @@ plugins: [
 ];
 ```
 
-Add it as a link in `docusaurus.config.js` to `themeConfig.navbar.links`:
+Add it as a item in `docusaurus.config.js` to `themeConfig.navbar.items`:
 
 ```js
-{
-  to: "api/",
-  activeBasePath: "api",
-  label: "API",
-  position: "left",
-}
+{ to: "/api", label: "API", position: "left" }
 ```
 
 For more than one OpenAPI definition, add them as multiple plugins to `docusaurus.config.js`:

@@ -65,12 +65,7 @@ const config = {
             position: "left",
             label: "Tutorial",
           },
-          {
-            to: "api/",
-            activeBasePath: "api",
-            label: "API",
-            position: "left",
-          },
+          { to: "/api", label: "API", position: "left" },
           { to: "/blog", label: "Blog", position: "left" },
           {
             href: "https://github.com/facebook/docusaurus",
