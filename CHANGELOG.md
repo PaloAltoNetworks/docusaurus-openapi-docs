@@ -1,3 +1,10 @@
+## 0.1.1 (Nov 24, 2021)
+
+Enhancements and bug fixes
+
+- Fix missing status code description ([#61](https://github.com/cloud-annotations/docusaurus-plugin-openapi/pull/61))
+- Fix narrow tables style regression ([#55](https://github.com/cloud-annotations/docusaurus-plugin-openapi/pull/55))
+
 ## 0.1.0 (Nov 4, 2021)
 
 Enhancements and bug fixes
