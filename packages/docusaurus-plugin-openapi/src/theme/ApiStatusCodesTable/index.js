@@ -7,14 +7,19 @@
 
 import React from "react";
 
-import RequestBodyTable from "../ApiRequestBodyTable";
+import MD from "react-markdown";
+import rehypeRaw from "rehype-raw";
+import rehypeSanitize from "rehype-sanitize";
+
 import FullWidthTable from "../FullWidthTable";
+import ObjectTable from "../ObjectTable";
 
 function StatusCodesTable({ responses }) {
   // openapi requires at least one response, so we shouldn't HAVE to check...
   if (responses === undefined) {
     return null;
   }
+
   const codes = Object.keys(responses);
   if (codes.length === 0) {
     return null;
@@ -24,7 +29,7 @@ function StatusCodesTable({ responses }) {
     <FullWidthTable>
       <thead>
         <tr>
-          <th style={{ textAlign: "left" }}>Status Codes</th>
+          <th style={{ textAlign: "left" }}>Responses</th>
         </tr>
       </thead>
       <tbody>
@@ -37,11 +42,26 @@ function StatusCodesTable({ responses }) {
                     <code>{code}</code>
                   </div>
                   <div>
-                    <RequestBodyTable
-                      body={{ ...responses[code], description: "" }}
-                      title={responses[code].description}
-                    />
+                    <MD
+                      rehypePlugins={[rehypeRaw, rehypeSanitize]}
+                      className="table-markdown"
+                    >
+                      {responses[code].description}
+                    </MD>
                   </div>
+                </div>
+                <div>
+                  <ObjectTable
+                    style={{
+                      marginTop: "var(--ifm-table-cell-padding)",
+                      marginBottom: "0px",
+                    }}
+                    body={{
+                      ...responses[code],
+                      description: "", // remove description since it acts as a subtitle, but is already rendered above.
+                    }}
+                    title="Schema"
+                  />
                 </div>
               </td>
             </tr>
