@@ -27,9 +27,7 @@ function isRequestComplete(params) {
 
 function Execute() {
   const { siteConfig } = useDocusaurusContext();
-  const proxy = siteConfig?.plugins?.find((plugin) =>
-    plugin[0].includes("docusaurus-plugin-openapi")
-  )[1].corsProxy;
+  const { proxy } = siteConfig.themeConfig;
 
   const postman = useSelector((state) => state.postman);
 

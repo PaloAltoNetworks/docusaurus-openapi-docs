@@ -5,16 +5,17 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import type { RemarkAndRehypePluginOptions } from "@docusaurus/mdx-loader";
 import { Request } from "postman-collection";
 
-export interface PluginOptions {
-  openapiPath: string;
+export interface PluginOptions extends RemarkAndRehypePluginOptions {
+  path: string;
   routeBasePath: string;
   apiLayoutComponent: string;
   apiItemComponent: string;
-  remarkPlugins: ([Function, object] | Function)[];
-  rehypePlugins: string[];
-  admonitions: any;
+  admonitions: Record<string, unknown>;
+  sidebarCollapsible: boolean;
+  sidebarCollapsed: boolean;
 }
 
 export interface LoadedContent {

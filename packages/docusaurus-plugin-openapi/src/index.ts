@@ -15,63 +15,32 @@ import {
 } from "@docusaurus/types";
 import { normalizeUrl, docuHash } from "@docusaurus/utils";
 import fs from "fs-extra";
-import admonitions from "remark-admonitions";
-import webpack, { Configuration } from "webpack";
+import { Configuration } from "webpack";
 
 import { loadOpenapi } from "./openapi";
 import { PluginOptions, LoadedContent, ApiSection } from "./types";
 
-const DEFAULT_OPTIONS: PluginOptions = {
-  routeBasePath: "api",
-  openapiPath: "",
-  apiLayoutComponent: "@theme/ApiPage",
-  apiItemComponent: "@theme/ApiItem",
-  remarkPlugins: [],
-  rehypePlugins: [],
-  admonitions: {},
-};
-
 export default function pluginOpenAPI(
   context: LoadContext,
-  opts: Partial<PluginOptions>
+  options: PluginOptions
 ): Plugin<LoadedContent | null> {
   const name = "docusaurus-plugin-openapi";
-
-  const options: PluginOptions = { ...DEFAULT_OPTIONS, ...opts };
-
-  if (options.admonitions) {
-    options.remarkPlugins = options.remarkPlugins.concat([
-      [admonitions, options.admonitions],
-    ]);
-  }
 
   const { baseUrl, generatedFilesDir } = context;
 
   const dataDir = path.join(generatedFilesDir, name);
 
+  const openapiPath = path.resolve(context.siteDir, options.path);
+
   return {
     name: name,
 
-    getThemePath() {
-      return path.resolve(__dirname, "./theme");
-    },
-
     getPathsToWatch() {
-      return [options.openapiPath];
-    },
-
-    getClientModules() {
-      const modules = [];
-
-      if (options.admonitions) {
-        modules.push(require.resolve("remark-admonitions/styles/infima.css"));
-      }
-
-      return modules;
+      return [openapiPath];
     },
 
     async loadContent() {
-      const { routeBasePath, openapiPath } = options;
+      const { routeBasePath } = options;
 
       if (!openapiPath || !fs.existsSync(openapiPath)) {
         return null;
@@ -195,17 +164,7 @@ export default function pluginOpenAPI(
           alias: {
             "~api": dataDir,
           },
-          fallback: {
-            buffer: require.resolve("buffer/"),
-            process: require.resolve("process/browser"),
-          },
         },
-        plugins: [
-          new webpack.ProvidePlugin({
-            Buffer: [require.resolve("buffer/"), "Buffer"],
-            process: require.resolve("process/browser"),
-          }),
-        ],
         module: {
           rules: [
             {
@@ -234,3 +193,5 @@ export default function pluginOpenAPI(
 function compact<T>(elems: (T | null)[]): T[] {
   return elems.filter((t) => !!t) as T[];
 }
+
+export { validateOptions } from "./options";

@@ -6,7 +6,7 @@
  * ========================================================================== */
 
 import { normalizeUrl } from "@docusaurus/utils";
-import importFresh from "import-fresh";
+import fs from "fs-extra";
 import JsonRefs from "json-refs";
 import { kebabCase } from "lodash";
 // @ts-ignore - openapi-to-postmanv2 doesn't have types.
@@ -178,7 +178,8 @@ export async function loadOpenapi(
   baseUrl: string,
   routeBasePath: string
 ) {
-  const openapiData = importFresh(openapiPath) as OpenApiObject;
+  const openapiString = await fs.readFile(openapiPath, "utf-8");
+  const openapiData = JSON.parse(openapiString) as OpenApiObject;
 
   // Attach a postman request object to the openapi spec.
   const postmanCollection = await convertToPostman(openapiData);
