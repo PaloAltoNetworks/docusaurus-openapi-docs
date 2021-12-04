@@ -7,6 +7,7 @@
 
 import { normalizeUrl } from "@docusaurus/utils";
 import fs from "fs-extra";
+import yaml from "js-yaml";
 import JsonRefs from "json-refs";
 import { kebabCase } from "lodash";
 import Converter from "openapi-to-postmanv2";
@@ -176,7 +177,7 @@ export async function loadOpenapi(
   routeBasePath: string
 ) {
   const openapiString = await fs.readFile(openapiPath, "utf-8");
-  const openapiData = JSON.parse(openapiString) as OpenApiObject;
+  const openapiData = yaml.load(openapiString) as OpenApiObject;
 
   // Attach a postman request object to the openapi spec.
   const postmanCollection = await convertToPostman(openapiData);
