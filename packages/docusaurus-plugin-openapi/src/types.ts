@@ -9,6 +9,7 @@ import type { RemarkAndRehypePluginOptions } from "@docusaurus/mdx-loader";
 import { Request } from "postman-collection";
 
 export interface PluginOptions extends RemarkAndRehypePluginOptions {
+  id: string;
   path: string;
   routeBasePath: string;
   apiLayoutComponent: string;
@@ -19,7 +20,7 @@ export interface PluginOptions extends RemarkAndRehypePluginOptions {
 }
 
 export interface LoadedContent {
-  openapiData: any;
+  loadedApi: ApiSection[];
 }
 
 export enum Type {
@@ -176,6 +177,7 @@ export interface OperationObject {
   requestBody?: RequestBodyObject | ReferenceObject;
   callbacks?: Map<CallbackObject | ReferenceObject>;
   deprecated?: boolean;
+  "x-deprecated-description"?: string;
   security?: SecurityRequirementObject[];
   servers?: ServerObject[];
   postman?: Request;
@@ -346,10 +348,10 @@ export interface ApiSection {
 }
 
 export interface ApiItem extends OperationObject {
+  id: string;
+  title: string;
   method: string;
   path: string;
-  hashId: string;
-  summary: string;
   permalink: string;
   next: Page;
   previous: Page;

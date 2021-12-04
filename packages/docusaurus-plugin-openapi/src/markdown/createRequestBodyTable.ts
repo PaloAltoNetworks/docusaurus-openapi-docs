@@ -5,13 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-/// <reference types="@docusaurus/preset-classic" />
+import { createSchemaTable } from "./createSchemaTable";
 
-import type { Preset, LoadContext } from "@docusaurus/types";
+interface Props {
+  title: string;
+  body: any;
+}
 
-declare module "@docusaurus/preset-classic" {
-  export default function preset(
-    context: LoadContext,
-    options: Options
-  ): Preset;
+export function createRequestBodyTable({ title, body }: Props) {
+  return createSchemaTable({ title, body });
 }

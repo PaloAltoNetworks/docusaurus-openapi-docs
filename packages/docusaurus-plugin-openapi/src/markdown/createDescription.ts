@@ -5,13 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-/// <reference types="@docusaurus/preset-classic" />
-
-import type { Preset, LoadContext } from "@docusaurus/types";
-
-declare module "@docusaurus/preset-classic" {
-  export default function preset(
-    context: LoadContext,
-    options: Options
-  ): Preset;
+export function createDescription(description: string | undefined) {
+  if (!description) {
+    return "";
+  }
+  return `\n\n${description}\n\n`;
 }

@@ -7,117 +7,142 @@
 
 import path from "path";
 
+import { DEFAULT_PLUGIN_ID } from "@docusaurus/core/lib/constants";
 import {
   LoadContext,
   Plugin,
   RouteConfig,
   ConfigureWebpackUtils,
 } from "@docusaurus/types";
-import { normalizeUrl, docuHash } from "@docusaurus/utils";
-import fs from "fs-extra";
+import {
+  normalizeUrl,
+  docuHash,
+  addTrailingPathSeparator,
+  posixPath,
+} from "@docusaurus/utils";
+import chalk from "chalk";
 import { Configuration } from "webpack";
 
+import { createMD } from "./markdown";
 import { loadOpenapi } from "./openapi";
-import { PluginOptions, LoadedContent, ApiSection } from "./types";
+import { PluginOptions, LoadedContent } from "./types";
 
 export default function pluginOpenAPI(
   context: LoadContext,
   options: PluginOptions
-): Plugin<LoadedContent | null> {
-  const name = "docusaurus-plugin-openapi";
-
+): Plugin<LoadedContent> {
   const { baseUrl, generatedFilesDir } = context;
 
-  const dataDir = path.join(generatedFilesDir, name);
+  const pluginId = options.id ?? DEFAULT_PLUGIN_ID;
 
-  const openapiPath = path.resolve(context.siteDir, options.path);
+  const pluginDataDirRoot = path.join(
+    generatedFilesDir,
+    "docusaurus-plugin-openapi"
+  );
+
+  const dataDir = path.join(pluginDataDirRoot, pluginId);
+
+  const aliasedSource = (source: string) =>
+    `~api/${posixPath(path.relative(pluginDataDirRoot, source))}`;
+
+  const contentPath = path.resolve(context.siteDir, options.path);
 
   return {
-    name: name,
+    name: "docusaurus-plugin-openapi",
 
     getPathsToWatch() {
-      return [openapiPath];
+      return [contentPath];
     },
 
     async loadContent() {
       const { routeBasePath } = options;
 
-      if (!openapiPath || !fs.existsSync(openapiPath)) {
-        return null;
+      try {
+        const loadedApi = await loadOpenapi(
+          contentPath,
+          baseUrl,
+          routeBasePath
+        );
+        return { loadedApi };
+      } catch (e) {
+        console.error(chalk.red(`Loading of api failed for "${contentPath}"`));
+        throw e;
       }
-
-      const openapiData = await loadOpenapi(
-        openapiPath,
-        baseUrl,
-        routeBasePath
-      );
-
-      return { openapiData };
     },
 
     async contentLoaded({ content, actions }) {
-      if (!content || Object.keys(content.openapiData).length === 0) {
-        return;
-      }
-
-      const openapiData = content.openapiData as ApiSection[];
+      const { loadedApi } = content;
       const { routeBasePath, apiLayoutComponent, apiItemComponent } = options;
       const { addRoute, createData } = actions;
 
-      const sidebar = openapiData.map((category) => {
+      const sidebarName = "openapi-sidebar";
+
+      const sidebar = loadedApi.map((category) => {
         return {
-          collapsed: true,
           type: "category",
           label: category.title,
+          collapsible: options.sidebarCollapsible,
+          collapsed: options.sidebarCollapsed,
           items: category.items.map((item) => {
             return {
               href: item.permalink,
-              label: item.summary,
+              label: item.title,
               type: "link",
-              deprecated: item.deprecated,
+              className: item.deprecated
+                ? "menu__list-item--deprecated"
+                : undefined,
             };
           }),
         };
       });
 
-      const promises = openapiData
-        .map((section) => {
-          return section.items.map(async (item) => {
-            const pageId = `site-${routeBasePath}-${item.hashId}`;
-            const openapiDataPath = await createData(
-              `${docuHash(pageId)}.json`,
-              JSON.stringify(item)
-            );
+      const promises = loadedApi.flatMap((section) => {
+        return section.items.map(async (item) => {
+          const { id, title, description, permalink, previous, next, ...api } =
+            item;
 
-            const markdown = await createData(
-              `${docuHash(pageId)}-description.md`,
-              item.description
-            );
-            return {
-              path: item.permalink,
-              component: apiItemComponent,
-              exact: true,
-              modules: {
-                openapi: openapiDataPath,
-                content: {
-                  __import: true,
-                  path: markdown,
-                },
+          const pageId = `site-${routeBasePath}-${id}`;
+
+          await createData(
+            `${docuHash(pageId)}.json`,
+            JSON.stringify(
+              {
+                unversionedId: id,
+                id,
+                isDocsHomePage: false, // TODO: Where does this come from?
+                title,
+                description,
+                // source: "@site/docs/tutorial-basics/congratulations.md",
+                // sourceDirName: "tutorial-basics",
+                slug: "/" + id, // TODO: Should this really be prepended with "/"?
+                permalink,
+                frontMatter: {},
+                sidebar: sidebarName,
+                previous,
+                next,
+                api,
               },
-            };
-          });
-        })
-        .flat();
+              null,
+              2
+            )
+          );
 
-      const routes = (await Promise.all(promises)) as RouteConfig[];
-
-      const permalinkToSidebar = routes.reduce(
-        (acc: { [key: string]: string }, item) => {
-          acc[item.path] = "sidebar";
-          return acc;
-        },
-        {}
-      );
+          // TODO: "-content" should be inside hash to prevent name too long errors.
+          const markdown = await createData(
+            `${docuHash(pageId)}-content.mdx`,
+            createMD(item)
+          );
+          return {
+            path: item.permalink,
+            component: apiItemComponent,
+            exact: true,
+            modules: {
+              content: markdown,
+            },
+            sidebar: sidebarName,
+          };
+        });
+      });
 
       // Important: the layout component should not end with /,
       // as it conflicts with the home doc
@@ -125,14 +150,34 @@ export default function pluginOpenAPI(
       const apiBaseRoute = normalizeUrl([baseUrl, routeBasePath]);
       const basePath = apiBaseRoute === "/" ? "" : apiBaseRoute;
 
-      const docsBaseMetadataPath = await createData(
-        `${docuHash(normalizeUrl([apiBaseRoute, ":route"]))}.json`,
+      async function rootRoute() {
+        const item = loadedApi[0].items[0];
+        const pageId = `site-${routeBasePath}-${item.id}`;
+
+        return {
+          path: basePath,
+          component: apiItemComponent,
+          exact: true,
+          modules: {
+            // TODO: "-content" should be inside hash to prevent name too long errors.
+            content: path.join(dataDir, `${docuHash(pageId)}-content.mdx`),
+          },
+          sidebar: sidebarName,
+        };
+      }
+
+      const routes = (await Promise.all([
+        ...promises,
+        rootRoute(),
+      ])) as RouteConfig[];
+
+      const apiBaseMetadataPath = await createData(
+        `${docuHash(`api-metadata-prop`)}.json`,
         JSON.stringify(
           {
-            docsSidebars: {
-              sidebar: sidebar,
+            apiSidebars: {
+              [sidebarName]: sidebar,
             },
-            permalinkToSidebar: permalinkToSidebar,
           },
           null,
           2
@@ -141,11 +186,11 @@ export default function pluginOpenAPI(
 
       addRoute({
         path: basePath,
-        exact: false, // allow matching /docs/* as well
-        component: apiLayoutComponent, // main docs component (DocPage)
-        routes, // subroute for each doc
+        exact: false, // allow matching /api/* as well
+        component: apiLayoutComponent, // main api component (ApiPage)
+        routes, // subroute for each api
         modules: {
-          docsMetadata: docsBaseMetadataPath,
+          apiMetadata: aliasedSource(apiBaseMetadataPath),
         },
       });
 
@@ -157,41 +202,45 @@ export default function pluginOpenAPI(
       isServer: boolean,
       { getJSLoader }: ConfigureWebpackUtils
     ) {
-      const { rehypePlugins, remarkPlugins } = options;
+      const {
+        rehypePlugins,
+        remarkPlugins,
+        beforeDefaultRehypePlugins,
+        beforeDefaultRemarkPlugins,
+      } = options;
 
-      const wp: Configuration = {
+      return {
         resolve: {
           alias: {
-            "~api": dataDir,
+            "~api": pluginDataDirRoot,
           },
         },
         module: {
           rules: [
             {
               test: /(\.mdx?)$/,
-              include: [dataDir],
-              use: compact([
+              include: [pluginDataDirRoot].map(addTrailingPathSeparator),
+              use: [
                 getJSLoader({ isServer }),
                 {
                   loader: require.resolve("@docusaurus/mdx-loader"),
                   options: {
                     remarkPlugins,
                     rehypePlugins,
+                    beforeDefaultRehypePlugins,
+                    beforeDefaultRemarkPlugins,
+                    metadataPath: (mdxPath: string) => {
+                      return mdxPath.replace(/(-content\.mdx?)$/, ".json");
+                    },
                   },
                 },
-              ]),
+              ].filter(Boolean),
             },
           ],
         },
       };
-
-      return wp;
     },
   };
-}
-
-function compact<T>(elems: (T | null)[]): T[] {
-  return elems.filter((t) => !!t) as T[];
 }
 
 export { validateOptions } from "./options";

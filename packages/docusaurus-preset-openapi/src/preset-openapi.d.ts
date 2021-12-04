@@ -5,12 +5,14 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React from "react";
+import type {
+  Options as ClassicOptions,
+  ThemeConfig as ClassicThemeConfig,
+} from "@docusaurus/preset-classic";
 
-import ObjectTable from "../ObjectTable";
+export type Options = {
+  api?: false | import("docusaurus-plugin-openapi").Options;
+} & ClassicOptions;
 
-function RequestBodyTable({ body, title }) {
-  return <ObjectTable body={body} title={title} />;
-}
-
-export default RequestBodyTable;
+export type ThemeConfig = import("docusaurus-theme-openapi").ThemeConfig &
+  ClassicThemeConfig;

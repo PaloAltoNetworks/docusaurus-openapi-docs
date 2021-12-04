@@ -5,75 +5,96 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
-import Editor, { monaco } from "@monaco-editor/react";
+import Editor, { loader } from "@monaco-editor/react";
 import useThemeContext from "@theme/hooks/useThemeContext";
 
 import styles from "./styles.module.css";
 
-function initMonaco(theme) {
-  const BRIGHT = theme === "dark" ? "f5f6f7" : "1c1e21";
-  const DIM = theme === "dark" ? "7f7f7f" : "aaaaaa";
+const LIGHT_BRIGHT = "1c1e21";
+const LIGHT_DIM = "aaaaaa";
+const LIGHT_BLUE = "648bea";
+const LIGHT_GREEN = "39a351";
+const LIGHT_BACKGROUND = "#ffffff";
+const LIGHT_SELECT = "#ebedef";
 
-  const BLUE = theme === "dark" ? "a4cdfe" : "648bea";
-  const GREEN = theme === "dark" ? "85d996" : "39a351";
+const DARK_BRIGHT = "f5f6f7";
+const DARK_DIM = "7f7f7f";
+const DARK_BLUE = "a4cdfe";
+const DARK_GREEN = "85d996";
+const DARK_BACKGROUND = "#18191a";
+const DARK_SELECT = "#515151";
 
-  const BACKGROUND = theme === "dark" ? "#18191a" : "#ffffff";
-  const SELECT = theme === "dark" ? "#515151" : "#ebedef";
-
-  monaco
-    .init()
-    .then((monaco) => {
-      monaco.editor.defineTheme("myCustomTheme", {
-        base: theme === "dark" ? "vs-dark" : "vs",
-        inherit: false,
-        rules: [
-          { token: "", foreground: BRIGHT },
-          { token: "string.key.json", foreground: BRIGHT },
-          { token: "string.value.json", foreground: GREEN },
-          { token: "number", foreground: BLUE },
-          { token: "keyword.json", foreground: BLUE },
-          { token: "delimiter", foreground: DIM },
-          { token: "tag.xml", foreground: DIM },
-          { token: "metatag.xml", foreground: DIM },
-          { token: "attribute.name.xml", foreground: BRIGHT },
-          { token: "attribute.value.xml", foreground: GREEN },
-          { token: "metatag.xml", foreground: BLUE },
-          { token: "tag.xml", foreground: BLUE },
-        ],
-        colors: {
-          "editor.background": BACKGROUND,
-          "editor.lineHighlightBackground": BACKGROUND,
-          "editorBracketMatch.background": BACKGROUND,
-          "editorBracketMatch.border": BACKGROUND,
-          "editor.selectionBackground": SELECT,
-        },
-      });
-    })
-    .catch((error) =>
-      console.error(
-        "An error occurred during initialization of Monaco: ",
-        error
-      )
-    );
-}
+loader
+  .init()
+  .then((monaco) => {
+    monaco.editor.defineTheme("OpenApiDark", {
+      base: "vs-dark",
+      inherit: false,
+      rules: [
+        { token: "", foreground: DARK_BRIGHT },
+        { token: "string.key.json", foreground: DARK_BRIGHT },
+        { token: "string.value.json", foreground: DARK_GREEN },
+        { token: "number", foreground: DARK_BLUE },
+        { token: "keyword.json", foreground: DARK_BLUE },
+        { token: "delimiter", foreground: DARK_DIM },
+        { token: "tag.xml", foreground: DARK_DIM },
+        { token: "metatag.xml", foreground: DARK_DIM },
+        { token: "attribute.name.xml", foreground: DARK_BRIGHT },
+        { token: "attribute.value.xml", foreground: DARK_GREEN },
+        { token: "metatag.xml", foreground: DARK_BLUE },
+        { token: "tag.xml", foreground: DARK_BLUE },
+      ],
+      colors: {
+        "editor.background": DARK_BACKGROUND,
+        "editor.lineHighlightBackground": DARK_BACKGROUND,
+        "editorBracketMatch.background": DARK_BACKGROUND,
+        "editorBracketMatch.border": DARK_BACKGROUND,
+        "editor.selectionBackground": DARK_SELECT,
+      },
+    });
+    monaco.editor.defineTheme("OpenApiLight", {
+      base: "vs",
+      inherit: false,
+      rules: [
+        { token: "", foreground: LIGHT_BRIGHT },
+        { token: "string.key.json", foreground: LIGHT_BRIGHT },
+        { token: "string.value.json", foreground: LIGHT_GREEN },
+        { token: "number", foreground: LIGHT_BLUE },
+        { token: "keyword.json", foreground: LIGHT_BLUE },
+        { token: "delimiter", foreground: LIGHT_DIM },
+        { token: "tag.xml", foreground: LIGHT_DIM },
+        { token: "metatag.xml", foreground: LIGHT_DIM },
+        { token: "attribute.name.xml", foreground: LIGHT_BRIGHT },
+        { token: "attribute.value.xml", foreground: LIGHT_GREEN },
+        { token: "metatag.xml", foreground: LIGHT_BLUE },
+        { token: "tag.xml", foreground: LIGHT_BLUE },
+      ],
+      colors: {
+        "editor.background": LIGHT_BACKGROUND,
+        "editor.lineHighlightBackground": LIGHT_BACKGROUND,
+        "editorBracketMatch.background": LIGHT_BACKGROUND,
+        "editorBracketMatch.border": LIGHT_BACKGROUND,
+        "editor.selectionBackground": LIGHT_SELECT,
+      },
+    });
+  })
+  .catch((error) =>
+    console.error("An error occurred during initialization of Monaco: ", error)
+  );
 
 function VSCode({ value, language, onChange }) {
   const [focused, setFocused] = useState(false);
 
   const { isDarkTheme } = useThemeContext();
 
-  useEffect(() => {
-    initMonaco(isDarkTheme ? "dark" : "light");
-  }, [isDarkTheme]);
-
   return (
     <div className={focused ? styles.monacoFocus : styles.monaco}>
       <Editor
         value={value}
         language={language}
-        theme="myCustomTheme"
+        theme={isDarkTheme ? "OpenApiDark" : "OpenApiLight"}
         options={{
           contentLeft: 0,
           lineNumbers: "off",
@@ -92,7 +113,7 @@ function VSCode({ value, language, onChange }) {
             horizontal: "hidden",
           },
         }}
-        editorDidMount={(_valueGetter, editor) => {
+        onMount={(editor) => {
           editor.onDidFocusEditorText(() => {
             setFocused(true);
           });

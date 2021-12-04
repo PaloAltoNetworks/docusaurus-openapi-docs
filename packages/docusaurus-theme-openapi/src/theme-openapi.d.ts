@@ -5,13 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-/// <reference types="@docusaurus/preset-classic" />
+/// <reference types="docusaurus-plugin-openapi" />
 
-import type { Preset, LoadContext } from "@docusaurus/types";
-
-declare module "@docusaurus/preset-classic" {
-  export default function preset(
-    context: LoadContext,
-    options: Options
-  ): Preset;
+declare module "docusaurus-theme-openapi" {
+  export type ThemeConfig = Partial<import("./types").ThemeConfig>;
 }

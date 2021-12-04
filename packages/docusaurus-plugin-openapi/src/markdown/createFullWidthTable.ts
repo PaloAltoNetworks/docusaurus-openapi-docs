@@ -5,13 +5,12 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-/// <reference types="@docusaurus/preset-classic" />
+import { create, Props } from "./utils";
 
-import type { Preset, LoadContext } from "@docusaurus/types";
-
-declare module "@docusaurus/preset-classic" {
-  export default function preset(
-    context: LoadContext,
-    options: Options
-  ): Preset;
+export function createFullWidthTable({ children, style, ...rest }: Props) {
+  return create("table", {
+    style: { display: "table", width: "100%", ...style },
+    ...rest,
+    children,
+  });
 }

@@ -8,7 +8,7 @@
 import path from "path";
 
 import { Plugin } from "@docusaurus/types";
-import webpack, { Configuration } from "webpack";
+import { ProvidePlugin } from "webpack";
 
 export default function docusaurusThemeOpenAPI(): Plugin<void> {
   return {
@@ -19,22 +19,20 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
     },
 
     configureWebpack() {
-      const wp: Configuration = {
+      return {
+        plugins: [
+          new ProvidePlugin({
+            Buffer: [require.resolve("buffer/"), "Buffer"],
+            process: require.resolve("process/browser"),
+          }),
+        ],
         resolve: {
           fallback: {
             buffer: require.resolve("buffer/"),
             process: require.resolve("process/browser"),
           },
         },
-        plugins: [
-          new webpack.ProvidePlugin({
-            Buffer: [require.resolve("buffer/"), "Buffer"],
-            process: require.resolve("process/browser"),
-          }),
-        ],
       };
-
-      return wp;
     },
   };
 }

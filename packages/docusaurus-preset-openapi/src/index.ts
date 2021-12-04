@@ -5,14 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import type {
-  Preset,
-  LoadContext,
-  PluginConfig,
-  PluginOptions,
-} from "@docusaurus/types";
-
-import { Options, ThemeConfig } from "./preset-classic";
+import presetClassic from "@docusaurus/preset-classic";
+import type { Preset, LoadContext, PluginOptions } from "@docusaurus/types";
+import type { Options } from "docusaurus-preset-openapi";
 
 function makePluginConfig(
   source: string,
@@ -26,65 +21,16 @@ function makePluginConfig(
 
 export default function preset(
   context: LoadContext,
-  opts: Options = {}
+  options: Options = {}
 ): Preset {
-  const { siteConfig } = context;
-  const { themeConfig } = siteConfig;
-  const { algolia } = themeConfig as Partial<ThemeConfig>;
-  const isProd = process.env.NODE_ENV === "production";
-  const {
-    api,
-    debug,
-    docs,
-    blog,
-    pages,
-    sitemap,
-    theme,
-    googleAnalytics,
-    gtag,
-    ...rest
-  } = opts;
+  const { api, ...rest } = options;
 
-  const themes: PluginConfig[] = [];
-  themes.push(makePluginConfig("@docusaurus/theme-classic", theme));
+  const { themes = [], plugins = [] } = presetClassic(context, rest);
+
   themes.push(makePluginConfig("docusaurus-theme-openapi"));
-  if (algolia) {
-    themes.push(require.resolve("@docusaurus/theme-search-algolia"));
-  }
 
-  const plugins: PluginConfig[] = [];
   if (api !== false) {
     plugins.push(makePluginConfig("docusaurus-plugin-openapi", api));
-  }
-  if (docs !== false) {
-    plugins.push(makePluginConfig("@docusaurus/plugin-content-docs", docs));
-  }
-  if (blog !== false) {
-    plugins.push(makePluginConfig("@docusaurus/plugin-content-blog", blog));
-  }
-  if (pages !== false) {
-    plugins.push(makePluginConfig("@docusaurus/plugin-content-pages", pages));
-  }
-  if (isProd && googleAnalytics) {
-    plugins.push(
-      makePluginConfig("@docusaurus/plugin-google-analytics", googleAnalytics)
-    );
-  }
-  if (debug || (debug === undefined && !isProd)) {
-    plugins.push(require.resolve("@docusaurus/plugin-debug"));
-  }
-  if (isProd && gtag) {
-    plugins.push(makePluginConfig("@docusaurus/plugin-google-gtag", gtag));
-  }
-  if (isProd && sitemap !== false) {
-    plugins.push(makePluginConfig("@docusaurus/plugin-sitemap", sitemap));
-  }
-  if (Object.keys(rest).length > 0) {
-    throw new Error(
-      `Unrecognized keys ${Object.keys(rest).join(
-        ", "
-      )} found in preset-classic configuration. The allowed keys are debug, docs, blog, pages, sitemap, theme, googleAnalytics, gtag. Check the documentation: https://docusaurus.io/docs/presets#docusauruspreset-classic for more information on how to configure individual plugins.`
-    );
   }
 
   return { themes, plugins };

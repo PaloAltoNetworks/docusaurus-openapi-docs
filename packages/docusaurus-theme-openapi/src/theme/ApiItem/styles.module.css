@@ -1,24 +1,20 @@
-.docTitle {
-  font-size: 3rem;
-  margin-bottom: calc(var(--ifm-leading-desktop) * var(--ifm-leading));
-}
-
-.docItemContainer {
-  margin: 0 auto;
-  padding: 0 0.5rem;
+.apiItemContainer article > *:first-child,
+.apiItemContainer header + * {
+  margin-top: 0;
 }
 
 /* default markdown margins look really silly in a table */
-.markdown :global(.table-markdown) > * {
+:global(.theme-api-markdown table *:last-child) {
   margin-bottom: 0;
 }
 
-.markdown :global(.admonition) :global(.admonition-heading):last-child h5 {
-  margin-bottom: 0;
-}
+@media (min-width: 997px) {
+  .docItemCol {
+    max-width: 75% !important;
+  }
 
-@media only screen and (max-width: 996px) {
-  .docItemContainer {
-    padding: 0 0.3rem;
+  /* Prevent hydration FOUC, as the mobile TOC needs to be server-rendered */
+  .tocMobile {
+    display: none;
   }
 }

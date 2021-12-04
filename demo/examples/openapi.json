@@ -19,11 +19,12 @@
       "put": {
         "tags": ["pet"],
         "summary": "Recursive",
+        "description": "Advanced markdown description example.\n\n## H2 title\n\nCode snippet **Shell Example**:\n\n```shell\nyarn start\n```\n\n:::tip pro tip\n`remark-admonitions` is pretty great!\n:::",
         "parameters": [
           {
             "name": "currency",
             "in": "query",
-            "description": "The 3 character currency code.",
+            "description": "Advanced markdown description example.\n\n## H2 title\n\nCode snippet **Shell Example**:\n\n```shell\nyarn start\n```\n\n:::tip pro tip\n`remark-admonitions` is pretty great!\n:::",
             "required": false,
             "schema": {
               "type": "string"

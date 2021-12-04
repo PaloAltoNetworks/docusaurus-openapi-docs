@@ -21,7 +21,8 @@
     "test:cypress": "start-server-and-test serve http://localhost:3000 cy:run",
     "release:changelog": "scripts/changelog.ts",
     "release:version": "scripts/version.ts",
-    "release:publish": "scripts/publish.ts"
+    "release:publish": "scripts/publish.ts",
+    "clean": "rm -rf node_modules build demo/.docusaurus demo/build demo/node_modules && find packages -name node_modules -type d -maxdepth 2 -exec rm -rf {} + && find packages -name dist -type d -maxdepth 2 -exec rm -rf {} +"
   },
   "devDependencies": {
     "@testing-library/cypress": "^8.0.1",

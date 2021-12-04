@@ -9,7 +9,6 @@ import { normalizeUrl } from "@docusaurus/utils";
 import fs from "fs-extra";
 import JsonRefs from "json-refs";
 import { kebabCase } from "lodash";
-// @ts-ignore - openapi-to-postmanv2 doesn't have types.
 import Converter from "openapi-to-postmanv2";
 import sdk, { Collection } from "postman-collection";
 
@@ -48,7 +47,7 @@ function getPaths(spec: OpenApiObject): ApiItem[] {
           let method = key;
           let operationObject = val as OperationObject;
 
-          const summary =
+          const title =
             operationObject.summary ??
             operationObject.operationId ??
             "Missing summary";
@@ -57,33 +56,31 @@ function getPaths(spec: OpenApiObject): ApiItem[] {
               operationObject.summary ?? operationObject.operationId ?? "";
           }
 
-          const baseId = kebabCase(summary);
+          const baseId = kebabCase(title);
           let count = seen[baseId];
 
-          let hashId;
+          let id;
           if (count) {
-            hashId = `${baseId}-${count}`;
+            id = `${baseId}-${count}`;
             seen[baseId] = count + 1;
           } else {
-            hashId = baseId;
+            id = baseId;
             seen[baseId] = 1;
           }
 
           const servers =
-            operationObject.servers || pathObject.servers || spec.servers;
+            operationObject.servers ?? pathObject.servers ?? spec.servers;
 
-          // NOTE: no security on the path level, only op level.
-          // The following line is unneeded, but is just for piece of mind.
-          const security = operationObject.security;
+          // TODO: Don't include summary temporarilly
+          const { summary, ...defaults } = operationObject;
 
           return {
-            ...operationObject,
-            summary: summary,
-            method: method,
-            path: path,
-            hashId: hashId,
-            servers: servers,
-            security: security,
+            ...defaults,
+            id,
+            title,
+            method,
+            path,
+            servers,
           };
         }
         return undefined;
@@ -233,11 +230,12 @@ export async function loadOpenapi(
         item.security = dereffedSpec.security;
       }
 
-      if (i === 0 && ii === 0) {
-        item.hashId = "/";
-      }
+      // TODO: we don't want this behavior anymore, but it might break things
+      // if (i === 0 && ii === 0) {
+      //   item.id = "/";
+      // }
 
-      item.permalink = normalizeUrl([baseUrl, routeBasePath, item.hashId]);
+      item.permalink = normalizeUrl([baseUrl, routeBasePath, item.id]);
 
       const prev =
         order[i].items[ii - 1] ||
@@ -247,15 +245,15 @@ export async function loadOpenapi(
 
       if (prev) {
         item.previous = {
-          title: prev.summary,
-          permalink: normalizeUrl([baseUrl, routeBasePath, prev.hashId]),
+          title: prev.title,
+          permalink: normalizeUrl([baseUrl, routeBasePath, prev.id]),
         };
       }
 
       if (next) {
         item.next = {
-          title: next.summary,
-          permalink: normalizeUrl([baseUrl, routeBasePath, next.hashId]),
+          title: next.title,
+          permalink: normalizeUrl([baseUrl, routeBasePath, next.id]),
         };
       }
 

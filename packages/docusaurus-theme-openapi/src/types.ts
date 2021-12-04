@@ -5,16 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-function FullWidthTable({
-  children,
-  style,
-  ...rest
-}: JSX.IntrinsicElements["table"]) {
-  return (
-    <table style={{ display: "table", width: "100%", ...style }} {...rest}>
-      {children}
-    </table>
-  );
+export interface ThemeConfig {
+  proxy: string;
 }
-
-export default FullWidthTable;
