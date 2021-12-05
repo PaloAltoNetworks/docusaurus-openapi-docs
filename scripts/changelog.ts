@@ -12,7 +12,7 @@ import { printBanner, printSpacer } from "./utils/print-utils";
 
 const ORG = "cloud-annotations";
 const REPO = "docusaurus-plugin-openapi";
-const BRANCH = "master";
+const BRANCH = "main";
 
 const COMMIT_FILTERS = [/\(release\) v.*/];
 
