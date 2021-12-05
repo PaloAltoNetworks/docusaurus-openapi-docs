@@ -42,6 +42,25 @@ const config = {
     ],
   ],
 
+  plugins: [
+    [
+      "docusaurus-plugin-openapi",
+      {
+        id: "issue",
+        path: "examples/openapi-issue-21.json",
+        routeBasePath: "issue-21",
+      },
+    ],
+    [
+      "docusaurus-plugin-openapi",
+      {
+        id: "cos",
+        path: "examples/openapi-cos.json",
+        routeBasePath: "cos",
+      },
+    ],
+  ],
+
   themeConfig:
     /** @type {import('docusaurus-preset-openapi').ThemeConfig} */
     ({
@@ -59,6 +78,8 @@ const config = {
             label: "Tutorial",
           },
           { to: "/api", label: "API", position: "left" },
+          { to: "/issue-21", label: "Issue 21", position: "left" },
+          { to: "/cos", label: "COS", position: "left" },
           { to: "/blog", label: "Blog", position: "left" },
           {
             href: "https://github.com/facebook/docusaurus",

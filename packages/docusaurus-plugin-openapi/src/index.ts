@@ -75,7 +75,7 @@ export default function pluginOpenAPI(
       const { routeBasePath, apiLayoutComponent, apiItemComponent } = options;
       const { addRoute, createData } = actions;
 
-      const sidebarName = "openapi-sidebar";
+      const sidebarName = `openapi-sidebar-${pluginId}`;
 
       const sidebar = loadedApi.map((category) => {
         return {
@@ -219,7 +219,7 @@ export default function pluginOpenAPI(
           rules: [
             {
               test: /(\.mdx?)$/,
-              include: [pluginDataDirRoot].map(addTrailingPathSeparator),
+              include: [dataDir].map(addTrailingPathSeparator),
               use: [
                 getJSLoader({ isServer }),
                 {

@@ -1,175 +1,6 @@
 {
   "openapi": "3.0.3",
-  "info": {
-    "title": "Cloud Object Storage",
-    "version": "1.0.0"
-  },
-  "paths": {
-    "/": {
-      "get": {
-        "tags": ["Bucket operations"],
-        "summary": "List buckets",
-        "description": "A `GET` request sent to the endpoint root returns a list of buckets that are associated with the specified service instance. For more information about endpoints, see [Endpoints and storage locations](https://cloud.ibm.com/docs/cloud-object-storage?topic=cloud-object-storage-endpoints#endpoints).",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "extended",
-            "description": "Provides `LocationConstraint` metadata in the listing.",
-            "required": false,
-            "schema": {
-              "type": "boolean"
-            },
-            "allowEmptyValue": true
-          },
-          {
-            "in": "header",
-            "name": "ibm-service-instance-id",
-            "description": "List buckets that were created in this service instance.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "ok"
-          }
-        }
-      }
-    },
-    "/{bucketName}": {
-      "put": {
-        "tags": ["Bucket operations"],
-        "summary": "Create a bucket",
-        "description": "A `PUT` request sent to the endpoint root followed by a string will create a bucket. For more information about endpoints, see [Endpoints and storage locations](https://cloud.ibm.com/docs/cloud-object-storage?topic=cloud-object-storage-endpoints#endpoints). Bucket names must be globally unique and DNS-compliant; names between 3 and 63 characters long must be made of lowercase letters, numbers, and dashes. Bucket names must begin and end with a lowercase letter or number. Bucket names resembling IP addresses are not allowed. This operation doesn't make use of operation specific query parameters.\n<div class=\"admonition admonition-caution alert alert--warning\"><div class=\"admonition-heading\"><h5><span class=\"admonition-icon\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 16 16\"><path fill-rule=\"evenodd\" d=\"M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 0 0 0 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 0 0 .01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z\"></path></svg></span>IMPORTANT</h5></div><div class=\"admonition-content\"><p>Bucket names must be unique because all buckets in the public cloud share a global namespace. This allows for access to a bucket without needing to provide any service instance or account information. It is also not possible to create a bucket with a name beginning with <code>cosv1-</code> or <code>account-</code> as these prefixes are reserved by the system.</p></div></div>\n<div class=\"admonition admonition-note alert alert--secondary\"><div class=\"admonition-heading\"><h5><span class=\"admonition-icon\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"16\" viewBox=\"0 0 12 16\"><path fill-rule=\"evenodd\" d=\"M6.5 0C3.48 0 1 2.19 1 5c0 .92.55 2.25 1 3 1.34 2.25 1.78 2.78 2 4v1h5v-1c.22-1.22.66-1.75 2-4 .45-.75 1-2.08 1-3 0-2.81-2.48-5-5.5-5zm3.64 7.48c-.25.44-.47.8-.67 1.11-.86 1.41-1.25 2.06-1.45 3.23-.02.05-.02.11-.02.17H5c0-.06 0-.13-.02-.17-.2-1.17-.59-1.83-1.45-3.23-.2-.31-.42-.67-.67-1.11C2.44 6.78 2 5.65 2 5c0-2.2 2.02-4 4.5-4 1.22 0 2.36.42 3.22 1.19C10.55 2.94 11 3.94 11 5c0 .66-.44 1.78-.86 2.48zM4 14h5c-.23 1.14-1.3 2-2.5 2s-2.27-.86-2.5-2z\"></path></svg></span>NOTE</h5></div><div class=\"admonition-content\"><p>Personally Identifiable Information (PII): When creating buckets or adding objects, please ensure to not use any information that can identify any user (natural person) by name, location or any other means in the name of the bucket or object.</p></div></div>\n\n## Create a bucket with a different storage class\n\nTo create a bucket with a different storage class, send an XML block specifying a bucket configuration with a `LocationConstraint` of `{provisioning code}` in the body of a `PUT` request to a bucket endpoint. For more information about endpoints, see [Endpoints and storage locations](https://cloud.ibm.com/docs/cloud-object-storage?topic=cloud-object-storage-endpoints#endpoints). Note that standard bucket [naming rules](https://cloud.ibm.com/docs/cloud-object-storage?topic=cloud-object-storage-compatibility-api-bucket-operations#compatibility-api-new-bucket) apply. This operation does not make use of operation specific query parameters.\n\nThe body of the request must contain an XML block with the following schema:\n\n```xml\n<CreateBucketConfiguration>\n  <LocationConstraint>us-vault</LocationConstraint>\n</CreateBucketConfiguration>\n```\n\nA list of valid provisioning codes for `LocationConstraint` can be referenced in [the Storage Classes guide](https://cloud.ibm.com/docs/cloud-object-storage?topic=cloud-object-storage-classes#classes-locationconstraint).\n\n## Create a new bucket with Key Protect or Hyper Protect Crypto Services managed encryption keys (SSE-KP)\n\nTo create a bucket where the encryption keys are managed by Key Protect or Hyper Protect Crypto Services, it is necessary to have access to an active Key Protect or Hyper Protect Crypto Services service instance located in the same location as the new bucket. This operation does not make use of operation specific query parameters.\n\nFor more information on using Key Protect to manage your encryption keys, [see the documentation for Key Protect](https://cloud.ibm.com/docs/key-protect?topic=key-protect-getting-started-tutorial).\n\nFor more information on Hyper Protect Crypto Services, [see the documentation](https://cloud.ibm.com/docs/hs-crypto?topic=hs-crypto-get-started).\n<div class=\"admonition admonition-note alert alert--secondary\"><div class=\"admonition-heading\"><h5><span class=\"admonition-icon\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"16\" viewBox=\"0 0 12 16\"><path fill-rule=\"evenodd\" d=\"M6.5 0C3.48 0 1 2.19 1 5c0 .92.55 2.25 1 3 1.34 2.25 1.78 2.78 2 4v1h5v-1c.22-1.22.66-1.75 2-4 .45-.75 1-2.08 1-3 0-2.81-2.48-5-5.5-5zm3.64 7.48c-.25.44-.47.8-.67 1.11-.86 1.41-1.25 2.06-1.45 3.23-.02.05-.02.11-.02.17H5c0-.06 0-.13-.02-.17-.2-1.17-.59-1.83-1.45-3.23-.2-.31-.42-.67-.67-1.11C2.44 6.78 2 5.65 2 5c0-2.2 2.02-4 4.5-4 1.22 0 2.36.42 3.22 1.19C10.55 2.94 11 3.94 11 5c0 .66-.44 1.78-.86 2.48zM4 14h5c-.23 1.14-1.3 2-2.5 2s-2.27-.86-2.5-2z\"></path></svg></span>NOTE</h5></div><div class=\"admonition-content\"><p>Note that managed encryption is <strong>not</strong> available in a Cross Region configuration and any SSE-KP buckets must be Regional.</p></div></div>",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "bucketName",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "header",
-            "name": "ibm-service-instance-id",
-            "description": "This header references the service instance where the bucket will be created and to which data usage will be billed.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "header",
-            "name": "ibm-sse-kp-encryption-algorithm",
-            "description": "This header is used to specify the algorithm and key size to use with the encryption key stored by using Key Protect. This value must be set to the string `AES256`.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "header",
-            "name": "ibm-sse-kp-customer-root-key-crn",
-            "description": "This header is used to reference the specific root key used by Key Protect or Hyper Protect Crypto Services to encrypt this bucket. This value must be the full CRN of the root key.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "text/plain": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "CreateBucketConfiguration": {
-                    "type": "object"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "ok"
-          }
-        }
-      },
-      "head": {
-        "tags": ["Bucket operations"],
-        "summary": "Retrieve a bucket's headers",
-        "description": "A `HEAD` issued to a bucket will return the headers for that bucket.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "bucketName",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "ok"
-          }
-        }
-      }
-    },
-    "/identity/token": {
-      "post": {
-        "tags": ["Authentication"],
-        "summary": "Generating an IAM token",
-        "description": "Generate an IBM Cloud® Identity and Access Management (IAM) token by using either your [IAM API key](https://cloud.ibm.com/docs/iam?topic=iam-userapikey#userapikey) or a [service ID's API key](https://cloud.ibm.com/docs/iam?topic=iam-serviceidapikeys#serviceidapikeys). IBM Cloud APIs can be accessed only by users who are authorized by an assigned IAM role. Each user who is calling the API must pass credentials for the API to authenticate.\n\nYou can generate an IAM token by using either your IBM Cloud API key or a service ID's API key. The API key is a permanent credential that can be reused if you don't lose the API key value or delete the API key in the account. This process is also used if you are developing an application that needs to work with other IBM Cloud services. You must use a service ID API key to get an access token to be passed to each of the IBM Cloud services.\n<div class=\"admonition admonition-note alert alert--secondary\"><div class=\"admonition-heading\"><h5><span class=\"admonition-icon\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"16\" viewBox=\"0 0 12 16\"><path fill-rule=\"evenodd\" d=\"M6.5 0C3.48 0 1 2.19 1 5c0 .92.55 2.25 1 3 1.34 2.25 1.78 2.78 2 4v1h5v-1c.22-1.22.66-1.75 2-4 .45-.75 1-2.08 1-3 0-2.81-2.48-5-5.5-5zm3.64 7.48c-.25.44-.47.8-.67 1.11-.86 1.41-1.25 2.06-1.45 3.23-.02.05-.02.11-.02.17H5c0-.06 0-.13-.02-.17-.2-1.17-.59-1.83-1.45-3.23-.2-.31-.42-.67-.67-1.11C2.44 6.78 2 5.65 2 5c0-2.2 2.02-4 4.5-4 1.22 0 2.36.42 3.22 1.19C10.55 2.94 11 3.94 11 5c0 .66-.44 1.78-.86 2.48zM4 14h5c-.23 1.14-1.3 2-2.5 2s-2.27-.86-2.5-2z\"></path></svg></span>NOTE</h5></div><div class=\"admonition-content\"><p>An access token is a temporary credential that expires after 1 hour. After the acquired token expires, you must generate a new token to continue calling IBM Cloud or service APIs, and you can perform only actions that are allowed by your level of assigned access within all accounts.</p></div></div>",
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "grant_type": {
-                    "type": "string",
-                    "enum": ["urn:ibm:params:oauth:grant-type:apikey"]
-                  },
-                  "apikey": {
-                    "type": "string"
-                  }
-                },
-                "required": ["grant_type", "apikey"]
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "ok"
-          }
-        },
-        "security": []
-      },
-      "servers": [{ "url": "https://iam.cloud.ibm.com" }]
-    }
-  },
-  "component": {
-    "securitySchemes": {
-      "BearerAuth": {
-        "type": "http",
-        "scheme": "bearer"
-      }
-    }
-  },
-  "security": [{ "BearerAuth": [] }],
-  "tags": [
-    { "name": "Authentication" },
-    { "name": "Bucket operations" },
-    { "name": "Object operations" }
-  ],
+  "info": { "title": "Cloud Object Storage", "version": "1.0.1" },
   "servers": [
     {
       "url": "https://s3.{region}.cloud-object-storage.appdomain.cloud",
@@ -203,5 +34,138 @@
         }
       }
     }
+  ],
+  "paths": {
+    "/identity/token": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Generating an IAM token",
+        "description": "Generate an IBM Cloud® Identity and Access Management (IAM) token by using either your [IAM API key](https://cloud.ibm.com/docs/iam?topic=iam-userapikey#userapikey) or a [service ID's API key](https://cloud.ibm.com/docs/iam?topic=iam-serviceidapikeys#serviceidapikeys) IBM Cloud APIs can be accessed only by users who are authorized by an assigned IAM role.\nEach user who is calling the API must pass credentials for the API to authenticate.\n\nYou can generate an IAM token by using either your IBM Cloud API key or a service ID's API key.\nThe API key is a permanent credential that can be reused if you don't lose the API key value or delete the API key in the account.\nThis process is also used if you are developing an application that needs to work with other IBM Cloud services.\nYou must use a service ID API key to get an access token to be passed to each of the IBM Cloud services.\n\n:::note\nAn access token is a temporary credential that expires after 1 hour.\nAfter the acquired token expires, you must generate a new token to continue calling IBM Cloud or service APIs, and you can perform only actions that are allowed by your level of assigned access within all accounts.\n:::",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": { "$ref": "#/components/schemas/AuthForm" }
+            }
+          },
+          "required": true
+        },
+        "security": [{ "//": [] }],
+        "responses": { "200": { "description": "ok" } }
+      }
+    },
+    "/": {
+      "get": {
+        "tags": ["Bucket operations"],
+        "summary": "List buckets",
+        "description": "A `GET` request sent to the endpoint root returns a list of buckets that are associated with the specified service instance.\nFor more information about endpoints, see [Endpoints and storage locations](https://cloud.ibm.com/docs/cloud-object-storage?topic=cloud-object-storage-endpoints#endpoints).",
+        "parameters": [
+          { "$ref": "#/components/parameters/Extended" },
+          {
+            "name": "ibm-service-instance-id",
+            "in": "header",
+            "description": "List buckets that were created in this service instance.",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": { "200": { "description": "ok" } }
+      }
+    },
+    "/{bucketName}": {
+      "put": {
+        "tags": ["Bucket operations"],
+        "summary": "Create a bucket",
+        "description": "A `PUT` request sent to the endpoint root followed by a string will create a bucket.\nFor more information about endpoints, see [Endpoints and storage locations](https://cloud.ibm.com/docs/cloud-object-storage?topic=cloud-object-storage-endpoints#endpoints).\nBucket names must be globally unique and DNS-compliant; names between 3 and 63 characters long must be made of lowercase letters, numbers, and dashes.\nBucket names must begin and end with a lowercase letter or number.\nBucket names resembling IP addresses are not allowed.\nThis operation doesn't make use of operation specific query parameters.\n\n:::info important\nBucket names must be unique because all buckets in the public cloud share a global namespace.\nThis allows for access to a bucket without needing to provide any service instance or account information.\nIt is also not possible to create a bucket with a name beginning with `cosv1-` or `account-` as these prefixes are reserved by the system.\n:::\n\n:::note\nPersonally Identifiable Information (PII): When creating buckets or adding objects, please ensure to not use any information that can identify any user (natural person) by name, location or any other means in the name of the bucket or object.\n:::\n\n## Create a bucket with a different storage class\n\nTo create a bucket with a different storage class, send an XML block specifying a bucket configuration with a `LocationConstraint` of `{provisioning code}` in the body of a `PUT` request to a bucket endpoint.\nFor more information about endpoints, see [Endpoints and storage locations](https://cloud.ibm.com/docs/cloud-object-storage?topic=cloud-object-storage-endpoints#endpoints).\nNote that standard bucket [naming rules](https://cloud.ibm.com/docs/cloud-object-storage?topic=cloud-object-storage-compatibility-api-bucket-operations#compatibility-api-new-bucket) apply.\nThis operation does not make use of operation specific query parameters.\n\nThe body of the request must contain an XML block with the following schema:\n\n```xml\n<CreateBucketConfiguration>\n  <LocationConstraint>us-vault</LocationConstraint>\n</CreateBucketConfiguration>\n```\n\nA list of valid provisioning codes for `LocationConstraint` can be referenced in [the Storage Classes guide](https://cloud.ibm.com/docs/cloud-object-storage?topic=cloud-object-storage-classes#classes-locationconstraint).\n\n## Create a new bucket with Key Protect or Hyper Protect Crypto Services managed encryption keys (SSE-KP)\n\nTo create a bucket where the encryption keys are managed by Key Protect or Hyper Protect Crypto Services, it is necessary to have access to an active Key Protect or Hyper Protect Crypto Services service instance located in the same location as the new bucket.\nThis operation does not make use of operation specific query parameters.\n\nFor more information on using Key Protect to manage your encryption keys, [see the documentation for Key Protect](https://cloud.ibm.com/docs/key-protect?topic=key-protect-getting-started-tutorial).\n\nFor more information on Hyper Protect Crypto Services, [see the documentation](https://cloud.ibm.com/docs/hs-crypto?topic=hs-crypto-get-started).\n\n:::note\nNote that managed encryption is **not** available in a Cross Region configuration and any SSE-KP buckets must be Regional.\n:::",
+        "parameters": [
+          {
+            "name": "bucketName",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "ibm-service-instance-id",
+            "in": "header",
+            "description": "This header references the service instance where the bucket will be created and to which data usage will be billed.",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "ibm-sse-kp-encryption-algorithm",
+            "in": "header",
+            "description": "This header is used to specify the algorithm and key size to use with the encryption key stored by using Key Protect. This value must be set to the string `AES256`.",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "ibm-sse-kp-customer-root-key-crn",
+            "in": "header",
+            "description": "This header is used to reference the specific root key used by Key Protect or Hyper Protect Crypto Services to encrypt this bucket. This value must be the full CRN of the root key.",
+            "required": false,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "text/plain": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBucketConfiguration"
+              }
+            }
+          }
+        },
+        "responses": { "200": { "description": "ok" } }
+      },
+      "head": {
+        "tags": ["Bucket operations"],
+        "summary": "Retrieve a bucket's headers",
+        "description": "A `HEAD` issued to a bucket will return the headers for that bucket.",
+        "parameters": [
+          {
+            "name": "bucketName",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": { "200": { "description": "ok" } }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": { "BearerAuth": { "type": "http", "scheme": "bearer" } },
+    "schemas": {
+      "AuthForm": {
+        "type": "object",
+        "properties": {
+          "grant_type": {
+            "type": "string",
+            "enum": ["urn:ibm:params:oauth:grant-type:apikey"]
+          },
+          "apikey": { "type": "string" }
+        },
+        "required": ["grant_type", "apikey"]
+      },
+      "CreateBucketConfiguration": {
+        "type": "object",
+        "properties": { "CreateBucketConfiguration": { "type": "object" } }
+      }
+    },
+    "parameters": {
+      "Extended": {
+        "in": "query",
+        "name": "extended",
+        "description": "Provides `LocationConstraint` metadata in the listing.",
+        "required": false,
+        "schema": { "type": "boolean" },
+        "allowEmptyValue": true
+      }
+    }
+  },
+  "security": [{ "BearerAuth": [] }],
+  "tags": [
+    { "name": "Authentication" },
+    { "name": "Bucket operations" },
+    { "name": "Object operations" }
   ]
 }
