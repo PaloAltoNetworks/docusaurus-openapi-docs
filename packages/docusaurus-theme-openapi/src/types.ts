@@ -6,5 +6,8 @@
  * ========================================================================== */
 
 export interface ThemeConfig {
-  proxy: string;
+  api?: {
+    proxy?: string;
+    authPersistance?: false | "localStorage" | "sessionStorage";
+  };
 }

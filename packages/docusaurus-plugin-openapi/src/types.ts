@@ -356,6 +356,13 @@ export interface ApiItem extends OperationObject {
   next: Page;
   previous: Page;
   jsonRequestBodyExample: string;
+  securitySchemes?: Map<
+    | ApiKeySecuritySchemeObject
+    | HttpSecuritySchemeObject
+    | Oauth2SecuritySchemeObject
+    | OpenIdConnectSecuritySchemeObject
+    | ReferenceObject
+  >;
 }
 
 export interface Page {

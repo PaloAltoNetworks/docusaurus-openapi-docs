@@ -5,6 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import React from "react";
+
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import type { Props } from "@theme/ApiItem";
 import DocPaginator from "@theme/DocPaginator";

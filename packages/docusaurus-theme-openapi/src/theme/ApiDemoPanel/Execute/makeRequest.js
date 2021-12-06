@@ -154,18 +154,16 @@ async function makeRequest(request, proxy, _body) {
     body: myBody,
   };
 
+  let finalUrl = request.url.toString();
   if (proxy) {
     // Ensure the proxy ends with a slash.
     let normalizedProxy = proxy.replace(/\/$/, "") + "/";
-    return await fetch(
-      normalizedProxy + request.url.toString(),
-      requestOptions
-    ).then((response) => response.text());
+    finalUrl = normalizedProxy + request.url.toString();
   }
 
-  return await fetch(request.url.toString(), requestOptions).then((response) =>
-    response.text()
-  );
+  return await fetch(finalUrl, requestOptions).then((response) => {
+    return response.text();
+  });
 }
 
 export default makeRequest;

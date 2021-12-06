@@ -7,6 +7,7 @@
 
 import React from "react";
 
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import sdk from "postman-collection";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
@@ -26,10 +27,13 @@ import Response from "./Response";
 import styles from "./styles.module.css";
 
 function ApiDemoPanel({ item }) {
+  const { siteConfig } = useDocusaurusContext();
+  const { api: options } = siteConfig.themeConfig;
+
   item.postman = new sdk.Request(item.postman);
   const store = createStore(
     reducer,
-    init(item),
+    init(item, options),
     composeWithDevTools({ name: `${item.method} ${item.path}` })()
   );
 

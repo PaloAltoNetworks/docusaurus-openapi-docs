@@ -164,8 +164,9 @@ function buildPostmanRequest(
     headerParams,
     body,
     endpoint,
-    security,
-    bearerToken,
+    auth,
+    selectedAuthID,
+    authOptionIDs,
   }
 ) {
   const clonedPostman = cloneDeep(postman);
@@ -192,11 +193,39 @@ function buildPostmanRequest(
 
   const cookie = buildCookie(cookieParams);
   let otherHeaders = [];
-  if (bearerToken && security?.length > 0) {
-    otherHeaders.push({
-      key: "Authorization",
-      value: bearerToken,
-    });
+
+  let selectedAuth = [];
+  if (selectedAuthID !== undefined) {
+    const selectedAuthIndex = authOptionIDs.indexOf(selectedAuthID);
+    selectedAuth = auth[selectedAuthIndex];
+  }
+
+  for (const a of selectedAuth) {
+    // Bearer Auth
+    if (a.type === "http" && a.scheme === "bearer") {
+      const { token } = a.data;
+      if (token === undefined) {
+        continue;
+      }
+      otherHeaders.push({
+        key: "Authorization",
+        value: `Bearer ${token}`,
+      });
+      continue;
+    }
+
+    // Basic Auth
+    if (a.type === "http" && a.scheme === "basic") {
+      const { username, password } = a.data;
+      if (username === undefined || password === undefined) {
+        continue;
+      }
+      otherHeaders.push({
+        key: "Authorization",
+        value: `Basic ${window.btoa(`${username}:${password}`)}`,
+      });
+      continue;
+    }
   }
 
   setHeaders(

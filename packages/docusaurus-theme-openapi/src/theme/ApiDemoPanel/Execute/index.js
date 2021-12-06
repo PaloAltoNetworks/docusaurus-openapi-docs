@@ -7,7 +7,6 @@
 
 import React from "react";
 
-import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import { useSelector } from "react-redux";
 
 import buildPostmanRequest from "./../buildPostmanRequest";
@@ -26,9 +25,6 @@ function isRequestComplete(params) {
 }
 
 function Execute() {
-  const { siteConfig } = useDocusaurusContext();
-  const { proxy } = siteConfig.themeConfig;
-
   const postman = useSelector((state) => state.postman);
 
   const pathParams = useSelector((state) => state.params.path);
@@ -39,8 +35,10 @@ function Execute() {
   const body = useSelector((state) => state.body);
   const accept = useSelector((state) => state.accept);
   const endpoint = useSelector((state) => state.endpoint);
-  const security = useSelector((state) => state.security);
-  const bearerToken = useSelector((state) => state.bearerToken);
+  const auth = useSelector((state) => state.auth);
+  const selectedAuthID = useSelector((state) => state.selectedAuthID);
+  const authOptionIDs = useSelector((state) => state.authOptionIDs);
+  const proxy = useSelector((state) => state.options.proxy);
 
   const params = useSelector((state) => state.params);
   const finishedRequest = isRequestComplete(params);
@@ -56,8 +54,9 @@ function Execute() {
     headerParams,
     body,
     endpoint,
-    security,
-    bearerToken,
+    auth,
+    selectedAuthID,
+    authOptionIDs,
   });
 
   return (
@@ -67,8 +66,12 @@ function Execute() {
       disabled={!finishedRequest}
       onClick={async () => {
         setResponse("loading...");
-        const res = await makeRequest(postmanRequest, proxy, body);
-        setResponse(res);
+        try {
+          const res = await makeRequest(postmanRequest, proxy, body);
+          setResponse(res);
+        } catch (e) {
+          setResponse(e.message ?? "Error fetching.");
+        }
       }}
     >
       Execute

@@ -68,6 +68,10 @@
             "schema": { "type": "string" }
           }
         ],
+        "security": [
+          { "BearerAuth": [] },
+          { "BearerAuth": [], "BasicAuth": [] }
+        ],
         "responses": { "200": { "description": "ok" } }
       }
     },
@@ -133,7 +137,10 @@
     }
   },
   "components": {
-    "securitySchemes": { "BearerAuth": { "type": "http", "scheme": "bearer" } },
+    "securitySchemes": {
+      "BearerAuth": { "type": "http", "scheme": "bearer" },
+      "BasicAuth": { "type": "http", "scheme": "basic" }
+    },
     "schemas": {
       "AuthForm": {
         "type": "object",

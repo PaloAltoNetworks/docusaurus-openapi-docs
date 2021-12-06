@@ -8,13 +8,14 @@
 import produce from "immer";
 
 import { types } from "./actions";
+import { persistAuth, persistSelectedAuth } from "./persistance";
 
 const reducer = produce((draft, action) => {
   switch (action.type) {
     case types.updateParam: {
       draft.params[action.param.type][
         draft.params[action.param.type].findIndex(
-          (param) => param.name === action.param.name
+          (param: any) => param.name === action.param.name
         )
       ] = action.param;
       break;
@@ -39,7 +40,9 @@ const reducer = produce((draft, action) => {
       break;
     }
     case types.setEndpoint: {
-      draft.endpoint = draft.servers.find((s) => s.url === action.endpoint);
+      draft.endpoint = draft.servers.find(
+        (s: any) => s.url === action.endpoint
+      );
       break;
     }
     case types.setEndpointValue: {
@@ -50,14 +53,23 @@ const reducer = produce((draft, action) => {
       draft.contentType = action.contentType;
       break;
     }
-    case types.setBearerToken: {
-      sessionStorage.setItem("bearerToken", action.bearerToken);
-      draft.bearerToken = action.bearerToken;
+    case types.setAuth: {
+      //  TODO: This is a side effect and shouldn't be done here.
+      persistAuth({
+        security: action.auth,
+        persistance: draft.options.authPersistance,
+      });
+      draft.auth = action.auth;
       break;
     }
-    case types.clearSession: {
-      sessionStorage.clear();
-      draft.bearerToken = undefined;
+    case types.setSelectedAuthID: {
+      //  TODO: This is a side effect and shouldn't be done here.
+      persistSelectedAuth({
+        key: draft._uniqueAuthKey,
+        selectedAuthID: action.selectedAuthID,
+        persistance: draft.options.authPersistance,
+      });
+      draft.selectedAuthID = action.selectedAuthID;
       break;
     }
     default:

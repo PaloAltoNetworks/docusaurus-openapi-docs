@@ -231,10 +231,8 @@ export async function loadOpenapi(
         item.security = dereffedSpec.security;
       }
 
-      // TODO: we don't want this behavior anymore, but it might break things
-      // if (i === 0 && ii === 0) {
-      //   item.id = "/";
-      // }
+      // Add security schemes so we know how to handle security.
+      item.securitySchemes = dereffedSpec.components?.securitySchemes;
 
       item.permalink = normalizeUrl([baseUrl, routeBasePath, item.id]);
 

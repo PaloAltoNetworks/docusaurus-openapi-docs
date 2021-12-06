@@ -16,18 +16,18 @@ export const types = {
   setContentType: "SET_CONTENT_TYPE",
   setEndpoint: "SET_ENDPOINT",
   setEndpointValue: "SET_ENDPOINT_VALUE",
-  setBearerToken: "SET_BEARER_TOKEN",
-  clearSession: "CLEAR_SESSION",
+  setAuth: "SET_AUTH",
+  setSelectedAuthID: "SET_SELECTED_AUTH_ID",
 };
 
 export function useActions() {
   const dispatch = useDispatch();
 
-  function updateParam(param) {
+  function updateParam(param: any) {
     dispatch({ type: types.updateParam, param });
   }
 
-  function setResponse(response) {
+  function setResponse(response: any) {
     dispatch({ type: types.setResponse, response });
   }
 
@@ -35,36 +35,36 @@ export function useActions() {
     dispatch({ type: types.setResponse, response: undefined });
   }
 
-  function setBody(body) {
+  function setBody(body: any) {
     dispatch({ type: types.setBody, body });
   }
 
-  function setForm(body) {
+  function setForm(body: any) {
     dispatch({ type: types.setForm, body });
   }
 
-  function setAccept(accept) {
+  function setAccept(accept: any) {
     dispatch({ type: types.setAccept, accept });
   }
 
-  function setContentType(contentType) {
+  function setContentType(contentType: any) {
     dispatch({ type: types.setContentType, contentType });
   }
 
-  function setEndpoint(endpoint) {
+  function setEndpoint(endpoint: any) {
     dispatch({ type: types.setEndpoint, endpoint });
   }
 
-  function setEndpointValue(key, value) {
+  function setEndpointValue(key: any, value: any) {
     dispatch({ type: types.setEndpointValue, key, value });
   }
 
-  function setBearerToken(bearerToken) {
-    dispatch({ type: types.setBearerToken, bearerToken });
+  function setAuth(auth: any) {
+    dispatch({ type: types.setAuth, auth });
   }
 
-  function clearSession() {
-    dispatch({ type: types.clearSession });
+  function setSelectedAuthID(selectedAuthID: string) {
+    dispatch({ type: types.setSelectedAuthID, selectedAuthID });
   }
 
   return {
@@ -77,7 +77,7 @@ export function useActions() {
     clearResponse,
     setBody,
     setForm,
-    setBearerToken,
-    clearSession,
+    setAuth,
+    setSelectedAuthID,
   };
 }

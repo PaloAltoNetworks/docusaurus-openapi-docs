@@ -128,8 +128,9 @@ function Curl() {
   const accept = useSelector((state) => state.accept);
   const endpoint = useSelector((state) => state.endpoint);
   const postman = useSelector((state) => state.postman);
-  const security = useSelector((state) => state.security);
-  const bearerToken = useSelector((state) => state.bearerToken);
+  const auth = useSelector((state) => state.auth);
+  const selectedAuthID = useSelector((state) => state.selectedAuthID);
+  const authOptionIDs = useSelector((state) => state.authOptionIDs);
 
   const langs = [
     ...(siteConfig?.themeConfig?.languageTabs ?? languageSet),
@@ -151,8 +152,9 @@ function Curl() {
         headerParams,
         body,
         endpoint,
-        security,
-        bearerToken,
+        auth,
+        selectedAuthID,
+        authOptionIDs,
       });
 
       codegen.convert(
@@ -183,8 +185,9 @@ function Curl() {
     postman,
     queryParams,
     endpoint,
-    security,
-    bearerToken,
+    auth,
+    selectedAuthID,
+    authOptionIDs,
   ]);
 
   const ref = useRef(null);

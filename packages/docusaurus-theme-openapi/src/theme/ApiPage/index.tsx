@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { ReactNode, useState, useCallback } from "react";
+import React, { ReactNode, useState, useCallback } from "react";
 
 import renderRoutes from "@docusaurus/renderRoutes";
 import { matchPath } from "@docusaurus/router";
