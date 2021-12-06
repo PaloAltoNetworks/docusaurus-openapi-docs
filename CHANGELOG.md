@@ -1,3 +1,15 @@
+## 0.2.1 (Dec 5, 2021)
+
+High level enhancements
+
+- The demo panel now allows you to choose the security scheme from a dropdown that is populated by the OpenAPI definition (only showing the dropdown if more than one is listed)
+- Adds support for using multiple auth modes simultaneously (Eg: `(BearerAuth) OR (ApiKeyAuth AND BasicAuth)`)
+- Adds an `authPersistence` option to `themeConfig.api`. Defaults to `"localStorage"`, can be set to `false` to disable or `sessionStorage` to only persist while the window is open.
+
+Other enhancements and bug fixes
+
+- Add better auth support ([#74](https://github.com/cloud-annotations/docusaurus-plugin-openapi/pull/74))
+
 ## 0.2.0 (Dec 4, 2021)
 
 ### 💥 Breaking Changes
