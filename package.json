@@ -11,6 +11,7 @@
     "prepare": "husky install",
     "watch": "lerna run watch --parallel",
     "build": "lerna run build",
+    "build-packages": "lerna run build --no-private",
     "serve": "yarn workspace demo serve",
     "cy:run": "cypress run",
     "cy:open": "cypress open",
