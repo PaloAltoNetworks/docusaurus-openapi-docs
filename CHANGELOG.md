@@ -1,3 +1,7 @@
+## 0.2.2 (Dec 6, 2021)
+
+Fix broken package
+
 ## 0.2.1 (Dec 5, 2021)
 
 High level enhancements

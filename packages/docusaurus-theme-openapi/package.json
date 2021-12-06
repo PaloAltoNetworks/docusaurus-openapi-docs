@@ -1,16 +1,13 @@
 {
   "name": "docusaurus-theme-openapi",
   "description": "OpenAPI theme for Docusaurus.",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
   "types": "src/theme-openapi.d.ts",
   "main": "lib/index.js",
-  "files": [
-    "/dist"
-  ],
   "scripts": {
     "build": "tsc --noEmit && yarn babel:lib && yarn babel:lib-next && yarn format:lib-next",
     "watch": "concurrently --names \"lib,lib-next,tsc\" --kill-others \"yarn babel:lib --watch\" \"yarn babel:lib-next --watch\" \"yarn tsc --watch\"",
