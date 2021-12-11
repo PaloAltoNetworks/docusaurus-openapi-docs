@@ -8,9 +8,6 @@
   },
   "types": "src/plugin-openapi.d.ts",
   "main": "dist/index.js",
-  "files": [
-    "/dist"
-  ],
   "scripts": {
     "build": "scripts/build.ts",
     "watch": "scripts/build.ts --watch"

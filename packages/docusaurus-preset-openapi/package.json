@@ -3,14 +3,23 @@
   "description": "OpenAPI preset for Docusaurus.",
   "version": "0.2.2",
   "license": "MIT",
+  "keywords": [
+    "openapi",
+    "swagger",
+    "docusaurus",
+    "documentation",
+    "react"
+  ],
   "publishConfig": {
     "access": "public"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cloud-annotations/docusaurus-plugin-openapi.git",
+    "directory": "packages/docusaurus-preset-openapi"
+  },
   "types": "src/preset-openapi.d.ts",
   "main": "dist/index.js",
-  "files": [
-    "/dist"
-  ],
   "scripts": {
     "build": "scripts/build.ts",
     "watch": "scripts/build.ts --watch"
