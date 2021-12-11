@@ -1,5 +1,7 @@
 # Docusaurus OpenAPI (beta)
 
+OpenAPI plugin for generating API reference docs in Docusaurus v2.
+
 ![](https://user-images.githubusercontent.com/4212769/85324376-b9e3d900-b497-11ea-9765-c42a8ad1ff61.png)
 
 > ### 💥 [Breaking Changes](https://github.com/cloud-annotations/docusaurus-plugin-openapi/releases/tag/v0.2.0): v0.1.0 -> v0.2.0
