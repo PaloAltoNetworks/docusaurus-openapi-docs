@@ -1,3 +1,10 @@
+## 0.2.3 (Dec 11, 2021)
+
+Enhancements and bug fixes
+
+- Add case-insensitive security scheme support ([#83](https://github.com/cloud-annotations/docusaurus-plugin-openapi/pull/83))
+- Add CodeSandbox CI ([#77](https://github.com/cloud-annotations/docusaurus-plugin-openapi/pull/77))
+
 ## 0.2.2 (Dec 6, 2021)
 
 Fix broken package
