@@ -93,7 +93,7 @@ Example:
       "docusaurus-preset-openapi",
       {
         api: {
-          path: "api/cars.yaml"
+          path: "api/cars.yaml",
           routeBasePath: "cars",
           // ... other options
         }
