@@ -138,7 +138,7 @@
   },
   "components": {
     "securitySchemes": {
-      "BearerAuth": { "type": "http", "scheme": "bearer" },
+      "BearerAuth": { "type": "http", "scheme": "BeAreR" },
       "BasicAuth": { "type": "http", "scheme": "basic" }
     },
     "schemas": {

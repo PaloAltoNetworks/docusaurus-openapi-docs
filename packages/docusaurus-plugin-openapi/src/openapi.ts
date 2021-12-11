@@ -25,7 +25,22 @@ import {
   ApiItem,
   RequestBodyObject,
   SchemaObject,
+  HttpSecuritySchemeObject,
+  ApiKeySecuritySchemeObject,
+  Oauth2SecuritySchemeObject,
+  OpenIdConnectSecuritySchemeObject,
 } from "./types";
+
+function isHttpSecuritySchemeObject(
+  item:
+    | ReferenceObject
+    | ApiKeySecuritySchemeObject
+    | HttpSecuritySchemeObject
+    | Oauth2SecuritySchemeObject
+    | OpenIdConnectSecuritySchemeObject
+): item is HttpSecuritySchemeObject {
+  return (item as HttpSecuritySchemeObject).type === "http";
+}
 
 function isOperationObject(
   item:
@@ -233,6 +248,13 @@ export async function loadOpenapi(
 
       // Add security schemes so we know how to handle security.
       item.securitySchemes = dereffedSpec.components?.securitySchemes;
+
+      // Make sure schemes are lowercase. See: https://github.com/cloud-annotations/docusaurus-plugin-openapi/issues/79
+      Object.values(item.securitySchemes ?? {}).forEach((auth) => {
+        if (isHttpSecuritySchemeObject(auth)) {
+          auth.scheme = auth.scheme.toLowerCase();
+        }
+      });
 
       item.permalink = normalizeUrl([baseUrl, routeBasePath, item.id]);
 
