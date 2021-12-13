@@ -24,7 +24,7 @@ function ApiItem(props: Props): JSX.Element {
   const { content: ApiContent } = props;
   const { metadata, frontMatter } = ApiContent;
   const { image, keywords } = frontMatter;
-  const { description, title, api } = metadata;
+  const { description, title, api, previous, next } = metadata;
 
   return (
     <>
@@ -39,7 +39,7 @@ function ApiItem(props: Props): JSX.Element {
               </div>
             </article>
 
-            <DocPaginator metadata={metadata} />
+            <DocPaginator previous={previous} next={next} />
           </div>
         </div>
         <div className="col col--5">

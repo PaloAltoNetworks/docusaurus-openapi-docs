@@ -7,7 +7,6 @@
 
 import path from "path";
 
-import { DEFAULT_PLUGIN_ID } from "@docusaurus/core/lib/constants";
 import {
   LoadContext,
   Plugin,
@@ -15,6 +14,7 @@ import {
   ConfigureWebpackUtils,
 } from "@docusaurus/types";
 import {
+  DEFAULT_PLUGIN_ID,
   normalizeUrl,
   docuHash,
   addTrailingPathSeparator,
