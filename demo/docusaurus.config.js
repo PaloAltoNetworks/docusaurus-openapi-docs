@@ -67,6 +67,14 @@ const config = {
         routeBasePath: "yaml",
       },
     ],
+    [
+      "docusaurus-plugin-openapi",
+      {
+        id: "petstore",
+        path: "examples/petstore.yaml",
+        routeBasePath: "petstore",
+      },
+    ],
   ],
 
   themeConfig:
@@ -89,6 +97,7 @@ const config = {
           { to: "/issue-21", label: "Issue 21", position: "left" },
           { to: "/cos", label: "COS", position: "left" },
           { to: "/yaml", label: "YAML", position: "left" },
+          { to: "/petstore", label: "Petstore", position: "left" },
           { to: "/blog", label: "Blog", position: "left" },
           {
             href: "https://github.com/facebook/docusaurus",

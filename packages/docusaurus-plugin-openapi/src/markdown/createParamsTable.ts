@@ -5,6 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import { escape } from "lodash";
+
 import { ApiItem } from "../types";
 import { createDescription } from "./createDescription";
 import { createFullWidthTable } from "./createFullWidthTable";
@@ -60,6 +62,27 @@ export function createParamsTable({ parameters, type }: Props) {
                     children: " REQUIRED",
                   }),
                 ]),
+                // TODO: This feels a little hacky. We should have a more resilient way to generate enum descriptions.
+                guard(param.schema?.items?.enum, (options) =>
+                  create("div", {
+                    style: { marginTop: "var(--ifm-table-cell-padding)" },
+                    children: `Items Enum: ${options
+                      .map((option) =>
+                        create("code", { children: `"${option}"` })
+                      )
+                      .join(", ")}`,
+                  })
+                ),
+                guard(param.schema?.enum, (options) =>
+                  create("div", {
+                    style: { marginTop: "var(--ifm-table-cell-padding)" },
+                    children: `Enum: ${options
+                      .map((option) =>
+                        create("code", { children: `"${option}"` })
+                      )
+                      .join(", ")}`,
+                  })
+                ),
                 guard(param.description, (description) =>
                   create("div", {
                     style: { marginTop: "var(--ifm-table-cell-padding)" },
@@ -69,7 +92,7 @@ export function createParamsTable({ parameters, type }: Props) {
                 guard(param.example, (example) =>
                   create("div", {
                     style: { marginTop: "var(--ifm-table-cell-padding)" },
-                    children: `Example: ${example}`,
+                    children: escape(`Example: ${example}`),
                   })
                 ),
                 guard(param.examples, (examples) =>
@@ -77,7 +100,7 @@ export function createParamsTable({ parameters, type }: Props) {
                     style: { marginTop: "var(--ifm-table-cell-padding)" },
                     children: Object.entries(examples).map(([k, v]) =>
                       create("div", {
-                        children: `Example (${k}): ${v.value}`,
+                        children: escape(`Example (${k}): ${v.value}`),
                       })
                     ),
                   })

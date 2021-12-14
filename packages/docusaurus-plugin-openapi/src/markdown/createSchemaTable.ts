@@ -39,6 +39,14 @@ function createRow({ name, schema, required }: RowProps) {
             children: " REQUIRED",
           }),
         ]),
+        guard(schema.enum, (options) =>
+          create("div", {
+            style: { marginTop: "var(--ifm-table-cell-padding)" },
+            children: `Enum: ${options
+              .map((option) => create("code", { children: `"${option}"` }))
+              .join(", ")}`,
+          })
+        ),
         guard(schema.description, (description) =>
           create("div", {
             style: { marginTop: "var(--ifm-table-cell-padding)" },
@@ -117,6 +125,14 @@ function createRowsRoot({ schema }: RowsRootProps) {
           style: { opacity: "0.6" },
           children: ` ${schema.type}`,
         }),
+        guard(schema.enum, (options) =>
+          create("div", {
+            style: { marginTop: "var(--ifm-table-cell-padding)" },
+            children: `Enum: ${options
+              .map((option) => create("code", { children: `"${option}"` }))
+              .join(", ")}`,
+          })
+        ),
         guard(schema.description, (description) =>
           create("div", {
             style: { marginTop: "var(--ifm-table-cell-padding)" },

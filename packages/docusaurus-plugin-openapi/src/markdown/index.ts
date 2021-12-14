@@ -5,6 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import { escape } from "lodash";
+
 import { ApiItem } from "../types";
 import { createDeprecationNotice } from "./createDeprecationNotice";
 import { createDescription } from "./createDescription";
@@ -23,7 +25,7 @@ export function createMD({
   responses,
 }: ApiItem) {
   return render([
-    `# ${title}\n\n`,
+    `# ${escape(title)}\n\n`,
     createDeprecationNotice({ deprecated, description: deprecatedDescription }),
     createDescription(description),
     createParamsTable({ parameters, type: "path" }),
