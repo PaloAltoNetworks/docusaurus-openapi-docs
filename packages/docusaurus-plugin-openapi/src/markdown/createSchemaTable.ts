@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { Map, MediaTypeObject, SchemaObject } from "../types";
+import { MediaTypeObject, SchemaObject } from "../openapi/types";
 import { createDescription } from "./createDescription";
 import { createFullWidthTable } from "./createFullWidthTable";
 import { getSchemaName } from "./schema";
@@ -64,11 +64,13 @@ function createRows({ schema }: RowsProps): string | undefined {
         marginBottom: "0px",
       },
       children: create("tbody", {
-        children: Object.keys(schema.properties).map((key) =>
+        children: Object.entries(schema.properties).map(([key, val]) =>
           createRow({
             name: key,
-            schema: schema.properties[key],
-            required: schema.required?.includes(key),
+            schema: val,
+            required: Array.isArray(schema.required)
+              ? schema.required.includes(key)
+              : false,
           })
         ),
       }),
@@ -91,11 +93,13 @@ interface RowsRootProps {
 function createRowsRoot({ schema }: RowsRootProps) {
   // object
   if (schema.properties !== undefined) {
-    return Object.keys(schema.properties).map((key) =>
+    return Object.entries(schema.properties).map(([key, val]) =>
       createRow({
         name: key,
-        schema: schema.properties[key],
-        required: schema.required?.includes(key),
+        schema: val,
+        required: Array.isArray(schema.required)
+          ? schema.required.includes(key)
+          : false,
       })
     );
   }
@@ -128,7 +132,9 @@ interface Props {
   style?: any;
   title: string;
   body: {
-    content: Map<MediaTypeObject>;
+    content: {
+      [key: string]: MediaTypeObject;
+    };
     description?: string;
     required?: boolean;
   };
@@ -144,7 +150,11 @@ export function createSchemaTable({ title, body, ...rest }: Props) {
 
   const randomFirstKey = Object.keys(body.content)[0];
 
-  const firstBody = body.content[randomFirstKey].schema as SchemaObject;
+  const firstBody = body.content[randomFirstKey].schema;
+
+  if (firstBody === undefined) {
+    return undefined;
+  }
 
   // we don't show the table if there is no properties to show
   if (Object.keys(firstBody.properties ?? {}).length === 0) {

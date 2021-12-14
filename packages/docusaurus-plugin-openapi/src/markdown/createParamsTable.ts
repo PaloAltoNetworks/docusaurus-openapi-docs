@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { ApiItem, ExampleObject, ParameterObject } from "../types";
+import { ApiItem } from "../types";
 import { createDescription } from "./createDescription";
 import { createFullWidthTable } from "./createFullWidthTable";
 import { getSchemaName } from "./schema";
@@ -20,9 +20,7 @@ export function createParamsTable({ parameters, type }: Props) {
   if (parameters === undefined) {
     return undefined;
   }
-  const params = parameters.filter(
-    (param: any) => param?.in === type
-  ) as ParameterObject[];
+  const params = parameters.filter((param) => param?.in === type);
   if (params.length === 0) {
     return undefined;
   }
@@ -79,9 +77,7 @@ export function createParamsTable({ parameters, type }: Props) {
                     style: { marginTop: "var(--ifm-table-cell-padding)" },
                     children: Object.entries(examples).map(([k, v]) =>
                       create("div", {
-                        children: `Example (${k}): ${
-                          (v as ExampleObject).value
-                        }`,
+                        children: `Example (${k}): ${v.value}`,
                       })
                     ),
                   })

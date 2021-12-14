@@ -5,7 +5,22 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { Primitives, Schema, Type } from "./types";
+import { SchemaObject } from "./types";
+
+interface OASTypeToTypeMap {
+  string: string;
+  number: number;
+  integer: number;
+  boolean: boolean;
+  object: any;
+  array: any[];
+}
+
+type Primitives = {
+  [OASType in keyof OASTypeToTypeMap]: {
+    [format: string]: (schema: SchemaObject) => OASTypeToTypeMap[OASType];
+  };
+};
 
 const primitives: Primitives = {
   string: {
@@ -25,14 +40,14 @@ const primitives: Primitives = {
     default: () => 0,
   },
   boolean: {
-    default: (schema: Schema) =>
+    default: (schema) =>
       typeof schema.default === "boolean" ? schema.default : true,
   },
   object: {},
   array: {},
 };
 
-export const sampleFromSchema = (schema: Schema = {}): any => {
+export const sampleFromSchema = (schema: SchemaObject = {}): any => {
   let { type, example, properties, items } = schema;
 
   if (example !== undefined) {
@@ -41,15 +56,15 @@ export const sampleFromSchema = (schema: Schema = {}): any => {
 
   if (!type) {
     if (properties) {
-      type = Type.object;
+      type = "object";
     } else if (items) {
-      type = Type.array;
+      type = "array";
     } else {
       return;
     }
   }
 
-  if (type === Type.object) {
+  if (type === "object") {
     let obj: any = {};
     for (let [name, prop] of Object.entries(properties || {})) {
       if (prop && prop.deprecated) {
@@ -60,7 +75,7 @@ export const sampleFromSchema = (schema: Schema = {}): any => {
     return obj;
   }
 
-  if (type === Type.array) {
+  if (type === "array") {
     if (Array.isArray(items?.anyOf)) {
       return items?.anyOf.map((item) => sampleFromSchema(item));
     }
@@ -82,7 +97,7 @@ export const sampleFromSchema = (schema: Schema = {}): any => {
   return primitive(schema);
 };
 
-function primitive(schema: Schema = {}) {
+function primitive(schema: SchemaObject = {}) {
   let { type, format } = schema;
 
   if (type === undefined) {
