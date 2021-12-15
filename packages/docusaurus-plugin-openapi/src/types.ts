@@ -8,7 +8,11 @@
 import type { RemarkAndRehypePluginOptions } from "@docusaurus/mdx-loader";
 import { Request } from "postman-collection";
 
-import { OperationObject, SecuritySchemeObject } from "./openapi/types";
+import {
+  InfoObject,
+  OperationObject,
+  SecuritySchemeObject,
+} from "./openapi/types";
 
 export interface PluginOptions extends RemarkAndRehypePluginOptions {
   id: string;
@@ -22,24 +26,36 @@ export interface PluginOptions extends RemarkAndRehypePluginOptions {
 }
 
 export interface LoadedContent {
-  loadedApi: ApiSection[];
+  loadedApi: ApiMetadata[];
 }
 
-export interface ApiSection {
+export type ApiMetadata = ApiPageMetadata | InfoPageMetadata;
+
+export interface ApiMetadataBase {
+  sidebar?: string;
+  previous?: ApiNavLink;
+  next?: ApiNavLink;
+  //
+  id: string; // TODO legacy versioned id => try to remove
+  unversionedId: string; // TODO new unversioned id => try to rename to "id"
   title: string;
   description: string;
-  items: ApiItem[];
+  source: string; // @site aliased source => "@site/docs/folder/subFolder/subSubFolder/myDoc.md"
+  sourceDirName: string; // relative to the versioned docs folder (can be ".") => "folder/subFolder/subSubFolder"
+  slug: string;
+  permalink: string;
+  sidebarPosition?: number;
+  frontMatter: Record<string, unknown>;
 }
 
-// TODO: Clean up this object
+export interface ApiPageMetadata extends ApiMetadataBase {
+  type: "api";
+  api: ApiItem;
+}
+
 export interface ApiItem extends OperationObject {
-  id: string;
-  title: string;
-  method: string;
-  path: string;
-  permalink: string;
-  next: Page;
-  previous: Page;
+  method: string; // get, post, put, etc...
+  path: string; // The endpoint path => "/api/getPets"
   jsonRequestBodyExample: string;
   securitySchemes?: {
     [key: string]: SecuritySchemeObject;
@@ -47,7 +63,14 @@ export interface ApiItem extends OperationObject {
   postman?: Request;
 }
 
-export interface Page {
+export interface InfoPageMetadata extends ApiMetadataBase {
+  type: "info";
+  info: ApiInfo;
+}
+
+export type ApiInfo = InfoObject;
+
+export interface ApiNavLink {
   title: string;
   permalink: string;
 }

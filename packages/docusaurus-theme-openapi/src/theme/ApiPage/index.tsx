@@ -7,6 +7,7 @@
 
 import React, { ReactNode, useState, useCallback } from "react";
 
+import { PropSidebar } from "@docusaurus/plugin-content-docs-types";
 import renderRoutes from "@docusaurus/renderRoutes";
 import { matchPath } from "@docusaurus/router";
 import { translate } from "@docusaurus/Translate";
@@ -41,6 +42,21 @@ function getSidebar({ currentApiRoute, apiMetadata }: SidebarMetadata) {
   return sidebar;
 }
 
+function getLinks(sidebar: PropSidebar): string[] {
+  let links = [];
+  for (let item of sidebar) {
+    switch (item.type) {
+      case "link":
+        links.push(item.href);
+        break;
+      case "category":
+        links.push(...getLinks(item.items));
+        break;
+    }
+  }
+  return links;
+}
+
 function getSidebarPaths({
   currentApiRoute,
   apiMetadata,
@@ -50,21 +66,7 @@ function getSidebarPaths({
     return [];
   }
 
-  return sidebar.flatMap((category) => {
-    if (category.type === "category") {
-      return category.items
-        .map((link) => {
-          if (link.type === "link") {
-            return link.href;
-          }
-          // kinda hacky but don't feel like wrestling typescript
-          // the empty string will get filtered our
-          return "";
-        })
-        .filter(Boolean);
-    }
-    return [];
-  });
+  return getLinks(sidebar);
 }
 
 function ApiPageContent({

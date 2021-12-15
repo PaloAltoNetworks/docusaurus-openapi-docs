@@ -23,8 +23,9 @@ import {
 import chalk from "chalk";
 import { Configuration } from "webpack";
 
-import { createMD } from "./markdown";
-import { loadOpenapi } from "./openapi";
+import { createApiPageMD, createInfoPageMD } from "./markdown";
+import { readOpenapiFiles, processOpenapiFiles } from "./openapi";
+import { generateSidebars } from "./sidebars";
 import { PluginOptions, LoadedContent } from "./types";
 
 export default function pluginOpenAPI(
@@ -58,11 +59,12 @@ export default function pluginOpenAPI(
       const { routeBasePath } = options;
 
       try {
-        const loadedApi = await loadOpenapi(
-          contentPath,
+        const openapiFiles = await readOpenapiFiles(contentPath, {});
+        const loadedApi = await processOpenapiFiles(openapiFiles, {
           baseUrl,
-          routeBasePath
-        );
+          routeBasePath,
+          siteDir: context.siteDir,
+        });
         return { loadedApi };
       } catch (e) {
         console.error(chalk.red(`Loading of api failed for "${contentPath}"`));
@@ -72,76 +74,43 @@ export default function pluginOpenAPI(
 
     async contentLoaded({ content, actions }) {
       const { loadedApi } = content;
-      const { routeBasePath, apiLayoutComponent, apiItemComponent } = options;
+      const {
+        routeBasePath,
+        apiLayoutComponent,
+        apiItemComponent,
+        sidebarCollapsed,
+        sidebarCollapsible,
+      } = options;
       const { addRoute, createData } = actions;
 
       const sidebarName = `openapi-sidebar-${pluginId}`;
-
-      const sidebar = loadedApi.map((category) => {
-        return {
-          type: "category",
-          label: category.title,
-          collapsible: options.sidebarCollapsible,
-          collapsed: options.sidebarCollapsed,
-          items: category.items.map((item) => {
-            return {
-              href: item.permalink,
-              label: item.title,
-              type: "link",
-              className: item.deprecated
-                ? "menu__list-item--deprecated"
-                : undefined,
-            };
-          }),
-        };
+      const sidebar = generateSidebars(loadedApi, {
+        sidebarCollapsible,
+        sidebarCollapsed,
       });
 
-      const promises = loadedApi.flatMap((section) => {
-        return section.items.map(async (item) => {
-          const { id, title, description, permalink, previous, next, ...api } =
-            item;
+      const promises = loadedApi.map(async (item) => {
+        const pageId = `site-${routeBasePath}-${item.id}`;
 
-          const pageId = `site-${routeBasePath}-${id}`;
+        await createData(
+          `${docuHash(pageId)}.json`,
+          JSON.stringify(item, null, 2)
+        );
 
-          await createData(
-            `${docuHash(pageId)}.json`,
-            JSON.stringify(
-              {
-                unversionedId: id,
-                id,
-                isDocsHomePage: false, // TODO: Where does this come from?
-                title,
-                description,
-                // source: "@site/docs/tutorial-basics/congratulations.md",
-                // sourceDirName: "tutorial-basics",
-                slug: "/" + id, // TODO: Should this really be prepended with "/"?
-                permalink,
-                frontMatter: {},
-                sidebar: sidebarName,
-                previous,
-                next,
-                api,
-              },
-              null,
-              2
-            )
-          );
-
-          // TODO: "-content" should be inside hash to prevent name too long errors.
-          const markdown = await createData(
-            `${docuHash(pageId)}-content.mdx`,
-            createMD(item)
-          );
-          return {
-            path: item.permalink,
-            component: apiItemComponent,
-            exact: true,
-            modules: {
-              content: markdown,
-            },
-            sidebar: sidebarName,
-          };
-        });
+        // TODO: "-content" should be inside hash to prevent name too long errors.
+        const markdown = await createData(
+          `${docuHash(pageId)}-content.mdx`,
+          item.type === "api" ? createApiPageMD(item) : createInfoPageMD(item)
+        );
+        return {
+          path: item.permalink,
+          component: apiItemComponent,
+          exact: true,
+          modules: {
+            content: markdown,
+          },
+          sidebar: sidebarName,
+        };
       });
 
       // Important: the layout component should not end with /,
@@ -151,7 +120,7 @@ export default function pluginOpenAPI(
       const basePath = apiBaseRoute === "/" ? "" : apiBaseRoute;
 
       async function rootRoute() {
-        const item = loadedApi[0].items[0];
+        const item = loadedApi[0];
         const pageId = `site-${routeBasePath}-${item.id}`;
 
         return {

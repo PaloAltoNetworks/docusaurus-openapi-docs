@@ -5,4 +5,14 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-export { readOpenapiFiles, processOpenapiFiles } from "./openapi";
+import { create, guard } from "./utils";
+
+export function createVersionBadge(version: string | undefined) {
+  return guard(version, (version) => [
+    create("span", {
+      className: "theme-doc-version-badge badge badge--secondary",
+      children: `Version: ${escape(version)}`,
+    }),
+    `\n\n`,
+  ]);
+}
