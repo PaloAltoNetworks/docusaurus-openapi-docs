@@ -48,10 +48,28 @@ const primitives: Primitives = {
 };
 
 export const sampleFromSchema = (schema: SchemaObject = {}): any => {
-  let { type, example, properties, items } = schema;
+  let { type, example, allOf, properties, items } = schema;
 
   if (example !== undefined) {
     return example;
+  }
+
+  if (allOf) {
+    // TODO: We are just assuming it will always be an object for now
+    let obj: SchemaObject = {
+      type: "object",
+      properties: {},
+      required: [], // NOTE: We shouldn't need to worry about required
+    };
+    for (let item of allOf) {
+      if (item.properties) {
+        obj.properties = {
+          ...obj.properties,
+          ...item.properties,
+        };
+      }
+    }
+    return sampleFromSchema(obj);
   }
 
   if (!type) {
@@ -66,8 +84,8 @@ export const sampleFromSchema = (schema: SchemaObject = {}): any => {
 
   if (type === "object") {
     let obj: any = {};
-    for (let [name, prop] of Object.entries(properties || {})) {
-      if (prop && prop.deprecated) {
+    for (let [name, prop] of Object.entries(properties ?? {})) {
+      if (prop.deprecated) {
         continue;
       }
       obj[name] = sampleFromSchema(prop);

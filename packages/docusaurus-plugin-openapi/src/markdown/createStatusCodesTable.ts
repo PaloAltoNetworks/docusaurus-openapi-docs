@@ -50,9 +50,7 @@ export function createStatusCodesTable({ responses }: Props) {
                       }),
                     }),
                     create("div", {
-                      children: createDescription(
-                        (responses[code] as any)?.description
-                      ),
+                      children: createDescription(responses[code].description),
                     }),
                   ],
                 }),
@@ -64,9 +62,8 @@ export function createStatusCodesTable({ responses }: Props) {
                     },
                     title: "Schema",
                     body: {
-                      ...responses[code],
-                      description: "", // remove description since it acts as a subtitle, but is already rendered above.
-                    } as any,
+                      content: responses[code].content,
+                    },
                   }),
                 }),
               ],
