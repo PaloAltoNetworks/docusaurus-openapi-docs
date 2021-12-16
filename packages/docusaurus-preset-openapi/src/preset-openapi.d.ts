@@ -12,6 +12,7 @@ import type {
 
 export type Options = {
   api?: false | import("docusaurus-plugin-openapi").Options;
+  proxy?: false | import("docusaurus-plugin-proxy").Options;
 } & ClassicOptions;
 
 export type ThemeConfig = import("docusaurus-theme-openapi").ThemeConfig &

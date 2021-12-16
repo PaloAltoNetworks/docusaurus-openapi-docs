@@ -42,6 +42,7 @@
     "@docusaurus/theme-classic": "2.0.0-beta.13",
     "@docusaurus/theme-search-algolia": "2.0.0-beta.13",
     "docusaurus-plugin-openapi": "^0.2.3",
+    "docusaurus-plugin-proxy": "^0.2.3",
     "docusaurus-theme-openapi": "^0.2.3"
   },
   "peerDependencies": {

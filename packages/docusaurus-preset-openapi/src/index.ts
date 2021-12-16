@@ -23,7 +23,7 @@ export default function preset(
   context: LoadContext,
   options: Options = {}
 ): Preset {
-  const { api, ...rest } = options;
+  const { proxy, api, ...rest } = options;
 
   const { themes = [], plugins = [] } = presetClassic(context, rest);
 
@@ -31,6 +31,10 @@ export default function preset(
 
   if (api !== false) {
     plugins.push(makePluginConfig("docusaurus-plugin-openapi", api));
+  }
+
+  if (proxy !== false) {
+    plugins.push(makePluginConfig("docusaurus-plugin-proxy", proxy));
   }
 
   return { themes, plugins };

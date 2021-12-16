@@ -1,0 +1,28 @@
+{
+  "name": "docusaurus-plugin-proxy",
+  "description": "A dev server proxy for Docusaurus.",
+  "version": "0.2.3",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "types": "src/plugin-proxy.d.ts",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "scripts/build.ts",
+    "watch": "scripts/build.ts --watch"
+  },
+  "devDependencies": {
+    "@types/concurrently": "^6.3.0",
+    "@types/webpack-dev-server": "^4.5.0",
+    "concurrently": "^5.2.0",
+    "cpx": "^1.5.0"
+  },
+  "dependencies": {
+    "@docusaurus/core": "^2.0.0-beta.13",
+    "@docusaurus/types": "^2.0.0-beta.13"
+  },
+  "engines": {
+    "node": ">=14"
+  }
+}
