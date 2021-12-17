@@ -45,10 +45,12 @@ export function createParamsTable({ parameters, type }: Props) {
             children: create("td", {
               children: [
                 create("code", { children: param.name }),
-                create("span", {
-                  style: { opacity: "0.6" },
-                  children: ` ${getSchemaName(param.schema)}`,
-                }),
+                guard(param.schema, (schema) =>
+                  create("span", {
+                    style: { opacity: "0.6" },
+                    children: ` ${getSchemaName(schema)}`,
+                  })
+                ),
                 guard(param.required, () => [
                   create("span", {
                     style: { opacity: "0.6" },

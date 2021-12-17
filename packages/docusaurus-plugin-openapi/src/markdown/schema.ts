@@ -5,39 +5,35 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-// TODO: Can this logic be merged? I don't remember why they are different.
-function prettyNameCircular(schema: any) {
+import { SchemaObject } from "../openapi/types";
+
+function prettyName(schema: SchemaObject, circular?: boolean) {
   if (schema.$ref) {
-    return schema.$ref.replace("#/components/schemas/", "") + " (circular)";
+    return schema.$ref.replace("#/components/schemas/", "") + circular
+      ? " (circular)"
+      : "";
   }
+
   if (schema.format) {
     return schema.format;
   }
+
+  if (schema.allOf) {
+    return "object";
+  }
+
   if (schema.type === "object") {
-    return schema.xml?.name || schema.type;
+    return schema.xml?.name ?? schema.type;
   }
-  return schema.title || schema.type;
+
+  return schema.title ?? schema.type;
 }
 
-function prettyNameSimple(schema: any) {
-  if (schema.$ref) {
-    return schema.$ref.replace("#/components/schemas/", "");
-  }
-  if (schema.format) {
-    return schema.format;
-  }
-  return schema.type;
-}
-
-function prettyName(schema: any, circular?: boolean) {
-  if (circular) {
-    return prettyNameCircular(schema);
-  }
-  return prettyNameSimple(schema);
-}
-
-export function getSchemaName(schema: any, circular?: boolean): string {
-  if (schema.type === "array") {
+export function getSchemaName(
+  schema: SchemaObject,
+  circular?: boolean
+): string {
+  if (schema.items) {
     return prettyName(schema.items, circular) + "[]";
   }
 
