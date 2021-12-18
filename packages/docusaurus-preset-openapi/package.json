@@ -18,17 +18,13 @@
     "url": "https://github.com/cloud-annotations/docusaurus-plugin-openapi.git",
     "directory": "packages/docusaurus-preset-openapi"
   },
+  "main": "lib/index.js",
   "types": "src/preset-openapi.d.ts",
-  "main": "dist/index.js",
   "scripts": {
-    "build": "scripts/build.ts",
-    "watch": "scripts/build.ts --watch"
+    "build": "tsc",
+    "watch": "tsc --watch"
   },
-  "devDependencies": {
-    "@types/concurrently": "^6.3.0",
-    "concurrently": "^5.2.0",
-    "cpx": "^1.5.0"
-  },
+  "devDependencies": {},
   "dependencies": {
     "@docusaurus/core": "2.0.0-beta.13",
     "@docusaurus/plugin-content-blog": "2.0.0-beta.13",

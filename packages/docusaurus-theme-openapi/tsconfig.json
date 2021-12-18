@@ -1,9 +1,9 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "lib": ["es2017", "es2019.array", "dom"],
+    "lib": ["DOM", "ES2019"],
     "module": "esnext",
-    "outDir": "dist",
+    "noEmit": true,
     "jsx": "react"
   },
   "include": ["src"]

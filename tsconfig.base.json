@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
+    "target": "ES2019",
     "module": "commonjs",
-    "lib": ["es2017", "es2019.array"],
+    "lib": ["ESNext", "DOM"],
     "declaration": true,
     // "allowJs": true, // causing strange issue
     "skipLibCheck": true,
-    "jsx": "react-jsx",
+    "jsx": "react",
 
     /* Strict Type-Checking Options */
     "strict": true,
