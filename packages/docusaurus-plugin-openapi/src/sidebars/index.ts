@@ -5,6 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import clsx from "clsx";
+
 import { ApiMetadata, ApiPageMetadata } from "../types";
 
 interface Options {
@@ -60,14 +62,17 @@ function groupByTags(
             return item.api.tags?.includes(tag);
           })
           .map((item) => {
+            const apiPage = item as ApiPageMetadata; // TODO: we should have filtered out all info pages, but I don't like this
             return {
               type: "link",
-              label: item.title,
-              href: item.permalink,
-              docId: item.id,
-              className: (item as ApiPageMetadata).api.deprecated // TODO: we should have filtered out all info pages, but I don't like this
-                ? "menu__list-item--deprecated"
-                : undefined,
+              label: apiPage.title,
+              href: apiPage.permalink,
+              docId: apiPage.id,
+              className: clsx({
+                "menu__list-item--deprecated": apiPage.api.deprecated,
+                "api-method": !!apiPage.api.method,
+                [apiPage.api.method]: !!apiPage.api.method,
+              }),
             };
           }),
       };
@@ -93,14 +98,17 @@ function groupByTags(
           return false;
         })
         .map((item) => {
+          const apiPage = item as ApiPageMetadata; // TODO: we should have filtered out all info pages, but I don't like this
           return {
             type: "link",
-            label: item.title,
-            href: item.permalink,
-            docId: item.id,
-            className: (item as ApiPageMetadata).api.deprecated // TODO: we should have filtered out all info pages, but I don't like this
-              ? "menu__list-item--deprecated"
-              : undefined,
+            label: apiPage.title,
+            href: apiPage.permalink,
+            docId: apiPage.id,
+            className: clsx({
+              "menu__list-item--deprecated": apiPage.api.deprecated,
+              "api-method": !!apiPage.api.method,
+              [apiPage.api.method]: !!apiPage.api.method,
+            }),
           };
         }),
     },
