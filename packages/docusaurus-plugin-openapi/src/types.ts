@@ -14,6 +14,12 @@ import {
   SecuritySchemeObject,
 } from "./openapi/types";
 
+export type {
+  PropSidebarItemCategory,
+  SidebarItemLink,
+  PropSidebar,
+  PropSidebarItem,
+} from "@docusaurus/plugin-content-docs-types";
 export interface PluginOptions extends RemarkAndRehypePluginOptions {
   id: string;
   path: string;
@@ -61,6 +67,7 @@ export interface ApiItem extends OperationObject {
     [key: string]: SecuritySchemeObject;
   };
   postman?: Request;
+  info: InfoObject;
 }
 
 export interface InfoPageMetadata extends ApiMetadataBase {

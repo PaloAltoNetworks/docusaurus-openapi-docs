@@ -5,40 +5,95 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import clsx from "clsx";
+import path from "path";
 
-import { ApiMetadata, ApiPageMetadata } from "../types";
+import clsx from "clsx";
+import _ from "lodash";
+
+import type { PropSidebar } from "../types";
+import { ApiPageMetadata } from "../types";
 
 interface Options {
   sidebarCollapsible: boolean;
   sidebarCollapsed: boolean;
 }
 
-function groupByTags(
-  items: ApiMetadata[],
-  { sidebarCollapsible, sidebarCollapsed }: Options
-) {
-  const intros = items
-    .filter((item) => {
-      if (item.type === "info") {
-        return true;
-      }
-      return false;
-    })
-    .map((item) => {
+export type BaseItem = {
+  title: string;
+  permalink: string;
+  id: string;
+  source: string;
+};
+
+export type InfoItem = BaseItem & {
+  type: "info";
+};
+
+export type ApiItem = BaseItem & {
+  type: "api";
+  api: {
+    info?: {
+      title?: string;
+    };
+    tags?: string[] | undefined;
+  };
+};
+
+type Item = InfoItem | ApiItem;
+
+function isApiItem(item: Item): item is ApiItem {
+  return item.type === "api";
+}
+
+function isInfoItem(item: Item): item is InfoItem {
+  return item.type === "info";
+}
+
+export function generateSidebars(items: Item[], options: Options): PropSidebar {
+  const sections = _(items)
+    .groupBy((item) => item.source)
+    .mapValues((items, source) => {
+      const prototype = items.filter(isApiItem).find((item) => {
+        return item.api?.info != null;
+      });
+      const info = prototype?.api?.info;
+      const fileName = path.basename(source).split(".")[0];
       return {
-        type: "link",
-        label: item.title,
-        href: item.permalink,
-        docId: item.id,
+        collapsible: options.sidebarCollapsible,
+        collapsed: options.sidebarCollapsed,
+        type: "category" as const,
+        label: info?.title || fileName,
+        items: groupByTags(items, options),
       };
-    });
+    })
+    .values()
+    .value();
+
+  if (sections.length === 1) {
+    return sections[0].items;
+  }
+
+  return sections;
+}
+
+function groupByTags(
+  items: Item[],
+  { sidebarCollapsible, sidebarCollapsed }: Options
+): PropSidebar {
+  const intros = items.filter(isInfoItem).map((item) => {
+    return {
+      type: "link" as const,
+      label: item.title,
+      href: item.permalink,
+      docId: item.id,
+    };
+  });
 
   const tags = [
     ...new Set(
       items
         .flatMap((item) => {
-          if (item.type === "info") {
+          if (isInfoItem(item)) {
             return undefined;
           }
           return item.api.tags;
@@ -50,13 +105,13 @@ function groupByTags(
   const tagged = tags
     .map((tag) => {
       return {
-        type: "category",
+        type: "category" as const,
         label: tag,
         collapsible: sidebarCollapsible,
         collapsed: sidebarCollapsed,
         items: items
           .filter((item) => {
-            if (item.type === "info") {
+            if (isInfoItem(item)) {
               return false;
             }
             return item.api.tags?.includes(tag);
@@ -64,7 +119,7 @@ function groupByTags(
           .map((item) => {
             const apiPage = item as ApiPageMetadata; // TODO: we should have filtered out all info pages, but I don't like this
             return {
-              type: "link",
+              type: "link" as const,
               label: apiPage.title,
               href: apiPage.permalink,
               docId: apiPage.id,
@@ -81,14 +136,14 @@ function groupByTags(
 
   const untagged = [
     {
-      type: "category",
+      type: "category" as const,
       label: "API",
       collapsible: sidebarCollapsible,
       collapsed: sidebarCollapsed,
       items: items
         .filter((item) => {
           // Filter out info pages and pages with tags
-          if (item.type === "info") {
+          if (isInfoItem(item)) {
             return false;
           }
           if (item.api.tags === undefined || item.api.tags.length === 0) {
@@ -100,7 +155,7 @@ function groupByTags(
         .map((item) => {
           const apiPage = item as ApiPageMetadata; // TODO: we should have filtered out all info pages, but I don't like this
           return {
-            type: "link",
+            type: "link" as const,
             label: apiPage.title,
             href: apiPage.permalink,
             docId: apiPage.id,
@@ -115,8 +170,4 @@ function groupByTags(
   ];
 
   return [...intros, ...tagged, ...untagged];
-}
-
-export function generateSidebars(items: ApiMetadata[], options: Options) {
-  return groupByTags(items, options);
 }

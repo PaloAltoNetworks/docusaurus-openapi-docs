@@ -5,7 +5,15 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { aliasedSitePath, normalizeUrl } from "@docusaurus/utils";
+import path from "path";
+
+import {
+  aliasedSitePath,
+  Globby,
+  GlobExcludeDefault,
+  normalizeUrl,
+} from "@docusaurus/utils";
+import chalk from "chalk";
 import fs from "fs-extra";
 import yaml from "js-yaml";
 import JsonRefs from "json-refs";
@@ -71,8 +79,6 @@ async function createPostmanCollection(
 type PartialPage<T> = Omit<T, "permalink" | "source" | "sourceDirName">;
 
 function createItems(openapiData: OpenApiObject): ApiMetadata[] {
-  const seen: { [key: string]: number } = {};
-
   // TODO: Find a better way to handle this
   let items: PartialPage<ApiMetadata>[] = [];
 
@@ -108,16 +114,6 @@ function createItems(openapiData: OpenApiObject): ApiMetadata[] {
       }
 
       const baseId = kebabCase(title);
-      let count = seen[baseId];
-
-      let id;
-      if (count) {
-        id = `${baseId}-${count}`;
-        seen[baseId] = count + 1;
-      } else {
-        id = baseId;
-        seen[baseId] = 1;
-      }
 
       const servers =
         operationObject.servers ?? pathObject.servers ?? openapiData.servers;
@@ -147,11 +143,11 @@ function createItems(openapiData: OpenApiObject): ApiMetadata[] {
 
       const apiPage: PartialPage<ApiPageMetadata> = {
         type: "api",
-        id,
-        unversionedId: id,
+        id: baseId,
+        unversionedId: baseId,
         title: title,
         description: description ?? "",
-        slug: "/" + id,
+        slug: "/" + baseId,
         frontMatter: {},
         api: {
           ...defaults,
@@ -161,6 +157,7 @@ function createItems(openapiData: OpenApiObject): ApiMetadata[] {
           security,
           securitySchemes,
           jsonRequestBodyExample,
+          info: openapiData.info,
         },
       };
 
@@ -209,8 +206,30 @@ export async function readOpenapiFiles(
 ): Promise<OpenApiFiles[]> {
   const stat = await fs.lstat(openapiPath);
   if (stat.isDirectory()) {
-    // TODO: load all specs in folder
-    throw Error("Plugin doesn't support directories yet");
+    console.warn(
+      chalk.yellow(
+        "WARNING: Loading a directory of OpenAPI definitions is experimental and subject to unannounced breaking changes."
+      )
+    );
+
+    // TODO: Add config for inlcude/ignore
+    const sources = await Globby(["**/*.{json,yaml,yml}"], {
+      cwd: openapiPath,
+      ignore: GlobExcludeDefault,
+    });
+    return Promise.all(
+      sources.map(async (source) => {
+        // TODO: make a function for this
+        const fullPath = path.join(openapiPath, source);
+        const openapiString = await fs.readFile(fullPath, "utf-8");
+        const data = yaml.load(openapiString) as OpenApiObjectWithRef;
+        return {
+          source: fullPath, // This will be aliased in process.
+          sourceDirName: ".",
+          data,
+        };
+      })
+    );
   }
   const openapiString = await fs.readFile(openapiPath, "utf-8");
   const data = yaml.load(openapiString) as OpenApiObjectWithRef;
@@ -232,7 +251,7 @@ export async function processOpenapiFiles(
   }
 ): Promise<ApiMetadata[]> {
   const promises = files.map(async (file) => {
-    const items = await processOpenapiFile(file.data, options);
+    const items = await processOpenapiFile(file.data);
     return items.map((item) => ({
       ...item,
       source: aliasedSitePath(file.source, options.siteDir),
@@ -240,46 +259,72 @@ export async function processOpenapiFiles(
     }));
   });
   const metadata = await Promise.all(promises);
-  return metadata.flat();
-}
+  const items = metadata.flat();
 
-export async function processOpenapiFile(
-  openapiDataWithRefs: OpenApiObjectWithRef,
-  {
-    baseUrl,
-    routeBasePath,
-  }: {
-    baseUrl: string;
-    routeBasePath: string;
+  let seen: { [key: string]: number } = {};
+  for (let i = 0; i < items.length; i++) {
+    const baseId = items[i].id;
+    let count = seen[baseId];
+
+    let id;
+    if (count) {
+      id = `${baseId}-${count}`;
+      seen[baseId] = count + 1;
+    } else {
+      id = baseId;
+      seen[baseId] = 1;
+    }
+
+    items[i].id = id;
+    items[i].unversionedId = id;
+    items[i].slug = "/" + id;
   }
-): Promise<ApiMetadata[]> {
-  const openapiData = await resolveRefs(openapiDataWithRefs);
-  const postmanCollection = await createPostmanCollection(openapiData);
-  const items = createItems(openapiData);
-
-  bindCollectionToApiItems(items, postmanCollection);
 
   for (let i = 0; i < items.length; i++) {
     const current = items[i];
     const prev = items[i - 1];
     const next = items[i + 1];
 
-    current.permalink = normalizeUrl([baseUrl, routeBasePath, current.id]);
+    current.permalink = normalizeUrl([
+      options.baseUrl,
+      options.routeBasePath,
+      current.id,
+    ]);
 
     if (prev) {
       current.previous = {
         title: prev.title,
-        permalink: normalizeUrl([baseUrl, routeBasePath, prev.id]),
+        permalink: normalizeUrl([
+          options.baseUrl,
+          options.routeBasePath,
+          prev.id,
+        ]),
       };
     }
 
     if (next) {
       current.next = {
         title: next.title,
-        permalink: normalizeUrl([baseUrl, routeBasePath, next.id]),
+        permalink: normalizeUrl([
+          options.baseUrl,
+          options.routeBasePath,
+          next.id,
+        ]),
       };
     }
   }
+
+  return items;
+}
+
+export async function processOpenapiFile(
+  openapiDataWithRefs: OpenApiObjectWithRef
+): Promise<ApiMetadata[]> {
+  const openapiData = await resolveRefs(openapiDataWithRefs);
+  const postmanCollection = await createPostmanCollection(openapiData);
+  const items = createItems(openapiData);
+
+  bindCollectionToApiItems(items, postmanCollection);
 
   return items;
 }

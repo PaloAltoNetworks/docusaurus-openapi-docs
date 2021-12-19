@@ -41,7 +41,7 @@ info:
     <SecurityDefinitions />
 
   version: 1.0.0
-  title: Swagger Petstore
+  title: Swagger Petstore YAML
   termsOfService: "http://swagger.io/terms/"
   contact:
     name: API Support

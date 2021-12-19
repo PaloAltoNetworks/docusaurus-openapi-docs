@@ -19,6 +19,7 @@ declare module "@docusaurus/plugin-content-docs-types" {
     type: "link";
     href: string;
     label: string;
+    docId: string;
   };
 
   type SidebarItemCategoryBase = SidebarItemBase & {
