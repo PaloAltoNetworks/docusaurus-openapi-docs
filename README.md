@@ -123,3 +123,12 @@ To have more than one OpenAPI pages, add additional OpenAPI plugin instances:
 This will create routes for `/cars`, `/trains` and `/bikes`.
 
 > **Note:** One instance of the plugin is included in the preset. All additional plugin instances will require an `id`.
+
+## Contributing
+
+We encourage you to contribute to Docusaurus OpenAPI! Please check out the
+[Contributing to Docusaurus OpenAPI guide](https://github.com/cloud-annotations/docusaurus-plugin-openapi/blob/main/CONTRIBUTING.md) for guidelines about how to proceed.
+
+## License
+
+Docusaurus OpenAPI is released under the [MIT License](https://opensource.org/licenses/MIT).
