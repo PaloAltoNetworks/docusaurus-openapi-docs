@@ -46,6 +46,26 @@ jobs:
       - name: Lint
         run: yarn lint --max-warnings 0
 
+  test:
+    name: Test
+    needs: prepare-yarn-cache
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "*"
+      - uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            */*/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+      - name: Install
+        run: yarn install
+      - name: Test
+        run: yarn test
+
   cypress:
     name: Cypress
     needs: prepare-yarn-cache
