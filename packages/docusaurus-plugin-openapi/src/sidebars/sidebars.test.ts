@@ -51,7 +51,7 @@ describe("sidebars", () => {
   });
 
   describe("Single Spec - YAML", () => {
-    it("base case - single spec with untagged routes should render flat with a default category", () => {
+    it("base case - single spec with untagged routes should render flat with a default category", async () => {
       const input = [
         getIntro(),
         {
@@ -67,7 +67,7 @@ describe("sidebars", () => {
         },
       ];
 
-      const output = generateSidebars(input, getOpts());
+      const output = await generateSidebars(input, getOpts());
       // console.log(JSON.stringify(output, null, 2));
 
       // intro.md
@@ -86,7 +86,7 @@ describe("sidebars", () => {
       expect(api?.docId).toBe("hello-world");
     });
 
-    it("single spec tags case - should render root level categories per tag", () => {
+    it("single spec tags case - should render root level categories per tag", async () => {
       const input = [
         getIntro(),
         {
@@ -102,7 +102,7 @@ describe("sidebars", () => {
         },
       ];
 
-      const output = generateSidebars(input, getOpts());
+      const output = await generateSidebars(input, getOpts());
       // console.log(JSON.stringify(output, null, 2));
 
       // intro.md
@@ -127,7 +127,7 @@ describe("sidebars", () => {
     });
   });
   describe("Multi Spec", () => {
-    it("should leverage the info.title if provided for spec name @ root category", () => {
+    it("should leverage the info.title if provided for spec name @ root category", async () => {
       const input = [
         {
           type: "api" as const,
@@ -155,10 +155,10 @@ describe("sidebars", () => {
         },
       ];
 
-      const output = generateSidebars(
+      const output = (await generateSidebars(
         input,
         getOpts()
-      ) as PropSidebarItemCategory[];
+      )) as PropSidebarItemCategory[];
 
       // console.log(JSON.stringify(output, null, 2));
       expect(output).toHaveLength(2);
@@ -175,7 +175,7 @@ describe("sidebars", () => {
       expect(dogs.label).toBe("Dogs");
     });
 
-    it("empty title should render the filename.", () => {
+    it("empty title should render the filename.", async () => {
       const input = [
         {
           type: "api" as const,
@@ -215,10 +215,10 @@ describe("sidebars", () => {
         },
       ];
 
-      const output = generateSidebars(
+      const output = (await generateSidebars(
         input,
         getOpts()
-      ) as PropSidebarItemCategory[];
+      )) as PropSidebarItemCategory[];
 
       // console.log(JSON.stringify(output, null, 2));
       const [cats, dogsSpec] = output;
@@ -231,7 +231,7 @@ describe("sidebars", () => {
       expect(dogsItem.label).toBe("List Dogs");
     });
 
-    it("multi spec, multi tag", () => {
+    it("multi spec, multi tag", async () => {
       const input = [
         {
           type: "api" as const,
@@ -307,10 +307,10 @@ describe("sidebars", () => {
         },
       ];
 
-      const output = generateSidebars(
+      const output = (await generateSidebars(
         input,
         getOpts()
-      ) as PropSidebarItemCategory[];
+      )) as PropSidebarItemCategory[];
 
       // console.log(JSON.stringify(output, null, 2));
       const [cats, dogs] = output;
@@ -334,6 +334,82 @@ describe("sidebars", () => {
       expect(toys.type).toBe("category");
       expect(doggos.items).toHaveLength(2);
       expect(toys.items).toHaveLength(1);
+    });
+
+    it("child folders", async () => {
+      const input = [
+        {
+          type: "api" as const,
+          id: "cats",
+          title: "Cats",
+          api: {
+            info: { title: "Cat Store" },
+            tags: ["Cats"],
+          },
+          source: "@site/examples/animals/pets/cats.yaml",
+          sourceDirName: "animals/pets",
+          permalink: "/yaml/cats",
+        },
+        {
+          type: "api" as const,
+          id: "burgers",
+          title: "Burgers",
+          api: {
+            info: { title: "Burger Store" },
+            tags: ["Burgers"],
+          },
+          source: "@site/examples/food/fast/burgers.yaml",
+          sourceDirName: "food/fast",
+          permalink: "/yaml/burgers",
+        },
+      ];
+
+      const output = await generateSidebars(input, getOpts());
+      expect(output).toBeTruthy();
+      // console.log(JSON.stringify(output, null, 2));
+      // console.log(output);
+      const [animals, foods] = output;
+      expect(animals.type).toBe("category");
+      expect(foods.type).toBe("category");
+
+      /*
+        animals
+          pets
+            Cat Store
+              cats
+        Foods
+          Buger Store
+            Burger Example
+              burgers
+      */
+      output.filter(isCategory).forEach((category) => {
+        // console.log(category.label);
+        expect(category.items[0].type).toBe("category");
+        category.items.filter(isCategory).forEach((subCategory) => {
+          expect(subCategory.items[0].type).toBe("category");
+          subCategory.items.filter(isCategory).forEach((groupCategory) => {
+            expect(groupCategory.items[0].type).toBe("category");
+            groupCategory.items.forEach((linkItem) => {
+              expect(linkItem.type).toBe("category");
+            });
+          });
+        });
+      });
+    });
+    it("child folders with no paths", async () => {
+      const input = [
+        getIntro({
+          source: "@site/examples/foods/foods.yaml",
+          sourceDirName: "foods",
+        }),
+        getIntro({
+          source: "@site/examples/animals/animals.yaml",
+          sourceDirName: "animals",
+        }),
+      ];
+      const output = await generateSidebars(input, getOpts());
+      expect(output).toBeTruthy();
+      expect(output[0].type).toBe("category");
     });
   });
 });

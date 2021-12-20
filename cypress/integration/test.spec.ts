@@ -23,8 +23,22 @@ describe("test", () => {
   });
 
   it("loads yaml tab", () => {
-    checkTab(/yaml/i, [/Introduction/i], /YAML Example/i);
+    checkTab(/yaml/i, [/introduction/i], /yaml example/i);
     checkTab(/yaml/i, [/api/i, /hello world/i], /hello world/i);
+  });
+
+  it("loads mega tab", () => {
+    checkTab(
+      /mega/i,
+      [
+        /foods/i,
+        /burger store/i,
+        /burger example/i,
+        /^api$/i,
+        /list all burgers/i,
+      ],
+      /list all burgers/i
+    );
   });
 
   it("loads petstore tab", () => {

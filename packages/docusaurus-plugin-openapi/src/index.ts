@@ -84,7 +84,8 @@ export default function pluginOpenAPI(
       const { addRoute, createData } = actions;
 
       const sidebarName = `openapi-sidebar-${pluginId}`;
-      const sidebar = generateSidebars(loadedApi, {
+
+      const sidebar = await generateSidebars(loadedApi, {
         sidebarCollapsible,
         sidebarCollapsed,
       });

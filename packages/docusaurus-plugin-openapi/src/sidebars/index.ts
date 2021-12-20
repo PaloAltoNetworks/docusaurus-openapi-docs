@@ -7,7 +7,12 @@
 
 import path from "path";
 
+import { validateCategoryMetadataFile } from "@docusaurus/plugin-content-docs/lib/sidebars/validation";
+import { posixPath } from "@docusaurus/utils";
+import chalk from "chalk";
 import clsx from "clsx";
+import fs from "fs-extra";
+import Yaml from "js-yaml";
 import _ from "lodash";
 
 import type { PropSidebar } from "../types";
@@ -23,6 +28,7 @@ export type BaseItem = {
   permalink: string;
   id: string;
   source: string;
+  sourceDirName: string;
 };
 
 export type InfoItem = BaseItem & {
@@ -49,7 +55,10 @@ function isInfoItem(item: Item): item is InfoItem {
   return item.type === "info";
 }
 
-export function generateSidebars(items: Item[], options: Options): PropSidebar {
+export async function generateSidebars(
+  items: Item[],
+  options: Options
+): Promise<PropSidebar> {
   const sections = _(items)
     .groupBy((item) => item.source)
     .mapValues((items, source) => {
@@ -57,8 +66,11 @@ export function generateSidebars(items: Item[], options: Options): PropSidebar {
         return item.api?.info != null;
       });
       const info = prototype?.api?.info;
-      const fileName = path.basename(source).split(".")[0];
+      const fileName = path.basename(source, path.extname(source));
       return {
+        source: prototype?.source,
+        sourceDirName: prototype?.sourceDirName ?? ".",
+
         collapsible: options.sidebarCollapsible,
         collapsed: options.sidebarCollapsed,
         type: "category" as const,
@@ -73,7 +85,49 @@ export function generateSidebars(items: Item[], options: Options): PropSidebar {
     return sections[0].items;
   }
 
-  return sections;
+  // group into folders and build recursive category tree
+  const rootSections = sections.filter((x) => x.sourceDirName === ".");
+  const childSections = sections.filter((x) => x.sourceDirName !== ".");
+
+  const subCategories = [] as any;
+
+  for (const childSection of childSections) {
+    const basePathRegex = new RegExp(`${childSection.sourceDirName}.*$`);
+    const basePath =
+      childSection.source?.replace(basePathRegex, "").replace("@site", ".") ??
+      ".";
+
+    const dirs = childSection.sourceDirName.split("/");
+
+    let root = subCategories;
+    const parents: string[] = [];
+    while (dirs.length) {
+      const currentDir = dirs.shift() as string;
+      // todo: optimize?
+      const folderPath = path.join(basePath, ...parents, currentDir);
+      const meta = await readCategoryMetadataFile(folderPath);
+      const label = meta?.label ?? currentDir;
+      const existing = root.find((x: any) => x.label === label);
+
+      if (!existing) {
+        const child = {
+          collapsible: options.sidebarCollapsible,
+          collapsed: options.sidebarCollapsed,
+          type: "category" as const,
+          label,
+          items: [],
+        };
+        root.push(child);
+        root = child.items;
+      } else {
+        root = existing.items;
+      }
+      parents.push(currentDir);
+    }
+    root.push(childSection);
+  }
+
+  return [...rootSections, ...subCategories];
 }
 
 function groupByTags(
@@ -110,23 +164,22 @@ function groupByTags(
         collapsible: sidebarCollapsible,
         collapsed: sidebarCollapsed,
         items: items
-          .filter((item) => {
+          .filter((item): item is ApiPageMetadata => {
             if (isInfoItem(item)) {
               return false;
             }
-            return item.api.tags?.includes(tag);
+            return !!item.api.tags?.includes(tag);
           })
           .map((item) => {
-            const apiPage = item as ApiPageMetadata; // TODO: we should have filtered out all info pages, but I don't like this
             return {
               type: "link" as const,
-              label: apiPage.title,
-              href: apiPage.permalink,
-              docId: apiPage.id,
+              label: item.title,
+              href: item.permalink,
+              docId: item.id,
               className: clsx({
-                "menu__list-item--deprecated": apiPage.api.deprecated,
-                "api-method": !!apiPage.api.method,
-                [apiPage.api.method]: !!apiPage.api.method,
+                "menu__list-item--deprecated": item.api.deprecated,
+                "api-method": !!item.api.method,
+                [item.api.method]: !!item.api.method,
               }),
             };
           }),
@@ -141,7 +194,7 @@ function groupByTags(
       collapsible: sidebarCollapsible,
       collapsed: sidebarCollapsed,
       items: items
-        .filter((item) => {
+        .filter((item): item is ApiPageMetadata => {
           // Filter out info pages and pages with tags
           if (isInfoItem(item)) {
             return false;
@@ -153,16 +206,15 @@ function groupByTags(
           return false;
         })
         .map((item) => {
-          const apiPage = item as ApiPageMetadata; // TODO: we should have filtered out all info pages, but I don't like this
           return {
             type: "link" as const,
-            label: apiPage.title,
-            href: apiPage.permalink,
-            docId: apiPage.id,
+            label: item.title,
+            href: item.permalink,
+            docId: item.id,
             className: clsx({
-              "menu__list-item--deprecated": apiPage.api.deprecated,
-              "api-method": !!apiPage.api.method,
-              [apiPage.api.method]: !!apiPage.api.method,
+              "menu__list-item--deprecated": item.api.deprecated,
+              "api-method": !!item.api.method,
+              [item.api.method]: !!item.api.method,
             }),
           };
         }),
@@ -170,4 +222,36 @@ function groupByTags(
   ];
 
   return [...intros, ...tagged, ...untagged];
+}
+
+export const CategoryMetadataFilenameBase = "_category_";
+
+async function readCategoryMetadataFile(
+  categoryDirPath: string
+): Promise<any | null> {
+  async function tryReadFile(filePath: string): Promise<any> {
+    const contentString = await fs.readFile(filePath, { encoding: "utf8" });
+    const unsafeContent = Yaml.load(contentString);
+    try {
+      return validateCategoryMetadataFile(unsafeContent);
+    } catch (e) {
+      console.error(
+        chalk.red(
+          `The docs sidebar category metadata file looks invalid!\nPath: ${filePath}`
+        )
+      );
+      throw e;
+    }
+  }
+  // eslint-disable-next-line no-restricted-syntax
+  for (const ext of [".json", ".yml", ".yaml"]) {
+    // Simpler to use only posix paths for mocking file metadata in tests
+    const filePath = posixPath(
+      path.join(categoryDirPath, `${CategoryMetadataFilenameBase}${ext}`)
+    );
+    if (await fs.pathExists(filePath)) {
+      return tryReadFile(filePath);
+    }
+  }
+  return null;
 }

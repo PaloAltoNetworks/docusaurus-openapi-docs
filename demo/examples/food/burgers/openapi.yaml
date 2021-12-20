@@ -1,0 +1,13 @@
+openapi: 3.0.3
+info:
+  title: Burger Example
+  version: 1.0.0
+  description: Sample description.
+paths:
+  /flavors:
+    get:
+      summary: List All Burgers
+      description: Burgers
+      responses:
+        200:
+          description: OK

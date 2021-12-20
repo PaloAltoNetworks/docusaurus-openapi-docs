@@ -213,10 +213,11 @@ export async function readOpenapiFiles(
     );
 
     // TODO: Add config for inlcude/ignore
-    const sources = await Globby(["**/*.{json,yaml,yml}"], {
+    const allFiles = await Globby(["**/*.{json,yaml,yml}"], {
       cwd: openapiPath,
       ignore: GlobExcludeDefault,
     });
+    const sources = allFiles.filter((x) => !x.includes("_category_")); // todo: regex exclude?
     return Promise.all(
       sources.map(async (source) => {
         // TODO: make a function for this
@@ -225,7 +226,7 @@ export async function readOpenapiFiles(
         const data = yaml.load(openapiString) as OpenApiObjectWithRef;
         return {
           source: fullPath, // This will be aliased in process.
-          sourceDirName: ".",
+          sourceDirName: path.dirname(source),
           data,
         };
       })
