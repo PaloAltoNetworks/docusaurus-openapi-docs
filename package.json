@@ -10,7 +10,7 @@
   "scripts": {
     "prepare": "husky install",
     "watch": "lerna run watch --parallel",
-    "watch:demo": "nodemon --watch \"./packages/*/lib/**/*.*\" --exec \"yarn start\"",
+    "watch:demo": "nodemon --watch \"./packages/*/lib/**/*.*\" --exec \"yarn start --no-open\"",
     "build": "lerna run build",
     "build-packages": "lerna run build --no-private",
     "serve": "yarn workspace demo serve",

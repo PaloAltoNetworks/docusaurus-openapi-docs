@@ -10,7 +10,7 @@ import { escape } from "lodash";
 import { ApiItem } from "../types";
 import { createDescription } from "./createDescription";
 import { createFullWidthTable } from "./createFullWidthTable";
-import { getSchemaName } from "./schema";
+import { getQualifierMessage, getSchemaName } from "./schema";
 import { create, guard } from "./utils";
 
 interface Props {
@@ -64,25 +64,10 @@ export function createParamsTable({ parameters, type }: Props) {
                     children: " REQUIRED",
                   }),
                 ]),
-                // TODO: This feels a little hacky. We should have a more resilient way to generate enum descriptions.
-                guard(param.schema?.items?.enum, (options) =>
+                guard(getQualifierMessage(param.schema), (message) =>
                   create("div", {
                     style: { marginTop: "var(--ifm-table-cell-padding)" },
-                    children: `Items Enum: ${options
-                      .map((option) =>
-                        create("code", { children: `"${option}"` })
-                      )
-                      .join(", ")}`,
-                  })
-                ),
-                guard(param.schema?.enum, (options) =>
-                  create("div", {
-                    style: { marginTop: "var(--ifm-table-cell-padding)" },
-                    children: `Enum: ${options
-                      .map((option) =>
-                        create("code", { children: `"${option}"` })
-                      )
-                      .join(", ")}`,
+                    children: createDescription(message),
                   })
                 ),
                 guard(param.description, (description) =>

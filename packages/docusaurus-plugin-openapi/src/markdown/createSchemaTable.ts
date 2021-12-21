@@ -8,7 +8,7 @@
 import { MediaTypeObject, SchemaObject } from "../openapi/types";
 import { createDescription } from "./createDescription";
 import { createFullWidthTable } from "./createFullWidthTable";
-import { getSchemaName } from "./schema";
+import { getQualifierMessage, getSchemaName } from "./schema";
 import { create, guard } from "./utils";
 
 function resolveAllOf(allOf: SchemaObject[]) {
@@ -60,12 +60,10 @@ function createRow({ name, schema, required }: RowProps) {
             children: " REQUIRED",
           }),
         ]),
-        guard(schema.enum, (options) =>
+        guard(getQualifierMessage(schema), (message) =>
           create("div", {
             style: { marginTop: "var(--ifm-table-cell-padding)" },
-            children: `Enum: ${options
-              .map((option) => create("code", { children: `"${option}"` }))
-              .join(", ")}`,
+            children: createDescription(message),
           })
         ),
         guard(schema.description, (description) =>
@@ -188,12 +186,10 @@ function createRowsRoot({ schema }: RowsRootProps) {
           style: { opacity: "0.6" },
           children: ` ${schema.type}`,
         }),
-        guard(schema.enum, (options) =>
+        guard(getQualifierMessage(schema), (message) =>
           create("div", {
             style: { marginTop: "var(--ifm-table-cell-padding)" },
-            children: `Enum: ${options
-              .map((option) => create("code", { children: `"${option}"` }))
-              .join(", ")}`,
+            children: createDescription(message),
           })
         ),
         guard(schema.description, (description) =>
