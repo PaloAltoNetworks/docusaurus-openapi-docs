@@ -7,42 +7,37 @@
 
 import path from "path";
 
+import {
+  CategoryMetadataFile,
+  CategoryMetadataFilenameBase,
+} from "@docusaurus/plugin-content-docs/lib/sidebars/generator";
 import { validateCategoryMetadataFile } from "@docusaurus/plugin-content-docs/lib/sidebars/validation";
 import { posixPath } from "@docusaurus/utils";
 import chalk from "chalk";
 import clsx from "clsx";
 import fs from "fs-extra";
 import Yaml from "js-yaml";
-import _ from "lodash";
+import { groupBy, uniq } from "lodash";
+import type { DeepPartial } from "utility-types";
 
-import type { PropSidebar } from "../types";
+import type {
+  InfoPageMetadata,
+  PropSidebar,
+  PropSidebarItemCategory,
+} from "../types";
 import { ApiPageMetadata } from "../types";
 
 interface Options {
+  contentPath: string;
   sidebarCollapsible: boolean;
   sidebarCollapsed: boolean;
 }
 
-export type BaseItem = {
-  title: string;
-  permalink: string;
-  id: string;
-  source: string;
-  sourceDirName: string;
-};
+type keys = "type" | "title" | "permalink" | "id" | "source" | "sourceDirName";
 
-export type InfoItem = BaseItem & {
-  type: "info";
-};
-
-export type ApiItem = BaseItem & {
-  type: "api";
-  api: {
-    info?: {
-      title?: string;
-    };
-    tags?: string[] | undefined;
-  };
+type InfoItem = Pick<InfoPageMetadata, keys>;
+type ApiItem = Pick<ApiPageMetadata, keys> & {
+  api: DeepPartial<ApiPageMetadata["api"]>;
 };
 
 type Item = InfoItem | ApiItem;
@@ -55,85 +50,96 @@ function isInfoItem(item: Item): item is InfoItem {
   return item.type === "info";
 }
 
-export async function generateSidebars(
+const Terminator = "."; // a file or folder can never be "."
+const BreadcrumbSeparator = "/";
+function getBreadcrumbs(dir: string) {
+  if (dir === Terminator) {
+    // this isn't actually needed, but removing would result in an array: [".", "."]
+    return [Terminator];
+  }
+  return [...dir.split(BreadcrumbSeparator).filter(Boolean), Terminator];
+}
+
+export async function generateSidebar(
   items: Item[],
   options: Options
 ): Promise<PropSidebar> {
-  const sections = _(items)
-    .groupBy((item) => item.source)
-    .mapValues((items, source) => {
-      const prototype = items.filter(isApiItem).find((item) => {
-        return item.api?.info != null;
-      });
-      const info = prototype?.api?.info;
-      const fileName = path.basename(source, path.extname(source));
-      return {
-        source: prototype?.source,
-        sourceDirName: prototype?.sourceDirName ?? ".",
+  const sourceGroups = groupBy(items, (item) => item.source);
 
-        collapsible: options.sidebarCollapsible,
-        collapsed: options.sidebarCollapsed,
-        type: "category" as const,
-        label: info?.title || fileName,
-        items: groupByTags(items, options),
-      };
-    })
-    .values()
-    .value();
+  let sidebar: PropSidebar = [];
+  let visiting = sidebar;
+  for (const items of Object.values(sourceGroups)) {
+    if (items.length === 0) {
+      // Since the groups are created based on the items, there should never be a length of zero.
+      console.warn(chalk.yellow(`Unnexpected empty group!`));
+      continue;
+    }
 
-  if (sections.length === 1) {
-    return sections[0].items;
-  }
+    const { sourceDirName, source } = items[0];
 
-  // group into folders and build recursive category tree
-  const rootSections = sections.filter((x) => x.sourceDirName === ".");
-  const childSections = sections.filter((x) => x.sourceDirName !== ".");
+    const breadcrumbs = getBreadcrumbs(sourceDirName);
 
-  const subCategories = [] as any;
-
-  for (const childSection of childSections) {
-    const basePathRegex = new RegExp(`${childSection.sourceDirName}.*$`);
-    const basePath =
-      childSection.source?.replace(basePathRegex, "").replace("@site", ".") ??
-      ".";
-
-    const dirs = childSection.sourceDirName.split("/");
-
-    let root = subCategories;
-    const parents: string[] = [];
-    while (dirs.length) {
-      const currentDir = dirs.shift() as string;
-      // todo: optimize?
-      const folderPath = path.join(basePath, ...parents, currentDir);
-      const meta = await readCategoryMetadataFile(folderPath);
-      const label = meta?.label ?? currentDir;
-      const existing = root.find((x: any) => x.label === label);
-
-      if (!existing) {
-        const child = {
-          collapsible: options.sidebarCollapsible,
-          collapsed: options.sidebarCollapsed,
+    let currentPath = [];
+    for (const crumb of breadcrumbs) {
+      // We hit a spec file, create the groups for it.
+      if (crumb === Terminator) {
+        const title = items.filter(isApiItem)[0]?.api.info?.title;
+        const fileName = path.basename(source, path.extname(source));
+        // Title could be an empty string so `??` won't work here.
+        const label = !title ? fileName : title;
+        visiting.push({
           type: "category" as const,
           label,
-          items: [],
-        };
-        root.push(child);
-        root = child.items;
-      } else {
-        root = existing.items;
+          collapsible: options.sidebarCollapsible,
+          collapsed: options.sidebarCollapsed,
+          items: groupByTags(items, options),
+        });
+        visiting = sidebar; // reset
+        break;
       }
-      parents.push(currentDir);
+
+      // Read category file to generate a label for the current path.
+      currentPath.push(crumb);
+      const categoryPath = path.join(options.contentPath, ...currentPath);
+      const meta = await readCategoryMetadataFile(categoryPath);
+      const label = meta?.label ?? crumb;
+
+      // Check for existing categories for the current label.
+      const existingCategory = visiting
+        .filter((c): c is PropSidebarItemCategory => c.type === "category")
+        .find((c) => c.label === label);
+
+      // If exists, skip creating a new one.
+      if (existingCategory) {
+        visiting = existingCategory.items;
+        continue;
+      }
+
+      // Otherwise, create a new one.
+      const newCategory = {
+        type: "category" as const,
+        label,
+        collapsible: options.sidebarCollapsible,
+        collapsed: options.sidebarCollapsed,
+        items: [],
+      };
+      visiting.push(newCategory);
+      visiting = newCategory.items;
     }
-    root.push(childSection);
   }
 
-  return [...rootSections, ...subCategories];
+  // The first group should always be a category, but check for type narrowing
+  if (sidebar.length === 1 && sidebar[0].type === "category") {
+    return sidebar[0].items;
+  }
+
+  return sidebar;
 }
 
-function groupByTags(
-  items: Item[],
-  { sidebarCollapsible, sidebarCollapsed }: Options
-): PropSidebar {
+/**
+ * Takes a flat list of pages and groups them into categories based on there tags.
+ */
+function groupByTags(items: Item[], options: Options): PropSidebar {
   const intros = items.filter(isInfoItem).map((item) => {
     return {
       type: "link" as const,
@@ -143,93 +149,66 @@ function groupByTags(
     };
   });
 
-  const tags = [
-    ...new Set(
-      items
-        .flatMap((item) => {
-          if (isInfoItem(item)) {
-            return undefined;
-          }
-          return item.api.tags;
-        })
-        .filter(Boolean) as string[]
-    ),
-  ];
+  const apiItems = items.filter(isApiItem);
+
+  const tags = uniq(
+    apiItems
+      .flatMap((item) => item.api.tags)
+      .filter((item): item is string => !!item)
+  );
+
+  function createLink(item: ApiItem) {
+    return {
+      type: "link" as const,
+      label: item.title,
+      href: item.permalink,
+      docId: item.id,
+      className: clsx(
+        {
+          "menu__list-item--deprecated": item.api.deprecated,
+          "api-method": !!item.api.method,
+        },
+        item.api.method
+      ),
+    };
+  }
 
   const tagged = tags
     .map((tag) => {
       return {
         type: "category" as const,
         label: tag,
-        collapsible: sidebarCollapsible,
-        collapsed: sidebarCollapsed,
-        items: items
-          .filter((item): item is ApiPageMetadata => {
-            if (isInfoItem(item)) {
-              return false;
-            }
-            return !!item.api.tags?.includes(tag);
-          })
-          .map((item) => {
-            return {
-              type: "link" as const,
-              label: item.title,
-              href: item.permalink,
-              docId: item.id,
-              className: clsx({
-                "menu__list-item--deprecated": item.api.deprecated,
-                "api-method": !!item.api.method,
-                [item.api.method]: !!item.api.method,
-              }),
-            };
-          }),
+        collapsible: options.sidebarCollapsible,
+        collapsed: options.sidebarCollapsed,
+        items: apiItems
+          .filter((item) => !!item.api.tags?.includes(tag))
+          .map(createLink),
       };
     })
-    .filter((item) => item.items.length > 0);
+    .filter((item) => item.items.length > 0); // Filter out any categories with no items.
 
   const untagged = [
     {
       type: "category" as const,
       label: "API",
-      collapsible: sidebarCollapsible,
-      collapsed: sidebarCollapsed,
-      items: items
-        .filter((item): item is ApiPageMetadata => {
-          // Filter out info pages and pages with tags
-          if (isInfoItem(item)) {
-            return false;
-          }
-          if (item.api.tags === undefined || item.api.tags.length === 0) {
-            // no tags
-            return true;
-          }
-          return false;
-        })
-        .map((item) => {
-          return {
-            type: "link" as const,
-            label: item.title,
-            href: item.permalink,
-            docId: item.id,
-            className: clsx({
-              "menu__list-item--deprecated": item.api.deprecated,
-              "api-method": !!item.api.method,
-              [item.api.method]: !!item.api.method,
-            }),
-          };
-        }),
+      collapsible: options.sidebarCollapsible,
+      collapsed: options.sidebarCollapsed,
+      items: apiItems
+        .filter(({ api }) => api.tags === undefined || api.tags.length === 0)
+        .map(createLink),
     },
   ];
 
   return [...intros, ...tagged, ...untagged];
 }
 
-export const CategoryMetadataFilenameBase = "_category_";
-
+/**
+ * Taken from: https://github.com/facebook/docusaurus/blob/main/packages/docusaurus-plugin-content-docs/src/sidebars/generator.ts
+ */
 async function readCategoryMetadataFile(
   categoryDirPath: string
-): Promise<any | null> {
-  async function tryReadFile(filePath: string): Promise<any> {
+): Promise<CategoryMetadataFile | null> {
+  async function tryReadFile(filePath: string): Promise<CategoryMetadataFile> {
     const contentString = await fs.readFile(filePath, { encoding: "utf8" });
     const unsafeContent = Yaml.load(contentString);
     try {
@@ -237,7 +216,7 @@ async function readCategoryMetadataFile(
     } catch (e) {
       console.error(
         chalk.red(
-          `The docs sidebar category metadata file looks invalid!\nPath: ${filePath}`
+          `The docs sidebar category metadata file path=${filePath} looks invalid!`
         )
       );
       throw e;

@@ -25,7 +25,7 @@ import { Configuration } from "webpack";
 
 import { createApiPageMD, createInfoPageMD } from "./markdown";
 import { readOpenapiFiles, processOpenapiFiles } from "./openapi";
-import { generateSidebars } from "./sidebars";
+import { generateSidebar } from "./sidebars";
 import { PluginOptions, LoadedContent } from "./types";
 
 export default function pluginOpenAPI(
@@ -85,7 +85,8 @@ export default function pluginOpenAPI(
 
       const sidebarName = `openapi-sidebar-${pluginId}`;
 
-      const sidebar = await generateSidebars(loadedApi, {
+      const sidebar = await generateSidebar(loadedApi, {
+        contentPath,
         sidebarCollapsible,
         sidebarCollapsed,
       });
