@@ -1,3 +1,50 @@
+## 0.3.1 (Dec 21, 2021)
+
+High level enhancements
+
+- Added support for more schema qualifiers:
+
+  ```
+  - maxLength
+  - minLength
+  - maximum
+  - minumum
+  - exclusiveMaximum
+  - exclusiveMinimum
+  - pattern
+  ```
+
+  Example:
+
+  ```yaml
+  slug:
+    type: string
+    description: The human-readable, unique identifier, used to identify the document.
+    minLength: 1
+    maxLength: 40
+    pattern: "^[a-zA-Z0-9_-]*$"
+  ```
+
+  Displays:
+  <table><tbody><tr><td>
+
+  `slug` string
+
+  **Possible values:** 1 ≤ length ≤ 40, Value must match regular expression `^[a-zA-Z0-9_-]*$`
+
+  The human-readable, unique identifier, used to identify the document.
+
+  </td></tr></tbody></table>
+
+Other enhancements and bug fixes
+
+- Add additional schema qualifiers ([#112](https://github.com/cloud-annotations/docusaurus-plugin-openapi/pull/112))
+- Sidebar generation refactor ([#111](https://github.com/cloud-annotations/docusaurus-plugin-openapi/pull/111))
+- Add recursive folder structure reading & labeling support ([#107](https://github.com/cloud-annotations/docusaurus-plugin-openapi/pull/107))
+- Add experimental support for loading a multiple OpenAPI definitions ([#103](https://github.com/cloud-annotations/docusaurus-plugin-openapi/pull/103))
+- Add sidebar item classname for method ([#104](https://github.com/cloud-annotations/docusaurus-plugin-openapi/pull/104))
+- Fix schema name bug with allOf ([#102](https://github.com/cloud-annotations/docusaurus-plugin-openapi/pull/102))
+
 ## 0.3.0 (Dec 16, 2021)
 
 High level enhancements

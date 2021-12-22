@@ -1,7 +1,7 @@
 {
   "name": "docusaurus-preset-openapi",
   "description": "OpenAPI preset for Docusaurus.",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "license": "MIT",
   "keywords": [
     "openapi",
@@ -24,7 +24,6 @@
     "build": "tsc",
     "watch": "tsc --watch"
   },
-  "devDependencies": {},
   "dependencies": {
     "@docusaurus/core": "2.0.0-beta.13",
     "@docusaurus/plugin-content-blog": "2.0.0-beta.13",
@@ -37,9 +36,9 @@
     "@docusaurus/preset-classic": "2.0.0-beta.13",
     "@docusaurus/theme-classic": "2.0.0-beta.13",
     "@docusaurus/theme-search-algolia": "2.0.0-beta.13",
-    "docusaurus-plugin-openapi": "^0.3.0",
-    "docusaurus-plugin-proxy": "^0.3.0",
-    "docusaurus-theme-openapi": "^0.3.0"
+    "docusaurus-plugin-openapi": "^0.3.1",
+    "docusaurus-plugin-proxy": "^0.3.1",
+    "docusaurus-theme-openapi": "^0.3.1"
   },
   "peerDependencies": {
     "react": "^16.8.4 || ^17.0.0",
