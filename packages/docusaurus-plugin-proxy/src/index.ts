@@ -5,9 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { LoadContext, Plugin } from "@docusaurus/types";
+import type { LoadContext, Plugin } from "@docusaurus/types";
 
-import { PluginOptions } from "./types";
+import type { PluginOptions } from "./types";
 
 export default function pluginOpenAPI(
   _context: LoadContext,

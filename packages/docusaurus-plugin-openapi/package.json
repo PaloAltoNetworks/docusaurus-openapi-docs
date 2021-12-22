@@ -13,17 +13,18 @@
     "watch": "tsc --watch"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "2.0.0-beta.13",
+    "@docusaurus/module-type-aliases": "^2.0.0-beta.13",
+    "@docusaurus/types": "^2.0.0-beta.13",
     "@types/fs-extra": "^9.0.13",
     "@types/js-yaml": "^4.0.5",
     "@types/lodash": "^4.14.176",
-    "@types/postman-collection": "^3.5.3"
+    "@types/postman-collection": "^3.5.3",
+    "@types/json-schema": "^7.0.9",
+    "utility-types": "^3.10.0"
   },
   "dependencies": {
-    "@docusaurus/core": "^2.0.0-beta.13",
     "@docusaurus/mdx-loader": "^2.0.0-beta.13",
     "@docusaurus/plugin-content-docs": "^2.0.0-beta.13",
-    "@docusaurus/types": "^2.0.0-beta.13",
     "@docusaurus/utils": "^2.0.0-beta.13",
     "@docusaurus/utils-validation": "^2.0.0-beta.13",
     "chalk": "^4.1.2",

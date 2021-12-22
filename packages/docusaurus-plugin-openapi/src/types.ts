@@ -6,7 +6,7 @@
  * ========================================================================== */
 
 import type { RemarkAndRehypePluginOptions } from "@docusaurus/mdx-loader";
-import { Request } from "postman-collection";
+import type { Request } from "postman-collection";
 
 import {
   InfoObject,

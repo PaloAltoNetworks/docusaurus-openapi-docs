@@ -7,7 +7,7 @@
 
 import path from "path";
 
-import {
+import type {
   LoadContext,
   Plugin,
   RouteConfig,
@@ -26,7 +26,7 @@ import { Configuration } from "webpack";
 import { createApiPageMD, createInfoPageMD } from "./markdown";
 import { readOpenapiFiles, processOpenapiFiles } from "./openapi";
 import { generateSidebar } from "./sidebars";
-import { PluginOptions, LoadedContent } from "./types";
+import type { PluginOptions, LoadedContent } from "./types";
 
 export default function pluginOpenAPI(
   context: LoadContext,

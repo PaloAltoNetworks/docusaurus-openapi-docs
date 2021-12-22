@@ -7,7 +7,7 @@
 
 import path from "path";
 
-import { Plugin } from "@docusaurus/types";
+import type { Plugin } from "@docusaurus/types";
 import { ProvidePlugin } from "webpack";
 
 export default function docusaurusThemeOpenAPI(): Plugin<void> {

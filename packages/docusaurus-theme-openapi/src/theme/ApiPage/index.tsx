@@ -7,7 +7,7 @@
 
 import React, { ReactNode, useState, useCallback } from "react";
 
-import { PropSidebar } from "@docusaurus/plugin-content-docs-types";
+import type { PropSidebar } from "@docusaurus/plugin-content-docs-types";
 import renderRoutes from "@docusaurus/renderRoutes";
 import { matchPath } from "@docusaurus/router";
 import { translate } from "@docusaurus/Translate";
