@@ -16,14 +16,13 @@ export default function pluginOpenAPI(
   return {
     name: "docusaurus-plugin-proxy",
 
-    configureWebpack() {
-      const { proxy } = options;
-
+    // docusaurus type is outdated
+    configureWebpack(): any {
       return {
         devServer: {
-          proxy: proxy,
+          proxy: options,
         },
-      } as any;
+      };
     },
   };
 }
