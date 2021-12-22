@@ -1,0 +1,24 @@
+name: PR Title Check
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - edited
+
+jobs:
+  check:
+    name: Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Check
+        run: npx ts-node --transpile-only scripts/check-pr-title.ts "$PR_TITLE"
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
