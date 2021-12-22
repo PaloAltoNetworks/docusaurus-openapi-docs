@@ -10,8 +10,6 @@ import { execSync } from "child_process";
 import fs from "fs";
 import path from "path";
 
-import { yellow } from "chalk";
-
 import { version } from "../lerna.json";
 import { createDryRun } from "./utils/dry-run";
 import { getOutput } from "./utils/get-output";
@@ -58,11 +56,6 @@ function checkoutCode() {
   });
 
   REPO_ROOT = path.join(BUILD_PATH, REPO);
-
-  safeExec(`yarn install`, {
-    cwd: REPO_ROOT,
-    stdio: "ignore",
-  });
 }
 
 function configureGit() {
@@ -77,6 +70,11 @@ function configureGit() {
 }
 
 function buildAndPublish() {
+  safeExec(`yarn install --frozen-lockfile`, {
+    cwd: REPO_ROOT,
+    stdio: "ignore",
+  });
+
   printBanner("Building Packages");
 
   safeExec(`yarn lerna run build --no-private`, {
@@ -107,7 +105,7 @@ function versions() {
 
 function main() {
   if (versions().includes(`v${version}`)) {
-    console.log(yellow(`SKIPPING: Version ${version} already exists.`));
+    console.log(`\x1b[33mSKIPPING: Version ${version} already exists.\x1b[0m`);
     return;
   }
   if (!process.env.CI) {

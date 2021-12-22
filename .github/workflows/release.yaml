@@ -1,4 +1,4 @@
-name: Validate
+name: Release
 
 on:
   push:
@@ -24,10 +24,8 @@ jobs:
         with:
           node-version: "*"
           registry-url: "https://registry.npmjs.org"
-      - name: Install
-        run: yarn install --frozen-lockfile
       - name: Release
-        run: yarn release:publish
+        run: npx ts-node --transpile-only scripts/publish.ts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

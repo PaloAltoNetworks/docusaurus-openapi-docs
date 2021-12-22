@@ -103,9 +103,13 @@ function main() {
 
   const changelog = `
 ## ${pkg.version} (${date})
+
 High level enhancements
+
 - TODO HIGHLIGHTS
+
 Other enhancements and bug fixes
+
 ${formattedCommits.join("\n")}
   `;
 
