@@ -1,3 +1,62 @@
+## 0.4.0 (Dec 23, 2021)
+
+High level enhancements
+
+- Docusaurus beta.14 support
+
+  ```js
+  // Be sure to update @docusaurus/core:
+  "dependencies": {
+    "@docusaurus/core": "2.0.0-beta.14",
+    // ...
+  }
+  ```
+
+- With the release of Docusaurus beta.14 (Thanks @slorber!), we can now support configuration of `webpack-dev-server`'s proxy via our `docusaurus-plugin-proxy` plugin.
+
+  This can be useful when you have a separate API backend development server and you want to send API requests on the same domain.
+
+  With the following, a request to `/api/users` will now proxy the request to `http://localhost:3001/api/users`:
+
+  ```js
+  // docusaurus.config.js
+
+  const config = {
+    plugins: [["docusaurus-plugin-proxy", { "/api": "http://localhost:3001" }]],
+    // ...
+  };
+  ```
+
+  To proxy `/api/users` to `http://localhost:3001/users`, the path can be rewritten:
+
+  ```js
+  // docusaurus.config.js
+
+  const config = {
+    plugins: [
+      [
+        "docusaurus-plugin-proxy",
+        {
+          "/api": {
+            target: "http://localhost:3001",
+            pathRewrite: { "^/api": "" },
+          },
+        },
+      ],
+    ],
+    // ...
+  };
+  ```
+
+  For more config options, see [devServer.proxy](https://webpack.js.org/configuration/dev-server/#devserverproxy).
+
+- Better yarn 3 support
+
+Other enhancements and bug fixes
+
+- Bump to beta 14 and fix proxy plugin ([#120](https://github.com/cloud-annotations/docusaurus-plugin-openapi/pull/120))
+- Fix dependency resolutions ([#119](https://github.com/cloud-annotations/docusaurus-plugin-openapi/pull/119))
+
 ## 0.3.1 (Dec 21, 2021)
 
 High level enhancements

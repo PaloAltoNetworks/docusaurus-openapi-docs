@@ -1,7 +1,7 @@
 {
   "name": "docusaurus-plugin-openapi",
   "description": "OpenAPI plugin for Docusaurus.",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -17,9 +17,9 @@
     "@docusaurus/types": "^2.0.0-beta.14",
     "@types/fs-extra": "^9.0.13",
     "@types/js-yaml": "^4.0.5",
+    "@types/json-schema": "^7.0.9",
     "@types/lodash": "^4.14.176",
     "@types/postman-collection": "^3.5.3",
-    "@types/json-schema": "^7.0.9",
     "utility-types": "^3.10.0"
   },
   "dependencies": {

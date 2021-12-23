@@ -1,7 +1,7 @@
 {
   "name": "docusaurus-theme-openapi",
   "description": "OpenAPI theme for Docusaurus.",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -29,12 +29,12 @@
   "dependencies": {
     "@mdx-js/react": "^1.6.21",
     "@monaco-editor/react": "^4.3.1",
-    "monaco-editor": "^0.31.1",
     "buffer": "^6.0.3",
     "clsx": "^1.1.1",
-    "docusaurus-plugin-openapi": "^0.3.1",
+    "docusaurus-plugin-openapi": "^0.4.0",
     "immer": "^9.0.6",
     "lodash": "^4.17.20",
+    "monaco-editor": "^0.31.1",
     "postman-code-generators": "^1.0.0",
     "postman-collection": "^4.1.0",
     "prism-react-renderer": "^1.2.1",
