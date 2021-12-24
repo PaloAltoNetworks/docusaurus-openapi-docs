@@ -8,7 +8,7 @@ OpenAPI plugin for generating API reference docs in Docusaurus v2.
 [![npm latest package](https://img.shields.io/npm/v/docusaurus-preset-openapi/latest.svg)](https://www.npmjs.com/package/docusaurus-preset-openapi)
 [![npm downloads](https://img.shields.io/npm/dm/docusaurus-plugin-openapi.svg)](https://www.npmjs.com/package/docusaurus-preset-openapi)
 [![build](https://github.com/cloud-annotations/docusaurus-plugin-openapi/actions/workflows/validate.yaml/badge.svg)](https://github.com/cloud-annotations/docusaurus-plugin-openapi/actions/workflows/validate.yaml)
-
+<br/>
 [![prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![Cypress.io](https://img.shields.io/badge/tested%20with-Cypress-04C38E.svg)](https://www.cypress.io/)
 [![jest](https://jestjs.io/img/jest-badge.svg)](https://github.com/facebook/jest)
