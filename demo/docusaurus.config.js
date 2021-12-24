@@ -6,15 +6,15 @@ const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "My Site",
-  tagline: "Dinosaurs are cool",
-  url: "https://your-docusaurus-test-site.com",
+  title: "Docusaurus OpenAPI",
+  tagline: "OpenAPI plugin for generating API reference docs in Docusaurus v2.",
+  url: "https://docusaurus-openapi.netlify.app",
   baseUrl: "/",
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
-  organizationName: "facebook", // Usually your GitHub org/user name.
-  projectName: "docusaurus", // Usually your repo name.
+  organizationName: "cloud-annotations", // Usually your GitHub org/user name.
+  projectName: "docusaurus-openapi", // Usually your repo name.
 
   presets: [
     [
@@ -27,13 +27,14 @@ const config = {
         docs: {
           sidebarPath: require.resolve("./sidebars.js"),
           // Please change this to your repo.
-          editUrl: "https://github.com/facebook/docusaurus/edit/main/website/",
+          editUrl:
+            "https://github.com/cloud-annotations/docusaurus-openapi/edit/main/demo/",
         },
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
           editUrl:
-            "https://github.com/facebook/docusaurus/edit/main/website/blog/",
+            "https://github.com/cloud-annotations/docusaurus-openapi/edit/main/demo/",
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
@@ -95,9 +96,9 @@ const config = {
     /** @type {import('docusaurus-preset-openapi').ThemeConfig} */
     ({
       navbar: {
-        title: "My Site",
+        title: "OpenAPI",
         logo: {
-          alt: "My Site Logo",
+          alt: "Docusaurus Logo",
           src: "img/logo.svg",
         },
         items: [
@@ -115,7 +116,7 @@ const config = {
           { to: "/mega", label: "Mega", position: "left" },
           { to: "/blog", label: "Blog", position: "left" },
           {
-            href: "https://github.com/facebook/docusaurus",
+            href: "https://github.com/cloud-annotations/docusaurus-openapi",
             label: "GitHub",
             position: "right",
           },
@@ -159,12 +160,12 @@ const config = {
               },
               {
                 label: "GitHub",
-                href: "https://github.com/facebook/docusaurus",
+                href: "https://github.com/cloud-annotations/docusaurus-openapi",
               },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} Cloud Annotations, Inc. Built with Docusaurus.`,
       },
       prism: {
         theme: lightCodeTheme,

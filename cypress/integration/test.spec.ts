@@ -24,7 +24,7 @@ describe("test", () => {
 
   it("loads yaml tab", () => {
     checkTab(/yaml/i, [/introduction/i], /yaml example/i);
-    checkTab(/yaml/i, [/api/i, /hello world/i], /hello world/i);
+    checkTab(/yaml/i, [/^api$/i, /hello world/i], /hello world/i);
   });
 
   it("loads mega tab", () => {
@@ -50,7 +50,7 @@ describe("test", () => {
   });
 
   it("loads api tab", () => {
-    checkTab(/api/i, [/^pet$/i, /recursive/i], /recursive/i);
+    checkTab(/^api$/i, [/^pet$/i, /recursive/i], /recursive/i);
   });
 
   it("loads a page with authentication", () => {
