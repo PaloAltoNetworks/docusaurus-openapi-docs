@@ -20,7 +20,7 @@
     "format": "prettier . --check --ignore-unknown --ignore-path .gitignore",
     "lint": "eslint . --ignore-path .gitignore --ext .ts,.tsx,.js",
     "test": "jest",
-    "test:cypress:dev": "start-server-and-test watch http://localhost:3000 cy:open",
+    "test:cypress:dev": "start-server-and-test watch:demo http://localhost:3000 cy:open",
     "test:cypress": "start-server-and-test serve http://localhost:3000 cy:run",
     "release:changelog": "scripts/changelog.ts",
     "release:version": "scripts/version.ts",

@@ -6,30 +6,22 @@
  * ========================================================================== */
 
 describe("test", () => {
-  before(() => {
-    cy.visit("/api/recursive");
+  it("loads Petstore page", () => {
+    cy.visit("/petstore");
+    navTo(
+      [/pet/i, /add a new pet to the store/i],
+      /add a new pet to the store/i
+    );
   });
 
-  it("renders query parameters", () => {
-    cy.findByText(/query parameters/i).should("exist");
+  it("loads Cloud Object Storage page", () => {
+    cy.visit("/cos");
+    navTo([], /generating an iam token/i);
   });
 
-  it("loads issue 21 tab", () => {
-    checkTab(/issue 21/i, [], /missing summary/i);
-  });
-
-  it("loads cos tab", () => {
-    checkTab(/cos/i, [], /generating an iam token/i);
-  });
-
-  it("loads yaml tab", () => {
-    checkTab(/yaml/i, [/introduction/i], /yaml example/i);
-    checkTab(/yaml/i, [/^api$/i, /hello world/i], /hello world/i);
-  });
-
-  it("loads mega tab", () => {
-    checkTab(
-      /mega/i,
+  it("loads Multi-spec page", () => {
+    cy.visit("/multi-spec");
+    navTo(
       [
         /foods/i,
         /burger store/i,
@@ -41,18 +33,6 @@ describe("test", () => {
     );
   });
 
-  it("loads petstore tab", () => {
-    checkTab(
-      /petstore/i,
-      [/pet/i, /add a new pet to the store/i],
-      /add a new pet to the store/i
-    );
-  });
-
-  it("loads api tab", () => {
-    checkTab(/^api$/i, [/^pet$/i, /recursive/i], /recursive/i);
-  });
-
   it("loads a page with authentication", () => {
     cy.visit("/cos/list-buckets");
     cy.findByRole("button", { name: /authorize/i }).should("exist");
@@ -62,13 +42,14 @@ describe("test", () => {
   });
 });
 
-function checkTab(tab: RegExp, links: RegExp[], heading: RegExp) {
+/**
+ * Navigate to page using the sidebar
+ */
+function navTo(links: RegExp[], heading: RegExp) {
   cy.on("uncaught:exception", () => {
     // there is an uncaught error trying to load monaco in ci
     return false;
   });
-
-  cy.get(".navbar").findByRole("link", { name: tab }).click();
 
   for (let link of links) {
     cy.get("nav.menu")

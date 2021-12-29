@@ -8,6 +8,7 @@
 import React, { useRef, useState, useEffect } from "react";
 
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import clsx from "clsx";
 import codegen from "postman-code-generators";
 import Highlight, { defaultProps } from "prism-react-renderer";
 import { useSelector } from "react-redux";
@@ -206,12 +207,16 @@ function Curl() {
 
   return (
     <>
-      <div className={styles.buttonGroup}>
+      <div className={clsx(styles.buttonGroup, "api-code-tab-group")}>
         {langs.map((lang) => {
           return (
             <button
               key={lang.tabName || lang.label}
-              className={language === lang ? styles.selected : undefined}
+              className={clsx(
+                language === lang ? styles.selected : undefined,
+                language === lang ? "api-code-tab--active" : undefined,
+                "api-code-tab"
+              )}
               onClick={() => setLanguage(lang)}
             >
               {lang.tabName || lang.label}

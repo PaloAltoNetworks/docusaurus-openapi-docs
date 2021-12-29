@@ -10,12 +10,14 @@ Let's discover **Docusaurus in less than 5 minutes**.
 
 Get started by **creating a new site**.
 
+Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
+
 ## Generate a new site
 
-Generate a new Docusaurus site using the **OpenAPI template**:
+Generate a new Docusaurus site using the **classic template**:
 
 ```shell
-npx create-docusaurus-openapi my-website
+npm init docusaurus@latest my-website classic
 ```
 
 ## Start your site
@@ -30,4 +32,4 @@ npx docusaurus start
 
 Your site starts at `http://localhost:3000`.
 
-Open `openapi.json` and make some edits: the site **reloads automatically** and displays your changes.
+Open `docs/intro.md` and edit some lines: the site **reloads automatically** and displays your changes.

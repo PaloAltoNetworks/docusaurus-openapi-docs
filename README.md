@@ -22,125 +22,119 @@ OpenAPI plugin for generating API reference docs in Docusaurus v2.
 
 </p>
 
-> ### 💥 [Breaking Changes](https://github.com/cloud-annotations/docusaurus-plugin-openapi/releases/tag/v0.2.0): v0.1.0 -> v0.2.0
-
-## Preset usage
-
-Install the preset in your docusaurus project by running:
+## Quick Overview
 
 ```sh
-// with npm
-npm install docusaurus-preset-openapi
-
-// with yarn
-yarn add docusaurus-preset-openapi
+npx create-docusaurus-openapi my-website
+cd my-website
+npm start
 ```
 
-The OpenAPI preset can be used as a drop-in replacement to `@docusaurus/preset-classic`:
+> Coming from `v0.1.0`? See the [migration guide](https://github.com/cloud-annotations/docusaurus-plugin-openapi/releases/tag/v0.2.0).
 
-```js
-/* docusaurus.config.js */
+_([npx](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b) comes with npm 5.2+ and higher)_
 
-{
-  presets: [
-    [
-      "docusaurus-preset-openapi",
-      {
-        // ... options
-      },
-    ],
-  ],
-}
+Then open [http://localhost:3000/](http://localhost:3000/) to see your site.<br>
+When you’re ready to deploy to production, create a minified bundle with `npm run build`.
+
+## Creating a Site
+
+**You’ll need to have Node 14.0.0 or later version on your local development machine** (but it’s not required on the server). We recommend using the latest LTS version. You can use [nvm](https://github.com/creationix/nvm#installation) (macOS/Linux) or [nvm-windows](https://github.com/coreybutler/nvm-windows#node-version-manager-nvm-for-windows) to switch Node versions between different projects.
+
+To create a new site, you may choose one of the following methods:
+
+### npx
+
+```sh
+npx create-docusaurus-openapi my-website
 ```
 
-The default preset options will expose a route, `/api`, and look for an OpenAPI definition at `./openapi.json`.
+_([npx](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b) is a package runner tool that comes with npm 5.2+ and higher)_
 
-To explictly configure this, add an `api` stanza as follows:
+### npm
 
-```js
-/* docusaurus.config.js */
-
-{
-  presets: [
-    [
-      "docusaurus-preset-openapi",
-      {
-        api: {
-          path: 'openapi.json',
-          routeBasePath: 'api',
-        },
-        // ... other options
-      },
-    ],
-  ],
-}
+```sh
+npm init docusaurus-openapi my-website
 ```
 
-To add a link to the API page, add a new item to the navbar by updating `themeConfig.navbar.items`:
+_`npm init <initializer>` is available in npm 6+_
 
-```js
-/* docusaurus.config.js */
+### Yarn
 
-{
-  themeConfig: {
-    navbar: {
-      items: [
-        // ... other items
-        { to: "/api", label: "API", position: "left" },
-        // ... other items
-      ],
-    },
-  },
-}
+```sh
+yarn create docusaurus-openapi my-website
 ```
 
-## Multiple OpenAPI Definitions
+_[`yarn create <starter-kit-package>`](https://yarnpkg.com/lang/en/docs/cli/create/) is available in Yarn 0.25+_
 
-To have more than one OpenAPI pages, add additional OpenAPI plugin instances:
+It will create a directory called `my-website` inside the current folder.<br>
+Inside that directory, it will generate the initial project structure and install the transitive dependencies:
 
-```js
-/* docusaurus.config.js */
-
-{
-  presets: [
-    [
-      'docusaurus-preset-openapi',
-      {
-        api: {
-          // id: 'cars', // omitted => default instance
-          path: 'cars/openapi.json',
-          routeBasePath: 'cars',
-          // ... other options
-        },
-      },
-    ],
-  ],
-  plugins: [
-    [
-      'docusaurus-plugin-openapi',
-      {
-        id: 'trains',
-        path: 'trains/openapi.json',
-        routeBasePath: 'trains',
-        // ... other options
-      },
-    ],
-    [
-      'docusaurus-plugin-openapi',
-      {
-        id: 'bikes',
-        path: 'bikes/openapi.json',
-        routeBasePath: 'bikes',
-        // ... other options
-      },
-    ],
-  ],
-}
+```
+my-website
+├── blog
+│   ├── 2019-05-28-hola.md
+│   ├── 2019-05-29-hello-world.md
+│   └── 2020-05-30-welcome.md
+├── docs
+│   ├── doc1.md
+│   ├── doc2.md
+│   ├── doc3.md
+│   └── mdx.md
+├── src
+│   ├── css
+│   │   └── custom.css
+│   └── pages
+│       ├── styles.module.css
+│       └── index.js
+├── static
+│   └── img
+├── .gitignore
+├── openapi.json
+├── docusaurus.config.js
+├── babel.config.js
+├── package.json
+├── sidebars.js
+└── README.md
 ```
 
-This will create routes for `/cars`, `/trains` and `/bikes`.
+- `/docusaurus.config.js` - A config file containing the site configuration. This can be used to configure the OpenAPI preset
+- `/openapi.json` - The default OpenAPI defination that will be served _(path can be configured in `docusaurus.config.js`)_.
 
-> **Note:** One instance of the plugin is included in the preset. All additional plugin instances will require an `id`.
+For more info see [project structure rundown](https://docusaurus.io/docs/installation#project-structure-rundown).
+
+Once the installation is done, you can open your project folder:
+
+```sh
+cd my-website
+```
+
+Inside the newly created project, you can run some built-in commands:
+
+### `npm start` or `yarn start`
+
+Runs the site in development mode.<br>
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+The page will automatically reload if you make changes to the code.
+
+### `npm run build` or `yarn build`
+
+Builds the site for production to the `build` folder.
+
+Docusaurus is a modern static website generator that will build the website into a directory of static contents, which can be copied to any static file hosting service like [GitHub pages](https://pages.github.com/), [Vercel](https://vercel.com/) or [Netlify](https://www.netlify.com/).
+
+## Popular Alternatives
+
+Docusaurus OpenAPI is great for:
+
+- **Static generation** All OpenAPI operations will be rendered as static pages at build time, giving many performance benefits.
+- **Demo panel** Allow users to try out your API with an interactive demo panel.
+- **Native Docusaurus feel** Built from scratch to work with Docusaurus.
+
+Here are a few common cases where you might want to try something else:
+
+- If you need better support for more advanced OpenAPI features, check out [Redocusaurus](https://github.com/rohit-gohri/redocusaurus/). Redocusaurus embeds the much more mature OpenAPI documentation generator, [Redoc](https://github.com/Redocly/redoc), into Docusaurus as a React component.
 
 ## Contributing
 

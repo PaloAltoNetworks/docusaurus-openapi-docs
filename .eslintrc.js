@@ -9,7 +9,7 @@ const tsExtensions = [".ts", ".tsx", ".d.ts"];
 const allExtensions = [...tsExtensions, ".js", ".jsx"];
 
 module.exports = {
-  ignorePatterns: ["demo/**"],
+  ignorePatterns: ["demo/**", "packages/docusaurus-template-*/**"],
   root: true,
   extends: [
     "react-app",

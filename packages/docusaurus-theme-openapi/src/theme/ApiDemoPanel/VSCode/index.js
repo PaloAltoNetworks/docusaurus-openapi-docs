@@ -16,14 +16,18 @@ const LIGHT_BRIGHT = "1c1e21";
 const LIGHT_DIM = "aaaaaa";
 const LIGHT_BLUE = "648bea";
 const LIGHT_GREEN = "39a351";
-const LIGHT_BACKGROUND = "#ffffff";
+const LIGHT_BACKGROUND = getComputedStyle(
+  document.documentElement
+).getPropertyValue("--openapi-monaco-background-color");
 const LIGHT_SELECT = "#ebedef";
 
 const DARK_BRIGHT = "f5f6f7";
 const DARK_DIM = "7f7f7f";
 const DARK_BLUE = "a4cdfe";
 const DARK_GREEN = "85d996";
-const DARK_BACKGROUND = "#18191a";
+const DARK_BACKGROUND = getComputedStyle(
+  document.documentElement
+).getPropertyValue("--openapi-monaco-background-color");
 const DARK_SELECT = "#515151";
 
 loader

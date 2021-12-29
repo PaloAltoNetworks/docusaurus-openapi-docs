@@ -22,7 +22,8 @@ const config = {
       /** @type {import('docusaurus-preset-openapi').Options} */
       ({
         api: {
-          path: "examples/openapi.json",
+          path: "examples/petstore.yaml",
+          routeBasePath: "petstore",
         },
         docs: {
           sidebarPath: require.resolve("./sidebars.js"),
@@ -30,12 +31,7 @@ const config = {
           editUrl:
             "https://github.com/cloud-annotations/docusaurus-openapi/edit/main/demo/",
         },
-        blog: {
-          showReadingTime: true,
-          // Please change this to your repo.
-          editUrl:
-            "https://github.com/cloud-annotations/docusaurus-openapi/edit/main/demo/",
-        },
+        blog: false,
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
         },
@@ -53,14 +49,6 @@ const config = {
     [
       "docusaurus-plugin-openapi",
       {
-        id: "issue",
-        path: "examples/openapi-issue-21.json",
-        routeBasePath: "issue-21",
-      },
-    ],
-    [
-      "docusaurus-plugin-openapi",
-      {
         id: "cos",
         path: "examples/openapi-cos.json",
         routeBasePath: "cos",
@@ -69,25 +57,9 @@ const config = {
     [
       "docusaurus-plugin-openapi",
       {
-        id: "yaml",
-        path: "examples/openapi.yaml",
-        routeBasePath: "yaml",
-      },
-    ],
-    [
-      "docusaurus-plugin-openapi",
-      {
-        id: "petstore",
-        path: "examples/petstore.yaml",
-        routeBasePath: "petstore",
-      },
-    ],
-    [
-      "docusaurus-plugin-openapi",
-      {
-        id: "mega",
+        id: "multi-spec",
         path: "examples",
-        routeBasePath: "mega",
+        routeBasePath: "multi-spec",
       },
     ],
   ],
@@ -95,6 +67,10 @@ const config = {
   themeConfig:
     /** @type {import('docusaurus-preset-openapi').ThemeConfig} */
     ({
+      colorMode: {
+        disableSwitch: true,
+        defaultMode: "dark",
+      },
       navbar: {
         title: "OpenAPI",
         logo: {
@@ -106,65 +82,64 @@ const config = {
             type: "doc",
             docId: "intro",
             position: "left",
-            label: "Tutorial",
+            label: "Docs",
           },
-          { to: "/api", label: "API", position: "left" },
-          { to: "/issue-21", label: "Issue 21", position: "left" },
-          { to: "/cos", label: "COS", position: "left" },
-          { to: "/yaml", label: "YAML", position: "left" },
-          { to: "/petstore", label: "Petstore", position: "left" },
-          { to: "/mega", label: "Mega", position: "left" },
-          { to: "/blog", label: "Blog", position: "left" },
+          {
+            label: "Examples",
+            position: "left",
+            items: [
+              { to: "/petstore", label: "Petstore" },
+              { to: "/cos", label: "Cloud Object Storage" },
+              { to: "/multi-spec", label: "Multi-spec" },
+            ],
+          },
           {
             href: "https://github.com/cloud-annotations/docusaurus-openapi",
-            label: "GitHub",
             position: "right",
+            className: "header-github-link",
+            "aria-label": "GitHub repository",
           },
         ],
       },
       footer: {
         style: "dark",
-        links: [
-          {
-            title: "Docs",
-            items: [
-              {
-                label: "Tutorial",
-                to: "/docs/intro",
-              },
-            ],
-          },
-          {
-            title: "Community",
-            items: [
-              {
-                label: "Stack Overflow",
-                href: "https://stackoverflow.com/questions/tagged/docusaurus",
-              },
-              {
-                label: "Discord",
-                href: "https://discordapp.com/invite/docusaurus",
-              },
-              {
-                label: "Twitter",
-                href: "https://twitter.com/docusaurus",
-              },
-            ],
-          },
-          {
-            title: "More",
-            items: [
-              {
-                label: "Blog",
-                to: "/blog",
-              },
-              {
-                label: "GitHub",
-                href: "https://github.com/cloud-annotations/docusaurus-openapi",
-              },
-            ],
-          },
-        ],
+        // links: [
+        //   {
+        //     title: "Docs",
+        //     items: [
+        //       {
+        //         label: "Tutorial",
+        //         to: "/docs/intro",
+        //       },
+        //     ],
+        //   },
+        //   {
+        //     title: "Community",
+        //     items: [
+        //       {
+        //         label: "Stack Overflow",
+        //         href: "https://stackoverflow.com/questions/tagged/docusaurus",
+        //       },
+        //       {
+        //         label: "Discord",
+        //         href: "https://discordapp.com/invite/docusaurus",
+        //       },
+        //       {
+        //         label: "Twitter",
+        //         href: "https://twitter.com/docusaurus",
+        //       },
+        //     ],
+        //   },
+        //   {
+        //     title: "More",
+        //     items: [
+        //       {
+        //         label: "GitHub",
+        //         href: "https://github.com/cloud-annotations/docusaurus-openapi",
+        //       },
+        //     ],
+        //   },
+        // ],
         copyright: `Copyright © ${new Date().getFullYear()} Cloud Annotations, Inc. Built with Docusaurus.`,
       },
       prism: {
