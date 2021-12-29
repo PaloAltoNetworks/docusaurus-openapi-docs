@@ -11,7 +11,7 @@ import { getOutput } from "./utils/get-output";
 import { printBanner, printSpacer } from "./utils/print-utils";
 
 const ORG = "cloud-annotations";
-const REPO = "docusaurus-plugin-openapi";
+const REPO = "docusaurus-openapi";
 const BRANCH = "main";
 
 const COMMIT_FILTERS = [/\(release\) v.*/];

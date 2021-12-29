@@ -16,7 +16,7 @@ import { getOutput } from "./utils/get-output";
 import { printBanner } from "./utils/print-utils";
 
 const ORG = "cloud-annotations";
-const REPO = "docusaurus-plugin-openapi";
+const REPO = "docusaurus-openapi";
 let REPO_ROOT = undefined;
 
 // Makes the script crash on unhandled rejections instead of silently
