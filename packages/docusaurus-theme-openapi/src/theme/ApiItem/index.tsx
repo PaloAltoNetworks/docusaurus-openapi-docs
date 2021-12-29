@@ -15,7 +15,7 @@ import clsx from "clsx";
 
 import styles from "./styles.module.css";
 
-let ApiDemoPanel = (_: { item: any }) => <div />;
+let ApiDemoPanel = (_: { item: any }) => <div style={{ marginTop: "3.5em" }} />;
 if (ExecutionEnvironment.canUseDOM) {
   ApiDemoPanel = require("@theme/ApiDemoPanel").default;
 }

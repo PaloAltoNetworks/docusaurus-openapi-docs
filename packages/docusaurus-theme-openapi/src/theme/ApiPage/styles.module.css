@@ -58,7 +58,8 @@ html[data-theme="dark"] {
   display: flex;
 }
 
-.apiPage {
+.apiPage,
+.apiMainContainer {
   display: flex;
   width: 100%;
 }

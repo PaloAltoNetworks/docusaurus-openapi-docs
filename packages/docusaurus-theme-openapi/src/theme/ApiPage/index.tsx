@@ -179,7 +179,7 @@ function ApiPage(props: Props): JSX.Element {
 
   // Override the current route path to the first page if it can't be found on the sidebar.
   const paths = getSidebarPaths({ currentApiRoute, apiMetadata });
-  if (!paths.includes(location.pathname)) {
+  if (!paths.find((path) => matchPath(location.pathname, path))) {
     currentApiRoute = {
       ...currentApiRoute,
       path: paths[0],
