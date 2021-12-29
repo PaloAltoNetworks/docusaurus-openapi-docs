@@ -1,3 +1,12 @@
+## 0.4.1 (Dec 28, 2021)
+
+Enhancements and bug fixes
+
+- Add `create` command ([#126](https://github.com/cloud-annotations/docusaurus-plugin-openapi/pull/126))
+- Update demo ([#124](https://github.com/cloud-annotations/docusaurus-plugin-openapi/pull/124))
+- Update README.md ([#123](https://github.com/cloud-annotations/docusaurus-plugin-openapi/pull/123))
+- Add README badges ([#122](https://github.com/cloud-annotations/docusaurus-plugin-openapi/pull/122))
+
 ## 0.4.0 (Dec 23, 2021)
 
 High level enhancements
