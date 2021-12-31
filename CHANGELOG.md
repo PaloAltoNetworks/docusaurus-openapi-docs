@@ -1,3 +1,10 @@
+## 0.4.2 (Dec 30, 2021)
+
+Enhancements and bug fixes
+
+- Update package metadata ([#131](https://github.com/cloud-annotations/docusaurus-openapi/pull/131))
+- Fix mobile css bug ([#129](https://github.com/cloud-annotations/docusaurus-openapi/pull/129))
+
 ## 0.4.1 (Dec 28, 2021)
 
 Enhancements and bug fixes
