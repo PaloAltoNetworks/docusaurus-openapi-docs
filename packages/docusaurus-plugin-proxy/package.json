@@ -6,6 +6,14 @@
   "publishConfig": {
     "access": "public"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cloud-annotations/docusaurus-openapi.git",
+    "directory": "packages/docusaurus-plugin-proxy"
+  },
+  "bugs": {
+    "url": "https://github.com/cloud-annotations/docusaurus-openapi/issues"
+  },
   "main": "lib/index.js",
   "types": "src/plugin-proxy.d.ts",
   "scripts": {

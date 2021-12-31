@@ -4,11 +4,11 @@
   "description": "Create Docusaurus apps easily.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cloud-annotations/docusaurus-plugin-openapi.git",
+    "url": "https://github.com/cloud-annotations/docusaurus-openapi.git",
     "directory": "packages/create-docusaurus-openapi"
   },
   "bugs": {
-    "url": "https://github.com/cloud-annotations/docusaurus-plugin-openapi/issues"
+    "url": "https://github.com/cloud-annotations/docusaurus-openapi/issues"
   },
   "scripts": {
     "create-docusaurus-openapi": "create-docusaurus-openapi",

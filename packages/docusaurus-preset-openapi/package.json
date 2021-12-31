@@ -15,8 +15,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/cloud-annotations/docusaurus-plugin-openapi.git",
+    "url": "https://github.com/cloud-annotations/docusaurus-openapi.git",
     "directory": "packages/docusaurus-preset-openapi"
+  },
+  "bugs": {
+    "url": "https://github.com/cloud-annotations/docusaurus-openapi/issues"
   },
   "main": "lib/index.js",
   "types": "src/preset-openapi.d.ts",

@@ -13,12 +13,12 @@
     "url": "https://github.com/cloud-annotations/docusaurus-openapi.git",
     "directory": "packages/docusaurus-template-openapi"
   },
+  "bugs": {
+    "url": "https://github.com/cloud-annotations/docusaurus-openapi/issues"
+  },
   "license": "MIT",
   "engines": {
     "node": ">=14"
-  },
-  "bugs": {
-    "url": "https://github.com/cloud-annotations/docusaurus-openapi/issues"
   },
   "files": [
     "template",
