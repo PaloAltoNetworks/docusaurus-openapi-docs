@@ -7,21 +7,34 @@
 
 import React, { useState } from "react";
 
-import { useSelector } from "react-redux";
+import { RequestBodyObject } from "docusaurus-plugin-openapi/src/openapi/types";
 
 import ContentType from "../ContentType";
 import FormSelect from "../FormSelect";
+import { useTypedDispatch, useTypedSelector } from "../hooks";
 import FormFileUpload from "./../FormFileUpload";
 import FormItem from "./../FormItem";
 import FormTextInput from "./../FormTextInput";
-import { useActions } from "./../redux/actions";
 import VSCode from "./../VSCode";
+import {
+  clearFormBodyKey,
+  clearRawBody,
+  setFileFormBody,
+  setFileRawBody,
+  setStringFormBody,
+  setStringRawBody,
+} from "./slice";
 import styles from "./styles.module.css";
 
-function BodyWrap() {
+interface Props {
+  jsonRequestBodyExample: string;
+  requestBodyMetadata?: RequestBodyObject;
+}
+
+function BodyWrap({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
   const [showOptional, setShowOptional] = useState(false);
-  const contentType = useSelector((state) => state.contentType);
-  const required = useSelector((state) => state.requestBodyMetadata.required);
+  const contentType = useTypedSelector((state) => state.contentType.value);
+  const required = requestBodyMetadata?.required;
 
   // No body
   if (contentType === undefined) {
@@ -32,7 +45,10 @@ function BodyWrap() {
     return (
       <>
         <ContentType />
-        <Body />
+        <Body
+          requestBodyMetadata={requestBodyMetadata}
+          jsonRequestBodyExample={jsonRequestBodyExample}
+        />
       </>
     );
   }
@@ -76,20 +92,20 @@ function BodyWrap() {
       <div className={showOptional ? styles.showOptions : styles.hideOptions}>
         <>
           <ContentType />
-          <Body />
+          <Body
+            requestBodyMetadata={requestBodyMetadata}
+            jsonRequestBodyExample={jsonRequestBodyExample}
+          />
         </>
       </div>
     </>
   );
 }
 
-function Body() {
-  const contentType = useSelector((state) => state.contentType);
-  const requestBodyMetadata = useSelector((state) => state.requestBodyMetadata);
-  const jsonRequestBodyExample = useSelector(
-    (state) => state.jsonRequestBodyExample
-  );
-  const { setBody, setForm } = useActions();
+function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
+  const contentType = useTypedSelector((state) => state.contentType.value);
+
+  const dispatch = useTypedDispatch();
 
   // Lot's of possible content-types:
   // - application/json
@@ -118,21 +134,23 @@ function Body() {
   }
 
   const schema = requestBodyMetadata?.content?.[contentType]?.schema;
-  if (schema.format === "binary") {
+
+  if (schema?.format === "binary") {
     return (
       <FormItem label="Body">
         <FormFileUpload
           placeholder={schema.description || "Body"}
           onChange={(file) => {
             if (file === undefined) {
-              setBody(undefined);
+              dispatch(clearRawBody());
               return;
             }
-            setBody({
-              type: "file",
-              src: `/path/to/${file.name}`,
-              content: file,
-            });
+            dispatch(
+              setFileRawBody({
+                src: `/path/to/${file.name}`,
+                content: file,
+              })
+            );
           }}
         />
       </FormItem>
@@ -142,7 +160,7 @@ function Body() {
   if (
     (contentType === "multipart/form-data" ||
       contentType === "application/x-www-form-urlencoded") &&
-    requestBodyMetadata?.content?.[contentType]?.schema.type === "object"
+    schema?.type === "object"
   ) {
     return (
       <FormItem label="Body">
@@ -154,9 +172,7 @@ function Body() {
             border: "1px solid var(--openapi-monaco-border-color)",
           }}
         >
-          {Object.entries(
-            requestBodyMetadata?.content?.[contentType]?.schema.properties
-          ).map(([key, val]) => {
+          {Object.entries(schema.properties ?? {}).map(([key, val]: any) => {
             if (val.format === "binary") {
               return (
                 <FormItem key={key} label={key}>
@@ -164,17 +180,18 @@ function Body() {
                     placeholder={val.description || key}
                     onChange={(file) => {
                       if (file === undefined) {
-                        setForm({ key: key, value: undefined });
+                        dispatch(clearFormBodyKey(key));
                         return;
                       }
-                      setForm({
-                        key: key,
-                        value: {
-                          type: "file",
-                          src: `/path/to/${file.name}`,
-                          content: file,
-                        },
-                      });
+                      dispatch(
+                        setFileFormBody({
+                          key: key,
+                          value: {
+                            src: `/path/to/${file.name}`,
+                            content: file,
+                          },
+                        })
+                      );
                     }}
                   />
                 </FormItem>
@@ -188,10 +205,16 @@ function Body() {
                     options={["---", ...val.enum]}
                     onChange={(e) => {
                       const val = e.target.value;
-                      setForm({
-                        key: key,
-                        value: val === "---" ? undefined : val,
-                      });
+                      if (val === "---") {
+                        dispatch(clearFormBodyKey(key));
+                      } else {
+                        dispatch(
+                          setStringFormBody({
+                            key: key,
+                            value: val,
+                          })
+                        );
+                      }
                     }}
                   />
                 </FormItem>
@@ -203,7 +226,9 @@ function Body() {
                 <FormTextInput
                   placeholder={val.description || key}
                   onChange={(e) => {
-                    setForm({ key: key, value: e.target.value });
+                    dispatch(
+                      setStringFormBody({ key: key, value: e.target.value })
+                    );
                   }}
                 />
               </FormItem>
@@ -233,7 +258,9 @@ function Body() {
       <VSCode
         value={exampleBodyString}
         language={language}
-        onChange={setBody}
+        onChange={(value) => {
+          dispatch(setStringRawBody(value));
+        }}
       />
     </FormItem>
   );

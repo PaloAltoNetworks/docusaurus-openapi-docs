@@ -9,14 +9,19 @@ import React from "react";
 
 import styles from "./styles.module.css";
 
-function FormItem({ label, type, children }) {
+interface Props {
+  label?: string;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  children?: React.ReactNode;
+}
+
+function FloatingButton({ label, onClick, children }: Props) {
   return (
-    <div className={styles.formItem}>
-      <code>{label}</code>
-      {type && <span style={{ opacity: 0.6 }}> — {type}</span>}
-      <div>{children}</div>
+    <div className={styles.floatingButton}>
+      {label && <button onClick={onClick}>{label}</button>}
+      {children}
     </div>
   );
 }
 
-export default FormItem;
+export default FloatingButton;

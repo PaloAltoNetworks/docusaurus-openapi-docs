@@ -7,44 +7,44 @@
 
 import React, { useState } from "react";
 
-import { useSelector } from "react-redux";
-
 import FloatingButton from "../FloatingButton";
+import { useTypedDispatch, useTypedSelector } from "../hooks";
 import FormItem from "./../FormItem";
 import FormSelect from "./../FormSelect";
 import FormTextInput from "./../FormTextInput";
-import { useActions } from "./../redux/actions";
+import { setServer, setServerVariable } from "./slice";
 import styles from "./styles.module.css";
 
-function Endpoint() {
-  const [edit, setEdit] = useState(false);
-  const servers = useSelector((state) => state.servers);
-  const endpoint = useSelector((state) => state.endpoint);
-  const { setEndpoint, setEndpointValue } = useActions();
+function Server() {
+  const [isEditing, setIsEditing] = useState(false);
+  const value = useTypedSelector((state) => state.server.value);
+  const options = useTypedSelector((state) => state.server.options);
 
-  if (servers.length <= 0) {
+  const dispatch = useTypedDispatch();
+
+  if (options.length <= 0) {
     return null;
   }
 
-  if (servers.length <= 1 && endpoint.variables === undefined) {
+  if (options.length <= 1 && value?.variables === undefined) {
     return null;
   }
 
-  if (!edit) {
-    let url;
-    if (endpoint) {
-      url = endpoint.url.replace(/\/$/, "");
-      if (endpoint.variables) {
-        Object.keys(endpoint.variables).forEach((variable) => {
+  if (!isEditing) {
+    let url = "";
+    if (value) {
+      url = value.url.replace(/\/$/, "");
+      if (value.variables) {
+        Object.keys(value.variables).forEach((variable) => {
           url = url.replace(
             `{${variable}}`,
-            endpoint.variables[variable].default
+            value.variables?.[variable].default ?? ""
           );
         });
       }
     }
     return (
-      <FloatingButton onClick={() => setEdit(true)} label="Edit">
+      <FloatingButton onClick={() => setIsEditing(true)} label="Edit">
         <pre
           style={{
             background: "var(--openapi-card-background-color)",
@@ -59,24 +59,27 @@ function Endpoint() {
 
   return (
     <div className={styles.optionsPanel}>
-      <button className={styles.showMoreButton} onClick={() => setEdit(false)}>
+      <button
+        className={styles.showMoreButton}
+        onClick={() => setIsEditing(false)}
+      >
         Hide
       </button>
       <FormItem label="Endpoint">
         <FormSelect
-          options={servers.map((s) => s.url)}
-          onChange={(e) => setEndpoint(e.target.value)}
+          options={options.map((s) => s.url)}
+          onChange={(e) => dispatch(setServer(e.target.value))}
         />
       </FormItem>
-      {endpoint.variables &&
-        Object.keys(endpoint.variables).map((key) => {
-          if (endpoint.variables[key].enum) {
+      {value?.variables &&
+        Object.keys(value.variables).map((key) => {
+          if (value.variables?.[key].enum !== undefined) {
             return (
               <FormItem label={key}>
                 <FormSelect
-                  options={endpoint.variables[key].enum}
+                  options={value.variables[key].enum}
                   onChange={(e) => {
-                    setEndpointValue(key, e.target.value);
+                    dispatch(setServerVariable({ key, value: e.target.value }));
                   }}
                 />
               </FormItem>
@@ -85,9 +88,9 @@ function Endpoint() {
           return (
             <FormItem label={key}>
               <FormTextInput
-                placeholder={endpoint.variables[key].default}
+                placeholder={value.variables?.[key].default}
                 onChange={(e) => {
-                  setEndpointValue(key, e.target.value);
+                  dispatch(setServerVariable({ key, value: e.target.value }));
                 }}
               />
             </FormItem>
@@ -97,4 +100,4 @@ function Endpoint() {
   );
 }
 
-export default Endpoint;
+export default Server;

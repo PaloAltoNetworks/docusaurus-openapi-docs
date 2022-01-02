@@ -7,12 +7,19 @@
 
 import React, { useState } from "react";
 
+// @ts-ignore
 import MagicDropzone from "react-magic-dropzone";
 
 import FloatingButton from "../FloatingButton";
 import styles from "./styles.module.css";
 
-function RenderPreview({ file }) {
+type PreviewFile = { preview: string } & File;
+
+interface RenderPreviewProps {
+  file: PreviewFile;
+}
+
+function RenderPreview({ file }: RenderPreviewProps) {
   switch (file.type) {
     case "image/png":
     case "image/jpeg":
@@ -55,16 +62,21 @@ function RenderPreview({ file }) {
   }
 }
 
-function FormFileUpload({ placeholder, onChange }) {
-  const [hover, setHover] = useState(false);
-  const [file, setFile] = useState(undefined);
+interface Props {
+  placeholder: string;
+  onChange?(file?: File): any;
+}
 
-  function setAndNotifyFile(file) {
+function FormFileUpload({ placeholder, onChange }: Props) {
+  const [hover, setHover] = useState(false);
+  const [file, setFile] = useState<PreviewFile>();
+
+  function setAndNotifyFile(file?: PreviewFile) {
     setFile(file);
-    onChange(file);
+    onChange?.(file);
   }
 
-  function handleDrop(accepted, _) {
+  function handleDrop(accepted: PreviewFile[]) {
     const [file] = accepted;
     setAndNotifyFile(file);
     setHover(false);

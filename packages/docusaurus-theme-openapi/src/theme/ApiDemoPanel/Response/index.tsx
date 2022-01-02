@@ -7,12 +7,12 @@
 
 import React from "react";
 
-import { useSelector } from "react-redux";
-
+import { useTypedDispatch, useTypedSelector } from "../hooks";
 import FloatingButton from "./../FloatingButton";
-import { useActions } from "./../redux/actions";
+import { clearResponse } from "./slice";
 
-function formatXml(xml) {
+// TODO: We probably shouldn't attempt to format XML...
+function formatXml(xml: string) {
   const tab = "  ";
   let formatted = "";
   let indent = "";
@@ -32,14 +32,14 @@ function formatXml(xml) {
 }
 
 function Response() {
-  const response = useSelector((state) => state.response);
-  const { clearResponse } = useActions();
+  const response = useTypedSelector((state) => state.response.value);
+  const dispatch = useTypedDispatch();
 
   if (response === undefined) {
     return null;
   }
 
-  let prettyResponse = response;
+  let prettyResponse: string = response;
   try {
     prettyResponse = JSON.stringify(JSON.parse(response), null, 2);
   } catch {
@@ -49,7 +49,7 @@ function Response() {
   }
 
   return (
-    <FloatingButton onClick={() => clearResponse()} label="Clear">
+    <FloatingButton onClick={() => dispatch(clearResponse())} label="Clear">
       <pre
         style={{
           background: "var(--openapi-card-background-color)",

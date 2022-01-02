@@ -168,7 +168,7 @@ export interface ExternalDocumentationObject {
 
 export interface ParameterObject {
   name: string;
-  in: string;
+  in: "query" | "header" | "path" | "cookie";
   description?: string;
   required?: boolean;
   deprecated?: boolean;

@@ -9,15 +9,25 @@ import React, { useRef, useState, useEffect } from "react";
 
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import clsx from "clsx";
+// @ts-ignore
 import codegen from "postman-code-generators";
+import sdk from "postman-collection";
 import Highlight, { defaultProps } from "prism-react-renderer";
-import { useSelector } from "react-redux";
 
+import { useTypedSelector } from "../hooks";
 import buildPostmanRequest from "./../buildPostmanRequest";
 import FloatingButton from "./../FloatingButton";
 import styles from "./styles.module.css";
 
-const languageSet = [
+interface Language {
+  tabName: string;
+  highlight: string;
+  language: string;
+  variant: string;
+  options: { [key: string]: boolean };
+}
+
+const languageSet: Language[] = [
   {
     tabName: "cURL",
     highlight: "bash",
@@ -112,29 +122,34 @@ const languageTheme = {
   ],
 };
 
-function Curl() {
+interface Props {
+  postman: sdk.Request;
+  codeSamples: any; // TODO: Type this...
+}
+
+function Curl({ postman, codeSamples }: Props) {
   // TODO: match theme for vscode.
 
   const { siteConfig } = useDocusaurusContext();
 
   const [copyText, setCopyText] = useState("Copy");
 
-  const pathParams = useSelector((state) => state.params.path);
-  const queryParams = useSelector((state) => state.params.query);
-  const cookieParams = useSelector((state) => state.params.cookie);
-  const headerParams = useSelector((state) => state.params.header);
-  const contentType = useSelector((state) => state.contentType);
-  const codeSamples = useSelector((state) => state.codeSamples);
-  const body = useSelector((state) => state.body);
-  const accept = useSelector((state) => state.accept);
-  const endpoint = useSelector((state) => state.endpoint);
-  const postman = useSelector((state) => state.postman);
-  const auth = useSelector((state) => state.auth);
-  const selectedAuthID = useSelector((state) => state.selectedAuthID);
-  const authOptionIDs = useSelector((state) => state.authOptionIDs);
+  const contentType = useTypedSelector((state) => state.contentType.value);
+  const accept = useTypedSelector((state) => state.accept.value);
+  const server = useTypedSelector((state) => state.server.value);
+  const body = useTypedSelector((state) => state.body);
 
+  const pathParams = useTypedSelector((state) => state.params.path);
+  const queryParams = useTypedSelector((state) => state.params.query);
+  const cookieParams = useTypedSelector((state) => state.params.cookie);
+  const headerParams = useTypedSelector((state) => state.params.header);
+
+  const auth = useTypedSelector((state) => state.auth);
+
+  // TODO
   const langs = [
-    ...(siteConfig?.themeConfig?.languageTabs ?? languageSet),
+    ...((siteConfig?.themeConfig?.languageTabs as Language[] | undefined) ??
+      languageSet),
     ...codeSamples,
   ];
 
@@ -152,10 +167,8 @@ function Curl() {
         accept,
         headerParams,
         body,
-        endpoint,
+        server,
         auth,
-        selectedAuthID,
-        authOptionIDs,
       });
 
       codegen.convert(
@@ -163,7 +176,7 @@ function Curl() {
         language.variant,
         postmanRequest,
         language.options,
-        (error, snippet) => {
+        (error: any, snippet: string) => {
           if (error) {
             return;
           }
@@ -185,20 +198,20 @@ function Curl() {
     pathParams,
     postman,
     queryParams,
-    endpoint,
+    server,
     auth,
-    selectedAuthID,
-    authOptionIDs,
   ]);
 
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   const handleCurlCopy = () => {
     setCopyText("Copied");
     setTimeout(() => {
       setCopyText("Copy");
     }, 2000);
-    navigator.clipboard.writeText(ref.current.innerText);
+    if (ref.current?.innerText) {
+      navigator.clipboard.writeText(ref.current.innerText);
+    }
   };
 
   if (language === undefined) {

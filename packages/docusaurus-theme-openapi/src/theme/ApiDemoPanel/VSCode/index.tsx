@@ -88,7 +88,13 @@ loader
     console.error("An error occurred during initialization of Monaco: ", error)
   );
 
-function VSCode({ value, language, onChange }) {
+interface Props {
+  value?: string;
+  language?: string;
+  onChange(value: string): any;
+}
+
+function VSCode({ value, language, onChange }: Props) {
   const [focused, setFocused] = useState(false);
 
   const { isDarkTheme } = useThemeContext();
@@ -100,7 +106,6 @@ function VSCode({ value, language, onChange }) {
         language={language}
         theme={isDarkTheme ? "OpenApiDark" : "OpenApiLight"}
         options={{
-          contentLeft: 0,
           lineNumbers: "off",
           scrollBeyondLastLine: false,
           scrollBeyondLastColumn: 3,
@@ -108,7 +113,7 @@ function VSCode({ value, language, onChange }) {
           minimap: { enabled: false },
           fontFamily:
             "SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace",
-          fontSize: "14.4",
+          fontSize: 14.4,
           overviewRulerLanes: 0,
           folding: false,
           lineDecorationsWidth: 0,

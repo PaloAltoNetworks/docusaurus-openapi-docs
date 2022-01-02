@@ -79,6 +79,10 @@ declare module "@theme/ApiPage" {
 }
 
 declare module "@theme/ApiItem" {
+  import type { Request } from "postman-collection";
+
+  import type { ApiItem } from "./types";
+
   export type ApiRoute = {
     readonly component: () => JSX.Element;
     readonly exact: boolean;
@@ -99,7 +103,7 @@ declare module "@theme/ApiItem" {
     readonly permalink?: string;
     readonly previous?: { readonly permalink: string; readonly title: string };
     readonly next?: { readonly permalink: string; readonly title: string };
-    readonly api?: any; // TODO
+    readonly api?: ApiItem & { postman: Request }; // TODO
   };
 
   export interface Props {

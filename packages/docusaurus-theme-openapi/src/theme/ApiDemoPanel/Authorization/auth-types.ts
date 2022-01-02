@@ -5,17 +5,17 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React from "react";
+export function getAuthDataKeys(security: { [key: string]: any }) {
+  // Bearer Auth
+  if (security.type === "http" && security.scheme === "bearer") {
+    return ["token"];
+  }
 
-import styles from "./styles.module.css";
+  // Basic Auth
+  if (security.type === "http" && security.scheme === "basic") {
+    return ["username", "password"];
+  }
 
-function FloatingButton({ children, onClick, label }) {
-  return (
-    <div className={styles.floatingButton}>
-      {label && <button onClick={onClick}>{label}</button>}
-      {children}
-    </div>
-  );
+  // none
+  return [];
 }
-
-export default FloatingButton;

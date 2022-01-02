@@ -7,27 +7,26 @@
 
 import React from "react";
 
-import { useSelector } from "react-redux";
-
+import { useTypedDispatch, useTypedSelector } from "../hooks";
 import FormItem from "./../FormItem";
 import FormSelect from "./../FormSelect";
-import { useActions } from "./../redux/actions";
+import { setAccept } from "./slice";
 
 function Accept() {
-  const acceptOptions = useSelector((state) => state.acceptOptions);
-  const accept = useSelector((state) => state.accept);
-  const { setAccept } = useActions();
+  const value = useTypedSelector((state) => state.accept.value);
+  const options = useTypedSelector((state) => state.accept.options);
+  const dispatch = useTypedDispatch();
 
-  if (acceptOptions.length <= 1) {
+  if (options.length <= 1) {
     return null;
   }
 
   return (
     <FormItem label="Accept">
       <FormSelect
-        options={acceptOptions}
-        value={accept}
-        onChange={(e) => setAccept(e.target.value)}
+        value={value}
+        options={options}
+        onChange={(e) => dispatch(setAccept(e.target.value))}
       />
     </FormItem>
   );

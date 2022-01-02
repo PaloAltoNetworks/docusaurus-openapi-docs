@@ -9,7 +9,13 @@ import React from "react";
 
 import styles from "./styles.module.css";
 
-function FormMultiSelect({ options, value, onChange }) {
+interface Props {
+  value?: string;
+  options: string[];
+  onChange?: React.ChangeEventHandler<HTMLSelectElement>;
+}
+
+function FormMultiSelect({ value, options, onChange }: Props) {
   if (options.length === 0) {
     return null;
   }

@@ -8,17 +8,13 @@
 import React, { useState } from "react";
 
 import clsx from "clsx";
-import produce from "immer";
-import { useSelector } from "react-redux";
 
-// @ts-ignore
 import FormItem from "../FormItem";
-// @ts-ignore
 import FormSelect from "../FormSelect";
-// @ts-ignore
 import FormTextInput from "../FormTextInput";
-import { useActions } from "../redux/actions";
+import { useTypedDispatch, useTypedSelector } from "../hooks";
 import styles from "../styles.module.css";
+import { AuthState, Scheme, setAuthData, setSelectedAuth } from "./slice";
 
 type Props = {
   mode: "locked" | "unlocked";
@@ -61,53 +57,68 @@ function LockButton({ mode, children, style, ...rest }: Props) {
   );
 }
 
+function validateData(selectedAuth: Scheme[], data: AuthState["data"]) {
+  for (const scheme of selectedAuth) {
+    if (data[scheme.key] === undefined) {
+      return false;
+    }
+    const hasMissingKeys = Object.values(data[scheme.key]).includes(undefined);
+    if (hasMissingKeys) {
+      return false;
+    }
+  }
+  return true;
+}
+
 function Authorization() {
-  const { setAuth, setSelectedAuthID } = useActions();
-  const auth = useSelector((state: any) => state.auth);
-  const selectedAuthID = useSelector((state: any) => state.selectedAuthID);
-  const authOptionIDs = useSelector((state: any) => state.authOptionIDs);
   const [editing, setEditing] = useState(false);
 
-  const noAuthorization = selectedAuthID === undefined;
+  const data = useTypedSelector((state) => state.auth.data);
+  const options = useTypedSelector((state) => state.auth.options);
+  const selected = useTypedSelector((state) => state.auth.selected);
 
-  if (noAuthorization) {
+  const dispatch = useTypedDispatch();
+
+  if (selected === undefined) {
     return null;
   }
 
-  const selectedAuthIndex = authOptionIDs.indexOf(selectedAuthID);
-  const selectedAuth = auth[selectedAuthIndex] as any[];
+  const selectedAuth = options[selected];
 
-  const values = selectedAuth.flat().flatMap((a) => Object.values(a.data));
-  const authenticated = !values.includes(undefined);
+  const authenticated = validateData(selectedAuth, data);
+
+  const optionKeys = Object.keys(options);
 
   if (editing) {
     return (
       <div className={styles.optionsPanel}>
-        {authOptionIDs.length > 1 && (
+        {optionKeys.length > 1 && (
           <FormItem label="Security Scheme">
             <FormSelect
-              options={authOptionIDs}
-              value={selectedAuthID}
-              onChange={(e: any) => {
-                setSelectedAuthID(e.target.value);
+              options={optionKeys}
+              value={selected}
+              onChange={(e) => {
+                dispatch(setSelectedAuth(e.target.value));
               }}
             />
           </FormItem>
         )}
-        {selectedAuth.map((a, i) => {
+        {selectedAuth.map((a) => {
           if (a.type === "http" && a.scheme === "bearer") {
             return (
-              <FormItem label="Bearer Token" key={selectedAuthID + "-bearer"}>
+              <FormItem label="Bearer Token" key={selected + "-bearer"}>
                 <FormTextInput
                   placeholder="Bearer Token"
-                  value={a.data.token ?? ""}
-                  onChange={(e: any) => {
-                    const newAuth = produce(auth, (draft: any) => {
-                      let value = (e.target.value ?? "").trim();
-                      value = !value ? undefined : value;
-                      draft[selectedAuthIndex][i].data.token = value;
-                    });
-                    setAuth(newAuth);
+                  value={data[a.key].token ?? ""}
+                  onChange={(e) => {
+                    const value = e.target.value.trim();
+                    dispatch(
+                      setAuthData({
+                        scheme: a.key,
+                        key: "token",
+                        value: value ? value : undefined,
+                      })
+                    );
                   }}
                 />
               </FormItem>
@@ -116,18 +127,20 @@ function Authorization() {
 
           if (a.type === "http" && a.scheme === "basic") {
             return (
-              <React.Fragment key={selectedAuthID + "-basic"}>
+              <React.Fragment key={selected + "-basic"}>
                 <FormItem label="Username">
                   <FormTextInput
                     placeholder="Username"
-                    value={a.data.username ?? ""}
-                    onChange={(e: any) => {
-                      const newAuth = produce(auth, (draft: any) => {
-                        let value = (e.target.value ?? "").trim();
-                        value = !value ? undefined : value;
-                        draft[selectedAuthIndex][i].data.username = value;
-                      });
-                      setAuth(newAuth);
+                    value={data[a.key].username ?? ""}
+                    onChange={(e) => {
+                      const value = e.target.value.trim();
+                      dispatch(
+                        setAuthData({
+                          scheme: a.key,
+                          key: "username",
+                          value: value ? value : undefined,
+                        })
+                      );
                     }}
                   />
                 </FormItem>
@@ -135,14 +148,16 @@ function Authorization() {
                   <FormTextInput
                     placeholder="Password"
                     password
-                    value={a.data.password ?? ""}
-                    onChange={(e: any) => {
-                      const newAuth = produce(auth, (draft: any) => {
-                        let value = (e.target.value ?? "").trim();
-                        value = !value ? undefined : value;
-                        draft[selectedAuthIndex][i].data.password = value;
-                      });
-                      setAuth(newAuth);
+                    value={data[a.key].password ?? ""}
+                    onChange={(e) => {
+                      const value = e.target.value.trim();
+                      dispatch(
+                        setAuthData({
+                          scheme: a.key,
+                          key: "password",
+                          value: value ? value : undefined,
+                        })
+                      );
                     }}
                   />
                 </FormItem>

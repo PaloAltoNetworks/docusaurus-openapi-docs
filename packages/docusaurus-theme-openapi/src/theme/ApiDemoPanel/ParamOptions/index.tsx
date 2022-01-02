@@ -7,43 +7,45 @@
 
 import React, { useState, useEffect } from "react";
 
-import { useSelector } from "react-redux";
+import { nanoid } from "@reduxjs/toolkit";
 
+import { useTypedDispatch, useTypedSelector } from "../hooks";
 import FormItem from "./../FormItem";
 import FormMultiSelect from "./../FormMultiSelect";
 import FormSelect from "./../FormSelect";
 import FormTextInput from "./../FormTextInput";
-import { useActions } from "./../redux/actions";
+import { Param, setParam } from "./slice";
 import styles from "./styles.module.css";
 
-function ParamOption({ param }) {
-  if (param.schema.type === "array" && param.schema.items.enum) {
+interface ParamProps {
+  param: Param;
+}
+
+function ParamOption({ param }: ParamProps) {
+  if (param.schema?.type === "array" && param.schema.items?.enum) {
     return <ParamMultiSelectFormItem param={param} />;
   }
 
-  if (param.schema.type === "array") {
+  if (param.schema?.type === "array") {
     return <ParamArrayFormItem param={param} />;
   }
 
-  if (param.schema.enum) {
+  if (param.schema?.enum) {
     return <ParamSelectFormItem param={param} />;
   }
 
-  if (param.schema.type === "boolean") {
+  if (param.schema?.type === "boolean") {
     return <ParamBooleanFormItem param={param} />;
   }
-
-  // NOTE: We used to support `password` type, but curl still shows it and
-  // Chrome's autocomplete is a huge dick.
 
   // integer, number, string, int32, int64, float, double, object, byte, binary,
   // date-time, date, password
   return <ParamTextFormItem param={param} />;
 }
 
-function ParamOptionWrapper({ param }) {
+function ParamOptionWrapper({ param }: ParamProps) {
   return (
-    <FormItem label={param.name} type={param.type}>
+    <FormItem label={param.name} type={param.in}>
       <ParamOption param={param} />
     </FormItem>
   );
@@ -52,10 +54,10 @@ function ParamOptionWrapper({ param }) {
 function ParamOptions() {
   const [showOptional, setShowOptional] = useState(false);
 
-  const pathParams = useSelector((state) => state.params.path);
-  const queryParams = useSelector((state) => state.params.query);
-  const cookieParams = useSelector((state) => state.params.cookie);
-  const headerParams = useSelector((state) => state.params.header);
+  const pathParams = useTypedSelector((state) => state.params.path);
+  const queryParams = useTypedSelector((state) => state.params.query);
+  const cookieParams = useTypedSelector((state) => state.params.cookie);
+  const headerParams = useTypedSelector((state) => state.params.header);
 
   const allParams = [
     ...pathParams,
@@ -132,17 +134,11 @@ function ParamOptions() {
   );
 }
 
-function uuidv4() {
-  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
-    (
-      c ^
-      (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-    ).toString(16)
-  );
-}
-
-function ArrayItem({ param, onChange }) {
-  if (param.schema.items.type === "boolean") {
+function ArrayItem({
+  param,
+  onChange,
+}: ParamProps & { onChange(value?: string): any }) {
+  if (param.schema?.items?.type === "boolean") {
     return (
       <FormSelect
         options={["---", "true", "false"]}
@@ -164,38 +160,41 @@ function ArrayItem({ param, onChange }) {
   );
 }
 
-function ParamArrayFormItem({ param }) {
-  const [items, setItems] = useState([]);
-  const { updateParam } = useActions();
+function ParamArrayFormItem({ param }: ParamProps) {
+  const [items, setItems] = useState<{ id: string; value?: string }[]>([]);
+  const dispatch = useTypedDispatch();
 
   function handleAddItem() {
     setItems((i) => [
       ...i,
       {
-        id: uuidv4(),
+        id: nanoid(),
       },
     ]);
   }
 
   useEffect(() => {
-    const values = items.map((item) => item.value).filter((item) => item);
+    const values = items
+      .map((item) => item.value)
+      .filter((item): item is string => !!item);
 
-    updateParam({
-      ...param,
-      value: values.length > 0 ? values : undefined,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [items]);
+    dispatch(
+      setParam({
+        ...param,
+        value: values.length > 0 ? values : undefined,
+      })
+    );
+  }, [dispatch, items, param]);
 
-  function handleDeleteItem(itemToDelete) {
+  function handleDeleteItem(itemToDelete: { id: string }) {
     return () => {
       const newItems = items.filter((i) => i.id !== itemToDelete.id);
       setItems(newItems);
     };
   }
 
-  function handleChangeItem(itemToUpdate) {
-    return (value) => {
+  function handleChangeItem(itemToUpdate: { id: string }) {
+    return (value: string) => {
       const newItems = items.map((i) => {
         if (i.id === itemToUpdate.id) {
           return { ...i, value: value };
@@ -238,67 +237,77 @@ function ParamArrayFormItem({ param }) {
   );
 }
 
-function ParamSelectFormItem({ param }) {
-  const { updateParam } = useActions();
+function ParamSelectFormItem({ param }: ParamProps) {
+  const dispatch = useTypedDispatch();
+
+  const options = param.schema?.enum ?? [];
 
   return (
     <FormSelect
-      options={["---", ...param.schema.enum]}
+      options={["---", ...(options as string[])]}
       onChange={(e) => {
         const val = e.target.value;
-        updateParam({
-          ...param,
-          value: val === "---" ? undefined : val,
-        });
+        dispatch(
+          setParam({
+            ...param,
+            value: val === "---" ? undefined : val,
+          })
+        );
       }}
     />
   );
 }
 
-function ParamBooleanFormItem({ param }) {
-  const { updateParam } = useActions();
+function ParamBooleanFormItem({ param }: ParamProps) {
+  const dispatch = useTypedDispatch();
 
   return (
     <FormSelect
       options={["---", "true", "false"]}
       onChange={(e) => {
         const val = e.target.value;
-        updateParam({
-          ...param,
-          value: val === "---" ? undefined : val,
-        });
+        dispatch(
+          setParam({
+            ...param,
+            value: val === "---" ? undefined : val,
+          })
+        );
       }}
     />
   );
 }
 
-function ParamMultiSelectFormItem({ param }) {
-  const { updateParam } = useActions();
+function ParamMultiSelectFormItem({ param }: ParamProps) {
+  const dispatch = useTypedDispatch();
+
+  const options = param.schema?.items?.enum ?? [];
 
   return (
     <FormMultiSelect
-      options={param.schema.items.enum}
+      options={options as string[]}
       onChange={(e) => {
         const values = Array.prototype.filter
           .call(e.target.options, (o) => o.selected)
           .map((o) => o.value);
 
-        updateParam({
-          ...param,
-          value: values.length > 0 ? values : undefined,
-        });
+        dispatch(
+          setParam({
+            ...param,
+            value: values.length > 0 ? values : undefined,
+          })
+        );
       }}
     />
   );
 }
 
-function ParamTextFormItem({ param }) {
-  const { updateParam } = useActions();
+function ParamTextFormItem({ param }: ParamProps) {
+  const dispatch = useTypedDispatch();
 
   return (
     <FormTextInput
       placeholder={param.description || param.name}
-      onChange={(e) => updateParam({ ...param, value: e.target.value })}
+      onChange={(e) => dispatch(setParam({ ...param, value: e.target.value }))}
     />
   );
 }

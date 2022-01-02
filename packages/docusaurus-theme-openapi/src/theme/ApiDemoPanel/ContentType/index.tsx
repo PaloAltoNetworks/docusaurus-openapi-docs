@@ -7,27 +7,26 @@
 
 import React from "react";
 
-import { useSelector } from "react-redux";
-
+import { useTypedDispatch, useTypedSelector } from "../hooks";
 import FormItem from "./../FormItem";
 import FormSelect from "./../FormSelect";
-import { useActions } from "./../redux/actions";
+import { setContentType } from "./slice";
 
 function ContentType() {
-  const contentTypeOptions = useSelector((state) => state.contentTypeOptions);
-  const contentType = useSelector((state) => state.contentType);
-  const { setContentType } = useActions();
+  const value = useTypedSelector((state) => state.contentType.value);
+  const options = useTypedSelector((state) => state.contentType.options);
+  const dispatch = useTypedDispatch();
 
-  if (contentTypeOptions.length <= 1) {
+  if (options.length <= 1) {
     return null;
   }
 
   return (
     <FormItem label="Content-Type">
       <FormSelect
-        options={contentTypeOptions}
-        value={contentType}
-        onChange={(e) => setContentType(e.target.value)}
+        value={value}
+        options={options}
+        onChange={(e) => dispatch(setContentType(e.target.value))}
       />
     </FormItem>
   );

@@ -7,9 +7,7 @@
 
 import React from "react";
 
-import { useSelector } from "react-redux";
-
-function colorForMethod(method) {
+function colorForMethod(method: string) {
   switch (method.toLowerCase()) {
     case "get":
       return "var(--openapi-code-blue)";
@@ -24,10 +22,12 @@ function colorForMethod(method) {
   }
 }
 
-function MethodEndpoint() {
-  const method = useSelector((state) => state.method);
-  const path = useSelector((state) => state.path);
+interface Props {
+  method: string;
+  path: string;
+}
 
+function MethodEndpoint({ method, path }: Props) {
   return (
     <pre
       style={{

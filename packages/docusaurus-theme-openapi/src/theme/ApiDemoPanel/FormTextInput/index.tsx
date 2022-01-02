@@ -9,7 +9,14 @@ import React from "react";
 
 import styles from "./styles.module.css";
 
-function FormTextInput({ placeholder, value, password, onChange }) {
+interface Props {
+  value?: string;
+  placeholder?: string;
+  password?: boolean;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+}
+
+function FormTextInput({ value, placeholder, password, onChange }: Props) {
   return (
     <input
       className={styles.input}
