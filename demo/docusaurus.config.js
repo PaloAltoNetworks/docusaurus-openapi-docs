@@ -103,7 +103,14 @@ const config = {
       },
       footer: {
         style: "dark",
-        copyright: `Copyright © ${new Date().getFullYear()} Cloud Annotations, Inc. Built with Docusaurus.`,
+        logo: {
+          alt: "Deploys by Netlify",
+          src: "https://www.netlify.com/img/global/badges/netlify-color-accent.svg",
+          width: 160,
+          height: 51,
+          href: "https://www.netlify.com",
+        },
+        copyright: `Copyright © ${new Date().getFullYear()} Cloud Annotations. Built with Docusaurus.`,
       },
       prism: {
         theme: lightCodeTheme,
