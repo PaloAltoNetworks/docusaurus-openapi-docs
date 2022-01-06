@@ -7,35 +7,48 @@
 
 import React, { useState } from "react";
 
-import Editor, { loader } from "@monaco-editor/react";
+import Editor, { Monaco } from "@monaco-editor/react";
 import useThemeContext from "@theme/hooks/useThemeContext";
 
 import styles from "./styles.module.css";
 
-const LIGHT_BRIGHT = "1c1e21";
-const LIGHT_DIM = "aaaaaa";
-const LIGHT_BLUE = "648bea";
-const LIGHT_GREEN = "39a351";
-const LIGHT_BACKGROUND = getComputedStyle(
-  document.documentElement
-).getPropertyValue("--openapi-monaco-background-color");
-const LIGHT_SELECT = "#ebedef";
+interface Props {
+  value?: string;
+  language?: string;
+  onChange(value: string): any;
+}
 
-const DARK_BRIGHT = "f5f6f7";
-const DARK_DIM = "7f7f7f";
-const DARK_BLUE = "a4cdfe";
-const DARK_GREEN = "85d996";
-const DARK_BACKGROUND = getComputedStyle(
-  document.documentElement
-).getPropertyValue("--openapi-monaco-background-color");
-const DARK_SELECT = "#515151";
+function VSCode({ value, language, onChange }: Props) {
+  const [focused, setFocused] = useState(false);
 
-loader
-  .init()
-  .then((monaco) => {
+  const { isDarkTheme } = useThemeContext();
+
+  function handleEditorWillMount(monaco: Monaco) {
+    const styles = getComputedStyle(document.documentElement);
+    function getColor(property: string) {
+      // Weird chrome bug, returns " #ffffff " instead of "#ffffff", see: https://github.com/cloud-annotations/docusaurus-openapi/issues/144
+      return styles.getPropertyValue(property).trim();
+    }
+
+    const LIGHT_BRIGHT = "#1c1e21";
+    const LIGHT_DIM = getColor("--openapi-code-dim-light");
+    const LIGHT_BLUE = getColor("--openapi-code-blue-light");
+    const LIGHT_GREEN = getColor("--openapi-code-green-light");
+    const LIGHT_BACKGROUND = getColor(
+      "--openapi-monaco-background-color-light"
+    );
+    const LIGHT_SELECT = "#ebedef";
+
+    const DARK_BRIGHT = "#f5f6f7";
+    const DARK_DIM = getColor("--openapi-code-dim-dark");
+    const DARK_BLUE = getColor("--openapi-code-blue-dark");
+    const DARK_GREEN = getColor("--openapi-code-green-dark");
+    const DARK_BACKGROUND = getColor("--openapi-monaco-background-color-dark");
+    const DARK_SELECT = "#515151";
+
     monaco.editor.defineTheme("OpenApiDark", {
       base: "vs-dark",
-      inherit: false,
+      inherit: true,
       rules: [
         { token: "", foreground: DARK_BRIGHT },
         { token: "string.key.json", foreground: DARK_BRIGHT },
@@ -60,7 +73,7 @@ loader
     });
     monaco.editor.defineTheme("OpenApiLight", {
       base: "vs",
-      inherit: false,
+      inherit: true,
       rules: [
         { token: "", foreground: LIGHT_BRIGHT },
         { token: "string.key.json", foreground: LIGHT_BRIGHT },
@@ -83,21 +96,7 @@ loader
         "editor.selectionBackground": LIGHT_SELECT,
       },
     });
-  })
-  .catch((error) =>
-    console.error("An error occurred during initialization of Monaco: ", error)
-  );
-
-interface Props {
-  value?: string;
-  language?: string;
-  onChange(value: string): any;
-}
-
-function VSCode({ value, language, onChange }: Props) {
-  const [focused, setFocused] = useState(false);
-
-  const { isDarkTheme } = useThemeContext();
+  }
 
   return (
     <div className={focused ? styles.monacoFocus : styles.monaco}>
@@ -105,6 +104,7 @@ function VSCode({ value, language, onChange }: Props) {
         value={value}
         language={language}
         theme={isDarkTheme ? "OpenApiDark" : "OpenApiLight"}
+        beforeMount={handleEditorWillMount}
         options={{
           lineNumbers: "off",
           scrollBeyondLastLine: false,

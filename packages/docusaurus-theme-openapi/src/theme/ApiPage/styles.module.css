@@ -1,15 +1,36 @@
 :root {
+  --openapi-code-dim-dark: #7f7f7f;
+  --openapi-code-red-dark: #fc929e;
+  --openapi-code-orange-dark: #f8b886;
+  --openapi-code-green-dark: #85d996;
+  --openapi-code-blue-dark: #a4cdfe;
+  --openapi-code-purple-dark: #d9a0f9;
+  --openapi-monaco-background-color-dark: #18191a;
+
+  --openapi-code-dim-light: #aaaaaa;
+  --openapi-code-red-light: #f44336;
+  --openapi-code-orange-light: var(
+    --ifm-code-color
+  ); /* orange looks bad on white background */
+  --openapi-code-green-light: #388e3c;
+  --openapi-code-blue-light: #1976d2;
+  --openapi-code-purple-light: #ab47bc;
+  --openapi-monaco-background-color-light: #ffffff;
+
+  --openapi-code-dim: var(--openapi-code-dim-light);
+  --openapi-code-red: var(--openapi-code-red-light);
+  --openapi-code-orange: var(--openapi-code-orange-light);
+  --openapi-code-green: var(--openapi-code-green-light);
+  --openapi-code-blue: var(--openapi-code-blue-light);
+  --openapi-code-purple: var(--openapi-code-purple-light);
+  --openapi-monaco-background-color: var(
+    --openapi-monaco-background-color-light
+  );
+
+  --openapi-monaco-border-color: #dadde1;
+
   --api-sidebar-width: 300px;
   --api-sidebar-hidden-width: 30px;
-
-  --openapi-code-dim: #aaaaaa;
-
-  --openapi-code-red: #f44336;
-  /* orange looks bad on white background */
-  --openapi-code-orange: var(--ifm-code-color);
-  --openapi-code-green: #388e3c;
-  --openapi-code-blue: #1976d2;
-  --openapi-code-purple: #ab47bc;
 
   --openapi-required: var(--openapi-code-red);
 
@@ -21,9 +42,6 @@
   --openapi-input-border: var(--ifm-color-primary);
   --openapi-button-dissabled: #c6c6c6;
 
-  --openapi-monaco-background-color: #ffffff;
-  --openapi-monaco-border-color: #dadde1;
-
   --openapi-dropzone-color: rgba(0, 0, 0, 0.5);
   --openapi-dropzone-hover-shim: rgba(235, 237, 240, 0.8);
 
@@ -31,12 +49,18 @@
 }
 
 html[data-theme="dark"] {
-  --openapi-code-dim: #7f7f7f;
-  --openapi-code-red: #fc929e;
-  --openapi-code-orange: #f8b886;
-  --openapi-code-green: #85d996;
-  --openapi-code-blue: #a4cdfe;
-  --openapi-code-purple: #d9a0f9;
+  --openapi-code-dim: var(--openapi-code-dim-dark);
+  --openapi-code-red: var(--openapi-code-red-dark);
+  --openapi-code-orange: var(--openapi-code-orange-dark);
+  --openapi-code-green: var(--openapi-code-green-dark);
+  --openapi-code-blue: var(--openapi-code-blue-dark);
+  --openapi-code-purple: var(--openapi-code-purple-dark);
+  --openapi-monaco-background-color: var(
+    --openapi-monaco-background-color-dark
+  );
+
+  --openapi-monaco-border-color: #606770;
+
   --openapi-required: var(--openapi-code-red);
 
   --openapi-card-background-color: var(--ifm-card-background-color);
@@ -44,9 +68,6 @@ html[data-theme="dark"] {
   --openapi-input-background: #393939;
   --openapi-input-border: white;
   --openapi-button-dissabled: #525252;
-
-  --openapi-monaco-background-color: #18191a;
-  --openapi-monaco-border-color: #606770;
 
   --openapi-dropzone-color: rgba(255, 255, 255, 0.3);
   --openapi-dropzone-hover-shim: rgba(57, 57, 57, 0.8);

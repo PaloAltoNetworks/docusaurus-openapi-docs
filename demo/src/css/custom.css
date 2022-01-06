@@ -18,7 +18,7 @@ html[data-theme="dark"] {
   --ifm-table-stripe-background: var(--ifm-table-background);
   --openapi-input-background: rgba(110, 118, 129, 0.4) !important;
   --openapi-monaco-border-color: #21262d !important;
-  --openapi-monaco-background-color: #0d1117 !important;
+  --openapi-monaco-background-color-dark: #0d1117 !important;
   --ifm-dropdown-background-color: #161b22;
 }
 
