@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React, { useState } from "react";
+import React from "react";
 
 import { RequestBodyObject } from "docusaurus-plugin-openapi/src/openapi/types";
 
@@ -24,7 +24,6 @@ import {
   setStringFormBody,
   setStringRawBody,
 } from "./slice";
-import styles from "./styles.module.css";
 
 interface Props {
   jsonRequestBodyExample: string;
@@ -32,72 +31,23 @@ interface Props {
 }
 
 function BodyWrap({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
-  const [showOptional, setShowOptional] = useState(false);
   const contentType = useTypedSelector((state) => state.contentType.value);
-  const required = requestBodyMetadata?.required;
+
+  // NOTE: We used to check if body was required, but opted to always show the request body
+  // to reduce confusion, see: https://github.com/cloud-annotations/docusaurus-openapi/issues/145
 
   // No body
   if (contentType === undefined) {
     return null;
   }
 
-  if (required) {
-    return (
-      <>
-        <ContentType />
-        <Body
-          requestBodyMetadata={requestBodyMetadata}
-          jsonRequestBodyExample={jsonRequestBodyExample}
-        />
-      </>
-    );
-  }
   return (
     <>
-      <button
-        className={styles.showMoreButton}
-        onClick={() => setShowOptional((prev) => !prev)}
-      >
-        <span
-          style={{
-            width: "1.5em",
-            display: "inline-block",
-            textAlign: "center",
-          }}
-        >
-          <span className={showOptional ? styles.plusExpanded : styles.plus}>
-            <div>
-              <svg
-                style={{
-                  fill: "currentColor",
-                  width: "10px",
-                  height: "10px",
-                }}
-                height="16"
-                viewBox="0 0 16 16"
-                width="16"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M9 7h6a1 1 0 0 1 0 2H9v6a1 1 0 0 1-2 0V9H1a1 1 0 1 1 0-2h6V1a1 1 0 1 1 2 0z"
-                  fillRule="evenodd"
-                ></path>
-              </svg>
-            </div>
-          </span>
-        </span>
-        {showOptional ? "Hide optional body" : "Show optional body"}
-      </button>
-
-      <div className={showOptional ? styles.showOptions : styles.hideOptions}>
-        <>
-          <ContentType />
-          <Body
-            requestBodyMetadata={requestBodyMetadata}
-            jsonRequestBodyExample={jsonRequestBodyExample}
-          />
-        </>
-      </div>
+      <ContentType />
+      <Body
+        requestBodyMetadata={requestBodyMetadata}
+        jsonRequestBodyExample={jsonRequestBodyExample}
+      />
     </>
   );
 }
@@ -127,11 +77,6 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
   // Show form:
   // - multipart/form-data
   // - application/x-www-form-urlencoded
-
-  // No body
-  if (contentType === undefined) {
-    return null;
-  }
 
   const schema = requestBodyMetadata?.content?.[contentType]?.schema;
 
@@ -259,6 +204,10 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
         value={exampleBodyString}
         language={language}
         onChange={(value) => {
+          if (value.trim() === "") {
+            dispatch(clearRawBody());
+            return;
+          }
           dispatch(setStringRawBody(value));
         }}
       />
