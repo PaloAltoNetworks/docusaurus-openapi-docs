@@ -37,7 +37,7 @@ function ApiDemoPanel({ item }: { item: NonNullable<Metadata["api"]> }) {
 
   const acceptArray = Array.from(
     new Set(
-      Object.values(item.responses)
+      Object.values(item.responses ?? {})
         .map((response) => Object.keys(response.content ?? {}))
         .flat()
     )
