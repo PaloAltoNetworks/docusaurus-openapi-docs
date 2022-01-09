@@ -1,3 +1,16 @@
+## 0.5.0 (Jan 9, 2022)
+
+High level enhancements
+
+- All theme components are now TypeScript 🎉
+
+Other enhancements and bug fixes
+
+- Fix small theme regression ([#151](https://github.com/cloud-annotations/docusaurus-openapi/pull/151))
+- Clear request body when empty ([#147](https://github.com/cloud-annotations/docusaurus-openapi/pull/147))
+- Fix code editor background color bug ([#146](https://github.com/cloud-annotations/docusaurus-openapi/pull/146))
+- Update theme components to TypeScript ([#130](https://github.com/cloud-annotations/docusaurus-openapi/pull/130))
+
 ## 0.4.2 (Dec 30, 2021)
 
 Enhancements and bug fixes
