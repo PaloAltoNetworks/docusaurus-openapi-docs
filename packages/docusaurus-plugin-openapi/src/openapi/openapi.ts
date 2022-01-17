@@ -23,7 +23,7 @@ import sdk, { Collection } from "postman-collection";
 
 import { ApiMetadata, ApiPageMetadata, InfoPageMetadata } from "../types";
 import { sampleFromSchema } from "./createExample";
-import { OpenApiObject, OpenApiObjectWithRef } from "./types";
+import { OpenApiObject, OpenApiObjectWithRef, TagObject } from "./types";
 
 /**
  * Finds any reference objects in the OpenAPI definition and resolves them to a finalized value.
@@ -151,6 +151,9 @@ function createItems(openapiData: OpenApiObject): ApiMetadata[] {
         frontMatter: {},
         api: {
           ...defaults,
+          tags: operationObject.tags?.map((tagName) =>
+            getTagDisplayName(tagName, openapiData.tags ?? [])
+          ),
           method,
           path,
           servers,
@@ -328,4 +331,26 @@ export async function processOpenapiFile(
   bindCollectionToApiItems(items, postmanCollection);
 
   return items;
+}
+
+// order for picking items as a display name of tags
+const tagDisplayNameProperties = ["x-displayName", "name"] as const;
+
+function getTagDisplayName(tagName: string, tags: TagObject[]): string {
+  // find the very own tagObject
+  const tagObject = tags.find((tagObject) => tagObject.name === tagName) ?? {
+    // if none found, just fake one
+    name: tagName,
+  };
+
+  // return the first found and filled value from the property list
+  for (const property of tagDisplayNameProperties) {
+    const displayName = tagObject[property];
+    if (typeof displayName === "string") {
+      return displayName;
+    }
+  }
+
+  // always default to the tagName
+  return tagName;
 }

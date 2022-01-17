@@ -296,6 +296,7 @@ export interface TagObject {
   name: string;
   description?: string;
   externalDocs?: ExternalDocumentationObject;
+  "x-displayName"?: string;
 }
 
 export interface ReferenceObject {
