@@ -9,7 +9,7 @@ describe("test", () => {
   it("loads Petstore page", () => {
     cy.visit("/petstore");
     navTo(
-      [/pet/i, /add a new pet to the store/i],
+      [/^pet$/i, /add a new pet to the store/i],
       /add a new pet to the store/i
     );
   });
