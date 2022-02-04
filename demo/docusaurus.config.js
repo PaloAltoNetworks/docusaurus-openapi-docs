@@ -10,7 +10,7 @@ const config = {
   tagline: "OpenAPI plugin for generating API reference docs in Docusaurus v2.",
   url: "https://docusaurus-openapi.netlify.app",
   baseUrl: "/",
-  onBrokenLinks: "throw",
+  onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
   organizationName: "cloud-annotations", // Usually your GitHub org/user name.
@@ -68,7 +68,7 @@ const config = {
     /** @type {import('docusaurus-preset-openapi').ThemeConfig} */
     ({
       colorMode: {
-        disableSwitch: true,
+        disableSwitch: false,
         defaultMode: "dark",
       },
       navbar: {
