@@ -5,11 +5,16 @@
  */
 
 :root {
+  --ifm-color-primary: #58a6ff;
+  --ifm-background-color: #ffffff;
   --ifm-code-font-size: 95%;
+  --openapi-code-green: var(--ifm-color-success) !important;
+  --openapi-code-blue: var(--ifm-color-primary) !important;
+  --openapi-code-red: var(--ifm-color-danger) !important;
+  --openapi-code-orange: var(--ifm-color-warning) !important;
 }
 
 html[data-theme="dark"] {
-  --ifm-color-primary: #58a6ff;
   --ifm-background-color: #0d1117;
   --ifm-navbar-background-color: #0d1117;
   --ifm-color-emphasis-300: #30363d;
@@ -42,11 +47,6 @@ html[data-theme="dark"] {
   font-size: 90%;
 }
 
-.theme-api-markdown table {
-  --ifm-code-background: #161b22;
-  --ifm-table-border-color: #21262d;
-}
-
 .theme-api-markdown table table {
   width: calc(100% - 16px) !important;
   margin-left: 16px;
@@ -55,6 +55,11 @@ html[data-theme="dark"] {
 .theme-api-markdown table table {
   box-shadow: -15px 0px 0px 0px var(--ifm-background-color),
     -16px 0px 0px 0px var(--ifm-table-border-color);
+}
+
+.theme-api-markdown .alert table {
+  box-shadow: -15px 0px 0px 0px var(--ifm-alert-background-color),
+    -16px 0px 0px 0px var(--ifm-alert-border-color);
 }
 
 .theme-api-markdown table table tr:first-child {
