@@ -12,6 +12,7 @@
   --openapi-code-blue: var(--ifm-color-primary) !important;
   --openapi-code-red: var(--ifm-color-danger) !important;
   --openapi-code-orange: var(--ifm-color-warning) !important;
+  --ifm-table-stripe-background: transparent;
 }
 
 html[data-theme="dark"] {
