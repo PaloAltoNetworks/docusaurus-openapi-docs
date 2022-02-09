@@ -12,7 +12,7 @@ import { createDeprecationNotice } from "./createDeprecationNotice";
 import { createDescription } from "./createDescription";
 import { createParamsTable } from "./createParamsTable";
 import { createRequestBodyTable } from "./createRequestBodyTable";
-import { createStatusCodesTable } from "./createStatusCodesTable";
+import { createStatusCodes } from "./createStatusCodes";
 import { createVersionBadge } from "./createVersionBadge";
 import { render } from "./utils";
 
@@ -36,7 +36,7 @@ export function createApiPageMD({
     createParamsTable({ parameters, type: "header" }),
     createParamsTable({ parameters, type: "cookie" }),
     createRequestBodyTable({ title: "Request Body", body: requestBody }),
-    createStatusCodesTable({ responses }),
+    createStatusCodes({ responses }),
   ]);
 }
 
