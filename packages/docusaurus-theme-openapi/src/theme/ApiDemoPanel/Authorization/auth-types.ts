@@ -16,6 +16,11 @@ export function getAuthDataKeys(security: { [key: string]: any }) {
     return ["username", "password"];
   }
 
+  // API Auth
+  if (security.type === "apiKey") {
+    return ["apiKey"];
+  }
+
   // none
   return [];
 }
