@@ -57,9 +57,9 @@ const config = {
     [
       "docusaurus-plugin-openapi",
       {
-        id: "multi-spec",
-        path: "examples",
-        routeBasePath: "multi-spec",
+        id: "cspm",
+        path: "examples/cspm.yaml",
+        routeBasePath: "cspm",
       },
     ],
   ],
@@ -90,7 +90,7 @@ const config = {
             items: [
               { to: "/petstore", label: "Petstore" },
               { to: "/cos", label: "Cloud Object Storage" },
-              { to: "/multi-spec", label: "Multi-spec" },
+              { to: "/cspm", label: "CSPM" },
             ],
           },
           {
