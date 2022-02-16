@@ -105,7 +105,7 @@ export function createStatusCodes({ responses }: Props) {
                     ? "alert--danger"
                     : parseInt(code) >= 200 && parseInt(code) < 300
                     ? "alert--success"
-                    : "alert--warning",
+                    : "alert--info",
                 children: [
                   createDetailsSummary({
                     children: create("span", {
