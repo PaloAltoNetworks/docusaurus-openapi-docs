@@ -64,6 +64,11 @@ const config = {
     ],
   ],
 
+  customFields: {
+    showManualAuthentication: false,
+    showExecuteButton: false,
+  },
+
   themeConfig:
     /** @type {import('docusaurus-preset-openapi').ThemeConfig} */
     ({

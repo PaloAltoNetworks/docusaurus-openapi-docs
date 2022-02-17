@@ -11,3 +11,8 @@ export interface ThemeConfig {
     authPersistance?: false | "localStorage" | "sessionStorage";
   };
 }
+
+export interface CustomFields {
+  showManualAuthentication?: boolean;
+  showExecuteButton?: boolean;
+}

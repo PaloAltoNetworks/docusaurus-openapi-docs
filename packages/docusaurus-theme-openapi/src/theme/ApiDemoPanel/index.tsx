@@ -13,7 +13,7 @@ import { ParameterObject } from "docusaurus-plugin-openapi/src/openapi/types";
 import sdk from "postman-collection";
 import { Provider } from "react-redux";
 
-import { ThemeConfig } from "../../types";
+import { CustomFields, ThemeConfig } from "../../types";
 import Accept from "./Accept";
 import Authorization from "./Authorization";
 import StaticAuthorization from "./StaticAuthorization";
@@ -32,8 +32,9 @@ import styles from "./styles.module.css";
 function ApiDemoPanel({ item }: { item: NonNullable<Metadata["api"]> }) {
   const { siteConfig } = useDocusaurusContext();
   const themeConfig = siteConfig.themeConfig as ThemeConfig;
+  const customFields = siteConfig.customFields as CustomFields;
+  const { showExecuteButton, showManualAuthentication } = customFields;
   const options = themeConfig.api;
-
   const postman = new sdk.Request(item.postman);
 
   const acceptArray = Array.from(
@@ -87,7 +88,7 @@ function ApiDemoPanel({ item }: { item: NonNullable<Metadata["api"]> }) {
   return (
     <Provider store={store2}>
       <div style={{ marginTop: "3.5em" }}>
-        {/* <Authorization /> Will be conditionally rendered based on plugin boolean*/}
+        {showManualAuthentication && <Authorization />}
 
         {item.operationId !== undefined && (
           <div style={{ marginBottom: "var(--ifm-table-cell-padding)" }}>
@@ -117,7 +118,9 @@ function ApiDemoPanel({ item }: { item: NonNullable<Metadata["api"]> }) {
           codeSamples={(item as any)["x-code-samples"] ?? []}
         />
 
-        {/* <Execute postman={postman} proxy={options?.proxy} /> Will need to conditionally render based on plugin boolean*/}
+        {showExecuteButton && (
+          <Execute postman={postman} proxy={options?.proxy} />
+        )}
 
         <Response />
       </div>
