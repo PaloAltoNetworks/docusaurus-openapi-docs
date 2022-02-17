@@ -269,6 +269,23 @@ function buildPostmanRequest(
       });
       continue;
     }
+
+    // API Key
+    if (a.type === "apiKey" && a.in === "header") {
+      const { apikey } = auth.data[a.key];
+      if (apikey === undefined) {
+        otherHeaders.push({
+          key: a.name,
+          value: "API_KEY_VALUE",
+        });
+        continue;
+      }
+      otherHeaders.push({
+        key: a.name,
+        value: apikey,
+      });
+      continue;
+    }
   }
 
   setHeaders(
