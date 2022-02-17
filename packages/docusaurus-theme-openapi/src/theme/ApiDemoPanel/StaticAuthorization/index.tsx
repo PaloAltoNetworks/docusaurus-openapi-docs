@@ -15,7 +15,7 @@ function StaticAuthorization() {
         if (auth.type === "apiKey") {
           return (
             <React.Fragment key={selected + "-apiKey"}>
-              <b>{auth.type} Authorization</b>
+              <b>Authorization: {auth.name}</b>
               <pre
                 style={{
                   display: "flex",
