@@ -16,6 +16,7 @@ import { Provider } from "react-redux";
 import { ThemeConfig } from "../../types";
 import Accept from "./Accept";
 import Authorization from "./Authorization";
+import StaticAuthorization from "./StaticAuthorization";
 import { createAuth } from "./Authorization/slice";
 import Body from "./Body";
 import Curl from "./Curl";
@@ -86,7 +87,7 @@ function ApiDemoPanel({ item }: { item: NonNullable<Metadata["api"]> }) {
   return (
     <Provider store={store2}>
       <div style={{ marginTop: "3.5em" }}>
-        <Authorization />
+        {/* <Authorization /> Will be conditionally rendered based on plugin boolean*/}
 
         {item.operationId !== undefined && (
           <div style={{ marginBottom: "var(--ifm-table-cell-padding)" }}>
@@ -97,6 +98,8 @@ function ApiDemoPanel({ item }: { item: NonNullable<Metadata["api"]> }) {
         )}
 
         <MethodEndpoint method={method} path={path} />
+
+        <StaticAuthorization />
 
         <div className={styles.optionsPanel}>
           <ParamOptions />
@@ -114,7 +117,7 @@ function ApiDemoPanel({ item }: { item: NonNullable<Metadata["api"]> }) {
           codeSamples={(item as any)["x-code-samples"] ?? []}
         />
 
-        <Execute postman={postman} proxy={options?.proxy} />
+        {/* <Execute postman={postman} proxy={options?.proxy} /> Will need to conditionally render based on plugin boolean*/}
 
         <Response />
       </div>
