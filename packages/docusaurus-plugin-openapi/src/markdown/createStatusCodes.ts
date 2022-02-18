@@ -7,9 +7,9 @@
 
 import { ApiItem } from "../types";
 import { createDescription } from "./createDescription";
-import { createSchemaTable } from "./createSchemaTable";
 import { createDetails } from "./createDetails";
 import { createDetailsSummary } from "./createDetailsSummary";
+import { createSchemaTable } from "./createSchemaTable";
 import { create } from "./utils";
 
 interface Props {
