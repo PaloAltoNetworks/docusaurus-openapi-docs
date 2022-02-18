@@ -29,6 +29,8 @@ export interface PluginOptions extends RemarkAndRehypePluginOptions {
   admonitions: Record<string, unknown>;
   sidebarCollapsible: boolean;
   sidebarCollapsed: boolean;
+  showExecuteButton: boolean;
+  showManualAuthentication: boolean;
 }
 
 export interface LoadedContent {

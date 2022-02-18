@@ -80,6 +80,8 @@ export default function pluginOpenAPI(
         apiItemComponent,
         sidebarCollapsed,
         sidebarCollapsible,
+        showExecuteButton,
+        showManualAuthentication,
       } = options;
       const { addRoute, createData } = actions;
 
@@ -110,6 +112,8 @@ export default function pluginOpenAPI(
           exact: true,
           modules: {
             content: markdown,
+            showExecuteButton,
+            showManualAuthentication,
           },
           sidebar: sidebarName,
         };

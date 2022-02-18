@@ -15,13 +15,21 @@ import clsx from "clsx";
 
 import styles from "./styles.module.css";
 
-let ApiDemoPanel = (_: { item: any }) => <div style={{ marginTop: "3.5em" }} />;
+let ApiDemoPanel = (_: {
+  item: any;
+  showExecuteButton: boolean;
+  showManualAuthentication: boolean;
+}) => <div style={{ marginTop: "3.5em" }} />;
 if (ExecutionEnvironment.canUseDOM) {
   ApiDemoPanel = require("@theme/ApiDemoPanel").default;
 }
 
 function ApiItem(props: Props): JSX.Element {
-  const { content: ApiContent } = props;
+  const {
+    content: ApiContent,
+    showExecuteButton,
+    showManualAuthentication,
+  } = props;
   const { metadata, frontMatter } = ApiContent;
   const { image, keywords } = frontMatter;
   const { description, title, api, previous, next } = metadata;
@@ -43,7 +51,13 @@ function ApiItem(props: Props): JSX.Element {
           </div>
         </div>
         <div className={clsx("col", api ? "col--5" : "col--3")}>
-          {api && <ApiDemoPanel item={api} />}
+          {api && (
+            <ApiDemoPanel
+              item={api}
+              showExecuteButton={showExecuteButton}
+              showManualAuthentication={showManualAuthentication}
+            />
+          )}
         </div>
       </div>
     </>

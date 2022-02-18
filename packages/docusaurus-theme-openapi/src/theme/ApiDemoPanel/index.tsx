@@ -29,11 +29,17 @@ import Server from "./Server";
 import { createStoreWithState } from "./store";
 import styles from "./styles.module.css";
 
-function ApiDemoPanel({ item }: { item: NonNullable<Metadata["api"]> }) {
+function ApiDemoPanel({
+  item,
+  showExecuteButton,
+  showManualAuthentication,
+}: {
+  item: NonNullable<Metadata["api"]>;
+  showExecuteButton: boolean;
+  showManualAuthentication: boolean;
+}) {
   const { siteConfig } = useDocusaurusContext();
   const themeConfig = siteConfig.themeConfig as ThemeConfig;
-  const customFields = siteConfig.customFields as CustomFields;
-  const { showExecuteButton, showManualAuthentication } = customFields;
   const options = themeConfig.api;
   const postman = new sdk.Request(item.postman);
 

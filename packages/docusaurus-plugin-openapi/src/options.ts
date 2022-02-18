@@ -32,6 +32,8 @@ export const DEFAULT_OPTIONS: Omit<PluginOptions, "id" | "sidebarPath"> = {
   admonitions: {},
   sidebarCollapsible: true,
   sidebarCollapsed: true,
+  showExecuteButton: true,
+  showManualAuthentication: true,
 };
 
 export const OptionsSchema = Joi.object({
@@ -55,6 +57,10 @@ export const OptionsSchema = Joi.object({
   admonitions: Joi.alternatives()
     .try(AdmonitionsSchema, Joi.boolean().invalid(true))
     .default(DEFAULT_OPTIONS.admonitions),
+  showExecuteButton: Joi.boolean().default(DEFAULT_OPTIONS.showExecuteButton),
+  showManualAuthentication: Joi.boolean().default(
+    DEFAULT_OPTIONS.showManualAuthentication
+  ),
 });
 
 export function validateOptions({

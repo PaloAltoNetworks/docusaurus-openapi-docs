@@ -60,14 +60,11 @@ const config = {
         id: "multi-spec",
         path: "examples",
         routeBasePath: "multi-spec",
+        showManualAuthentication: true,
+        showExecuteButton: true,
       },
     ],
   ],
-
-  customFields: {
-    showManualAuthentication: false,
-    showExecuteButton: false,
-  },
 
   themeConfig:
     /** @type {import('docusaurus-preset-openapi').ThemeConfig} */
