@@ -7,11 +7,6 @@
 
 import path from "path";
 
-import {
-  CategoryMetadataFile,
-  CategoryMetadataFilenameBase,
-} from "@docusaurus/plugin-content-docs/lib/sidebars/generator";
-import { validateCategoryMetadataFile } from "@docusaurus/plugin-content-docs/lib/sidebars/validation";
 import { posixPath } from "@docusaurus/utils";
 import chalk from "chalk";
 import clsx from "clsx";
@@ -25,7 +20,9 @@ import type {
   PropSidebar,
   PropSidebarItemCategory,
 } from "../types";
+import { CategoryMetadataFile } from "../types";
 import { ApiPageMetadata } from "../types";
+import { validateCategoryMetadataFile } from "./validation";
 
 interface Options {
   contentPath: string;
@@ -52,6 +49,7 @@ function isInfoItem(item: Item): item is InfoItem {
 
 const Terminator = "."; // a file or folder can never be "."
 const BreadcrumbSeparator = "/";
+const CategoryMetadataFilenameBase = "_category_";
 function getBreadcrumbs(dir: string) {
   if (dir === Terminator) {
     // this isn't actually needed, but removing would result in an array: [".", "."]
