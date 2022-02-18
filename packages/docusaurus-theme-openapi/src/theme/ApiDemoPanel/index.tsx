@@ -13,7 +13,7 @@ import { ParameterObject } from "docusaurus-plugin-openapi/src/openapi/types";
 import sdk from "postman-collection";
 import { Provider } from "react-redux";
 
-import { CustomFields, ThemeConfig } from "../../types";
+import { ThemeConfig } from "../../types";
 import Accept from "./Accept";
 import Authorization from "./Authorization";
 import SecuritySchemes from "./SecuritySchemes";
