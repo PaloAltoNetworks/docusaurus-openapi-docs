@@ -20,7 +20,7 @@ import type {
   PropSidebar,
   PropSidebarItemCategory,
 } from "../types";
-import { CategoryMetadataFile } from "../types";
+import { CategoryMetadataFile } from "./types";
 import { ApiPageMetadata } from "../types";
 import { validateCategoryMetadataFile } from "./validation";
 
