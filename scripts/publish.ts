@@ -15,7 +15,7 @@ import { createDryRun } from "./utils/dry-run";
 import { getOutput } from "./utils/get-output";
 import { printBanner } from "./utils/print-utils";
 
-const ORG = "cloud-annotations";
+const ORG = "PaloAltoNetworks";
 const REPO = "docusaurus-openapi";
 let REPO_ROOT = undefined;
 
