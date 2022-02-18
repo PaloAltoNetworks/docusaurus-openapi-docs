@@ -1,7 +1,7 @@
 import React from "react";
 import { useTypedSelector } from "../hooks";
 
-function StaticAuthorization() {
+function SecuritySchemes() {
   const options = useTypedSelector((state) => state.auth.options);
   const selected = useTypedSelector((state) => state.auth.selected);
 
@@ -38,4 +38,4 @@ function StaticAuthorization() {
   );
 }
 
-export default StaticAuthorization;
+export default SecuritySchemes;

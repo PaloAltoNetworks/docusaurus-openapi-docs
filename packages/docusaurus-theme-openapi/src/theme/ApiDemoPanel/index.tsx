@@ -16,7 +16,7 @@ import { Provider } from "react-redux";
 import { CustomFields, ThemeConfig } from "../../types";
 import Accept from "./Accept";
 import Authorization from "./Authorization";
-import StaticAuthorization from "./StaticAuthorization";
+import SecuritySchemes from "./SecuritySchemes";
 import { createAuth } from "./Authorization/slice";
 import Body from "./Body";
 import Curl from "./Curl";
@@ -100,7 +100,7 @@ function ApiDemoPanel({ item }: { item: NonNullable<Metadata["api"]> }) {
 
         <MethodEndpoint method={method} path={path} />
 
-        <StaticAuthorization />
+        <SecuritySchemes />
 
         <div className={styles.optionsPanel}>
           <ParamOptions />
