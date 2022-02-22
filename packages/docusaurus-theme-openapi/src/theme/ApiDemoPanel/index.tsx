@@ -13,10 +13,9 @@ import { ParameterObject } from "docusaurus-plugin-openapi/src/openapi/types";
 import sdk from "postman-collection";
 import { Provider } from "react-redux";
 
-import { CustomFields, ThemeConfig } from "../../types";
+import { ThemeConfig } from "../../types";
 import Accept from "./Accept";
 import Authorization from "./Authorization";
-import StaticAuthorization from "./StaticAuthorization";
 import { createAuth } from "./Authorization/slice";
 import Body from "./Body";
 import Curl from "./Curl";
@@ -25,15 +24,22 @@ import MethodEndpoint from "./MethodEndpoint";
 import ParamOptions from "./ParamOptions";
 import { createPersistanceMiddleware } from "./persistanceMiddleware";
 import Response from "./Response";
+import SecuritySchemes from "./SecuritySchemes";
 import Server from "./Server";
 import { createStoreWithState } from "./store";
 import styles from "./styles.module.css";
 
-function ApiDemoPanel({ item }: { item: NonNullable<Metadata["api"]> }) {
+function ApiDemoPanel({
+  item,
+  showExecuteButton,
+  showManualAuthentication,
+}: {
+  item: NonNullable<Metadata["api"]>;
+  showExecuteButton: boolean;
+  showManualAuthentication: boolean;
+}) {
   const { siteConfig } = useDocusaurusContext();
   const themeConfig = siteConfig.themeConfig as ThemeConfig;
-  const customFields = siteConfig.customFields as CustomFields;
-  const { showExecuteButton, showManualAuthentication } = customFields;
   const options = themeConfig.api;
   const postman = new sdk.Request(item.postman);
 
@@ -100,7 +106,7 @@ function ApiDemoPanel({ item }: { item: NonNullable<Metadata["api"]> }) {
 
         <MethodEndpoint method={method} path={path} />
 
-        <StaticAuthorization />
+        <SecuritySchemes />
 
         <div className={styles.optionsPanel}>
           <ParamOptions />

@@ -114,6 +114,8 @@ declare module "@theme/ApiItem" {
       readonly contentTitle: string | undefined;
       (): JSX.Element;
     };
+    readonly showExecuteButton: boolean;
+    readonly showManualAuthentication: boolean;
   }
 
   const ApiItem: (props: Props) => JSX.Element;
