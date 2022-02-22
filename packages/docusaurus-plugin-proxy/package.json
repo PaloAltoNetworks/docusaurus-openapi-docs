@@ -21,7 +21,7 @@
     "watch": "tsc --watch"
   },
   "devDependencies": {
-    "@docusaurus/types": "2.0.0-beta.14",
+    "@docusaurus/types": "2.0.0-beta.15",
     "@types/webpack-dev-server": "^4.5.0"
   },
   "engines": {
