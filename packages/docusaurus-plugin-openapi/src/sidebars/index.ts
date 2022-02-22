@@ -7,11 +7,6 @@
 
 import path from "path";
 
-import {
-  CategoryMetadataFile,
-  CategoryMetadataFilenameBase,
-} from "@docusaurus/plugin-content-docs/lib/sidebars/generator";
-import { validateCategoryMetadataFile } from "@docusaurus/plugin-content-docs/lib/sidebars/validation";
 import { posixPath } from "@docusaurus/utils";
 import chalk from "chalk";
 import clsx from "clsx";
@@ -26,12 +21,18 @@ import type {
   PropSidebarItemCategory,
 } from "../types";
 import { ApiPageMetadata } from "../types";
+import { CategoryMetadataFile } from "./types";
+import { validateCategoryMetadataFile } from "./validation";
 
 interface Options {
   contentPath: string;
   sidebarCollapsible: boolean;
   sidebarCollapsed: boolean;
 }
+
+// Statically define CategoryMetadataFilenameBase as
+// './lib/sidebars/validation' is not defined by "exports"
+const CategoryMetadataFilenameBase = "_category_";
 
 type keys = "type" | "title" | "permalink" | "id" | "source" | "sourceDirName";
 
