@@ -33,7 +33,6 @@ export default function pluginOpenAPI(
   options: PluginOptions
 ): Plugin<LoadedContent> {
   const { baseUrl, generatedFilesDir } = context;
-
   const pluginId = options.id ?? DEFAULT_PLUGIN_ID;
 
   const pluginDataDirRoot = path.join(
@@ -83,8 +82,8 @@ export default function pluginOpenAPI(
         showExecuteButton,
         showManualAuthentication,
       } = options;
-      const { addRoute, createData } = actions;
 
+      const { addRoute, createData } = actions;
       const sidebarName = `openapi-sidebar-${pluginId}`;
 
       const sidebar = await generateSidebar(loadedApi, {
@@ -95,6 +94,10 @@ export default function pluginOpenAPI(
 
       const promises = loadedApi.map(async (item) => {
         const pageId = `site-${routeBasePath}-${item.id}`;
+
+        // Statically set custom plugin options
+        item["showExecuteButton"] = showExecuteButton;
+        item["showManualAuthentication"] = showManualAuthentication;
 
         await createData(
           `${docuHash(pageId)}.json`,
@@ -112,8 +115,6 @@ export default function pluginOpenAPI(
           exact: true,
           modules: {
             content: markdown,
-            showExecuteButton,
-            showManualAuthentication,
           },
           sidebar: sidebarName,
         };
