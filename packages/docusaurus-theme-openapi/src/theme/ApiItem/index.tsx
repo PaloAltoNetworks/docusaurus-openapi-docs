@@ -25,19 +25,22 @@ if (ExecutionEnvironment.canUseDOM) {
 }
 
 function ApiItem(props: Props): JSX.Element {
-  const {
-    content: ApiContent,
-    showExecuteButton,
-    showManualAuthentication,
-  } = props;
+  const { content: ApiContent } = props;
   const { metadata, frontMatter } = ApiContent;
   const { image, keywords } = frontMatter;
-  const { description, title, api, previous, next } = metadata;
+  const {
+    description,
+    title,
+    api,
+    previous,
+    next,
+    showExecuteButton,
+    showManualAuthentication,
+  } = metadata;
 
   return (
     <>
       <Seo {...{ title, description, keywords, image }} />
-
       <div className="row">
         <div className="col">
           <div className={styles.apiItemContainer}>
