@@ -54,6 +54,8 @@ export interface ApiMetadataBase {
   permalink: string;
   sidebarPosition?: number;
   frontMatter: Record<string, unknown>;
+  showExecuteButton?: boolean;
+  showManualAuthentication?: boolean;
 }
 
 export interface ApiPageMetadata extends ApiMetadataBase {
