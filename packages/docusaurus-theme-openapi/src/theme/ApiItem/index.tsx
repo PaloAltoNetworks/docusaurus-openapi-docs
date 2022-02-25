@@ -17,8 +17,8 @@ import styles from "./styles.module.css";
 
 let ApiDemoPanel = (_: {
   item: any;
-  showExecuteButton: boolean;
-  showManualAuthentication: boolean;
+  showExecuteButton?: boolean;
+  showManualAuthentication?: boolean;
 }) => <div style={{ marginTop: "3.5em" }} />;
 if (ExecutionEnvironment.canUseDOM) {
   ApiDemoPanel = require("@theme/ApiDemoPanel").default;
@@ -57,8 +57,8 @@ function ApiItem(props: Props): JSX.Element {
           {api && (
             <ApiDemoPanel
               item={api}
-              showExecuteButton={showExecuteButton || true}
-              showManualAuthentication={showManualAuthentication || true}
+              showExecuteButton={showExecuteButton}
+              showManualAuthentication={showManualAuthentication}
             />
           )}
         </div>
