@@ -1,18 +1,18 @@
 {
   "name": "@paloaltonetworks/docusaurus-plugin-proxy",
   "description": "A dev server proxy for Docusaurus.",
-  "version": "0.5.0",
+  "version": "15.0",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/cloud-annotations/docusaurus-openapi.git",
+    "url": "https://github.com/PaloAltoNetworks/docusaurus-openapi.git",
     "directory": "packages/docusaurus-plugin-proxy"
   },
   "bugs": {
-    "url": "https://github.com/cloud-annotations/docusaurus-openapi/issues"
+    "url": "https://github.com/PaloAltoNetworks/docusaurus-openapi/issues"
   },
   "main": "lib/index.js",
   "types": "src/plugin-proxy.d.ts",

@@ -1,6 +1,6 @@
 {
   "name": "@paloaltonetworks/docusaurus-template-openapi",
-  "version": "0.5.0",
+  "version": "15.0",
   "keywords": [
     "react",
     "create-docusaurus",
@@ -10,11 +10,11 @@
   "description": "OpenAPI template for Docusaurus.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cloud-annotations/docusaurus-openapi.git",
+    "url": "https://github.com/PaloAltoNetworks/docusaurus-openapi.git",
     "directory": "packages/docusaurus-template-openapi"
   },
   "bugs": {
-    "url": "https://github.com/cloud-annotations/docusaurus-openapi/issues"
+    "url": "https://github.com/PaloAltoNetworks/docusaurus-openapi/issues"
   },
   "license": "MIT",
   "engines": {
