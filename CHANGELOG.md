@@ -1,4 +1,4 @@
-## 15.0 (Feb 25, 2022)
+## 15.0.0 (Feb 25, 2022)
 
 First release of @paloaltonetworks/docusaurus-openapi
 

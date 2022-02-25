@@ -1,7 +1,7 @@
 {
   "name": "@paloaltonetworks/docusaurus-theme-openapi",
   "description": "OpenAPI theme for Docusaurus.",
-  "version": "15.0",
+  "version": "15.0.0",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -43,7 +43,7 @@
     "buffer": "^6.0.3",
     "clsx": "^1.1.1",
     "crypto-js": "^4.1.1",
-    "@paloaltonetworks/docusaurus-plugin-openapi": "15.0",
+    "@paloaltonetworks/docusaurus-plugin-openapi": "15.0.0",
     "immer": "^9.0.7",
     "lodash": "^4.17.20",
     "monaco-editor": "^0.31.1",

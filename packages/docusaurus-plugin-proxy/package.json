@@ -1,7 +1,7 @@
 {
   "name": "@paloaltonetworks/docusaurus-plugin-proxy",
   "description": "A dev server proxy for Docusaurus.",
-  "version": "15.0",
+  "version": "15.0.0",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
