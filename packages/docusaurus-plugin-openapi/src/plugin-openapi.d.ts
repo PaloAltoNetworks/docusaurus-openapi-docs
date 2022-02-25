@@ -42,7 +42,7 @@ declare module "@docusaurus/plugin-content-docs-types" {
   };
 }
 
-declare module "docusaurus-plugin-openapi" {
+declare module "@paloaltonetworks/docusaurus-plugin-openapi" {
   import type { PropSidebars } from "@docusaurus/plugin-content-docs-types";
 
   export type Options = Partial<import("./types").PluginOptions>;

@@ -5,8 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import { ParameterObject } from "@paloaltonetworks/docusaurus-plugin-openapi/src/openapi/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ParameterObject } from "docusaurus-plugin-openapi/src/openapi/types";
 
 export type Param = ParameterObject & { value?: string[] | string };
 

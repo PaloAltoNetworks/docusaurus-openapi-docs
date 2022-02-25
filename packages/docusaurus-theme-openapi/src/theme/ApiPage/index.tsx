@@ -12,6 +12,7 @@ import renderRoutes from "@docusaurus/renderRoutes";
 import { matchPath } from "@docusaurus/router";
 import { translate } from "@docusaurus/Translate";
 import { MDXProvider } from "@mdx-js/react";
+import { PropApiMetadata } from "@paloaltonetworks/docusaurus-plugin-openapi";
 import type { ApiRoute } from "@theme/ApiItem";
 import type { Props } from "@theme/ApiPage";
 import BackToTopButton from "@theme/BackToTopButton";
@@ -21,7 +22,6 @@ import Layout from "@theme/Layout";
 import MDXComponents from "@theme/MDXComponents";
 import NotFound from "@theme/NotFound";
 import clsx from "clsx";
-import { PropApiMetadata } from "docusaurus-plugin-openapi";
 
 import styles from "./styles.module.css";
 

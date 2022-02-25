@@ -5,11 +5,11 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   SecurityRequirementObject,
   SecuritySchemeObject,
-} from "docusaurus-plugin-openapi/src/openapi/types";
+} from "@paloaltonetworks/docusaurus-plugin-openapi/src/openapi/types";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { ThemeConfig } from "../../../types";
 import { createStorage, hashArray } from "../storage-utils";

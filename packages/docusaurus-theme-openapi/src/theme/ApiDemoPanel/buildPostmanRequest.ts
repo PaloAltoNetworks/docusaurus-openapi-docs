@@ -8,7 +8,7 @@
 import {
   ParameterObject,
   ServerObject,
-} from "docusaurus-plugin-openapi/src/openapi/types";
+} from "@paloaltonetworks/docusaurus-plugin-openapi/src/openapi/types";
 import cloneDeep from "lodash/cloneDeep";
 import sdk from "postman-collection";
 

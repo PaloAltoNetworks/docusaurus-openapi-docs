@@ -18,8 +18,8 @@ const config = {
 
   presets: [
     [
-      "docusaurus-preset-openapi",
-      /** @type {import('docusaurus-preset-openapi').Options} */
+      "@paloaltonetworks/docusaurus-preset-openapi",
+      /** @type {import('@paloaltonetworks/docusaurus-preset-openapi').Options} */
       ({
         api: {
           path: "examples/petstore.yaml",
@@ -47,7 +47,7 @@ const config = {
 
   plugins: [
     [
-      "docusaurus-plugin-openapi",
+      "@paloaltonetworks/docusaurus-plugin-openapi",
       {
         id: "cos",
         path: "examples/openapi-cos.json",
@@ -55,7 +55,7 @@ const config = {
       },
     ],
     [
-      "docusaurus-plugin-openapi",
+      "@paloaltonetworks/docusaurus-plugin-openapi",
       {
         id: "multi-spec",
         path: "examples",
@@ -67,7 +67,7 @@ const config = {
   ],
 
   themeConfig:
-    /** @type {import('docusaurus-preset-openapi').ThemeConfig} */
+    /** @type {import('@paloaltonetworks/docusaurus-preset-openapi').ThemeConfig} */
     ({
       colorMode: {
         disableSwitch: false,

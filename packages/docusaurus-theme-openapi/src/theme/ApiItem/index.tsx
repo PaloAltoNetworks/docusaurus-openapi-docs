@@ -57,8 +57,8 @@ function ApiItem(props: Props): JSX.Element {
           {api && (
             <ApiDemoPanel
               item={api}
-              showExecuteButton={showExecuteButton}
-              showManualAuthentication={showManualAuthentication}
+              showExecuteButton={showExecuteButton || true}
+              showManualAuthentication={showManualAuthentication || true}
             />
           )}
         </div>

@@ -8,8 +8,8 @@
 import React from "react";
 
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import { ParameterObject } from "@paloaltonetworks/docusaurus-plugin-openapi/src/openapi/types";
 import { Metadata } from "@theme/ApiItem";
-import { ParameterObject } from "docusaurus-plugin-openapi/src/openapi/types";
 import sdk from "postman-collection";
 import { Provider } from "react-redux";
 

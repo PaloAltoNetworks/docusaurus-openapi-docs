@@ -1,5 +1,5 @@
 {
-  "name": "docusaurus-template-openapi",
+  "name": "@paloaltonetworks/docusaurus-template-openapi",
   "version": "0.5.0",
   "keywords": [
     "react",
