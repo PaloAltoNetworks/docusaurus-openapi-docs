@@ -1,3 +1,9 @@
+## 15.0.1 (Feb 25, 2022)
+
+Bug fixes
+
+- Fixed type definitions for `showManualAuthentication` and `showExecuteButton` in ApiDemoPanel component
+
 ## 15.0.0 (Feb 25, 2022)
 
 First release of @paloaltonetworks/docusaurus-openapi
