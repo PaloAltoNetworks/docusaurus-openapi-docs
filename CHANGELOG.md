@@ -1,3 +1,13 @@
+## 15.0 (Feb 25, 2022)
+
+First release of @paloaltonetworks/docusaurus-openapi
+
+High level enhancements
+
+- Support for Docusaurus 2.0.0-beta.15
+- Use details component for status code response tables
+- Adds options to hide Execute button and auth input field
+
 ## 0.5.0 (Jan 9, 2022)
 
 High level enhancements
