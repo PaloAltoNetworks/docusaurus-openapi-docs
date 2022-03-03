@@ -8,6 +8,20 @@
   margin-bottom: 0;
 }
 
+:global(.theme-api-markdown details) {
+  background-color: var(--ifm-background-color);
+  color: var(--ifm-font-color-base);
+  padding: unset;
+  border: unset !important;
+  box-shadow: unset !important;
+  --docusaurus-details-decoration-color: var(--ifm-font-color-base);
+}
+
+:global(.theme-api-markdown details > div > div) {
+  padding-top: unset !important;
+  border-top: unset !important;
+}
+
 @media (min-width: 997px) {
   .docItemCol {
     max-width: 75% !important;

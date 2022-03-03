@@ -10,8 +10,8 @@ import { escape } from "lodash";
 import { ApiPageMetadata, InfoPageMetadata } from "../types";
 import { createDeprecationNotice } from "./createDeprecationNotice";
 import { createDescription } from "./createDescription";
-import { createParamsTable } from "./createParamsTable";
-import { createRequestBodyTable } from "./createRequestBodyTable";
+import { createParamsDetails } from "./createParamsDetails";
+import { createRequestBodyDetails } from "./createRequestBodyDetails";
 import { createStatusCodes } from "./createStatusCodes";
 import { createVersionBadge } from "./createVersionBadge";
 import { render } from "./utils";
@@ -31,11 +31,11 @@ export function createApiPageMD({
     `## ${escape(title)}\n\n`,
     createDeprecationNotice({ deprecated, description: deprecatedDescription }),
     createDescription(escape(description)),
-    createParamsTable({ parameters, type: "path" }),
-    createParamsTable({ parameters, type: "query" }),
-    createParamsTable({ parameters, type: "header" }),
-    createParamsTable({ parameters, type: "cookie" }),
-    createRequestBodyTable({ title: "Request Body", body: requestBody }),
+    createParamsDetails({ parameters, type: "path" }),
+    createParamsDetails({ parameters, type: "query" }),
+    createParamsDetails({ parameters, type: "header" }),
+    createParamsDetails({ parameters, type: "cookie" }),
+    createRequestBodyDetails({ title: "Request Body", body: requestBody }),
     createStatusCodes({ responses }),
   ]);
 }
