@@ -28,9 +28,9 @@ export function createApiPageMD({
   },
 }: ApiPageMetadata) {
   return render([
-    `# ${escape(title)}\n\n`,
+    `## ${escape(title)}\n\n`,
     createDeprecationNotice({ deprecated, description: deprecatedDescription }),
-    createDescription(description),
+    createDescription(escape(description)),
     createParamsTable({ parameters, type: "path" }),
     createParamsTable({ parameters, type: "query" }),
     createParamsTable({ parameters, type: "header" }),
