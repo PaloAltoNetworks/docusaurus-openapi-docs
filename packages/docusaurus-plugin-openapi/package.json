@@ -41,14 +41,13 @@
     "js-yaml": "^4.1.0",
     "json-refs": "^3.0.15",
     "lodash": "^4.17.20",
-    "openapi-to-postmanv2": "^1.2.1",
+    "openapi-to-postmanv2": "^3.0.0",
     "postman-collection": "^4.1.0",
     "remark-admonitions": "^1.2.1",
     "webpack": "^5.61.0"
   },
   "peerDependencies": {
-    "react": "^16.8.4 || ^17.0.0",
-    "react-dom": "^16.8.4 || ^17.0.0"
+    "react": "^16.8.4 || ^17.0.0"
   },
   "engines": {
     "node": ">=14"
