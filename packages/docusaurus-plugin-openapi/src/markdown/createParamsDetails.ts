@@ -11,7 +11,6 @@ import { ApiItem } from "../types";
 import { createDescription } from "./createDescription";
 import { createDetails } from "./createDetails";
 import { createDetailsSummary } from "./createDetailsSummary";
-import { createFullWidthTable } from "./createFullWidthTable";
 import { getQualifierMessage, getSchemaName } from "./schema";
 import { create, guard } from "./utils";
 
