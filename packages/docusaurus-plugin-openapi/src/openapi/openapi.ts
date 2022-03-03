@@ -38,16 +38,17 @@ async function resolveRefs(openapiData: OpenApiObjectWithRef) {
  */
 function jsonToCollection(data: OpenApiObject): Promise<Collection> {
   return new Promise((resolve, reject) => {
-    Converter.convert(
+    let schemaPack = new Converter.SchemaPack(
       { type: "json", data },
-      {},
-      (_err: any, conversionResult: any) => {
-        if (!conversionResult.result) {
-          return reject(conversionResult.reason);
-        }
-        return resolve(new sdk.Collection(conversionResult.output[0].data));
-      }
+      { schemaFaker: false }
     );
+    schemaPack.computedOptions.schemaFaker = false;
+    schemaPack.convert((_err: any, conversionResult: any) => {
+      if (!conversionResult.result) {
+        return reject(conversionResult.reason);
+      }
+      return resolve(new sdk.Collection(conversionResult.output[0].data));
+    });
   });
 }
 
