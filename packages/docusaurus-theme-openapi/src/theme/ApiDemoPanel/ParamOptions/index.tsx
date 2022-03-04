@@ -184,7 +184,7 @@ function ParamArrayFormItem({ param }: ParamProps) {
         value: values.length > 0 ? values : undefined,
       })
     );
-  }, [dispatch, items, param]);
+  }, [items]);
 
   function handleDeleteItem(itemToDelete: { id: string }) {
     return () => {
