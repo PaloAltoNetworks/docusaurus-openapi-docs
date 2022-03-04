@@ -9,7 +9,7 @@ import { ApiItem } from "../types";
 import { createDescription } from "./createDescription";
 import { createDetails } from "./createDetails";
 import { createDetailsSummary } from "./createDetailsSummary";
-import { createSchemaTable } from "./createSchemaTable";
+import { createSchemaDetails } from "./createSchemaDetails";
 import { create } from "./utils";
 
 interface Props {
@@ -95,39 +95,19 @@ export function createStatusCodes({ responses }: Props) {
             label: code,
             value: code,
             children: [
-              createDetails({
-                className:
-                  parseInt(code) >= 400
-                    ? "alert--danger"
-                    : parseInt(code) >= 200 && parseInt(code) < 300
-                    ? "alert--success"
-                    : "alert--info",
-                children: [
-                  createDetailsSummary({
-                    children: create("span", {
-                      children: [
-                        create("div", {
-                          children: statusCodes[code as any],
-                        }),
-                      ],
-                    }),
-                  }),
-                  create("div", {
-                    children: createDescription(responses[code].description),
-                  }),
-                  create("div", {
-                    children: createSchemaTable({
-                      style: {
-                        marginTop: "var(--ifm-table-cell-padding)",
-                        marginBottom: "0px",
-                      },
-                      title: "Schema",
-                      body: {
-                        content: responses[code].content,
-                      },
-                    }),
-                  }),
-                ],
+              create("hr", {}),
+              create("div", {
+                style: { marginLeft: "16px" },
+                children: createDescription(responses[code].description),
+              }),
+              create("div", {
+                style: { marginLeft: "16px" },
+                children: createSchemaDetails({
+                  title: "Schema",
+                  body: {
+                    content: responses[code].content,
+                  },
+                }),
               }),
             ],
           });
