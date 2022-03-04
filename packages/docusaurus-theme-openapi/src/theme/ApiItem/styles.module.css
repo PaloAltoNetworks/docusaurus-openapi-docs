@@ -22,6 +22,10 @@
   border-top: unset !important;
 }
 
+:global(.theme-api-markdown code) {
+  max-width: 600px;
+}
+
 @media (min-width: 997px) {
   .docItemCol {
     max-width: 75% !important;
