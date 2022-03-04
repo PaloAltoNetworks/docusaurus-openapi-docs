@@ -28,6 +28,8 @@ export function createApiPageMD({
   },
 }: ApiPageMetadata) {
   return render([
+    `import Tabs from "@theme/Tabs";\n\n`,
+    `import TabItem from "@theme/TabItem";\n\n`,
     `## ${escape(title)}\n\n`,
     createDeprecationNotice({ deprecated, description: deprecatedDescription }),
     createDescription(escape(description)),
