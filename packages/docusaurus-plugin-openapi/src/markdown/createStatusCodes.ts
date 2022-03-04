@@ -89,15 +89,11 @@ export function createStatusCodes({ responses }: Props) {
 
   return create("div", {
     children: [
-      create("p", {
-        children: "Responses",
-        style: {
-          fontWeight: "var(--ifm-table-head-font-weight)",
-        },
-      }),
-      create("div", {
-        children: codes.map((code) =>
-          create("div", {
+      create("Tabs", {
+        children: codes.map((code) => {
+          return create("TabItem", {
+            label: code,
+            value: code,
             children: [
               createDetails({
                 className:
@@ -134,8 +130,8 @@ export function createStatusCodes({ responses }: Props) {
                 ],
               }),
             ],
-          })
-        ),
+          });
+        }),
       }),
     ],
   });
