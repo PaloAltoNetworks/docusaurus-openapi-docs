@@ -1,9 +1,10 @@
-/**
- * Copyright (c) Facebook, Inc. and its affiliates.
+/* ============================================================================
+ * Copyright (c) Cloud Annotations
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
- */
+ * ========================================================================== */
+
 import React, {
   useState,
   useRef,
@@ -11,13 +12,15 @@ import React, {
   Children,
   isValidElement,
 } from "react";
-import useIsBrowser from "@docusaurus/useIsBrowser";
+
 import {
   useScrollPositionBlocker,
   duplicates,
   useTabGroupChoice,
 } from "@docusaurus/theme-common";
+import useIsBrowser from "@docusaurus/useIsBrowser";
 import clsx from "clsx";
+
 import styles from "./styles.module.css"; // A very rough duck type, but good enough to guard against mistakes while
 // allowing customization
 
