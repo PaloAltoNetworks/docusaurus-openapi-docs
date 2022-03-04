@@ -43,7 +43,6 @@ function createRow({ name, schema, required }: RowProps) {
   const schemaName = getSchemaName(schema, true);
   if (schemaName && (schemaName === "object" || schemaName === "object[]")) {
     return createDetails({
-      style: { marginLeft: "16px" },
       children: [
         createDetailsSummary({
           children: [
@@ -84,7 +83,6 @@ function createRow({ name, schema, required }: RowProps) {
     });
   }
   return create("div", {
-    style: { marginLeft: "16px" },
     children: create("div", {
       children: [
         create("strong", { children: name }),
