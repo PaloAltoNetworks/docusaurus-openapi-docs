@@ -217,18 +217,20 @@ function ResponseCodeTabs(props) {
           )}
         </div>
       </div>
-
+      <hr />
       {lazy ? (
         cloneElement(
           children.filter(
             (tabItem) => tabItem.props.value === selectedValue
           )[0],
           {
-            className: "margin-vert--md",
+            className: clsx("margin-vert--md", styles.responseSchemaContainer),
           }
         )
       ) : (
-        <div className="margin-vert--md">
+        <div
+          className={clsx("margin-vert--md", styles.responseSchemaContainer)}
+        >
           {children.map((tabItem, i) =>
             cloneElement(tabItem, {
               key: i,

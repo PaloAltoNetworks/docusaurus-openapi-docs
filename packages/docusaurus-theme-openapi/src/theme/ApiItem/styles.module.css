@@ -9,6 +9,7 @@
 }
 
 :global(.theme-api-markdown details) {
+  max-width: 600px;
   background-color: var(--ifm-background-color);
   color: var(--ifm-font-color-base);
   padding: unset;

@@ -32,7 +32,6 @@ export function createStatusCodes({ responses }: Props) {
             label: code,
             value: code,
             children: [
-              create("hr", {}),
               create("div", {
                 style: { marginLeft: "16px" },
                 children: createDescription(responses[code].description),

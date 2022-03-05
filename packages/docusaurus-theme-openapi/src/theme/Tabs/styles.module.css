@@ -77,6 +77,10 @@
   color: var(--ifm-color-primary) !important;
 }
 
+.responseSchemaContainer {
+  max-width: 600px;
+}
+
 /* Tab Arrows */
 .tabArrow {
   content: "";
