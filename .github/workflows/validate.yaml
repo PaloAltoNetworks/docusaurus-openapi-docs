@@ -1,6 +1,9 @@
 name: Validate
 
-on: [push, pull_request]
+on:
+  - pull_request
+  - push:
+      branches: [panw-main]
 
 env:
   FORCE_COLOR: true
