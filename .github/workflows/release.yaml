@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     branches:
-      - main
+      - panw-main
 
 env:
   FORCE_COLOR: true
@@ -12,7 +12,7 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
-    if: ${{ github.repository == 'cloud-annotations/docusaurus-openapi' && github.ref == 'refs/heads/main' && github.event_name == 'push' }}
+    if: ${{ github.repository == 'PaloAltoNetworks/docusaurus-openapi' && github.ref == 'refs/heads/panw-main' && github.event_name == 'push' }}
     steps:
       - uses: actions/checkout@v2
         with:
