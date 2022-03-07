@@ -28,10 +28,10 @@
     "watch": "tsc --watch"
   },
   "devDependencies": {
-    "@docusaurus/types": "2.0.0-beta.15"
+    "@docusaurus/types": "2.0.0-beta.17"
   },
   "dependencies": {
-    "@docusaurus/preset-classic": "2.0.0-beta.15",
+    "@docusaurus/preset-classic": "2.0.0-beta.17",
     "@paloaltonetworks/docusaurus-plugin-openapi": "^15.0.1",
     "@paloaltonetworks/docusaurus-plugin-proxy": "^15.0.1",
     "@paloaltonetworks/docusaurus-theme-openapi": "^15.0.1"
