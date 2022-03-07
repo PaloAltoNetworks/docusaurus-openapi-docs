@@ -1,7 +1,7 @@
 {
   "name": "@paloaltonetworks/docusaurus-plugin-openapi",
   "description": "OpenAPI plugin for Docusaurus.",
-  "version": "15.0.1",
+  "version": "17.0.0",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
