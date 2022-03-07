@@ -1,3 +1,16 @@
+## 17.0.1 (Mar 7, 2022)
+
+High level enhancements
+
+- Allow GitHub Actions to publish to npm
+- Minor fix to status code Tabs component
+
+Other enhancements and bug fixes
+
+- Tabs: Fix Arrow Rendering ([#11](https://github.com/PaloAltoNetworks/docusaurus-openapi/pull/11))
+- Update validate.yaml
+- Update workflows ([#10](https://github.com/PaloAltoNetworks/docusaurus-openapi/pull/10))
+
 ## 17.0.0 (Mar 7, 2022)
 
 High level enhancements
