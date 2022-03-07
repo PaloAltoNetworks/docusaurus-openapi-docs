@@ -57,5 +57,5 @@ function navTo(links: RegExp[], heading: RegExp) {
       .click({ force: true }); // sometimes the sidebar items get covered by the navbar in CI.
   }
 
-  cy.findByRole("heading", { name: heading, level: 1 }).should("exist");
+  cy.findByRole("heading", { name: heading, level: 2 }).should("exist");
 }

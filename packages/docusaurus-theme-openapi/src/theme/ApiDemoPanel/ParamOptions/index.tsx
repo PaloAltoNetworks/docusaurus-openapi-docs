@@ -184,7 +184,8 @@ function ParamArrayFormItem({ param }: ParamProps) {
         value: values.length > 0 ? values : undefined,
       })
     );
-  }, [dispatch, items, param]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [items]);
 
   function handleDeleteItem(itemToDelete: { id: string }) {
     return () => {

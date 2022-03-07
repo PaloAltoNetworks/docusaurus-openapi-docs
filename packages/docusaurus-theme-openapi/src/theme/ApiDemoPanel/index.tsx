@@ -96,14 +96,6 @@ function ApiDemoPanel({
       <div style={{ marginTop: "3.5em" }}>
         {showManualAuthentication && <Authorization />}
 
-        {item.operationId !== undefined && (
-          <div style={{ marginBottom: "var(--ifm-table-cell-padding)" }}>
-            <code>
-              <b>{item.operationId}</b>
-            </code>
-          </div>
-        )}
-
         <MethodEndpoint method={method} path={path} />
 
         <SecuritySchemes />

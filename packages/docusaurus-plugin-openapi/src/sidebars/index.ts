@@ -188,17 +188,21 @@ function groupByTags(items: Item[], options: Options): PropSidebar {
     })
     .filter((item) => item.items.length > 0); // Filter out any categories with no items.
 
-  const untagged = [
-    {
-      type: "category" as const,
-      label: "API",
-      collapsible: options.sidebarCollapsible,
-      collapsed: options.sidebarCollapsed,
-      items: apiItems
-        .filter(({ api }) => api.tags === undefined || api.tags.length === 0)
-        .map(createLink),
-    },
-  ];
+  const untaggedItems = apiItems.filter(
+    (item) => item.api.tags === undefined || item.api.tags.length === 0
+  );
+  const untagged =
+    untaggedItems.length > 0
+      ? [
+          {
+            type: "category" as const,
+            label: "API",
+            collapsible: options.sidebarCollapsible,
+            collapsed: options.sidebarCollapsed,
+            items: untaggedItems.map(createLink),
+          },
+        ]
+      : [];
 
   return [...intros, ...tagged, ...untagged];
 }

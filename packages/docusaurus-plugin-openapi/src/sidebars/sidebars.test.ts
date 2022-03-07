@@ -316,7 +316,7 @@ describe("sidebars", () => {
       // console.log(JSON.stringify(output, null, 2));
       const [cats, dogs] = output;
       expect(cats.type).toBe("category");
-      expect(cats.items).toHaveLength(3); // extra api item category is included but gets filtered out later
+      expect(cats.items).toHaveLength(2); // extra api item category no longer included
       const [tails, whiskers] = (cats.items || []).filter(isCategory);
       expect(tails.type).toBe("category");
       expect(whiskers.type).toBe("category");
@@ -328,7 +328,7 @@ describe("sidebars", () => {
       expect(whiskers.items?.[0].label).toBe("List whiskers");
 
       expect(dogs.type).toBe("category");
-      expect(dogs.items).toHaveLength(3); // extra api item category is included but gets filtered out later
+      expect(dogs.items).toHaveLength(2); // extra api item category no longer included
       expect(dogs.label).toBe("Dogs");
       const [doggos, toys] = (dogs.items || []) as PropSidebarItemCategory[];
       expect(doggos.type).toBe("category");

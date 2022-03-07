@@ -1,3 +1,24 @@
+## 17.0.0 (Mar 7, 2022)
+
+High level enhancements
+
+- Support for Docusuaurs 2.0.0-beta.17!
+- New collapsible schema component (replaces tables)
+- New Tabs component for status code responses
+
+Bug fixes and such
+
+- Set max-width for schema component
+- Disable exhaustive-deps eslint
+- Fix infinite render in ParamOptions
+- Upgrade `openapi-to-postmanv2` to latest release (3.0.0)
+- Disable `schemaFaker`
+- Remove `operationId` from ApiItem
+- Change ApiItem title to h2
+- Use colored badge for method
+- Update cypress tests
+- Update sidebars tests
+
 ## 15.0.1 (Feb 25, 2022)
 
 Bug fixes

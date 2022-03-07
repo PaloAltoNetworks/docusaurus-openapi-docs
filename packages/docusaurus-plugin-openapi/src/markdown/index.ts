@@ -10,8 +10,8 @@ import { escape } from "lodash";
 import { ApiPageMetadata, InfoPageMetadata } from "../types";
 import { createDeprecationNotice } from "./createDeprecationNotice";
 import { createDescription } from "./createDescription";
-import { createParamsTable } from "./createParamsTable";
-import { createRequestBodyTable } from "./createRequestBodyTable";
+import { createParamsDetails } from "./createParamsDetails";
+import { createRequestBodyDetails } from "./createRequestBodyDetails";
 import { createStatusCodes } from "./createStatusCodes";
 import { createVersionBadge } from "./createVersionBadge";
 import { render } from "./utils";
@@ -28,14 +28,16 @@ export function createApiPageMD({
   },
 }: ApiPageMetadata) {
   return render([
-    `# ${escape(title)}\n\n`,
+    `import Tabs from "@theme/Tabs";\n\n`,
+    `import TabItem from "@theme/TabItem";\n\n`,
+    `## ${escape(title)}\n\n`,
     createDeprecationNotice({ deprecated, description: deprecatedDescription }),
-    createDescription(description),
-    createParamsTable({ parameters, type: "path" }),
-    createParamsTable({ parameters, type: "query" }),
-    createParamsTable({ parameters, type: "header" }),
-    createParamsTable({ parameters, type: "cookie" }),
-    createRequestBodyTable({ title: "Request Body", body: requestBody }),
+    createDescription(escape(description)),
+    createParamsDetails({ parameters, type: "path" }),
+    createParamsDetails({ parameters, type: "query" }),
+    createParamsDetails({ parameters, type: "header" }),
+    createParamsDetails({ parameters, type: "cookie" }),
+    createRequestBodyDetails({ title: "Request Body", body: requestBody }),
     createStatusCodes({ responses }),
   ]);
 }
