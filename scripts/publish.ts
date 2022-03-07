@@ -84,7 +84,7 @@ function buildAndPublish() {
   printBanner("Publishing Packages");
 
   // --no-verify-access enables lerna publish to work in ci with access token.
-  safeExec(`lerna publish --yes from-package -no-verify-access`, {
+  safeExec(`lerna publish --yes from-package --no-verify-access`, {
     cwd: REPO_ROOT,
   });
 }
