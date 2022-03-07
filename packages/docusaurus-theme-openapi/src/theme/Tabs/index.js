@@ -141,14 +141,14 @@ function ResponseCodeTabs(props) {
   };
 
   const tabItemListContainerRef = useRef(null);
-  const shouldRenderArrows = values.length > 6;
+  const showTabArrows = values.length > 5;
 
   const handleRightClick = () => {
-    tabItemListContainerRef.current.scrollLeft += 75;
+    tabItemListContainerRef.current.scrollLeft += 90;
   };
 
   const handleLeftClick = () => {
-    tabItemListContainerRef.current.scrollLeft -= 75;
+    tabItemListContainerRef.current.scrollLeft -= 90;
   };
 
   return (
@@ -156,7 +156,7 @@ function ResponseCodeTabs(props) {
       <div className={styles.responseTabsTopSection}>
         <strong>Responses</strong>
         <div className={styles.responseTabsContainer}>
-          {shouldRenderArrows && (
+          {showTabArrows && (
             <button
               className={clsx(styles.tabArrow, styles.tabArrowLeft)}
               onClick={handleLeftClick}
@@ -209,7 +209,7 @@ function ResponseCodeTabs(props) {
               );
             })}
           </ul>
-          {shouldRenderArrows && (
+          {showTabArrows && (
             <button
               className={clsx(styles.tabArrow, styles.tabArrowRight)}
               onClick={handleRightClick}

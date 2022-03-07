@@ -37,7 +37,8 @@
 }
 
 .responseTabsListContainer {
-  max-width: 450px;
+  max-width: 440px;
+  padding: 0 0.25rem;
   overflow-y: hidden;
   overflow-x: scroll;
   scroll-behavior: smooth;
