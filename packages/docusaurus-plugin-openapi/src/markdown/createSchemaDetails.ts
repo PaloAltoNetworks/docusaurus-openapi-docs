@@ -123,6 +123,7 @@ function createRows({ schema }: RowsProps): string | undefined {
   // object
   if (schema.properties !== undefined) {
     return create("div", {
+      style: { marginLeft: "16px" },
       children: create("div", {
         children: Object.entries(schema.properties).map(([key, val]) =>
           createRow({

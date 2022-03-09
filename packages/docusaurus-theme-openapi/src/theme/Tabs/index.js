@@ -176,12 +176,12 @@ function ResponseCodeTabs(props) {
             )}
           >
             {values.map(({ value, label, attributes }) => {
-              const tabStyle =
+              const responseTabDotStyle =
                 parseInt(value) >= 400
-                  ? styles.responseTabDanger
+                  ? styles.responseTabDotDanger
                   : parseInt(value) >= 200 && parseInt(value) < 300
-                  ? styles.responseTabSuccess
-                  : styles.responseTabInfo;
+                  ? styles.responseTabDotSuccess
+                  : styles.responseTabDotInfo;
 
               return (
                 <li
@@ -198,12 +198,14 @@ function ResponseCodeTabs(props) {
                     "tabs__item",
                     styles.tabItem,
                     attributes?.className,
-                    tabStyle,
                     {
                       [styles.responseTabActive]: selectedValue === value,
                     }
                   )}
                 >
+                  <div
+                    className={clsx(styles.responseTabDot, responseTabDotStyle)}
+                  />
                   {label ?? value}
                 </li>
               );
