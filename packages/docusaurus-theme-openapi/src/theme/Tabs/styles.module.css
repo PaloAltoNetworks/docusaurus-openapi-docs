@@ -13,11 +13,15 @@
   height: 2.5rem;
   margin-top: 0 !important;
   margin-right: 0.5rem;
-  padding: 1rem;
-  font-weight: var(--ifm-font-weight-normal);
   border: 1px solid var(--openapi-code-dim-dark);
   border-radius: var(--ifm-global-radius);
+  padding: 1rem;
+  font-weight: var(--ifm-font-weight-normal);
   color: var(--openapi-code-dim-dark);
+}
+
+.tabItem:hover {
+  color: var(--ifm-color-emphasis-500) !important;
 }
 
 .tabItem:last-child {
@@ -49,33 +53,28 @@
 }
 
 /* Response Code Tabs - Colored Dots */
-.responseTabSuccess::before,
-.responseTabDanger::before,
-.responseTabInfo::before {
-  padding: 0.25rem 0.25rem 0 0;
-  font-size: 3.5rem;
-  content: "•";
+.responseTabDot {
+  width: 12.5px;
+  height: 12.5px;
+  margin-right: 5px;
+  border-radius: 50%;
 }
 
-.responseTabSuccess::before {
-  color: var(--ifm-color-success);
-}
-.responseTabDanger::before {
-  color: var(--ifm-color-danger);
-}
-.responseTabInfo::before {
-  color: var(--ifm-color-info);
+.responseTabDotSuccess {
+  background-color: var(--ifm-color-success);
 }
 
-.responseTabSuccess:hover,
-.responseTabDanger:hover,
-.responseTabInfo:hover {
-  color: var(--ifm-color-emphasis-500) !important;
+.responseTabDotDanger {
+  background-color: var(--ifm-color-danger);
+}
+
+.responseTabDotInfo {
+  background-color: var(--ifm-color-info);
 }
 
 .responseTabActive {
-  border: 1px solid var(--ifm-color-primary) !important;
-  color: var(--ifm-color-primary) !important;
+  border: 1px solid var(--ifm-color-primary);
+  color: var(--ifm-color-primary);
 }
 
 .responseSchemaContainer {
