@@ -1,3 +1,11 @@
+## 17.0.2 (Mar 9, 2022)
+
+Bug fixes
+
+- Merge pull request #13 from PaloAltoNetworks/refactor-tabs
+- Update schema indentation
+- Refactor response tab dot styling
+
 ## 17.0.1 (Mar 7, 2022)
 
 High level enhancements
