@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "pandev"
+  },
+  "targets": {
+    "pandev": {
+      "hosting": {
+        "docusaurus-openapi.tryingpan.dev": [
+          "docusaurus-openapi-36b86"
+        ]
+      }
+    }
+  }
+}

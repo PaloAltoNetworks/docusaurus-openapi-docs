@@ -1,0 +1,7 @@
+{
+  "hosting": {
+    "target": "docusaurus-openapi.tryingpan.dev",
+    "public": "demo/build",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+  }
+}
