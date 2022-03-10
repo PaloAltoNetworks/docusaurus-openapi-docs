@@ -1,0 +1,63 @@
+name: Deploy Live
+
+on:
+  push:
+    branches: [panw-main]
+
+jobs:
+  build:
+    if: github.repository_owner	== 'PaloAltoNetworks'
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Install dependencies
+        run: yarn --prefer-offline
+
+      - name: Build site
+        run: yarn build-demo
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: build-dir
+          path: demo/build/
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - uses: actions/download-artifact@v2
+        with:
+          name: build-dir
+          path: demo/build/
+
+      - name: Deploy to Firebase
+        id: deploy_live
+        uses: FirebaseExtended/action-hosting-deploy@276388dd6c2cde23455b30293105cc866c22282d # v0.6-alpha
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_PANDEV }}"
+          projectId: pandev
+          channelId: live
+          target: docusaurus-openapi.tryingpan.dev
+        env:
+          FIREBASE_CLI_PREVIEWS: hostingchannels
