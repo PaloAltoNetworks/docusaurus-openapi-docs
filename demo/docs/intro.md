@@ -31,3 +31,7 @@ npx docusaurus start
 Your site starts at `http://localhost:3000`.
 
 Open `openapi.json` and make some edits: the site **reloads automatically** and displays your changes.
+
+## Preview Build
+
+After making a pull request, the site's preview build will be deployed to Firebase.
