@@ -1,7 +1,7 @@
-diff --git a/node_modules/postman-collection/lib/superstring/dynamic-variables.js b/node_modules/postman-collection/lib/superstring/dynamic-variables.js
-index b5b0f05..41d4b27 100644
---- a/node_modules/postman-collection/lib/superstring/dynamic-variables.js
-+++ b/node_modules/postman-collection/lib/superstring/dynamic-variables.js
+diff --git a/node_modules/postman-code-generators/node_modules/postman-collection/lib/superstring/dynamic-variables.js b/node_modules/postman-code-generators/node_modules/postman-collection/lib/superstring/dynamic-variables.js
+index 58f3714..41d4b27 100644
+--- a/node_modules/postman-code-generators/node_modules/postman-collection/lib/superstring/dynamic-variables.js
++++ b/node_modules/postman-code-generators/node_modules/postman-collection/lib/superstring/dynamic-variables.js
 @@ -1,615 +1,5 @@
 -var faker = require('faker/locale/en'),
 -    uuid = require('uuid'),
@@ -104,7 +104,7 @@ index b5b0f05..41d4b27 100644
 -        },
 -
 -        $randomInt: {
--            description: 'A random integer between 0 and 1000',
+-            description: 'A random integer between 1 and 1000',
 -            generator: function () {
 -                return ~~(Math.random() * (1000 + 1));
 -            }
@@ -124,7 +124,7 @@ index b5b0f05..41d4b27 100644
 -        $randomPhoneNumberExt: {
 -            description: 'A random phone number with extension (12 digits)',
 -            generator: function () {
--                return faker.datatype.number({ min: 1, max: 99 }) + '-' + faker.phone.phoneNumberFormat(0);
+-                return faker.random.number({ min: 1, max: 99 }) + '-' + faker.phone.phoneNumberFormat(0);
 -            }
 -        },
 -
@@ -143,7 +143,7 @@ index b5b0f05..41d4b27 100644
 -            description: 'Some random words',
 -            generator: function () {
 -                var words = [],
--                    count = faker.datatype.number({ min: 2, max: 5 }),
+-                    count = faker.random.number({ min: 2, max: 5 }),
 -                    i;
 -
 -                for (i = 0; i < count; i++) {
@@ -317,7 +317,7 @@ index b5b0f05..41d4b27 100644
 -            generator: faker.finance.mask
 -        },
 -        $randomPrice: {
--            description: 'A random price between 0.00 and 1000.00',
+-            description: 'A random price between 100.00 and 999.00',
 -            generator: faker.finance.amount
 -        },
 -        $randomTransactionType: {
@@ -568,11 +568,11 @@ index b5b0f05..41d4b27 100644
 -
 -        $randomUUID: {
 -            description: 'A random 36-character UUID',
--            generator: faker.datatype.uuid
+-            generator: faker.random.uuid
 -        },
 -        $randomBoolean: {
 -            description: 'A random boolean value (true/false)',
--            generator: faker.datatype.boolean
+-            generator: faker.random.boolean
 -        },
 -        $randomWord: {
 -            description: 'A random word',
