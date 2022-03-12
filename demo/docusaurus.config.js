@@ -64,7 +64,7 @@ const config = {
         showManualAuthentication: false,
       },
     ],
-    [require.resolve("./plugins/bundleOptimizer"), {}],
+    [require.resolve("./plugins/webpackOptimizer"), {}],
   ],
 
   themeConfig:
