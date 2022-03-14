@@ -7,6 +7,7 @@
 
 import path from "path";
 
+import type { PluginOptions } from "@docusaurus/plugin-content-docs";
 import { posixPath } from "@docusaurus/utils";
 import chalk from "chalk";
 import clsx from "clsx";
@@ -42,6 +43,17 @@ type ApiItem = Pick<ApiPageMetadata, keys> & {
 };
 
 type Item = InfoItem | ApiItem;
+
+// If a path is provided, make it absolute
+// use this before loadSidebars()
+export function resolveSidebarPathOption(
+  siteDir: string,
+  sidebarPathOption: PluginOptions["sidebarPath"]
+): PluginOptions["sidebarPath"] {
+  return sidebarPathOption
+    ? path.resolve(siteDir, sidebarPathOption)
+    : sidebarPathOption;
+}
 
 function isApiItem(item: Item): item is ApiItem {
   return item.type === "api";

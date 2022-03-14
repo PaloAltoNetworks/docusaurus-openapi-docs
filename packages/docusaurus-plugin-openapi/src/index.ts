@@ -23,6 +23,8 @@ import {
 import chalk from "chalk";
 import { Configuration } from "webpack";
 
+import { readDocFiles } from "./docs";
+import { processDocFiles } from "./docs/docs";
 import { createApiPageMD, createInfoPageMD } from "./markdown";
 import { readOpenapiFiles, processOpenapiFiles } from "./openapi";
 import { generateSidebar } from "./sidebars";
@@ -34,6 +36,7 @@ export default function pluginOpenAPI(
 ): Plugin<LoadedContent> {
   const { baseUrl, generatedFilesDir } = context;
   const pluginId = options.id ?? DEFAULT_PLUGIN_ID;
+  const beforeApiDocs = options.beforeApiDocs;
 
   const pluginDataDirRoot = path.join(
     generatedFilesDir,
@@ -46,17 +49,25 @@ export default function pluginOpenAPI(
     `~api/${posixPath(path.relative(pluginDataDirRoot, source))}`;
 
   const contentPath = path.resolve(context.siteDir, options.path);
+  const docPaths = beforeApiDocs.map((docPath) => {
+    return path.resolve(context.siteDir, docPath);
+  });
 
   return {
     name: "docusaurus-plugin-openapi",
 
     getPathsToWatch() {
-      return [contentPath];
+      return [contentPath].concat(docPaths);
     },
 
     async loadContent() {
       const { routeBasePath } = options;
-
+      const docFiles = await readDocFiles(beforeApiDocs, {});
+      const loadedDocs = await processDocFiles(docFiles, {
+        baseUrl,
+        routeBasePath,
+        siteDir: context.siteDir,
+      });
       try {
         const openapiFiles = await readOpenapiFiles(contentPath, {});
         const loadedApi = await processOpenapiFiles(openapiFiles, {
@@ -64,7 +75,7 @@ export default function pluginOpenAPI(
           routeBasePath,
           siteDir: context.siteDir,
         });
-        return { loadedApi };
+        return { loadedApi, loadedDocs };
       } catch (e) {
         console.error(chalk.red(`Loading of api failed for "${contentPath}"`));
         throw e;
@@ -72,7 +83,7 @@ export default function pluginOpenAPI(
     },
 
     async contentLoaded({ content, actions }) {
-      const { loadedApi } = content;
+      const { loadedApi, loadedDocs } = content;
       const {
         routeBasePath,
         apiLayoutComponent,
@@ -86,10 +97,40 @@ export default function pluginOpenAPI(
       const { addRoute, createData } = actions;
       const sidebarName = `openapi-sidebar-${pluginId}`;
 
+      const docSidebar = await generateSidebar(loadedDocs as [], {
+        contentPath,
+        sidebarCollapsible,
+        sidebarCollapsed,
+      });
+
       const sidebar = await generateSidebar(loadedApi, {
         contentPath,
         sidebarCollapsible,
         sidebarCollapsed,
+      });
+
+      const docPromises = loadedDocs.map(async (item) => {
+        const pageId = `site-${routeBasePath}-${item.id}`;
+
+        await createData(
+          `${docuHash(pageId)}.json`,
+          JSON.stringify(item, null, 2)
+        );
+
+        const markdown = await createData(
+          `${docuHash(pageId)}-content.mdx`,
+          item.data
+        );
+
+        return {
+          path: item.permalink,
+          component: apiItemComponent,
+          exact: true,
+          modules: {
+            content: markdown,
+          },
+          sidebar: sidebarName,
+        };
       });
 
       const promises = loadedApi.map(async (item) => {
@@ -144,6 +185,7 @@ export default function pluginOpenAPI(
 
       const routes = (await Promise.all([
         ...promises,
+        ...docPromises,
         rootRoute(),
       ])) as RouteConfig[];
 
@@ -152,7 +194,7 @@ export default function pluginOpenAPI(
         JSON.stringify(
           {
             apiSidebars: {
-              [sidebarName]: sidebar,
+              [sidebarName]: docSidebar.concat(sidebar),
             },
           },
           null,
