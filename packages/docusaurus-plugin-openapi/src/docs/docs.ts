@@ -124,11 +124,11 @@ export async function processDocFiles(
       contentPathLocalized:
         "/Users/sserrata/projects/panw/docusaurus-openapi/demo/i18n/en/docusaurus-plugin-content-docs/current",
     };
-    const contentPath = await getFolderContainingFile(
-      getDocsDirPaths(versionMetadata),
-      file.source
-    );
-    const filePath = path.join(contentPath, file.source);
+    // const contentPath = await getFolderContainingFile(
+    //   getDocsDirPaths(versionMetadata),
+    //   file.source
+    // );
+    // const filePath = path.join(contentPath, file.source);
     const source = file.source;
     const sourceDirName = file.sourceDirName;
     const docSlug = getSlug({
