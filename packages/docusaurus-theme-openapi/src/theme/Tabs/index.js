@@ -141,7 +141,7 @@ function ResponseCodeTabs(props) {
   };
 
   const tabItemListContainerRef = useRef(null);
-  const showTabArrows = values.length > 5;
+  const showTabArrows = values.length >= 5;
 
   const handleRightClick = () => {
     tabItemListContainerRef.current.scrollLeft += 90;

@@ -9,13 +9,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 5.5rem;
   height: 2.5rem;
   margin-top: 0 !important;
   margin-right: 0.5rem;
   border: 1px solid var(--openapi-code-dim-dark);
   border-radius: var(--ifm-global-radius);
-  padding: 1rem;
   font-weight: var(--ifm-font-weight-normal);
   color: var(--openapi-code-dim-dark);
 }
@@ -38,10 +36,10 @@
 .responseTabsContainer {
   display: flex;
   align-items: center;
+  max-width: 430px;
 }
 
 .responseTabsListContainer {
-  max-width: 440px;
   padding: 0 0.25rem;
   overflow-y: hidden;
   overflow-x: scroll;
