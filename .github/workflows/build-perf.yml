@@ -1,0 +1,52 @@
+name: Build Performance
+
+on:
+  pull_request:
+    branches:
+      - panw-main
+    paths-ignore:
+      - demo/docs/**
+
+jobs:
+  build-size:
+    name: Build Size Report
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "17"
+          cache: yarn
+      - uses: preactjs/compressed-size-action@v2
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          build-script: build
+          clean-script: clean
+          pattern: "{demo/build/assets/js/*js,demo/build/assets/css/styles*css,demo/.docusaurus/globalData.json,demo/build/index.html,demo/build/docs/index.html,demo/build/docs/installation/index.html}"
+          strip-hash: '\.([^;]\w{7})\.'
+          minimum-change-threshold: 30
+          compression: none
+
+  build-time:
+    name: Build Time Perf
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          cache: yarn
+      - name: Installation
+        run: yarn
+
+      # Ensure build with a cold cache does not increase too much
+      - name: Build (cold cache)
+        run: yarn build
+        timeout-minutes: 20
+
+      # Ensure build with a warm cache does not increase too much
+      - name: Build (warm cache)
+        run: yarn build
+        timeout-minutes: 10
+    # TODO post a Github comment with build with perf warnings?
