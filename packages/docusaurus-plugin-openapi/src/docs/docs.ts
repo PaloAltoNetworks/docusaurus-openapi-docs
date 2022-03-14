@@ -8,8 +8,6 @@
 import path from "path";
 
 import type {
-  MetadataOptions,
-  PluginOptions,
   CategoryIndexMatcher,
   CategoryIndexMatcherParam,
 } from "@docusaurus/plugin-content-docs";

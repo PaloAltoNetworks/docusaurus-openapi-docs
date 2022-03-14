@@ -7,7 +7,6 @@
 
 import type { RemarkAndRehypePluginOptions } from "@docusaurus/mdx-loader";
 import type { Request } from "postman-collection";
-import { Doc } from "prettier";
 
 import { DocObject } from "./docs/types";
 import {
