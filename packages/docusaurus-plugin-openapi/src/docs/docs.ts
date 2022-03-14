@@ -14,7 +14,7 @@ import type {
 import {
   aliasedSitePath,
   parseMarkdownString,
-  getFolderContainingFile,
+  // getFolderContainingFile,
   normalizeUrl,
 } from "@docusaurus/utils";
 import fs from "fs-extra";
@@ -23,7 +23,7 @@ import { DocPageMetadata } from "../types";
 import { validateDocFrontMatter } from "./docFrontmatter";
 import getSlug from "./slug";
 import { DocObject, DocMetadataBase } from "./types";
-import { getDocsDirPaths } from "./versions";
+// import { getDocsDirPaths } from "./versions";
 
 interface DocFiles {
   source: string;
