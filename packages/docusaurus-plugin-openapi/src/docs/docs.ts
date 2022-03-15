@@ -11,19 +11,12 @@ import type {
   CategoryIndexMatcher,
   CategoryIndexMatcherParam,
 } from "@docusaurus/plugin-content-docs";
-import {
-  aliasedSitePath,
-  parseMarkdownString,
-  // getFolderContainingFile,
-  normalizeUrl,
-} from "@docusaurus/utils";
+import { aliasedSitePath, parseMarkdownString } from "@docusaurus/utils";
 import fs from "fs-extra";
 
 import { DocPageMetadata } from "../types";
 import { validateDocFrontMatter } from "./docFrontmatter";
-import getSlug from "./slug";
 import { DocObject, DocMetadataBase } from "./types";
-// import { getDocsDirPaths } from "./versions";
 
 interface DocFiles {
   source: string;
@@ -104,7 +97,8 @@ export async function processDocFiles(
     } = parseMarkdownString(file.data as string);
     const frontMatter = validateDocFrontMatter(unsafeFrontMatter);
     const slug = "/" + frontMatter.id;
-    const permalink = options.baseUrl + options.routeBasePath;
+    const permalink =
+      options.baseUrl + options.routeBasePath + "/" + frontMatter.id;
     return {
       type: "doc" as "doc", // TODO: fix this
       id: frontMatter.id ?? "",

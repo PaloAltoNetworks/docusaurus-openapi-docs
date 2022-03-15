@@ -36,6 +36,7 @@ interface Options {
 const CategoryMetadataFilenameBase = "_category_";
 
 type keys = "type" | "title" | "permalink" | "id" | "source" | "sourceDirName";
+// Gotta be a better way man
 type docKeys =
   | "type"
   | "title"
@@ -91,9 +92,22 @@ export async function generateSidebar(
   options: Options
 ): Promise<PropSidebar> {
   const sourceGroups = groupBy(items, (item) => item.source);
-
   let sidebar: PropSidebar = [];
   let visiting = sidebar;
+  let docsSidebar = sidebar;
+
+  if (items.length > 0 && items[0].type === "doc") {
+    for (const item of items) {
+      docsSidebar.push({
+        type: "link" as const,
+        label: item.id ?? item.title,
+        href: item.permalink,
+        docId: item.id,
+      });
+    }
+    return docsSidebar;
+  }
+
   for (const items of Object.values(sourceGroups)) {
     if (items.length === 0) {
       // Since the groups are created based on the items, there should never be a length of zero.

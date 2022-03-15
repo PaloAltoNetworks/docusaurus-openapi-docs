@@ -84,7 +84,6 @@ export default function pluginOpenAPI(
 
     async contentLoaded({ content, actions }) {
       const { loadedApi, loadedDocs } = content;
-      console.log(loadedDocs);
       const {
         routeBasePath,
         apiLayoutComponent,
