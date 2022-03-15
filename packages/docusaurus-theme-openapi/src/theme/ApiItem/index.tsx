@@ -10,6 +10,9 @@ import React from "react";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import type { Props } from "@theme/ApiItem";
 import DocPaginator from "@theme/DocPaginator";
+import TOC from "@theme/TOC";
+import TOCCollapsible from "@theme/TOCCollapsible";
+import { ThemeClassNames, useWindowSize } from "@docusaurus/theme-common";
 import Seo from "@theme/Seo";
 import clsx from "clsx";
 
@@ -27,7 +30,14 @@ if (ExecutionEnvironment.canUseDOM) {
 function ApiItem(props: Props): JSX.Element {
   const { content: ApiContent } = props;
   const { metadata, frontMatter } = ApiContent;
-  const { image, keywords } = frontMatter;
+  const {
+    image,
+    keywords,
+    hide_table_of_contents: hideTableOfContents,
+    toc_min_heading_level: tocMinHeadingLevel,
+    toc_max_heading_level: tocMaxHeadingLevel,
+  } = frontMatter;
+
   const {
     description,
     title,
@@ -36,7 +46,16 @@ function ApiItem(props: Props): JSX.Element {
     next,
     showExecuteButton,
     showManualAuthentication,
+    type,
   } = metadata;
+
+  const windowSize = useWindowSize();
+
+  const canRenderTOC =
+    ApiContent.toc && ApiContent.toc.length > 0 && type === "doc";
+
+  const renderTocDesktop =
+    canRenderTOC && (windowSize === "desktop" || windowSize === "ssr");
 
   return (
     <>
@@ -46,10 +65,20 @@ function ApiItem(props: Props): JSX.Element {
           <div className={styles.apiItemContainer}>
             <article>
               <div className={clsx("theme-api-markdown", "markdown")}>
+                {canRenderTOC && (
+                  <TOCCollapsible
+                    toc={ApiContent.toc}
+                    minHeadingLevel={tocMinHeadingLevel}
+                    maxHeadingLevel={tocMaxHeadingLevel}
+                    className={clsx(
+                      ThemeClassNames.docs.docTocMobile,
+                      styles.tocMobile
+                    )}
+                  />
+                )}
                 <ApiContent />
               </div>
             </article>
-
             <DocPaginator previous={previous} next={next} />
           </div>
         </div>
@@ -59,6 +88,14 @@ function ApiItem(props: Props): JSX.Element {
               item={api}
               showExecuteButton={showExecuteButton}
               showManualAuthentication={showManualAuthentication}
+            />
+          )}
+          {renderTocDesktop && (
+            <TOC
+              toc={ApiContent.toc}
+              minHeadingLevel={tocMinHeadingLevel}
+              maxHeadingLevel={tocMaxHeadingLevel}
+              className={ThemeClassNames.docs.docTocDesktop}
             />
           )}
         </div>
