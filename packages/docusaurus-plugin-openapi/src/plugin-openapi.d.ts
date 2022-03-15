@@ -95,6 +95,9 @@ declare module "@theme/ApiItem" {
     readonly title: string;
     readonly image?: string;
     readonly keywords?: readonly string[];
+    readonly hide_table_of_contents?: boolean;
+    readonly toc_min_heading_level?: number;
+    readonly toc_max_heading_level?: number;
   };
 
   export type Metadata = {
@@ -106,6 +109,7 @@ declare module "@theme/ApiItem" {
     readonly api?: ApiItem & { postman: Request }; // TODO
     readonly showExecuteButton?: boolean;
     readonly showManualAuthentication?: boolean;
+    readonly type?: string;
   };
 
   export interface Props {
@@ -114,6 +118,7 @@ declare module "@theme/ApiItem" {
       readonly frontMatter: FrontMatter;
       readonly metadata: Metadata;
       readonly contentTitle: string | undefined;
+      readonly toc: array | undefined;
       (): JSX.Element;
     };
   }
