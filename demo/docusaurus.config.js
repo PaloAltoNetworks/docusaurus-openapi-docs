@@ -53,6 +53,7 @@ const config = {
         id: "cos",
         path: "examples/openapi-cos.json",
         routeBasePath: "cos",
+        beforeApiDocs: ["examples/test.md", "examples/test2.md"],
       },
     ],
     [
@@ -92,8 +93,8 @@ const config = {
             label: "Examples",
             position: "left",
             items: [
-              { to: "/petstore", label: "Petstore" },
-              { to: "/cos", label: "Cloud Object Storage" },
+              { to: "/petstore/test", label: "Petstore" },
+              { to: "/cos/test", label: "Cloud Object Storage" },
               { to: "/multi-spec", label: "Multi-spec" },
             ],
           },
