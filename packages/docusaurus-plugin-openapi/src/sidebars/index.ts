@@ -97,10 +97,11 @@ export async function generateSidebar(
   let docsSidebar = sidebar;
 
   if (items.length > 0 && items[0].type === "doc") {
-    for (const item of items) {
+    for (const item of items as DocItem[]) {
+      const { sidebar_label } = item.frontMatter;
       docsSidebar.push({
         type: "link" as const,
-        label: item.id ?? item.title,
+        label: (sidebar_label as string) ?? item.id ?? item.title,
         href: item.permalink,
         docId: item.id,
       });
