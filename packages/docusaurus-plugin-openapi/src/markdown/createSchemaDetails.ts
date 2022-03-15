@@ -66,13 +66,13 @@ function createRow({ name, schema, required }: RowProps) {
           children: [
             guard(getQualifierMessage(schema), (message) =>
               create("div", {
-                style: { marginLeft: "1.5rem" },
+                style: { marginLeft: "1rem" },
                 children: createDescription(message),
               })
             ),
             guard(schema.description, (description) =>
               create("div", {
-                style: { marginLeft: "1.5rem" },
+                style: { marginLeft: "1rem" },
                 children: createDescription(description),
               })
             ),
@@ -123,7 +123,7 @@ function createRows({ schema }: RowsProps): string | undefined {
   // object
   if (schema.properties !== undefined) {
     return create("div", {
-      style: { marginLeft: "1.5rem" },
+      style: { marginLeft: "1rem" },
       children: create("div", {
         children: Object.entries(schema.properties).map(([key, val]) =>
           createRow({
@@ -144,7 +144,7 @@ function createRows({ schema }: RowsProps): string | undefined {
     return create("div", {
       className: "allOf",
       style: {
-        marginLeft: "1.5rem",
+        marginLeft: "1rem",
       },
       children: create("div", {
         children: Object.entries(properties).map(([key, val]) =>
@@ -268,7 +268,7 @@ export function createSchemaDetails({ title, body, ...rest }: Props) {
 
   const firstBodyIndentation = firstBody.items
     ? { marginLeft: "0" }
-    : { marginLeft: "1.5rem" };
+    : { marginLeft: "1rem" };
 
   return createDetails({
     ...rest,
@@ -289,7 +289,7 @@ export function createSchemaDetails({ title, body, ...rest }: Props) {
         ],
       }),
       create("div", {
-        style: { marginLeft: "1.5rem" },
+        style: { marginLeft: "1rem" },
         children: create("div", {
           children: create("div", {
             style: { textAlign: "left" },

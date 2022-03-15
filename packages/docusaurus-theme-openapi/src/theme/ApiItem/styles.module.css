@@ -27,25 +27,6 @@
   max-width: 600px;
 }
 
-details > summary::before,
-details summary::-webkit-details-marker {
-  display: none;
-}
-
-details > summary::marker {
-  font-size: 1.5rem;
-}
-
-details > summary {
-  list-style-type: "\002B" !important;
-  margin-left: 1rem !important;
-  padding-left: 0.5rem !important;
-}
-
-details[open] > summary {
-  list-style-type: "\2212" !important;
-}
-
 @media (min-width: 997px) {
   .docItemCol {
     max-width: 75% !important;
