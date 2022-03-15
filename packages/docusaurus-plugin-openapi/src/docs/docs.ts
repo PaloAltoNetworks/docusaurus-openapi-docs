@@ -103,48 +103,15 @@ export async function processDocFiles(
       excerpt,
     } = parseMarkdownString(file.data as string);
     const frontMatter = validateDocFrontMatter(unsafeFrontMatter);
-    const baseID = frontMatter.id ?? "";
-    const versionMetadata = {
-      versionName: "current",
-      versionLabel: "Next",
-      versionPath: "/petstore",
-      // tagsPath: "/docs/tags",
-      // versionEditUrl:
-      //   "https://github.com/cloud-annotations/docusaurus-openapi/edit/main/demo/docs",
-      // versionEditUrlLocalized:
-      //   "https://github.com/cloud-annotations/docusaurus-openapi/edit/main/demo/i18n/en/docusaurus-plugin-content-docs/current",
-      versionBanner: null,
-      versionBadge: false,
-      versionClassName: "docs-version-current",
-      isLast: true,
-      routePriority: -1,
-      // sidebarFilePath:
-      //   "/Users/sserrata/projects/panw/docusaurus-openapi/demo/sidebars.js",
-      contentPath: "/Users/sserrata/projects/panw/docusaurus-openapi/demo",
-      contentPathLocalized:
-        "/Users/sserrata/projects/panw/docusaurus-openapi/demo/i18n/en/docusaurus-plugin-content-docs/current",
-    };
-    // const contentPath = await getFolderContainingFile(
-    //   getDocsDirPaths(versionMetadata),
-    //   file.source
-    // );
-    // const filePath = path.join(contentPath, file.source);
-    const source = file.source;
-    const sourceDirName = file.sourceDirName;
-    const docSlug = getSlug({
-      baseID,
-      source,
-      sourceDirName,
-      frontMatterSlug: frontMatter.slug,
-    });
-    const permalink = normalizeUrl([versionMetadata.versionPath, docSlug]);
-
+    const slug = "/" + frontMatter.id;
+    const permalink = options.baseUrl + options.routeBasePath;
     return {
+      type: "doc" as "doc", // TODO: fix this
       id: frontMatter.id ?? "",
       unversionedId: frontMatter.id ?? "",
       title: frontMatter.title ?? contentTitle ?? frontMatter.id ?? "",
       description: frontMatter.description ?? excerpt ?? "",
-      slug: docSlug,
+      slug: slug,
       frontMatter: frontMatter,
       permalink: permalink,
       ...file,

@@ -24,7 +24,7 @@ const config = {
         api: {
           path: "examples/petstore.yaml",
           routeBasePath: "petstore",
-          beforeApiDocs: ["examples/test.md"],
+          beforeApiDocs: ["examples/test.md", "examples/test2.md"],
         },
         docs: {
           sidebarPath: require.resolve("./sidebars.js"),

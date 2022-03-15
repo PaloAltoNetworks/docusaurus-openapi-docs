@@ -1,6 +1,6 @@
 ---
 id: test
-sidebar_label: Test
+sidebar_label: Fancy Label
 ---
 
 # This is only a test!!!!!!!

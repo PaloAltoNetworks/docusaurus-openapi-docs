@@ -21,7 +21,7 @@ import type {
   PropSidebar,
   PropSidebarItemCategory,
 } from "../types";
-import { ApiPageMetadata } from "../types";
+import { ApiPageMetadata, DocPageMetadata } from "../types";
 import { CategoryMetadataFile } from "./types";
 import { validateCategoryMetadataFile } from "./validation";
 
@@ -36,13 +36,22 @@ interface Options {
 const CategoryMetadataFilenameBase = "_category_";
 
 type keys = "type" | "title" | "permalink" | "id" | "source" | "sourceDirName";
+type docKeys =
+  | "type"
+  | "title"
+  | "permalink"
+  | "id"
+  | "source"
+  | "sourceDirName"
+  | "frontMatter";
 
 type InfoItem = Pick<InfoPageMetadata, keys>;
 type ApiItem = Pick<ApiPageMetadata, keys> & {
   api: DeepPartial<ApiPageMetadata["api"]>;
 };
+type DocItem = Pick<DocPageMetadata, docKeys>;
 
-type Item = InfoItem | ApiItem;
+type Item = InfoItem | ApiItem | DocItem;
 
 // If a path is provided, make it absolute
 // use this before loadSidebars()
@@ -61,6 +70,10 @@ function isApiItem(item: Item): item is ApiItem {
 
 function isInfoItem(item: Item): item is InfoItem {
   return item.type === "info";
+}
+
+function isDocItem(item: Item): item is DocItem {
+  return item.type === "doc";
 }
 
 const Terminator = "."; // a file or folder can never be "."
@@ -153,6 +166,16 @@ export async function generateSidebar(
  * Takes a flat list of pages and groups them into categories based on there tags.
  */
 function groupByTags(items: Item[], options: Options): PropSidebar {
+  const docs = items.filter(isDocItem).map((item) => {
+    const sidebarLabel = item.frontMatter.sidebar_label as string;
+    return {
+      type: "link" as const,
+      label: sidebarLabel ?? item.id ?? item.title,
+      href: item.permalink,
+      docId: item.id,
+    };
+  });
+
   const intros = items.filter(isInfoItem).map((item) => {
     return {
       type: "link" as const,
@@ -216,7 +239,7 @@ function groupByTags(items: Item[], options: Options): PropSidebar {
         ]
       : [];
 
-  return [...intros, ...tagged, ...untagged];
+  return [...docs, ...intros, ...tagged, ...untagged];
 }
 
 /**

@@ -83,6 +83,7 @@ export interface InfoPageMetadata extends ApiMetadataBase {
 }
 
 export interface DocPageMetadata extends ApiMetadataBase {
+  type: "doc";
   data: DocObject;
 }
 
