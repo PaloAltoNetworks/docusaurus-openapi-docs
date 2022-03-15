@@ -33,11 +33,9 @@ export function createStatusCodes({ responses }: Props) {
             value: code,
             children: [
               create("div", {
-                style: { marginLeft: "16px" },
                 children: createDescription(responses[code].description),
               }),
               create("div", {
-                style: { marginLeft: "16px" },
                 children: createSchemaDetails({
                   title: "Schema",
                   body: {
