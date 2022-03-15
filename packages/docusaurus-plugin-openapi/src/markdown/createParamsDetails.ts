@@ -38,7 +38,7 @@ export function createParamsDetails({ parameters, type }: Props) {
       create("div", {
         children: params.map((param) =>
           create("div", {
-            style: { marginLeft: "16px" },
+            style: { marginLeft: "1.5rem" },
             children: [
               create("strong", { children: param.name }),
               guard(param.schema, (schema) =>

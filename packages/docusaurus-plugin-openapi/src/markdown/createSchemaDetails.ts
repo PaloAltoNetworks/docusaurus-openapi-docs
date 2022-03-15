@@ -66,13 +66,13 @@ function createRow({ name, schema, required }: RowProps) {
           children: [
             guard(getQualifierMessage(schema), (message) =>
               create("div", {
-                style: { marginLeft: "16px" },
+                style: { marginLeft: "1.5rem" },
                 children: createDescription(message),
               })
             ),
             guard(schema.description, (description) =>
               create("div", {
-                style: { marginLeft: "16px" },
+                style: { marginLeft: "1.5rem" },
                 children: createDescription(description),
               })
             ),
@@ -123,7 +123,7 @@ function createRows({ schema }: RowsProps): string | undefined {
   // object
   if (schema.properties !== undefined) {
     return create("div", {
-      style: { marginLeft: "16px" },
+      style: { marginLeft: "1.5rem" },
       children: create("div", {
         children: Object.entries(schema.properties).map(([key, val]) =>
           createRow({
@@ -144,7 +144,7 @@ function createRows({ schema }: RowsProps): string | undefined {
     return create("div", {
       className: "allOf",
       style: {
-        marginLeft: "16px",
+        marginLeft: "1.5rem",
       },
       children: create("div", {
         children: Object.entries(properties).map(([key, val]) =>
@@ -201,13 +201,7 @@ function createRowsRoot({ schema }: RowsRootProps) {
   if (schema.items !== undefined) {
     return create("div", {
       children: create("div", {
-        children: [
-          create("span", {
-            style: { opacity: "0.6" },
-            children: ` ${getSchemaName(schema, true)}`,
-          }),
-          createRows({ schema: schema.items }),
-        ],
+        children: [createRows({ schema: schema.items })],
       }),
     });
   }
@@ -272,6 +266,10 @@ export function createSchemaDetails({ title, body, ...rest }: Props) {
     }
   }
 
+  const firstBodyIndentation = firstBody.items
+    ? { marginLeft: "0" }
+    : { marginLeft: "1.5rem" };
+
   return createDetails({
     ...rest,
     children: [
@@ -291,7 +289,7 @@ export function createSchemaDetails({ title, body, ...rest }: Props) {
         ],
       }),
       create("div", {
-        style: { marginLeft: "16px" },
+        style: { marginLeft: "1.5rem" },
         children: create("div", {
           children: create("div", {
             style: { textAlign: "left" },
@@ -304,7 +302,7 @@ export function createSchemaDetails({ title, body, ...rest }: Props) {
         }),
       }),
       create("div", {
-        style: { marginLeft: "16px" },
+        style: firstBodyIndentation,
         children: createRowsRoot({ schema: firstBody }),
       }),
     ],
