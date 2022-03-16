@@ -11,9 +11,9 @@ import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import { ThemeClassNames, useWindowSize } from "@docusaurus/theme-common";
 import type { Props } from "@theme/ApiItem";
 import DocPaginator from "@theme/DocPaginator";
+import Seo from "@theme/Seo";
 import TOC from "@theme/TOC";
 import TOCCollapsible from "@theme/TOCCollapsible";
-import Seo from "@theme/Seo";
 import clsx from "clsx";
 
 import styles from "./styles.module.css";
@@ -52,7 +52,10 @@ function ApiItem(props: Props): JSX.Element {
   const windowSize = useWindowSize();
 
   const canRenderTOC =
-    ApiContent.toc && ApiContent.toc.length > 0 && type === "doc";
+    !hideTableOfContents &&
+    ApiContent.toc &&
+    ApiContent.toc.length > 0 &&
+    type === "doc";
 
   const renderTocDesktop =
     canRenderTOC && (windowSize === "desktop" || windowSize === "ssr");
