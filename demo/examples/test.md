@@ -1,9 +1,9 @@
 ---
 id: test
-sidebar_label: Fancy Label
+sidebar_label: Custom Sidebar Label
 ---
 
-# This is only a test!!!!!!!
+# This is the title
 
 ## This is a heading 2
 

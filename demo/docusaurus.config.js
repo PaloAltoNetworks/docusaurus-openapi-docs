@@ -26,7 +26,7 @@ const config = {
           routeBasePath: "petstore",
           beforeApiDocs: [
             "examples/test.md",
-            "examples/test2.md",
+            "examples/test2.mdx",
             "examples/test3.md",
           ],
         },
@@ -57,7 +57,7 @@ const config = {
         id: "cos",
         path: "examples/openapi-cos.json",
         routeBasePath: "cos",
-        beforeApiDocs: ["examples/test.md", "examples/test2.md"],
+        beforeApiDocs: ["examples/test.md", "examples/test2.mdx"],
       },
     ],
     [
