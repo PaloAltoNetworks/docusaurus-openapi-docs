@@ -8,6 +8,7 @@
 import type { RemarkAndRehypePluginOptions } from "@docusaurus/mdx-loader";
 import type { Request } from "postman-collection";
 
+import { DocObject } from "./docs/types";
 import {
   InfoObject,
   OperationObject,
@@ -31,10 +32,12 @@ export interface PluginOptions extends RemarkAndRehypePluginOptions {
   sidebarCollapsed: boolean;
   showExecuteButton: boolean;
   showManualAuthentication: boolean;
+  beforeApiDocs: Array<string>;
 }
 
 export interface LoadedContent {
   loadedApi: ApiMetadata[];
+  loadedDocs: DocPageMetadata[];
 }
 
 export type ApiMetadata = ApiPageMetadata | InfoPageMetadata;
@@ -77,6 +80,11 @@ export interface ApiItem extends OperationObject {
 export interface InfoPageMetadata extends ApiMetadataBase {
   type: "info";
   info: ApiInfo;
+}
+
+export interface DocPageMetadata extends ApiMetadataBase {
+  type: "doc";
+  data: DocObject;
 }
 
 export type ApiInfo = InfoObject;
