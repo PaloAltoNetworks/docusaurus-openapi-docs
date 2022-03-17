@@ -1,6 +1,6 @@
 {
   "name": "@paloaltonetworks/create-docusaurus-openapi",
-  "version": "17.0.1",
+  "version": "17.0.3",
   "description": "Create Docusaurus apps easily.",
   "repository": {
     "type": "git",
