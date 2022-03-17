@@ -37,3 +37,9 @@
     display: none;
   }
 }
+
+@media (max-width: 996px) {
+  .apiItemContainer nav {
+    display: none;
+  }
+}
