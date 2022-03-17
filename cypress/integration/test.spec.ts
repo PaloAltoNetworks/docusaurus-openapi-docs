@@ -7,6 +7,7 @@
 
 describe("test", () => {
   it("loads Petstore page", () => {
+    cy.viewport("macbook-15");
     cy.visit("/petstore");
     navTo(
       [/^pet$/i, /add a new pet to the store/i],
@@ -15,11 +16,13 @@ describe("test", () => {
   });
 
   it("loads Cloud Object Storage page", () => {
+    cy.viewport("macbook-15");
     cy.visit("/cos");
     navTo([], /generating an iam token/i);
   });
 
   it("loads Multi-spec page", () => {
+    cy.viewport("macbook-15");
     cy.visit("/multi-spec");
     navTo(
       [
