@@ -1,3 +1,16 @@
+## 17.0.3 (Mar 16, 2022)
+
+High level enhancements
+
+- Added support for frontloading docs ([#20](https://github.com/PaloAltoNetworks/docusaurus-openapi/pull/20))
+- Optimize webpack bundle size ([#16](https://github.com/PaloAltoNetworks/docusaurus-openapi/pull/16))
+
+Other enhancements and bug fixes
+
+- Added workflow for Firebase deployment
+- Minor fixes to Tabs component
+- Minor fixes to schema indentation
+
 ## 17.0.2 (Mar 9, 2022)
 
 Bug fixes
