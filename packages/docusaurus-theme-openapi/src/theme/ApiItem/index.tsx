@@ -66,7 +66,7 @@ function ApiItem(props: Props): JSX.Element {
     <>
       <Seo {...{ title, description, keywords, image }} />
       <div className="row">
-        <div className="col">
+        <div className={clsx("col", api ? "col--7" : "col--9")}>
           <div className={styles.apiItemContainer}>
             <article>
               <div className={clsx("theme-api-markdown", "markdown")}>
@@ -84,10 +84,9 @@ function ApiItem(props: Props): JSX.Element {
                 <ApiContent />
               </div>
             </article>
-            <DocPaginator previous={previous} next={next} />
           </div>
         </div>
-        <div className={clsx("col", api ? "col--5" : "col--3")}>
+        <div className={clsx("col", api && "col--5")}>
           {api && (
             <ApiDemoPanel
               item={api}
@@ -105,6 +104,11 @@ function ApiItem(props: Props): JSX.Element {
               className={ThemeClassNames.docs.docTocDesktop}
             />
           )}
+        </div>
+      </div>
+      <div className="row">
+        <div className={clsx("col", api ? "col--7" : "col--9")}>
+          <DocPaginator previous={previous} next={next} />
         </div>
       </div>
     </>
