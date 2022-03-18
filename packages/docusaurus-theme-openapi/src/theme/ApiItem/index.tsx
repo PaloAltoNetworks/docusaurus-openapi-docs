@@ -22,8 +22,6 @@ let ApiDemoPanel = (_: {
   item: any;
   showExecuteButton?: boolean;
   showManualAuthentication?: boolean;
-  previous?: object;
-  next?: object;
 }) => <div style={{ marginTop: "3.5em" }} />;
 if (ExecutionEnvironment.canUseDOM) {
   ApiDemoPanel = require("@theme/ApiDemoPanel").default;
@@ -66,7 +64,7 @@ function ApiItem(props: Props): JSX.Element {
     <>
       <Seo {...{ title, description, keywords, image }} />
       <div className="row">
-        <div className="col">
+        <div className={clsx("col", api ? "col--7" : "col--9")}>
           <div className={styles.apiItemContainer}>
             <article>
               <div className={clsx("theme-api-markdown", "markdown")}>
@@ -84,17 +82,14 @@ function ApiItem(props: Props): JSX.Element {
                 <ApiContent />
               </div>
             </article>
-            <DocPaginator previous={previous} next={next} />
           </div>
         </div>
-        <div className={clsx("col", api ? "col--5" : "col--3")}>
+        <div className={clsx("col", api && "col--5")}>
           {api && (
             <ApiDemoPanel
               item={api}
               showExecuteButton={showExecuteButton}
               showManualAuthentication={showManualAuthentication}
-              previous={previous}
-              next={next}
             />
           )}
           {renderTocDesktop && (
@@ -105,6 +100,11 @@ function ApiItem(props: Props): JSX.Element {
               className={ThemeClassNames.docs.docTocDesktop}
             />
           )}
+        </div>
+      </div>
+      <div className="row">
+        <div className={clsx("col", api ? "col--7" : "col--9")}>
+          <DocPaginator previous={previous} next={next} />
         </div>
       </div>
     </>
