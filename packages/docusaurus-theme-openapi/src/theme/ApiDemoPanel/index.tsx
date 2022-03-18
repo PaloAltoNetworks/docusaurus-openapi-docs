@@ -10,6 +10,7 @@ import React from "react";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import { ParameterObject } from "@paloaltonetworks/docusaurus-plugin-openapi/src/openapi/types";
 import { Metadata } from "@theme/ApiItem";
+import DocPaginator from "@theme/DocPaginator";
 import sdk from "postman-collection";
 import { Provider } from "react-redux";
 
@@ -33,10 +34,14 @@ function ApiDemoPanel({
   item,
   showExecuteButton,
   showManualAuthentication,
+  previous,
+  next,
 }: {
   item: NonNullable<Metadata["api"]>;
   showExecuteButton: boolean;
   showManualAuthentication: boolean;
+  previous: Metadata["previous"];
+  next: Metadata["next"];
 }) {
   const { siteConfig } = useDocusaurusContext();
   const themeConfig = siteConfig.themeConfig as ThemeConfig;
@@ -93,7 +98,10 @@ function ApiDemoPanel({
 
   return (
     <Provider store={store2}>
-      <div style={{ marginTop: "3.5em" }}>
+      <div
+        className={styles.apiDemoPanelContainer}
+        style={{ marginTop: "3.5em" }}
+      >
         {showManualAuthentication && <Authorization />}
 
         <MethodEndpoint method={method} path={path} />
@@ -121,6 +129,8 @@ function ApiDemoPanel({
         )}
 
         <Response />
+
+        <DocPaginator previous={previous} next={next} />
       </div>
     </Provider>
   );

@@ -15,3 +15,9 @@
   /* hack for view calculation when monaco is hidden */
   position: relative;
 }
+
+@media (min-width: 997px) {
+  .apiDemoPanelContainer nav {
+    display: none;
+  }
+}

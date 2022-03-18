@@ -89,7 +89,7 @@ html[data-theme="dark"] {
   display: none;
 }
 
-@media (min-width: 997px) {
+@media (min-width: 1195px) {
   .apiMainContainer {
     flex-grow: 1;
     max-width: calc(100% - var(--api-sidebar-width));
