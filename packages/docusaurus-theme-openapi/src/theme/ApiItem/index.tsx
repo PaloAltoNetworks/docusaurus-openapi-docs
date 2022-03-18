@@ -22,8 +22,6 @@ let ApiDemoPanel = (_: {
   item: any;
   showExecuteButton?: boolean;
   showManualAuthentication?: boolean;
-  previous?: object;
-  next?: object;
 }) => <div style={{ marginTop: "3.5em" }} />;
 if (ExecutionEnvironment.canUseDOM) {
   ApiDemoPanel = require("@theme/ApiDemoPanel").default;
@@ -92,8 +90,6 @@ function ApiItem(props: Props): JSX.Element {
               item={api}
               showExecuteButton={showExecuteButton}
               showManualAuthentication={showManualAuthentication}
-              previous={previous}
-              next={next}
             />
           )}
           {renderTocDesktop && (
