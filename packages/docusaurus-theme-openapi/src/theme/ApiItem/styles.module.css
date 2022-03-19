@@ -9,8 +9,9 @@
 }
 
 :global(.theme-api-markdown details) {
+  margin: unset;
   max-width: 600px;
-  background-color: var(--ifm-background-color);
+  background-color: transparent;
   color: var(--ifm-font-color-base);
   padding: unset;
   border: unset !important;
@@ -36,4 +37,57 @@
   .tocMobile {
     display: none;
   }
+}
+
+:global(.theme-api-markdown details li) {
+  list-style: none;
+  padding-bottom: 5px;
+  padding-top: 5px;
+}
+
+:global(.theme-api-markdown details li:last-child) {
+  border-left: none;
+}
+
+:global(.theme-api-markdown details p) {
+  margin-bottom: 0;
+}
+
+:global(.theme-api-markdown li::before) {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  width: 0.7rem; /* width of horizontal line */
+  height: 0.5rem; /* vertical position of line */
+  vertical-align: top;
+  border-bottom: thin solid var(--ifm-color-gray-500);
+  content: "";
+  display: inline-block;
+}
+
+:global(.theme-api-markdown details ul) {
+  padding-left: 0;
+  /* font-family: "Fira Mono", monospace; */
+  font-size: 14px;
+}
+
+:global(.schemaItem:hover) {
+  background-color: var(--ifm-menu-color-background-active);
+}
+
+:global(.schemaItem:focus) {
+  background-color: var(--ifm-menu-color-background-active);
+}
+
+:global(.paramsItem:hover) {
+  background-color: var(--ifm-menu-color-background-active);
+}
+
+:global(.paramsItem:focus) {
+  background-color: var(--ifm-menu-color-background-active);
+}
+
+:global(.theme-api-markdown div[class^="collapsibleContent"]) {
+  margin-top: 0 !important;
+  padding-left: 2px;
 }
