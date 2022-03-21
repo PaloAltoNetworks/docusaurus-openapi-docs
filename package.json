@@ -5,6 +5,10 @@
     "packages": [
       "packages/*",
       "demo"
+    ],
+    "nohoist": [
+      "**/postman-code-generators",
+      "**/postman-collection"
     ]
   },
   "scripts": {
@@ -27,7 +31,7 @@
     "release:version": "scripts/version.ts",
     "release:publish": "scripts/publish.ts",
     "clean": "rm -rf node_modules build demo/.docusaurus demo/build demo/node_modules && find packages -name node_modules -type d -maxdepth 2 -exec rm -rf {} + && find packages -name dist -type d -maxdepth 2 -exec rm -rf {} + && find packages -name lib -type d -maxdepth 2 -exec rm -rf {} + && find packages -name lib-next -type d -maxdepth 2 -exec rm -rf {} +",
-    "postinstall": "patch-package"
+    "postinstall": "cd packages/docusaurus-theme-openapi && patch-package && cd ../docusaurus-plugin-openapi && patch-package"
   },
   "devDependencies": {
     "@babel/cli": "^7.16.0",
