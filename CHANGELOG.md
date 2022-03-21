@@ -1,3 +1,28 @@
+## 17.0.4 (Mar 21, 2022)
+
+High level enhancements
+
+- Nohoist `postman-collection` and `postman-code-generators` to support package-level patching.
+- Add schema guidelines to improve readability.
+- Improve responsiveness.
+
+Other enhancements and bug fixes
+
+- Add patch-package to standalone packages ([#29](https://github.com/PaloAltoNetworks/docusaurus-openapi/pull/29))
+- Add guidelines to collapsible schemas ([#27](https://github.com/PaloAltoNetworks/docusaurus-openapi/pull/27))
+- Merge pull request #26 from PaloAltoNetworks/response-tweaks-v2
+- Update tabs css
+- Revert to original ApiPage media query
+- Responsiveness tweaks ([#25](https://github.com/PaloAltoNetworks/docusaurus-openapi/pull/25))
+- Manually bump to 17.0.3 ([#24](https://github.com/PaloAltoNetworks/docusaurus-openapi/pull/24))
+- Merge pull request #23 from PaloAltoNetworks/ui-cleanup
+- Increase cypress viewport size
+- Hide ApiItem doc pagination on mobile
+- Pass down previous and next props to ApiDemoPanel from ApiItem
+- Import DocPaginator into ApiDemoPanel
+- Adjust responseTabsContainer width
+- Adjust apiSidebarContainer media query
+
 ## 17.0.3 (Mar 16, 2022)
 
 High level enhancements
