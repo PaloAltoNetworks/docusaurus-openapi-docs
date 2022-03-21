@@ -1,7 +1,7 @@
 {
   "name": "@paloaltonetworks/docusaurus-plugin-openapi",
   "description": "OpenAPI plugin for Docusaurus.",
-  "version": "17.0.4",
+  "version": "17.0.5",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -29,7 +29,6 @@
     "@types/json-schema": "^7.0.9",
     "@types/lodash": "^4.14.176",
     "@types/postman-collection": "^3.5.3",
-    "patch-package": "^6.4.7",
     "utility-types": "^3.10.0"
   },
   "dependencies": {
@@ -44,6 +43,7 @@
     "json-refs": "^3.0.15",
     "lodash": "^4.17.20",
     "openapi-to-postmanv2": "^3.0.0",
+    "patch-package": "^6.4.7",
     "postman-collection": "^4.1.0",
     "remark-admonitions": "^1.2.1",
     "webpack": "^5.61.0"
