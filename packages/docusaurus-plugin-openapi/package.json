@@ -18,7 +18,8 @@
   "types": "src/plugin-openapi.d.ts",
   "scripts": {
     "build": "tsc",
-    "watch": "tsc --watch"
+    "watch": "tsc --watch",
+    "postinstall": "patch-package"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "2.0.0-beta.17",
