@@ -64,7 +64,7 @@ function ApiItem(props: Props): JSX.Element {
     <>
       <Seo {...{ title, description, keywords, image }} />
       <div className="row">
-        <div className={clsx("col", api ? "col--7" : "col--9")}>
+        <div className={clsx("col", api ? "col--7" : "col--12")}>
           <div className={styles.apiItemContainer}>
             <article>
               <div className={clsx("theme-api-markdown", "markdown")}>
@@ -103,7 +103,7 @@ function ApiItem(props: Props): JSX.Element {
         </div>
       </div>
       <div className="row">
-        <div className={clsx("col", api ? "col--7" : "col--9")}>
+        <div className={clsx("col")}>
           <DocPaginator previous={previous} next={next} />
         </div>
       </div>
