@@ -1,3 +1,9 @@
+## 17.0.5 (Mar 21, 2022)
+
+High level enhancements
+
+- Convert patch-package to full dependency.
+
 ## 17.0.4 (Mar 21, 2022)
 
 High level enhancements
