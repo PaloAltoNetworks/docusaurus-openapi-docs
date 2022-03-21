@@ -295,7 +295,7 @@ export function createSchemaDetails({ title, body, ...rest }: Props) {
       createDetailsSummary({
         style: { textAlign: "left" },
         children: [
-          `${title} `,
+          create("strong", { children: `${title}` }),
           guard(body.required, () => [
             create("strong", {
               style: {

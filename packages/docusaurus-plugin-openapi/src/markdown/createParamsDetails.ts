@@ -32,7 +32,11 @@ export function createParamsDetails({ parameters, type }: Props) {
     children: [
       createDetailsSummary({
         children: [
-          `${type.charAt(0).toUpperCase() + type.slice(1)} Parameters`,
+          create("strong", {
+            children: `${
+              type.charAt(0).toUpperCase() + type.slice(1)
+            } Parameters`,
+          }),
         ],
       }),
       create("div", {
