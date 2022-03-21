@@ -28,6 +28,7 @@
 
 /* Open API Response Code Tabs */
 .responseTabsTopSection {
+  margin-top: 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
