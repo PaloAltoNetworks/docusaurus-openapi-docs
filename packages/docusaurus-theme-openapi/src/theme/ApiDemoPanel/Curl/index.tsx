@@ -10,7 +10,6 @@ import React, { useRef, useState, useEffect } from "react";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import clsx from "clsx";
 // @ts-ignore
-import codegen from "postman-code-generators";
 import sdk from "postman-collection";
 import Highlight, { defaultProps } from "prism-react-renderer";
 
@@ -18,6 +17,8 @@ import { useTypedSelector } from "../hooks";
 import buildPostmanRequest from "./../buildPostmanRequest";
 import FloatingButton from "./../FloatingButton";
 import styles from "./styles.module.css";
+
+const codegen = require("./postman-code-generators");
 
 interface Language {
   tabName: string;
