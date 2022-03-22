@@ -7,7 +7,7 @@ build
 dist
 lib
 lib-next
-!packages/docusaurus-theme-openapi/src/theme/ApiDemoPanel/Curl/postman-code-generators/lib/**
+!packages/docusaurus-theme-openapi/src/theme/ApiDemoPanel/Curl/postman-code-generators/lib
 
 # Dependencies
 /node_modules
