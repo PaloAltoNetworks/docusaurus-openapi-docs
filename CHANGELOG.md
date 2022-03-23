@@ -1,3 +1,13 @@
+## 17.0.6 (Mar 23, 2022)
+
+High level enhancements
+
+- Switch to @paloaltonetworks/postman-code-generators
+
+Other enhancements and bug fixes
+
+- Switch to @paloaltonetworks/postman-code-generators ([#33](https://github.com/PaloAltoNetworks/docusaurus-openapi/pull/33))
+
 ## 17.0.5 (Mar 21, 2022)
 
 High level enhancements
