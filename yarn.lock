@@ -2834,10 +2834,10 @@
   dependencies:
     "@octokit/openapi-types" "^11.2.0"
 
-"@paloaltonetworks/postman-code-generators@^1.1.5":
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/@paloaltonetworks/postman-code-generators/-/postman-code-generators-1.1.5.tgz#f635c10b30fd8e6df03ebeb56c32cc1fb285aaf3"
-  integrity sha512-KXsg70kg4XB8oumC+LOw/bR6UIiVDS9uvw/goU3cmWUyOV62Qq7RGWpWn0z1ifOiOd4vAnw7lJGfIkeX6DYWNA==
+"@paloaltonetworks/postman-code-generators@1.1.5-hotfix.1":
+  version "1.1.5-hotfix.1"
+  resolved "https://registry.yarnpkg.com/@paloaltonetworks/postman-code-generators/-/postman-code-generators-1.1.5-hotfix.1.tgz#f49567a7b7df7ddd70aa3e7664f64072b6a556e4"
+  integrity sha512-MJWEs2SaRqIZDVnnV/0/u1Om7ngUwqHCZ8WNmL4Bp/yAFn0wSvC5FJZwBMpr1tFkR7Uaz44IkyaDGnKjmecROA==
   dependencies:
     async "2.6.3"
     path "0.12.7"
