@@ -5,10 +5,6 @@
     "packages": [
       "packages/*",
       "demo"
-    ],
-    "nohoist": [
-      "**/postman-code-generators",
-      "**/postman-collection"
     ]
   },
   "scripts": {
