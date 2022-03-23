@@ -8,9 +8,9 @@
 import React, { useRef, useState, useEffect } from "react";
 
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
-import clsx from "clsx";
 // @ts-ignore
-import codegen from "postman-code-generators";
+import codegen from "@paloaltonetworks/postman-code-generators";
+import clsx from "clsx";
 import sdk from "postman-collection";
 import Highlight, { defaultProps } from "prism-react-renderer";
 
