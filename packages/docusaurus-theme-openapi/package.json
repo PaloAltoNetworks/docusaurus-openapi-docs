@@ -21,8 +21,7 @@
     "watch": "concurrently --names \"lib,lib-next,tsc\" --kill-others \"yarn babel:lib --watch\" \"yarn babel:lib-next --watch\" \"yarn tsc --watch\"",
     "babel:lib": "cross-env BABEL_ENV=lib babel src -d lib --extensions \".tsx,.ts\" --ignore \"**/*.d.ts\" --copy-files",
     "babel:lib-next": "cross-env BABEL_ENV=lib-next babel src -d lib-next --extensions \".tsx,.ts\" --ignore \"**/*.d.ts\" --copy-files",
-    "format:lib-next": "prettier --config ../../.prettierrc.json --write \"lib-next/**/*.{js,ts,jsx,tsc}\"",
-    "postinstall": "patch-package"
+    "format:lib-next": "prettier --config ../../.prettierrc.json --write \"lib-next/**/*.{js,ts,jsx,tsc}\""
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "2.0.0-beta.17",
@@ -41,6 +40,7 @@
     "@mdx-js/react": "^1.6.21",
     "@monaco-editor/react": "^4.3.1",
     "@paloaltonetworks/docusaurus-plugin-openapi": "^17.0.5",
+    "@paloaltonetworks/postman-code-generators": "1.1.5-hotfix.3",
     "@reduxjs/toolkit": "^1.7.1",
     "buffer": "^6.0.3",
     "clsx": "^1.1.1",
@@ -48,8 +48,6 @@
     "immer": "^9.0.7",
     "lodash": "^4.17.20",
     "monaco-editor": "^0.31.1",
-    "patch-package": "^6.4.7",
-    "postman-code-generators": "^1.0.0",
     "postman-collection": "^4.1.0",
     "prism-react-renderer": "^1.2.1",
     "process": "^0.11.10",

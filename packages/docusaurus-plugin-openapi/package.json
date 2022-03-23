@@ -18,8 +18,7 @@
   "types": "src/plugin-openapi.d.ts",
   "scripts": {
     "build": "tsc",
-    "watch": "tsc --watch",
-    "postinstall": "patch-package"
+    "watch": "tsc --watch"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "2.0.0-beta.17",
@@ -43,7 +42,6 @@
     "json-refs": "^3.0.15",
     "lodash": "^4.17.20",
     "openapi-to-postmanv2": "^3.0.0",
-    "patch-package": "^6.4.7",
     "postman-collection": "^4.1.0",
     "remark-admonitions": "^1.2.1",
     "webpack": "^5.61.0"
