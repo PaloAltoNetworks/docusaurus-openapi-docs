@@ -8,9 +8,11 @@
 import React from "react";
 
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+// @ts-ignore
 import { ParameterObject } from "@paloaltonetworks/docusaurus-plugin-openapi/src/openapi/types";
+// @ts-ignore
+import sdk from "@paloaltonetworks/postman-collection";
 import { Metadata } from "@theme/ApiItem";
-import sdk from "postman-collection";
 import { Provider } from "react-redux";
 
 import { ThemeConfig } from "../../types";

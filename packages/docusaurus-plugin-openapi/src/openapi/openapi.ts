@@ -13,13 +13,15 @@ import {
   GlobExcludeDefault,
   normalizeUrl,
 } from "@docusaurus/utils";
+// @ts-ignore
+import Converter from "@paloaltonetworks/openapi-to-postmanv2";
+// @ts-ignore
+import sdk, { Collection } from "@paloaltonetworks/postman-collection";
 import chalk from "chalk";
 import fs from "fs-extra";
 import yaml from "js-yaml";
 import JsonRefs from "json-refs";
 import { kebabCase } from "lodash";
-import Converter from "openapi-to-postmanv2";
-import sdk, { Collection } from "postman-collection";
 
 import { ApiMetadata, ApiPageMetadata, InfoPageMetadata } from "../types";
 import { sampleFromSchema } from "./createExample";
@@ -179,6 +181,7 @@ function bindCollectionToApiItems(
   items: ApiMetadata[],
   postmanCollection: sdk.Collection
 ) {
+  // @ts-ignore
   postmanCollection.forEachItem((item) => {
     const method = item.request.method.toLowerCase();
     const path = item.request.url

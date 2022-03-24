@@ -6,7 +6,8 @@
  * ========================================================================== */
 
 import type { RemarkAndRehypePluginOptions } from "@docusaurus/mdx-loader";
-import type { Request } from "postman-collection";
+// @ts-ignore
+import type { Request } from "@paloaltonetworks/postman-collection";
 
 import { DocObject } from "./docs/types";
 import {

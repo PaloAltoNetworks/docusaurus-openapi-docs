@@ -7,7 +7,8 @@
 
 import React from "react";
 
-import sdk from "postman-collection";
+// @ts-ignore
+import sdk from "@paloaltonetworks/postman-collection";
 
 import { useTypedDispatch, useTypedSelector } from "../hooks";
 import { Param } from "../ParamOptions/slice";
