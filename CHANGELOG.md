@@ -1,3 +1,14 @@
+## 17.0.7 (Mar 25, 2022)
+
+High level enhancements
+
+- Switch to forked versions of postman dependencies to reduce bundle size.
+
+Other enhancements and bug fixes
+
+- [Experimental] Switch to forked postman packages ([#36](https://github.com/PaloAltoNetworks/docusaurus-openapi/pull/36))
+- Remove unnecessary custom styles ([#35](https://github.com/PaloAltoNetworks/docusaurus-openapi/pull/35))
+
 ## 17.0.6 (Mar 23, 2022)
 
 High level enhancements
