@@ -5,6 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-declare module "openapi-to-postmanv2" {
+declare module "@paloaltonetworks/openapi-to-postmanv2" {
   export default any;
 }
