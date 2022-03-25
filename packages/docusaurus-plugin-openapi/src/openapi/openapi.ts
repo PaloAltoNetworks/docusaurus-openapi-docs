@@ -13,7 +13,6 @@ import {
   GlobExcludeDefault,
   normalizeUrl,
 } from "@docusaurus/utils";
-// @ts-ignore
 import Converter from "@paloaltonetworks/openapi-to-postmanv2";
 // @ts-ignore
 import sdk, { Collection } from "@paloaltonetworks/postman-collection";
