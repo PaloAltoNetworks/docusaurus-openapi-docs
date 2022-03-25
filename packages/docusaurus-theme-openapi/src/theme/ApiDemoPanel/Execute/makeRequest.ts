@@ -5,7 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import sdk from "postman-collection";
+// @ts-ignore
+import sdk from "@paloaltonetworks/postman-collection";
 
 import { Body } from "../Body/slice";
 
@@ -41,6 +42,7 @@ async function makeRequest(
 
   let myHeaders = new Headers();
   if (headers) {
+    // @ts-ignore
     headers.forEach((header) => {
       if (header.key && header.value) {
         myHeaders.append(header.key, header.value);

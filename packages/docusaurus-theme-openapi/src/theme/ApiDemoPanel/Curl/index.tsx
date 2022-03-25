@@ -10,8 +10,9 @@ import React, { useRef, useState, useEffect } from "react";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 // @ts-ignore
 import codegen from "@paloaltonetworks/postman-code-generators";
+// @ts-ignore
+import sdk from "@paloaltonetworks/postman-collection";
 import clsx from "clsx";
-import sdk from "postman-collection";
 import Highlight, { defaultProps } from "prism-react-renderer";
 
 import { useTypedSelector } from "../hooks";

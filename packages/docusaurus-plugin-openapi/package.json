@@ -27,7 +27,7 @@
     "@types/js-yaml": "^4.0.5",
     "@types/json-schema": "^7.0.9",
     "@types/lodash": "^4.14.176",
-    "@types/postman-collection": "^3.5.3",
+    "@types/postman-collection": "^3.5.7",
     "utility-types": "^3.10.0"
   },
   "dependencies": {
@@ -41,8 +41,8 @@
     "js-yaml": "^4.1.0",
     "json-refs": "^3.0.15",
     "lodash": "^4.17.20",
-    "openapi-to-postmanv2": "^3.0.0",
-    "postman-collection": "^4.1.0",
+    "@paloaltonetworks/openapi-to-postmanv2": "3.1.0-hotfix.1",
+    "@paloaltonetworks/postman-collection": "^4.1.0",
     "remark-admonitions": "^1.2.1",
     "webpack": "^5.61.0"
   },
