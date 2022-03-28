@@ -5,14 +5,10 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { escape } from "lodash";
-
 import { ApiItem } from "../types";
-import { createDescription } from "./createDescription";
 import { createDetails } from "./createDetails";
 import { createDetailsSummary } from "./createDetailsSummary";
-import { getQualifierMessage, getSchemaName } from "./schema";
-import { create, guard } from "./utils";
+import { create } from "./utils";
 
 interface Props {
   parameters: ApiItem["parameters"];
@@ -27,7 +23,7 @@ export function createParamsDetails({ parameters, type }: Props) {
   if (params.length === 0) {
     return undefined;
   }
-  // Create new component to render params details
+
   return createDetails({
     children: [
       createDetailsSummary({
@@ -40,7 +36,6 @@ export function createParamsDetails({ parameters, type }: Props) {
         ],
       }),
       create("div", {
-        // ParamsContainer -> Creates an unordered list
         children: [
           create("ul", {
             children: params.map((param) =>
