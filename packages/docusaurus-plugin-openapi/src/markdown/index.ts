@@ -30,6 +30,7 @@ export function createApiPageMD({
   return render([
     `import Tabs from "@theme/Tabs";\n\n`,
     `import TabItem from "@theme/TabItem";\n\n`,
+    `import ParamsItem from "@theme/ParamsItem";\n\n`,
     `## ${escape(title)}\n\n`,
     createDeprecationNotice({ deprecated, description: deprecatedDescription }),
     createDescription(escape(description)),
