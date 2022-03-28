@@ -27,7 +27,7 @@ export function createParamsDetails({ parameters, type }: Props) {
   if (params.length === 0) {
     return undefined;
   }
-
+  // Create new component to render params details
   return createDetails({
     children: [
       createDetailsSummary({
@@ -40,65 +40,13 @@ export function createParamsDetails({ parameters, type }: Props) {
         ],
       }),
       create("div", {
+        // ParamsContainer -> Creates an unordered list
         children: [
           create("ul", {
             children: params.map((param) =>
-              create("li", {
+              create("ParamsItem", {
                 className: "paramsItem",
-                style: {
-                  marginLeft: "1rem",
-                  position: "relative",
-                  paddingLeft: "1rem",
-                  marginTop: 0,
-                  marginBottom: 0,
-                  borderLeft: "thin solid var(--ifm-color-gray-500)",
-                },
-                children: [
-                  create("strong", { children: param.name }),
-                  guard(param.schema, (schema) =>
-                    create("span", {
-                      style: { opacity: "0.6" },
-                      children: ` ${getSchemaName(schema)}`,
-                    })
-                  ),
-                  guard(param.required, () => [
-                    create("strong", {
-                      style: {
-                        fontSize: "var(--ifm-code-font-size)",
-                        color: "var(--openapi-required)",
-                      },
-                      children: " required",
-                    }),
-                  ]),
-                  guard(getQualifierMessage(param.schema), (message) =>
-                    create("div", {
-                      //   style: { marginTop: "var(--ifm-table-cell-padding)" },
-                      children: createDescription(message),
-                    })
-                  ),
-                  guard(param.description, (description) =>
-                    create("div", {
-                      //   style: { marginTop: "var(--ifm-table-cell-padding)" },
-                      children: createDescription(description),
-                    })
-                  ),
-                  guard(param.example, (example) =>
-                    create("div", {
-                      //   style: { marginTop: "var(--ifm-table-cell-padding)" },
-                      children: escape(`Example: ${example}`),
-                    })
-                  ),
-                  guard(param.examples, (examples) =>
-                    create("div", {
-                      //   style: { marginTop: "var(--ifm-table-cell-padding)" },
-                      children: Object.entries(examples).map(([k, v]) =>
-                        create("div", {
-                          children: escape(`Example (${k}): ${v.value}`),
-                        })
-                      ),
-                    })
-                  ),
-                ],
+                param: param,
               })
             ),
           }),
