@@ -21,11 +21,11 @@ function ParamsItem({
   param: { description, example, examples, name, required, schema },
 }) {
   const renderSchemaName = guard(schema, (schema) => (
-    <span> {getSchemaName(schema)}</span>
+    <span className={styles.schemaName}> {getSchemaName(schema)}</span>
   ));
 
   const renderSchemaRequired = guard(required, () => (
-    <strong> required</strong>
+    <strong className={styles.paramsRequired}> required</strong>
   ));
 
   const renderSchema = guard(getQualifierMessage(schema), (message) => (
@@ -37,7 +37,7 @@ function ParamsItem({
   ));
 
   const renderExample = guard(example, (example) => (
-    <div>{escape(`Example: ${example}`)}</div>
+    <div>{`Example: ${example}`}</div>
   ));
 
   const renderExamples = guard(examples, (examples) => {
@@ -45,7 +45,7 @@ function ParamsItem({
     return (
       <>
         {exampleEntries.map(([k, v]) => (
-          <div>{escape(`Example (${k}): ${v.value}`)}</div>
+          <div>{`Example (${k}): ${v.value}`}</div>
         ))}
       </>
     );
