@@ -1,12 +1,20 @@
-import React from "react";
-import escape from "lodash/escape";
-import { createDescription } from "../../../../docusaurus-plugin-openapi/src/markdown/createDescription";
-import { guard } from "../../../../docusaurus-plugin-openapi/src/markdown/utils";
-import {
-  getQualifierMessage,
-  getSchemaName,
-} from "../../../../docusaurus-plugin-openapi/src/markdown/schema";
+/* ============================================================================
+ * Copyright (c) Cloud Annotations
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ * ========================================================================== */
 
+import React from "react";
+
+import escape from "lodash/escape";
+
+import { createDescription } from "../../../../docusaurus-plugin-openapi/src/markdown/createDescription";
+import {
+  getSchemaName,
+  getQualifierMessage,
+} from "../../../../docusaurus-plugin-openapi/src/markdown/schema";
+import { guard } from "../../../../docusaurus-plugin-openapi/src/markdown/utils";
 import styles from "./styles.module.css";
 
 function ParamsItem({
