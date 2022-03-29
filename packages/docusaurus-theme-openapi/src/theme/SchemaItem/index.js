@@ -9,7 +9,6 @@ import React from "react";
 
 import { createDescription } from "../../../../docusaurus-plugin-openapi/src/markdown/createDescription";
 import { guard } from "../../../../docusaurus-plugin-openapi/src/markdown/utils";
-
 import styles from "./styles.module.css";
 
 function SchemaItem({
