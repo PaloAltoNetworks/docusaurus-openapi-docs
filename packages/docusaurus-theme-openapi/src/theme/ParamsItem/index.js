@@ -6,7 +6,6 @@
  * ========================================================================== */
 
 import React from "react";
-import ReactMarkdown from "react-markdown";
 
 import { createDescription } from "@paloaltonetworks/docusaurus-plugin-openapi/src/markdown/createDescription";
 import {
@@ -14,6 +13,7 @@ import {
   getQualifierMessage,
 } from "@paloaltonetworks/docusaurus-plugin-openapi/src/markdown/schema";
 import { guard } from "@paloaltonetworks/docusaurus-plugin-openapi/src/markdown/utils";
+import ReactMarkdown from "react-markdown";
 
 import styles from "./styles.module.css";
 
