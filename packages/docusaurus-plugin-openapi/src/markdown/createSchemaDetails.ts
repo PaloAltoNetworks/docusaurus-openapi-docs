@@ -41,13 +41,53 @@ interface RowProps {
 
 function createRow({ name, schema, required }: RowProps) {
   const schemaName = getSchemaName(schema, true);
+  if (schemaName && (schemaName === "object" || schemaName === "object[]")) {
+    return create("li", {
+      className: "schemaItem",
+      children: [
+        createDetails({
+          children: [
+            createDetailsSummary({
+              children: [
+                create("strong", { children: name }),
+                create("span", {
+                  style: { opacity: "0.6" },
+                  children: ` ${getSchemaName(schema, true)}`,
+                }),
+                guard(required, () => [
+                  create("strong", {
+                    style: {
+                      fontSize: "var(--ifm-code-font-size)",
+                      color: "var(--openapi-required)",
+                    },
+                    children: " required",
+                  }),
+                ]),
+              ],
+            }),
+            create("div", {
+              children: [
+                guard(getQualifierMessage(schema), (message) =>
+                  create("div", {
+                    style: { marginLeft: "1rem" },
+                    children: createDescription(message),
+                  })
+                ),
+                guard(schema.description, (description) =>
+                  create("div", {
+                    style: { marginLeft: "1rem" },
+                    children: createDescription(description),
+                  })
+                ),
+                createRows({ schema: schema }),
+              ],
+            }),
+          ],
+        }),
+      ],
+    });
+  }
   return create("SchemaItem", {
-    // childrenRows: createRows({ schema: schema }),
-    // style: listStyle,
-    collapsible:
-      schemaName && (schemaName === "object" || schemaName === "object[]")
-        ? true
-        : false,
     name,
     required,
     schemaDescription: schema.description,

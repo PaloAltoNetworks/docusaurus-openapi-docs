@@ -12,8 +12,6 @@ import { guard } from "@paloaltonetworks/docusaurus-plugin-openapi/src/markdown/
 import styles from "./styles.module.css";
 
 function SchemaItem({
-  childrenRows,
-  collapsible,
   name,
   qualifierMessage,
   required,
@@ -36,35 +34,15 @@ function SchemaItem({
     </div>
   ));
 
-  const schemaContent = (
-    <div>
-      <strong>{name}</strong>
-      <span className={styles.schemaName}> {schemaName}</span>
-      {renderRequired}
-      {renderQualifierMessage}
-      {renderSchemaDescription}
-      {/* {childrenRows} */}
-    </div>
-  );
-
-  const collapsibleSchemaContent = (
-    <details>
-      <summary>
+  return (
+    <li className={styles.schemaItem}>
+      <div>
         <strong>{name}</strong>
         <span className={styles.schemaName}> {schemaName}</span>
         {renderRequired}
-      </summary>
-      <div>
         {renderQualifierMessage}
         {renderSchemaDescription}
-        {/* {childrenRows} */}
       </div>
-    </details>
-  );
-
-  return (
-    <li className={styles.schemaItem}>
-      {collapsible ? collapsibleSchemaContent : schemaContent}
     </li>
   );
 }
