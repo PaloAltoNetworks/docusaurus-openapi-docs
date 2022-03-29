@@ -6,7 +6,7 @@
  * ========================================================================== */
 
 import React from "react";
-
+import ReactMarkdown from "react-markdown";
 import { createDescription } from "@paloaltonetworks/docusaurus-plugin-openapi/src/markdown/createDescription";
 import { guard } from "@paloaltonetworks/docusaurus-plugin-openapi/src/markdown/utils";
 
@@ -31,7 +31,7 @@ function SchemaItem({
 
   const renderQualifierMessage = guard(qualifierMessage, (message) => (
     <div className={styles.schemaQualifierMessage}>
-      {createDescription(message)}
+      <ReactMarkdown children={createDescription(message)} />
     </div>
   ));
 

@@ -6,6 +6,7 @@
  * ========================================================================== */
 
 import React from "react";
+import ReactMarkdown from "react-markdown";
 
 import { createDescription } from "@paloaltonetworks/docusaurus-plugin-openapi/src/markdown/createDescription";
 import {
@@ -29,7 +30,9 @@ function ParamsItem({
 
   // TODO: getQualiferMessage() contains output in MD format, need to be able to handle formatting here?
   const renderSchema = guard(getQualifierMessage(schema), (message) => (
-    <div>{createDescription(message)}</div>
+    <div>
+      <ReactMarkdown children={createDescription(message)} />
+    </div>
   ));
 
   const renderDescription = guard(description, (description) => (
