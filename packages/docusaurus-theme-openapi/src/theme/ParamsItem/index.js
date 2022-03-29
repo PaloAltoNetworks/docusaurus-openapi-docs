@@ -7,8 +7,6 @@
 
 import React from "react";
 
-import escape from "lodash/escape";
-
 import { createDescription } from "../../../../docusaurus-plugin-openapi/src/markdown/createDescription";
 import {
   getSchemaName,
@@ -28,6 +26,7 @@ function ParamsItem({
     <strong className={styles.paramsRequired}> required</strong>
   ));
 
+  // TODO: getQualiferMessage() contains output in MD format, need to be able to handle formatting here?
   const renderSchema = guard(getQualifierMessage(schema), (message) => (
     <div>{createDescription(message)}</div>
   ));
