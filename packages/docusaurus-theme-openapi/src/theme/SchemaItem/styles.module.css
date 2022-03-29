@@ -18,11 +18,6 @@
   opacity: 0.6;
 }
 
-.schemaDescription,
-.schemaQualiferMessage {
-  margin-left: 1rem;
-}
-
 .required {
   font-size: var(--ifm-code-font-size);
   color: var(--openapi-required);
