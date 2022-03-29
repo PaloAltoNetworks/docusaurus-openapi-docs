@@ -12,17 +12,6 @@ import { createDetailsSummary } from "./createDetailsSummary";
 import { getQualifierMessage, getSchemaName } from "./schema";
 import { create, guard } from "./utils";
 
-const listStyle = {
-  listStyle: "none",
-  position: "relative",
-  paddingBottom: "5px",
-  paddingTop: "5px",
-  paddingLeft: "1rem",
-  marginTop: 0,
-  marginBottom: 0,
-  borderLeft: "thin solid var(--ifm-color-gray-500)",
-};
-
 function resolveAllOf(allOf: SchemaObject[]) {
   // TODO: naive implementation (only supports objects, no directly nested allOf)
   const properties = allOf.reduce((acc, cur) => {
