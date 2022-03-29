@@ -7,12 +7,12 @@
 
 import React from "react";
 
-import { createDescription } from "../../../../docusaurus-plugin-openapi/src/markdown/createDescription";
+import { createDescription } from "@paloaltonetworks/docusaurus-plugin-openapi/src/markdown/createDescription";
 import {
   getSchemaName,
   getQualifierMessage,
-} from "../../../../docusaurus-plugin-openapi/src/markdown/schema";
-import { guard } from "../../../../docusaurus-plugin-openapi/src/markdown/utils";
+} from "@paloaltonetworks/docusaurus-plugin-openapi/src/markdown/schema";
+import { guard } from "@paloaltonetworks/docusaurus-plugin-openapi/src/markdown/utils";
 import styles from "./styles.module.css";
 
 function ParamsItem({
