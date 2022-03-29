@@ -1,7 +1,7 @@
 {
   "name": "@paloaltonetworks/docusaurus-theme-openapi",
   "description": "OpenAPI theme for Docusaurus.",
-  "version": "17.0.6",
+  "version": "17.0.7",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -31,7 +31,7 @@
     "@types/fs-extra": "^9.0.13",
     "@types/lodash": "^4.14.176",
     "@types/mdx-js__react": "^1.5.4",
-    "@types/postman-collection": "^3.5.3",
+    "@types/postman-collection": "^3.5.7",
     "@types/rtlcss": "^3.1.1",
     "concurrently": "^5.2.0"
   },
@@ -39,8 +39,9 @@
     "@docusaurus/theme-common": "2.0.0-beta.17",
     "@mdx-js/react": "^1.6.21",
     "@monaco-editor/react": "^4.3.1",
-    "@paloaltonetworks/docusaurus-plugin-openapi": "^17.0.6",
-    "@paloaltonetworks/postman-code-generators": "1.1.5-hotfix.3",
+    "@paloaltonetworks/docusaurus-plugin-openapi": "^17.0.7",
+    "@paloaltonetworks/postman-code-generators": "1.1.5-hotfix.5",
+    "@paloaltonetworks/postman-collection": "^4.1.0",
     "@reduxjs/toolkit": "^1.7.1",
     "buffer": "^6.0.3",
     "clsx": "^1.1.1",
@@ -48,7 +49,6 @@
     "immer": "^9.0.7",
     "lodash": "^4.17.20",
     "monaco-editor": "^0.31.1",
-    "postman-collection": "^4.1.0",
     "prism-react-renderer": "^1.2.1",
     "process": "^0.11.10",
     "react-magic-dropzone": "^1.0.1",
