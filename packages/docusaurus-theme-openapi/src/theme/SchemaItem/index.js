@@ -14,6 +14,8 @@ import ReactMarkdown from "react-markdown";
 import styles from "./styles.module.css";
 
 function SchemaItem({
+  children: collapsibleSchemaContent,
+  collapsible,
   name,
   qualifierMessage,
   required,
@@ -36,15 +38,19 @@ function SchemaItem({
     </div>
   ));
 
+  const schemaContent = (
+    <div>
+      <strong>{name}</strong>
+      <span className={styles.schemaName}> {schemaName}</span>
+      {renderRequired}
+      {renderQualifierMessage}
+      {renderSchemaDescription}
+    </div>
+  );
+
   return (
     <li className={styles.schemaItem}>
-      <div>
-        <strong>{name}</strong>
-        <span className={styles.schemaName}> {schemaName}</span>
-        {renderRequired}
-        {renderQualifierMessage}
-        {renderSchemaDescription}
-      </div>
+      {collapsible ? collapsibleSchemaContent : schemaContent}
     </li>
   );
 }

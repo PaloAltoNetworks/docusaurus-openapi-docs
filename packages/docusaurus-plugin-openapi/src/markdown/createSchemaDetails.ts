@@ -42,7 +42,8 @@ interface RowProps {
 function createRow({ name, schema, required }: RowProps) {
   const schemaName = getSchemaName(schema, true);
   if (schemaName && (schemaName === "object" || schemaName === "object[]")) {
-    return create("li", {
+    return create("SchemaItem", {
+      collapsible: true,
       className: "schemaItem",
       children: [
         createDetails({
@@ -87,7 +88,9 @@ function createRow({ name, schema, required }: RowProps) {
       ],
     });
   }
+
   return create("SchemaItem", {
+    collapsible: false,
     name,
     required,
     schemaDescription: schema.description,
