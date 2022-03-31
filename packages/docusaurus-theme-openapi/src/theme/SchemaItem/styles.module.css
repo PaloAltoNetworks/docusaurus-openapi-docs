@@ -1,0 +1,24 @@
+.schemaItem {
+  list-style: none;
+  position: relative;
+  margin: 0 !important;
+  padding: 5px 0 5px 1rem;
+  border-left: thin solid var(--ifm-color-gray-500) !important;
+}
+
+.schemaItem:hover {
+  background-color: var(--ifm-menu-color-background-active);
+}
+
+.schemaItem:focus {
+  background-color: var(--ifm-menu-color-background-active);
+}
+
+.schemaName {
+  opacity: 0.6;
+}
+
+.required {
+  font-size: var(--ifm-code-font-size);
+  color: var(--openapi-required);
+}

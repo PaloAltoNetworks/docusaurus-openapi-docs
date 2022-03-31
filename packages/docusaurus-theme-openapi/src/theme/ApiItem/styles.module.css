@@ -71,6 +71,14 @@
   font-size: 14px;
 }
 
+:global(.schemaItem) {
+  list-style: none;
+  position: relative;
+  margin: 0 !important;
+  padding: 5px 0 5px 1rem;
+  border-left: thin solid var(--ifm-color-gray-500) !important;
+}
+
 :global(.schemaItem:hover) {
   background-color: var(--ifm-menu-color-background-active);
 }

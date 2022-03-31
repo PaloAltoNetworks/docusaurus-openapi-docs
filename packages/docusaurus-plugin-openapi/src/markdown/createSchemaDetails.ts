@@ -12,17 +12,6 @@ import { createDetailsSummary } from "./createDetailsSummary";
 import { getQualifierMessage, getSchemaName } from "./schema";
 import { create, guard } from "./utils";
 
-const listStyle = {
-  listStyle: "none",
-  position: "relative",
-  paddingBottom: "5px",
-  paddingTop: "5px",
-  paddingLeft: "1rem",
-  marginTop: 0,
-  marginBottom: 0,
-  borderLeft: "thin solid var(--ifm-color-gray-500)",
-};
-
 function resolveAllOf(allOf: SchemaObject[]) {
   // TODO: naive implementation (only supports objects, no directly nested allOf)
   const properties = allOf.reduce((acc, cur) => {
@@ -53,9 +42,9 @@ interface RowProps {
 function createRow({ name, schema, required }: RowProps) {
   const schemaName = getSchemaName(schema, true);
   if (schemaName && (schemaName === "object" || schemaName === "object[]")) {
-    return create("li", {
+    return create("SchemaItem", {
+      collapsible: true,
       className: "schemaItem",
-      style: listStyle,
       children: [
         createDetails({
           children: [
@@ -78,16 +67,17 @@ function createRow({ name, schema, required }: RowProps) {
               ],
             }),
             create("div", {
+              style: { marginLeft: "1rem" },
               children: [
                 guard(getQualifierMessage(schema), (message) =>
                   create("div", {
-                    style: { marginLeft: "1rem" },
+                    style: { marginTop: ".5rem", marginBottom: ".5rem" },
                     children: createDescription(message),
                   })
                 ),
                 guard(schema.description, (description) =>
                   create("div", {
-                    style: { marginLeft: "1rem" },
+                    style: { marginTop: ".5rem", marginBottom: ".5rem" },
                     children: createDescription(description),
                   })
                 ),
@@ -99,38 +89,14 @@ function createRow({ name, schema, required }: RowProps) {
       ],
     });
   }
-  return create("li", {
-    className: "schemaItem",
-    style: listStyle,
-    children: create("div", {
-      children: [
-        create("strong", { children: name }),
-        create("span", {
-          style: { opacity: "0.6" },
-          children: ` ${getSchemaName(schema, true)}`,
-        }),
-        guard(required, () => [
-          create("strong", {
-            style: {
-              fontSize: "var(--ifm-code-font-size)",
-              color: "var(--openapi-required)",
-            },
-            children: " required",
-          }),
-        ]),
-        guard(getQualifierMessage(schema), (message) =>
-          create("div", {
-            children: createDescription(message),
-          })
-        ),
-        guard(schema.description, (description) =>
-          create("div", {
-            children: createDescription(description),
-          })
-        ),
-        createRows({ schema: schema }),
-      ],
-    }),
+
+  return create("SchemaItem", {
+    collapsible: false,
+    name,
+    required,
+    schemaDescription: schema.description,
+    schemaName: getSchemaName(schema, true),
+    qualifierMessage: getQualifierMessage(schema),
   });
 }
 
@@ -141,39 +107,31 @@ interface RowsProps {
 function createRows({ schema }: RowsProps): string | undefined {
   // object
   if (schema.properties !== undefined) {
-    return create("li", {
-      style: { marginLeft: "1rem" },
-      children: create("ul", {
-        children: Object.entries(schema.properties).map(([key, val]) =>
-          createRow({
-            name: key,
-            schema: val,
-            required: Array.isArray(schema.required)
-              ? schema.required.includes(key)
-              : false,
-          })
-        ),
-      }),
+    return create("ul", {
+      children: Object.entries(schema.properties).map(([key, val]) =>
+        createRow({
+          name: key,
+          schema: val,
+          required: Array.isArray(schema.required)
+            ? schema.required.includes(key)
+            : false,
+        })
+      ),
     });
   }
 
   // TODO: This can be a bit complicated types can be missmatched and there can be nested allOfs which need to be resolved before merging properties
   if (schema.allOf !== undefined) {
     const { properties, required } = resolveAllOf(schema.allOf);
-    return create("li", {
+    return create("ul", {
       className: "allOf",
-      style: {
-        marginLeft: "1rem",
-      },
-      children: create("ul", {
-        children: Object.entries(properties).map(([key, val]) =>
-          createRow({
-            name: key,
-            schema: val,
-            required: Array.isArray(required) ? required.includes(key) : false,
-          })
-        ),
-      }),
+      children: Object.entries(properties).map(([key, val]) =>
+        createRow({
+          name: key,
+          schema: val,
+          required: Array.isArray(required) ? required.includes(key) : false,
+        })
+      ),
     });
   }
 
@@ -285,10 +243,6 @@ export function createSchemaDetails({ title, body, ...rest }: Props) {
     }
   }
 
-  const firstBodyIndentation = firstBody.items
-    ? { marginLeft: "0" }
-    : { marginLeft: "1rem" };
-
   return createDetails({
     ...rest,
     children: [
@@ -308,23 +262,18 @@ export function createSchemaDetails({ title, body, ...rest }: Props) {
         ],
       }),
       create("div", {
-        style: { marginLeft: "1rem" },
-        children: create("div", {
-          children: create("div", {
-            style: { textAlign: "left" },
-            children: [
-              guard(body.description, () => [
-                create("div", {
-                  style: { marginTop: "1rem", marginBottom: "1rem" },
-                  children: createDescription(body.description),
-                }),
-              ]),
-            ],
-          }),
-        }),
+        style: { textAlign: "left", marginLeft: "1rem" },
+        children: [
+          guard(body.description, () => [
+            create("div", {
+              style: { marginTop: "1rem", marginBottom: "1rem" },
+              children: createDescription(body.description),
+            }),
+          ]),
+        ],
       }),
       create("ul", {
-        style: firstBodyIndentation,
+        style: { marginLeft: "1rem" },
         children: createRowsRoot({ schema: firstBody }),
       }),
     ],
