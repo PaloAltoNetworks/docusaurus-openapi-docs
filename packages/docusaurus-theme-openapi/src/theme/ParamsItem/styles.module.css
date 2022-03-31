@@ -3,6 +3,7 @@
   position: relative;
   padding-left: 1rem;
   border-left: thin solid var(--ifm-color-gray-500) !important;
+  margin-top: unset !important;
 }
 
 .paramsItem:hover {
