@@ -25,6 +25,7 @@ export function createParamsDetails({ parameters, type }: Props) {
   }
 
   return createDetails({
+    style: { marginBottom: "1rem" },
     children: [
       createDetailsSummary({
         children: [
