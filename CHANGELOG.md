@@ -1,3 +1,46 @@
+## 17.0.8 (Mar 31, 2022)
+
+High level enhancements
+
+- Refactor `createSchemaDetails` as theme component
+- Refactor `createParamsDetails` as theme component
+- Reduce overall MDX file sizes in final bundle
+- Add/improve support for handling `allOf` schema type
+
+Other enhancements and bug fixes
+
+- Improvements/fixes to `allOf` schema support ([#40](https://github.com/PaloAltoNetworks/docusaurus-openapi/pull/40))
+- Merge pull request #39 from PaloAltoNetworks/schema-component
+- Cleanup unnecessary divs and indentation
+- Add margin-bottom after each params type
+- Remove param item margin-top
+- Use react-markdown for descriptions
+- Remove react-markdown from plugin package.json
+- Use children props for details in SchemaItem
+- Fix imports
+- Add react-markdown to theme-openapi dependencies
+- Add react-markdown
+- Fix linting issues
+- Readd createDetails for collapsible content
+- Import util functions from @paloaltonetworks
+- Merge branch 'panw-main' of https://github.com/PaloAltoNetworks/docusaurus-openapi into schema-component
+- Remove margin-left from schemaDescription and schemaQualifierMessage
+- Remove empty line
+- Remove unused listStyle object
+- Add SchemaItem styling
+- Create SchemaItem component
+- Update ParamsItem styling
+- Remove unused import
+- Import SchemaItem component into createApiPageMD
+- Use SchemaItem component in createSchemaDetails
+- Remove escape func for examples
+- Organize imports
+- Remove unused imports
+- Add styling to ParamsItem component
+- Import ParamsItem component into createApiPageMD
+- Create ParamsItem component
+- Remove statically created elements from createParamsDetails
+
 ## 17.0.7 (Mar 25, 2022)
 
 High level enhancements
