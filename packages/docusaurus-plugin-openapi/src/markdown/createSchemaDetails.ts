@@ -12,15 +12,25 @@ import { createDetailsSummary } from "./createDetailsSummary";
 import { getQualifierMessage, getSchemaName } from "./schema";
 import { create, guard } from "./utils";
 
+const mergeAllOf = require("json-schema-merge-allof");
+
 function resolveAllOf(allOf: SchemaObject[]) {
-  // TODO: naive implementation (only supports objects, no directly nested allOf)
-  const properties = allOf.reduce((acc, cur) => {
-    if (cur.properties !== undefined) {
-      const next = { ...acc, ...cur.properties };
-      return next;
-    }
-    return acc;
-  }, {});
+  // Use external library to resolve and merge nested allOf schemas
+  let properties: SchemaObject = {};
+  const mergedSchemas = mergeAllOf(allOf, {
+    resolvers: {
+      readOnly: function () {
+        return true;
+      },
+      example: function () {
+        return true;
+      },
+    },
+  });
+
+  if (mergedSchemas.properties) {
+    properties = mergedSchemas.properties;
+  }
 
   const required = allOf.reduce((acc, cur) => {
     if (Array.isArray(cur.required)) {
@@ -53,7 +63,7 @@ function createRow({ name, schema, required }: RowProps) {
                 create("strong", { children: name }),
                 create("span", {
                   style: { opacity: "0.6" },
-                  children: ` ${getSchemaName(schema, true)}`,
+                  children: ` ${schemaName}`,
                 }),
                 guard(required, () => [
                   create("strong", {
@@ -123,15 +133,26 @@ function createRows({ schema }: RowsProps): string | undefined {
   // TODO: This can be a bit complicated types can be missmatched and there can be nested allOfs which need to be resolved before merging properties
   if (schema.allOf !== undefined) {
     const { properties, required } = resolveAllOf(schema.allOf);
-    return create("ul", {
-      className: "allOf",
-      children: Object.entries(properties).map(([key, val]) =>
-        createRow({
-          name: key,
-          schema: val,
-          required: Array.isArray(required) ? required.includes(key) : false,
-        })
-      ),
+    return create("div", {
+      children: [
+        create("span", {
+          className: "badge badge--info",
+          style: { marginBottom: "1rem" },
+          children: "allOf",
+        }),
+        create("ul", {
+          className: "allOf",
+          children: Object.entries(properties).map(([key, val]) =>
+            createRow({
+              name: key,
+              schema: val,
+              required: Array.isArray(required)
+                ? required.includes(key)
+                : false,
+            })
+          ),
+        }),
+      ],
     });
   }
 
