@@ -28,7 +28,7 @@ function SchemaItem({
 
   const renderSchemaDescription = guard(schemaDescription, (description) => (
     <div className={styles.schemaDescription}>
-      {createDescription(description)}
+      <ReactMarkdown children={createDescription(description)} />
     </div>
   ));
 

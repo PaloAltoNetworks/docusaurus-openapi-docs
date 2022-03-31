@@ -9,8 +9,8 @@ import React from "react";
 
 import { createDescription } from "@paloaltonetworks/docusaurus-plugin-openapi/src/markdown/createDescription";
 import {
-  getSchemaName,
   getQualifierMessage,
+  getSchemaName,
 } from "@paloaltonetworks/docusaurus-plugin-openapi/src/markdown/schema";
 import { guard } from "@paloaltonetworks/docusaurus-plugin-openapi/src/markdown/utils";
 import ReactMarkdown from "react-markdown";
@@ -36,7 +36,9 @@ function ParamsItem({
   ));
 
   const renderDescription = guard(description, (description) => (
-    <div>{createDescription(description)}</div>
+    <div>
+      <ReactMarkdown children={createDescription(description)} />
+    </div>
   ));
 
   const renderExample = guard(example, (example) => (
