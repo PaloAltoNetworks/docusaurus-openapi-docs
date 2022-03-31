@@ -133,15 +133,26 @@ function createRows({ schema }: RowsProps): string | undefined {
   // TODO: This can be a bit complicated types can be missmatched and there can be nested allOfs which need to be resolved before merging properties
   if (schema.allOf !== undefined) {
     const { properties, required } = resolveAllOf(schema.allOf);
-    return create("ul", {
-      className: "allOf",
-      children: Object.entries(properties).map(([key, val]) =>
-        createRow({
-          name: key,
-          schema: val,
-          required: Array.isArray(required) ? required.includes(key) : false,
-        })
-      ),
+    return create("div", {
+      children: [
+        create("span", {
+          className: "badge badge--info",
+          style: { marginBottom: "1rem" },
+          children: "allOf",
+        }),
+        create("ul", {
+          className: "allOf",
+          children: Object.entries(properties).map(([key, val]) =>
+            createRow({
+              name: key,
+              schema: val,
+              required: Array.isArray(required)
+                ? required.includes(key)
+                : false,
+            })
+          ),
+        }),
+      ],
     });
   }
 
