@@ -28,7 +28,9 @@ export function createApiPageMD({
   },
 }: ApiPageMetadata) {
   return render([
-    `import Tabs from "@theme/Tabs";\n\n`,
+    `import ParamsItem from "@theme/ParamsItem";\n`,
+    `import SchemaItem from "@theme/SchemaItem"\n`,
+    `import Tabs from "@theme/Tabs";\n`,
     `import TabItem from "@theme/TabItem";\n\n`,
     `## ${escape(title)}\n\n`,
     createDeprecationNotice({ deprecated, description: deprecatedDescription }),
