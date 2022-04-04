@@ -7,12 +7,11 @@
 
 import React from "react";
 
-import { createDescription } from "@paloaltonetworks/docusaurus-plugin-openapi/lib/markdown/createDescription.js";
 import ReactMarkdown from "react-markdown";
 
+import { createDescription } from "../../markdown/createDescription";
+import { guard } from "../../markdown/utils";
 import styles from "./styles.module.css";
-
-const MarkdownUtils = require("@paloaltonetworks/docusaurus-plugin-openapi/lib/markdown/utils");
 
 function SchemaItem({
   children: collapsibleSchemaContent,
@@ -23,7 +22,6 @@ function SchemaItem({
   schemaDescription,
   schemaName,
 }) {
-  const { guard } = MarkdownUtils;
   const renderRequired = guard(required, () => (
     <strong className={styles.required}> required</strong>
   ));

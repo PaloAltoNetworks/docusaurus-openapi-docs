@@ -7,21 +7,16 @@
 
 import React from "react";
 
-import { createDescription } from "@paloaltonetworks/docusaurus-plugin-openapi/lib/markdown/createDescription.js";
-import {
-  getQualifierMessage,
-  getSchemaName,
-} from "@paloaltonetworks/docusaurus-plugin-openapi/lib/markdown/schema.js";
 import ReactMarkdown from "react-markdown";
 
+import { createDescription } from "../../markdown/createDescription";
+import { getQualifierMessage, getSchemaName } from "../../markdown/schema";
+import { guard } from "../../markdown/utils";
 import styles from "./styles.module.css";
-
-const MarkdownUtils = require("@paloaltonetworks/docusaurus-plugin-openapi/lib/markdown/utils");
 
 function ParamsItem({
   param: { description, example, examples, name, required, schema },
 }) {
-  const { guard } = MarkdownUtils;
   const renderSchemaName = guard(schema, (schema) => (
     <span className={styles.schemaName}> {getSchemaName(schema)}</span>
   ));
