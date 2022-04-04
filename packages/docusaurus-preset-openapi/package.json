@@ -1,7 +1,7 @@
 {
   "name": "@paloaltonetworks/docusaurus-preset-openapi",
   "description": "OpenAPI preset for Docusaurus.",
-  "version": "17.0.8",
+  "version": "17.0.9",
   "license": "MIT",
   "keywords": [
     "openapi",
@@ -32,9 +32,9 @@
   },
   "dependencies": {
     "@docusaurus/preset-classic": "2.0.0-beta.17",
-    "@paloaltonetworks/docusaurus-plugin-openapi": "^17.0.8",
-    "@paloaltonetworks/docusaurus-plugin-proxy": "^17.0.4",
-    "@paloaltonetworks/docusaurus-theme-openapi": "^17.0.8"
+    "@paloaltonetworks/docusaurus-plugin-openapi": "17.0.9",
+    "@paloaltonetworks/docusaurus-plugin-proxy": "17.0.9",
+    "@paloaltonetworks/docusaurus-theme-openapi": "17.0.9"
   },
   "peerDependencies": {
     "react": "^16.8.4 || ^17.0.0",
