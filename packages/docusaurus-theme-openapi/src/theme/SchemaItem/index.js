@@ -7,10 +7,10 @@
 
 import React from "react";
 
-import { createDescription } from "@paloaltonetworks/docusaurus-plugin-openapi/src/markdown/createDescription";
-import { guard } from "@paloaltonetworks/docusaurus-plugin-openapi/src/markdown/utils";
 import ReactMarkdown from "react-markdown";
 
+import { createDescription } from "../../markdown/createDescription";
+import { guard } from "../../markdown/utils";
 import styles from "./styles.module.css";
 
 function SchemaItem({

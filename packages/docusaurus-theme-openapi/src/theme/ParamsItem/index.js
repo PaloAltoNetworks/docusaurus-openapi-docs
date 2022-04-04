@@ -7,14 +7,11 @@
 
 import React from "react";
 
-import { createDescription } from "@paloaltonetworks/docusaurus-plugin-openapi/src/markdown/createDescription";
-import {
-  getQualifierMessage,
-  getSchemaName,
-} from "@paloaltonetworks/docusaurus-plugin-openapi/src/markdown/schema";
-import { guard } from "@paloaltonetworks/docusaurus-plugin-openapi/src/markdown/utils";
 import ReactMarkdown from "react-markdown";
 
+import { createDescription } from "../../markdown/createDescription";
+import { getQualifierMessage, getSchemaName } from "../../markdown/schema";
+import { guard } from "../../markdown/utils";
 import styles from "./styles.module.css";
 
 function ParamsItem({
@@ -28,7 +25,6 @@ function ParamsItem({
     <strong className={styles.paramsRequired}> required</strong>
   ));
 
-  // TODO: getQualiferMessage() contains output in MD format, need to be able to handle formatting here?
   const renderSchema = guard(getQualifierMessage(schema), (message) => (
     <div>
       <ReactMarkdown children={createDescription(message)} />
