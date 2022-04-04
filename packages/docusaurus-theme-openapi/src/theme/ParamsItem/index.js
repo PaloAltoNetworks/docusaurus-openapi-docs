@@ -25,7 +25,6 @@ function ParamsItem({
     <strong className={styles.paramsRequired}> required</strong>
   ));
 
-  // TODO: getQualiferMessage() contains output in MD format, need to be able to handle formatting here?
   const renderSchema = guard(getQualifierMessage(schema), (message) => (
     <div>
       <ReactMarkdown children={createDescription(message)} />
