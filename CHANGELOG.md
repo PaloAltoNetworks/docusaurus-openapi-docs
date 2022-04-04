@@ -1,3 +1,13 @@
+## 17.0.9 (Apr 4, 2022)
+
+High level enhancements
+
+- Move over necessary TS modules and types for `SchemaItem` and `ParamsItem` components
+
+Bug fixes
+
+- Fix Babel-loader import warnings ([#42](https://github.com/PaloAltoNetworks/docusaurus-openapi/pull/42))
+
 ## 17.0.8 (Mar 31, 2022)
 
 High level enhancements
