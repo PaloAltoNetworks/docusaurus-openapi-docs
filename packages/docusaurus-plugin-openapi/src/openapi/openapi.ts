@@ -20,7 +20,7 @@ import chalk from "chalk";
 import fs from "fs-extra";
 import yaml from "js-yaml";
 import JsonRefs from "json-refs";
-import { kebabCase } from "lodash";
+import kebabCase from "lodash/kebabCase";
 
 import { ApiMetadata, ApiPageMetadata, InfoPageMetadata } from "../types";
 import { sampleFromSchema } from "./createExample";

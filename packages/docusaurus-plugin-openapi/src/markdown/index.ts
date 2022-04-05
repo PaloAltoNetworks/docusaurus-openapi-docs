@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { escape } from "lodash";
+import escape from "lodash/escape";
 
 import { ApiPageMetadata, InfoPageMetadata } from "../types";
 import { createDeprecationNotice } from "./createDeprecationNotice";

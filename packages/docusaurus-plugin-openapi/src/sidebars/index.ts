@@ -13,7 +13,8 @@ import chalk from "chalk";
 import clsx from "clsx";
 import fs from "fs-extra";
 import Yaml from "js-yaml";
-import { groupBy, uniq } from "lodash";
+import groupBy from "lodash/groupBy";
+import uniq from "lodash/uniq";
 import type { DeepPartial } from "utility-types";
 
 import type {
