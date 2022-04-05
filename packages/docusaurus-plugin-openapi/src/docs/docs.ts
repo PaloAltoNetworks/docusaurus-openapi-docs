@@ -107,12 +107,7 @@ export async function processDocFiles(
       type: "doc" as "doc", // TODO: fix this
       id: frontMatter.id ?? "",
       unversionedId: frontMatter.id ?? "",
-      title:
-        frontMatter.sidebar_label ??
-        frontMatter.title ??
-        contentTitle ??
-        frontMatter.id ??
-        "",
+      title: frontMatter.title ?? contentTitle ?? frontMatter.id ?? "",
       description: frontMatter.description ?? excerpt ?? "",
       slug: slug,
       frontMatter: frontMatter,
@@ -157,7 +152,10 @@ export async function processDocFiles(
 
     if (prev) {
       current.previous = {
-        title: prev.title,
+        title:
+          (prev.frontMatter.pagination_label as string) ??
+          (prev.frontMatter.sidebar_label as string) ??
+          prev.title,
         permalink: normalizeUrl([
           options.baseUrl,
           options.routeBasePath,
@@ -168,7 +166,10 @@ export async function processDocFiles(
 
     if (next) {
       current.next = {
-        title: next.title,
+        title:
+          (next.frontMatter.pagination_label as string) ??
+          (next.frontMatter.sidebar_label as string) ??
+          next.title,
         permalink: normalizeUrl([
           options.baseUrl,
           options.routeBasePath,
