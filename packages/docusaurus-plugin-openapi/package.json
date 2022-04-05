@@ -35,7 +35,7 @@
     "@docusaurus/plugin-content-docs": "2.0.0-beta.17",
     "@docusaurus/utils": "2.0.0-beta.17",
     "@docusaurus/utils-validation": "2.0.0-beta.17",
-    "@paloaltonetworks/openapi-to-postmanv2": "3.1.0-hotfix.1",
+    "@paloaltonetworks/openapi-to-postmanv2": "3.1.0-hotfix.3",
     "@paloaltonetworks/postman-collection": "^4.1.0",
     "chalk": "^4.1.2",
     "clsx": "^1.1.1",
