@@ -11,7 +11,11 @@ import type {
   CategoryIndexMatcher,
   CategoryIndexMatcherParam,
 } from "@docusaurus/plugin-content-docs";
-import { aliasedSitePath, parseMarkdownString } from "@docusaurus/utils";
+import {
+  aliasedSitePath,
+  parseMarkdownString,
+  normalizeUrl,
+} from "@docusaurus/utils";
 import fs from "fs-extra";
 
 import { DocPageMetadata } from "../types";
@@ -111,9 +115,63 @@ export async function processDocFiles(
       ...file,
       source: aliasedSitePath(file.source, options.siteDir),
       sourceDirName: file.sourceDirName,
-    };
+    } as DocPageMetadata;
   });
   const metadata = await Promise.all(promises);
   const items = metadata.flat();
+
+  let seen: { [key: string]: number } = {};
+  for (let i = 0; i < items.length; i++) {
+    const baseId = items[i].id;
+    let count = seen[baseId];
+
+    let id;
+    if (count) {
+      id = `${baseId}-${count}`;
+      seen[baseId] = count + 1;
+    } else {
+      id = baseId;
+      seen[baseId] = 1;
+    }
+
+    items[i].id = id;
+    items[i].unversionedId = id;
+    items[i].slug = "/" + id;
+  }
+
+  for (let i = 0; i < items.length; i++) {
+    const current = items[i];
+    const prev = items[i - 1];
+    const next = items[i + 1];
+
+    current.permalink = normalizeUrl([
+      options.baseUrl,
+      options.routeBasePath,
+      current.id,
+    ]);
+
+    if (prev) {
+      current.previous = {
+        title: prev.title,
+        permalink: normalizeUrl([
+          options.baseUrl,
+          options.routeBasePath,
+          prev.id,
+        ]),
+      };
+    }
+
+    if (next) {
+      current.next = {
+        title: next.title,
+        permalink: normalizeUrl([
+          options.baseUrl,
+          options.routeBasePath,
+          next.id,
+        ]),
+      };
+    }
+  }
+
   return items;
 }
