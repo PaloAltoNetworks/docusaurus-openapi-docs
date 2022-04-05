@@ -107,7 +107,12 @@ export async function processDocFiles(
       type: "doc" as "doc", // TODO: fix this
       id: frontMatter.id ?? "",
       unversionedId: frontMatter.id ?? "",
-      title: frontMatter.title ?? contentTitle ?? frontMatter.id ?? "",
+      title:
+        frontMatter.sidebar_label ??
+        frontMatter.title ??
+        contentTitle ??
+        frontMatter.id ??
+        "",
       description: frontMatter.description ?? excerpt ?? "",
       slug: slug,
       frontMatter: frontMatter,
