@@ -70,11 +70,20 @@ export default function pluginOpenAPI(
       });
       try {
         const openapiFiles = await readOpenapiFiles(contentPath, {});
-        const loadedApi = await processOpenapiFiles(openapiFiles, {
+        const loadedApi = await processOpenapiFiles(loadedDocs, openapiFiles, {
           baseUrl,
           routeBasePath,
           siteDir: context.siteDir,
         });
+
+        // Set item.next on last doc item
+        if (loadedDocs.length > 0) {
+          loadedDocs[loadedDocs.length - 1].next = {
+            title: loadedApi[0].title,
+            permalink: loadedApi[0].permalink,
+          };
+        }
+
         return { loadedApi, loadedDocs };
       } catch (e) {
         console.error(chalk.red(`Loading of api failed for "${contentPath}"`));

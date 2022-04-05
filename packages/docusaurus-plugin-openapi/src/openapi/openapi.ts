@@ -22,7 +22,12 @@ import yaml from "js-yaml";
 import JsonRefs from "json-refs";
 import { kebabCase } from "lodash";
 
-import { ApiMetadata, ApiPageMetadata, InfoPageMetadata } from "../types";
+import {
+  ApiMetadata,
+  ApiPageMetadata,
+  InfoPageMetadata,
+  DocPageMetadata,
+} from "../types";
 import { sampleFromSchema } from "./createExample";
 import { OpenApiObject, OpenApiObjectWithRef, TagObject } from "./types";
 
@@ -250,6 +255,7 @@ export async function readOpenapiFiles(
 }
 
 export async function processOpenapiFiles(
+  beforeApiItems: DocPageMetadata[],
   files: OpenApiFiles[],
   options: {
     baseUrl: string;
@@ -289,7 +295,13 @@ export async function processOpenapiFiles(
 
   for (let i = 0; i < items.length; i++) {
     const current = items[i];
-    const prev = items[i - 1];
+    let prev;
+    if (i === 0) {
+      // Set item.prev to last doc item
+      prev = beforeApiItems[beforeApiItems.length - 1];
+    } else {
+      prev = items[i - 1];
+    }
     const next = items[i + 1];
 
     current.permalink = normalizeUrl([
@@ -320,7 +332,6 @@ export async function processOpenapiFiles(
       };
     }
   }
-
   return items;
 }
 
