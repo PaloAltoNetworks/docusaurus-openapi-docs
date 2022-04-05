@@ -2834,10 +2834,10 @@
   dependencies:
     "@octokit/openapi-types" "^11.2.0"
 
-"@paloaltonetworks/openapi-to-postmanv2@3.1.0-hotfix.1":
-  version "3.1.0-hotfix.1"
-  resolved "https://registry.yarnpkg.com/@paloaltonetworks/openapi-to-postmanv2/-/openapi-to-postmanv2-3.1.0-hotfix.1.tgz#4baf401d2e94ba86d888e6011a4c45d824e88114"
-  integrity sha512-0bdaPCEyQbnUo4xpOu7EzxXXkDx4BAXqc8QSbVBlzlVB5KoTLJiKKB4c3fa4BXbK+3u/OqfLbeNCebc2EC8ngA==
+"@paloaltonetworks/openapi-to-postmanv2@3.1.0-hotfix.4":
+  version "3.1.0-hotfix.4"
+  resolved "https://registry.yarnpkg.com/@paloaltonetworks/openapi-to-postmanv2/-/openapi-to-postmanv2-3.1.0-hotfix.4.tgz#cca6c9b0cebac201e9ab112016050c515155aaad"
+  integrity sha512-CxIJyLBqrL+sF/av4tyBMn05kkCCqApRP8s79l98FHBUUieVsqjaGzU2jO/3z3uFU2HIImpcDC1+CzJwLn6tkQ==
   dependencies:
     "@paloaltonetworks/postman-collection" "^4.1.0"
     ajv "8.1.0"
