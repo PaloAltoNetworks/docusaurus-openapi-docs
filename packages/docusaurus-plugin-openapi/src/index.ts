@@ -119,6 +119,7 @@ export default function pluginOpenAPI(
 
         const markdown = await createData(
           `${docuHash(pageId)}-content.mdx`,
+          // @ts-ignore
           item.data
         );
 

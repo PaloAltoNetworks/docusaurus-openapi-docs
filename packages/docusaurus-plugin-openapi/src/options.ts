@@ -5,10 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import type {
-  OptionValidationContext,
-  ValidationResult,
-} from "@docusaurus/types";
+import type { OptionValidationContext } from "@docusaurus/types";
+import type { Options } from "@paloaltonetworks/docusaurus-preset-openapi";
 import {
   Joi,
   RemarkPluginsSchema,
@@ -68,7 +66,7 @@ export const OptionsSchema = Joi.object({
 export function validateOptions({
   validate,
   options: userOptions,
-}: OptionValidationContext<PluginOptions>): ValidationResult<PluginOptions> {
+}: OptionValidationContext<PluginOptions, Options>): PluginOptions {
   let options = userOptions;
 
   if (options.sidebarCollapsible === false) {
@@ -93,7 +91,7 @@ export function validateOptions({
     }
   }
 
-  const normalizedOptions = validate(OptionsSchema, options);
+  const normalizedOptions = validate(OptionsSchema, options) as PluginOptions;
 
   if (normalizedOptions.admonitions) {
     normalizedOptions.remarkPlugins = normalizedOptions.remarkPlugins.concat([
