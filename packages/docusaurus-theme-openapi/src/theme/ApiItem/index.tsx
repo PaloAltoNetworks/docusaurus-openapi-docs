@@ -11,7 +11,7 @@ import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import { ThemeClassNames, useWindowSize } from "@docusaurus/theme-common";
 import type { Props } from "@theme/ApiItem";
 import DocPaginator from "@theme/DocPaginator";
-import Seo from "@theme/Seo";
+import { PageMetadata } from "@docusaurus/theme-common";
 import TOC from "@theme/TOC";
 import TOCCollapsible from "@theme/TOCCollapsible";
 import clsx from "clsx";
@@ -62,7 +62,7 @@ function ApiItem(props: Props): JSX.Element {
 
   return (
     <>
-      <Seo {...{ title, description, keywords, image }} />
+      <PageMetadata {...{ title, description, keywords, image }} />
       <div className="row">
         <div className={clsx("col", api ? "col--7" : "col--9")}>
           <div className={styles.apiItemContainer}>
