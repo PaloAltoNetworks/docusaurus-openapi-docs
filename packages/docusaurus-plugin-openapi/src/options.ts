@@ -6,13 +6,13 @@
  * ========================================================================== */
 
 import type { OptionValidationContext } from "@docusaurus/types";
-import type { Options } from "@paloaltonetworks/docusaurus-preset-openapi";
 import {
   Joi,
   RemarkPluginsSchema,
   RehypePluginsSchema,
   AdmonitionsSchema,
 } from "@docusaurus/utils-validation";
+import type { Options } from "@paloaltonetworks/docusaurus-preset-openapi";
 import chalk from "chalk";
 import admonitions from "remark-admonitions";
 

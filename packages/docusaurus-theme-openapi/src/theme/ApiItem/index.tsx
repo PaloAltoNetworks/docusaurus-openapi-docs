@@ -8,10 +8,13 @@
 import React from "react";
 
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
-import { ThemeClassNames, useWindowSize } from "@docusaurus/theme-common";
+import {
+  PageMetadata,
+  ThemeClassNames,
+  useWindowSize,
+} from "@docusaurus/theme-common";
 import type { Props } from "@theme/ApiItem";
 import DocPaginator from "@theme/DocPaginator";
-import { PageMetadata } from "@docusaurus/theme-common";
 import TOC from "@theme/TOC";
 import TOCCollapsible from "@theme/TOCCollapsible";
 import clsx from "clsx";
