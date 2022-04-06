@@ -87,6 +87,7 @@ function ApiPageContent({
   }, [hiddenSidebar]);
 
   return (
+    // @ts-ignore
     <Layout wrapperClassName="api-wrapper" pageClassName="api-page">
       <div className={styles.apiPage}>
         <BackToTopButton />
