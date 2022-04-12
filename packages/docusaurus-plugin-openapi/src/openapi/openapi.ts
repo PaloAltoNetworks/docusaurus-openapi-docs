@@ -7,12 +7,7 @@
 
 import path from "path";
 
-import {
-  aliasedSitePath,
-  Globby,
-  GlobExcludeDefault,
-  normalizeUrl,
-} from "@docusaurus/utils";
+import { Globby, GlobExcludeDefault } from "@docusaurus/utils";
 import Converter from "@paloaltonetworks/openapi-to-postmanv2";
 // @ts-ignore
 import sdk, { Collection } from "@paloaltonetworks/postman-collection";
@@ -22,12 +17,7 @@ import yaml from "js-yaml";
 import JsonRefs from "json-refs";
 import { kebabCase } from "lodash";
 
-import {
-  ApiMetadata,
-  ApiPageMetadata,
-  InfoPageMetadata,
-  DocPageMetadata,
-} from "../types";
+import { ApiMetadata, ApiPageMetadata, InfoPageMetadata } from "../types";
 import { sampleFromSchema } from "./createExample";
 import { OpenApiObject, OpenApiObjectWithRef, TagObject } from "./types";
 
@@ -255,83 +245,16 @@ export async function readOpenapiFiles(
 }
 
 export async function processOpenapiFiles(
-  beforeApiItems: DocPageMetadata[],
-  files: OpenApiFiles[],
-  options: {
-    baseUrl: string;
-    routeBasePath: string;
-    siteDir: string;
-  }
+  files: OpenApiFiles[]
 ): Promise<ApiMetadata[]> {
   const promises = files.map(async (file) => {
     const items = await processOpenapiFile(file.data);
     return items.map((item) => ({
       ...item,
-      source: aliasedSitePath(file.source, options.siteDir),
-      sourceDirName: file.sourceDirName,
     }));
   });
   const metadata = await Promise.all(promises);
   const items = metadata.flat();
-
-  let seen: { [key: string]: number } = {};
-  for (let i = 0; i < items.length; i++) {
-    const baseId = items[i].id;
-    let count = seen[baseId];
-
-    let id;
-    if (count) {
-      id = `${baseId}-${count}`;
-      seen[baseId] = count + 1;
-    } else {
-      id = baseId;
-      seen[baseId] = 1;
-    }
-
-    items[i].id = id;
-    items[i].unversionedId = id;
-    items[i].slug = "/" + id;
-  }
-
-  for (let i = 0; i < items.length; i++) {
-    const current = items[i];
-    let prev;
-    if (i === 0) {
-      // Set item.prev to last doc item
-      prev = beforeApiItems[beforeApiItems.length - 1];
-    } else {
-      prev = items[i - 1];
-    }
-    const next = items[i + 1];
-
-    current.permalink = normalizeUrl([
-      options.baseUrl,
-      options.routeBasePath,
-      current.id,
-    ]);
-
-    if (prev) {
-      current.previous = {
-        title: prev.title,
-        permalink: normalizeUrl([
-          options.baseUrl,
-          options.routeBasePath,
-          prev.id,
-        ]),
-      };
-    }
-
-    if (next) {
-      current.next = {
-        title: next.title,
-        permalink: normalizeUrl([
-          options.baseUrl,
-          options.routeBasePath,
-          next.id,
-        ]),
-      };
-    }
-  }
   return items;
 }
 
