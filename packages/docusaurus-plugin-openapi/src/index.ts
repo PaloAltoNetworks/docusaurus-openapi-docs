@@ -9,7 +9,7 @@ import fs from "fs";
 import path from "path";
 
 import type { LoadContext, Plugin } from "@docusaurus/types";
-import { DEFAULT_PLUGIN_ID } from "@docusaurus/utils";
+// import { DEFAULT_PLUGIN_ID } from "@docusaurus/utils";
 import chalk from "chalk";
 import { render } from "mustache";
 
@@ -21,7 +21,7 @@ export default function pluginOpenAPI(
   context: LoadContext,
   options: PluginOptions
 ): Plugin<LoadedContent> {
-  const pluginId = options.id ?? DEFAULT_PLUGIN_ID; // TODO: determine if this is required
+  // const pluginId = options.id ?? DEFAULT_PLUGIN_ID; // TODO: determine if this is required
 
   const contentPath = path.resolve(context.siteDir, options.path);
 
