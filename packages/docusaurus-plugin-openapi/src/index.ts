@@ -9,7 +9,7 @@ import fs from "fs";
 import path from "path";
 
 import type { LoadContext, Plugin } from "@docusaurus/types";
-import { DEFAULT_PLUGIN_ID, Globby } from "@docusaurus/utils";
+import { DEFAULT_PLUGIN_ID } from "@docusaurus/utils";
 import chalk from "chalk";
 import { render } from "mustache";
 
@@ -29,7 +29,8 @@ export default function pluginOpenAPI(
     name: "docusaurus-plugin-openapi",
 
     getPathsToWatch() {
-      return [contentPath, options.outputDir];
+      // TODO: determine if options.outputDir should be in paths to watch
+      return [contentPath];
     },
 
     async loadContent() {
@@ -51,22 +52,27 @@ export default function pluginOpenAPI(
         outputDir,
         template,
       } = options;
-      const mdFiles = await Globby(["*.mdx"], {
-        cwd: path.resolve(outputDir),
-      });
-      mdFiles.map((mdx) =>
-        fs.unlink(`${outputDir}/${mdx}`, (err) => {
-          if (err) {
-            console.error(
-              chalk.red(`Cleanup failed for "${outputDir}/${mdx}"`)
-            );
-          } else {
-            console.log(
-              chalk.green(`Cleanup succeeded for "${outputDir}/${mdx}"`)
-            );
-          }
-        })
-      );
+
+      // TODO: Address race condition leading to "Module not found"
+      // TODO: Determine if mdx cleanup should be separate yarn script
+      //
+      // const mdFiles = await Globby(["*.mdx"], {
+      //   cwd: path.resolve(outputDir),
+      // });
+      // mdFiles.map((mdx) =>
+      //   fs.unlink(`${outputDir}/${mdx}`, (err) => {
+      //     if (err) {
+      //       console.error(
+      //         chalk.red(`Cleanup failed for "${outputDir}/${mdx}"`)
+      //       );
+      //     } else {
+      //       console.log(
+      //         chalk.green(`Cleanup succeeded for "${outputDir}/${mdx}"`)
+      //       );
+      //     }
+      //   })
+      // );
+
       const mdTemplate = template
         ? fs.readFileSync(template).toString()
         : `---
@@ -92,7 +98,39 @@ api: {{{json}}}
         }
         const view = render(mdTemplate, item);
 
-        fs.writeFileSync(`${outputDir}/${item.id}.mdx`, view);
+        if (item.type === "api") {
+          if (!fs.existsSync(`${outputDir}/${item.id}.mdx`)) {
+            try {
+              fs.writeFileSync(`${outputDir}/${item.id}.mdx`, view, "utf8");
+              console.log(
+                chalk.green(
+                  `Successfully created "${outputDir}/${item.id}.mdx"`
+                )
+              );
+            } catch {
+              console.error(
+                chalk.red(`Failed to write "${outputDir}/${item.id}.mdx"`)
+              );
+            }
+          }
+        }
+
+        // TODO: determine if we actually want/need this
+        if (item.type === "info") {
+          if (!fs.existsSync(`${outputDir}/index.md`)) {
+            try {
+              fs.writeFileSync(`${outputDir}/index.md`, view, "utf8");
+              console.log(
+                chalk.green(`Successfully created "${outputDir}/index.md"`)
+              );
+            } catch {
+              console.error(
+                chalk.red(`Failed to write "${outputDir}/index.md"`)
+              );
+            }
+          }
+        }
+
         return;
       });
 
