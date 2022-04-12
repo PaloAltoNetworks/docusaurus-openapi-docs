@@ -9,8 +9,14 @@ import React from "react";
 
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import { ThemeClassNames, useWindowSize } from "@docusaurus/theme-common";
+// @ts-ignore
 import type { Props } from "@theme/ApiItem";
+import DocBreadcrumbs from "@theme/DocBreadcrumbs";
+import DocItemFooter from "@theme/DocItemFooter";
 import DocPaginator from "@theme/DocPaginator";
+import DocVersionBadge from "@theme/DocVersionBadge";
+import DocVersionBanner from "@theme/DocVersionBanner";
+import Heading from "@theme/Heading";
 import Seo from "@theme/Seo";
 import TOC from "@theme/TOC";
 import TOCCollapsible from "@theme/TOCCollapsible";
@@ -27,27 +33,33 @@ if (ExecutionEnvironment.canUseDOM) {
   ApiDemoPanel = require("@theme/ApiDemoPanel").default;
 }
 
-function ApiItem(props: Props): JSX.Element {
+function ApiItem(props: typeof Props): JSX.Element {
   const { content: ApiContent } = props;
   const { metadata, frontMatter } = ApiContent;
   const {
     image,
     keywords,
+    hide_title: hideTitle,
     hide_table_of_contents: hideTableOfContents,
     toc_min_heading_level: tocMinHeadingLevel,
     toc_max_heading_level: tocMaxHeadingLevel,
+    api,
   } = frontMatter;
-
   const {
     description,
     title,
-    api,
     previous,
     next,
     showExecuteButton,
     showManualAuthentication,
     type,
   } = metadata;
+
+  // We only add a title if:
+  // - user doesn't ask to hide it with front matter
+  // - the markdown content does not already contain a top-level h1 heading
+  const shouldAddTitle =
+    !hideTitle && typeof ApiContent.contentTitle === "undefined";
 
   const windowSize = useWindowSize();
 
@@ -65,8 +77,12 @@ function ApiItem(props: Props): JSX.Element {
       <Seo {...{ title, description, keywords, image }} />
       <div className="row">
         <div className={clsx("col", api ? "col--7" : "col--9")}>
+          <DocVersionBanner />
           <div className={styles.apiItemContainer}>
             <article>
+              <DocBreadcrumbs />
+              <DocVersionBadge />
+
               <div className={clsx("theme-api-markdown", "markdown")}>
                 {canRenderTOC && (
                   <TOCCollapsible
@@ -79,8 +95,14 @@ function ApiItem(props: Props): JSX.Element {
                     )}
                   />
                 )}
+                {shouldAddTitle && (
+                  <header>
+                    <Heading as="h1">{title}</Heading>
+                  </header>
+                )}
                 <ApiContent />
               </div>
+              <DocItemFooter {...props} />
             </article>
           </div>
         </div>
