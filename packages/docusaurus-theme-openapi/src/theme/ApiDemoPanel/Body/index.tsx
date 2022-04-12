@@ -200,7 +200,7 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
 
   return (
     <FormItem label="Body">
-      <VSCode
+      {/* <VSCode
         value={exampleBodyString}
         language={language}
         onChange={(value) => {
@@ -210,7 +210,7 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
           }
           dispatch(setStringRawBody(value));
         }}
-      />
+      /> */}
     </FormItem>
   );
 }
