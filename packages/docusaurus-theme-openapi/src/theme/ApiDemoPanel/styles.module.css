@@ -1,3 +1,21 @@
+:root {
+  /* Dark mode */
+  --openapi-code-bright-dark: var(--ifm-color-secondary-lighter);
+  --openapi-code-dim-dark: var(--ifm-color-secondary-dark);
+  --openapi-code-blue-dark: var(--ifm-color-info-lightest);
+  --openapi-code-green-dark: var(--ifm-color-success-lightest);
+  --openapi-code-select-dark: var(--ifm-color-secondary-lightest);
+  --openapi-monaco-background-color-dark: var(--ifm-code-background);
+
+  /* Light mode */
+  --openapi-code-bright-light: var(--ifm-color-secondary-contrast-foreground);
+  --openapi-code-dim-light: var(--ifm-color-secondary-contrast-foreground);
+  --openapi-code-blue-light: var(--ifm-color-info);
+  --openapi-code-green-light: var(--ifm-color-success);
+  --openapi-code-select-light: var(--ifm-color-secondary-light);
+  --openapi-monaco-background-color-light: var(--ifm-code-background);
+}
+
 .optionsPanel:empty {
   display: none;
 }
