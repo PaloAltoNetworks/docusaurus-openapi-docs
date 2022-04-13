@@ -9,7 +9,6 @@ import fs from "fs";
 import path from "path";
 
 import type { LoadContext, Plugin } from "@docusaurus/types";
-// import { DEFAULT_PLUGIN_ID } from "@docusaurus/utils";
 import chalk from "chalk";
 import { render } from "mustache";
 
@@ -21,31 +20,13 @@ export default function pluginOpenAPI(
   context: LoadContext,
   options: PluginOptions
 ): Plugin<LoadedContent> {
-  // const pluginId = options.id ?? DEFAULT_PLUGIN_ID; // TODO: determine if this is required
-
   const contentPath = path.resolve(context.siteDir, options.path);
 
-  return {
-    name: "docusaurus-plugin-openapi",
-
-    getPathsToWatch() {
-      // TODO: determine if options.outputDir should be in paths to watch
-      return [contentPath];
-    },
-
-    async loadContent() {
-      try {
-        const openapiFiles = await readOpenapiFiles(contentPath, {});
-        const loadedApi = await processOpenapiFiles(openapiFiles);
-        return { loadedApi };
-      } catch (e) {
-        console.error(chalk.red(`Loading of api failed for "${contentPath}"`));
-        throw e;
-      }
-    },
-
-    async contentLoaded({ content }) {
-      const { loadedApi } = content;
+  // Generate md/mdx before loadContent() life cycle method
+  async function beforeLoadContent() {
+    try {
+      const openapiFiles = await readOpenapiFiles(contentPath, {});
+      const loadedApi = await processOpenapiFiles(openapiFiles);
       const {
         showExecuteButton,
         showManualAuthentication,
@@ -130,11 +111,22 @@ api: {{{json}}}
             }
           }
         }
-
         return;
       });
+      return loadedApi;
+    } catch (e) {
+      console.error(chalk.red(`Loading of api failed for "${contentPath}"`));
+      throw e;
+    }
+  }
 
-      return;
+  beforeLoadContent();
+
+  return {
+    name: "docusaurus-plugin-openapi",
+
+    getPathsToWatch() {
+      return [contentPath];
     },
   };
 }
