@@ -15,14 +15,14 @@ import { useTypedDispatch, useTypedSelector } from "../hooks";
 import FormFileUpload from "./../FormFileUpload";
 import FormItem from "./../FormItem";
 import FormTextInput from "./../FormTextInput";
-// import VSCode from "./../VSCode";
+import VSCode from "./../VSCode";
 import {
   clearFormBodyKey,
   clearRawBody,
   setFileFormBody,
   setFileRawBody,
   setStringFormBody,
-  // setStringRawBody,
+  setStringRawBody,
 } from "./slice";
 
 interface Props {
@@ -184,23 +184,23 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
     );
   }
 
-  // let language = "plaintext";
-  // let exampleBodyString = ""; //"body content";
+  let language = "plaintext";
+  let exampleBodyString = ""; //"body content";
 
-  // if (contentType === "application/json") {
-  //   if (jsonRequestBodyExample) {
-  //     exampleBodyString = JSON.stringify(jsonRequestBodyExample, null, 2);
-  //   }
-  //   language = "json";
-  // }
+  if (contentType === "application/json") {
+    if (jsonRequestBodyExample) {
+      exampleBodyString = JSON.stringify(jsonRequestBodyExample, null, 2);
+    }
+    language = "json";
+  }
 
-  // if (contentType === "application/xml") {
-  //   language = "xml";
-  // }
+  if (contentType === "application/xml") {
+    language = "xml";
+  }
 
   return (
     <FormItem label="Body">
-      {/* <VSCode
+      <VSCode
         value={exampleBodyString}
         language={language}
         onChange={(value) => {
@@ -210,7 +210,7 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
           }
           dispatch(setStringRawBody(value));
         }}
-      /> */}
+      />
     </FormItem>
   );
 }
