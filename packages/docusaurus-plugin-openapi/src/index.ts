@@ -98,15 +98,15 @@ api: {{{json}}}
 
         // TODO: determine if we actually want/need this
         if (item.type === "info") {
-          if (!fs.existsSync(`${outputDir}/index.md`)) {
+          if (!fs.existsSync(`${outputDir}/index.mdx`)) {
             try {
-              fs.writeFileSync(`${outputDir}/index.md`, view, "utf8");
+              fs.writeFileSync(`${outputDir}/index.mdx`, view, "utf8");
               console.log(
-                chalk.green(`Successfully created "${outputDir}/index.md"`)
+                chalk.green(`Successfully created "${outputDir}/index.mdx"`)
               );
             } catch {
               console.error(
-                chalk.red(`Failed to write "${outputDir}/index.md"`)
+                chalk.red(`Failed to write "${outputDir}/index.mdx"`)
               );
             }
           }
