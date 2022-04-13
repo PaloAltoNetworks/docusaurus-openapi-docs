@@ -51,9 +51,9 @@ const config = {
     [
       "@paloaltonetworks/docusaurus-plugin-openapi",
       {
-        id: "openapi-cos",
+        id: "cos",
         path: "examples/openapi-cos.json",
-        outputDir: "api/openapi-cos",
+        outputDir: "api/cos",
       },
     ],
     [
@@ -87,7 +87,7 @@ const config = {
         id: "openapi",
         path: "api",
         breadcrumbs: true,
-        routeBasePath: "openapi",
+        routeBasePath: "api",
         include: ["**/*.md", "**/*.mdx"],
         sidebarPath: "apiSidebars.js",
         docLayoutComponent: "@theme/DocPage", // This solves the providers issue and drop the need for ApiPage component
