@@ -67,7 +67,7 @@ function ApiItem(props: typeof Props): JSX.Element {
     !hideTableOfContents &&
     ApiContent.toc &&
     ApiContent.toc.length > 0 &&
-    type === "doc";
+    type !== "api";
 
   const renderTocDesktop =
     canRenderTOC && (windowSize === "desktop" || windowSize === "ssr");
