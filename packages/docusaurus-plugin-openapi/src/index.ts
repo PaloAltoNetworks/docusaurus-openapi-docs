@@ -60,6 +60,9 @@ export default function pluginOpenAPI(
 id: {{{id}}}
 sidebar_label: {{{title}}}
 hide_title: true
+{{#api}}
+hide_table_of_contents: true
+{{/api}}
 {{#api.json}}
 api: {{{json}}}
 {{/api.json}}
