@@ -60,7 +60,12 @@ export default function pluginOpenAPI(
 id: {{{id}}}
 sidebar_label: {{{title}}}
 hide_title: true
+{{#api.json}}
 api: {{{json}}}
+{{/api.json}}
+{{#api.method}}
+sidebar_class_name: "{{{api.method}}} api-method"
+{{/api.method}}
 ---
 
 {{{markdown}}}
@@ -70,7 +75,6 @@ api: {{{json}}}
         // Statically set custom plugin options
         item.showExecuteButton = showExecuteButton;
         item.showManualAuthentication = showManualAuthentication;
-
         const markdown =
           item.type === "api" ? createApiPageMD(item) : createInfoPageMD(item);
         item.markdown = markdown;
