@@ -134,5 +134,4 @@ dist
 .tern-port
 
 # demo API MDX files
-demo/api/**/*.md
 demo/api/**/*.mdx

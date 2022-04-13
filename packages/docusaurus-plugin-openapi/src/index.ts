@@ -60,7 +60,15 @@ export default function pluginOpenAPI(
 id: {{{id}}}
 sidebar_label: {{{title}}}
 hide_title: true
+{{#api}}
+hide_table_of_contents: true
+{{/api}}
+{{#api.json}}
 api: {{{json}}}
+{{/api.json}}
+{{#api.method}}
+sidebar_class_name: "{{{api.method}}} api-method"
+{{/api.method}}
 ---
 
 {{{markdown}}}
@@ -70,7 +78,6 @@ api: {{{json}}}
         // Statically set custom plugin options
         item.showExecuteButton = showExecuteButton;
         item.showManualAuthentication = showManualAuthentication;
-
         const markdown =
           item.type === "api" ? createApiPageMD(item) : createInfoPageMD(item);
         item.markdown = markdown;
@@ -98,15 +105,15 @@ api: {{{json}}}
 
         // TODO: determine if we actually want/need this
         if (item.type === "info") {
-          if (!fs.existsSync(`${outputDir}/index.md`)) {
+          if (!fs.existsSync(`${outputDir}/index.mdx`)) {
             try {
-              fs.writeFileSync(`${outputDir}/index.md`, view, "utf8");
+              fs.writeFileSync(`${outputDir}/index.mdx`, view, "utf8");
               console.log(
-                chalk.green(`Successfully created "${outputDir}/index.md"`)
+                chalk.green(`Successfully created "${outputDir}/index.mdx"`)
               );
             } catch {
               console.error(
-                chalk.red(`Failed to write "${outputDir}/index.md"`)
+                chalk.red(`Failed to write "${outputDir}/index.mdx"`)
               );
             }
           }

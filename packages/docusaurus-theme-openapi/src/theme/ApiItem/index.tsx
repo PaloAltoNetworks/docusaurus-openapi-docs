@@ -52,7 +52,6 @@ function ApiItem(props: typeof Props): JSX.Element {
     next,
     showExecuteButton,
     showManualAuthentication,
-    type,
   } = metadata;
 
   // We only add a title if:
@@ -64,10 +63,7 @@ function ApiItem(props: typeof Props): JSX.Element {
   const windowSize = useWindowSize();
 
   const canRenderTOC =
-    !hideTableOfContents &&
-    ApiContent.toc &&
-    ApiContent.toc.length > 0 &&
-    type === "doc";
+    !hideTableOfContents && ApiContent.toc && ApiContent.toc.length > 0;
 
   const renderTocDesktop =
     canRenderTOC && (windowSize === "desktop" || windowSize === "ssr");
