@@ -127,9 +127,12 @@ const config = {
             label: "Examples",
             position: "left",
             items: [
-              { to: "/petstore/test", label: "Petstore" },
-              { to: "/cos/test", label: "Cloud Object Storage" },
-              { to: "/multi-spec", label: "Multi-spec" },
+              { to: "/api/petstore/", label: "Petstore" },
+              {
+                to: "/api/cos/create-a-bucket",
+                label: "Cloud Object Storage",
+              },
+              { to: "api/food/burgers/", label: "Food" },
             ],
           },
           {
