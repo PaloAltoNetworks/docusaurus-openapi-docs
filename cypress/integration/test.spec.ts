@@ -8,40 +8,11 @@
 describe("test", () => {
   it("loads Petstore page", () => {
     cy.viewport("macbook-15");
-    cy.visit("/petstore");
+    cy.visit("/api/petstore");
     navTo(
-      [/^pet$/i, /add a new pet to the store/i],
+      [/^petstore$/i, /add a new pet to the store/i],
       /add a new pet to the store/i
     );
-  });
-
-  it("loads Cloud Object Storage page", () => {
-    cy.viewport("macbook-15");
-    cy.visit("/cos");
-    navTo([], /generating an iam token/i);
-  });
-
-  it("loads Multi-spec page", () => {
-    cy.viewport("macbook-15");
-    cy.visit("/multi-spec");
-    navTo(
-      [
-        /foods/i,
-        /burger store/i,
-        /burger example/i,
-        /^api$/i,
-        /list all burgers/i,
-      ],
-      /list all burgers/i
-    );
-  });
-
-  it("loads a page with authentication", () => {
-    cy.visit("/cos/list-buckets");
-    cy.findByRole("button", { name: /authorize/i }).should("exist");
-
-    cy.visit("/cos/create-a-bucket");
-    cy.findByRole("button", { name: /authorize/i }).should("exist");
   });
 });
 
