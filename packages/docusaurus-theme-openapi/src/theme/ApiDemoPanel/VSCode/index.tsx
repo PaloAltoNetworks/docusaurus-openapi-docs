@@ -8,10 +8,9 @@
 import React, { useState } from "react";
 
 import { useColorMode } from "@docusaurus/theme-common";
-import * as monaco from "monaco-editor";
 import Editor, { Monaco, loader } from "@monaco-editor/react";
-//@ts-ignore
-loader.config({ monaco });
+import * as monaco from "monaco-editor";
+
 import styles from "./styles.module.css";
 
 interface Props {
@@ -19,6 +18,9 @@ interface Props {
   language?: string;
   onChange(value: string): any;
 }
+
+//@ts-ignore
+loader.config({ monaco });
 
 function VSCode({ value, language, onChange }: Props) {
   const [focused, setFocused] = useState(false);
