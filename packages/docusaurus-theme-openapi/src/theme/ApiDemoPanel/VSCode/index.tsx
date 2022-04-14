@@ -70,7 +70,7 @@ function VSCode({ value, language, onChange }: Props) {
     const LIGHT_BACKGROUND = getColor(
       "--openapi-monaco-background-color-light"
     );
-    const LIGHT_BRIGHT = getColor("--openapi-code-blue-light");
+    const LIGHT_BRIGHT = getColor("--openapi-code-bright-light");
     const LIGHT_DIM = getColor("--openapi-code-dim-light");
     const LIGHT_BLUE = getColor("--openapi-code-blue-light");
     const LIGHT_GREEN = getColor("--openapi-code-green-light");
