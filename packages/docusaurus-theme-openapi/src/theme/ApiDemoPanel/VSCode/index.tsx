@@ -24,12 +24,8 @@ function VSCode({ value, language, onChange }: Props) {
   const { isDarkTheme } = useColorMode();
 
   useEffect(() => {
-    // do conditional chaining
+    // Ensure monaco instance is loaded
     monaco?.languages.typescript.javascriptDefaults.setEagerModelSync(true);
-    // or make sure that it exists by other ways
-    if (monaco) {
-      console.log("here is the monaco instance:", monaco);
-    }
   }, [monaco]);
 
   function handleEditorWillMount(monaco: any) {
