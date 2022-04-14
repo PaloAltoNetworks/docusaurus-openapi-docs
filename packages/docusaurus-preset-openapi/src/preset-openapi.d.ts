@@ -15,5 +15,6 @@ export type Options = {
   proxy?: false | import("@paloaltonetworks/docusaurus-plugin-proxy").Options;
 } & ClassicOptions;
 
-export type ThemeConfig = import("docusaurus-theme-openapi").ThemeConfig &
-  ClassicThemeConfig;
+export type ThemeConfig =
+  import("@paloaltonetworks/docusaurus-theme-openapi").ThemeConfig &
+    ClassicThemeConfig;

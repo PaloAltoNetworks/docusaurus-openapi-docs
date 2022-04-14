@@ -12,6 +12,7 @@ import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import { ParameterObject } from "@paloaltonetworks/docusaurus-plugin-openapi/src/openapi/types";
 // @ts-ignore
 import sdk from "@paloaltonetworks/postman-collection";
+// @ts-ignore
 import { Metadata } from "@theme/ApiItem";
 import { Provider } from "react-redux";
 
@@ -48,6 +49,7 @@ function ApiDemoPanel({
   const acceptArray = Array.from(
     new Set(
       Object.values(item.responses ?? {})
+        // @ts-ignore
         .map((response) => Object.keys(response.content ?? {}))
         .flat()
     )
@@ -66,7 +68,8 @@ function ApiDemoPanel({
     cookie: [] as ParameterObject[],
   };
 
-  item.parameters?.forEach((param) => {
+  item.parameters?.forEach((param: { in: string | number }) => {
+    // @ts-ignore
     params[param.in].push(param);
   });
 

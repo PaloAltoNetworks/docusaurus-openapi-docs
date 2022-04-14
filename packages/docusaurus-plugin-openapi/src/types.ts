@@ -5,11 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import type { RemarkAndRehypePluginOptions } from "@docusaurus/mdx-loader";
 // @ts-ignore
 import type { Request } from "@paloaltonetworks/postman-collection";
 
-import { DocObject } from "./docs/types";
 import {
   InfoObject,
   OperationObject,
@@ -22,23 +20,18 @@ export type {
   PropSidebar,
   PropSidebarItem,
 } from "@docusaurus/plugin-content-docs-types";
-export interface PluginOptions extends RemarkAndRehypePluginOptions {
-  id: string;
+export interface PluginOptions {
+  id?: string;
   path: string;
-  routeBasePath: string;
-  apiLayoutComponent: string;
-  apiItemComponent: string;
-  admonitions: Record<string, unknown>;
-  sidebarCollapsible: boolean;
-  sidebarCollapsed: boolean;
   showExecuteButton: boolean;
   showManualAuthentication: boolean;
-  beforeApiDocs: Array<string>;
+  outputDir: string;
+  template?: string;
 }
 
 export interface LoadedContent {
   loadedApi: ApiMetadata[];
-  loadedDocs: DocPageMetadata[];
+  // loadedDocs: DocPageMetadata[]; TODO: cleanup
 }
 
 export type ApiMetadata = ApiPageMetadata | InfoPageMetadata;
@@ -63,8 +56,10 @@ export interface ApiMetadataBase {
 }
 
 export interface ApiPageMetadata extends ApiMetadataBase {
+  json?: string;
   type: "api";
   api: ApiItem;
+  markdown?: string;
 }
 
 export interface ApiItem extends OperationObject {
@@ -81,11 +76,7 @@ export interface ApiItem extends OperationObject {
 export interface InfoPageMetadata extends ApiMetadataBase {
   type: "info";
   info: ApiInfo;
-}
-
-export interface DocPageMetadata extends ApiMetadataBase {
-  type: "doc";
-  data: DocObject;
+  markdown?: string;
 }
 
 export type ApiInfo = InfoObject;

@@ -5,10 +5,10 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { useColorMode } from "@docusaurus/theme-common";
-import Editor, { Monaco } from "@monaco-editor/react";
+import Editor, { useMonaco } from "@monaco-editor/react";
 
 import styles from "./styles.module.css";
 
@@ -20,31 +20,78 @@ interface Props {
 
 function VSCode({ value, language, onChange }: Props) {
   const [focused, setFocused] = useState(false);
-
+  const monaco = useMonaco();
   const { isDarkTheme } = useColorMode();
 
-  function handleEditorWillMount(monaco: Monaco) {
+  useEffect(() => {
+    // do conditional chaining
+    monaco?.languages.typescript.javascriptDefaults.setEagerModelSync(true);
+    // or make sure that it exists by other ways
+    if (monaco) {
+      console.log("here is the monaco instance:", monaco);
+    }
+  }, [monaco]);
+
+  function handleEditorWillMount(monaco: any) {
     const styles = getComputedStyle(document.documentElement);
+
     function getColor(property: string) {
       // Weird chrome bug, returns " #ffffff " instead of "#ffffff", see: https://github.com/cloud-annotations/docusaurus-openapi/issues/144
-      return styles.getPropertyValue(property).trim();
+      const color = styles.getPropertyValue(property).trim();
+      const isColorRgb = color.includes("rgb");
+      const isColorHexShortened = color.length === 4;
+
+      // Convert "rgb(r, g, b)" to color hex code
+      const getColorHex = (color: string) => {
+        const rgbValues = color.substring(4).split(")")[0].split(",");
+        const [r, g, b] = rgbValues;
+
+        const colorToHex = (rgb: string) => {
+          const hexadecimal = parseInt(rgb).toString(16);
+          return hexadecimal.length === 1 ? "0" + hexadecimal : hexadecimal;
+        };
+
+        return "#" + colorToHex(r) + colorToHex(g) + colorToHex(b);
+      };
+
+      // Extend shortened hex codes ie. "#aaa" => "#aaaaaa" or "#xyz" => "#xxyyzz"
+      const getFullColorHex = (color: string) => {
+        let fullColorHex = "#";
+        const hexValues = color.slice(1);
+
+        for (let i = 0; i < hexValues.length; i++) {
+          for (let j = 0; j < 2; j++) {
+            fullColorHex += hexValues[i];
+          }
+        }
+
+        return fullColorHex.toLowerCase();
+      };
+
+      if (isColorRgb) {
+        return getColorHex(color);
+      } else if (isColorHexShortened) {
+        return getFullColorHex(color);
+      } else {
+        return color;
+      }
     }
 
-    const LIGHT_BRIGHT = "#1c1e21";
-    const LIGHT_DIM = getColor("--openapi-code-dim-light");
-    const LIGHT_BLUE = getColor("--openapi-code-blue-light");
-    const LIGHT_GREEN = getColor("--openapi-code-green-light");
     const LIGHT_BACKGROUND = getColor(
       "--openapi-monaco-background-color-light"
     );
-    const LIGHT_SELECT = "#ebedef";
+    const LIGHT_BRIGHT = getColor("--openapi-code-bright-light");
+    const LIGHT_DIM = getColor("--openapi-code-dim-light");
+    const LIGHT_BLUE = getColor("--openapi-code-blue-light");
+    const LIGHT_GREEN = getColor("--openapi-code-green-light");
+    const LIGHT_SELECT = getColor("--openapi-code-select-light");
 
-    const DARK_BRIGHT = "#f5f6f7";
+    const DARK_BACKGROUND = getColor("--openapi-monaco-background-color-dark");
+    const DARK_BRIGHT = getColor("--openapi-code-bright-dark");
     const DARK_DIM = getColor("--openapi-code-dim-dark");
     const DARK_BLUE = getColor("--openapi-code-blue-dark");
     const DARK_GREEN = getColor("--openapi-code-green-dark");
-    const DARK_BACKGROUND = getColor("--openapi-monaco-background-color-dark");
-    const DARK_SELECT = "#515151";
+    const DARK_SELECT = getColor("--openapi-code-select-dark");
 
     monaco.editor.defineTheme("OpenApiDark", {
       base: "vs-dark",

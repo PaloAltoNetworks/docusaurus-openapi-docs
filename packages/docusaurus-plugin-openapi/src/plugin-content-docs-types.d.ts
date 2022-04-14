@@ -5,8 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-/// <reference types="@paloaltonetworks/docusaurus-plugin-openapi" />
-
 declare module "@docusaurus/plugin-content-docs-types" {
   // Makes all properties visible when hovering over the type
   type Expand<T extends Record<string, unknown>> = { [P in keyof T]: T[P] };
@@ -41,8 +39,4 @@ declare module "@docusaurus/plugin-content-docs-types" {
   export type PropSidebars = {
     [sidebarId: string]: PropSidebar;
   };
-}
-
-declare module "docusaurus-theme-openapi" {
-  export type ThemeConfig = Partial<import("./types").ThemeConfig>;
 }

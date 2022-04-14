@@ -27,7 +27,7 @@
   --openapi-code-red: var(--ifm-color-danger) !important;
   --openapi-code-orange: var(--ifm-color-warning) !important;
   /* Helps avoid #aaa bug in monaco-editor */
-  --openapi-code-dim-light: var(--ifm-color-secondary-lightest) !important;
+  /* --openapi-code-dim-light: var(--ifm-color-secondary-lightest) !important; */
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */

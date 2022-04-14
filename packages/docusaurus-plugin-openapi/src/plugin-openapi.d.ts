@@ -5,43 +5,10 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import type { FrontMatter as DocsFrontMatter } from "@docusaurus/types";
+import type { Props as DocsProps } from "@docusaurus/types";
+
 // TODO: figure out how to import this
-declare module "@docusaurus/plugin-content-docs-types" {
-  // Makes all properties visible when hovering over the type
-  type Expand<T extends Record<string, unknown>> = { [P in keyof T]: T[P] };
-
-  export type SidebarItemBase = {
-    className?: string;
-    customProps?: Record<string, unknown>;
-  };
-
-  export type SidebarItemLink = SidebarItemBase & {
-    type: "link";
-    href: string;
-    label: string;
-    docId: string;
-  };
-
-  type SidebarItemCategoryBase = SidebarItemBase & {
-    type: "category";
-    label: string;
-    collapsed: boolean;
-    collapsible: boolean;
-  };
-
-  export type PropSidebarItemCategory = Expand<
-    SidebarItemCategoryBase & {
-      items: PropSidebarItem[];
-    }
-  >;
-
-  export type PropSidebarItem = SidebarItemLink | PropSidebarItemCategory;
-  export type PropSidebar = PropSidebarItem[];
-  export type PropSidebars = {
-    [sidebarId: string]: PropSidebar;
-  };
-}
-
 declare module "@paloaltonetworks/docusaurus-plugin-openapi" {
   import type { PropSidebars } from "@docusaurus/plugin-content-docs-types";
 
@@ -90,15 +57,9 @@ declare module "@theme/ApiItem" {
     readonly sidebar?: string;
   };
 
-  export type FrontMatter = {
-    readonly id: string;
-    readonly title: string;
-    readonly image?: string;
-    readonly keywords?: readonly string[];
-    readonly hide_table_of_contents?: boolean;
-    readonly toc_min_heading_level?: number;
-    readonly toc_max_heading_level?: number;
-  };
+  export interface FrontMatter extends DocsFrontMatter {
+    readonly api?: object;
+  }
 
   export type Metadata = {
     readonly description?: string;
@@ -112,7 +73,7 @@ declare module "@theme/ApiItem" {
     readonly type?: string;
   };
 
-  export interface Props {
+  export interface Props extends DocsProps {
     readonly route: ApiRoute;
     readonly content: {
       readonly frontMatter: FrontMatter;
