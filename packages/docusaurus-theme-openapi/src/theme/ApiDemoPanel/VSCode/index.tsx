@@ -5,10 +5,10 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import { useColorMode } from "@docusaurus/theme-common";
-import Editor, { useMonaco } from "@monaco-editor/react";
+import Editor, { Monaco } from "@monaco-editor/react";
 
 import styles from "./styles.module.css";
 
@@ -20,15 +20,9 @@ interface Props {
 
 function VSCode({ value, language, onChange }: Props) {
   const [focused, setFocused] = useState(false);
-  const monaco = useMonaco();
   const { isDarkTheme } = useColorMode();
 
-  useEffect(() => {
-    // Ensure monaco instance is loaded
-    monaco?.languages.typescript.javascriptDefaults.setEagerModelSync(true);
-  }, [monaco]);
-
-  function handleEditorWillMount(monaco: any) {
+  function handleEditorWillMount(monaco: Monaco) {
     const styles = getComputedStyle(document.documentElement);
 
     function getColor(property: string) {
@@ -76,7 +70,7 @@ function VSCode({ value, language, onChange }: Props) {
     const LIGHT_BACKGROUND = getColor(
       "--openapi-monaco-background-color-light"
     );
-    const LIGHT_BRIGHT = getColor("--openapi-code-bright-light");
+    const LIGHT_BRIGHT = getColor("--openapi-code-blue-light");
     const LIGHT_DIM = getColor("--openapi-code-dim-light");
     const LIGHT_BLUE = getColor("--openapi-code-blue-light");
     const LIGHT_GREEN = getColor("--openapi-code-green-light");
