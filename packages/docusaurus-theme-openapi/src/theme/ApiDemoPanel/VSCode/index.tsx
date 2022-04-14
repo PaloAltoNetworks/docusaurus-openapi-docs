@@ -32,7 +32,7 @@ function VSCode({ value, language, onChange }: Props) {
     }
   }, [monaco]);
 
-  function handleEditorWillMount(monaco: object) {
+  function handleEditorWillMount(monaco: any) {
     const styles = getComputedStyle(document.documentElement);
 
     function getColor(property: string) {
