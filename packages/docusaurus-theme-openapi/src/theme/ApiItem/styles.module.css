@@ -1,3 +1,7 @@
+:root {
+  --openapi-required: var(--ifm-color-danger);
+}
+
 .apiItemContainer article > *:first-child,
 .apiItemContainer header + * {
   margin-top: 0;

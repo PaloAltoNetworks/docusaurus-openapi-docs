@@ -5,10 +5,10 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import { useColorMode } from "@docusaurus/theme-common";
-import Editor, { useMonaco } from "@monaco-editor/react";
+import Editor, { Monaco } from "@monaco-editor/react";
 
 import styles from "./styles.module.css";
 
@@ -20,19 +20,9 @@ interface Props {
 
 function VSCode({ value, language, onChange }: Props) {
   const [focused, setFocused] = useState(false);
-  const monaco = useMonaco();
   const { isDarkTheme } = useColorMode();
 
-  useEffect(() => {
-    // do conditional chaining
-    monaco?.languages.typescript.javascriptDefaults.setEagerModelSync(true);
-    // or make sure that it exists by other ways
-    if (monaco) {
-      console.log("here is the monaco instance:", monaco);
-    }
-  }, [monaco]);
-
-  function handleEditorWillMount(monaco: any) {
+  function handleEditorWillMount(monaco: Monaco) {
     const styles = getComputedStyle(document.documentElement);
 
     function getColor(property: string) {
