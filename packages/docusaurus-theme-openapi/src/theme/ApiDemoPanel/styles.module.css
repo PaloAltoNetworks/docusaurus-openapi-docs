@@ -14,6 +14,14 @@
   --openapi-code-green-light: var(--ifm-color-success);
   --openapi-code-select-light: var(--ifm-color-secondary-light);
   --openapi-monaco-background-color-light: var(--ifm-code-background);
+
+  --openapi-monaco-background-color: var(--ifm-code-background);
+  --openapi-card-background-color: var(--ifm-color-gray-100);
+  --openapi-card-border-radius: var(--ifm-pre-border-radius);
+}
+
+[data-theme="dark"] {
+  --openapi-card-background-color: var(--ifm-color-gray-900);
 }
 
 .optionsPanel:empty {

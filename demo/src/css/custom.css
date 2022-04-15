@@ -20,8 +20,8 @@
   --ifm-color-danger: #fa582d;
   --ifm-code-font-size: 95%;
   --openapi-input-background: rgba(110, 118, 129, 0.4) !important;
-  --openapi-monaco-border-color: #21262d !important;
-  --openapi-monaco-background-color-dark: #0d1117 !important;
+  /* --openapi-monaco-border-color: #21262d !important;
+  --openapi-monaco-background-color-dark: #0d1117 !important; */
   --openapi-code-green: var(--ifm-color-success) !important;
   --openapi-code-blue: var(--ifm-color-primary) !important;
   --openapi-code-red: var(--ifm-color-danger) !important;
