@@ -27,6 +27,7 @@ export interface PluginOptions {
   showManualAuthentication: boolean;
   outputDir: string;
   template?: string;
+  sidebarOptions?: SidebarOptions;
 }
 
 export interface LoadedContent {
@@ -84,4 +85,11 @@ export type ApiInfo = InfoObject;
 export interface ApiNavLink {
   title: string;
   permalink: string;
+}
+
+export interface SidebarOptions {
+  groupPathsBy?: string;
+  customProps?: { [key: string]: unknown };
+  sidebarCollapsible?: boolean;
+  sidebarCollapsed?: boolean;
 }

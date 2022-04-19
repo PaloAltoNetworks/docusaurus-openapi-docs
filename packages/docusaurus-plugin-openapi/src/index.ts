@@ -14,6 +14,7 @@ import { render } from "mustache";
 
 import { createApiPageMD, createInfoPageMD } from "./markdown";
 import { readOpenapiFiles, processOpenapiFiles } from "./openapi";
+import generateSidebarSlice from "./sidebars";
 import type { PluginOptions, LoadedContent } from "./types";
 
 export default function pluginOpenAPI(
@@ -32,7 +33,40 @@ export default function pluginOpenAPI(
         showManualAuthentication,
         outputDir,
         template,
+        sidebarOptions,
       } = options;
+
+      if (Object.keys(sidebarOptions!).length > 0) {
+        const sidebarSlice = generateSidebarSlice(
+          sidebarOptions!, // TODO: find a better way to handle null
+          options,
+          loadedApi
+        );
+
+        const sidebarSliceTemplate = template
+          ? fs.readFileSync(template).toString()
+          : `module.exports = {
+  sidebar: {{{slice}}},
+};
+      `;
+
+        const view = render(sidebarSliceTemplate, {
+          slice: JSON.stringify(sidebarSlice),
+        });
+
+        if (!fs.existsSync(`${outputDir}/sidebar.js`)) {
+          try {
+            fs.writeFileSync(`${outputDir}/sidebar.js`, view, "utf8");
+            console.log(
+              chalk.green(`Successfully created "${outputDir}/sidebar.js"`)
+            );
+          } catch {
+            console.error(
+              chalk.red(`Failed to write "${outputDir}/sidebar.js"`)
+            );
+          }
+        }
+      }
 
       // TODO: Address race condition leading to "Module not found"
       // TODO: Determine if mdx cleanup should be separate yarn script
