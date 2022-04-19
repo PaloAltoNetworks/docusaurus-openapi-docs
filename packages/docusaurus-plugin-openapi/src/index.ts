@@ -22,19 +22,33 @@ export default function pluginOpenAPI(
   options: PluginOptions
 ): Plugin<LoadedContent> {
   const contentPath = path.resolve(context.siteDir, options.path);
+  let {
+    id,
+    showExecuteButton,
+    showManualAuthentication,
+    outputDir,
+    template,
+    sidebarOptions,
+  } = options;
+
+  if (!fs.existsSync(`${outputDir}/.gitinclude`)) {
+    try {
+      fs.writeFileSync(`${outputDir}/.gitinclude`, "");
+      console.log(
+        chalk.green(`Successfully created "${outputDir}/.gitinclude"`)
+      );
+    } catch (err) {
+      console.error(
+        chalk.red(`Failed to write "${outputDir}/.gitinclude" | ${err}`)
+      );
+    }
+  }
 
   // Generate md/mdx before loadContent() life cycle method
-  async function beforeLoadContent() {
+  async function generateApiDocs() {
     try {
       const openapiFiles = await readOpenapiFiles(contentPath, {});
       const loadedApi = await processOpenapiFiles(openapiFiles);
-      const {
-        showExecuteButton,
-        showManualAuthentication,
-        outputDir,
-        template,
-        sidebarOptions,
-      } = options;
 
       if (Object.keys(sidebarOptions!).length > 0) {
         const sidebarSlice = generateSidebarSlice(
@@ -126,7 +140,7 @@ sidebar_class_name: "{{{api.method}}} api-method"
         if (item.type === "api") {
           if (!fs.existsSync(`${outputDir}/${item.id}.mdx`)) {
             try {
-              fs.writeFileSync(`${outputDir}/${item.id}.mdx`, view, "utf8");
+              fs.writeFileSync(`${outputDir}/${item.id}.api.mdx`, view, "utf8");
               console.log(
                 chalk.green(
                   `Successfully created "${outputDir}/${item.id}.mdx"`
@@ -157,20 +171,34 @@ sidebar_class_name: "{{{api.method}}} api-method"
         }
         return;
       });
-      return loadedApi;
+      return;
     } catch (e) {
       console.error(chalk.red(`Loading of api failed for "${contentPath}"`));
       throw e;
     }
   }
 
-  beforeLoadContent();
+  async function clearApiDocs() {
+    console.log("no");
+  }
 
   return {
-    name: "docusaurus-plugin-openapi",
+    name: `docusaurus-plugin-openapi-${id}`,
 
-    getPathsToWatch() {
-      return [contentPath];
+    extendCli(cli): void {
+      cli
+        .command(`generate-api-docs-${id}`)
+        .description(`Downloads the remote ${id} data.`)
+        .action(async () => {
+          await generateApiDocs();
+        });
+
+      cli
+        .command(`clean-api-docs-${id}`)
+        .description(`Downloads the remote ${id} data.`)
+        .action(async () => {
+          await clearApiDocs();
+        });
     },
   };
 }
