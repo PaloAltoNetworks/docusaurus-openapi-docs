@@ -88,19 +88,19 @@ function groupByTags(
     })
     .filter((item) => item.items.length > 0); // Filter out any categories with no items.
 
-  const untagged = [
-    // TODO: determine if needed and how
-    {
-      type: "category" as const,
-      label: "UNTAGGED",
-      // collapsible: options.sidebarCollapsible, TODO: add option
-      // collapsed: options.sidebarCollapsed, TODO: add option
-      items: apiItems
-        //@ts-ignore
-        .filter(({ api }) => api.tags === undefined || api.tags.length === 0)
-        .map(createDocItem),
-    },
-  ];
+  // const untagged = [
+  //   // TODO: determine if needed and how
+  //   {
+  //     type: "category" as const,
+  //     label: "UNTAGGED",
+  //     // collapsible: options.sidebarCollapsible, TODO: add option
+  //     // collapsed: options.sidebarCollapsed, TODO: add option
+  //     items: apiItems
+  //       //@ts-ignore
+  //       .filter(({ api }) => api.tags === undefined || api.tags.length === 0)
+  //       .map(createDocItem),
+  //   },
+  // ];
   return [...tagged];
 }
 

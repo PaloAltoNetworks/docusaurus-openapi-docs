@@ -50,7 +50,21 @@ export default function pluginOpenAPI(
       const openapiFiles = await readOpenapiFiles(contentPath, {});
       const loadedApi = await processOpenapiFiles(openapiFiles);
 
-      if (Object.keys(sidebarOptions!).length > 0) {
+      if (!fs.existsSync(`${outputDir}/.gitinclude`)) {
+        try {
+          fs.writeFileSync(`${outputDir}/.gitinclude`, "");
+          console.log(
+            chalk.green(`Successfully created "${outputDir}/.gitinclude"`)
+          );
+        } catch (err) {
+          console.error(
+            chalk.red(`Failed to write "${outputDir}/.gitinclude" | ${err}`)
+          );
+        }
+      }
+
+      // TODO: figure out better way to set default
+      if (Object.keys(sidebarOptions ?? {}).length > 0) {
         const sidebarSlice = generateSidebarSlice(
           sidebarOptions!, // TODO: find a better way to handle null
           options,
@@ -74,9 +88,9 @@ export default function pluginOpenAPI(
             console.log(
               chalk.green(`Successfully created "${outputDir}/sidebar.js"`)
             );
-          } catch {
+          } catch (err) {
             console.error(
-              chalk.red(`Failed to write "${outputDir}/sidebar.js"`)
+              chalk.red(`Failed to write "${outputDir}/sidebar.js" | ${err}`)
             );
           }
         }
@@ -146,9 +160,11 @@ sidebar_class_name: "{{{api.method}}} api-method"
                   `Successfully created "${outputDir}/${item.id}.mdx"`
                 )
               );
-            } catch {
+            } catch (err) {
               console.error(
-                chalk.red(`Failed to write "${outputDir}/${item.id}.mdx"`)
+                chalk.red(
+                  `Failed to write "${outputDir}/${item.id}.mdx" | ${err}`
+                )
               );
             }
           }
@@ -162,9 +178,9 @@ sidebar_class_name: "{{{api.method}}} api-method"
               console.log(
                 chalk.green(`Successfully created "${outputDir}/index.mdx"`)
               );
-            } catch {
+            } catch (err) {
               console.error(
-                chalk.red(`Failed to write "${outputDir}/index.mdx"`)
+                chalk.red(`Failed to write "${outputDir}/index.mdx" | ${err}`)
               );
             }
           }
