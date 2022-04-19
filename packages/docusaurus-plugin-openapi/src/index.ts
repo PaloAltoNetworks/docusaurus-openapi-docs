@@ -61,9 +61,9 @@ export default function pluginOpenAPI(
             console.log(
               chalk.green(`Successfully created "${outputDir}/sidebar.js"`)
             );
-          } catch {
+          } catch (err) {
             console.error(
-              chalk.red(`Failed to write "${outputDir}/sidebar.js"`)
+              chalk.red(`Failed to write "${outputDir}/sidebar.js" | ${err}`)
             );
           }
         }
@@ -133,9 +133,11 @@ sidebar_class_name: "{{{api.method}}} api-method"
                   `Successfully created "${outputDir}/${item.id}.mdx"`
                 )
               );
-            } catch {
+            } catch (err) {
               console.error(
-                chalk.red(`Failed to write "${outputDir}/${item.id}.mdx"`)
+                chalk.red(
+                  `Failed to write "${outputDir}/${item.id}.mdx" | ${err}`
+                )
               );
             }
           }
@@ -149,9 +151,9 @@ sidebar_class_name: "{{{api.method}}} api-method"
               console.log(
                 chalk.green(`Successfully created "${outputDir}/index.mdx"`)
               );
-            } catch {
+            } catch (err) {
               console.error(
-                chalk.red(`Failed to write "${outputDir}/index.mdx"`)
+                chalk.red(`Failed to write "${outputDir}/index.mdx" | ${err}`)
               );
             }
           }
