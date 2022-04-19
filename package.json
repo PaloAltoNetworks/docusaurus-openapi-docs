@@ -27,7 +27,7 @@
     "release:version": "scripts/version.ts",
     "release:publish": "scripts/publish.ts",
     "clean": "rm -rf node_modules build demo/.docusaurus demo/build demo/node_modules && find packages -name node_modules -type d -maxdepth 2 -exec rm -rf {} + && find packages -name dist -type d -maxdepth 2 -exec rm -rf {} + && find packages -name lib -type d -maxdepth 2 -exec rm -rf {} + && find packages -name lib-next -type d -maxdepth 2 -exec rm -rf {} +",
-    "cleanApiDocs": "find ./demo/api -name '*.mdx' -type f | xargs rm"
+    "cleanApiDocs": "find ./demo/api -name '*.mdx' -o -name '*.js' -type f | xargs rm"
   },
   "devDependencies": {
     "@babel/cli": "^7.16.0",
