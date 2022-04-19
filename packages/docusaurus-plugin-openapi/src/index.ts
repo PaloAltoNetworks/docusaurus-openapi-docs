@@ -36,6 +36,19 @@ export default function pluginOpenAPI(
         sidebarOptions,
       } = options;
 
+      if (!fs.existsSync(`${outputDir}/.gitinclude`)) {
+        try {
+          fs.writeFileSync(`${outputDir}/.gitinclude`, "");
+          console.log(
+            chalk.green(`Successfully created "${outputDir}/.gitinclude"`)
+          );
+        } catch (err) {
+          console.error(
+            chalk.red(`Failed to write "${outputDir}/.gitinclude" | ${err}`)
+          );
+        }
+      }
+
       // TODO: figure out better way to set default
       if (Object.keys(sidebarOptions ?? {}).length > 0) {
         const sidebarSlice = generateSidebarSlice(
