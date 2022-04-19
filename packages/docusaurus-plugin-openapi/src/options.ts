@@ -14,6 +14,7 @@ export const DEFAULT_OPTIONS: PluginOptions = {
   showExecuteButton: true,
   showManualAuthentication: true,
   outputDir: "api",
+  sidebarOptions: {},
 };
 
 export const OptionsSchema = Joi.object({
@@ -23,4 +24,5 @@ export const OptionsSchema = Joi.object({
     DEFAULT_OPTIONS.showManualAuthentication
   ),
   outputDir: Joi.string().default(DEFAULT_OPTIONS.outputDir),
+  sidebarOptions: Joi.object().default(DEFAULT_OPTIONS.sidebarOptions),
 });

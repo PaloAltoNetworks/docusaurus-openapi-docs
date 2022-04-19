@@ -36,7 +36,8 @@ export default function pluginOpenAPI(
         sidebarOptions,
       } = options;
 
-      if (Object.keys(sidebarOptions!).length > 0) {
+      // TODO: figure out better way to set default
+      if (Object.keys(sidebarOptions ?? {}).length > 0) {
         const sidebarSlice = generateSidebarSlice(
           sidebarOptions!, // TODO: find a better way to handle null
           options,
