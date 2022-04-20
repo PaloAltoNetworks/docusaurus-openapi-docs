@@ -43,41 +43,23 @@ const config = {
     [
       "@paloaltonetworks/docusaurus-plugin-openapi",
       {
-        id: "petstore",
-        path: "examples/petstore.yaml",
-        outputDir: "api/petstore",
-      },
-    ],
-    [
-      "@paloaltonetworks/docusaurus-plugin-openapi",
-      {
-        id: "cos",
-        path: "examples/openapi-cos.json",
-        outputDir: "api/cos",
-      },
-    ],
-    [
-      "@paloaltonetworks/docusaurus-plugin-openapi",
-      {
-        id: "openapi-issue",
-        path: "examples/openapi-issue-21.json",
-        outputDir: "api/openapi-issue",
-      },
-    ],
-    [
-      "@paloaltonetworks/docusaurus-plugin-openapi",
-      {
-        id: "burgers",
-        path: "examples/food/burgers/openapi.yaml",
-        outputDir: "api/food/burgers",
-      },
-    ],
-    [
-      "@paloaltonetworks/docusaurus-plugin-openapi",
-      {
-        id: "yogurt",
-        path: "examples/food/yogurtstore/openapi.yaml",
-        outputDir: "api/food/yogurtstore",
+        config: {
+          cspm: {
+            id: "cspm",
+            specPath: "examples/cspm",
+            outputDir: "api/cspm",
+            sidebarOptions: {
+              groupPathsBy: "tags",
+            },
+          },
+          petstore: {
+            specPath: "examples/petstore.yaml",
+            outputDir: "api/petstore",
+            sidebarOptions: {
+              groupPathsBy: "tags",
+            },
+          },
+        },
       },
     ],
     // [require.resolve("./plugins/webpackOptimizer"), {}],

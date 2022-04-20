@@ -1,0 +1,1648 @@
+components:
+  requestBodies:
+    AuditEventSearchParamsModel:
+      content:
+        application/json; charset=UTF-8:
+          schema:
+            $ref: "#/components/schemas/AuditEventSearchParamsModel"
+      description: Audit event search parameters model
+      required: true
+    ConfigRuleSearchParams:
+      content:
+        application/json; charset=UTF-8:
+          schema:
+            $ref: "#/components/schemas/ConfigRuleSearchParams"
+      description: Config rule search parameters model
+      required: true
+    SearchModel:
+      content:
+        application/json; charset=UTF-8:
+          schema:
+            $ref: "#/components/schemas/SearchModel"
+      description: Search model
+      required: true
+  securitySchemes:
+    x-redlock-auth:
+      description: The x-redlock-auth value is a JSON Web Token (JWT).
+      in: header
+      name: x-redlock-auth
+      type: apiKey
+  schemas:
+    AbsoluteTimeRangeConfigModel:
+      allOf:
+        - $ref: "#/components/schemas/TimeRangeConfigModel"
+        - description: Model for AbsoluteTimeRangeConfig
+          properties:
+            type:
+              example: absolute
+              type: string
+            value:
+              allOf:
+                - $ref: "#/components/schemas/TimeModel"
+                - description: Time range object
+          required:
+            - value
+          type: object
+    AggregateAuditEvent:
+      properties:
+        anomalies:
+          format: int32
+          type: integer
+        bruteForceAnomalies:
+          format: int32
+          type: integer
+        cityId:
+          format: int32
+          type: integer
+        cityName:
+          type: string
+        countryId:
+          format: int32
+          type: integer
+        countryName:
+          type: string
+        description:
+          type: string
+        deviceFingerprintLoginAnomalies:
+          format: int32
+          type: integer
+        distinctUsers:
+          format: int32
+          type: integer
+        events:
+          format: int32
+          type: integer
+        geoAnomalies:
+          format: int32
+          type: integer
+        geoAnomaliesByAccessKey:
+          format: int32
+          type: integer
+        geoAnomaliesByUser:
+          format: int32
+          type: integer
+        latitude:
+          format: double
+          type: number
+        longitude:
+          format: double
+          type: number
+        service:
+          type: string
+        serviceAnomalies:
+          format: int32
+          type: integer
+        serviceAnomaliesByAccessKey:
+          format: int32
+          type: integer
+        serviceAnomaliesByUser:
+          format: int32
+          type: integer
+        serviceHighlighted:
+          type: boolean
+        serviceNGeoAnomalies:
+          format: int32
+          type: integer
+        serviceNGeoAnomaliesByAccessKey:
+          format: int32
+          type: integer
+        serviceNGeoAnomaliesByUser:
+          format: int32
+          type: integer
+        stateId:
+          format: int32
+          type: integer
+        stateName:
+          type: string
+        timeTravelAnomalies:
+          format: int32
+          type: integer
+        timestamp:
+          format: int64
+          type: integer
+        unusualLocations:
+          type: string
+        user:
+          type: string
+      type: object
+    AuditEvent:
+      properties:
+        accessKey:
+          type: string
+        accessKeyUsed:
+          type: boolean
+        account:
+          type: string
+        accountName:
+          type: string
+        anomalyId:
+          type: string
+        browser:
+          type: string
+        cityId:
+          format: int32
+          type: integer
+        cityLatitude:
+          format: double
+          type: number
+        cityLongitude:
+          format: double
+          type: number
+        cityName:
+          type: string
+        countryId:
+          format: int32
+          type: integer
+        countryName:
+          type: string
+        dynamicData:
+          additionalProperties:
+            type: object
+          type: object
+        eventTs:
+          format: int64
+          type: integer
+        flaggedFeature:
+          type: string
+        id:
+          format: int64
+          type: integer
+        ingestionTs:
+          format: int64
+          type: integer
+        internal:
+          type: boolean
+        ip:
+          type: string
+        location:
+          type: string
+        name:
+          type: string
+        objects:
+          items:
+            $ref: "#/components/schemas/ResourceIdBean"
+          type: array
+        os:
+          type: string
+        rawEvent:
+          type: object
+        reasonIds:
+          items:
+            format: int32
+            type: integer
+          type: array
+        regionApiIdentifier:
+          type: string
+        regionId:
+          format: int32
+          type: integer
+        regionName:
+          type: string
+        role:
+          type: string
+        source:
+          type: string
+        stateId:
+          format: int32
+          type: integer
+        stateName:
+          type: string
+        subject:
+          type: string
+        subjectType:
+          enum:
+            - AWS_OTHER
+            - AZURE_OTHER
+            - GCP_OTHER
+            - AWS_IAM_USER
+            - AWS_ROOT
+            - AWS_ASSUMED_ROLE
+            - AWS_ROLE
+            - GCP_USER
+            - GCP_SERVICE_ACCOUNT
+            - AZURE_AD_USER
+            - AZURE_APPLICATION
+            - AWS_ACCOUNT
+            - AWS_SERVICE
+            - AWS_FEDERATED_USER
+            - AWS_SAML_USER
+            - AWS_WEB_IDENTITY_USER
+            - AWS_DIRECTORY
+          type: string
+        success:
+          type: boolean
+        timezone:
+          type: string
+        type:
+          enum:
+            - UNKNOWN
+            - CREATE
+            - READ
+            - UPDATE
+            - DELETE
+            - LOGIN
+            - TEST
+            - AUDITD
+          type: string
+        userAgentBrowser:
+          $ref: "#/components/schemas/UserAgentBrowser"
+        userAgentOs:
+          $ref: "#/components/schemas/UserAgentOs"
+      type: object
+    AuditEventPageParams:
+      properties:
+        limit:
+          description: Results per Page
+          format: int32
+          type: integer
+        pageToken:
+          description: Page Token
+          type: string
+      type: object
+    AuditEventSearchParamsModel:
+      description: Audit event search parameters model
+      properties:
+        alertId:
+          description: Alert ID
+          type: string
+        filters:
+          description: Filters
+          items:
+            $ref: "#/components/schemas/UIFilterModel"
+          type: array
+        groupBy:
+          description: Group By parameters
+          items:
+            type: string
+          type: array
+        id:
+          description: Search ID
+          type: string
+        limit:
+          description: Limit
+          format: int32
+          type: integer
+        query:
+          description: RQL query
+          type: string
+        sort:
+          description: Sort Fields
+          items:
+            $ref: "#/components/schemas/SortAuditEventSortField"
+          type: array
+        timeRange:
+          $ref: "#/components/schemas/TimeRangeConfigModel"
+      type: object
+    AutocompleteInfo:
+      description: Model for AutocompleteInfo
+      properties:
+        links:
+          description: JSON query builder links
+          type: string
+        needsOffsetUpdate:
+          description: Needs offset update (for internal use)
+          type: boolean
+        offset:
+          description: Offset within query
+          format: int32
+          type: integer
+        suggestions:
+          description: List of suggestions
+          items:
+            type: string
+          type: array
+        translate:
+          description: Translate (for internal use)
+          type: boolean
+        valid:
+          description: Query is valid
+          type: boolean
+      type: object
+    ConfigCsvJobResponseModel:
+      description: " Response Model for CreateConfigRuleSearchCsvDownloadJob"
+      properties:
+        createdBy:
+          description: Job creator
+          readOnly: true
+          type: string
+        createdOn:
+          description: Creation timestamp
+          format: int64
+          readOnly: true
+          type: integer
+        getdownloadUri:
+          description: Status URI
+          readOnly: true
+          type: string
+        id:
+          description: Job ID
+          readOnly: true
+          type: string
+      type: object
+    ConfigRulePageParams:
+      properties:
+        limit:
+          description: Results per Page
+          format: int32
+          type: integer
+        pageToken:
+          description: Page Token
+          type: string
+        withResourceJson:
+          type: boolean
+      type: object
+    ConfigRuleSearchParams:
+      properties:
+        id:
+          description: Search ID
+          type: string
+        limit:
+          description: Results per page. Does not apply to asynchronous search jobs.
+          format: int32
+          type: integer
+        query:
+          description: RQL query
+          type: string
+        searchDescription:
+          description: Search description. For asynchronouse search jobs only.
+          type: string
+        searchName:
+          description: Search name. For asynchronouse search jobs only.
+          type: string
+        sort:
+          description: Sort field data
+          items:
+            $ref: "#/components/schemas/SortConfigRuleSortField"
+          type: array
+        timeRange:
+          allOf:
+            - $ref: "#/components/schemas/TimeRangeConfigModel"
+            - description: Time range
+        withResourceJson:
+          description: true = include resource JSON. Default is true.
+          type: boolean
+      type: object
+    PagedResultsAuditEvent:
+      properties:
+        dynamicColumns:
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+        items:
+          items:
+            $ref: "#/components/schemas/AuditEvent"
+          type: array
+        nextPageToken:
+          type: string
+        sortAllowedColumns:
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+        totalRows:
+          format: int64
+          type: integer
+      type: object
+    PagedResultsResourceMetaModel:
+      properties:
+        dynamicColumns:
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+        items:
+          items:
+            $ref: "#/components/schemas/ResourceMetaModel"
+          type: array
+        nextPageToken:
+          type: string
+        sortAllowedColumns:
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+        totalRows:
+          format: int64
+          type: integer
+      type: object
+    RRNModel:
+      description: Model for RRN
+      properties:
+        accountId:
+          description: Account ID
+          readOnly: true
+          type: string
+        cloudType:
+          description: Cloud type
+          enum:
+            - ALL
+            - AWS
+            - AZURE
+            - GCP
+            - ALIBABA_CLOUD
+            - OCI
+          readOnly: true
+          type: string
+        idmapId:
+          description: Hashed generated ID
+          readOnly: true
+          type: string
+        regionId:
+          description: Region ID
+          readOnly: true
+          type: string
+        resourceId:
+          description: Resource ID
+          readOnly: true
+          type: string
+        resourceType:
+          description: Resource type
+          readOnly: true
+          type: string
+      type: object
+    RelativeTimeDurationModel:
+      description: Model for RelativeTimeDuration
+      properties:
+        amount:
+          description: Number of time units
+          format: int32
+          type: integer
+        unit:
+          description: Time unit
+          enum:
+            - minute
+            - hour
+            - day
+            - week
+            - month
+            - year
+          type: string
+      type: object
+    RelativeTimeRangeConfigModel:
+      allOf:
+        - $ref: "#/components/schemas/TimeRangeConfigModel"
+        - description: Model for RelativeTimeRangeConfig
+          properties:
+            relativeTimeType:
+              description: Direction in which to count time. Default = BACKWARD
+              enum:
+                - BACKWARD
+                - FORWARD
+              type: string
+            type:
+              example: relative
+              type: string
+            value:
+              allOf:
+                - $ref: "#/components/schemas/RelativeTimeDurationModel"
+                - description: Time range object
+          required:
+            - value
+          type: object
+    ResourceIdBean:
+      description: Model for Resource ID Bean
+      properties:
+        account:
+          description: Account
+          readOnly: true
+          type: string
+        apiName:
+          description: Resource API name
+          readOnly: true
+          type: string
+        cloudType:
+          description: Cloud type
+          enum:
+            - ALL
+            - AWS
+            - AZURE
+            - GCP
+            - ALIBABA_CLOUD
+            - OCI
+          readOnly: true
+          type: string
+        insert_ts:
+          description: Insertion timestamp
+          format: int64
+          readOnly: true
+          type: integer
+        region:
+          description: Region
+          readOnly: true
+          type: string
+        resource:
+          description: Resource
+          readOnly: true
+          type: string
+        type:
+          description: Resource type
+          readOnly: true
+          type: string
+        vpc:
+          description: VCP
+          readOnly: true
+          type: string
+      type: object
+    ResourceMetaModel:
+      description: Model containing resource metadata
+      properties:
+        accountGroupName:
+          description: Account group name
+          type: string
+        accountId:
+          description: Account ID
+          type: string
+        accountName:
+          description: Account name
+          type: string
+        allowDrillDown:
+          description: allowDrillDown
+          type: boolean
+        cloudType:
+          description: Cloud Type
+          enum:
+            - ALL
+            - AWS
+            - AZURE
+            - GCP
+            - ALIBABA_CLOUD
+            - OCI
+          type: string
+        createdTs:
+          description: Creation timestamp
+          format: int64
+          type: integer
+        data:
+          description: Raw JSON data for the resource
+          type: object
+        deleted:
+          description: Deleted
+          type: boolean
+        dynamicData:
+          additionalProperties:
+            type: object
+          description: Dynamic data
+          type: object
+        hasExtFindingRiskFactors:
+          description: Has risk factors
+          type: boolean
+        hasExternalFinding:
+          description: Has external finding
+          type: boolean
+        hasExternalIntegration:
+          description: Has external integration
+          type: boolean
+        hasNetwork:
+          description: Has network
+          type: boolean
+        id:
+          description: ID
+          type: string
+        insertTs:
+          description: Insertion timestamp
+          format: int64
+          type: integer
+        name:
+          description: Name
+          type: string
+        regionId:
+          description: Region ID
+          type: string
+        regionName:
+          description: Region name
+          type: string
+        resourceType:
+          description: Resource type
+          type: string
+        riskGrade:
+          description: Risk grade
+          type: string
+        rrn:
+          allOf:
+            - $ref: "#/components/schemas/RRNModel"
+            - description: RRN
+        service:
+          description: Service
+          type: string
+        stateId:
+          description: State ID
+          type: string
+        tags:
+          additionalProperties:
+            type: string
+          description: Tags
+          type: object
+        url:
+          description: URL
+          type: string
+        vpcId:
+          description: Virtual private cloud ID
+          type: string
+        vpcName:
+          description: Virtual private cloud name
+          type: string
+      type: object
+    SearchModel:
+      properties:
+        alertId:
+          description: Alert ID
+          readOnly: true
+          type: string
+        async:
+          description: true = Is Async
+          readOnly: true
+          type: boolean
+        asyncResultUrl:
+          description: Async Result Url
+          example: /search/config/jobs/2df49d4f72e842b582b123bc2b7826b3/download
+          readOnly: true
+          type: string
+        cloudType:
+          description: Cloud Type
+          enum:
+            - aws
+            - azure
+            - gcp
+            - alibaba_cloud
+            - oci
+          type: string
+        cursor:
+          description: Cursor
+          format: int32
+          readOnly: true
+          type: integer
+        default:
+          type: boolean
+        description:
+          description: Search Description
+          type: string
+        filters:
+          description: View Order
+          items:
+            $ref: "#/components/schemas/UIFilterModel"
+          readOnly: true
+          type: array
+        groupBy:
+          description: Group By
+          items:
+            type: string
+          readOnly: true
+          type: array
+        id:
+          description: Search ID
+          type: string
+        name:
+          description: Search Name
+          type: string
+        query:
+          description: RQL Query
+          type: string
+        saved:
+          description: Search Exists
+          type: boolean
+        searchType:
+          description: Search Type
+          enum:
+            - network
+            - audit_event
+            - config
+          readOnly: true
+          type: string
+        timeGranularity:
+          description: Time Granularity
+          readOnly: true
+          type: string
+        timeRange:
+          allOf:
+            - $ref: "#/components/schemas/TimeRangeConfigModel"
+            - description: Time Range
+      required:
+        - query
+        - timeRange
+      type: object
+    SearchResponseModel:
+      properties:
+        alertId:
+          description: Alert ID
+          readOnly: true
+          type: string
+        async:
+          description: true = Is Async
+          readOnly: true
+          type: boolean
+        asyncResultUrl:
+          description: Async Result Url
+          example: /search/config/jobs/2df49d4f72e842b582b123bc2b7826b3/download
+          readOnly: true
+          type: string
+        cloudType:
+          description: Cloud Type
+          enum:
+            - aws
+            - azure
+            - gcp
+            - alibaba_cloud
+            - oci
+          type: string
+        cursor:
+          description: Cursor
+          format: int32
+          readOnly: true
+          type: integer
+        data:
+          type: object
+        default:
+          type: boolean
+        description:
+          description: Search Description
+          type: string
+        filters:
+          description: View Order
+          items:
+            $ref: "#/components/schemas/UIFilterModel"
+          readOnly: true
+          type: array
+        groupBy:
+          description: Group By
+          items:
+            type: string
+          readOnly: true
+          type: array
+        id:
+          description: Search ID
+          type: string
+        name:
+          description: Search Name
+          type: string
+        query:
+          description: RQL Query
+          type: string
+        saved:
+          description: Search Exists
+          type: boolean
+        searchType:
+          description: Search Type
+          enum:
+            - network
+            - audit_event
+            - config
+          readOnly: true
+          type: string
+        timeGranularity:
+          description: Time Granularity
+          readOnly: true
+          type: string
+        timeRange:
+          allOf:
+            - $ref: "#/components/schemas/TimeRangeConfigModel"
+            - description: Time Range
+      required:
+        - query
+        - timeRange
+      type: object
+    SearchResponseModelListAggregateAuditEvent:
+      properties:
+        alertId:
+          description: Alert ID
+          readOnly: true
+          type: string
+        async:
+          description: true = Is Async
+          readOnly: true
+          type: boolean
+        asyncResultUrl:
+          description: Async Result Url
+          example: /search/config/jobs/2df49d4f72e842b582b123bc2b7826b3/download
+          readOnly: true
+          type: string
+        cloudType:
+          description: Cloud Type
+          enum:
+            - aws
+            - azure
+            - gcp
+            - alibaba_cloud
+            - oci
+          type: string
+        cursor:
+          description: Cursor
+          format: int32
+          readOnly: true
+          type: integer
+        data:
+          items:
+            $ref: "#/components/schemas/AggregateAuditEvent"
+          type: array
+        default:
+          type: boolean
+        description:
+          description: Search Description
+          type: string
+        filters:
+          description: View Order
+          items:
+            $ref: "#/components/schemas/UIFilterModel"
+          readOnly: true
+          type: array
+        groupBy:
+          description: Group By
+          items:
+            type: string
+          readOnly: true
+          type: array
+        id:
+          description: Search ID
+          type: string
+        name:
+          description: Search Name
+          type: string
+        query:
+          description: RQL Query
+          type: string
+        saved:
+          description: Search Exists
+          type: boolean
+        searchType:
+          description: Search Type
+          enum:
+            - network
+            - audit_event
+            - config
+          readOnly: true
+          type: string
+        timeGranularity:
+          description: Time Granularity
+          readOnly: true
+          type: string
+        timeRange:
+          allOf:
+            - $ref: "#/components/schemas/TimeRangeConfigModel"
+            - description: Time Range
+      required:
+        - query
+        - timeRange
+      type: object
+    SearchResponseModelListObject:
+      properties:
+        alertId:
+          description: Alert ID
+          readOnly: true
+          type: string
+        async:
+          description: true = Is Async
+          readOnly: true
+          type: boolean
+        asyncResultUrl:
+          description: Async Result Url
+          example: /search/config/jobs/2df49d4f72e842b582b123bc2b7826b3/download
+          readOnly: true
+          type: string
+        cloudType:
+          description: Cloud Type
+          enum:
+            - aws
+            - azure
+            - gcp
+            - alibaba_cloud
+            - oci
+          type: string
+        cursor:
+          description: Cursor
+          format: int32
+          readOnly: true
+          type: integer
+        data:
+          items:
+            type: object
+          type: array
+        default:
+          type: boolean
+        description:
+          description: Search Description
+          type: string
+        filters:
+          description: View Order
+          items:
+            $ref: "#/components/schemas/UIFilterModel"
+          readOnly: true
+          type: array
+        groupBy:
+          description: Group By
+          items:
+            type: string
+          readOnly: true
+          type: array
+        id:
+          description: Search ID
+          type: string
+        name:
+          description: Search Name
+          type: string
+        query:
+          description: RQL Query
+          type: string
+        saved:
+          description: Search Exists
+          type: boolean
+        searchType:
+          description: Search Type
+          enum:
+            - network
+            - audit_event
+            - config
+          readOnly: true
+          type: string
+        timeGranularity:
+          description: Time Granularity
+          readOnly: true
+          type: string
+        timeRange:
+          allOf:
+            - $ref: "#/components/schemas/TimeRangeConfigModel"
+            - description: Time Range
+      required:
+        - query
+        - timeRange
+      type: object
+    SearchResponseModelPagedResultsAuditEvent:
+      properties:
+        alertId:
+          description: Alert ID
+          readOnly: true
+          type: string
+        async:
+          description: true = Is Async
+          readOnly: true
+          type: boolean
+        asyncResultUrl:
+          description: Async Result Url
+          example: /search/config/jobs/2df49d4f72e842b582b123bc2b7826b3/download
+          readOnly: true
+          type: string
+        cloudType:
+          description: Cloud Type
+          enum:
+            - aws
+            - azure
+            - gcp
+            - alibaba_cloud
+            - oci
+          type: string
+        cursor:
+          description: Cursor
+          format: int32
+          readOnly: true
+          type: integer
+        data:
+          $ref: "#/components/schemas/PagedResultsAuditEvent"
+        default:
+          type: boolean
+        description:
+          description: Search Description
+          type: string
+        filters:
+          description: View Order
+          items:
+            $ref: "#/components/schemas/UIFilterModel"
+          readOnly: true
+          type: array
+        groupBy:
+          description: Group By
+          items:
+            type: string
+          readOnly: true
+          type: array
+        id:
+          description: Search ID
+          type: string
+        name:
+          description: Search Name
+          type: string
+        query:
+          description: RQL Query
+          type: string
+        saved:
+          description: Search Exists
+          type: boolean
+        searchType:
+          description: Search Type
+          enum:
+            - network
+            - audit_event
+            - config
+          readOnly: true
+          type: string
+        timeGranularity:
+          description: Time Granularity
+          readOnly: true
+          type: string
+        timeRange:
+          allOf:
+            - $ref: "#/components/schemas/TimeRangeConfigModel"
+            - description: Time Range
+      required:
+        - query
+        - timeRange
+      type: object
+    SearchResponseModelPagedResultsResourceMetaModel:
+      properties:
+        alertId:
+          description: Alert ID
+          readOnly: true
+          type: string
+        async:
+          description: true = Is Async
+          readOnly: true
+          type: boolean
+        asyncResultUrl:
+          description: Async Result Url
+          example: /search/config/jobs/2df49d4f72e842b582b123bc2b7826b3/download
+          readOnly: true
+          type: string
+        cloudType:
+          description: Cloud Type
+          enum:
+            - aws
+            - azure
+            - gcp
+            - alibaba_cloud
+            - oci
+          type: string
+        cursor:
+          description: Cursor
+          format: int32
+          readOnly: true
+          type: integer
+        data:
+          $ref: "#/components/schemas/PagedResultsResourceMetaModel"
+        default:
+          type: boolean
+        description:
+          description: Search Description
+          type: string
+        filters:
+          description: View Order
+          items:
+            $ref: "#/components/schemas/UIFilterModel"
+          readOnly: true
+          type: array
+        groupBy:
+          description: Group By
+          items:
+            type: string
+          readOnly: true
+          type: array
+        id:
+          description: Search ID
+          type: string
+        name:
+          description: Search Name
+          type: string
+        query:
+          description: RQL Query
+          type: string
+        saved:
+          description: Search Exists
+          type: boolean
+        searchType:
+          description: Search Type
+          enum:
+            - network
+            - audit_event
+            - config
+          readOnly: true
+          type: string
+        timeGranularity:
+          description: Time Granularity
+          readOnly: true
+          type: string
+        timeRange:
+          allOf:
+            - $ref: "#/components/schemas/TimeRangeConfigModel"
+            - description: Time Range
+      required:
+        - query
+        - timeRange
+      type: object
+    SortAuditEventSortField:
+      properties:
+        direction:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        field:
+          enum:
+            - ID
+            - TIME
+            - OPERATION
+            - CLOUD_SERVICE
+            - CRUD
+            - USER
+            - CLOUD_ACCOUNT
+            - CLOUD_REGION
+            - TIMESTAMP
+          type: string
+      type: object
+    SortConfigRuleSortField:
+      properties:
+        direction:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        field:
+          enum:
+            - ID
+            - TIME
+            - API_NAME
+            - CUSTOMER_ID
+            - INSERT_TS
+            - JSON
+            - CLOUD_ACCOUNT
+            - CLOUD_REGION
+            - STATE_ID
+          type: string
+      type: object
+    TimeModel:
+      description: Model for Time
+      properties:
+        endTime:
+          description: End timestamp
+          format: int64
+          type: integer
+        startTime:
+          description: Start timestamp
+          format: int64
+          type: integer
+      type: object
+    TimeRangeConfigModel:
+      description:
+        "See the [Time Range Model](/api/cloud/api-time-range-model) for
+        details.
+
+        "
+      discriminator:
+        mapping:
+          absolute: "#/components/schemas/AbsoluteTimeRangeConfigModel"
+          relative: "#/components/schemas/RelativeTimeRangeConfigModel"
+          to_now: "#/components/schemas/ToNowTimeRangeConfigModel"
+        propertyName: type
+      oneOf:
+        - $ref: "#/components/schemas/RelativeTimeRangeConfigModel"
+        - $ref: "#/components/schemas/AbsoluteTimeRangeConfigModel"
+        - $ref: "#/components/schemas/ToNowTimeRangeConfigModel"
+      properties:
+        type:
+          description: Time type
+          type: string
+      required:
+        - type
+      type: object
+    ToNowTimeRangeConfigModel:
+      allOf:
+        - $ref: "#/components/schemas/TimeRangeConfigModel"
+        - description: Model for ToNowTimeRangeConfig
+          properties:
+            value:
+              description: Time range object
+              enum:
+                - MINUTE
+                - HOUR
+                - DAY
+                - WEEK
+                - MONTH
+                - YEAR
+                - EPOCH
+                - LOGIN
+              type: string
+          type: object
+    UIFilterModel:
+      description: Model for UIFilter
+      properties:
+        name:
+          description: Name
+          type: string
+        operator:
+          description: Operator
+          enum:
+            - =
+          type: string
+        value:
+          description: Value
+          type: string
+      type: object
+    UserAgentBrowser:
+      properties:
+        hash:
+          format: int32
+          type: integer
+        id:
+          format: int32
+          type: integer
+        name:
+          type: string
+      type: object
+    UserAgentOs:
+      properties:
+        hash:
+          format: int32
+          type: integer
+        id:
+          format: int32
+          type: integer
+        name:
+          type: string
+      type: object
+info:
+  contact: {}
+  description:
+    "You can use the Resource Query Language (RQL) to perform configuration\
+    \ checks across cloud services as well as \ngain real-time insights into user\
+    \ and network events to gain security visibility and create policy guardrails\
+    \ \nin your cloud environment. See the [Prisma Cloud documentation](https://docs.paloaltonetworks.com/prisma/prisma-cloud.html)\
+    \ for more information.\n"
+  title: Prisma Cloud Search API Overview
+  version: Latest
+openapi: 3.0.0
+paths:
+  /search/config:
+    post:
+      description:
+        "Returns the results of an RQL config query. With config queries,\
+        \ you can retrieve resource information, identify misconfigurations, gain\
+        \ operational insights, and uncover policy and compliance violations.  \r\n\
+        \r\n### Download Config Search CSV \nIn addition to performing a config search,\
+        \ this endpoint can perform the config \nsearch and download the results as\
+        \ a CSV file. To download the config search CSV, \nadd the request HTTP header\
+        \ **Accept: text/csv**.\n\nAn example request body is:\n```json\n{\n  \"query\"\
+        :\"config where api.name = 'aws-iam-get-account-summary' \",\n  \"timeRange\"\
+        :{\n     \"type\":\"relative\",\n     \"value\":{\n        \"unit\":\"hour\"\
+        ,\n        \"amount\":24\n     }\n  }\n}\n```\n"
+      operationId: search-config
+      requestBody:
+        $ref: "#/components/requestBodies/ConfigRuleSearchParams"
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/SearchResponseModelPagedResultsResourceMetaModel"
+          description: success
+        "400":
+          description: conflict_saved_search
+        "404":
+          description: not_found
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Perform Config Search
+      tags:
+        - Search
+  /search:
+    post:
+      description:
+        "Perform a search against flow logs with an RQL query.  \r\n\r\n\
+        This endpoint ignores the body param **default**. \n\n### Download Network\
+        \ Search CSV \nIn addition to performing a network search, this API can perform\
+        \ the network \nsearch and download the results as a CSV file. To download\
+        \ the network search CSV, \nadd the request HTTP header **Accept: text/csv**.\n\
+        \nAn example request body is:\n```json\n{\n  \"cloudType\": \"\",\n  \"id\"\
+        :\"\",\n  \"name\":\"\",\n  \"description:\"\",\n  \"saved\":false,\n  \"\
+        default\":false,\n  \"query\": \"\",\n    \"timeRange\": {\n      \"type\"\
+        : \"\",\n      \"value\": \"\"\n    }\n}\n```\n"
+      operationId: search-network
+      requestBody:
+        $ref: "#/components/requestBodies/SearchModel"
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/SearchResponseModel"
+          description: success
+        "400":
+          description: invalid_parameter_value
+        "404":
+          description: not_found
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Perform Network Search
+      tags:
+        - Search
+  /search/event:
+    post:
+      description:
+        Returns the results of an RQL audit event query. You can use event
+        queries to detect and investigate console and API access, monitor privileged
+        activities, and detect account compromise and unusual user behavior in your
+        cloud environment.
+      operationId: search-events
+      requestBody:
+        $ref: "#/components/requestBodies/AuditEventSearchParamsModel"
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/SearchResponseModelPagedResultsAuditEvent"
+          description: success
+        "400":
+          description: conflict_saved_search
+        "404":
+          description: not_found
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Perform Event Search
+      tags:
+        - Search
+  /search/event/aggregate:
+    post:
+      description:
+        Returns the results of an RQL aggregated audit events query. This
+        RQL query is similar to an RQL event query, but the data returned includes
+        location and service data.
+      operationId: search-events-aggregated
+      requestBody:
+        $ref: "#/components/requestBodies/AuditEventSearchParamsModel"
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/SearchResponseModelListAggregateAuditEvent"
+          description: success
+        "400":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Aggregated Event Search
+      tags:
+        - Search
+  /search/event/filtered:
+    post:
+      description:
+        Filters the results of an event log search according to the specified
+        parameters. You can use this call to refine the results of an aggregated search.
+      operationId: search-events-filtered
+      requestBody:
+        $ref: "#/components/requestBodies/AuditEventSearchParamsModel"
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/SearchResponseModelPagedResultsAuditEvent"
+          description: success
+        "400":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Filter Event Search Results
+      tags:
+        - Search
+  /search/event/page:
+    post:
+      description:
+        "Returns the next page of search results, using a token provided\
+        \ from the previous page. Used for when there are over 100 search results\
+        \ for a given RQL query.  \r\n\r\nAn initial request to perform an event search\
+        \ will return a **data.nextPageToken** that you \ncan use as the initial **pageToken**.\n"
+      operationId: search-events-page
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: "#/components/schemas/AuditEventPageParams"
+        description: Audit event page parameters model
+        required: true
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/PagedResultsAuditEvent"
+          description: success
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get The Next Event Search Page
+      tags:
+        - Search
+  /search/event/raw/{id}:
+    get:
+      description: Returns the audit event data for the specified ID as raw metadata.
+      operationId: search-events-raw
+      parameters:
+        - description: Audit Event ID
+          in: path
+          name: id
+          required: true
+          schema:
+            format: int64
+            type: integer
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/AuditEvent"
+          description: success
+        "404":
+          description: not_found
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Raw Event Data
+      tags:
+        - Search
+  /search/suggest:
+    post:
+      description:
+        "Returns the possible options&mdash;including expressions, values,\
+        \ and operators&mdash;to append to a partial RQL query.  \r\n\r\nSpecifying\
+        \ a partial RQL query in the query parameter will result in a list of suggested\
+        \ \noptions to append to your partial query. No other parameters are required.\n"
+      operationId: search-suggest
+      requestBody:
+        $ref: "#/components/requestBodies/SearchModel"
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/AutocompleteInfo"
+          description: success
+      security:
+        - x-redlock-auth: []
+      summary: Autocomplete Search
+      tags:
+        - Search
+  /search/alert:
+    get:
+      description:
+        "Returns search data that can be used to investigate the alert\
+        \ with the specified ID.   \r\n\r\nThis request returns data for only the\
+        \ following types of alerts:\n* Anomaly alerts\n* Network alerts       \n"
+      operationId: search-for-alert-by-id
+      parameters:
+        - description: Alert ID
+          in: query
+          name: alertId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/SearchResponseModelListObject"
+          description: success
+        "404":
+          description: not_found
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Search Alerts by ID
+      tags:
+        - Search
+  /search/config/page:
+    post:
+      description:
+        Returns the next page of search results, using a token provided
+        from the previous page. Used for when there are over 100 search results for
+        a given RQL query.
+      operationId: search-config-page
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: "#/components/schemas/ConfigRulePageParams"
+        description: Config rule page parameters model
+        required: true
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/PagedResultsResourceMetaModel"
+          description: success
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get The Next Config Search Page
+      tags:
+        - Search
+  /search/event/filtered/download:
+    post:
+      description:
+        Performs an event log search with an RQL query and downloads the
+        result as a CSV file.
+      operationId: search-events-csv
+      requestBody:
+        $ref: "#/components/requestBodies/AuditEventSearchParamsModel"
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Download Event Search CSV
+      tags:
+        - Search
+  /search/config/jobs:
+    post:
+      description:
+        "Submits a job to generate an RQL config query results list that\
+        \ matches the constraints in the body parameters and is downloadable as a\
+        \ CSV file. Returns the job ID and job submission status.  \r\n\r\nTo identify\
+        \ your config query, specify either (1) a saved search **id**, (2) a recent\
+        \ search **id** plus a unique **searchName**, \nor (3) a **query** plus a\
+        \ unique **searchName**.\n\nIf you identify your search through a saved search\
+        \ **id**, the following request body parameters apply:\n* **id** - The search\
+        \ ID that corresponds to an existing saved search. You can [View Search History](https://prisma.pan.dev/api/cloud/cspm/search-manager#operation/search-history)\
+        \ with a filter \nto get a list of your saved search IDs. (Required)\n* **sort**\
+        \ - An array of sort field data (Optional)\n* **timeRange** - A time range\
+        \ filter. Default is the past seven days. (Optional)\n\nIf you identify your\
+        \ search through a recent **id** and a **searchName**, the following request\
+        \ body parameters apply:\n* **id** - The search ID that corresponds to an\
+        \ existing recent search. You can [View Search History](https://prisma.pan.dev/api/cloud/cspm/search-manager#operation/search-history)\
+        \ with a filter \nto get a list of your recent search IDs. (Required)\n* **searchName**\
+        \ - A unique name that identifies the search (Required)\n* **sort** - An array\
+        \ of sort field data (Optional)\n* **timeRange** - A time range filter. Default\
+        \ is the past seven days. (Optional)      \n\nIf you identify your search\
+        \ through a **query** and **searchName**, the following request body parameters\
+        \ apply:\n* **query** - A valid RQL config query that defines your search\
+        \ (Required)\n* **searchName** - A unique name that identifies the search\
+        \ (Required)\n* **searchDescription** - A description for your search (Optional)\n\
+        * **sort** - An array of sort field data (Optional)\n* **timeRange** - A time\
+        \ range filter. Default is the past seven days. (Optional)\n"
+      operationId: submit-an-search-config-csv-download-job
+      requestBody:
+        $ref: "#/components/requestBodies/ConfigRuleSearchParams"
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/ConfigCsvJobResponseModel"
+          description: success
+        "202":
+          description: in_process
+        "400":
+          description: invalid_parameter_value
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Submit Search Config CSV Generation Job
+      tags:
+        - Search
+  /search/config/jobs/{id}/download:
+    get:
+      description:
+        "Returns the results of an RQL Config query as a CSV. With Config\
+        \ queries, you can retrieve resource information, identify misconfigurations,\
+        \ gain operational insights, and uncover policy and compliance violations.\
+        \  \r\n\r\nThis request requires the HTTP header **Accept: text/csv**.\n"
+      operationId: async-search-config-csv
+      parameters:
+        - description: Job ID
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+        "202":
+          description: in_process
+        "400":
+          description: conflict_saved_search
+        "404":
+          description: not_found
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Download Async Config Search CSV
+      tags:
+        - Search
+servers:
+  - url: https://api.prismacloud.io
+tags:
+  - description: The Search endpoints are listed below.
+    name: Search

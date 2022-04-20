@@ -16,6 +16,8 @@
     "build-demo": "yarn workspace demo build",
     "serve": "yarn workspace demo serve",
     "start": "yarn workspace demo start",
+    "api": "yarn workspace demo gen-api-docs",
+    "clean-api": "yarn workspace demo clean-api-docs",
     "cy:run": "cypress run",
     "cy:open": "cypress open",
     "format": "prettier . --check --ignore-unknown --ignore-path .gitignore",

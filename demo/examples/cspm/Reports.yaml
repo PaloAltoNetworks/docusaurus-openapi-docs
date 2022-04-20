@@ -1,0 +1,862 @@
+components:
+  requestBodies:
+    FilterSuggestionModel:
+      content:
+        application/json; charset=UTF-8:
+          schema:
+            $ref: "#/components/schemas/FilterSuggestionModel"
+  securitySchemes:
+    x-redlock-auth:
+      description: The x-redlock-auth value is a JSON Web Token (JWT).
+      in: header
+      name: x-redlock-auth
+      type: apiKey
+  schemas:
+    AbsoluteTimeRangeConfigModel:
+      allOf:
+        - $ref: "#/components/schemas/TimeRangeConfigModel"
+        - description: Model for AbsoluteTimeRangeConfig
+          properties:
+            type:
+              example: absolute
+              type: string
+            value:
+              allOf:
+                - $ref: "#/components/schemas/TimeModel"
+                - description: Time range object
+          required:
+            - value
+          type: object
+    ComplianceAggregateCount:
+      description: Model for compliance aggregate count
+      properties:
+        failed:
+          description: Failed
+          format: int64
+          readOnly: true
+          type: integer
+        highSeverityFailed:
+          description: Number of high-severity failures
+          format: int64
+          readOnly: true
+          type: integer
+        lowSeverityFailed:
+          description: Number of low-severity failures
+          format: int64
+          readOnly: true
+          type: integer
+        mediumSeverityFailed:
+          description: Number of medium-severity failures
+          format: int64
+          readOnly: true
+          type: integer
+        passed:
+          description: Passed
+          format: int64
+          readOnly: true
+          type: integer
+        total:
+          description: Total
+          format: int64
+          readOnly: true
+          type: integer
+      type: object
+    FilterSuggestion:
+      description: Model for FilterSuggestion
+      properties:
+        nameValue:
+          description: Filter options
+          items:
+            $ref: "#/components/schemas/NameValueIntegerString"
+          type: array
+        options:
+          description:
+            Filter options, which lists all the default options for static
+            filters or all the recent options, if any, for non-static filters
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+        staticFilter:
+          description: Filter is a static filter
+          type: boolean
+      type: object
+    FilterSuggestionModel:
+      description: Model for Filter Suggestions
+      properties:
+        filterName:
+          description: Filter name
+          type: string
+        query:
+          description:
+            Case-insensitive fuzzy search autocomplete filter. Includes
+            only items that contain the query as a substring.
+          type: string
+      required:
+        - filterName
+      type: object
+    NameValueIntegerString:
+      properties:
+        id:
+          format: int32
+          type: integer
+        name:
+          type: string
+      type: object
+    ParsedTableFilter:
+      description: Model for parsed table filter
+      properties:
+        completeParameters:
+          items:
+            $ref: "#/components/schemas/UIFilterModel"
+          type: array
+        links:
+          description: JSON query builder links
+          type: string
+        needsOffsetUpdate:
+          description: Needs offset update (for internal use)
+          type: boolean
+        offset:
+          description: Offset within query
+          format: int32
+          type: integer
+        queryRemainder:
+          description: Query remainder
+          type: string
+        suggestions:
+          description: List of suggestions
+          items:
+            type: string
+          type: array
+        translate:
+          description: Translate (for internal use)
+          type: boolean
+        valid:
+          description: Query is valid
+          type: boolean
+      type: object
+    RelativeTimeDurationModel:
+      description: Model for RelativeTimeDuration
+      properties:
+        amount:
+          description: Number of time units
+          format: int32
+          type: integer
+        unit:
+          description: Time unit
+          enum:
+            - minute
+            - hour
+            - day
+            - week
+            - month
+            - year
+          type: string
+      type: object
+    RelativeTimeRangeConfigModel:
+      allOf:
+        - $ref: "#/components/schemas/TimeRangeConfigModel"
+        - description: Model for RelativeTimeRangeConfig
+          properties:
+            relativeTimeType:
+              description: Direction in which to count time. Default = BACKWARD
+              enum:
+                - BACKWARD
+                - FORWARD
+              type: string
+            type:
+              example: relative
+              type: string
+            value:
+              allOf:
+                - $ref: "#/components/schemas/RelativeTimeDurationModel"
+                - description: Time range object
+          required:
+            - value
+          type: object
+    ReportFilterSuggestion:
+      description: Model for ReportFilterSuggestion
+      properties:
+        account.group:
+          allOf:
+            - $ref: "#/components/schemas/FilterSuggestion"
+            - description: Account group
+        cloud.account:
+          allOf:
+            - $ref: "#/components/schemas/FilterSuggestion"
+            - description: Cloud account
+        cloud.region:
+          allOf:
+            - $ref: "#/components/schemas/FilterSuggestion"
+            - description: Cloud region
+        cloud.type:
+          allOf:
+            - $ref: "#/components/schemas/FilterSuggestion"
+            - readOnly: true
+        policy.complianceStandard:
+          allOf:
+            - $ref: "#/components/schemas/FilterSuggestion"
+            - description: Policy compliance standard
+        report.email.recipients:
+          allOf:
+            - $ref: "#/components/schemas/FilterSuggestion"
+            - description: Report email recepients
+        report.frequency:
+          allOf:
+            - $ref: "#/components/schemas/FilterSuggestion"
+            - readOnly: true
+        report.schedule:
+          allOf:
+            - $ref: "#/components/schemas/FilterSuggestion"
+            - readOnly: true
+        schedule.status:
+          allOf:
+            - $ref: "#/components/schemas/FilterSuggestion"
+            - readOnly: true
+      type: object
+    ReportGenerationConfigApiModel:
+      description: Model for report generation configuration
+      properties:
+        cloudType:
+          description: Cloud type
+          enum:
+            - aws
+            - azure
+            - gcp
+            - alibaba_cloud
+            - oci
+          type: string
+        complianceStandardId:
+          description: Compliance standard ID
+          format: uuid
+          readOnly: true
+          type: string
+        counts:
+          allOf:
+            - $ref: "#/components/schemas/ComplianceAggregateCount"
+            - description: Model for compliance aggregate count
+              readOnly: true
+        createdBy:
+          description: User who created this report
+          readOnly: true
+          type: string
+        createdOn:
+          description: Report created on this timestamp
+          format: int64
+          readOnly: true
+          type: integer
+        id:
+          description: Report ID
+          readOnly: true
+          type: string
+        lastModifiedBy:
+          description: Last modified by
+          readOnly: true
+          type: string
+        lastModifiedOn:
+          description: Timestamp of last modification
+          format: int64
+          readOnly: true
+          type: integer
+        lastScheduled:
+          description: Timestamp of last generated report
+          format: int64
+          readOnly: true
+          type: integer
+        locale:
+          description: Locale of caller (e.g. en_us, jp). Default is en_us.
+          type: string
+        name:
+          description: Report name
+          type: string
+        nextSchedule:
+          description: Timestamp of next scheduled report
+          format: int64
+          readOnly: true
+          type: integer
+        status:
+          description: Report generation status
+          readOnly: true
+          type: string
+        target:
+          allOf:
+            - $ref: "#/components/schemas/ReportTargetModel"
+            - description: Report definition
+        totalInstanceCount:
+          description: Total number of reports for the report ID
+          format: int32
+          readOnly: true
+          type: integer
+        type:
+          description: Report type. Default is COMPLIANCE.
+          enum:
+            - COMPLIANCE
+            - RIS
+            - INVENTORY_OVERVIEW
+            - INVENTORY_DETAIL
+          type: string
+      required:
+        - cloudType
+        - name
+        - target
+      type: object
+    ReportTargetModel:
+      description: Model for report target
+      properties:
+        accountGroups:
+          description: List of cloud account groups
+          items:
+            type: string
+          type: array
+        accounts:
+          description: List of cloud accounts
+          items:
+            type: string
+          type: array
+        complianceStandardIds:
+          description: List of compliance Standard IDs
+          items:
+            type: string
+          type: array
+        compressionEnabled:
+          description: Business unit detailed report compression enabled
+          type: boolean
+        downloadNow:
+          description: True = download now
+          type: boolean
+        notificationTemplateId:
+          description: Notification template id
+          readOnly: true
+          type: string
+        notifyTo:
+          description: List of email addresses to receive notification
+          items:
+            type: string
+          type: array
+        regions:
+          description: List of regions
+          items:
+            type: string
+          type: array
+        schedule:
+          description: Recurring report schedule in RRULE format
+          type: string
+        scheduleEnabled:
+          description: Report scheduling enabled
+          type: boolean
+        timeRange:
+          allOf:
+            - $ref: "#/components/schemas/TimeRangeConfigModel"
+            - description: Time range
+      required:
+        - timeRange
+      type: object
+    TimeModel:
+      description: Model for Time
+      properties:
+        endTime:
+          description: End timestamp
+          format: int64
+          type: integer
+        startTime:
+          description: Start timestamp
+          format: int64
+          type: integer
+      type: object
+    TimeRangeConfigModel:
+      description:
+        "See the [Time Range Model](/api/cloud/api-time-range-model) for
+        details.
+
+        "
+      discriminator:
+        mapping:
+          absolute: "#/components/schemas/AbsoluteTimeRangeConfigModel"
+          relative: "#/components/schemas/RelativeTimeRangeConfigModel"
+          to_now: "#/components/schemas/ToNowTimeRangeConfigModel"
+        propertyName: type
+      oneOf:
+        - $ref: "#/components/schemas/RelativeTimeRangeConfigModel"
+        - $ref: "#/components/schemas/AbsoluteTimeRangeConfigModel"
+        - $ref: "#/components/schemas/ToNowTimeRangeConfigModel"
+      properties:
+        type:
+          description: Time type
+          type: string
+      required:
+        - type
+      type: object
+    ToNowTimeRangeConfigModel:
+      allOf:
+        - $ref: "#/components/schemas/TimeRangeConfigModel"
+        - description: Model for ToNowTimeRangeConfig
+          properties:
+            value:
+              description: Time range object
+              enum:
+                - MINUTE
+                - HOUR
+                - DAY
+                - WEEK
+                - MONTH
+                - YEAR
+                - EPOCH
+                - LOGIN
+              type: string
+          type: object
+    UIFilterModel:
+      description: Model for UIFilter
+      properties:
+        name:
+          description: Name
+          type: string
+        operator:
+          description: Operator
+          enum:
+            - =
+          type: string
+        value:
+          description: Value
+          type: string
+      type: object
+info:
+  contact: {}
+  description:
+    "Creating compliance reports is the best way to monitor your cloud\
+    \ accounts across all cloud types and ensure that you \nare adhering to all compliance\
+    \ standards. You can create compliance reports based on a cloud compliance standard\
+    \ for \nimmediate download or schedule recurring reports so you can monitor compliance\
+    \ to the standard over time. From a single \nreport, you have a consolidated view\
+    \ of how well all of your cloud accounts are adhering to the selected standard.\
+    \ You \ncan also download historic reports so that you can see your compliance\
+    \ trend.\n"
+  title: Prisma Cloud Reports API Overview
+  version: Latest
+openapi: 3.0.0
+paths:
+  /report:
+    get:
+      description:
+        "Returns a list of compliance report generation configurations,\
+        \ including the ID for each configuration. Accepts query parameters to narrow\
+        \ the list.  \r\n\r\nOptional query parameters are available to narrow the\
+        \ reports list request. See \n[Get Report Overview Filters and Options](/api/cloud/cspm/reports#operation/get-report-filters-and-options)\
+        \ \nfor the REST API request to get the available query parameters.\n"
+      operationId: list-reports
+      parameters:
+        - description: Cloud account
+          in: query
+          name: cloud.account
+          required: false
+          schema:
+            type: string
+        - description: Cloud type
+          in: query
+          name: cloud.type
+          required: false
+          schema:
+            type: string
+        - description: Cloud region
+          in: query
+          name: cloud.region
+          required: false
+          schema:
+            type: string
+        - description: Account group
+          in: query
+          name: account.group
+          required: false
+          schema:
+            type: string
+        - description: Policy compliance standard name
+          in: query
+          name: policy.complianceStandard
+          required: false
+          schema:
+            type: string
+        - description: Report frequency
+          in: query
+          name: report.frequency
+          required: false
+          schema:
+            enum:
+              - one_time
+              - scheduled
+            type: string
+        - description: Report schedule
+          in: query
+          name: report.schedule
+          required: false
+          schema:
+            enum:
+              - daily
+              - weekly
+              - monthly
+            type: string
+        - description: Report email recipients
+          in: query
+          name: report.email.recipients
+          required: false
+          schema:
+            type: string
+        - description: Report type. Default is COMPLIANCE
+          in: query
+          name: report_view
+          required: false
+          schema:
+            enum:
+              - COMPLIANCE
+              - RIS
+              - INVENTORY_DETAIL
+              - INVENTORY_OVERVIEW
+            type: string
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                items:
+                  $ref: "#/components/schemas/ReportGenerationConfigApiModel"
+                type: array
+          description: success
+      security:
+        - x-redlock-auth: []
+      summary: List Report Configs
+      tags:
+        - Reports
+    post:
+      description:
+        "Creates a compliance report generation configuration based on\
+        \ the specified parameters. Report generation can be either one-time or recurring.\
+        \  \r\n\r\nYou can use the body parameters to specify whether the report is\
+        \ a one-time report \nor a recurring report. Specify a recurring report by\
+        \ providing a valid \n**target.schedule** body parameter.\n"
+      operationId: save-report
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: "#/components/schemas/ReportGenerationConfigApiModel"
+        description: Model for report generation configuration
+        required: true
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/ReportGenerationConfigApiModel"
+          description: successful operation
+        "400":
+          description: missing_required_parameter / invalid_parameter_value
+      security:
+        - x-redlock-auth: []
+      summary: Add Report Config
+      tags:
+        - Reports
+  /report/type:
+    get:
+      description:
+        Returns a list of the compliance report types and identifies which
+        report types are available for each cloud type.
+      operationId: get-report-types
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                additionalProperties:
+                  items:
+                    type: string
+                  type: array
+                  uniqueItems: true
+                type: object
+          description: success
+        "400":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Report Types
+      tags:
+        - Reports
+  /report/{id}:
+    get:
+      description:
+        Returns the compliance report generation configuration with the
+        specified ID. The response includes pass/fail counts for this ID.
+      operationId: get-specified-report
+      parameters:
+        - description: Report ID
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/ReportGenerationConfigApiModel"
+          description: success
+        "400":
+          description: error
+        "404":
+          description: not_found
+      security:
+        - x-redlock-auth: []
+      summary: Get Report Config
+      tags:
+        - Reports
+    put:
+      description:
+        "Updates the compliance report generation configuration with the\
+        \ specified ID.   \r\n\r\nYou can update a recurring report schedule through\
+        \ this request. \nWhen using this request to update a report schedule, the\
+        \ only body \nparameter that is required is **target**.\n"
+      operationId: update-report
+      parameters:
+        - description: Report ID
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: "#/components/schemas/ReportGenerationConfigApiModel"
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/ReportGenerationConfigApiModel"
+          description: success
+        "400":
+          description: missing_required_parameter / invalid_parameter_value
+        "404":
+          description: not_found
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Update Report Config
+      tags:
+        - Reports
+    delete:
+      description:
+        Deletes the compliance report generation configuration with the
+        specified ID.
+      operationId: delete-report
+      parameters:
+        - description: Report ID
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: success
+        "400":
+          description: error
+        "404":
+          description: not_found
+      security:
+        - x-redlock-auth: []
+      summary: Delete Report Config
+      tags:
+        - Reports
+  /report/{id}/download:
+    get:
+      description:
+        Downloads the compliance report with the specified ID. If the report
+        is scheduled, then the request downloads the latest generated report.
+      operationId: download-report
+      parameters:
+        - description: Report ID
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: success
+        "204":
+          description: pending
+        "400":
+          description: error
+        "404":
+          description: not_found / error
+      security:
+        - x-redlock-auth: []
+      summary: Download Report
+      tags:
+        - Reports
+  /report/{id}/history:
+    get:
+      description:
+        Returns a list of metadata for the scheduled compliance reports
+        that have been run for the specified report ID.
+      operationId: get-historical-report-by-id
+      parameters:
+        - description: Report ID
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                items:
+                  $ref: "#/components/schemas/ReportGenerationConfigApiModel"
+                type: array
+          description: success
+        "400":
+          description: error
+        "404":
+          description: not_found
+        "405":
+          description: method_not_allowed_for_legacy_reports
+      security:
+        - x-redlock-auth: []
+      summary: List Historical Reports Data
+      tags:
+        - Reports
+  /report/{id}/{lastScheduled}:
+    get:
+      description:
+        Returns metadata for the scheduled compliance report that has the
+        specified report ID and was generated on the given timestamp. Returned data
+        includes pass/fail counts.
+      operationId: get-last-scheduled-report-by-id
+      parameters:
+        - description: Report ID
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+        - description: Timestamp of report generation
+          in: path
+          name: lastScheduled
+          required: true
+          schema:
+            format: int64
+            type: integer
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/ReportGenerationConfigApiModel"
+          description: success
+        "400":
+          description: error
+        "404":
+          description: not_found
+        "405":
+          description: method_not_allowed_for_legacy_reports
+      security:
+        - x-redlock-auth: []
+      summary: Get Historical Report Data
+      tags:
+        - Reports
+  /report/{id}/{lastScheduled}/download:
+    get:
+      description:
+        Downloads the compliance report that has the specified report ID
+        and was generated on the specified timestamp.
+      operationId: download-historical-by-id
+      parameters:
+        - description: Report ID
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+        - description: Timestamp of report generation
+          in: path
+          name: lastScheduled
+          required: true
+          schema:
+            format: int64
+            type: integer
+      responses:
+        "200":
+          description: success
+        "204":
+          description: pending
+        "400":
+          description: error
+        "404":
+          description: not_found/error
+      security:
+        - x-redlock-auth: []
+      summary: Download Historical Report
+      tags:
+        - Reports
+  /filter/report/suggest:
+    get:
+      description:
+        "Returns an object whose key/value pairs identify filter options\
+        \ for compliance posture data. The keys are supported filters, and the corresponding\
+        \ values identify the available and saved filter options.  \r\n\r\nThe keys\
+        \ in the response object are the filter names you can use in \n[List Report\
+        \ Overview Filter Autocomplete Suggestions](/api/cloud/cspm/reports#operation/get-report-posture-filter-options).\n"
+      operationId: get-report-filters-and-options
+      responses:
+        "200":
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/ReportFilterSuggestion"
+          description: success
+        "404":
+          description: not_found
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Report Overview Filters and Options
+      tags:
+        - Reports
+    post:
+      description:
+        "Returns the available options for a specific report posture filter.\
+        \ Also supports fuzzy autocomplete search for easier filtering.  \r\n\r\n\
+        You can find the available filter names through \n[Get Report Overview Filters\
+        \ and Options request](/api/cloud/cspm/reports#operation/get-report-filters-and-options).\
+        \ \nThe keys in the response object from that GET request are \nthe available\
+        \ filter names.\n"
+      operationId: get-report-posture-filter-options
+      requestBody:
+        $ref: "#/components/requestBodies/FilterSuggestionModel"
+      responses:
+        "200":
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/ParsedTableFilter"
+          description: success
+        "400":
+          description: missing_required_parameter / invalid_parameter_value
+        "404":
+          description: not_found
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: List Report Overview Filter Autocomplete Suggestions
+      tags:
+        - Reports
+servers:
+  - url: https://api.prismacloud.io
+tags:
+  - description: The Compliance Report endpoints are listed below.
+    name: Reports

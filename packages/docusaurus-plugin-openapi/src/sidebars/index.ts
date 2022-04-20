@@ -14,7 +14,7 @@ import uniq from "lodash/uniq";
 
 import type {
   SidebarOptions,
-  PluginOptions,
+  APIOptions,
   ApiPageMetadata,
   ApiMetadata,
 } from "../types";
@@ -26,7 +26,7 @@ function isApiItem(item: ApiMetadata): item is ApiMetadata {
 function groupByTags(
   items: ApiPageMetadata[],
   sidebarOptions: SidebarOptions,
-  options: PluginOptions
+  options: APIOptions
 ): ProcessedSidebar {
   // TODO: Figure out how to handle these
   // const intros = items.filter(isInfoItem).map((item) => {
@@ -106,7 +106,7 @@ function groupByTags(
 
 export default function generateSidebarSlice(
   sidebarOptions: SidebarOptions,
-  options: PluginOptions,
+  options: APIOptions,
   api: ApiMetadata[]
 ) {
   let sidebarSlice: ProcessedSidebar = [];

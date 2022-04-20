@@ -1,0 +1,41 @@
+components:
+  requestBodies: {}
+  schemas:
+    TmpModel:
+      properties:
+        message:
+          description: Message
+          type: string
+      type: object
+info:
+  contact: {}
+  description: "Quickly check if Prisma Cloud is available.
+
+    "
+  title: Prisma Cloud System API Overview
+  version: Latest
+openapi: 3.0.0
+paths:
+  /check:
+    get:
+      description:
+        Allows a user to check and see if the Prisma Cloud API is up and
+        running.
+      operationId: health-check
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/TmpModel"
+          description: successful operation
+        "500":
+          description: ""
+      summary: Health Check
+      tags:
+        - System
+servers:
+  - url: https://api.prismacloud.io
+tags:
+  - description: This API runs a quick check for availability.
+    name: System

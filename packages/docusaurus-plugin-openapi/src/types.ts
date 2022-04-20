@@ -22,7 +22,13 @@ export type {
 } from "@docusaurus/plugin-content-docs-types";
 export interface PluginOptions {
   id?: string;
-  path: string;
+  config: {
+    [key: string]: APIOptions;
+  };
+}
+
+export interface APIOptions {
+  specPath: string;
   showExecuteButton: boolean;
   showManualAuthentication: boolean;
   outputDir: string;
