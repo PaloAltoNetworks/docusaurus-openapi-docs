@@ -43,21 +43,18 @@ const config = {
     [
       "@paloaltonetworks/docusaurus-plugin-openapi",
       {
+        id: "here",
         config: {
-          cspm: {
-            id: "cspm",
-            specPath: "examples/cspm",
-            outputDir: "api/cspm",
-            sidebarOptions: {
-              groupPathsBy: "tags",
-            },
-          },
           petstore: {
             specPath: "examples/petstore.yaml",
             outputDir: "api/petstore",
             sidebarOptions: {
               groupPathsBy: "tags",
             },
+          },
+          cos: {
+            specPath: "examples/openapi-cos.json",
+            outputDir: "api/cos",
           },
         },
       },

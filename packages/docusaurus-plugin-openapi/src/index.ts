@@ -9,6 +9,7 @@ import fs from "fs";
 import path from "path";
 
 import type { LoadContext, Plugin } from "@docusaurus/types";
+import { Globby } from "@docusaurus/utils";
 import chalk from "chalk";
 import { render } from "mustache";
 
@@ -36,32 +37,17 @@ export default function pluginOpenAPI(
     } = options;
 
     const contentPath = path.resolve(siteDir, specPath);
-    if (!fs.existsSync(`${outputDir}/.gitinclude`)) {
-      try {
-        fs.writeFileSync(`${outputDir}/.gitinclude`, "");
-        console.log(
-          chalk.green(`Successfully created "${outputDir}/.gitinclude"`)
-        );
-      } catch (err) {
-        console.error(
-          chalk.red(`Failed to write "${outputDir}/.gitinclude" | ${err}`)
-        );
-      }
-    }
+
     try {
       const openapiFiles = await readOpenapiFiles(contentPath, {});
       const loadedApi = await processOpenapiFiles(openapiFiles);
 
-      if (!fs.existsSync(`${outputDir}/.gitinclude`)) {
+      if (!fs.existsSync(outputDir)) {
         try {
-          fs.writeFileSync(`${outputDir}/.gitinclude`, "");
-          console.log(
-            chalk.green(`Successfully created "${outputDir}/.gitinclude"`)
-          );
+          fs.mkdirSync(outputDir, { recursive: true });
+          console.log(chalk.green(`Successfully created "${outputDir}"`));
         } catch (err) {
-          console.error(
-            chalk.red(`Failed to write "${outputDir}/.gitinclude" | ${err}`)
-          );
+          console.error(chalk.red(`Failed to create "${outputDir}" | ${err}`));
         }
       }
 
@@ -174,15 +160,17 @@ sidebar_class_name: "{{{api.method}}} api-method"
 
         // TODO: determine if we actually want/need this
         if (item.type === "info") {
-          if (!fs.existsSync(`${outputDir}/index.mdx`)) {
+          if (!fs.existsSync(`${outputDir}/index.api.mdx`)) {
             try {
-              fs.writeFileSync(`${outputDir}/index.mdx`, view, "utf8");
+              fs.writeFileSync(`${outputDir}/index.api.mdx`, view, "utf8");
               console.log(
-                chalk.green(`Successfully created "${outputDir}/index.mdx"`)
+                chalk.green(`Successfully created "${outputDir}/index.api.mdx"`)
               );
             } catch (err) {
               console.error(
-                chalk.red(`Failed to write "${outputDir}/index.mdx" | ${err}`)
+                chalk.red(
+                  `Failed to write "${outputDir}/index.api.mdx" | ${err}`
+                )
               );
             }
           }
@@ -198,14 +186,25 @@ sidebar_class_name: "{{{api.method}}} api-method"
 
   async function cleanApiDocs(options: APIOptions) {
     const apiDir = path.join(siteDir, options.outputDir);
-    const files = fs.readdirSync(apiDir);
-    files.forEach((file) => {
-      if (path.extname(file) === ".mdx") {
-        fs.unlinkSync(path.join(apiDir, file));
-        console.log(chalk.blue(`Removed ${file}`));
-      } else if (file === "sidebar.js") {
-        fs.unlinkSync(path.join(apiDir, file));
-        console.log(chalk.blue(`Removed ${file}`));
+    const apiMdxFiles = await Globby(["*.api.mdx"], {
+      cwd: path.resolve(apiDir),
+    });
+    apiMdxFiles.map((mdx) =>
+      fs.unlink(`${apiDir}/${mdx}`, (err) => {
+        if (err) {
+          console.error(chalk.red(`Cleanup failed for "${apiDir}/${mdx}"`));
+        } else {
+          console.log(chalk.green(`Cleanup succeeded for "${apiDir}/${mdx}"`));
+        }
+      })
+    );
+    fs.unlink(`${apiDir}/sidebar.js`, (err) => {
+      if (err) {
+        console.error(chalk.red(`No "${apiDir}/sidebar.js" to clear`));
+      } else {
+        console.log(
+          chalk.green(`Cleanup succeeded for "${apiDir}/sidebar.js"`)
+        );
       }
     });
   }
@@ -217,16 +216,24 @@ sidebar_class_name: "{{{api.method}}} api-method"
       cli
         .command(`gen-api-docs`)
         .description(`Generates API Docs mdx and sidebars.`)
-        .usage("[options] <id in docusaurus.config.js>")
+        .usage(
+          "[options] <id key value in plugin config within docusaurus.config.js>"
+        )
         .arguments("<id>")
-        .parse(process.argv)
         .action(async (id) => {
           if (id === "all") {
-            Object.keys(config).forEach(async function (key) {
-              await generateApiDocs(config[key]);
-            });
+            if (config[id]) {
+              console.error(chalk.red("Can't use id 'all' for API Doc."));
+            } else {
+              Object.keys(config).forEach(async function (key) {
+                await generateApiDocs(config[key]);
+              });
+            }
+          } else if (!config[id]) {
+            console.error(
+              chalk.red(`ID ${id} does not exist in openapi-plugin config`)
+            );
           } else {
-            console.log(config[id]);
             await generateApiDocs(config[id]);
           }
         });
@@ -234,16 +241,20 @@ sidebar_class_name: "{{{api.method}}} api-method"
       cli
         .command(`clean-api-docs`)
         .description(`Clears the Generated API Docs mdx and sidebars.`)
-        .usage("[options] <id in docusaurus.config.js>")
+        .usage(
+          "[options] <id key value in plugin config within docusaurus.config.js>"
+        )
         .arguments("<id>")
-        .parse(process.argv)
         .action(async (id) => {
           if (id === "all") {
-            Object.keys(config).forEach(async function (key) {
-              await cleanApiDocs(config[key]);
-            });
+            if (config[id]) {
+              console.error(chalk.red("Can't use id 'all' for API Doc."));
+            } else {
+              Object.keys(config).forEach(async function (key) {
+                await cleanApiDocs(config[key]);
+              });
+            }
           } else {
-            console.log(config[id]);
             await cleanApiDocs(config[id]);
           }
         });

@@ -16,4 +16,5 @@ export const DEFAULT_OPTIONS: PluginOptions = {
 
 export const OptionsSchema = Joi.object({
   id: Joi.string().default(DEFAULT_OPTIONS.id),
+  config: Joi.object().default(DEFAULT_OPTIONS.config),
 });

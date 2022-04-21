@@ -133,5 +133,3 @@ dist
 # TernJS port file
 .tern-port
 
-# demo API MDX files
-demo/api/**/*.mdx
