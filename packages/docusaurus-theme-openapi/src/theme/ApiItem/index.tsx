@@ -24,11 +24,7 @@ import clsx from "clsx";
 
 import styles from "./styles.module.css";
 
-let ApiDemoPanel = (_: {
-  item: any;
-  showExecuteButton?: boolean;
-  showManualAuthentication?: boolean;
-}) => <div style={{ marginTop: "3.5em" }} />;
+let ApiDemoPanel = (_: { item: any }) => <div style={{ marginTop: "3.5em" }} />;
 if (ExecutionEnvironment.canUseDOM) {
   ApiDemoPanel = require("@theme/ApiDemoPanel").default;
 }
@@ -45,14 +41,7 @@ function ApiItem(props: typeof Props): JSX.Element {
     toc_max_heading_level: tocMaxHeadingLevel,
     api,
   } = frontMatter;
-  const {
-    description,
-    title,
-    previous,
-    next,
-    showExecuteButton,
-    showManualAuthentication,
-  } = metadata;
+  const { description, title, previous, next } = metadata;
 
   // We only add a title if:
   // - user doesn't ask to hide it with front matter
@@ -103,13 +92,7 @@ function ApiItem(props: typeof Props): JSX.Element {
           </div>
         </div>
         <div className={clsx("col", api && "col--5")}>
-          {api && (
-            <ApiDemoPanel
-              item={api}
-              showExecuteButton={showExecuteButton}
-              showManualAuthentication={showManualAuthentication}
-            />
-          )}
+          {api && <ApiDemoPanel item={api} />}
           {renderTocDesktop && (
             <TOC
               toc={ApiContent.toc}

@@ -27,12 +27,7 @@ export default function pluginOpenAPI(
     try {
       const openapiFiles = await readOpenapiFiles(contentPath, {});
       const loadedApi = await processOpenapiFiles(openapiFiles);
-      const {
-        showExecuteButton,
-        showManualAuthentication,
-        outputDir,
-        template,
-      } = options;
+      const { outputDir, template } = options;
 
       // TODO: Address race condition leading to "Module not found"
       // TODO: Determine if mdx cleanup should be separate yarn script
@@ -78,9 +73,6 @@ sidebar_class_name: "{{{api.method}}} api-method"
       `;
 
       loadedApi.map(async (item) => {
-        // Statically set custom plugin options
-        item.showExecuteButton = showExecuteButton;
-        item.showManualAuthentication = showManualAuthentication;
         const markdown =
           item.type === "api" ? createApiPageMD(item) : createInfoPageMD(item);
         item.markdown = markdown;

@@ -23,8 +23,6 @@ export type {
 export interface PluginOptions {
   id?: string;
   path: string;
-  showExecuteButton: boolean;
-  showManualAuthentication: boolean;
   outputDir: string;
   template?: string;
 }
@@ -51,8 +49,6 @@ export interface ApiMetadataBase {
   permalink: string;
   sidebarPosition?: number;
   frontMatter: Record<string, unknown>;
-  showExecuteButton?: boolean;
-  showManualAuthentication?: boolean;
 }
 
 export interface ApiPageMetadata extends ApiMetadataBase {
