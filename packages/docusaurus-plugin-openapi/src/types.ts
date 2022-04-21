@@ -22,9 +22,18 @@ export type {
 } from "@docusaurus/plugin-content-docs-types";
 export interface PluginOptions {
   id?: string;
-  path: string;
+  config: {
+    [key: string]: APIOptions;
+  };
+}
+
+export interface APIOptions {
+  specPath: string;
+  showExecuteButton: boolean;
+  showManualAuthentication: boolean;
   outputDir: string;
   template?: string;
+  sidebarOptions?: SidebarOptions;
 }
 
 export interface LoadedContent {
@@ -80,4 +89,11 @@ export type ApiInfo = InfoObject;
 export interface ApiNavLink {
   title: string;
   permalink: string;
+}
+
+export interface SidebarOptions {
+  groupPathsBy?: string;
+  customProps?: { [key: string]: unknown };
+  sidebarCollapsible?: boolean;
+  sidebarCollapsed?: boolean;
 }

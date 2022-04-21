@@ -1,0 +1,228 @@
+components:
+  requestBodies: {}
+  securitySchemes:
+    x-redlock-auth:
+      description: The x-redlock-auth value is a JSON Web Token (JWT).
+      in: header
+      name: x-redlock-auth
+      type: apiKey
+  schemas:
+    ResourceListModel:
+      description: Model for Resource List
+      properties:
+        description:
+          description: Description
+          type: string
+        id:
+          description: Resource list id
+          readOnly: true
+          type: string
+        lastModifiedBy:
+          description: Last modified by
+          readOnly: true
+          type: string
+        lastModifiedTs:
+          description: Last modified time
+          format: int64
+          readOnly: true
+          type: integer
+        members:
+          description:
+            Resource list members. Each member is raw JSON. The content
+            depends on the resource list type. For example, if the resource list type
+            is TAG, then the member  is a JSON array of TAG key/value pairs.
+          type: string
+        name:
+          description: Name
+          maxLength: 256
+          minLength: 0
+          type: string
+        resourceListType:
+          description:
+            "Resource list type. Note: COMPUTE_ACCESS_GROUP is available
+            only if you have a Compute license"
+          enum:
+            - TAG
+            - COMPUTE_ACCESS_GROUP
+          type: string
+      required:
+        - members
+        - name
+        - resourceListType
+      type: object
+info:
+  contact: {}
+  description:
+    "A Resource List is a way to identify resources that are assigned with\
+    \ a specific tag or label.               \n"
+  title: Prisma Cloud Resource Lists API Overview
+  version: Latest
+openapi: 3.0.0
+paths:
+  /v1/resource_list:
+    get:
+      description: Returns all the resource lists for the current customer.
+      operationId: get-all-resource-list-for-customer
+      parameters:
+        - description: Resource list type
+          in: query
+          name: listType
+          required: true
+          schema:
+            enum:
+              - TAG
+            type: string
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                items:
+                  $ref: "#/components/schemas/ResourceListModel"
+                type: array
+          description: successful operation
+        "400":
+          description: invalid_resource_list_type
+        "403":
+          description: resource_list_flag_not_enabled
+      security:
+        - x-redlock-auth: []
+      summary: Get Resource Lists
+      tags:
+        - Resource Lists
+    post:
+      description: Adds a new resource list for the current customer.
+      operationId: add-resource-list
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: "#/components/schemas/ResourceListModel"
+        description: Model for Resource List
+        required: true
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/ResourceListModel"
+          description: successful operation
+        "403":
+          description: resource_list_flag_not_enabled
+        "409":
+          description: duplicate_resource_list_name
+        "500":
+          description: failed_to_parse_resource_lists
+      security:
+        - x-redlock-auth: []
+      summary: Add Resource List
+      tags:
+        - Resource Lists
+  /v1/resource_list/types:
+    get:
+      description: Returns a list of resource list types.
+      operationId: get-resource-list-types
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                items:
+                  type: string
+                type: array
+          description: successful operation
+      security:
+        - x-redlock-auth: []
+      summary: Get Resource List Types
+      tags:
+        - Resource Lists
+  /v1/resource_list/{id}:
+    get:
+      description: Returns the resource list that has the specified ID.
+      operationId: get-resource-list-by-id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/ResourceListModel"
+          description: successful operation
+        "403":
+          description: resource_list_flag_not_enabled
+        "404":
+          description: non_existing_resource_list_id
+      security:
+        - x-redlock-auth: []
+      summary: Get Resource List by ID
+      tags:
+        - Resource Lists
+    put:
+      description: Updates the resource list that has the specified ID.
+      operationId: update-resource-list
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: "#/components/schemas/ResourceListModel"
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/ResourceListModel"
+          description: successful operation
+        "400":
+          description: invalid_id
+        "403":
+          description: resource_list_flag_not_enabled
+        "404":
+          description: non_existing_resource_list_id
+        "409":
+          description: duplicate_resource_list_name
+        "500":
+          description: failed_to_parse_resource_lists
+      security:
+        - x-redlock-auth: []
+      summary: Update Resource List
+      tags:
+        - Resource Lists
+    delete:
+      description: Deletes the resource list that has the specified ID.
+      operationId: delete-resource-list-by-id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: successful operation
+        "400":
+          description:
+            invalid_id / non_existing_resource_list_id / resource_list_assigned_to_user_role
+            / resource_list_assigned_to_policy_scan_config
+        "404":
+          description: non_existing_resource_list_id
+      security:
+        - x-redlock-auth: []
+      summary: Delete Resource List
+      tags:
+        - Resource Lists
+servers:
+  - url: https://api.prismacloud.io
+tags:
+  - description: The Resource List endpoints are listed below.
+    name: Resource Lists

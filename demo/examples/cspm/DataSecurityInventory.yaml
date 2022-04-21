@@ -1,0 +1,1071 @@
+components:
+  requestBodies:
+    DLPInventoryFilterModel:
+      content:
+        application/json; charset=UTF-8:
+          schema:
+            $ref: "#/components/schemas/DLPInventoryFilterModel"
+    DLPInventoryResourceExplorerRequest:
+      content:
+        application/json; charset=UTF-8:
+          schema:
+            $ref: "#/components/schemas/DLPInventoryResourceExplorerRequest"
+  securitySchemes:
+    x-redlock-auth:
+      description: The x-redlock-auth value is a JSON Web Token (JWT).
+      in: header
+      name: x-redlock-auth
+      type: apiKey
+  schemas:
+    AbsoluteTimeRangeConfigModel:
+      allOf:
+        - $ref: "#/components/schemas/TimeRangeConfigModel"
+        - description: Model for AbsoluteTimeRangeConfig
+          properties:
+            type:
+              example: absolute
+              type: string
+            value:
+              allOf:
+                - $ref: "#/components/schemas/TimeModel"
+                - description: Time range object
+          required:
+            - value
+          type: object
+    CountByClassificationViewModel:
+      description: Model class for Bubble chart data
+      properties:
+        classification:
+          description: Object classification
+          type: string
+        count:
+          description: Object count
+          format: int32
+          type: integer
+        exposure:
+          description: Object Exposure
+          type: string
+        severity:
+          description: Policy Severity
+          type: string
+      type: object
+    DLPInventoryDataUsageModel:
+      description: Model class for filter sugegstions
+      properties:
+        dataScanned:
+          description: Data Scanned
+          format: float
+          type: number
+        limit:
+          description: Data limit
+          format: int64
+          type: integer
+        unit:
+          description: Unit (daily/hourly)
+          type: string
+      type: object
+    DLPInventoryFilterModel:
+      description: Model for DLP inventory filters
+      properties:
+        detailed:
+          description: Detailed
+          type: boolean
+        fields:
+          description: Array of specific fields to return
+          items:
+            type: string
+          type: array
+        filters:
+          description: Filtering parameters
+          items:
+            $ref: "#/components/schemas/UIFilterModel"
+          type: array
+        groupBy:
+          description:
+            For asset or data inventory only. Group returned items by **cloud.type**,
+            **cloud.service**, **cloud.region**, **cloud.account**, and/or **resource.type**
+          items:
+            type: string
+          type: array
+        limit:
+          description:
+            Maximum number of items to return. When data is paginated,
+            maximum number of items per page
+          type: number
+        offset:
+          description:
+            The number of items to skip before selecting items to return.
+            Default is zero
+          type: number
+        pageToken:
+          description:
+            "Setting this pagination Token to the **nextPageToken** from
+            a response object returns the next page of data "
+          type: string
+        sortBy:
+          description:
+            Array of sort properties. Append **:asc** or  **:desc** to
+            the key to sort by ascending or descending order respectively. Example
+            sort properties are **id:asc** and **timestamp:desc**
+          items:
+            type: string
+          type: array
+        tableLevel:
+          description: Table level
+          enum:
+            - 1
+            - 2
+            - 3
+            - 4
+          format: int32
+          type: integer
+        timeRange:
+          allOf:
+            - $ref: "#/components/schemas/TimeRangeConfigModel"
+            - description: Time range
+      required:
+        - tableLevel
+      type: object
+    DLPInventoryObjectClassificationReport:
+      description: Model class for classification report
+      properties:
+        detectionTime:
+          description: Detection time
+          type: string
+        identifiers:
+          description: List of identifiers
+          items:
+            $ref: "#/components/schemas/Identifiers"
+          type: array
+        name:
+          description: Classification name
+          type: string
+      type: object
+    DLPInventoryObjectClassificationReportV2:
+      description: Model class for classification report v2
+      properties:
+        dataPattern:
+          description: Pattern name
+          type: string
+        dataPatternId:
+          description: Pattern id
+          type: string
+        dataProfiles:
+          description: List of data profiles
+          items:
+            type: string
+          type: array
+        detectionTime:
+          description: Detection time unix timestamp
+          format: int64
+          type: integer
+        frequency:
+          description: Detection frequency
+          format: int32
+          type: integer
+        snippet:
+          description: Snippets data
+          type: string
+        snippetViewed:
+          description: Viewed snippets
+          type: boolean
+      type: object
+    DLPInventoryObjectExplorer:
+      description: Model for DLP Object Inventory
+      properties:
+        awsAccountId:
+          description: Cloud account ID
+          type: string
+        containerName:
+          description: Container Name
+          type: string
+        contentType:
+          description: Object content type
+          type: string
+        createdOn:
+          description: Object created on
+          format: int64
+          type: integer
+        exposureCalculatedOn:
+          description: Object exposure calculation time
+          format: int64
+          type: integer
+        malware:
+          description: Object malware status
+          type: string
+        objectAcl:
+          description: Object Acls
+          type: string
+        objectExposure:
+          description: Object exposure
+          type: string
+        objectName:
+          description: Object name
+          type: string
+        objectOwner:
+          description: Object owner
+          type: string
+        objectTags:
+          description: List of Object tags
+          items:
+            $ref: "#/components/schemas/DLPInventoryObjectExplorer"
+          type: array
+        objectUrl:
+          description: Object URL
+          type: string
+        regionName:
+          description: Object region
+          type: string
+        resourceName:
+          description: Object's resource name
+          type: string
+        resourceRRN:
+          description: Resource ARN
+          type: string
+        sha256:
+          description: Object SHA256
+          type: string
+        updatedOn:
+          description: Object updated on
+          format: int64
+          type: integer
+      type: object
+    DLPInventoryObjectHistoryViewModel:
+      description: Model class for object view model
+      properties:
+        malwareObjectsDelta:
+          description: Total malware objects changed
+          format: int64
+          type: integer
+        objectsDelta:
+          description: Objects changes
+          format: int64
+          type: integer
+        publicObjectsDelta:
+          description: Public objects changed
+          format: int64
+          type: integer
+        publicResourcesDelta:
+          description: Public resources changed
+          format: int64
+          type: integer
+        resourcesDelta:
+          description: Resources changed
+          format: int64
+          type: integer
+        sensitiveObjectsDelta:
+          description: Sensitive objects changed
+          format: int64
+          type: integer
+        totalMalwareObjects:
+          description: Total malware objects
+          format: int64
+          type: integer
+        totalObjects:
+          description: Total objects
+          format: int64
+          type: integer
+        totalPublicObjects:
+          description: Public objects
+          format: int64
+          type: integer
+        totalPublicResources:
+          description: Public resources
+          format: int64
+          type: integer
+        totalResources:
+          description: Total resources
+          format: int64
+          type: integer
+        totalSensitiveObjects:
+          description: Sensitive objects
+          format: int64
+          type: integer
+      type: object
+    DLPInventoryResourceExplorer:
+      description: Model for DLP Inventory Resource Explorer
+      properties:
+        accountName:
+          description: Cloud Name
+          type: string
+        cloudType:
+          description: Cloud Type
+          type: string
+        regionName:
+          description: Cloud region name
+          type: string
+        resourceAcl:
+          description: Resource Acls
+          type: string
+        resourceExposure:
+          description: Resource Exposure
+          type: string
+        resourceName:
+          description: Resource Name
+          type: string
+        resourcePolicy:
+          description: Resource policy
+          type: string
+        resourceTags:
+          description: Resource Tags
+          type: string
+        serviceName:
+          description: Service name
+          type: string
+        updatedOn:
+          description: Resource updated time
+          format: int64
+          type: integer
+      type: object
+    DLPInventoryResourceExplorerRequest:
+      description: Request for DLP Object inventory request
+      properties:
+        objectId:
+          description: Object Id
+          type: string
+        tenantId:
+          description: Tenant Id
+          type: string
+      required:
+        - objectId
+        - tenantId
+      type: object
+    DLPInventoryResourceObjects:
+      description: Model class for inventory resource objects
+      properties:
+        objects:
+          description: List of objects
+          items:
+            $ref: "#/components/schemas/ResourceObjects"
+          type: array
+        total:
+          description: Total objects
+          format: int32
+          type: integer
+      type: object
+    DLPInventoryViewModel:
+      description: Model for DLP Inventory View
+      properties:
+        accountId:
+          description: Cloud account id
+          type: string
+        accountName:
+          description: Cloud account name
+          type: string
+        alerts:
+          description: Total alerts
+          format: int64
+          type: integer
+        cloudType:
+          description: Cloud Type
+          type: string
+        containerName:
+          description: Container Name
+          type: string
+        contentType:
+          description: Object Content Type
+          type: string
+        dataPatterns:
+          description: List of Data Patterns
+          items:
+            type: string
+          type: array
+        dataProfiles:
+          description: List of Data Profiles
+          items:
+            type: string
+          type: array
+        dssScannedTime:
+          description: Classification Scanned Time
+          format: int64
+          type: integer
+        dssSnippetCreatedOn:
+          description: Snippets created on (unix timestamp)
+          format: int64
+          type: integer
+        dssSnippetStatus:
+          description: Snippets Status
+          type: string
+        dssSnippetViewed:
+          description: Snippets Viewed Status
+          type: boolean
+        malware:
+          description: Malware Result
+          type: string
+        malwareObjects:
+          description: Total malware objects
+          format: int64
+          type: integer
+        malwareScannedTime:
+          description: Malware Scanned Time
+          format: int64
+          type: integer
+        metadataScannedTime:
+          description: Metadata Scanned Time
+          format: int64
+          type: integer
+        objectAlerts:
+          description: Object Alerts
+          type: string
+        objectExposure:
+          description: Object Exposure
+          type: string
+        objectId:
+          description: Object Id
+          type: string
+        objectName:
+          description: Object Name
+          type: string
+        objectOwner:
+          description: Object Owner
+          type: string
+        objectPath:
+          description: Object Path
+          type: string
+        publicObjects:
+          description: Total public objects
+          format: int64
+          type: integer
+        publicResource:
+          description: List of public resources
+          type: string
+        publicResources:
+          description: Total number of public resources
+          format: int64
+          type: integer
+        regionName:
+          description: Cloud region
+          type: string
+        resourceExposure:
+          description: Resource Exposure
+          type: string
+        resourceName:
+          description: Resource name
+          type: string
+        resourceRrn:
+          description: resource RRN
+          type: string
+        resourceStatus:
+          description: Resource status (true if active)
+          type: boolean
+        rrn:
+          description: object RRN
+          type: string
+        sensitiveObjects:
+          description: Total sensitive objects
+          format: int64
+          type: integer
+        serviceName:
+          description: Service name
+          type: string
+        totalObjects:
+          description: Total objects
+          format: int64
+          type: integer
+        totalResources:
+          description: Total number of resources
+          format: int64
+          type: integer
+      type: object
+    Detection:
+      description: Model class Classification Detections
+      properties:
+        detection:
+          description: Detection technique
+          type: string
+        left:
+          description: Left detection
+          type: string
+        origOffSet:
+          description: Offset by
+          format: int64
+          type: integer
+        right:
+          description: Right detection
+          type: string
+        textLength:
+          description: Text Length
+          format: int64
+          type: integer
+      type: object
+    DssPatternSnippetViewModel:
+      description: Model class for viewing snippets
+      properties:
+        dataPattern:
+          description: Matching data patterns
+          type: string
+        highConfidenceDetections:
+          description: List of high confidence detections
+          items:
+            $ref: "#/components/schemas/Detection"
+          type: array
+        lowConfidenceDetections:
+          description: List of low confidence detections
+          items:
+            $ref: "#/components/schemas/Detection"
+          type: array
+        matchedConfidenceLevel:
+          description: Matched Confidence level
+          type: string
+        mediumConfidenceDetections:
+          description: List of medium confidence detections
+          items:
+            $ref: "#/components/schemas/Detection"
+          type: array
+        statusCode:
+          description: Snippets status code
+          format: int32
+          type: integer
+      type: object
+    Identifiers:
+      description: Model class for identifiers
+      properties:
+        frequency:
+          description: Identifier frequency
+          format: int32
+          type: integer
+        name:
+          description: Identifier name
+          type: string
+      type: object
+    RelativeTimeDurationModel:
+      description: Model for RelativeTimeDuration
+      properties:
+        amount:
+          description: Number of time units
+          format: int32
+          type: integer
+        unit:
+          description: Time unit
+          enum:
+            - minute
+            - hour
+            - day
+            - week
+            - month
+            - year
+          type: string
+      type: object
+    RelativeTimeRangeConfigModel:
+      allOf:
+        - $ref: "#/components/schemas/TimeRangeConfigModel"
+        - description: Model for RelativeTimeRangeConfig
+          properties:
+            relativeTimeType:
+              description: Direction in which to count time. Default = BACKWARD
+              enum:
+                - BACKWARD
+                - FORWARD
+              type: string
+            type:
+              example: relative
+              type: string
+            value:
+              allOf:
+                - $ref: "#/components/schemas/RelativeTimeDurationModel"
+                - description: Time range object
+          required:
+            - value
+          type: object
+    ResourceObjects:
+      description: Model class for resource objects
+      properties:
+        dataClassifications:
+          description: Object classification
+          type: string
+        dataIdentifiers:
+          description: Object identifiers
+          type: string
+        malware:
+          description: Object malware result
+          type: string
+        objectExposure:
+          description: Object exposure
+          type: string
+        objectId:
+          description: Object Id
+          type: string
+        objectName:
+          description: Object name
+          type: string
+        sha256:
+          description: Object sha
+          type: string
+      type: object
+    TimeModel:
+      description: Model for Time
+      properties:
+        endTime:
+          description: End timestamp
+          format: int64
+          type: integer
+        startTime:
+          description: Start timestamp
+          format: int64
+          type: integer
+      type: object
+    TimeRangeConfigModel:
+      description:
+        "See the [Time Range Model](/api/cloud/api-time-range-model) for
+        details.
+
+        "
+      discriminator:
+        mapping:
+          absolute: "#/components/schemas/AbsoluteTimeRangeConfigModel"
+          relative: "#/components/schemas/RelativeTimeRangeConfigModel"
+          to_now: "#/components/schemas/ToNowTimeRangeConfigModel"
+        propertyName: type
+      oneOf:
+        - $ref: "#/components/schemas/RelativeTimeRangeConfigModel"
+        - $ref: "#/components/schemas/AbsoluteTimeRangeConfigModel"
+        - $ref: "#/components/schemas/ToNowTimeRangeConfigModel"
+      properties:
+        type:
+          description: Time type
+          type: string
+      required:
+        - type
+      type: object
+    ToNowTimeRangeConfigModel:
+      allOf:
+        - $ref: "#/components/schemas/TimeRangeConfigModel"
+        - description: Model for ToNowTimeRangeConfig
+          properties:
+            value:
+              description: Time range object
+              enum:
+                - MINUTE
+                - HOUR
+                - DAY
+                - WEEK
+                - MONTH
+                - YEAR
+                - EPOCH
+                - LOGIN
+              type: string
+          type: object
+    UIFilterModel:
+      description: Model for UIFilter
+      properties:
+        name:
+          description: Name
+          type: string
+        operator:
+          description: Operator
+          enum:
+            - =
+          type: string
+        value:
+          description: Value
+          type: string
+      type: object
+info:
+  contact: {}
+  description:
+    "The Data Security capabilities on Prisma Cloud enable you to discover\
+    \ and classify data stored \nin AWS S3 buckets and protect accidental exposure,\
+    \ misuse, or sharing of sensitive data. The\ndata inventory provides information\
+    \ about the number of S3 storage buckets being monitored and\nabout how objects\
+    \ are exposed&mdash;public, sensitive, or malware.\n\n To get started with data\
+    \ security, see \n[Prisma Cloud Data Security](https://docs.paloaltonetworks.com/prisma/prisma-cloud/prisma-cloud-admin/prisma-cloud-data-security.html).\
+    \       \n"
+  title: Prisma Cloud Data Security Inventory API Overview
+  version: Latest
+openapi: 3.0.0
+paths:
+  /dlp/api/v1/inventory/data-scanned:
+    get:
+      description: Returns data usage information for your tenant.
+      operationId: get-data-usage
+      responses:
+        "200":
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/DLPInventoryDataUsageModel"
+          description: success
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Data Usage
+      tags:
+        - Data Security Inventory
+  /dlp/api/v1/inventory/object/data-classification/reportv2:
+    post:
+      description:
+        Returns a data classification report. Includes snippet masking
+        status.
+      operationId: get-classification-report-v2
+      requestBody:
+        $ref: "#/components/requestBodies/DLPInventoryResourceExplorerRequest"
+      responses:
+        "200":
+          content:
+            "*/*":
+              schema:
+                items:
+                  $ref: "#/components/schemas/DLPInventoryObjectClassificationReportV2"
+                type: array
+          description: success
+        "400":
+          description:
+            missing_required_parameter / invalid_parameter_value / internal_error
+            / violates_minimum_alert_dismiss_duration_time
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Classification Report V2
+      tags:
+        - Data Security Inventory
+  /dlp/api/v1/inventory/object/data-classification/report:
+    post:
+      deprecated: true
+      description: Returns a data classification report.
+      operationId: get-classification-report
+      requestBody:
+        $ref: "#/components/requestBodies/DLPInventoryResourceExplorerRequest"
+      responses:
+        "200":
+          content:
+            "*/*":
+              schema:
+                items:
+                  $ref: "#/components/schemas/DLPInventoryObjectClassificationReport"
+                type: array
+          description: success
+        "400":
+          description:
+            missing_required_parameter / invalid_parameter_value / internal_error
+            / violates_minimum_alert_dismiss_duration_time
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Classification Report
+      tags:
+        - Data Security Inventory
+  /dlp/api/v1/inventory/objects/aggregate:
+    post:
+      description:
+        "Lists data for objects. The response data depends on the table\
+        \ level you specify in the request body parameters.  \r\n\r\nThe **tableLevel**\
+        \ and **groupBy** request body parameters determine which \nresponse object\
+        \ fields a successful API request returns.\n\nIF **tableLevel** is **1** and\
+        \ **groupBy** is unspecified, the response properties are as shown below:\n\
+        ```json\n[\n  {\n    \"cloudType\": \"\",\n    \"serviceName\": \"\",\n  \
+        \  \"totalResources\": 0,\n    \"publicResources\": ,\n    \"totalObjects\"\
+        : 0,\n    \"publicObjects\": 0,\n    \"sensitiveObjects\": 0,\n    \"malwareObjects\"\
+        : 0,\n    \"alerts\": 0\n  }\n]\n``` \nIf **tableLevel** is **1** and **groupBy**\
+        \ is specified, the response properties are as shown below:\n```json\n[\n\
+        \  {\n    \"cloudType\": \"\",\n    \"accountName\": \"\",\n    \"regionName\"\
+        : \"\",\n    \"serviceName\": \"\",\n    \"totalResources\": 0,\n    \"publicResources\"\
+        : 0,\n    \"totalObjects\": 0,\n    \"publicObjects\": 0,\n    \"sensitiveObjects\"\
+        : 0,\n    \"malwareObjects\": 0,\n    \"alerts\": 0\n  }\n]\n```\nIf **tableLevel**\
+        \ is **2** and **groupBy** is unspecified, the response properties are as\
+        \ shown below:\n```json\n[\n  {\n    \"cloudType\": \"\",\n    \"serviceName\"\
+        : \"\",\n    \"totalResources\": 0,\n    \"publicResources\": 0,\n    \"totalObjects\"\
+        : 0,\n    \"publicObjects\": 0,\n    \"sensitiveObjects\": 0,\n    \"malwareObjects\"\
+        : 0,\n    \"alerts\": 0\n  }\n]\n```\nIf **tableLevel** is **2** and **groupBy**\
+        \ = **[\"cloud.region\"]**, the response properties are as shown below:\n\
+        ```json\n[\n  {\n    \"cloudType\": \"\",\n    \"regionName\": \"\",\n   \
+        \ \"serviceName\": \"\",\n    \"totalResources\": 0,\n    \"publicResources\"\
+        : 0,\n    \"totalObjects\": 0,\n    \"publicObjects\": 0,\n    \"sensitiveObjects\"\
+        : 0,\n    \"malwareObjects\": 0,\n    \"alerts\": 0\n  }\n]\n```\nIf **tableLevel**\
+        \ is **2** and **groupBy** = **[\"cloud.account\"]**, the response properties\
+        \ are as shown below:\n```json\n[\n  {\n    \"cloudType\": \"\",\n    \"accountName\"\
+        : \"\",\n    \"serviceName\": \"\",\n    \"totalResources\": 0,\n    \"publicResources\"\
+        : 0,\n    \"totalObjects\": 0,\n    \"publicObjects\": 0,\n    \"sensitiveObjects\"\
+        : 0,\n    \"malwareObjects\": 0,\n    \"alerts\": 0\n  }\n]\n```\nIf **tableLevel**\
+        \ is **2** and **groupBy** = **[\"cloud.region\", \"cloud.account\"]**, the\
+        \ response properties are as shown below:\n```json\n[\n  {\n    \"cloudType\"\
+        : \"\",\n    \"accountName\": \"\",\n    \"regionName\": \"\",\n    \"serviceName\"\
+        : \"\",\n    \"totalResources\": 0,\n    \"publicResources\": 0,\n    \"totalObjects\"\
+        : 0,\n    \"publicObjects\": 0,\n    \"sensitiveObjects\": 0,\n    \"malwareObjects\"\
+        : 20,\n    \"alerts\": 0\n  }\n]\n```\nIf **tableLevel** is **3** and **groupBy**\
+        \ is unspecified, the response properties are as shown below:\n```json\n[\n\
+        \  {\n    \"cloudType\": \"\",\n    \"resourceName\": \"\",\n    \"publicResource\"\
+        : \"\",\n    \"totalObjects\": 0,\n    \"publicObjects\": 0,\n    \"sensitiveObjects\"\
+        : 0,\n    \"malwareObjects\": 0,\n    \"alerts\": 0,\n    \"bucketRrn\":\"\
+        \"\n  }\n]\n```\nIf **tableLevel** is **3** and **groupBy** = **[\"cloud.account\"\
+        , \"cloud.region\"]**, the response properties are as shown below:\n```json\n\
+        [\n  {\n    \"cloudType\": \"\",\n    \"accountName\": \"\",\n    \"regionName\"\
+        : \"\",\n    \"resourceName\": \"\",\n    \"publicResource\": \"\",\n    \"\
+        totalObjects\": 0,\n    \"publicObjects\": 0,\n    \"sensitiveObjects\": 0,\n\
+        \    \"malwareObjects\": 0,\n    \"alerts\": 0,\n    \"bucketRrn\":\"\"\n\
+        \  }\n]\n```\nIf **tableLevel** is **3** and **groupBy** = **[\"cloud.region\"\
+        , \"cloud.service\"]**, the response properties are as shown below:\n```json\n\
+        [\n  {\n    \"cloudType\": \"\",\n    \"regionName\": \"\",\n    \"serviceName\"\
+        : \"\",\n    \"resourceName\": \"\",\n    \"publicResource\": \"\",\n    \"\
+        totalObjects\": 0,\n    \"publicObjects\": 0,\n    \"sensitiveObjects\": 0,\n\
+        \    \"malwareObjects\": 0,\n    \"alerts\": 0,\n    \"bucketRrn\":\"\"\n\
+        \  }\n]\n```\nIf **tableLevel** is **3** and **groupBy** = **[\"cloud.account\"\
+        , \"cloud.region\", \"cloud.service\"]**, the response properties are as shown\
+        \ below:\n```json\n[\n  {\n    \"cloudType\": \"\",\n    \"accountName\":\
+        \ \"\",\n    \"regionName\": \"\",\n    \"serviceName\": \"\",\n    \"resourceName\"\
+        : \"\",\n    \"publicResource\": \"\",\n    \"totalObjects\": 0,\n    \"publicObjects\"\
+        : 0,\n    \"sensitiveObjects\": 0,\n    \"malwareObjects\": 0,\n    \"alerts\"\
+        : 0,\n    \"bucketRrn\":\"\"\n  }\n]\n```\nIf **tableLevel** is **4**, the\
+        \ response properties are as shown below:\n```json\n[\n  {\n    \"cloudType\"\
+        : \"\",\n    \"accountName\": \",\n    \"regionName\": \"\",\n    \"serviceName\"\
+        : \"\",\n    \"resourceName\": \"\",\n    \"publicResource\": \"\",\n    \"\
+        objectName\": \"\",\n    \"objectExposure\": \"\",\n    \"objectOwner\": \"\
+        \",\n    \"contentType\": \"\",\n    \"dataProfiles\": \"\",\n    \"dataPatterns\"\
+        : \"\",\n    \"malware\": \"\",\n    \"metadataScannedTime\": 0, \n    \"\
+        malwareScannedTime\": 0, \n    \"dssScannedTime\": 0, \n    \"dssSnippetStatus\"\
+        : \"\",\n    \"dssSnippetCreatedOn\": \"\",\n    \"dssSnippetViewed\": false\n\
+        \  }\n]\n```                                                             \
+        \                             "
+      operationId: get-inventory-objects
+      requestBody:
+        $ref: "#/components/requestBodies/DLPInventoryFilterModel"
+      responses:
+        "200":
+          content:
+            "*/*":
+              schema:
+                items:
+                  $ref: "#/components/schemas/DLPInventoryViewModel"
+                type: array
+          description: success
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: List Inventory Objects
+      tags:
+        - Data Security Inventory
+  /dlp/api/v1/inventory/object/details:
+    post:
+      description: Returns details for the object with the specified object ID.
+      operationId: get-inventory-object-details
+      requestBody:
+        $ref: "#/components/requestBodies/DLPInventoryResourceExplorerRequest"
+      responses:
+        "200":
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/DLPInventoryObjectExplorer"
+          description: success
+        "400":
+          description:
+            missing_required_parameter / invalid_parameter_value / internal_error
+            / violates_minimum_alert_dismiss_duration_time
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Inventory Object Details
+      tags:
+        - Data Security Inventory
+  /dlp/api/v1/inventory/objects/aggregate/by-classification:
+    post:
+      description:
+        Returns the object counts identified by classification, malware,
+        and object exposure.
+      operationId: get-inventory-objects-by-classification
+      requestBody:
+        $ref: "#/components/requestBodies/DLPInventoryFilterModel"
+      responses:
+        "200":
+          content:
+            "*/*":
+              schema:
+                items:
+                  $ref: "#/components/schemas/CountByClassificationViewModel"
+                type: array
+          description: success
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Object Counts by Classification
+      tags:
+        - Data Security Inventory
+  /dlp/api/v1/inventory/objects/aggregate/alerts/by-classification:
+    post:
+      description:
+        Returns the object alert counts grouped by exposure, classification,
+        and severity.
+      operationId: get-inventory-aggregate-alerts-by-classification
+      requestBody:
+        $ref: "#/components/requestBodies/DLPInventoryFilterModel"
+      responses:
+        "200":
+          content:
+            "*/*":
+              schema:
+                items:
+                  $ref: "#/components/schemas/CountByClassificationViewModel"
+                type: array
+          description: success
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Aggregate Alert Data by Classification
+      tags:
+        - Data Security Inventory
+  /dlp/api/v1/inventory/objects/aggregate/history:
+    post:
+      description:
+        Returns counts of objects that satisfy the given creation time
+        window and other filters.
+      operationId: get-inventory-aggregate-history
+      requestBody:
+        $ref: "#/components/requestBodies/DLPInventoryFilterModel"
+      responses:
+        "200":
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/DLPInventoryObjectHistoryViewModel"
+          description: success
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Aggregate Data by History
+      tags:
+        - Data Security Inventory
+  /dlp/api/v1/inventory/object/malware/report/hash/{fileHash}:
+    post:
+      description: Returns a malware report.
+      operationId: get-malware-report
+      parameters:
+        - description: File hash value
+          in: path
+          name: fileHash
+          required: true
+          schema:
+            type: string
+      requestBody:
+        $ref: "#/components/requestBodies/DLPInventoryResourceExplorerRequest"
+      responses:
+        "200":
+          content:
+            application/xml:
+              schema:
+                type: string
+          description: success
+        "400":
+          description:
+            missing_required_parameter / invalid_parameter_value / internal_error
+            / violates_minimum_alert_dismiss_duration_time
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Malware Report
+      tags:
+        - Data Security Inventory
+  /dlp/api/v1/inventory/resource/details:
+    post:
+      description:
+        Returns details for the resource (bucket) with the specified tenant
+        ID and bucket name.
+      operationId: get-inventory-resource-details
+      requestBody:
+        $ref: "#/components/requestBodies/DLPInventoryResourceExplorerRequest"
+      responses:
+        "200":
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/DLPInventoryResourceExplorer"
+          description: success
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Inventory Resource Details
+      tags:
+        - Data Security Inventory
+  /dlp/api/v1/inventory/resource/objects:
+    post:
+      description: Returns the objects for the specified bucket.
+      operationId: get-inventory-resource-objects
+      requestBody:
+        $ref: "#/components/requestBodies/DLPInventoryResourceExplorerRequest"
+      responses:
+        "200":
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/DLPInventoryResourceObjects"
+          description: success
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Inventory Resource Objects
+      tags:
+        - Data Security Inventory
+  /dlp/api/v1/inventory/snippet:
+    post:
+      description: Generates a snippet for the specified object.
+      operationId: add-snippets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DLPInventoryResourceExplorerRequest"
+      responses:
+        "200":
+          content:
+            "*/*":
+              schema:
+                type: string
+          description: success
+        "400":
+          description:
+            missing_required_parameter / invalid_parameter_value / internal_error
+            / violates_minimum_alert_dismiss_duration_time
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Generate Snippet
+      tags:
+        - Data Security Inventory
+  /dlp/api/v1/inventory/snippet/objects/{objectId}/datapattern/{dataPatternId}:
+    get:
+      description: Returns a snippet for the given object and data pattern.
+      operationId: get-snippets
+      parameters:
+        - description: Object ID
+          in: path
+          name: objectId
+          required: true
+          schema:
+            type: string
+        - description: Data pattern ID
+          in: path
+          name: dataPatternId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/DssPatternSnippetViewModel"
+          description: success
+        "400":
+          description: bad_request
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Snippet
+      tags:
+        - Data Security Inventory
+servers:
+  - url: https://api.prismacloud.io
+tags:
+  - description: The Data Security Inventory endpoints are listed below.
+    name: Data Security Inventory

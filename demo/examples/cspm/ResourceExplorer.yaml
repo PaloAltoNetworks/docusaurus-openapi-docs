@@ -1,0 +1,1316 @@
+components:
+  requestBodies:
+    FilterModel3:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/FilterModel"
+    FilterSuggestionModel:
+      content:
+        application/json; charset=UTF-8:
+          schema:
+            $ref: "#/components/schemas/FilterSuggestionModel"
+    ResourceExplorerRequest:
+      content:
+        application/json; charset=UTF-8:
+          schema:
+            $ref: "#/components/schemas/ResourceExplorerRequest"
+  securitySchemes:
+    x-redlock-auth:
+      description: The x-redlock-auth value is a JSON Web Token (JWT).
+      in: header
+      name: x-redlock-auth
+      type: apiKey
+  schemas:
+    AbsoluteTimeRangeConfigModel:
+      allOf:
+        - $ref: "#/components/schemas/TimeRangeConfigModel"
+        - description: Model for AbsoluteTimeRangeConfig
+          properties:
+            type:
+              example: absolute
+              type: string
+            value:
+              allOf:
+                - $ref: "#/components/schemas/TimeModel"
+                - description: Time range object
+          required:
+            - value
+          type: object
+    AlertIdAndSeverity:
+      properties:
+        id:
+          type: string
+        severity:
+          enum:
+            - INFORMATIONAL
+            - LOW
+            - MEDIUM
+            - HIGH
+            - CRITICAL
+          type: string
+      type: object
+    DecoratedResourceInfo:
+      description: Model for resource info and status list
+      properties:
+        accountId:
+          description: Account ID
+          type: string
+        accountName:
+          description: Account name
+          type: string
+        cloudType:
+          description: Cloud type
+          enum:
+            - ALL
+            - AWS
+            - AZURE
+            - GCP
+            - ALIBABA_CLOUD
+            - OCI
+          type: string
+        id:
+          description: Resource ID
+          type: string
+        name:
+          description: Resource name
+          type: string
+        overallPassed:
+          description: All policies passed
+          type: boolean
+        regionId:
+          description: Region ID
+          type: string
+        regionName:
+          description: Region Name
+          type: string
+        rrn:
+          allOf:
+            - $ref: "#/components/schemas/RRNModel"
+            - description: RRN
+        scannedPolicies:
+          description: Scanned policies
+          items:
+            $ref: "#/components/schemas/ScannedPolicyInfo"
+          type: array
+      type: object
+    DecoratedResourceInfoResult:
+      description: Model for resource info and status list
+      properties:
+        nextPageToken:
+          allOf:
+            - $ref: "#/components/schemas/ResourceInfoPageOption"
+            - description: Use as page token to return next page of data
+        pageSize:
+          description: Page size
+          format: int64
+          type: integer
+        resources:
+          description: List of metadata for resources that match filter
+          items:
+            $ref: "#/components/schemas/DecoratedResourceInfo"
+          type: array
+        timestamp:
+          description: Epoch timestamp
+          format: int64
+          type: integer
+        totalMatchedCount:
+          description: Total number of filtered resources, both scanned and unscanned
+          format: int64
+          type: integer
+      type: object
+    ExternalFindingView:
+      properties:
+        accountId:
+          type: string
+        count:
+          type: string
+        createdOn:
+          format: int64
+          type: integer
+        customerId:
+          format: int32
+          type: integer
+        cveId:
+          type: string
+        description:
+          type: string
+        externalFindingId:
+          format: int64
+          type: integer
+        findingId:
+          type: string
+        normalizedName:
+          type: string
+        normalizedNames:
+          items:
+            type: string
+          type: array
+        nvdUrl:
+          type: string
+        rawData:
+          type: string
+        regionId:
+          type: string
+        resourceCloudId:
+          type: string
+        resourceId:
+          format: int64
+          type: integer
+        resourceUrl:
+          type: string
+        riskFactors:
+          items:
+            enum:
+              - CRITICAL_SEVERITY
+              - HIGH_SEVERITY
+              - MEDIUM_SEVERITY
+              - HAS_FIX
+              - REMOTE_EXECUTION
+              - DOS
+              - RECENT_VULNERABILITY
+              - EXPLOIT_EXISTS
+              - ATTACK_COMPLEXITY_LOW
+              - ATTACK_VECTOR_NETWORK
+              - REACHABLE_FROM_THE_INTERNET
+              - LISTENING_PORTS
+              - CONTAINER_IS_RUNNING_AS_ROOT
+              - NO_MANDATORY_SECURITY_PROFILE_APPLIED
+              - RUNNING_AS_PRIVILEGED_CONTAINER
+              - PACKAGE_IN_USE
+            type: string
+          type: array
+          uniqueItems: true
+        rlUpdatedOn:
+          format: int64
+          type: integer
+        scanId:
+          type: string
+        score:
+          type: object
+        severity:
+          enum:
+            - INFORMATIONAL
+            - LOW
+            - MEDIUM
+            - HIGH
+            - CRITICAL
+          type: string
+        source:
+          enum:
+            - AWS_INSPECTOR
+            - AWS_GUARD_DUTY
+            - TENABLE
+            - QUALYS
+            - PRISMA_CLOUD
+            - AZURE_SECURITY_CENTER
+          type: string
+        sourceData:
+          additionalProperties:
+            type: object
+          type: object
+        status:
+          enum:
+            - PENDING
+            - NO_ERROR
+            - ERROR
+            - ENABLED
+            - DISABLED
+            - OPEN
+            - DISMISSED
+            - RESOLVED
+            - DESCOPED
+            - RISK_SCORING_ERROR
+          type: string
+        title:
+          type: string
+        type:
+          enum:
+            - HOST_VULNERABILITY_CVE
+            - COMPLIANCE_ISSUE_CIS
+            - AWS_INSPECTOR_SECURITY_BEST_PRACTICES
+            - AWS_INSPECTOR_RUNTIME_BEHAVIOR_ANALYSIS
+            - AWS_GUARD_DUTY_HOST_FINDING
+            - AWS_GUARD_DUTY_IAM_FINDING
+            - SERVERLESS_VULNERABILITY
+            - AZURE_SECURITY_CENTER_ALERTS
+          type: string
+        updatedOn:
+          format: int64
+          type: integer
+      type: object
+    ExternalIntegrationView:
+      properties:
+        assetJson:
+          type: string
+        firstSeen:
+          format: int64
+          type: integer
+        hasAgent:
+          type: boolean
+        id:
+          type: string
+        lastSeen:
+          format: int64
+          type: integer
+        name:
+          type: string
+        rlUpdatedOn:
+          format: int64
+          type: integer
+        source:
+          enum:
+            - AWS_INSPECTOR
+            - AWS_GUARD_DUTY
+            - TENABLE
+            - QUALYS
+            - PRISMA_CLOUD
+            - AZURE_SECURITY_CENTER
+          type: string
+        tags:
+          items:
+            type: string
+          type: array
+      type: object
+    FilterModel:
+      description: Model for Filter
+      properties:
+        detailed:
+          description: Detailed
+          type: boolean
+        fields:
+          description: Array of specific fields to return
+          items:
+            type: string
+          type: array
+        filters:
+          description: Filtering parameters
+          items:
+            $ref: "#/components/schemas/UIFilterModel"
+          type: array
+        groupBy:
+          description:
+            For asset or data inventory only. Group returned items by **cloud.type**,
+            **cloud.service**, **cloud.region**, **cloud.account**, and/or **resource.type**
+          items:
+            type: string
+          type: array
+        limit:
+          description:
+            Maximum number of items to return. When data is paginated,
+            maximum number of items per page
+          type: number
+        offset:
+          description:
+            The number of items to skip before selecting items to return.
+            Default is zero
+          type: number
+        pageToken:
+          description:
+            "Setting this pagination Token to the **nextPageToken** from
+            a response object returns the next page of data "
+          type: string
+        sortBy:
+          description:
+            Array of sort properties. Append **:asc** or  **:desc** to
+            the key to sort by ascending or descending order respectively. Example
+            sort properties are **id:asc** and **timestamp:desc**
+          items:
+            type: string
+          type: array
+        timeRange:
+          allOf:
+            - $ref: "#/components/schemas/TimeRangeConfigModel"
+            - description: Time range
+      type: object
+    FilterSuggestion:
+      description: Model for FilterSuggestion
+      properties:
+        nameValue:
+          description: Filter options
+          items:
+            $ref: "#/components/schemas/NameValueIntegerString"
+          type: array
+        options:
+          description:
+            Filter options, which lists all the default options for static
+            filters or all the recent options, if any, for non-static filters
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+        staticFilter:
+          description: Filter is a static filter
+          type: boolean
+      type: object
+    FilterSuggestionModel:
+      description: Model for Filter Suggestions
+      properties:
+        filterName:
+          description: Filter name
+          type: string
+        query:
+          description:
+            Case-insensitive fuzzy search autocomplete filter. Includes
+            only items that contain the query as a substring.
+          type: string
+      required:
+        - filterName
+      type: object
+    InventoryFilterSuggestion:
+      description: Model for InventoryFilterSuggestion
+      properties:
+        account.group:
+          $ref: "#/components/schemas/FilterSuggestion"
+        cloud.account:
+          $ref: "#/components/schemas/FilterSuggestion"
+        cloud.region:
+          $ref: "#/components/schemas/FilterSuggestion"
+        cloud.service:
+          $ref: "#/components/schemas/FilterSuggestion"
+        cloud.type:
+          allOf:
+            - $ref: "#/components/schemas/FilterSuggestion"
+            - readOnly: true
+      type: object
+    NameValueIntegerString:
+      properties:
+        id:
+          format: int32
+          type: integer
+        name:
+          type: string
+      type: object
+    ParsedTableFilter:
+      description: Model for parsed table filter
+      properties:
+        completeParameters:
+          items:
+            $ref: "#/components/schemas/UIFilterModel"
+          type: array
+        links:
+          description: JSON query builder links
+          type: string
+        needsOffsetUpdate:
+          description: Needs offset update (for internal use)
+          type: boolean
+        offset:
+          description: Offset within query
+          format: int32
+          type: integer
+        queryRemainder:
+          description: Query remainder
+          type: string
+        suggestions:
+          description: List of suggestions
+          items:
+            type: string
+          type: array
+        translate:
+          description: Translate (for internal use)
+          type: boolean
+        valid:
+          description: Query is valid
+          type: boolean
+      type: object
+    RRNModel:
+      description: Model for RRN
+      properties:
+        accountId:
+          description: Account ID
+          readOnly: true
+          type: string
+        cloudType:
+          description: Cloud type
+          enum:
+            - ALL
+            - AWS
+            - AZURE
+            - GCP
+            - ALIBABA_CLOUD
+            - OCI
+          readOnly: true
+          type: string
+        idmapId:
+          description: Hashed generated ID
+          readOnly: true
+          type: string
+        regionId:
+          description: Region ID
+          readOnly: true
+          type: string
+        resourceId:
+          description: Resource ID
+          readOnly: true
+          type: string
+        resourceType:
+          description: Resource type
+          readOnly: true
+          type: string
+      type: object
+    RelativeTimeDurationModel:
+      description: Model for RelativeTimeDuration
+      properties:
+        amount:
+          description: Number of time units
+          format: int32
+          type: integer
+        unit:
+          description: Time unit
+          enum:
+            - minute
+            - hour
+            - day
+            - week
+            - month
+            - year
+          type: string
+      type: object
+    RelativeTimeRangeConfigModel:
+      allOf:
+        - $ref: "#/components/schemas/TimeRangeConfigModel"
+        - description: Model for RelativeTimeRangeConfig
+          properties:
+            relativeTimeType:
+              description: Direction in which to count time. Default = BACKWARD
+              enum:
+                - BACKWARD
+                - FORWARD
+              type: string
+            type:
+              example: relative
+              type: string
+            value:
+              allOf:
+                - $ref: "#/components/schemas/RelativeTimeDurationModel"
+                - description: Time range object
+          required:
+            - value
+          type: object
+    ResourceExplorerRequest:
+      properties:
+        findingSource:
+          description: External Finding Sources
+          items:
+            enum:
+              - AWS_INSPECTOR
+              - AWS_GUARD_DUTY
+              - TENABLE
+              - QUALYS
+              - PRISMA_CLOUD
+              - AZURE_SECURITY_CENTER
+            type: string
+          readOnly: true
+          type: array
+        findingType:
+          description: External Finding Types
+          items:
+            type: string
+          type: array
+        riskFactors:
+          description: External finding risk factors
+          items:
+            enum:
+              - CRITICAL_SEVERITY
+              - HIGH_SEVERITY
+              - MEDIUM_SEVERITY
+              - HAS_FIX
+              - REMOTE_EXECUTION
+              - DOS
+              - RECENT_VULNERABILITY
+              - EXPLOIT_EXISTS
+              - ATTACK_COMPLEXITY_LOW
+              - ATTACK_VECTOR_NETWORK
+              - REACHABLE_FROM_THE_INTERNET
+              - LISTENING_PORTS
+              - CONTAINER_IS_RUNNING_AS_ROOT
+              - NO_MANDATORY_SECURITY_PROFILE_APPLIED
+              - RUNNING_AS_PRIVILEGED_CONTAINER
+              - PACKAGE_IN_USE
+            type: string
+          type: array
+        rrn:
+          description: Restricted Resource Name
+          type: string
+        timelineItemId:
+          description: Timeline Item ID
+          type: string
+      required:
+        - rrn
+      type: object
+    ResourceInfoPageOption:
+      properties:
+        failedEventOffset:
+          type: boolean
+        lastRowIdx:
+          format: int64
+          type: integer
+        limit:
+          format: int64
+          type: integer
+        offset:
+          format: int64
+          type: integer
+        previousTotalMatchedCount:
+          format: int64
+          type: integer
+        timestamp:
+          format: int64
+          type: integer
+      type: object
+    ResourceMetaModel:
+      description: Model containing resource metadata
+      properties:
+        accountGroupName:
+          description: Account group name
+          type: string
+        accountId:
+          description: Account ID
+          type: string
+        accountName:
+          description: Account name
+          type: string
+        allowDrillDown:
+          description: allowDrillDown
+          type: boolean
+        cloudType:
+          description: Cloud Type
+          enum:
+            - ALL
+            - AWS
+            - AZURE
+            - GCP
+            - ALIBABA_CLOUD
+            - OCI
+          type: string
+        createdTs:
+          description: Creation timestamp
+          format: int64
+          type: integer
+        data:
+          description: Raw JSON data for the resource
+          type: object
+        deleted:
+          description: Deleted
+          type: boolean
+        dynamicData:
+          additionalProperties:
+            type: object
+          description: Dynamic data
+          type: object
+        hasExtFindingRiskFactors:
+          description: Has risk factors
+          type: boolean
+        hasExternalFinding:
+          description: Has external finding
+          type: boolean
+        hasExternalIntegration:
+          description: Has external integration
+          type: boolean
+        hasNetwork:
+          description: Has network
+          type: boolean
+        id:
+          description: ID
+          type: string
+        insertTs:
+          description: Insertion timestamp
+          format: int64
+          type: integer
+        name:
+          description: Name
+          type: string
+        regionId:
+          description: Region ID
+          type: string
+        regionName:
+          description: Region name
+          type: string
+        resourceType:
+          description: Resource type
+          type: string
+        riskGrade:
+          description: Risk grade
+          type: string
+        rrn:
+          allOf:
+            - $ref: "#/components/schemas/RRNModel"
+            - description: RRN
+        service:
+          description: Service
+          type: string
+        stateId:
+          description: State ID
+          type: string
+        tags:
+          additionalProperties:
+            type: string
+          description: Tags
+          type: object
+        url:
+          description: URL
+          type: string
+        vpcId:
+          description: Virtual private cloud ID
+          type: string
+        vpcName:
+          description: Virtual private cloud name
+          type: string
+      type: object
+    ResourceTimelineItem:
+      properties:
+        alertIds:
+          items:
+            type: string
+          type: array
+        discoveredTs:
+          format: int64
+          type: integer
+        eventName:
+          type: string
+        eventType:
+          type: string
+        firstState:
+          type: boolean
+        id:
+          type: string
+        previousStateId:
+          type: string
+        similarSince:
+          format: int64
+          type: integer
+        similarStateCount:
+          format: int64
+          type: integer
+        timestamp:
+          format: int64
+          type: integer
+        type:
+          enum:
+            - STATE_CHANGE
+            - EVENT
+            - VULNERABILITY
+          type: string
+        user:
+          type: string
+        vulnerabilities:
+          items:
+            $ref: "#/components/schemas/ResourceTimelineVulnerability"
+          type: array
+      type: object
+    ResourceTimelineVulnerability:
+      properties:
+        id:
+          type: string
+        url:
+          type: string
+      type: object
+    ScannedPolicyInfo:
+      properties:
+        id:
+          type: string
+        labels:
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+        name:
+          type: string
+        passed:
+          type: boolean
+        severity:
+          enum:
+            - INFORMATIONAL
+            - LOW
+            - MEDIUM
+            - HIGH
+            - CRITICAL
+          type: string
+      type: object
+    SecurityGroupDetail:
+      properties:
+        access:
+          type: string
+        direction:
+          type: string
+        id:
+          format: int64
+          type: integer
+        ips:
+          type: string
+        ports:
+          type: string
+        priority:
+          format: int32
+          type: integer
+        protocol:
+          type: string
+      type: object
+    TimeModel:
+      description: Model for Time
+      properties:
+        endTime:
+          description: End timestamp
+          format: int64
+          type: integer
+        startTime:
+          description: Start timestamp
+          format: int64
+          type: integer
+      type: object
+    TimeRangeConfigModel:
+      description:
+        "See the [Time Range Model](/api/cloud/api-time-range-model) for
+        details.
+
+        "
+      discriminator:
+        mapping:
+          absolute: "#/components/schemas/AbsoluteTimeRangeConfigModel"
+          relative: "#/components/schemas/RelativeTimeRangeConfigModel"
+          to_now: "#/components/schemas/ToNowTimeRangeConfigModel"
+        propertyName: type
+      oneOf:
+        - $ref: "#/components/schemas/RelativeTimeRangeConfigModel"
+        - $ref: "#/components/schemas/AbsoluteTimeRangeConfigModel"
+        - $ref: "#/components/schemas/ToNowTimeRangeConfigModel"
+      properties:
+        type:
+          description: Time type
+          type: string
+      required:
+        - type
+      type: object
+    ToNowTimeRangeConfigModel:
+      allOf:
+        - $ref: "#/components/schemas/TimeRangeConfigModel"
+        - description: Model for ToNowTimeRangeConfig
+          properties:
+            value:
+              description: Time range object
+              enum:
+                - MINUTE
+                - HOUR
+                - DAY
+                - WEEK
+                - MONTH
+                - YEAR
+                - EPOCH
+                - LOGIN
+              type: string
+          type: object
+    UIFilterModel:
+      description: Model for UIFilter
+      properties:
+        name:
+          description: Name
+          type: string
+        operator:
+          description: Operator
+          enum:
+            - =
+          type: string
+        value:
+          description: Value
+          type: string
+      type: object
+info:
+  contact: {}
+  description:
+    "The resource explorer is also known as the asset explorer.\n\n###\
+    \ Where Do I Find the RRN For My Resource?\n\nYou can find the RRN for a resource\
+    \ in the URL when you view that resource in the Prisma Cloud asset explorer.\n\
+    The following is an example of such a URL. The RRN is in the URL query string.\n\
+    \n```\nhttps://app.prismacloud.io/investigate/details?resourceId=rrn:aws:storageBucket:us-east-1:123456789012:test-bucket\
+    \ \n``` \n\n### Account Representation\n\nIf the **regionId** and **resourceId**\
+    \ are not in the RRN, then the **cloudType** and **resourceType** fields\nin thr\
+    \ RRN are optional. In this siutation, the RRN identifies an account.\n\n\nFull\
+    \ RRN:\n```\nrrn:::us-west-1:12345678901:i-ABCDEFGH\n```\n\nAbridged RRN:\n```\
+    \  \nrrn::::12345678901\n```\n"
+  title: Prisma Cloud Resource Explorer (Asset Explorer) API Overview
+  version: Latest
+openapi: 3.0.0
+paths:
+  /resource:
+    post:
+      description:
+        "Returns detailed information for the resource with the given **rrn**.\
+        \  \r\n\r\nGenerally, the data field in the response object contains the raw\
+        \ JSON blob as is received from the \nsource cloud service provider API for\
+        \ the given resource.\n\nOnly the **rrn** parameter in the request body is\
+        \ used for this API. Ignore the **timelineItemId** and \n**findingType** fields\
+        \ for this API.\n\nAn example request body is:\n```\n{\n  \"rrn\": \"rrn::storageBucket:us-east-1:123456789012:test-bucket\"\
+        \n}\n```\n"
+      operationId: get-resource
+      requestBody:
+        $ref: "#/components/requestBodies/ResourceExplorerRequest"
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/ResourceMetaModel"
+          description: successful operation
+        "400":
+          description: bad_request / no_results / invalid_parameter_value
+        "404":
+          description: not_found
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Resource
+      tags:
+        - Resource Explorer
+  /resource/alert:
+    post:
+      description:
+        "Get a list of alerts associated with a given resource.  \r\n\r\
+        \nOnly the **rrn** parameter in the request body is used for this API. Ignore\
+        \ the **timelineItemId** and \n**findingType** fields for this API.\n\nAn\
+        \ example request body is:\n```\n{\n  \"rrn\": \"rrn::storageBucket:us-east-1:123456789012:test-bucket\"\
+        \n}\n```\n"
+      operationId: get-alerts-for-resource
+      requestBody:
+        $ref: "#/components/requestBodies/ResourceExplorerRequest"
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                items:
+                  $ref: "#/components/schemas/AlertIdAndSeverity"
+                type: array
+          description: successful operation
+        "400":
+          description: bad_request / invalid_parameter_value
+      security:
+        - x-redlock-auth: []
+      summary: Get Alerts for Resource
+      tags:
+        - Resource Explorer
+  /resource/network:
+    post:
+      description:
+        "Fetch network port settings and configuration for a resource.\
+        \  \r\n\r\nOnly the **rrn** parameter in the request body is used for this\
+        \ API. Ignore the **timelineItemId** and \n**findingType** fields for this\
+        \ API.\n\nAn example request body is:\n```\n{\n  \"rrn\": \"rrn::storageBucket:us-east-1:123456789012:test-bucket\"\
+        \n}\n```\n"
+      operationId: get-network-for-resource
+      requestBody:
+        $ref: "#/components/requestBodies/ResourceExplorerRequest"
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                items:
+                  $ref: "#/components/schemas/SecurityGroupDetail"
+                type: array
+          description: success / no_results
+        "400":
+          description: bad_request / invalid_parameter_value
+      security:
+        - x-redlock-auth: []
+      summary: Get Resource Network Settings
+      tags:
+        - Resource Explorer
+  /resource/external_finding:
+    get:
+      description: Get a list of all host findings for a specific alert.
+      operationId: get-host-findings-for-alert
+      parameters:
+        - in: query
+          name: alertId
+          required: true
+          schema:
+            type: string
+        - explode: true
+          in: query
+          name: type
+          required: false
+          schema:
+            items:
+              type: string
+            type: array
+        - explode: true
+          in: query
+          name: source
+          required: false
+          schema:
+            items:
+              type: string
+            type: array
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                items:
+                  $ref: "#/components/schemas/ExternalFindingView"
+                type: array
+          description: successful operation
+        "400":
+          description: bad_request / invalid_parameter_value
+      security:
+        - x-redlock-auth: []
+      summary: List Host Findings For Alert
+      tags:
+        - Resource Explorer
+    post:
+      description:
+        "Returns a list of all host findings for the current resource.\
+        \  \r\n\r\nSupported finding types:\n\nFinding Type | Key\n-----------| ----\n\
+        AWS GuardDuty Host | **guard_duty_host**\nAWS GuardDuty IAM  | **guard_duty_iam**\n\
+        AWS Inspector Security Best Practices | **inspector_sbp**\nAWS Runtime Behavior\
+        \ Analysis | **inspector_rba_count**\nCIS Compliance | **compliance_cis**\n\
+        Host Vulnerability | **host_vulnerability_cve**\n\nOnly the **rrn** parameter\
+        \ in the request body is used for this API. Ignore the **timelineItemId**\
+        \ \nfield for this API.\n\nAn example request body with a specified finding\
+        \ type is:\n```json\n{\n  \"findingType\": [ \"host_vulnerability_cve\", \"\
+        inspector_sbp\" ],\n  \"rrn\": \"rrn::instance:us-east-1:i-xxxxxxxxxx\"\n\
+        }\n``` \n\nAn example request body for all finding types is:\n```json\n{\n\
+        \  \"rrn\": \"rrn::instance:us-east-1:i-xxxxxxxxxx\"\n}\n"
+      operationId: get-host-findings
+      requestBody:
+        $ref: "#/components/requestBodies/ResourceExplorerRequest"
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                items:
+                  $ref: "#/components/schemas/ExternalFindingView"
+                type: array
+          description: successful operation
+        "400":
+          description: bad_request / invalid_parameter_value
+      security:
+        - x-redlock-auth: []
+      summary: List Host Findings
+      tags:
+        - Resource Explorer
+  /resource/timeline:
+    post:
+      description:
+        "Returns a timeline of events and alerts for the given resource.\
+        \  \r\n\r\nOnly the **rrn** parameter in the request body is used for this\
+        \ API. Ignore the **timelineItemId** and \n**findingType** fields for this\
+        \ API.\n\nAn example request body is:\n```json\n{\n  \"\"rrn\": \"rrn::instance:us-east-1:i-xxxxxxxxxx\"\
+        \n}\n```\n"
+      operationId: get-timeline-for-resource
+      requestBody:
+        $ref: "#/components/requestBodies/ResourceExplorerRequest"
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                items:
+                  $ref: "#/components/schemas/ResourceTimelineItem"
+                type: array
+          description: successful operation
+        "400":
+          description: invalid_parameter_value
+        "404":
+          description: not_found
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Resource Timeline
+      tags:
+        - Resource Explorer
+  /resource/raw:
+    post:
+      description:
+        "Returns the raw metadata of the configuration of a resource at\
+        \ a given point in time.  \r\n\r\nGenerally, the response object contains\
+        \ the raw JSON blob as is received from the \nsource cloud service provider\
+        \ API.\n\nOnly the **rrn** parameter in the request body is used for this\
+        \ API. Ignore the **findingType** \nfield for this API.\n\nYou can find the\
+        \ **timelineItemId** for your resource from the timeline results that \n[Get\
+        \ Resource Timeline](/api/cloud/cspm/resource-explorer#operation/get-timeline-for-resource)\n\
+        returns.\n\nAn example request body is:\n```json\n{\n  \"rrn\": \"rrn::instance:us-east-1:i-xxxxxxxxxx\"\
+        ,\n  \"timelineItemId\": \"xxxxxxxxxxxxxx\"\n}\n```\n"
+      operationId: get-resource-raw
+      requestBody:
+        $ref: "#/components/requestBodies/ResourceExplorerRequest"
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: object
+          description: successful operation
+        "400":
+          description: invalid_parameter_value
+        "404":
+          description: not_found
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Resource (Raw)
+      tags:
+        - Resource Explorer
+  /filter/resource/scan_info/suggest:
+    get:
+      description:
+        Returns an object where the keys are supported Resource Info filters
+        and values contain default recent options.
+      operationId: get-resource-info-filters-and-options
+      responses:
+        "200":
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/InventoryFilterSuggestion"
+          description: success
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: List Resource Info Filters
+      tags:
+        - Resource Explorer
+    post:
+      description:
+        Returns an object that includes a list of autocomplete suggestions
+        for the specified resource info filter.
+      operationId: get-resource-info-filter-options
+      requestBody:
+        $ref: "#/components/requestBodies/FilterSuggestionModel"
+      responses:
+        "200":
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/ParsedTableFilter"
+          description: success
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: List Resource Info Filter Autocomplete Suggestions
+      tags:
+        - Resource Explorer
+  /resource/external_integration:
+    post:
+      description:
+        Returns a list of external ingestion integrations for the specified
+        resource.
+      operationId: get-external-integrations-for-resource
+      requestBody:
+        $ref: "#/components/requestBodies/ResourceExplorerRequest"
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                items:
+                  $ref: "#/components/schemas/ExternalIntegrationView"
+                type: array
+          description: success / no_results
+        "400":
+          description: bad_request / invalid_parameter_value
+      security:
+        - x-redlock-auth: []
+      summary: Get External Ingest Integrations for the resource
+      tags:
+        - Resource Explorer
+  /resource/scan_info:
+    get:
+      description:
+        "Returns a full breakdown of passed/failed statistics and associated\
+        \ policies for resources.  \r\n\r\nThe query parameters enable you to add\
+        \ filters to your request to narrow your results.\n### Filter by Time\nThe\
+        \ following table has examples of common filters by time. The time filter\
+        \ narrows the\nresponse to resources from account onboarding until the point\
+        \ in time of interest.\n\nPoint in time of interest | timeAmount | timeType\
+        \ | timeUnit \n-------------| ---- | ----------- | -------------\n24 hours\
+        \ ago | 24 | **relative** | hour      \n1 week ago |  1 | **relative** | week\n\
+        1 month ago | 1 | **relative** | month        \n1 year ago | 1 | **relative**\
+        \ | year                \nLatest | Not required with **to_now** | **to_now**\
+        \ | Defaults to **epoch**\n\n### How Current is the Returned Data?\nSince\
+        \ Prisma Cloud relies on snapshots of data, there can be an hour or two delay\
+        \ between the \ntime a resource passes or fails a policy check and the reporting\
+        \ of that result through this method.\n\n### Filter by Cloud Type\nYou can\
+        \ specify more than one cloud type to request a combination of data. For \n\
+        example **cloud.type=gcp&cloud.type=azure** returns data for both **gcp**\
+        \ and **azure**.\n\n### Filter by Compliance Standard, Requirement, and/or\
+        \ Section \nYou can also broaden your filter by specifying any of the following\
+        \ query parameters more than once:\n* **policy.complianceStandard**\n* **policy.complianceRequirement**\n\
+        * **policy.complianceSection**\n"
+      operationId: get-resource-scan-info
+      parameters:
+        - description: Time Type
+          in: query
+          name: timeType
+          required: true
+          schema:
+            enum:
+              - relative
+              - to_now
+            type: string
+        - description:
+            Time Amount. Required for **timeType** **relative**. Unused for
+            **timeType** **to_now**
+          in: query
+          name: timeAmount
+          required: false
+          schema:
+            type: string
+        - description:
+            Time Unit. Required for **timeType** **relative**. Unused for
+            **timeType** **to_now**
+          in: query
+          name: timeUnit
+          required: false
+          schema:
+            enum:
+              - minute
+              - hour
+              - day
+              - week
+              - month
+              - year
+            type: string
+        - description: Cloud account
+          in: query
+          name: cloud.account
+          required: false
+          schema:
+            type: string
+        - description: Cloud type
+          in: query
+          name: cloud.type
+          required: false
+          schema:
+            enum:
+              - aws
+              - azure
+              - gcp
+              - alibaba_cloud
+              - oci
+            type: string
+        - description: Cloud region
+          in: query
+          name: cloud.region
+          required: false
+          schema:
+            type: string
+        - description: Account group
+          in: query
+          name: account.group
+          required: false
+          schema:
+            type: string
+        - description:
+            Policy compliance standard. You can specify policy.complianceStandard=*
+            to return the data for all compliance standards.
+          in: query
+          name: policy.complianceStandard
+          required: false
+          schema:
+            type: string
+        - description: Policy compliance requirement name
+          in: query
+          name: policy.complianceRequirement
+          required: false
+          schema:
+            type: string
+        - description: Policy compliance section ID
+          in: query
+          name: policy.complianceSection
+          required: false
+          schema:
+            type: string
+        - description:
+            Maximum number of entries to be returned. A single API call retrieves
+            a maximum of 10,000 resources, which is also the default.
+          in: query
+          name: limit
+          required: false
+          schema:
+            type: string
+        - description:
+            Whether or not the resources were scanned and whether they passed
+            or failed the scan. The default is **all**.
+          in: query
+          name: scan.status
+          required: false
+          schema:
+            enum:
+              - all
+              - passed
+              - failed
+            type: string
+        - description:
+            Token identifying the required page of data. When there are multiple
+            pages of data, the **nextPageToken** from the response can be used in this
+            parameter
+          in: query
+          name: pageToken
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DecoratedResourceInfoResult"
+          description: success
+        "400":
+          description: bad_request
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Resource Scan Info - GET
+      tags:
+        - Resource Explorer
+    post:
+      description:
+        "Returns a full breakdown of passed/failed statistics and associated\
+        \ policies for resources.  \r\n\r\nYou can get a list of the valid names and\
+        \ values for the filters body parameter through \n[List Inventory Filters\
+        \ V2](/api/cloud/cspm/asset-inventory#operation/get-asset-inventory-v2-filters-and-options)\n\
+        \ and \n [List Inventory Dashboard Filter Autocomplete Suggestions V2](/api/cloud/cspm/asset-inventory#operation/get-asset-inventory-v2-dashboard-filter-options).\n\
+        \n### Filter by Time\nThe time filter narrows the response to resources from\
+        \ account onboarding until the point in time of interest.\n\n#### Time Types\n\
+        \nTime Type | Required **timeRange.value** Parameters\n----------|-----------------\n\
+        **to_now** | No **timeRange.value** parameter required\n**relative** | **timeRange.value.amount**,\
+        \ **timeRange.value.unit** \n**absolute** | **timeRange.value.endTime** (**timeRange.value.startTime**\
+        \ is ignored)\n\n### How Current is the Returned Data?\nSince Prisma Cloud\
+        \ relies on snapshots of data, there can be an hour or two delay between the\
+        \ \ntime a resource passes or fails a policy check and the reporting of that\
+        \ result through this method.\n"
+      operationId: post-resource-scan-info
+      requestBody:
+        $ref: "#/components/requestBodies/FilterModel3"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DecoratedResourceInfoResult"
+          description: success
+        "400":
+          description: bad_request
+        "404":
+          description: not_found
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Resource Scan Info - POST
+      tags:
+        - Resource Explorer
+servers:
+  - url: https://api.prismacloud.io
+tags:
+  - description: The Asset Explorer (a.k.a Resource Explorer) endpoints are listed below.
+    name: Resource Explorer

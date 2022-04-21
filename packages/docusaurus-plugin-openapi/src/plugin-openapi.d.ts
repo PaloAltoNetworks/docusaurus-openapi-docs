@@ -12,7 +12,7 @@ import type { Props as DocsProps } from "@docusaurus/types";
 declare module "@paloaltonetworks/docusaurus-plugin-openapi" {
   import type { PropSidebars } from "@docusaurus/plugin-content-docs-types";
 
-  export type Options = Partial<import("./types").PluginOptions>;
+  export type Options = Partial<import("./types").APIOptions>;
 
   export type PropApiMetadata = {
     // TODO: adjust this to our needs

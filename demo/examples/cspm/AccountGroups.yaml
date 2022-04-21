@@ -1,0 +1,403 @@
+components:
+  requestBodies:
+    AccountGroupModel:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/AccountGroupModel"
+      description: Account Group
+      required: true
+  securitySchemes:
+    x-redlock-auth:
+      description: The x-redlock-auth value is a JSON Web Token (JWT).
+      in: header
+      name: x-redlock-auth
+      type: apiKey
+  schemas:
+    AccountGroupMetadataViewModel:
+      properties:
+        autoCreated:
+          description: Boolean to indicate if account group is automatically created
+          type: boolean
+        id:
+          description: Account Group ID
+          type: string
+        name:
+          description: Name
+          type: string
+      required:
+        - name
+      type: object
+    AccountGroupModel:
+      description: Model for Account Group
+      properties:
+        accountIds:
+          description: Cloud Account IDs
+          items:
+            type: string
+          type: array
+        autoCreated:
+          description:
+            Boolean read-only attribute to indicate if account group is
+            automatically created
+          readOnly: true
+          type: boolean
+        cloudAccountCount:
+          description: Number of cloud accounts associated with this account group
+          format: int32
+          readOnly: true
+          type: integer
+        cloudAccountInfos:
+          description:
+            Cloud account details of account associated with this account
+            group
+          items:
+            $ref: "#/components/schemas/CloudAccountInfo"
+          readOnly: true
+          type: array
+        description:
+          description: Description
+          type: string
+        id:
+          description: Account Group ID
+          readOnly: true
+          type: string
+        lastModifiedBy:
+          description: Last Modified By
+          readOnly: true
+          type: string
+        lastModifiedTs:
+          description: Last Modified Time
+          format: int64
+          readOnly: true
+          type: integer
+        name:
+          description: Name
+          type: string
+      required:
+        - accountIds
+        - name
+      type: object
+    AccountGroupViewModel:
+      description: Model for Account Group View
+      properties:
+        accountIds:
+          description: Cloud Account IDs
+          items:
+            type: string
+          type: array
+        accounts:
+          description: Associated Cloud Accounts
+          items:
+            additionalProperties:
+              type: string
+            type: object
+          readOnly: true
+          type: array
+        alertRules:
+          description:
+            Singly associated alert rules which cannot exist in the system
+            without the account group
+          items:
+            $ref: "#/components/schemas/CustomAlertRule"
+          readOnly: true
+          type: array
+        autoCreated:
+          description:
+            Boolean read-only attribute to indicate if account group is
+            automatically created
+          readOnly: true
+          type: boolean
+        cloudAccountCount:
+          description: Number of cloud accounts associated with this account group
+          format: int32
+          readOnly: true
+          type: integer
+        cloudAccountInfos:
+          description:
+            Cloud account details of account associated with this account
+            group
+          items:
+            $ref: "#/components/schemas/CloudAccountInfo"
+          readOnly: true
+          type: array
+        description:
+          description: Description
+          type: string
+        id:
+          description: Account Group ID
+          readOnly: true
+          type: string
+        lastModifiedBy:
+          description: Last Modified By
+          readOnly: true
+          type: string
+        lastModifiedTs:
+          description: Last Modified Time
+          format: int64
+          readOnly: true
+          type: integer
+        name:
+          description: Name
+          type: string
+        parentInfo:
+          allOf:
+            - $ref: "#/components/schemas/AccountGroupMetadataViewModel"
+            - description: For future use
+      required:
+        - accountIds
+        - name
+      type: object
+    CloudAccountInfo:
+      description: Cloud account info linked to an account group
+      properties:
+        accountId:
+          description: Account ID
+          type: string
+        cloudType:
+          description: Cloud Type
+          enum:
+            - ALL
+            - AWS
+            - AZURE
+            - GCP
+            - ALIBABA_CLOUD
+            - OCI
+          type: string
+        lastModifiedBy:
+          description: Last Modified By
+          type: string
+      type: object
+    CustomAlertRule:
+      properties:
+        alertId:
+          type: string
+        alertName:
+          type: string
+      type: object
+info:
+  contact: {}
+  description:
+    "You can use Account Groups to combine access to multiple cloud accounts\
+    \ with similar or different applications \nthat span multiple divisions or business\
+    \ units, so that you can manage administrative access to these accounts \nfrom\
+    \ Prisma Cloud.\n\nWhen you onboard a cloud account to Prisma Cloud, you can assign\
+    \ the cloud account to one or more account groups, \nand then assign the account\
+    \ group to Prisma Cloud Administrator Roles. Assigning an account group to an\
+    \ administrative \nuser on Prisma Cloud allows you to restrict access only to\
+    \ the resources and data that pertains to the cloud account(s) \nwithin an account\
+    \ group. Alerts on Prisma Cloud are applied at the cloud account group level,\
+    \ which means you can set up \nseparate alert rules and notification flows for\
+    \ different cloud environments.        \n"
+  title: Prisma Cloud Account Groups API Overview
+  version: Latest
+openapi: 3.0.0
+paths:
+  /cloud/group:
+    get:
+      description: Returns an array of accessible account groups.
+      operationId: get-account-groups
+      parameters:
+        - description: true = Exclude cloud account details. Default is false.
+          in: query
+          name: excludeCloudAccountDetails
+          required: false
+          schema:
+            type: boolean
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                items:
+                  $ref: "#/components/schemas/AccountGroupViewModel"
+                type: array
+          description: successful operation
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: List Account Groups
+      tags:
+        - Account Groups
+    post:
+      description: Create a new account group on the Prisma Cloud platform.
+      operationId: add-account-group
+      requestBody:
+        $ref: "#/components/requestBodies/AccountGroupModel"
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/AccountGroupModel"
+          description: successful operation
+        "400":
+          description:
+            invalid_account_group_name / account_group_name_already_exists
+            / invalid_account_ids
+        "403":
+          description: unauthorized_access
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Add Account Group
+      tags:
+        - Account Groups
+  /cloud/group/name:
+    get:
+      description:
+        Returns list of account group IDs, names, and whether or not the
+        group was created automatically.
+      operationId: get-account-group-name
+      parameters:
+        - description:
+            Include account groups that were automatically created during
+            cloud onboarding. Default is true.
+          in: query
+          name: include_auto_created
+          required: false
+          schema:
+            type: boolean
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                items:
+                  $ref: "#/components/schemas/AccountGroupMetadataViewModel"
+                type: array
+          description: successful operation
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: List Account Group Names
+      tags:
+        - Account Groups
+  /cloud/group/name/{cloud_type}:
+    get:
+      description: Returns list of account group IDs and names filtered by cloud type.
+      operationId: get-account-group-name-by-cloudType
+      parameters:
+        - description: Cloud Type
+          in: path
+          name: cloud_type
+          required: true
+          schema:
+            enum:
+              - aws
+              - azure
+              - gcp
+              - alibaba_cloud
+              - oci
+            type: string
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                items:
+                  additionalProperties:
+                    type: object
+                  type: object
+                type: array
+          description: successful operation
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: List Account Group Names by Cloud Type
+      tags:
+        - Account Groups
+  /cloud/group/{id}:
+    get:
+      description: Retrieve all information about an account group using its ID.
+      operationId: get-account-group
+      parameters:
+        - description: Account Group ID
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+        - description: true = Include cloud account information. Default is false.
+          in: query
+          name: includeAccountInfo
+          required: false
+          schema:
+            type: boolean
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/AccountGroupModel"
+          description: successful operation
+        "403":
+          description: unauthorized_access
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Account Group Info
+      tags:
+        - Account Groups
+    put:
+      description: Update information related to an existing account group.
+      operationId: update-account-group
+      parameters:
+        - description: Account Group ID
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        $ref: "#/components/requestBodies/AccountGroupModel"
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: invalid_account_group_name / invalid_id / account_group_name_already_exists
+        "403":
+          description: unauthorized_access
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Update Account Group
+      tags:
+        - Account Groups
+    delete:
+      description: Deletes an existing account group using its ID.
+      operationId: delete-account-group
+      parameters:
+        - description: Account Group ID
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: invalid_id
+        "403":
+          description: unauthorized_access
+        "409":
+          description: conflict_deleting_last_account_group_for_alert_rule / cannot_delete_an_account_group_associated_with_cloud_accounts
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Delete Account Group
+      tags:
+        - Account Groups
+servers:
+  - url: https://api.prismacloud.io
+tags:
+  - description: The Account Group API are listed below.
+    name: Account Groups
