@@ -1,0 +1,890 @@
+components:
+  requestBodies:
+    FilterModel:
+      content:
+        application/json; charset=UTF-8:
+          schema:
+            $ref: "#/components/schemas/FilterModel"
+    FilterModel3:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/FilterModel"
+    FilterSuggestionModel:
+      content:
+        application/json; charset=UTF-8:
+          schema:
+            $ref: "#/components/schemas/FilterSuggestionModel"
+  securitySchemes:
+    x-redlock-auth:
+      description: The x-redlock-auth value is a JSON Web Token (JWT).
+      in: header
+      name: x-redlock-auth
+      type: apiKey
+  schemas:
+    AbsoluteTimeRangeConfigModel:
+      allOf:
+        - $ref: "#/components/schemas/TimeRangeConfigModel"
+        - description: Model for AbsoluteTimeRangeConfig
+          properties:
+            type:
+              example: absolute
+              type: string
+            value:
+              allOf:
+                - $ref: "#/components/schemas/TimeModel"
+                - description: Time range object
+          required:
+            - value
+          type: object
+    AssetInventoryGroupedAggregate:
+      description:
+        Model for Grouped Inventory Detail on Asset Inventory Dashboard
+        API
+      properties:
+        accountName:
+          description: Name of cloud account
+          type: string
+        allowDrillDown:
+          description: Possible to drill down further
+          type: boolean
+        cloudTypeName:
+          description: Name of cloud type
+          type: string
+        failedResources:
+          description: Number of failed resources
+          format: int64
+          type: integer
+        highSeverityFailedResources:
+          description: The number of resources that failed high severity policies
+          format: int64
+          type: integer
+        lowSeverityFailedResources:
+          description: The number of resources whose highest policy failure is **low**
+          format: int64
+          type: integer
+        mediumSeverityFailedResources:
+          description: The number of resources whose highest policy failure is **medium**
+          format: int64
+          type: integer
+        passedResources:
+          description: Number of passed resources
+          format: int64
+          type: integer
+        regionName:
+          description: Name of cloud region
+          type: string
+        resourceTypeName:
+          description: Name of resource type
+          type: string
+        serviceName:
+          description: Name of cloud service
+          type: string
+        totalResources:
+          description:
+            Total number of Compliance Standard/Requirement/Section scanned
+            resources
+          format: int64
+          type: integer
+        unscannedResources:
+          description: Total number of unscanned resources
+          format: int64
+          type: integer
+      type: object
+    AssetInventorySnapshot:
+      description: Model for Asset Inventory Snapshot
+      properties:
+        groupedAggregates:
+          description: List of grouped asset inventory aggregates
+          items:
+            $ref: "#/components/schemas/AssetInventoryGroupedAggregate"
+          type: array
+        requestedTimestamp:
+          description: Requested timestamp
+          format: int64
+          type: integer
+        summary:
+          allOf:
+            - $ref: "#/components/schemas/AssetInventorySummary"
+            - description: Asset Inventory summary
+        timestamp:
+          description: Timestamp
+          format: int64
+          type: integer
+      type: object
+    AssetInventorySummary:
+      description: Model for Asset Inventory Summary
+      properties:
+        failedResources:
+          description: Number of failed resources
+          format: int64
+          type: integer
+        highSeverityFailedResources:
+          description: The number of resources that failed high severity policies
+          format: int64
+          type: integer
+        lowSeverityFailedResources:
+          description: he number of resources whose highest policy failure is **low**
+          format: int64
+          type: integer
+        mediumSeverityFailedResources:
+          description: The number of resources whose highest policy failure is **medium**
+          format: int64
+          type: integer
+        passedResources:
+          description: Number of passed resources
+          format: int64
+          type: integer
+        timestamp:
+          description: Timestamp
+          format: int64
+          type: integer
+        totalResources:
+          description: Total number of resources
+          format: int64
+          type: integer
+        unscannedResources:
+          description: Total number of unscanned resources
+          format: int64
+          type: integer
+      type: object
+    FilterModel:
+      description: Model for Filter
+      properties:
+        detailed:
+          description: Detailed
+          type: boolean
+        fields:
+          description: Array of specific fields to return
+          items:
+            type: string
+          type: array
+        filters:
+          description: Filtering parameters
+          items:
+            $ref: "#/components/schemas/UIFilterModel"
+          type: array
+        groupBy:
+          description:
+            For asset or data inventory only. Group returned items by **cloud.type**,
+            **cloud.service**, **cloud.region**, **cloud.account**, and/or **resource.type**
+          items:
+            type: string
+          type: array
+        limit:
+          description:
+            Maximum number of items to return. When data is paginated,
+            maximum number of items per page
+          type: number
+        offset:
+          description:
+            The number of items to skip before selecting items to return.
+            Default is zero
+          type: number
+        pageToken:
+          description:
+            "Setting this pagination Token to the **nextPageToken** from
+            a response object returns the next page of data "
+          type: string
+        sortBy:
+          description:
+            Array of sort properties. Append **:asc** or  **:desc** to
+            the key to sort by ascending or descending order respectively. Example
+            sort properties are **id:asc** and **timestamp:desc**
+          items:
+            type: string
+          type: array
+        timeRange:
+          allOf:
+            - $ref: "#/components/schemas/TimeRangeConfigModel"
+            - description: Time range
+      type: object
+    FilterSuggestion:
+      description: Model for FilterSuggestion
+      properties:
+        nameValue:
+          description: Filter options
+          items:
+            $ref: "#/components/schemas/NameValueIntegerString"
+          type: array
+        options:
+          description:
+            Filter options, which lists all the default options for static
+            filters or all the recent options, if any, for non-static filters
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+        staticFilter:
+          description: Filter is a static filter
+          type: boolean
+      type: object
+    FilterSuggestionModel:
+      description: Model for Filter Suggestions
+      properties:
+        filterName:
+          description: Filter name
+          type: string
+        query:
+          description:
+            Case-insensitive fuzzy search autocomplete filter. Includes
+            only items that contain the query as a substring.
+          type: string
+      required:
+        - filterName
+      type: object
+    InventoryFilterSuggestion:
+      description: Model for InventoryFilterSuggestion
+      properties:
+        account.group:
+          $ref: "#/components/schemas/FilterSuggestion"
+        cloud.account:
+          $ref: "#/components/schemas/FilterSuggestion"
+        cloud.region:
+          $ref: "#/components/schemas/FilterSuggestion"
+        cloud.service:
+          $ref: "#/components/schemas/FilterSuggestion"
+        cloud.type:
+          allOf:
+            - $ref: "#/components/schemas/FilterSuggestion"
+            - readOnly: true
+      type: object
+    NameValueIntegerString:
+      properties:
+        id:
+          format: int32
+          type: integer
+        name:
+          type: string
+      type: object
+    ParsedTableFilter:
+      description: Model for parsed table filter
+      properties:
+        completeParameters:
+          items:
+            $ref: "#/components/schemas/UIFilterModel"
+          type: array
+        links:
+          description: JSON query builder links
+          type: string
+        needsOffsetUpdate:
+          description: Needs offset update (for internal use)
+          type: boolean
+        offset:
+          description: Offset within query
+          format: int32
+          type: integer
+        queryRemainder:
+          description: Query remainder
+          type: string
+        suggestions:
+          description: List of suggestions
+          items:
+            type: string
+          type: array
+        translate:
+          description: Translate (for internal use)
+          type: boolean
+        valid:
+          description: Query is valid
+          type: boolean
+      type: object
+    RelativeTimeDurationModel:
+      description: Model for RelativeTimeDuration
+      properties:
+        amount:
+          description: Number of time units
+          format: int32
+          type: integer
+        unit:
+          description: Time unit
+          enum:
+            - minute
+            - hour
+            - day
+            - week
+            - month
+            - year
+          type: string
+      type: object
+    RelativeTimeRangeConfigModel:
+      allOf:
+        - $ref: "#/components/schemas/TimeRangeConfigModel"
+        - description: Model for RelativeTimeRangeConfig
+          properties:
+            relativeTimeType:
+              description: Direction in which to count time. Default = BACKWARD
+              enum:
+                - BACKWARD
+                - FORWARD
+              type: string
+            type:
+              example: relative
+              type: string
+            value:
+              allOf:
+                - $ref: "#/components/schemas/RelativeTimeDurationModel"
+                - description: Time range object
+          required:
+            - value
+          type: object
+    TimeModel:
+      description: Model for Time
+      properties:
+        endTime:
+          description: End timestamp
+          format: int64
+          type: integer
+        startTime:
+          description: Start timestamp
+          format: int64
+          type: integer
+      type: object
+    TimeRangeConfigModel:
+      description:
+        "See the [Time Range Model](/api/cloud/api-time-range-model) for
+        details.
+
+        "
+      discriminator:
+        mapping:
+          absolute: "#/components/schemas/AbsoluteTimeRangeConfigModel"
+          relative: "#/components/schemas/RelativeTimeRangeConfigModel"
+          to_now: "#/components/schemas/ToNowTimeRangeConfigModel"
+        propertyName: type
+      oneOf:
+        - $ref: "#/components/schemas/RelativeTimeRangeConfigModel"
+        - $ref: "#/components/schemas/AbsoluteTimeRangeConfigModel"
+        - $ref: "#/components/schemas/ToNowTimeRangeConfigModel"
+      properties:
+        type:
+          description: Time type
+          type: string
+      required:
+        - type
+      type: object
+    ToNowTimeRangeConfigModel:
+      allOf:
+        - $ref: "#/components/schemas/TimeRangeConfigModel"
+        - description: Model for ToNowTimeRangeConfig
+          properties:
+            value:
+              description: Time range object
+              enum:
+                - MINUTE
+                - HOUR
+                - DAY
+                - WEEK
+                - MONTH
+                - YEAR
+                - EPOCH
+                - LOGIN
+              type: string
+          type: object
+    UIFilterModel:
+      description: Model for UIFilter
+      properties:
+        name:
+          description: Name
+          type: string
+        operator:
+          description: Operator
+          enum:
+            - =
+          type: string
+        value:
+          description: Value
+          type: string
+      type: object
+info:
+  contact: {}
+  description:
+    "The Asset Inventory APIs provide up-to-date information of all cloud\
+    \ assets that you are monitoring through Prisma Cloud.\nYou can request inventory\
+    \ data, list available filters to narrow inventory requests, and manage saved\
+    \ filters.\n\n### Pagination\n\nYou can limit the number of items in a response\
+    \ list from API resources that support pagination. The API \nrequests to list\
+    \ asset inventory, that supports pagination will accept the following request\
+    \ parameters.\n\nRequest Parameter  | Description  \n-----------| -------\n**limit**\
+    \ | Maximum number of items to return per page. Without pagination, maximum number\
+    \ of items to return in a response.\n**offset** | Number of items to skip before\
+    \ selecting items to return. Default is zero.\n**pageToken** | Set to the **nextPageToken**\
+    \ value from the previous response object to return the next page of data.\n\n\
+    ### Filters\n\nAPI requests that use POST methods to request a list of asset inventory\
+    \ have filter parameters that enable you to narrow \nyour request to inventory\
+    \ that meets a certain criteria. The \n[List Inventory Filters V2](/api/cloud/cspm/asset-inventory#operation/get-asset-inventory-v2-filters-and-options)\
+    \ and \n[List Inventory Dashboard Filter Autocomplete Suggestions V2](/api/cloud/cspm/asset-inventory#operation/get-asset-inventory-v2-dashboard-filter-options)\
+    \ \nrequests return the available filters.\n"
+  title: Prisma Cloud Asset Inventory API Overview
+  version: Latest
+openapi: 3.0.0
+paths:
+  /filter/v2/inventory/suggest:
+    get:
+      description:
+        Returns an object whose keys are supported asset inventory filters
+        and values contain default recent options.
+      operationId: get-asset-inventory-v2-filters-and-options
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/InventoryFilterSuggestion"
+          description: success
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: List Inventory Filters V2
+      tags:
+        - Asset Inventory
+    post:
+      description: Returns filter autocomplete suggestions.
+      operationId: get-asset-inventory-v2-dashboard-filter-options
+      requestBody:
+        $ref: "#/components/requestBodies/FilterSuggestionModel"
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/ParsedTableFilter"
+          description: success
+        "400":
+          description: missing_required_parameter/filter_name
+      security:
+        - x-redlock-auth: []
+      summary: List Inventory Dashboard Filter Autocomplete Suggestions V2
+      tags:
+        - Asset Inventory
+  /filter/inventory:
+    get:
+      description: Returns a list of all the saved asset inventory filters.
+      operationId: get-all-saved-asset-inventory-filters
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                items:
+                  $ref: "#/components/schemas/FilterModel"
+                type: array
+          description: successful operation
+        "500":
+          description: failed_fetch_inventory_saved_filters
+      security:
+        - x-redlock-auth: []
+      summary: List Saved Asset Inventory Filters
+      tags:
+        - Asset Inventory
+    post:
+      description: Saves the asset inventory filter.
+      operationId: save-asset-inventory-filter
+      requestBody:
+        $ref: "#/components/requestBodies/FilterModel"
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: failed_add_inventory_saved_filter
+        "500":
+          description: failed_add_inventory_saved_filter
+      security:
+        - x-redlock-auth: []
+      summary: Save Asset Inventory Filter
+      tags:
+        - Asset Inventory
+  /filter/inventory/{id}:
+    get:
+      description: Returns the saved asset inventory filter for the specified ID.
+      operationId: get-saved-asset-inventory-filter
+      parameters:
+        - description: Asset Inventory ID
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/FilterModel"
+          description: successful operation
+        "500":
+          description: failed_fetch_inventory_saved_filter
+      security:
+        - x-redlock-auth: []
+      summary: Get Saved Asset Inventory Filter
+      tags:
+        - Asset Inventory
+    put:
+      description: Updates the saved asset inventory filter with the specified ID.
+      operationId: update-saved-asset-inventory-filter
+      parameters:
+        - description: Asset Inventory ID
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        $ref: "#/components/requestBodies/FilterModel"
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: failed_update_inventory_saved_filter
+        "500":
+          description: failed_update_inventory_saved_filter
+      security:
+        - x-redlock-auth: []
+      summary: Update Saved Asset Inventory Filter
+      tags:
+        - Asset Inventory
+    delete:
+      description: Deletes the saved asset inventory filter with the specified ID.
+      operationId: delete-saved-asset-inventory-filter
+      parameters:
+        - description: Asset Inventory ID
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: failed_add_inventory_saved_filter
+        "403":
+          description: not_owner_or_same_role
+        "500":
+          description: failed_add_inventory_saved_filter
+      security:
+        - x-redlock-auth: []
+      summary: Delete Saved Asset Inventory Filter
+      tags:
+        - Asset Inventory
+  /v2/inventory:
+    get:
+      description:
+        "Returns asset inventory pass/fail data for the specified time\
+        \ period.  \r\n\r\nThe response includes an attribute **groupedAggregates**,\
+        \ whose content depends on the **groupBy** query parameter.\nThe following\
+        \ table shows the attributes that **groupedAggregates** will include for the\
+        \ specified **groupBy** query parameter:\n\n**groupBy**  | **groupedAggregates**\
+        \ Includes\n-------------| ------------------------------\nnot specified |\
+        \ **cloudTypeName**\n**cloudType** | **cloudTypeName**\n**cloud.account**\
+        \ | **accountName**\n**cloud.region** | **regionName**, **cloudTypeName**\n\
+        **cloud.service** | **serviceName**, **cloudTypeName**\n**resource.type**\
+        \ | **resourceTypeName**, **cloudTypeName**\n\n\nIf you specify **groupBy**\
+        \ multiple times in a single request, then **groupedAggregates** will include\
+        \ multiple attributes.\nFor example, you can set the following in the URL:\
+        \ **groupBy=cloud.account&groupBy=cloud.service**. Doing so will have the\
+        \ same effect\nas specifying a comma-separated list of values for **groupBy**.\n"
+      operationId: asset-inventory-v2
+      parameters:
+        - description: Time type
+          in: query
+          name: timeType
+          required: true
+          schema:
+            enum:
+              - relative
+            type: string
+        - description: Number of time units
+          in: query
+          name: timeAmount
+          required: true
+          schema:
+            type: string
+        - description: Time unit
+          in: query
+          name: timeUnit
+          required: true
+          schema:
+            enum:
+              - minute
+              - hour
+              - day
+              - week
+              - month
+              - year
+            type: string
+        - description: Cloud account
+          in: query
+          name: cloud.account
+          required: false
+          schema:
+            type: string
+        - description: Account group
+          in: query
+          name: account.group
+          required: false
+          schema:
+            type: string
+        - description: Cloud type
+          in: query
+          name: cloud.type
+          required: false
+          schema:
+            type: string
+        - description: Cloud region
+          in: query
+          name: cloud.region
+          required: false
+          schema:
+            type: string
+        - description: Cloud service
+          in: query
+          name: cloud.service
+          required: false
+          schema:
+            type: string
+        - description: Resource type
+          in: query
+          name: resource.type
+          required: false
+          schema:
+            type: string
+        - description:
+            Comma-separated list of values by to group response items. Valid
+            values are **cloud.type**, **cloud.account**, **cloud.region**, **cloud.service**,
+            and/or **resource.type**. Default is **cloud.type**.
+          in: query
+          name: groupBy
+          required: false
+          schema:
+            type: string
+        - description:
+            Whether or not the resources passed or failed the scan. **All**
+            includes both scanned and unscanned resources.
+          in: query
+          name: scan.status
+          required: false
+          schema:
+            enum:
+              - all
+              - passed
+              - failed
+            type: string
+        - description: Policy compliance standard name
+          in: query
+          name: policy.complianceStandard
+          required: false
+          schema:
+            type: string
+        - description: Policy compliance requirement name
+          in: query
+          name: policy.complianceRequirement
+          required: false
+          schema:
+            type: string
+        - description: Policy compliance section ID
+          in: query
+          name: policy.complianceSection
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/AssetInventorySnapshot"
+          description: success
+        "400":
+          description: bad_request
+        "404":
+          description: not_found
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Asset Inventory View V2 - GET
+      tags:
+        - Asset Inventory
+    post:
+      description:
+        "Returns asset inventory pass/fail data for the specified time\
+        \ period.  \r\n\r\nYou can get a list of the valid names and values for the\
+        \ filters body parameter \nthrough [List Inventory Filters V2](/api/cloud/cspm/asset-inventory#operation/get-asset-inventory-v2-filters-and-options)\
+        \ and [List Inventory Dashboard Filter Autocomplete \nSuggestions V2](/api/cloud/cspm/asset-inventory#operation/get-asset-inventory-v2-dashboard-filter-options).\n\
+        \nThe response includes an attribute **groupedAggregates**, whose content\
+        \ depends on the **groupBy** request body parameter.\nThe following table\
+        \ shows the attributes that **groupedAggregates** will include for the specified\
+        \ **groupBy** value:\n\n**groupBy**  | **groupedAggregates** Includes \n-------------|\
+        \ ------------------------------\n_not specified_ | **cloudTypeName**\n**cloudType**\
+        \ | **cloudTypeName**\n**cloud.account** | **accountName**\n**cloud.region**\
+        \ | **regionName**, **cloudTypeName**\n**cloud.service** | **serviceName**,\
+        \ **cloudTypeName**\n**resource.type** | **resourceTypeName**, **cloudTypeName**\n\
+        \n\nIf **groupBy** includes multiple values, then **groupedAggregates** will\
+        \ include multiple attributes. \n"
+      operationId: post-method-for-asset-inventory-v2
+      requestBody:
+        $ref: "#/components/requestBodies/FilterModel3"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AssetInventorySnapshot"
+          description: success
+        "404":
+          description: not_found
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Asset Inventory View V2 - POST
+      tags:
+        - Asset Inventory
+  /v2/inventory/trend:
+    get:
+      description:
+        Returns asset inventory pass/fail trends for the specified time
+        period.
+      operationId: asset-inventory-trend-v2
+      parameters:
+        - description: Time type
+          in: query
+          name: timeType
+          required: true
+          schema:
+            enum:
+              - relative
+            type: string
+        - description: Number of time units
+          in: query
+          name: timeAmount
+          required: true
+          schema:
+            type: string
+        - description: Time unit
+          in: query
+          name: timeUnit
+          required: true
+          schema:
+            enum:
+              - minute
+              - hour
+              - day
+              - week
+              - month
+              - year
+            type: string
+        - description: Cloud account
+          in: query
+          name: cloud.account
+          required: false
+          schema:
+            type: string
+        - description: Account group
+          in: query
+          name: account.group
+          required: false
+          schema:
+            type: string
+        - description: Cloud type
+          in: query
+          name: cloud.type
+          required: false
+          schema:
+            type: string
+        - description: Cloud region
+          in: query
+          name: cloud.region
+          required: false
+          schema:
+            type: string
+        - description: Cloud service
+          in: query
+          name: cloud.service
+          required: false
+          schema:
+            type: string
+        - description: Resource type
+          in: query
+          name: resource.type
+          required: false
+          schema:
+            type: string
+        - description: Scan status
+          in: query
+          name: scan.status
+          required: false
+          schema:
+            type: string
+        - description: Policy compliance standard name
+          in: query
+          name: policy.complianceStandard
+          required: false
+          schema:
+            type: string
+        - description: Policy compliance requirement name
+          in: query
+          name: policy.complianceRequirement
+          required: false
+          schema:
+            type: string
+        - description: Policy compliance section ID
+          in: query
+          name: policy.complianceSection
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                items:
+                  $ref: "#/components/schemas/AssetInventorySummary"
+                type: array
+          description: success
+        "400":
+          description: bad_request
+        "404":
+          description: not_found
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Asset Inventory Trend View V2 - GET
+      tags:
+        - Asset Inventory
+    post:
+      description:
+        "Returns asset inventory pass/fail trends for the specified time\
+        \ period.  \r\n\r\nYou can get a list of the valid names and values for the\
+        \ filters body parameter \nthrough [List Inventory Filters V2](/api/cloud/cspm/asset-inventory#operation/get-asset-inventory-v2-filters-and-options)\
+        \ \nand [List Inventory Dashboard Filter Autocomplete Suggestions V2](/api/cloud/cspm/asset-inventory#operation/get-asset-inventory-v2-dashboard-filter-options).\n"
+      operationId: post-method-asset-inventory-trend-v2
+      requestBody:
+        $ref: "#/components/requestBodies/FilterModel3"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/AssetInventorySummary"
+                type: array
+          description: success
+        "404":
+          description: not_found
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Asset Inventory Trend View V2 - POST
+      tags:
+        - Asset Inventory
+servers:
+  - url: https://api.prismacloud.io
+tags:
+  - description: The Asset Inventory Dashboard endpoints are listed below.
+    name: Asset Inventory

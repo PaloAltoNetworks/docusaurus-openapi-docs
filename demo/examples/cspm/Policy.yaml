@@ -1,0 +1,1355 @@
+components:
+  requestBodies:
+    FilterSuggestionModel:
+      content:
+        application/json; charset=UTF-8:
+          schema:
+            $ref: "#/components/schemas/FilterSuggestionModel"
+    PolicyModel:
+      content:
+        application/json; charset=UTF-8:
+          schema:
+            $ref: "#/components/schemas/PolicyModel"
+      description: Model for Policy
+      required: true
+  securitySchemes:
+    x-redlock-auth:
+      description: The x-redlock-auth value is a JSON Web Token (JWT).
+      in: header
+      name: x-redlock-auth
+      type: apiKey
+  schemas:
+    ComplianceMetadataModel:
+      description: Model for ComplianceMetadata
+      properties:
+        complianceId:
+          description: Compliance Section UUID
+          type: string
+        customAssigned:
+          type: boolean
+        policyId:
+          description: Policy ID
+          type: string
+        requirementDescription:
+          description: Requirement description
+          type: string
+        requirementId:
+          description: Requirement ID
+          type: string
+        requirementName:
+          description: Requirement name
+          type: string
+        sectionDescription:
+          description: Section name
+          type: string
+        sectionId:
+          description: Section Id
+          type: string
+        sectionLabel:
+          description: Section Label
+          type: string
+        standardDescription:
+          description: Compliance standard description
+          type: string
+        standardName:
+          description: Compliance standard name
+          type: string
+      type: object
+    FilterSuggestion:
+      description: Model for FilterSuggestion
+      properties:
+        nameValue:
+          description: Filter options
+          items:
+            $ref: "#/components/schemas/NameValueIntegerString"
+          type: array
+        options:
+          description:
+            Filter options, which lists all the default options for static
+            filters or all the recent options, if any, for non-static filters
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+        staticFilter:
+          description: Filter is a static filter
+          type: boolean
+      type: object
+    FilterSuggestionModel:
+      description: Model for Filter Suggestions
+      properties:
+        filterName:
+          description: Filter name
+          type: string
+        query:
+          description:
+            Case-insensitive fuzzy search autocomplete filter. Includes
+            only items that contain the query as a substring.
+          type: string
+      required:
+        - filterName
+      type: object
+    LegacyPolicyViewModel:
+      description: Model for Policy View
+      properties:
+        cloudType:
+          description:
+            Cloud type (Required for config policies). Not case-sensitive.
+            Default is **ALL**.
+          enum:
+            - ALL
+            - AWS
+            - AZURE
+            - GCP
+            - ALIBABA_CLOUD
+            - OCI
+          type: string
+        complianceMetadata:
+          description:
+            List of compliance data. Each item has compliance standard,
+            requirement, and/or section information.
+          items:
+            $ref: "#/components/schemas/ComplianceMetadataModel"
+          type: array
+        createdBy:
+          description: Created by
+          readOnly: true
+          type: string
+        createdOn:
+          description: Created on this timestamp
+          format: int64
+          readOnly: true
+          type: integer
+        deleted:
+          description: Deleted
+          readOnly: true
+          type: boolean
+        description:
+          description: Policy description
+          type: string
+        enabled:
+          description: true=enabled. false=disabled.
+          type: boolean
+        labels:
+          description: Labels
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+        lastModifiedBy:
+          description: Last modified by
+          readOnly: true
+          type: string
+        lastModifiedOn:
+          description: Last modified on this timestamp
+          format: int64
+          readOnly: true
+          type: integer
+        name:
+          description: Policy name
+          type: string
+        openAlertsCount:
+          description: Open Alerts Count (Deprecated)
+          format: int32
+          type: integer
+        overridden:
+          description: Overridden
+          readOnly: true
+          type: boolean
+        owner:
+          description: Owner
+          type: string
+        policyCategory:
+          description: PolicyCategory
+          enum:
+            - risk
+            - incident
+          type: string
+        policyClass:
+          description: PolicyClass
+          enum:
+            - behavioral
+            - privileged_activity_monitoring
+            - network_protection
+            - exposure
+            - vulnerabilities
+          type: string
+        policyId:
+          description: Policy ID
+          readOnly: true
+          type: string
+        policyMode:
+          description: PolicyMode
+          enum:
+            - custom/redlock_default
+          type: string
+        policySubTypes:
+          description: Policy subtype
+          items:
+            enum:
+              - run
+              - build
+              - run_and_build
+              - audit
+              - data_classification
+              - malware
+              - network_event
+              - network
+              - ueba
+              - permissions
+              - network_config
+            type: string
+          readOnly: true
+          type: array
+          uniqueItems: true
+        policyType:
+          description: Policy type. Policy type **anomaly** is read-only.
+          enum:
+            - config
+            - network
+            - audit_event
+            - anomaly
+            - data
+            - iam
+          type: string
+        policyUpi:
+          description: Policy UPI
+          readOnly: true
+          type: string
+        recommendation:
+          description: Remediation recommendation
+          type: string
+        remediable:
+          description: isRemediable
+          readOnly: true
+          type: boolean
+        remediation:
+          allOf:
+            - $ref: "#/components/schemas/RemediationModel"
+            - description: Auto remediation info. Available only if policy is remediable.
+        restrictAlertDismissal:
+          description: Restrict alert dismissal
+          readOnly: true
+          type: boolean
+        rule:
+          allOf:
+            - $ref: "#/components/schemas/RuleModel"
+            - description: Policy rule (Contains RQL search query or saved search)
+        ruleLastModifiedOn:
+          description: Rule last modified on
+          format: int64
+          readOnly: true
+          type: integer
+        severity:
+          description: Severity
+          enum:
+            - high
+            - medium
+            - low
+          type: string
+        systemDefault:
+          description: true = Policy is a Prisma Cloud system default policy
+          readOnly: true
+          type: boolean
+      required:
+        - name
+        - policyType
+        - rule
+        - severity
+      type: object
+    NameValueIntegerString:
+      properties:
+        id:
+          format: int32
+          type: integer
+        name:
+          type: string
+      type: object
+    ParsedTableFilter:
+      description: Model for parsed table filter
+      properties:
+        completeParameters:
+          items:
+            $ref: "#/components/schemas/UIFilterModel"
+          type: array
+        links:
+          description: JSON query builder links
+          type: string
+        needsOffsetUpdate:
+          description: Needs offset update (for internal use)
+          type: boolean
+        offset:
+          description: Offset within query
+          format: int32
+          type: integer
+        queryRemainder:
+          description: Query remainder
+          type: string
+        suggestions:
+          description: List of suggestions
+          items:
+            type: string
+          type: array
+        translate:
+          description: Translate (for internal use)
+          type: boolean
+        valid:
+          description: Query is valid
+          type: boolean
+      type: object
+    PolicyFilterSuggestion:
+      description: Model for PolicyFilterSuggestion
+      properties:
+        cloud.type:
+          allOf:
+            - $ref: "#/components/schemas/FilterSuggestion"
+            - readOnly: true
+        policy.category:
+          allOf:
+            - $ref: "#/components/schemas/FilterSuggestion"
+            - readOnly: true
+        policy.class:
+          $ref: "#/components/schemas/FilterSuggestion"
+        policy.complianceRequirement:
+          $ref: "#/components/schemas/FilterSuggestion"
+        policy.complianceSection:
+          $ref: "#/components/schemas/FilterSuggestion"
+        policy.complianceStandard:
+          $ref: "#/components/schemas/FilterSuggestion"
+        policy.enabled:
+          allOf:
+            - $ref: "#/components/schemas/FilterSuggestion"
+            - readOnly: true
+        policy.label:
+          $ref: "#/components/schemas/FilterSuggestion"
+        policy.name:
+          $ref: "#/components/schemas/FilterSuggestion"
+        policy.policyMode:
+          allOf:
+            - $ref: "#/components/schemas/FilterSuggestion"
+            - readOnly: true
+        policy.remediable:
+          allOf:
+            - $ref: "#/components/schemas/FilterSuggestion"
+            - readOnly: true
+        policy.rule.type:
+          $ref: "#/components/schemas/FilterSuggestion"
+        policy.severity:
+          allOf:
+            - $ref: "#/components/schemas/FilterSuggestion"
+            - readOnly: true
+        policy.subtype:
+          allOf:
+            - $ref: "#/components/schemas/FilterSuggestion"
+            - readOnly: true
+        policy.type:
+          $ref: "#/components/schemas/FilterSuggestion"
+      type: object
+    PolicyModel:
+      description: Model for Policy
+      properties:
+        cloudType:
+          description:
+            Cloud type (Required for config policies). Not case-sensitive.
+            Default is **ALL**.
+          enum:
+            - ALL
+            - AWS
+            - AZURE
+            - GCP
+            - ALIBABA_CLOUD
+            - OCI
+          type: string
+        complianceMetadata:
+          description:
+            List of compliance data. Each item has compliance standard,
+            requirement, and/or section information.
+          items:
+            $ref: "#/components/schemas/ComplianceMetadataModel"
+          type: array
+        createdBy:
+          description: Created by
+          readOnly: true
+          type: string
+        createdOn:
+          description: Created on this timestamp
+          format: int64
+          readOnly: true
+          type: integer
+        deleted:
+          description: Deleted
+          readOnly: true
+          type: boolean
+        description:
+          description: Policy description
+          type: string
+        enabled:
+          description: true=enabled. false=disabled.
+          type: boolean
+        labels:
+          description: Labels
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+        lastModifiedBy:
+          description: Last modified by
+          readOnly: true
+          type: string
+        lastModifiedOn:
+          description: Last modified on this timestamp
+          format: int64
+          readOnly: true
+          type: integer
+        name:
+          description: Policy name
+          type: string
+        overridden:
+          description: Overridden
+          readOnly: true
+          type: boolean
+        policyId:
+          description: Policy ID
+          readOnly: true
+          type: string
+        policySubTypes:
+          description: Policy subtype
+          items:
+            enum:
+              - run
+              - build
+              - run_and_build
+              - audit
+              - data_classification
+              - malware
+              - network_event
+              - network
+              - ueba
+              - permissions
+              - network_config
+            type: string
+          readOnly: true
+          type: array
+          uniqueItems: true
+        policyType:
+          description: Policy type. Policy type **anomaly** is read-only.
+          enum:
+            - config
+            - network
+            - audit_event
+            - anomaly
+            - data
+            - iam
+          type: string
+        policyUpi:
+          description: Policy UPI
+          readOnly: true
+          type: string
+        recommendation:
+          description: Remediation recommendation
+          type: string
+        remediable:
+          description: isRemediable
+          readOnly: true
+          type: boolean
+        remediation:
+          allOf:
+            - $ref: "#/components/schemas/RemediationModel"
+            - description: Auto remediation info. Available only if policy is remediable.
+        restrictAlertDismissal:
+          description: Restrict alert dismissal
+          readOnly: true
+          type: boolean
+        rule:
+          allOf:
+            - $ref: "#/components/schemas/RuleModel"
+            - description: Policy rule (Contains RQL search query or saved search)
+        ruleLastModifiedOn:
+          description: Rule last modified on
+          format: int64
+          readOnly: true
+          type: integer
+        severity:
+          description: Severity
+          enum:
+            - high
+            - medium
+            - low
+          type: string
+        systemDefault:
+          description: true = Policy is a Prisma Cloud system default policy
+          readOnly: true
+          type: boolean
+      required:
+        - name
+        - policyType
+        - rule
+        - severity
+      type: object
+    PolicyViewModel:
+      description: Model for Policy View V2
+      properties:
+        cloudType:
+          description:
+            Cloud type (Required for config policies). Not case-sensitive.
+            Default is **ALL**.
+          enum:
+            - ALL
+            - AWS
+            - AZURE
+            - GCP
+            - ALIBABA_CLOUD
+            - OCI
+          type: string
+        complianceMetadata:
+          description:
+            List of compliance data. Each item has compliance standard,
+            requirement, and/or section information.
+          items:
+            $ref: "#/components/schemas/ComplianceMetadataModel"
+          type: array
+        createdBy:
+          description: Created by
+          readOnly: true
+          type: string
+        createdOn:
+          description: Created on this timestamp
+          format: int64
+          readOnly: true
+          type: integer
+        deleted:
+          description: Deleted
+          readOnly: true
+          type: boolean
+        description:
+          description: Policy description
+          type: string
+        enabled:
+          description: true=enabled. false=disabled.
+          type: boolean
+        labels:
+          description: Labels
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+        lastModifiedBy:
+          description: Last modified by
+          readOnly: true
+          type: string
+        lastModifiedOn:
+          description: Last modified on this timestamp
+          format: int64
+          readOnly: true
+          type: integer
+        name:
+          description: Policy name
+          type: string
+        overridden:
+          description: Overridden
+          readOnly: true
+          type: boolean
+        owner:
+          description: Owner
+          type: string
+        policyCategory:
+          description: PolicyCategory
+          enum:
+            - risk
+            - incident
+          type: string
+        policyClass:
+          description: PolicyClass
+          enum:
+            - behavioral
+            - privileged_activity_monitoring
+            - network_protection
+            - exposure
+            - vulnerabilities
+          type: string
+        policyId:
+          description: Policy ID
+          readOnly: true
+          type: string
+        policyMode:
+          description: PolicyMode
+          enum:
+            - custom/redlock_default
+          type: string
+        policySubTypes:
+          description: Policy subtype
+          items:
+            enum:
+              - run
+              - build
+              - run_and_build
+              - audit
+              - data_classification
+              - malware
+              - network_event
+              - network
+              - ueba
+              - permissions
+              - network_config
+            type: string
+          readOnly: true
+          type: array
+          uniqueItems: true
+        policyType:
+          description: Policy type. Policy type **anomaly** is read-only.
+          enum:
+            - config
+            - network
+            - audit_event
+            - anomaly
+            - data
+            - iam
+          type: string
+        policyUpi:
+          description: Policy UPI
+          readOnly: true
+          type: string
+        recommendation:
+          description: Remediation recommendation
+          type: string
+        remediable:
+          description: isRemediable
+          readOnly: true
+          type: boolean
+        remediation:
+          allOf:
+            - $ref: "#/components/schemas/RemediationModel"
+            - description: Auto remediation info. Available only if policy is remediable.
+        restrictAlertDismissal:
+          description: Restrict alert dismissal
+          readOnly: true
+          type: boolean
+        rule:
+          allOf:
+            - $ref: "#/components/schemas/RuleModel"
+            - description: Policy rule (Contains RQL search query or saved search)
+        ruleLastModifiedOn:
+          description: Rule last modified on
+          format: int64
+          readOnly: true
+          type: integer
+        severity:
+          description: Severity
+          enum:
+            - high
+            - medium
+            - low
+          type: string
+        systemDefault:
+          description: true = Policy is a Prisma Cloud system default policy
+          readOnly: true
+          type: boolean
+      required:
+        - name
+        - policyType
+        - rule
+        - severity
+      type: object
+    RemediationAction:
+      description: Action for remediation for data policy.
+      properties:
+        operation:
+          type: string
+        payload:
+          type: string
+      type: object
+    RemediationModel:
+      description: Model for Remediation
+      properties:
+        actions:
+          description: Policy Action
+          items:
+            $ref: "#/components/schemas/RemediationAction"
+          type: array
+        cliScriptTemplate:
+          description: CLI Script Template
+          type: string
+        description:
+          description: Description
+          type: string
+      type: object
+    RuleCriteria:
+      description: Criteria for Rule
+      properties:
+        classificationResult:
+          description: Data policy. Required for DLP rule criteria.
+          type: string
+        exposure:
+          description: File exposure
+          enum:
+            - private
+            - public
+            - conditional
+          type: string
+        extension:
+          description: File extensions
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+      type: object
+    RuleModel:
+      description: Model for Rule
+      properties:
+        apiName:
+          description: API name
+          readOnly: true
+          type: string
+        cloudAccount:
+          description: Cloud account
+          readOnly: true
+          type: string
+        cloudType:
+          description: Cloud type
+          readOnly: true
+          type: string
+        criteria:
+          description: Saved search ID that defines the rule criteria.
+          type: string
+        dataCriteria:
+          allOf:
+            - $ref: "#/components/schemas/RuleCriteria"
+            - description: Rule criteria for DLP data policy
+        name:
+          description: Name
+          type: string
+        parameters:
+          additionalProperties:
+            type: string
+          description: 'Parameters (e.g. {"savedSearch": "true"})'
+          type: object
+        resourceIdPath:
+          description: Resource ID path
+          readOnly: true
+          type: string
+        resourceType:
+          description: Resource type
+          readOnly: true
+          type: string
+        type:
+          description: Type of rule or RQL query
+          enum:
+            - Config
+            - Network
+            - AuditEvent
+            - DLP
+            - IAM
+            - NetworkConfig
+          type: string
+      required:
+        - criteria
+        - name
+        - parameters
+        - type
+      type: object
+    UIFilterModel:
+      description: Model for UIFilter
+      properties:
+        name:
+          description: Name
+          type: string
+        operator:
+          description: Operator
+          enum:
+            - =
+          type: string
+        value:
+          description: Value
+          type: string
+      type: object
+info:
+  contact: {}
+  description:
+    "A policy is a set of one or more constraints or conditions that must\
+    \ be adhered to. Prisma Cloud provides \npredefined policies for configurations\
+    \ and access controls that adhere to established security best \npractices such\
+    \ as PCI, GDPR, ISO 27001:2013, and NIST. These Prisma Cloud default polices cannot\
+    \ be modified. \nIn addition to these, you can create custom policies to monitor\
+    \ for violations and to enforce your own organizational standards.\n"
+  title: Prisma Cloud User Policy API Overview
+  version: Latest
+openapi: 3.0.0
+paths:
+  /filter/policy/suggest:
+    get:
+      description:
+        Returns an object whose keys are the supported policy filters and
+        corresponding values are the default or recent options for that filter.
+      operationId: get-policy-filters-and-options
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/PolicyFilterSuggestion"
+          description: successful operation
+      security:
+        - x-redlock-auth: []
+      summary: List Policy Filters
+      tags:
+        - Policy
+    post:
+      description:
+        Returns available options for a policy filter key. Also supports
+        fuzzy autocomplete search for easier filtering.
+      operationId: get-policy-filter-options
+      requestBody:
+        $ref: "#/components/requestBodies/FilterSuggestionModel"
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/ParsedTableFilter"
+          description: successful operation
+      security:
+        - x-redlock-auth: []
+      summary: List Policy Filter Autocomplete Suggestions
+      tags:
+        - Policy
+  /policy:
+    get:
+      description:
+        "Returns all available policies, both system default and custom.
+        You can apply filters to narrow the returned policy list to a subset of policies
+        or potentially to a specific policy. Response includes open alert counts,
+        which can affect performance. "
+      operationId: get-policies
+      parameters:
+        - description: Policy name
+          in: query
+          name: policy.name
+          required: false
+          schema:
+            type: string
+        - description: Policy severity
+          in: query
+          name: policy.severity
+          required: false
+          schema:
+            enum:
+              - high
+              - medium
+              - low
+            type: string
+        - description: Policy label
+          in: query
+          name: policy.label
+          required: false
+          schema:
+            type: string
+        - description: Policy type
+          in: query
+          name: policy.type
+          required: false
+          schema:
+            enum:
+              - config
+              - network
+              - audit_event
+            type: string
+        - description: Policy compliance standard name
+          in: query
+          name: policy.complianceStandard
+          required: false
+          schema:
+            type: string
+        - description: Policy compliance requirement name
+          in: query
+          name: policy.complianceRequirement
+          required: false
+          schema:
+            type: string
+        - description: Policy compliance section ID
+          in: query
+          name: policy.complianceSection
+          required: false
+          schema:
+            type: string
+        - description: Policy enabled
+          in: query
+          name: policy.enabled
+          required: false
+          schema:
+            enum:
+              - "true"
+              - "false"
+            type: string
+        - description: Policy mode
+          in: query
+          name: policy.policyMode
+          required: false
+          schema:
+            enum:
+              - custom
+              - redlock_default
+            type: string
+        - description: Policy is remediable
+          in: query
+          name: policy.remediable
+          required: false
+          schema:
+            enum:
+              - "true"
+              - "false"
+            type: string
+        - description: Cloud type
+          in: query
+          name: cloud.type
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                items:
+                  $ref: "#/components/schemas/LegacyPolicyViewModel"
+                type: array
+          description: successful operation
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: List Policies
+      tags:
+        - Policy
+    post:
+      description:
+        "Adds a new policy.  \r\n\r\nThe request to add a custom policy\
+        \ uses request body parameters that describe the following:\n\n* General policy\
+        \ information, such as name, labels, and severity\n* Whether or not the policy\
+        \ is enabled. If you don't specify a value for **enabled** when you add a\
+        \ policy, the default is **enabled**=**true**\n* A rule, which identifies\
+        \ a saved search that defines the policy constraints (i.e. RQL query)\n* Optional\
+        \ compliance standards\n* Optional remediation details\n\nThe following are\
+        \ some examples of request body parameters for a request to add a policy.\
+        \ A new custom policy requires a saved search.\nSpecify a saved search ID\
+        \ for the **criteria** request parameter. You can request a list of exiting\
+        \ saved searches through the endpoint to \n[View Search History](/api/cloud/cspm/search-manager#operation/search-history).\n\
+        \nNote that the request parameters to add a custom config policy require a\
+        \ **cloudType**. The requests for other policy types default to a **cloudType**\
+        \ of **ALL**.\n\nThe JSON below is an example of the minimal request body\
+        \ parameters you need to add a config policy: \n```json\n{\n  \"cloudType\"\
+        : \"aws\",\n  \"name\": \"Config test policy\",\n  \"policyType\": \"config\"\
+        ,\n  \"rule\": {\n    \"criteria\": \"e1234567-2798-4d1d-a1b0-52d60d49730b\"\
+        ,\n    \"name\": \"test rule\",\n    \"parameters\": {\n      \"savedSearch\"\
+        : \"true\"\n    },\n    \"type\": \"Config\"\n  },\n \"severity\": \"low\"\
+        \n}\n```\n\nThe JSON below is an example of the minimal request body parameters\
+        \ you need to add a network policy:\n```json\n{\n  \"name\": \"test-network-policy\"\
+        ,\n  \"policyType\": \"network\",\n  \"severity\": \"medium\",\n  \"rule\"\
+        : {\n    \"name\": \"test-network-rule\",\n    \"criteria\": \"c1234567-3a02-4392-a228-327d0db3324d\"\
+        ,\n    \"parameters\": {\n      \"savedSearch\": \"true\"\n    },\n    \"\
+        type\": \"Network\"\n  }\n}\n```\n\nThe JSON below is an example of the minimal\
+        \ request body parameters you need to add an audit event policy:\n```json\n\
+        {\n  \"name\":\"test-event-policy\",\n  \"policyType\":\"audit_event\",\n\
+        \  \"rule\":\n    {\"criteria\":\"91234567-087a-4318-a9b3-efe6041b87b1\",\n\
+        \     \"name\":\"test-rule1\",\n     \"parameters\":{\n       \"savedSearch\"\
+        :\"true\"\n     },\n     \"type\":\"AuditEvent\"\n    },\n  \"severity\":\"\
+        low\"\n}\n```\n\nThe JSON below is an example of the minimal request body\
+        \ parameters you need to add an IAM policy:\n```json\n{\n  \"cloudType\":\
+        \ \"ALL\",\n  \"name\": \"test-iam-policy\",\n  \"policyType\": \"IAM\",\n\
+        \  \"rule\": {\n    \"criteria\": \"71234567-7251-4d3b-9be1-cced127fd09d\"\
+        ,\n    \"name\": \"test-iam\",\n    \"parameters\": {\n      \"savedSearch\"\
+        : \"true\"\n    },\n    \"type\": \"IAM\"\n },\n \"severity\": \"medium\"\n\
+        }\n```\n\nThe JSON below is an example of the minimal request body parameters\
+        \ you need to add a config policy that includes a compliance standard:\n```json\n\
+        {\n    \"cloudType\": \"aws\",\n    \"complianceMetadata\": [\n        {\n\
+        \            \"standardName\": \"GDPR\",\n            \"requirementId\": \"\
+        Chapter 1\",\n            \"sectionId\": \"Article 1\",\n            \"customAssigned\"\
+        : true,\n            \"complianceId\": \"91234567-7ddf-4e44-96fd-95135d9fbc6b\"\
+        ,\n            \"requirementName\": \"General provisions\",\n            \"\
+        sectionLabel\": \"Article 1\"\n        }\n    ],\n    \"description\": \"\
+        API test\",\n    \"name\": \"demo\",\n    \"policyType\": \"config\",\n  \
+        \  \"rule\": {\n        \"criteria\": \"b1234567-84fc-4443-8cbc-f08f13fba586\"\
+        ,\n        \"name\": \"demo\",\n        \"parameters\": {\n            \"\
+        savedSearch\": \"true\"\n        },\n        \"type\": \"Config\"\n    },\n\
+        \    \"severity\": \"medium\"\n}        \n```\n\nThe JSON below is an example\
+        \ of the request body parameters you need to add a custom build policy:\n\
+        ```json\n{\n    \"cloudType\": \"aws\",\n    \"complianceMetadata\": [],\n\
+        \    \"description\": \"\",\n    \"labels\": [],\n    \"name\": \"demo\",\n\
+        \    \"policySubTypes\": [\n        \"build\"\n    ],\n    \"policyType\"\
+        : \"config\",\n    \"recommendation\": \"\",\n    \"rule\": {\n        \"\
+        children\": [\n            \"criteria\": \"{\\\"category\\\":\\\"Storage\\\
+        \",\\\"resourceTypes\\\":[\\\"aws_s3_bucket\\\"],\\\"conditionQuery\\\":{\\\
+        \"attribute\\\":\\\"acl\\\",\\\"operator\\\":\\\"not_equals\\\",\\\"value\\\
+        \":\\\"log-delivery-write\\\",\\\"cond_type\\\":\\\"attribute\\\"}}\",\n \
+        \           \"type\": \"build\",\n            \"recommendation\": \"\"\n \
+        \       }\n        ],\n        \"name\": \"demo\",\n        \"parameters\"\
+        : {\n            \"savedSearch\": \"false\",\n            \"withIac\": \"\
+        true\"\n        },\n        \"type\": \"Config\"\n    },\n    \"severity\"\
+        : \"low\"\n}\n```\n\n  The JSON below is an example of the minimal request\
+        \ body parameters you need to add a Code Security build config policy:\n```json\n\
+        {\n    \"cloudType\": \"aws\",\n    \"name\": \"demo\",\n    \"policySubTypes\"\
+        : [\n        \"build\"\n    ],\n    \"policyType\": \"config\",\n    \"rule\"\
+        : {\n        \"children\": [\n            {\n                \"criteria\"\
+        : \"{\\\"category\\\":\\\"General\\\",\\\"resourceTypes\\\":[\\\"aws_s3_bucket\\\
+        \"],\\\"conditionQuery\\\":{\\\"attribute\\\":\\\"acl\\\",\\\"operator\\\"\
+        :\\\"not_equals\\\",\\\"value\\\":\\\"log-delivery-write\\\",\\\"cond_type\\\
+        \":\\\"attribute\\\"}}\",\n                \"type\": \"build\",\n        \
+        \        \"recommendation\": \"\"\n            }\n        ],\n        \"name\"\
+        : \"demo rule\",\n        \"parameters\": {\n            \"savedSearch\":\
+        \ \"false\",\n            \"withIac\": \"true\"\n        },\n        \"type\"\
+        : \"Config\"\n    },\n    \"severity\": \"medium\"\n} \n``` \n"
+      operationId: add-policy
+      requestBody:
+        $ref: "#/components/requestBodies/PolicyModel"
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/PolicyModel"
+          description: successful operation
+        "400":
+          description:
+            missing_required_parameter / invalid_parameter_value / bad_requestmissing_required_parameter
+            / duplicate_name / invalid_search_cloud_type_for_policy / create_update_disallowed_for_json_schema_type_policy
+            / invalid_ruleremediation_allowed_only_for_config_policies / policy_remediation_disallowed_for_non_sys_admins
+            / unable_to_determine_sub_types
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Add Policy
+      tags:
+        - Policy
+  /v2/policy:
+    get:
+      description:
+        "Returns all available policies, both system default and custom.\
+        \ You can apply filters to narrow the returned policy list to a subset of\
+        \ policies or potentially to a specific policy. For improved performance,\
+        \ response does not include open alert counts.  \r\n\r\nFor a request to get\
+        \ a full list of supported filters, see [List Policy Filters](/api/cloud/cspm/policy#operation/get-policy-filters-and-options).\n"
+      operationId: get-policies-v2
+      parameters:
+        - description: Policy name
+          in: query
+          name: policy.name
+          required: false
+          schema:
+            type: string
+        - description: Policy severity
+          in: query
+          name: policy.severity
+          required: false
+          schema:
+            enum:
+              - high
+              - medium
+              - low
+            type: string
+        - description: Policy label
+          in: query
+          name: policy.label
+          required: false
+          schema:
+            type: string
+        - description: Policy rule template type
+          in: query
+          name: policy.rule.type
+          required: false
+          schema:
+            enum:
+              - tf
+              - cft
+              - k8s
+            type: string
+        - description: Policy subtype
+          in: query
+          name: policy.subtype
+          required: false
+          schema:
+            enum:
+              - run
+              - build
+              - run_and_build
+              - audit
+              - data_classification
+              - malware
+              - network_event
+              - network
+              - ueba
+              - permissions
+            type: string
+        - description: Policy type
+          in: query
+          name: policy.type
+          required: false
+          schema:
+            enum:
+              - config
+              - network
+              - audit_event
+            type: string
+        - description: Policy compliance standard name
+          in: query
+          name: policy.complianceStandard
+          required: false
+          schema:
+            type: string
+        - description: Policy compliance requirement name
+          in: query
+          name: policy.complianceRequirement
+          required: false
+          schema:
+            type: string
+        - description: Policy compliance section ID
+          in: query
+          name: policy.complianceSection
+          required: false
+          schema:
+            type: string
+        - description: Policy enabled
+          in: query
+          name: policy.enabled
+          required: false
+          schema:
+            enum:
+              - "true"
+              - "false"
+            type: string
+        - description: Policy mode
+          in: query
+          name: policy.policyMode
+          required: false
+          schema:
+            enum:
+              - custom
+              - redlock_default
+            type: string
+        - description: Policy is remediable
+          in: query
+          name: policy.remediable
+          required: false
+          schema:
+            enum:
+              - "true"
+              - "false"
+            type: string
+        - description: Cloud type
+          in: query
+          name: cloud.type
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                items:
+                  $ref: "#/components/schemas/PolicyViewModel"
+                type: array
+          description: successful operation
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: List Policies V2
+      tags:
+        - Policy
+  /policy/{id}:
+    get:
+      description: Returns the policy that has the specified policy ID.
+      operationId: get-policy
+      parameters:
+        - description: Policy ID
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/PolicyModel"
+          description: successful operation
+        "400":
+          description: invalid_parameter_value
+        "403":
+          description: permission_error
+        "404":
+          description: no_results
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Policy Info
+      tags:
+        - Policy
+    put:
+      description:
+        "Updates the existing policy that has the specified policy ID.\
+        \  \r\n\r\nAlthough multiple body parameters are marked as required, to update\
+        \ a policy, you need to provide only the \nbody parameters that you want to\
+        \ update. All body parameters that you don't update will\ndefault to the values\
+        \ of the existing policy.\n"
+      operationId: update-policy
+      parameters:
+        - description: Policy ID
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        $ref: "#/components/requestBodies/PolicyModel"
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/PolicyModel"
+          description: successful operation
+        "400":
+          description:
+            missing_required_parameter / invalid_parameter_value / policy_id_cannot_be_changed
+            /type_cannot_be_changed / create_update_disallowed_for_json_schema_type_policy
+            / duplicate_name / remediation_allowed_only_for_config_policies / policy_remediation_disallowed_for_non_sys_admins
+            / unable_to_determine_sub_types / compliance_mapping_update_disallowed_for_policy_type
+        "403":
+          description: not_system_admin_user / not_owner_or_same_role
+        "404":
+          description: not_found
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Update Policy
+      tags:
+        - Policy
+    delete:
+      description: Delete a policy using its ID.
+      operationId: delete-policy
+      parameters:
+        - description: Policy ID
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: success
+        "400":
+          description: missing_required_parameter/invalid_parameter_value
+        "403":
+          description: cannot_delete_default_policy/not_owner_or_same_role/cannot_delete_default_policy
+        "404":
+          description: no_results
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Delete Policy
+      tags:
+        - Policy
+  /policy/{id}/status/{enabled}:
+    patch:
+      description: Enable or disable a policy.
+      operationId: update-policy-status
+      parameters:
+        - description: Policy ID
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+        - description: Policy status (true = enabled)
+          in: path
+          name: enabled
+          required: true
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: "invalid_parameter_value / missing_required_param / "
+        "403":
+          description: not_found / not_system_admin_user / not_owner_or_same_role
+        "404":
+          description: not_found / failed_update_policy_status
+        "500":
+          description: failed_update_policy_status
+      security:
+        - x-redlock-auth: []
+      summary: Update Policy Status
+      tags:
+        - Policy
+  /policy/compliance:
+    get:
+      description:
+        Returns a list of compliance standards that Prisma Cloud supports
+        and for each compliance standard, lists the supported sections.
+      operationId: get-compliance-standards
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                additionalProperties:
+                  items:
+                    $ref: "#/components/schemas/ComplianceMetadataModel"
+                  type: array
+                  uniqueItems: true
+                type: object
+          description: successful operation
+      security:
+        - x-redlock-auth: []
+      summary: List Policy Compliance Standards
+      tags:
+        - Policy
+  /policy/rule/validate:
+    post:
+      description:
+        "Pre-validates a policy rule without creating an actual policy.\
+        \  \r\n\r\nThe only request body parameters for this request are:\n\n* **policyType**\
+        \ - Only the following are valid values for **policyType**:\n    * \"config\"\
+        \ \n    * \"network\"\n    * \"audit_event\" \n    * \"iam\" \n\n* **rule**\
+        \ - The **rule.criteria** value is the RQL search query for the rule you want\
+        \ to validate. Validation of this rule implies validation of a policy you\
+        \ might create with this rule.\n\nOnly the parameters above apply to this\
+        \ request, and both of these parameters are required.\n\nThe JSON below is\
+        \ an example of valid request body parameters:\n\n```json\n{\n    \"policyType\"\
+        : \"config\",\n    \"rule\": {\n        \"criteria\": \"config from cloud.resource\
+        \ where cloud.type = '\\''azure'\\'' AND api.name = '\\''azure-security-center-settings'\\\
+        '' AND json.rule = '\\''autoProvisioningSettings[*].name equals default and\
+        \ (autoProvisioningSettings[*].properties.autoProvision equals Off or autoProvisioningSettings[*]\
+        \ does not exist)'\\''\"\n    }\n}\n``` \n"
+      operationId: policy-rule-validate
+      requestBody:
+        $ref: "#/components/requestBodies/PolicyModel"
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description:
+            missing_required_parameter / saved_search_validation_not_supported
+            / preprocessor_not_allowed_for_policy / invalid_search_type_for_policy
+            / invalid_search_type_for_policy / insufficient_query_for_policy_creation  /invalid_hostfinding_type_redlock_in_search_query
+            / invalid_search_cloud_type_for_policy / invalid_azure_resource_group_in_search_query
+            / json_not_supported_in_event_query / anomaly_search_not_supported_in_event_query
+            / rql_validation_service_unavailable / invalid_json_rule
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Pre-validate Policy Rule
+      tags:
+        - Policy
+servers:
+  - url: https://api.prismacloud.io
+tags:
+  - description: The Policy endpoints are listed below.
+    name: Policy

@@ -1,0 +1,183 @@
+components:
+  requestBodies: {}
+  securitySchemes:
+    x-redlock-auth:
+      description: The x-redlock-auth value is a JSON Web Token (JWT).
+      in: header
+      name: x-redlock-auth
+      type: apiKey
+  schemas:
+    AdoptionAdvisorCheckModel:
+      description: Model for Adoption Advisor Check
+      properties:
+        category:
+          description: Category
+          type: string
+        checkName:
+          description: Check name
+          type: string
+        createdTime:
+          description: Creation time in milliseconds
+          format: int64
+          type: integer
+        errors:
+          description:
+            List of errors. Each item has the title, status, detail, and
+            parameters of each error.
+          items:
+            $ref: "#/components/schemas/AdoptionScoreProblemModel"
+          type: array
+        executionTimeMillis:
+          description: Execution time in milliseconds
+          format: int64
+          type: integer
+        internalKey:
+          description: Internal key
+          type: string
+        module:
+          description: Module
+          type: string
+        phase:
+          description: Phase
+          type: string
+        pillar:
+          description: Pillar
+          type: string
+        stage:
+          description: Stage
+          type: string
+        status:
+          description: Status of completion or calculation for this check
+          enum:
+            - COMPLETE
+            - IN_COMPLETE
+            - ERROR
+            - NOT_APPLICABLE
+            - IN_PROGRESS
+          type: string
+      type: object
+    AdoptionAdvisorChecksComputationResponseModel:
+      description: Model for Adoption Advisor Checks Computation Response
+      properties:
+        adoptionAdvisorChecks:
+          description: List of Adoption Advisor checks
+          items:
+            $ref: "#/components/schemas/AdoptionAdvisorCheckModel"
+          type: array
+        creationTimeMillis:
+          description: Creation time in milliseconds
+          format: int64
+          type: integer
+        customData:
+          additionalProperties:
+            items:
+              $ref: "#/components/schemas/CustomDataCountObjectModel"
+            type: array
+          description: Custom data objects map
+          type: object
+        customerName:
+          description: Customer name
+          type: string
+      type: object
+    AdoptionAdvisorChecksResponseModel:
+      description: Model for Adoption Advisor Checks Response
+      properties:
+        errors:
+          description:
+            List of errors. Each item has the title, status, detail, and
+            parameters of each error.
+          items:
+            $ref: "#/components/schemas/AdoptionScoreProblemModel"
+          type: array
+        response:
+          description: List of Adoption Advisor Checks Computation Responses
+          items:
+            $ref: "#/components/schemas/AdoptionAdvisorChecksComputationResponseModel"
+          type: array
+      type: object
+    AdoptionScoreProblemModel:
+      description: Model for Adoption Score Problem
+      properties:
+        detail:
+          description: Error details
+          type: string
+        status:
+          description: Status code
+          type: string
+        title:
+          description: Title of error
+          type: string
+      type: object
+    CustomDataCountObjectModel:
+      description: Model for Custom Data Category By Type
+      properties:
+        label:
+          description: Label for custom object
+          type: string
+        total:
+          description: Total number counted
+          format: int64
+          type: integer
+      type: object
+info:
+  contact: {}
+  description:
+    "The Adoption Advisor API provides visibility into which Prisma Cloud\
+    \ capabilities you have adopted and \nhelps you uncover security capabilities\
+    \ that you not have yet explored.  \n"
+  title: Prisma Adoption Advisor API Overview
+  version: Latest
+openapi: 3.0.0
+paths:
+  /adoptionadvisor/checks:
+    get:
+      description:
+        Returns data about the Prisma Cloud capabilities you've adopted
+        and identifies available capabilities not yet utilized.
+      operationId: get-adoption-check-score
+      parameters:
+        - description:
+            true = Show formula used to calculate capability use. Default
+            is false.
+          in: query
+          name: showFormula
+          required: false
+          schema:
+            type: boolean
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/AdoptionAdvisorChecksResponseModel"
+          description: Complete list of adoption check breakdowns
+        "202":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/AdoptionAdvisorChecksResponseModel"
+          description:
+            Request accepted. Partial list of adoption check breakdown
+            response as some scores are still being computed
+        "206":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/AdoptionAdvisorChecksResponseModel"
+          description:
+            Partial list of adoption check breakdown response. Errors were
+            encountered in one or more computations
+        "400":
+          description: bad_request
+        "401":
+          description: unauthorized_access
+      security:
+        - x-redlock-auth: []
+      summary: Get Adoption Check Score
+      tags:
+        - Adoption Advisor
+servers:
+  - url: https://api.prismacloud.io
+tags:
+  - description: The Adoption Advisor endpoints are listed below.
+    name: Adoption Advisor

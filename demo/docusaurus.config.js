@@ -43,41 +43,32 @@ const config = {
     [
       "@paloaltonetworks/docusaurus-plugin-openapi",
       {
-        id: "petstore",
-        path: "examples/petstore.yaml",
-        outputDir: "api/petstore",
-      },
-    ],
-    [
-      "@paloaltonetworks/docusaurus-plugin-openapi",
-      {
-        id: "cos",
-        path: "examples/openapi-cos.json",
-        outputDir: "api/cos",
-      },
-    ],
-    [
-      "@paloaltonetworks/docusaurus-plugin-openapi",
-      {
-        id: "openapi-issue",
-        path: "examples/openapi-issue-21.json",
-        outputDir: "api/openapi-issue",
-      },
-    ],
-    [
-      "@paloaltonetworks/docusaurus-plugin-openapi",
-      {
-        id: "burgers",
-        path: "examples/food/burgers/openapi.yaml",
-        outputDir: "api/food/burgers",
-      },
-    ],
-    [
-      "@paloaltonetworks/docusaurus-plugin-openapi",
-      {
-        id: "yogurt",
-        path: "examples/food/yogurtstore/openapi.yaml",
-        outputDir: "api/food/yogurtstore",
+        id: "here",
+        config: {
+          petstore: {
+            specPath: "examples/petstore.yaml",
+            outputDir: "api/petstore",
+            sidebarOptions: {
+              groupPathsBy: "tags",
+            },
+          },
+          cos: {
+            specPath: "examples/openapi-cos.json",
+            outputDir: "api/cos",
+          },
+          burgers: {
+            specPath: "examples/food/burgers/openapi.yaml",
+            outputDir: "api/food/burgers",
+          },
+          yogurt: {
+            specPath: "examples/food/yogurtstore/openapi.yaml",
+            outputDir: "api/food/yogurtstore",
+          },
+          "openapi-issue": {
+            specPath: "examples/openapi-issue-21.json",
+            outputDir: "api/openapi-issue",
+          },
+        },
       },
     ],
     // [require.resolve("./plugins/webpackOptimizer"), {}],
@@ -127,7 +118,7 @@ const config = {
             label: "Examples",
             position: "left",
             items: [
-              { to: "/api/petstore/", label: "Petstore" },
+              { to: "/api/category/petstore-api", label: "Petstore" },
               {
                 to: "/api/cos/create-a-bucket",
                 label: "Cloud Object Storage",

@@ -1,0 +1,159 @@
+components:
+  requestBodies: {}
+  securitySchemes:
+    x-redlock-auth:
+      description: The x-redlock-auth value is a JSON Web Token (JWT).
+      in: header
+      name: x-redlock-auth
+      type: apiKey
+  schemas:
+    CustomerNamesResponseModel:
+      description: "Model for Customer Info shown during customer selection "
+      properties:
+        customerName:
+          description: Customer Name
+          readOnly: true
+          type: string
+        prismaId:
+          description: Prisma Identifier
+          readOnly: true
+          type: string
+        tosAccepted:
+          description: Terms of Service Accepted
+          readOnly: true
+          type: boolean
+      type: object
+    LoginModel:
+      description: Model used for authentication
+      properties:
+        customerName:
+          description: Customer Name
+          type: string
+        password:
+          description: Secret key
+          type: string
+        prismaId:
+          description: Unique Prisma Identifier
+          type: string
+        username:
+          description: Access key ID
+          type: string
+      required:
+        - password
+        - username
+      type: object
+    LoginResponseModel:
+      description: Model containing authentication status and token
+      properties:
+        customerNames:
+          description: Customer names and property list
+          items:
+            $ref: "#/components/schemas/CustomerNamesResponseModel"
+          type: array
+        message:
+          description: Authentication status
+          type: string
+        roles:
+          description:
+            List of user permissions based on user role type. This attribute
+            is populated only for the refresh token response.
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+        token:
+          description: JSON Web Token (JWT)
+          type: string
+      type: object
+info:
+  contact: {}
+  description:
+    "For secure access to the Prisma Cloud REST API, you need a Prisma\
+    \ Cloud API access key. An access key includes \nan Access Key ID and a Secret\
+    \ Key. After you use Prisma Cloud to generate an access key, you can use the key\
+    \ \nto obtain a JSON Web Token (JWT), which is required to authenticate Prisma\
+    \ Cloud REST API requests. The \nfollowing steps summarize the API requests necessary\
+    \ to authenticate all other Prisma Cloud API requests.\n\n1. Use the POST /login\
+    \ request to obtain a JWT.\n2. Authenticate further REST API requests by submitting\
+    \ the JWT in an HTTP header parameter.\n   The following shows the HTTP header\
+    \ parameter key. \n\n   HTTP Request Header Parameter | Value \n   ------------------------------|\
+    \ ---------\n   x-redlock-auth | Your JWT from POST /login response\n3. Refresh\
+    \ the JWT when necessary. The JWT is valid for 10 minutes, and you must refresh\
+    \ the token for \n   continued access to the Prisma Cloud API. An expired JWT\
+    \ request causes an HTTP 401 (Unauthorized) \n   response. You can use the GET\
+    \ /auth_token/extend request to obtain a refreshed JWT.  \n"
+  title: Prisma Cloud Login API Overview
+  version: Latest
+openapi: 3.0.0
+paths:
+  /login:
+    post:
+      description:
+        "Returns a JWT auth token for accessing the Prisma Cloud APIs.\
+        \  To generate a token, you must have an access key and include the following\
+        \ values in the request body parameter — access key ID as the username and\
+        \ your secret key as the password. Prisma Cloud requires this JWT in the request\
+        \ header to authorize API access. Note that access keys maintain the same\
+        \ level of permissions as the permission group of the account that created\
+        \ them.   \r\n\r\nIf you are a multi-tenant user and the body parameters of\
+        \ your login request include a user name and password instead of an access\
+        \ key ID and secret key. You will also need to provide the **prismaId** or\
+        \ the **customerName**.\nSpecifying just the **prismaId** is preferred, but\
+        \ specifying **customerName** is an acceptable alternative. Your **prismaId**\
+        \ is available from the \nlicense information in the Prisma Cloud console.\
+        \ It's unnecessary to specify both **prismaId** and **customerName**, but\
+        \ if you do specify both, the parameters must indicate the same tenant. \n\
+        \nNote that you should specify not only the URL and required headers, but\
+        \ also the request body or payload in any **POST /login** request.\nSee [Use\
+        \ Curl to Generate JWT Tokens in Prisma Cloud](https://prisma.pan.dev/docs/cloud/cspm/cspm-gs#use-curl-to-generate-jwt-tokens-in-prisma-cloud)\
+        \ for a detailed example.\n"
+      operationId: app-login
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: "#/components/schemas/LoginModel"
+        description: Model used for authentication
+        required: true
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/LoginResponseModel"
+          description: successful operation
+        "401":
+          description: sso_enabled_password_login_attempt / invalid_credentials
+        "500":
+          description: login_failed_unknown_error
+      summary: Login
+      tags:
+        - Login
+  /auth_token/extend:
+    get:
+      description:
+        Extend a user's session. The JWT token returned is valid until
+        the next session timeout occurs. This method requires a valid session token
+        to be passed (token from a prior successful extend or login calls).
+      operationId: extend-session
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponseModel"
+          description: successful operation
+        "401":
+          description: token_expired
+        "500":
+          description: login_failed_unknown_error
+      security:
+        - x-redlock-auth: []
+      summary: Refresh Session
+      tags:
+        - Login
+servers:
+  - url: https://api.prismacloud.io
+tags:
+  - description: The Login endpoints are listed below.
+    name: Login

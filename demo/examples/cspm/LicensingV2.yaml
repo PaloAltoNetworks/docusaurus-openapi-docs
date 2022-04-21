@@ -1,0 +1,519 @@
+openapi: 3.0.1
+info:
+  title: Prisma Cloud License V2 API Overview
+  description: The Prisma Cloud License endpoints enable you to query your Prisma Cloud usage.
+  version: Latest
+  contact: {}
+tags:
+  - name: Licensing
+servers:
+  - url: "https://api.prismacloud.io"
+paths:
+  /license/api/v1/usage/time_series:
+    post:
+      tags:
+        - Licensing
+      summary: Resource Usage Over Time
+      description: Get a breakdown of resource usage over time.
+      operationId: license-usage-graph
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: "#/components/schemas/AccountListRequestModel"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/ResourceUsageGraphResponse"
+        "400":
+          description: invalid_parameter_value
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/SpringErrorResponse"
+        "403":
+          description: Forbidden
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/SpringErrorResponse"
+        "500":
+          description: internal_error
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/SpringErrorResponse"
+      security:
+        - x-redlock-auth: []
+  /license/api/v1/usage:
+    post:
+      tags:
+        - Licensing
+      summary: Usage Count By Cloud Type
+      description: |
+        Returns a breakdown of resources used per account for a single cloud type. 
+
+
+        You can request usage data in one of the following formats;
+        * Receive paginated usage data in the response object 
+        * Download usage data in a CSV file
+
+
+        By default, you will receive your paginated usage data in the response object. You can control the number of items in the 
+        response object through the **limit** request body parameter. If data beyond what's in the response object is available,
+        the response object attribute **nextPageToken** will provide a token you can set in the request parameter **pageToken** of your
+        next request to get the next page of usage data.
+
+
+        To download the usage data in a CSV file, set the following:
+        * Request header: **Accept: application/octet-stream**
+        * Request body parameter: **csvHeaderRequired** = **true**.
+
+
+        The following example curl command requests usage data in a CSV file:
+
+        ```bash
+        curl --location --request POST 'https://api.prismacloud.io/license/api/v1/usage' \
+        --header 'x-redlock-auth:<your JWT>' \
+        --header 'Content-Type: application/json' \
+        --header 'Accept: application/octet-stream' \
+        --data-raw '{
+            "timeRange": {
+                "type": "relative",
+                "value": {
+                    "amount": 1,
+                    "unit": "month"
+                }
+            },
+            "accountIds": [
+                "123456789987", 
+                "987654321123"
+            ],
+            "cloudType": "AWS",
+            "csvHeaderRequired": true
+        }'
+        ````
+
+      operationId: get-license-usage
+      parameters:
+        - name: cloud_type
+          in: query
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: "#/components/schemas/LicenseRequestModel"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/LicenseResponseModel"
+            "application/octet-stream":
+              schema:
+                $ref: "#/components/schemas/CsvMessage"
+        "400":
+          description: invalid_parameter_value
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/SpringErrorResponse"
+        "403":
+          description: Forbidden
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/SpringErrorResponse"
+        "500":
+          description: internal_error
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/SpringErrorResponse"
+      security:
+        - x-redlock-auth: []
+components:
+  schemas:
+    AbsoluteTimeRangeConfigModel:
+      allOf:
+        - $ref: "#/components/schemas/TimeRangeConfigModel"
+        - type: object
+          required:
+            - value
+          properties:
+            type:
+              type: string
+              example: absolute
+            value:
+              $ref: "#/components/schemas/TimeModel"
+          description: Model for AbsoluteTimeRangeConfig
+    CsvMessage:
+      type: object
+      properties:
+        headerComments:
+          type: array
+          description: List of header comments
+          items:
+            type: string
+            description: List of header comments
+        headers:
+          type: array
+          description: List of headers
+          items:
+            type: string
+            description: List of headers
+        rows:
+          type: array
+          description: List of rows
+          items:
+            type: array
+            description: List of rows
+            items:
+              type: string
+              description: List of rows
+      description: Model for CsvMessage
+    SpringErrorResponse:
+      required:
+        - error
+        - message
+        - path
+        - status
+        - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: string
+          description: timestamp
+        status:
+          type: integer
+          description: Http status
+          format: int32
+        error:
+          type: string
+          description: Error message
+        message:
+          type: string
+          description: Error message
+        path:
+          type: string
+          description: Request path
+      description: Error Response
+    AccountListRequestModel:
+      required:
+        - accountIds
+        - timeRange
+      type: object
+      properties:
+        accountIds:
+          type: array
+          description: List of account IDs
+          items:
+            type: string
+            description: Each item is an account ID
+        limit:
+          type: integer
+          description: Limit of items per request. Default is 1000.
+          format: int32
+          example: 100
+        timeRange:
+          $ref: "#/components/schemas/TimeRangeConfigModel"
+        cloudType:
+          type: string
+          description: Cloud type values
+          enum:
+            - aws
+            - azure
+            - gcp
+            - alibaba_cloud
+            - oci
+        csvHeaderRequired:
+          type: boolean
+          description: CSV file header
+          example: true
+      description: Model for AccountListRequest
+    RelativeTimeRangeConfigModel:
+      allOf:
+        - $ref: "#/components/schemas/TimeRangeConfigModel"
+        - type: object
+          required:
+            - value
+          properties:
+            type:
+              type: string
+              example: relative
+            value:
+              $ref: "#/components/schemas/RelativeTimeDurationModel"
+            relativeTimeType:
+              type: string
+              description: Direction in which to count time. Default = BACKWARD
+              enum:
+                - BACKWARD
+                - FORWARD
+          description: Model for RelativeTimeRangeConfig
+    RelativeTimeDurationModel:
+      description: Model for RelativeTimeDuration
+      properties:
+        amount:
+          description: Number of time units
+          example: 5
+          format: int32
+          type: integer
+        unit:
+          description: Time unit
+          example: day
+          enum:
+            - minute
+            - hour
+            - day
+            - week
+            - month
+            - year
+          type: string
+      type: object
+    GraphDataPoint:
+      type: object
+      properties:
+        timeRange:
+          $ref: "#/components/schemas/TimeRange"
+        countsByCloudType:
+          type: object
+          description: Graph resource usage by cloud type
+          additionalProperties:
+            type: object
+            additionalProperties:
+              type: integer
+              format: int32
+          writeOnly: true
+        counts:
+          type: object
+          description: Graph resource usage count
+          additionalProperties:
+            type: object
+            additionalProperties:
+              type: integer
+              format: int32
+      description: Graph GraphDataPoint points
+    ResourceUsageGraphResponse:
+      type: object
+      properties:
+        dataPoints:
+          type: array
+          description: Graph GraphDataPoint points
+          items:
+            $ref: "#/components/schemas/GraphDataPoint"
+        workloadsPurchased:
+          type: integer
+          description: Purchased workload count
+          format: int32
+        timeUnit:
+          type: string
+          description: Returned data time unit
+          enum:
+            - minute
+            - hour
+            - day
+            - week
+            - month
+            - year
+            - epoch
+            - login
+        availableAsOf:
+          type: integer
+          description: Selected data end time in milliseconds
+          format: int64
+      description: Graph resource usage
+    TimeRange:
+      required:
+        - endTime
+        - startTime
+      type: object
+      properties:
+        startTime:
+          type: object
+          properties:
+            empty:
+              type: boolean
+            present:
+              type: boolean
+            asLong:
+              type: integer
+              format: int64
+          description: Start time im milliseconds
+        endTime:
+          type: object
+          properties:
+            empty:
+              type: boolean
+            present:
+              type: boolean
+            asLong:
+              type: integer
+              format: int64
+          description: End time im milliseconds
+      description: Time range
+    Account:
+      type: object
+      description: Account
+      properties:
+        name:
+          type: string
+          description: Account name
+        id:
+          type: string
+          description: AccountID
+    Item:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Total
+          format: int32
+        account:
+          $ref: "#/components/schemas/Account"
+        resourceTypeCount:
+          type: object
+          description: Resource type count
+          additionalProperties:
+            type: object
+      description: >-
+        List of items. Each item contains the cloud account name and workload
+        count of resource type
+    LicenseResponseModel:
+      type: object
+      properties:
+        totalRows:
+          type: integer
+          description: Total number of rows for the query
+          format: int64
+        nextPageToken:
+          type: string
+          description: Token to be used for next page call
+        items:
+          type: array
+          description: >-
+            List of items. Each item contains cloud account name and the
+            workload count of resource type
+          items:
+            $ref: "#/components/schemas/Item"
+        stats:
+          $ref: "#/components/schemas/Stats"
+      description: Model containing Paginated License response
+    Stats:
+      type: object
+      properties:
+        stats:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int32
+      description: >-
+        Statistics to be shown. This contains the total workload per resource
+        type
+    LicenseRequestModel:
+      required:
+        - accountIds
+        - timeRange
+      type: object
+      properties:
+        accountIds:
+          type: array
+          description: List of account IDs
+          items:
+            type: string
+            description: List of account IDs
+        limit:
+          type: integer
+          description: Limit no of records per request
+          format: int32
+          example: 10
+        timeRange:
+          $ref: "#/components/schemas/TimeRangeConfigModel"
+        cloudType:
+          type: string
+          description: Cloud type values
+          enum:
+            - aws
+            - azure
+            - gcp
+            - alibaba_cloud
+            - oci
+        csvHeaderRequired:
+          type: boolean
+          description: CSV file header
+          example: true
+        pageToken:
+          type: string
+          description: Page token for pagination
+        offset:
+          type: integer
+          description: Offset
+          format: int64
+      description: Model for LicenseRequest
+    TimeModel:
+      description: Model for Time
+      properties:
+        endTime:
+          description: End timestamp
+          format: int64
+          type: integer
+          example: 1504794533000
+        startTime:
+          description: Start timestamp
+          format: int64
+          type: integer
+          example: 1504448933000
+      type: object
+    TimeRangeConfigModel:
+      type: object
+      required:
+        - type
+      description: |
+        See the [Time Range Model](/api/cloud/api-time-range-model) for details.
+      discriminator:
+        propertyName: type
+        mapping:
+          relative: "#/components/schemas/RelativeTimeRangeConfigModel"
+          absolute: "#/components/schemas/AbsoluteTimeRangeConfigModel"
+          to_now: "#/components/schemas/ToNowTimeRangeConfigModel"
+      oneOf:
+        - $ref: "#/components/schemas/RelativeTimeRangeConfigModel"
+        - $ref: "#/components/schemas/AbsoluteTimeRangeConfigModel"
+        - $ref: "#/components/schemas/ToNowTimeRangeConfigModel"
+      properties:
+        type:
+          type: string
+          description: Time type
+    ToNowTimeRangeConfigModel:
+      allOf:
+        - $ref: "#/components/schemas/TimeRangeConfigModel"
+        - description: Model for ToNowTimeRangeConfig
+          properties:
+            value:
+              description: Time range object
+              example: DAY
+              enum:
+                - MINUTE
+                - HOUR
+                - DAY
+                - WEEK
+                - MONTH
+                - YEAR
+                - EPOCH
+                - LOGIN
+              type: string
+          type: object
+  securitySchemes:
+    x-redlock-auth:
+      description: The x-redlock-auth value is a JSON Web Token (JWT).
+      in: header
+      name: x-redlock-auth
+      type: apiKey

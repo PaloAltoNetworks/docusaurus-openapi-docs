@@ -1,0 +1,951 @@
+components:
+  securitySchemes:
+    x-redlock-auth:
+      description: The x-redlock-auth value is a JSON Web Token (JWT).
+      in: header
+      name: x-redlock-auth
+      type: apiKey
+  schemas:
+    EventsApiError:
+      properties:
+        debugMessage:
+          type: string
+        message:
+          type: string
+        status:
+          enum:
+            - 100 CONTINUE
+            - 101 SWITCHING_PROTOCOLS
+            - 102 PROCESSING
+            - 103 CHECKPOINT
+            - 200 OK
+            - 201 CREATED
+            - 202 ACCEPTED
+            - 203 NON_AUTHORITATIVE_INFORMATION
+            - 204 NO_CONTENT
+            - 205 RESET_CONTENT
+            - 206 PARTIAL_CONTENT
+            - 207 MULTI_STATUS
+            - 208 ALREADY_REPORTED
+            - 226 IM_USED
+            - 300 MULTIPLE_CHOICES
+            - 301 MOVED_PERMANENTLY
+            - 302 FOUND
+            - 302 MOVED_TEMPORARILY
+            - 303 SEE_OTHER
+            - 304 NOT_MODIFIED
+            - 305 USE_PROXY
+            - 307 TEMPORARY_REDIRECT
+            - 308 PERMANENT_REDIRECT
+            - 400 BAD_REQUEST
+            - 401 UNAUTHORIZED
+            - 402 PAYMENT_REQUIRED
+            - 403 FORBIDDEN
+            - 404 NOT_FOUND
+            - 405 METHOD_NOT_ALLOWED
+            - 406 NOT_ACCEPTABLE
+            - 407 PROXY_AUTHENTICATION_REQUIRED
+            - 408 REQUEST_TIMEOUT
+            - 409 CONFLICT
+            - 410 GONE
+            - 411 LENGTH_REQUIRED
+            - 412 PRECONDITION_FAILED
+            - 413 PAYLOAD_TOO_LARGE
+            - 413 REQUEST_ENTITY_TOO_LARGE
+            - 414 URI_TOO_LONG
+            - 414 REQUEST_URI_TOO_LONG
+            - 415 UNSUPPORTED_MEDIA_TYPE
+            - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+            - 417 EXPECTATION_FAILED
+            - 418 I_AM_A_TEAPOT
+            - 419 INSUFFICIENT_SPACE_ON_RESOURCE
+            - 420 METHOD_FAILURE
+            - 421 DESTINATION_LOCKED
+            - 422 UNPROCESSABLE_ENTITY
+            - 423 LOCKED
+            - 424 FAILED_DEPENDENCY
+            - 425 TOO_EARLY
+            - 426 UPGRADE_REQUIRED
+            - 428 PRECONDITION_REQUIRED
+            - 429 TOO_MANY_REQUESTS
+            - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+            - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+            - 500 INTERNAL_SERVER_ERROR
+            - 501 NOT_IMPLEMENTED
+            - 502 BAD_GATEWAY
+            - 503 SERVICE_UNAVAILABLE
+            - 504 GATEWAY_TIMEOUT
+            - 505 HTTP_VERSION_NOT_SUPPORTED
+            - 506 VARIANT_ALSO_NEGOTIATES
+            - 507 INSUFFICIENT_STORAGE
+            - 508 LOOP_DETECTED
+            - 509 BANDWIDTH_LIMIT_EXCEEDED
+            - 510 NOT_EXTENDED
+            - 511 NETWORK_AUTHENTICATION_REQUIRED
+          type: string
+        subErrors:
+          items:
+            $ref: "#/components/schemas/EventsApiSubError"
+          type: array
+        timestamp:
+          format: int64
+          type: integer
+      type: object
+    EventsApiSubError:
+      type: object
+    EventsCreateIntegrationRequest:
+      properties:
+        description:
+          description: Integration description
+          example: This is the sample integration
+          type: string
+        integrationConfig:
+          additionalProperties:
+            description: |
+              Integration configuration. See 
+              [Integration Configurations](https://prisma.pan.dev/api/cloud/api-integration-config/).
+            example:
+              webhookUrl: https://hooks.slack.com/abcdef
+            type: object
+          description: |
+            Integration configuration. See 
+            [Integration Configurations](https://prisma.pan.dev/api/cloud/api-integration-config/).
+          type: object
+        integrationType:
+          description: Integration type
+          enum:
+            - slack
+            - splunk
+            - amazon_sqs
+            - webhook
+            - microsoft_teams
+            - azure_service_bus_queue
+            - jira
+            - service_now
+            - pager_duty
+            - demisto
+            - google_cscc
+            - aws_security_hub
+            - aws_s3
+            - snowflake
+          example: slack
+          type: string
+        name:
+          description: Integration name
+          example: sample-integration
+          maxLength: 100
+          minLength: 5
+          pattern: ^[A-Za-z0-9](.){0,99}$
+          type: string
+      required:
+        - integrationConfig
+        - integrationType
+        - name
+      type: object
+    EventsIntegrationModel:
+      properties:
+        createdBy:
+          description: User who created the integration
+          type: string
+        createdTs:
+          description: Creation Unix timestamp in milliseconds
+          format: int64
+          type: integer
+        description:
+          description: Integration description
+          type: string
+        enabled:
+          description: true = Integration enabled
+          type: boolean
+        id:
+          description: Integration ID
+          type: string
+        integrationConfig:
+          additionalProperties:
+            description: |
+              Integration configuration. See 
+              [Integration Configurations](https://prisma.pan.dev/api/cloud/api-integration-config/).
+            example:
+              webhookUrl: https://hooks.slack.com/abcdef
+            type: object
+          description: |
+            Integration configuration. See 
+            [Integration Configurations](https://prisma.pan.dev/api/cloud/api-integration-config/).
+          type: object
+        integrationType:
+          description: Integration type
+          enum:
+            - slack
+            - splunk
+            - amazon_sqs
+            - webhook
+            - microsoft_teams
+            - azure_service_bus_queue
+            - jira
+            - service_now
+            - pager_duty
+            - demisto
+            - google_cscc
+            - aws_security_hub
+            - aws_s3
+            - snowflake
+          type: string
+        lastModifiedBy:
+          description: User who modified integration last
+          type: string
+        lastModifiedTs:
+          description: Unix timestamp of last modification, in milliseconds
+          format: int64
+          type: integer
+        name:
+          description: Integration name
+          type: string
+        reason:
+          $ref: "#/components/schemas/EventsIntegrationStatusDetails"
+        status:
+          description: Integration state
+          enum:
+            - GREEN
+            - RED
+            - YELLOW
+            - NA
+          type: string
+        valid:
+          description: true = Valid integration
+          type: boolean
+      required:
+        - customerId
+        - name
+      type: object
+    EventsIntegrationStatusDetails:
+      properties:
+        details:
+          $ref: "#/components/schemas/EventsMessageDetails"
+        errorType:
+          description: Error type
+          enum:
+            - INVALID_CONFIG
+            - TRANSLATION_EXCEPTION
+            - INVALID_TEMPLATE_CONFIG
+            - HTTP_EXCEPTION
+            - OTHERS
+            - TEST
+          type: string
+        lastUpdated:
+          description: Unix timestamp of last update, in milliseconds
+          format: int64
+          type: integer
+        message:
+          description: Message
+          type: string
+      type: object
+    EventsMessageDetails:
+      properties:
+        i18nKey:
+          type: string
+        statusCode:
+          format: int32
+          type: integer
+        subject:
+          type: string
+      type: object
+    EventsPatchIntegrationRequest:
+      properties:
+        enabled:
+          description: true = Is enabled
+          example: true
+          type: boolean
+      required:
+        - enabled
+      type: object
+    EventsRegions:
+      properties:
+        regions:
+          description: AWS Region ID
+          example:
+            - us-east-1
+          items:
+            description: AWS Region ID
+            example: '["us-east-1"]'
+            type: string
+          type: array
+      type: object
+    EventsTestIntegrationRequest:
+      properties:
+        integrationConfig:
+          additionalProperties:
+            description: |
+              Integration configuration. See 
+              [Integration Configurations](https://prisma.pan.dev/api/cloud/api-integration-config/).
+            example:
+              webhookUrl: https://hooks.slack.com/abcdef
+            externalDocs:
+              url: https://prisma.pan.dev/api/cloud/api-integration-config
+            type: object
+          description: |
+            Integration configuration. See 
+            [Integration Configurations](https://prisma.pan.dev/api/cloud/api-integration-config/).
+          externalDocs:
+            url: https://prisma.pan.dev/api/cloud/api-integration-config
+          type: object
+        integrationType:
+          description: Integration type
+          enum:
+            - slack
+            - splunk
+            - amazon_sqs
+            - webhook
+            - microsoft_teams
+            - azure_service_bus_queue
+            - jira
+            - service_now
+            - pager_duty
+            - demisto
+            - google_cscc
+            - aws_security_hub
+            - aws_s3
+            - snowflake
+          example: slack
+          type: string
+        name:
+          description: Integration name
+          example: sample-integration
+          maxLength: 100
+          minLength: 5
+          pattern: ^[A-Za-z0-9](.){0,99}$
+          type: string
+      required:
+        - integrationConfig
+        - integrationType
+        - name
+      type: object
+    EventsUpdateIntegrationRequest:
+      properties:
+        description:
+          description: Integration description
+          example: This is the sample integration
+          type: string
+        enabled:
+          description: Is enabled
+          example: true
+          type: boolean
+        integrationConfig:
+          additionalProperties:
+            description: |
+              Integration configuration. See 
+              [Integration Configurations](https://prisma.pan.dev/api/cloud/api-integration-config/).
+            example:
+              webhookUrl: https://hooks.slack.com/abcdef
+            type: object
+          description: |
+            Integration configuration. See 
+            [Integration Configurations](https://prisma.pan.dev/api/cloud/api-integration-config/).
+          type: object
+        name:
+          description: Integration name
+          example: sample-integration
+          maxLength: 100
+          minLength: 5
+          pattern: ^[A-Za-z0-9](.){0,99}$
+          type: string
+      required:
+        - integrationConfig
+        - name
+      type: object
+info:
+  contact: {}
+  description: |
+    With multiple out-of-the-box integration options, you can integrate Prisma Cloud into security 
+    workflows and technologies that already exist in your organization.
+
+    **Note**: For Prisma Cloud integrations with the following, see [Integrations Pull](/api/cloud/cspm/integrations-pull):
+
+    * Okta
+    * Qualys
+    * Tenable
+
+    ### Integration Configuration
+
+    The model for an integration between Prisma Cloud and an external system includes
+    an **integrationConfig** parameter which is a map of key/value pairs. The
+    type of integration defines the content of these key/value pairs. See
+    [Integration Configurations](/api/cloud/api-integration-config) for more information about
+    integration API request body details, including the **integrationConfig**
+    request parameter key/value pairs that apply to your specific integration API.
+  title: Prisma Cloud External Integrations API
+  version: Latest
+openapi: 3.0.3
+paths:
+  /api/v1/tenant/{prismaId}/integration/channels:
+    get:
+      description: |
+        Returns a list of the supported integration types.
+
+        **Note**: This request does not support Prisma Cloud integrations with the following:
+
+        * Okta
+        * Qualys
+        * Tenable
+
+        For requests that support integration with the systems above, see [Integrations Pull](/api/cloud/cspm/integrations-pull).
+
+      operationId: get-supported-integration-channels-v1
+      parameters:
+        - description: |
+            Prisma ID. Your Prisma ID is available either from the response object of your 
+            [API request to log in](/api/cloud/cspm/login#operation/app-login) or 
+            from the licensing information in the Prisma Cloud console.
+          in: path
+          name: prismaId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Success Response:
+                  description: Example of successful response
+                  value:
+                    - "amazon_sqs"
+                    - "aws_s3"
+                    - "aws_security_hub"
+                    - "azure_service_bus_queue"
+                    - "demisto"
+                    - "google_cscc"
+                    - "jira"
+                    - "microsoft_teams"
+                    - "pager_duty"
+                    - "service_now"
+                    - "slack"
+                    - "snowflake"
+                    - "splunk"
+                    - "webhook"
+              schema:
+                items:
+                  type: string
+                type: array
+          description: OK
+        "429":
+          description: Too Many Requests
+        4XX:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventsApiError"
+          description: default response
+        "500":
+          description: Internal Server Error
+      security:
+        - x-redlock-auth: []
+      summary: Get Supported Integration Types
+      tags:
+        - Integrations
+  /api/v1/tenant/{prismaId}/integration:
+    get:
+      description: |
+        Returns a list of integrations.
+
+        The caller must have one of the following Prisma Cloud roles:
+
+        * System Admin
+        * Account Group Admin
+        * Account and Cloud Provisioning Admin
+        * Account Group Read Only
+
+        **Note**: This request does not support Prisma Cloud integrations with the following:
+
+        * Okta
+        * Qualys
+        * Tenable
+
+        For requests that support integration with the systems above, see [Integrations Pull](/api/cloud/cspm/integrations-pull).
+
+      operationId: get-all-integrations-v1
+      parameters:
+        - description: |
+            Prisma ID. Your Prisma ID is available either from the response object of your 
+            [API request to log in](/api/cloud/cspm/login#operation/app-login) or 
+            from the licensing information in the Prisma Cloud console.
+          in: path
+          name: prismaId
+          required: true
+          schema:
+            type: string
+        - description: " Comma-separated list of integration IDs"
+          in: query
+          name: ids
+          required: false
+          schema:
+            items:
+              type: string
+            type: array
+        - description: " Comma-separated list of integration types"
+          in: query
+          name: type
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: onlyEnabled
+          required: false
+          schema:
+            default: true
+            type: boolean
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/EventsIntegrationModel"
+                type: array
+          description: OK
+        "429":
+          description: Too many requests
+        4XX:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventsApiError"
+          description: default response
+        "500":
+          description: Internal Server Error
+      security:
+        - x-redlock-auth: []
+      summary: List Integrations
+      tags:
+        - Integrations
+    post:
+      description: |
+        Creates a Prisma Cloud integration with an external system. 
+
+        The caller must have a Prisma Cloud role of System Admin.
+
+        **Note**: This request does not support Prisma Cloud integrations with the following:
+
+        * Okta
+        * Qualys
+        * Tenable
+
+        For requests that support integration with the systems above, see [Integrations Pull](/api/cloud/cspm/integrations-pull).
+
+      operationId: create-integration-v1
+      parameters:
+        - description: |
+            Prisma ID. Your Prisma ID is available either from the response object of your 
+            [API request to log in](/api/cloud/cspm/login#operation/app-login) or 
+            from the licensing information in the Prisma Cloud console.
+          in: path
+          name: prismaId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EventsCreateIntegrationRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventsIntegrationModel"
+          description: OK
+        "429":
+          description: Too Many Requests
+        4XX:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventsApiError"
+          description: default response
+        "500":
+          description: Internal Server Error
+      security:
+        - x-redlock-auth: []
+      summary: Add Integration
+      tags:
+        - Integrations
+  /api/v1/tenant/{prismaId}/integration/{id}:
+    get:
+      description: |
+        Returns the integration with the specified ID.
+
+        The caller must have a Prisma Cloud role of System Admin.
+
+        **Note**: This request does not support Prisma Cloud integrations with the following:
+
+        * Okta
+        * Qualys
+        * Tenable
+
+        For requests that support integration with the systems above, see [Integrations Pull](/api/cloud/cspm/integrations-pull).
+      operationId: get-integration-v1
+      parameters:
+        - description: |
+            Prisma ID. Your Prisma ID is available either from the response object of your 
+            [API request to log in](/api/cloud/cspm/login#operation/app-login) or 
+            from the licensing information in the Prisma Cloud console.
+          in: path
+          name: prismaId
+          required: true
+          schema:
+            type: string
+        - description: Integration Id
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventsIntegrationModel"
+          description: OK
+        "429":
+          description: Too Many Requests
+        4XX:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventsApiError"
+          description: default response
+        "500":
+          description: Internal Server Error
+      security:
+        - x-redlock-auth: []
+      summary: Get Integration by ID
+      tags:
+        - Integrations
+    patch:
+      description: |
+        Updates the state of an integration. For example, you can enable or disable
+        an integration.
+
+        The caller must have a Prisma Cloud role of System Admin.
+
+        **Note**: This request does not support Prisma Cloud integrations with the following:
+
+        * Okta
+        * Qualys
+        * Tenable
+
+        For requests that support integration with the systems above, see [Integrations Pull](/api/cloud/cspm/integrations-pull).
+      operationId: update-integration-state-v1
+      parameters:
+        - description: |
+            Prisma ID. Your Prisma ID is available either from the response object of your 
+            [API request to log in](/api/cloud/cspm/login#operation/app-login) or 
+            from the licensing information in the Prisma Cloud console.
+          in: path
+          name: prismaId
+          required: true
+          schema:
+            type: string
+        - description: " Integration Id "
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EventsPatchIntegrationRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+        "429":
+          description: Too Many Requests
+        4XX:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventsApiError"
+          description: default response
+        "500":
+          description: Internal Server Error
+      security:
+        - x-redlock-auth: []
+      summary: Update Integration State
+      tags:
+        - Integrations
+    put:
+      description: |
+        Updates an integration.
+
+        The caller must have a Prisma Cloud role of System Admin.
+
+        **Note**: This request does not support Prisma Cloud integrations with the following:
+
+        * Okta
+        * Qualys
+        * Tenable
+
+        For requests that support integration with the systems above, see [Integrations Pull](/api/cloud/cspm/integrations-pull).
+
+      operationId: update-integration-v1
+      parameters:
+        - description: |
+            Prisma ID. Your Prisma ID is available either from the response object of your 
+            [API request to log in](/api/cloud/cspm/login#operation/app-login) or 
+            from the licensing information in the Prisma Cloud console.
+          in: path
+          name: prismaId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EventsUpdateIntegrationRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventsIntegrationModel"
+          description: OK
+        "429":
+          description: Too Many Requests
+        4XX:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventsApiError"
+          description: default response
+        "500":
+          description: Internal Server Error
+      security:
+        - x-redlock-auth: []
+      summary: Update Integration
+      tags:
+        - Integrations
+    delete:
+      description: |
+        Deletes an integration.
+
+        The caller must have a Prisma Cloud role of System Admin.
+
+        **Note**: This request does not support Prisma Cloud integrations with the following:
+
+        * Okta
+        * Qualys
+        * Tenable
+
+        For requests that support integration with the systems above, see [Integrations Pull](/api/cloud/cspm/integrations-pull).
+      operationId: delete-integration-v1
+      parameters:
+        - description: |
+            Prisma ID. Your Prisma ID is available either from the response object of your 
+            [API request to log in](/api/cloud/cspm/login#operation/app-login) or 
+            from the licensing information in the Prisma Cloud console.
+          in: path
+          name: prismaId
+          required: true
+          schema:
+            type: string
+        - description: Integration Id
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+        "429":
+          description: Too Many Requests
+        4XX:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventsApiError"
+          description: default response
+        "500":
+          description: Internal Server Error
+      security:
+        - x-redlock-auth: []
+      summary: Delete Integration
+      tags:
+        - Integrations
+  /api/v1/tenant/{prismaId}/integration/test:
+    post:
+      description: |
+        Runs a test of the integration for the specified data.
+
+        The caller must have a Prisma Cloud role of System Admin.
+
+        **Note**: This request does not support Prisma Cloud integrations with the following:
+
+        * Okta
+        * Qualys
+        * Tenable
+
+        For requests that support integration with the systems above, see [Integrations Pull](/api/cloud/cspm/integrations-pull).
+
+      operationId: test-integration-v1
+      parameters:
+        - description: |
+            Prisma ID. Your Prisma ID is available either from the response object of your 
+            [API request to log in](/api/cloud/cspm/login#operation/app-login) or 
+            from the licensing information in the Prisma Cloud console.
+          in: path
+          name: prismaId
+          required: true
+          schema:
+            type: string
+        - description: Integration Id
+          in: query
+          name: id
+          required: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EventsTestIntegrationRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+        "429":
+          description: Too Many Requests
+        4XX:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventsApiError"
+          description: default response
+        "500":
+          description: Internal Server Error
+      security:
+        - x-redlock-auth: []
+      summary: Test Integration
+      tags:
+        - Integrations
+  /api/v1/tenant/{prismaId}/integration/securityhub/regions/{accountId}:
+    get:
+      description: |
+        Returns a list of security-hub-enabled AWS regions for the specified AWS account.
+
+        The caller must have a Prisma Cloud role of System Admin.
+
+        **Note**: This request does not support Prisma Cloud integrations with the following:
+
+        * Okta
+        * Qualys
+        * Tenable
+
+        For requests that support integration with the systems above, see [Integrations Pull](/api/cloud/cspm/integrations-pull).
+      operationId: get-security-hub-region-by-account-id-v1
+      parameters:
+        - description: |
+            Prisma ID. Your Prisma ID is available either from the response object of your 
+            [API request to log in](/api/cloud/cspm/login#operation/app-login) or 
+            from the licensing information in the Prisma Cloud console.
+          in: path
+          name: prismaId
+          required: true
+          schema:
+            type: string
+        - description: AWS Account ID
+          in: path
+          name: accountId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventsRegions"
+          description: OK
+        "429":
+          description: Too Many Requests
+        4XX:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventsApiError"
+          description: default response
+        "500":
+          description: Internal Server Error
+      security:
+        - x-redlock-auth: []
+      summary: Get Security Hub Enabled Regions by AWS Account ID
+      tags:
+        - Integrations
+  /api/v1/tenant/{prismaId}/integration/securityhub/accounts:
+    get:
+      description: |
+        Returns the security-hub-enabled AWS account name and ID for the specified Prisma ID.
+
+        The caller must have a Prisma Cloud role of System Admin.
+
+        **Note**: This request does not support Prisma Cloud integrations with the following:
+
+        * Okta
+        * Qualys
+        * Tenable
+
+        For requests that support integration with the systems above, see [Integrations Pull](/api/cloud/cspm/integrations-pull).
+      operationId: get-security-hub-accounts-v1
+      parameters:
+        - description: |
+            Prisma ID. Your Prisma ID is available either from the response object of your 
+            [API request to log in](/api/cloud/cspm/login#operation/app-login) or 
+            from the licensing information in the Prisma Cloud console.
+          in: path
+          name: prismaId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                "200 ":
+                  description: "200"
+                  value: '{ "11111111": "account1"}'
+              schema:
+                type: string
+          description: OK
+        "429":
+          description: Too Many Requests
+        4XX:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventsApiError"
+          description: default response
+        "500":
+          description: Internal Server Error
+      security:
+        - x-redlock-auth: []
+      summary: Get Security Hub Enabled AWS Accounts
+      tags:
+        - Integrations
+servers:
+  - url: https://api.prismacloud.io
+tags:
+  - description: The Integrations endpoints are listed below.
+    name: Integrations

@@ -1,0 +1,1273 @@
+components:
+  requestBodies:
+    FilterModel3:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/FilterModel"
+    FilterSuggestionModel:
+      content:
+        application/json; charset=UTF-8:
+          schema:
+            $ref: "#/components/schemas/FilterSuggestionModel"
+  securitySchemes:
+    x-redlock-auth:
+      description: The x-redlock-auth value is a JSON Web Token (JWT).
+      in: header
+      name: x-redlock-auth
+      type: apiKey
+  schemas:
+    AbsoluteTimeRangeConfigModel:
+      allOf:
+        - $ref: "#/components/schemas/TimeRangeConfigModel"
+        - description: Model for AbsoluteTimeRangeConfig
+          properties:
+            type:
+              example: absolute
+              type: string
+            value:
+              allOf:
+                - $ref: "#/components/schemas/TimeModel"
+                - description: Time range object
+          required:
+            - value
+          type: object
+    ComplianceDetail:
+      description: Model for Compliance Detail on Posture API
+      properties:
+        assignedPolicies:
+          description: Number of policies assigned to the Compliance Standard/Requirement/Section
+          format: int32
+          type: integer
+        default:
+          description: Is System Default
+          type: boolean
+        description:
+          description: Description of Compliance Standard/Requirement/Section
+          type: string
+        failedResources:
+          description:
+            Number of failing Compliance Standard/Requirement/Section Scanned
+            Resources
+          format: int64
+          type: integer
+        highSeverityFailedResources:
+          description:
+            Number of Compliance Standard/Requirement/Section Scanned Resources
+            failing high severity policies
+          format: int64
+          type: integer
+        id:
+          description: ID of Compliance Standard/Requirement/Section
+          type: string
+        lowSeverityFailedResources:
+          description:
+            Number of Compliance Standard/Requirement/Section Scanned Resources
+            failing low severity policies
+          format: int64
+          type: integer
+        mediumSeverityFailedResources:
+          description:
+            Number of Compliance Standard/Requirement/Section Scanned Resources
+            failing medium severity policies
+          format: int64
+          type: integer
+        name:
+          description: Name of Compliance Standard/Requirement/Section
+          type: string
+        passedResources:
+          description:
+            Number of Passing Compliance Standard/Requirement/Section Scanned
+            Resources
+          format: int64
+          type: integer
+        totalResources:
+          description:
+            Total number of Compliance Standard/Requirement/Section Scanned
+            Resources
+          format: int64
+          type: integer
+      type: object
+    CompliancePosture:
+      description: Model for Compliance Posture
+      properties:
+        complianceDetails:
+          description: List of compliance detail
+          items:
+            $ref: "#/components/schemas/ComplianceDetail"
+          type: array
+        requestedTimestamp:
+          description: Requested timestamp
+          format: int64
+          type: integer
+        requirementSummaries:
+          description: List of requirement summaries
+          items:
+            $ref: "#/components/schemas/RequirementSummary"
+          type: array
+        summary:
+          allOf:
+            - $ref: "#/components/schemas/PostureSummary"
+            - description: Posture summary
+        timestamp:
+          description: Timestamp
+          format: int64
+          type: integer
+      type: object
+    CompliancePostureFilterSuggestion:
+      description: Model for CompliancePostureFilterSuggestion
+      properties:
+        account.group:
+          allOf:
+            - $ref: "#/components/schemas/FilterSuggestion"
+            - description: Account group
+        cloud.account:
+          allOf:
+            - $ref: "#/components/schemas/FilterSuggestion"
+            - description: Cloud account
+        cloud.region:
+          allOf:
+            - $ref: "#/components/schemas/FilterSuggestion"
+            - description: Cloud region
+        cloud.type:
+          allOf:
+            - $ref: "#/components/schemas/FilterSuggestion"
+            - readOnly: true
+        policy.complianceRequirement:
+          allOf:
+            - $ref: "#/components/schemas/FilterSuggestion"
+            - description: Policy compliance requirement
+        policy.complianceSection:
+          allOf:
+            - $ref: "#/components/schemas/FilterSuggestion"
+            - description: Policy compliance section
+        policy.complianceStandard:
+          allOf:
+            - $ref: "#/components/schemas/FilterSuggestion"
+            - description: Policy compliance standard
+      type: object
+    FilterModel:
+      description: Model for Filter
+      properties:
+        detailed:
+          description: Detailed
+          type: boolean
+        fields:
+          description: Array of specific fields to return
+          items:
+            type: string
+          type: array
+        filters:
+          description: Filtering parameters
+          items:
+            $ref: "#/components/schemas/UIFilterModel"
+          type: array
+        groupBy:
+          description:
+            For asset or data inventory only. Group returned items by **cloud.type**,
+            **cloud.service**, **cloud.region**, **cloud.account**, and/or **resource.type**
+          items:
+            type: string
+          type: array
+        limit:
+          description:
+            Maximum number of items to return. When data is paginated,
+            maximum number of items per page
+          type: number
+        offset:
+          description:
+            The number of items to skip before selecting items to return.
+            Default is zero
+          type: number
+        pageToken:
+          description:
+            "Setting this pagination Token to the **nextPageToken** from
+            a response object returns the next page of data "
+          type: string
+        sortBy:
+          description:
+            Array of sort properties. Append **:asc** or  **:desc** to
+            the key to sort by ascending or descending order respectively. Example
+            sort properties are **id:asc** and **timestamp:desc**
+          items:
+            type: string
+          type: array
+        timeRange:
+          allOf:
+            - $ref: "#/components/schemas/TimeRangeConfigModel"
+            - description: Time range
+      type: object
+    FilterSuggestion:
+      description: Model for FilterSuggestion
+      properties:
+        nameValue:
+          description: Filter options
+          items:
+            $ref: "#/components/schemas/NameValueIntegerString"
+          type: array
+        options:
+          description:
+            Filter options, which lists all the default options for static
+            filters or all the recent options, if any, for non-static filters
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+        staticFilter:
+          description: Filter is a static filter
+          type: boolean
+      type: object
+    FilterSuggestionModel:
+      description: Model for Filter Suggestions
+      properties:
+        filterName:
+          description: Filter name
+          type: string
+        query:
+          description:
+            Case-insensitive fuzzy search autocomplete filter. Includes
+            only items that contain the query as a substring.
+          type: string
+      required:
+        - filterName
+      type: object
+    NameValueIntegerString:
+      properties:
+        id:
+          format: int32
+          type: integer
+        name:
+          type: string
+      type: object
+    ParsedTableFilter:
+      description: Model for parsed table filter
+      properties:
+        completeParameters:
+          items:
+            $ref: "#/components/schemas/UIFilterModel"
+          type: array
+        links:
+          description: JSON query builder links
+          type: string
+        needsOffsetUpdate:
+          description: Needs offset update (for internal use)
+          type: boolean
+        offset:
+          description: Offset within query
+          format: int32
+          type: integer
+        queryRemainder:
+          description: Query remainder
+          type: string
+        suggestions:
+          description: List of suggestions
+          items:
+            type: string
+          type: array
+        translate:
+          description: Translate (for internal use)
+          type: boolean
+        valid:
+          description: Query is valid
+          type: boolean
+      type: object
+    PostureSummary:
+      description: Model for Compliance Posture Summary
+      properties:
+        failedResources:
+          description: Number of failed scanned compliance resources
+          format: int64
+          type: integer
+        highSeverityFailedResources:
+          description:
+            Number of scanned compliance resources that failed high severity
+            policies
+          format: int64
+          type: integer
+        lowSeverityFailedResources:
+          description:
+            Number of scanned compliance resources whose highest policy
+            failure is **low**
+          format: int64
+          type: integer
+        mediumSeverityFailedResources:
+          description:
+            Number of scanned compliance resources whose highest policy
+            failure is **medium**
+          format: int64
+          type: integer
+        passedResources:
+          description: Number of passed scanned compliance resources
+          format: int64
+          type: integer
+        timestamp:
+          description: Timestamp
+          format: int64
+          type: integer
+        totalResources:
+          description: Total number of scanned compliance resources
+          format: int64
+          type: integer
+      type: object
+    RelativeTimeDurationModel:
+      description: Model for RelativeTimeDuration
+      properties:
+        amount:
+          description: Number of time units
+          format: int32
+          type: integer
+        unit:
+          description: Time unit
+          enum:
+            - minute
+            - hour
+            - day
+            - week
+            - month
+            - year
+          type: string
+      type: object
+    RelativeTimeRangeConfigModel:
+      allOf:
+        - $ref: "#/components/schemas/TimeRangeConfigModel"
+        - description: Model for RelativeTimeRangeConfig
+          properties:
+            relativeTimeType:
+              description: Direction in which to count time. Default = BACKWARD
+              enum:
+                - BACKWARD
+                - FORWARD
+              type: string
+            type:
+              example: relative
+              type: string
+            value:
+              allOf:
+                - $ref: "#/components/schemas/RelativeTimeDurationModel"
+                - description: Time range object
+          required:
+            - value
+          type: object
+    RequirementSummary:
+      description: Model for Compliance Requirement Summary on Posture API
+      properties:
+        id:
+          description: Compliance Requirement ID
+          type: string
+        name:
+          description: Compliance Requirement name
+          type: string
+        sectionSummaries:
+          description: Section Summary list for the compliance requirement
+          items:
+            $ref: "#/components/schemas/SectionSummary"
+          type: array
+      type: object
+    SectionSummary:
+      description: Model for Compliance Section Summary on Posture API
+      properties:
+        failedResources:
+          description: Number of failed compliance section scanned resources
+          format: int64
+          type: integer
+        id:
+          description: Compliance section ID
+          type: string
+        name:
+          description: Compliance section name
+          type: string
+        passedResources:
+          description: Number of passed compliance section scanned resources
+          format: int64
+          type: integer
+        totalResources:
+          description: Total number of compliance section scanned resources
+          format: int64
+          type: integer
+      type: object
+    TimeModel:
+      description: Model for Time
+      properties:
+        endTime:
+          description: End timestamp
+          format: int64
+          type: integer
+        startTime:
+          description: Start timestamp
+          format: int64
+          type: integer
+      type: object
+    TimeRangeConfigModel:
+      description:
+        "See the [Time Range Model](/api/cloud/api-time-range-model) for
+        details.
+
+        "
+      discriminator:
+        mapping:
+          absolute: "#/components/schemas/AbsoluteTimeRangeConfigModel"
+          relative: "#/components/schemas/RelativeTimeRangeConfigModel"
+          to_now: "#/components/schemas/ToNowTimeRangeConfigModel"
+        propertyName: type
+      oneOf:
+        - $ref: "#/components/schemas/RelativeTimeRangeConfigModel"
+        - $ref: "#/components/schemas/AbsoluteTimeRangeConfigModel"
+        - $ref: "#/components/schemas/ToNowTimeRangeConfigModel"
+      properties:
+        type:
+          description: Time type
+          type: string
+      required:
+        - type
+      type: object
+    ToNowTimeRangeConfigModel:
+      allOf:
+        - $ref: "#/components/schemas/TimeRangeConfigModel"
+        - description: Model for ToNowTimeRangeConfig
+          properties:
+            value:
+              description: Time range object
+              enum:
+                - MINUTE
+                - HOUR
+                - DAY
+                - WEEK
+                - MONTH
+                - YEAR
+                - EPOCH
+                - LOGIN
+              type: string
+          type: object
+    UIFilterModel:
+      description: Model for UIFilter
+      properties:
+        name:
+          description: Name
+          type: string
+        operator:
+          description: Operator
+          enum:
+            - =
+          type: string
+        value:
+          description: Value
+          type: string
+      type: object
+info:
+  contact: {}
+  description:
+    "The Compliance Posture API methods provide information related to\
+    \ your compliance posture across various compliance \nstandards. The filters available\
+    \ through the API enable you to view your status across different cloud accounts,\
+    \ \nregions, and for specific compliance mandates.\n"
+  title: Prisma Cloud Compliance Posture API Overview
+  version: Latest
+openapi: 3.0.0
+paths:
+  /compliance/posture:
+    get:
+      description:
+        Returns a breakdown of the passed/failed statistics and associated
+        policies for compliance standards, requirements, and sections. Also returns
+        a summary for all compliance standards.
+      operationId: get-compliance-posture
+      parameters:
+        - description: Time type
+          in: query
+          name: timeType
+          required: true
+          schema:
+            enum:
+              - relative
+            type: string
+        - description: Number of time units
+          in: query
+          name: timeAmount
+          required: true
+          schema:
+            type: string
+        - description: Time unit
+          in: query
+          name: timeUnit
+          required: true
+          schema:
+            enum:
+              - minute
+              - hour
+              - day
+              - week
+              - month
+              - year
+            type: string
+        - description: Cloud account
+          in: query
+          name: cloud.account
+          required: false
+          schema:
+            type: string
+        - description: Cloud type
+          in: query
+          name: cloud.type
+          required: false
+          schema:
+            type: string
+        - description: Cloud region
+          in: query
+          name: cloud.region
+          required: false
+          schema:
+            type: string
+        - description: Policy compliance standard name
+          in: query
+          name: policy.complianceStandard
+          required: false
+          schema:
+            type: string
+        - description: Policy compliance requirement name
+          in: query
+          name: policy.complianceRequirement
+          required: false
+          schema:
+            type: string
+        - description: Policy compliance section ID
+          in: query
+          name: policy.complianceSection
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/CompliancePosture"
+          description: success
+        "400":
+          description: bad_request
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Compliance Statistics Breakdown - GET
+      tags:
+        - Compliance Posture
+    post:
+      description:
+        Returns a breakdown of the passed/failed statistics and associated
+        policies for compliance standards, requirements, and sections. Also returns
+        a summary for all compliance standards.
+      operationId: post-compliance-posture
+      requestBody:
+        $ref: "#/components/requestBodies/FilterModel3"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompliancePosture"
+          description: success
+        "400":
+          description: bad_request
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Compliance Statistics Breakdown - POST
+      tags:
+        - Compliance Posture
+  /compliance/posture/{complianceId}:
+    get:
+      description:
+        Returns a breakdown of the passed/failed statistics and associated
+        policies for compliance standards, requirements, and sections for the given
+        compliance standard ID.
+      operationId: get-compliance-posture-for-standard
+      parameters:
+        - description: Compliance standard ID
+          in: path
+          name: complianceId
+          required: true
+          schema:
+            format: uuid
+            type: string
+        - description: Time type
+          in: query
+          name: timeType
+          required: true
+          schema:
+            enum:
+              - relative
+            type: string
+        - description: Number of time units
+          in: query
+          name: timeAmount
+          required: true
+          schema:
+            type: string
+        - description: Time unit
+          in: query
+          name: timeUnit
+          required: true
+          schema:
+            enum:
+              - minute
+              - hour
+              - day
+              - week
+              - month
+              - year
+            type: string
+        - description: Cloud account
+          in: query
+          name: cloud.account
+          required: false
+          schema:
+            type: string
+        - description: Cloud type
+          in: query
+          name: cloud.type
+          required: false
+          schema:
+            type: string
+        - description: Cloud region
+          in: query
+          name: cloud.region
+          required: false
+          schema:
+            type: string
+        - description: Policy compliance requirement name
+          in: query
+          name: policy.complianceRequirement
+          required: false
+          schema:
+            type: string
+        - description: Policy compliance section ID
+          in: query
+          name: policy.complianceSection
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/CompliancePosture"
+          description: success
+        "400":
+          description: bad_request
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Compliance Statistics for Standard ID - GET
+      tags:
+        - Compliance Posture
+    post:
+      description:
+        Returns a breakdown of the passed/failed statistics and associated
+        policies for compliance standards, requirements, and sections for the given
+        compliance standard ID.
+      operationId: post-compliance-posture-for-standard
+      parameters:
+        - description: Compliance standard ID
+          in: path
+          name: complianceId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        $ref: "#/components/requestBodies/FilterModel3"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompliancePosture"
+          description: success
+        "400":
+          description: bad_request
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Compliance Statistics for Standard ID - POST
+      tags:
+        - Compliance Posture
+  /compliance/posture/{complianceId}/{requirementId}:
+    get:
+      description:
+        Returns a breakdown of the passed/failed statistics and associated
+        policies for compliance sections for the specified compliance standard ID
+        and compliance requirement ID.
+      operationId: get-compliance-posture-for-requirement
+      parameters:
+        - description: Compliance standard ID
+          in: path
+          name: complianceId
+          required: true
+          schema:
+            format: uuid
+            type: string
+        - description: Compliance requirement ID
+          in: path
+          name: requirementId
+          required: true
+          schema:
+            format: uuid
+            type: string
+        - description: Time type
+          in: query
+          name: timeType
+          required: true
+          schema:
+            enum:
+              - relative
+            type: string
+        - description: Number of time units
+          in: query
+          name: timeAmount
+          required: true
+          schema:
+            type: string
+        - description: Time unit
+          in: query
+          name: timeUnit
+          required: true
+          schema:
+            enum:
+              - minute
+              - hour
+              - day
+              - week
+              - month
+              - year
+            type: string
+        - description: Cloud account
+          in: query
+          name: cloud.account
+          required: false
+          schema:
+            type: string
+        - description: Cloud type
+          in: query
+          name: cloud.type
+          required: false
+          schema:
+            type: string
+        - description: Cloud region
+          in: query
+          name: cloud.region
+          required: false
+          schema:
+            type: string
+        - description: Policy compliance section ID
+          in: query
+          name: policy.complianceSection
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/CompliancePosture"
+          description: success
+        "400":
+          description: bad_request
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Compliance Statistics for Requirement ID - GET
+      tags:
+        - Compliance Posture
+    post:
+      description:
+        "Returns a breakdown of the passed/failed statistics and associated\
+        \ policies for compliance sections for the specified compliance standard ID\
+        \ and compliance requirement ID.  \r\n\r\nThe **fields** body parameter allows\
+        \ you to request specific fields. These fields are separate \nfrom the filters\
+        \ you specify. The following are valid **fields** items.\n\n* cloud.account\n\
+        * account.group\n* cloud.region\n* cloud.type\n* policy.complianceStandard\n\
+        * policy.complianceRequirement\n* policy.complianceSection\n\nThe **filters**\
+        \ body parameter enables you to narrow your request for alerts. \nSee [Get\
+        \ Compliance Overview Filters and Options](/api/cloud/cspm/compliance-posture#operation/get-compliance-posture-filters-and-options)\
+        \ \nfor for an API request to list all the valid filters.\n"
+      operationId: post-compliance-posture-for-requirement
+      parameters:
+        - description: Compliance standard ID
+          in: path
+          name: complianceId
+          required: true
+          schema:
+            format: uuid
+            type: string
+        - description: Compliance requirement ID
+          in: path
+          name: requirementId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        $ref: "#/components/requestBodies/FilterModel3"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompliancePosture"
+          description: success
+        "400":
+          description: bad_request
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Compliance Statistics for Requirement ID - POST
+      tags:
+        - Compliance Posture
+  /compliance/posture/trend:
+    get:
+      description:
+        Returns a compliance posture summary that describes the passed/failed
+        statistics trend.
+      operationId: get-compliance-posture-trend
+      parameters:
+        - description: Time type
+          in: query
+          name: timeType
+          required: true
+          schema:
+            enum:
+              - relative
+            type: string
+        - description: Number of time units
+          in: query
+          name: timeAmount
+          required: true
+          schema:
+            type: string
+        - description: Time unit
+          in: query
+          name: timeUnit
+          required: true
+          schema:
+            enum:
+              - minute
+              - hour
+              - day
+              - week
+              - month
+              - year
+            type: string
+        - description: Cloud account
+          in: query
+          name: cloud.account
+          required: false
+          schema:
+            type: string
+        - description: Cloud type
+          in: query
+          name: cloud.type
+          required: false
+          schema:
+            type: string
+        - description: Cloud region
+          in: query
+          name: cloud.region
+          required: false
+          schema:
+            type: string
+        - description: Policy compliance standard name
+          in: query
+          name: policy.complianceStandard
+          required: false
+          schema:
+            type: string
+        - description: Policy compliance requirement name
+          in: query
+          name: policy.complianceRequirement
+          required: false
+          schema:
+            type: string
+        - description: Policy compliance section ID
+          in: query
+          name: policy.complianceSection
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                items:
+                  $ref: "#/components/schemas/PostureSummary"
+                type: array
+          description: success
+        "400":
+          description: bad_request
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Compliance Trend - GET
+      tags:
+        - Compliance Posture
+    post:
+      description:
+        "Returns a compliance posture summary that describes the passed/failed\
+        \ statistics trend.  \r\n\r\nThe **fields** body parameter allows you to request\
+        \ specific fields. These fields are separate \nfrom the filters you specify.\
+        \ The following are valid **fields** items.\n\n* cloud.account\n* account.group\n\
+        * cloud.region\n* cloud.type\n* policy.complianceStandard\n* policy.complianceRequirement\n\
+        * policy.complianceSection\n\nThe **filters** body parameter enables you to\
+        \ narrow your request for alerts. \nSee [Get Compliance Overview Filters and\
+        \ Options](/api/cloud/cspm/compliance-posture#operation/get-compliance-posture-filters-and-options)\
+        \ \nfor the API request to list all valid filters.\n"
+      operationId: post-compliance-posture-trend
+      requestBody:
+        $ref: "#/components/requestBodies/FilterModel3"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/PostureSummary"
+                type: array
+          description: success
+        "400":
+          description: bad_request
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Compliance Trend - POST
+      tags:
+        - Compliance Posture
+  /compliance/posture/trend/{complianceId}:
+    get:
+      description:
+        Returns a compliance posture summary that describes the passed/failed
+        statistics trend for the specified compliance standard ID.
+      operationId: get-compliance-posture-trend-for-standard
+      parameters:
+        - description: Compliance standard ID
+          in: path
+          name: complianceId
+          required: true
+          schema:
+            format: uuid
+            type: string
+        - description: Time type
+          in: query
+          name: timeType
+          required: true
+          schema:
+            enum:
+              - relative
+            type: string
+        - description: Number of time units
+          in: query
+          name: timeAmount
+          required: true
+          schema:
+            type: string
+        - description: Time unit
+          in: query
+          name: timeUnit
+          required: true
+          schema:
+            enum:
+              - minute
+              - hour
+              - day
+              - week
+              - month
+              - year
+            type: string
+        - description: Cloud account
+          in: query
+          name: cloud.account
+          required: false
+          schema:
+            type: string
+        - description: Cloud type
+          in: query
+          name: cloud.type
+          required: false
+          schema:
+            type: string
+        - description: Cloud region
+          in: query
+          name: cloud.region
+          required: false
+          schema:
+            type: string
+        - description: Policy compliance requirement name
+          in: query
+          name: policy.complianceRequirement
+          required: false
+          schema:
+            type: string
+        - description: Policy compliance section ID
+          in: query
+          name: policy.complianceSection
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                items:
+                  $ref: "#/components/schemas/PostureSummary"
+                type: array
+          description: success
+        "400":
+          description: bad_request
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Compliance Trend for Standard ID - GET
+      tags:
+        - Compliance Posture
+    post:
+      description:
+        "Returns a compliance posture summary that describes the passed/failed\
+        \ statistics trend for the specified compliance standard ID.  \r\n\r\nThe\
+        \ **fields** request body parameter allows you to request specific fields.\
+        \ These fields are separate \nfrom the filters you specify. The following\
+        \ are valid **fields** items.\n\n* cloud.account\n* account.group\n* cloud.region\n\
+        * cloud.type\n* policy.complianceStandard\n* policy.complianceRequirement\n\
+        * policy.complianceSection\n\nThe **filters** request body parameter enables\
+        \ you to narrow your request for alerts. \nSee [Get Compliance Overview Filters\
+        \ and Options](/api/cloud/cspm/compliance-posture#operation/get-compliance-posture-filters-and-options)\
+        \ \nfor for an API request to list all the valid filters.\n"
+      operationId: post-compliance-posture-trend-for-standard
+      parameters:
+        - description: Compliance standard ID
+          in: path
+          name: complianceId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        $ref: "#/components/requestBodies/FilterModel3"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/PostureSummary"
+                type: array
+          description: success
+        "400":
+          description: bad_request
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Compliance Trend for Standard ID - POST
+      tags:
+        - Compliance Posture
+  /compliance/posture/trend/{complianceId}/{requirementId}:
+    get:
+      description:
+        Returns the compliance posture summary that describes the passed/failed
+        statistics trend for the given compliance standard ID and compliance requirement
+        ID.
+      operationId: get-compliance-posture-trend-for-requirement
+      parameters:
+        - description: Compliance standard ID
+          in: path
+          name: complianceId
+          required: true
+          schema:
+            format: uuid
+            type: string
+        - description: Compliance requirement ID
+          in: path
+          name: requirementId
+          required: true
+          schema:
+            format: uuid
+            type: string
+        - description: Time type
+          in: query
+          name: timeType
+          required: true
+          schema:
+            enum:
+              - relative
+            type: string
+        - description: Number of time units
+          in: query
+          name: timeAmount
+          required: true
+          schema:
+            type: string
+        - description: Time unit
+          in: query
+          name: timeUnit
+          required: true
+          schema:
+            enum:
+              - minute
+              - hour
+              - day
+              - week
+              - month
+              - year
+            type: string
+        - description: Cloud account
+          in: query
+          name: cloud.account
+          required: false
+          schema:
+            type: string
+        - description: Cloud type
+          in: query
+          name: cloud.type
+          required: false
+          schema:
+            type: string
+        - description: Cloud region
+          in: query
+          name: cloud.region
+          required: false
+          schema:
+            type: string
+        - description: Policy compliance section ID
+          in: query
+          name: policy.complianceSection
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                items:
+                  $ref: "#/components/schemas/PostureSummary"
+                type: array
+          description: success
+        "400":
+          description: bad_request
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Compliance Trend for Requirement ID - GET
+      tags:
+        - Compliance Posture
+    post:
+      description:
+        "Returns the compliance posture summary that describes the passed/failed\
+        \ statistics trend for the given compliance standard ID and compliance requirement\
+        \ ID.  \r\n\r\nThe **fields** body parameter allows you to request specific\
+        \ fields. These fields are separate \nfrom the filters you specify. The following\
+        \ are valid **fields** items.\n\n* cloud.account\n* account.group\n* cloud.region\n\
+        * cloud.type\n* policy.complianceStandard\n* policy.complianceRequirement\n\
+        * policy.complianceSection\n\nThe **filters** body parameter enables you to\
+        \ narrow your request for alerts. \nSee [Get Compliance Overview Filters and\
+        \ Options](/api/cloud/cspm/compliance-posture#operation/get-compliance-posture-filters-and-options)\n\
+        for the API request to list all valid filters.                           \
+        \     \n"
+      operationId: post-compliance-posture-trend-for-requirement
+      parameters:
+        - description: Compliance standard ID
+          in: path
+          name: complianceId
+          required: true
+          schema:
+            format: uuid
+            type: string
+        - description: Compliance requirement ID
+          in: path
+          name: requirementId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        $ref: "#/components/requestBodies/FilterModel3"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/PostureSummary"
+                type: array
+          description: success
+        "400":
+          description: bad_request
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Compliance Trend for Requirement ID - POST
+      tags:
+        - Compliance Posture
+  /filter/compliance/posture/suggest:
+    get:
+      description:
+        Returns an object whose key/value pairs identify filter options
+        for compliance posture data. The keys are supported filters, and the corresponding
+        values identify the available and saved filter options.
+      operationId: get-compliance-posture-filters-and-options
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/CompliancePostureFilterSuggestion"
+          description: success
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Compliance Overview Filters and Options
+      tags:
+        - Compliance Posture
+    post:
+      description:
+        Returns the available options for a compliance posture filter key.
+        Also supports fuzzy autocomplete search. If you specify a query value in the
+        request body parameters, the response includes only items that contain the
+        query string.
+      operationId: get-compliance-posture-filter-options
+      requestBody:
+        $ref: "#/components/requestBodies/FilterSuggestionModel"
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/ParsedTableFilter"
+          description: success
+        "400":
+          description: missing_required_parameter / invalid_parameter_value
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: List Compliance Overview Filter Autocomplete Suggestions
+      tags:
+        - Compliance Posture
+servers:
+  - url: https://api.prismacloud.io
+tags:
+  - description: The Compliance Posture endpoints are listed below.
+    name: Compliance Posture

@@ -1,0 +1,102 @@
+components:
+  requestBodies: {}
+  securitySchemes:
+    x-redlock-auth:
+      description: The x-redlock-auth value is a JSON Web Token (JWT).
+      in: header
+      name: x-redlock-auth
+      type: apiKey
+  schemas:
+    EnterpriseSettingsRequestModel:
+      description: Model used for EnterpriseSettings
+      properties:
+        accessKeyMaxValidity:
+          description: Access Keys maximum validity in days
+          format: int32
+          type: integer
+        alarmEnabled:
+          description: Alarms enabled
+          enum:
+            - true
+            - false
+          type: boolean
+        applyDefaultPoliciesEnabled:
+          description: Apply default policies enabled
+          enum:
+            - true
+            - false
+          type: boolean
+        defaultPoliciesEnabled:
+          additionalProperties:
+            type: boolean
+          description:
+            Default Policies Enabled. An example is {"low":true, "medium":true,
+            "high":true}
+          type: object
+        requireAlertDismissalNote:
+          description: Require Alert Dismissal Note
+          type: boolean
+        sessionTimeout:
+          description: Browser Session Timeout
+          format: int32
+          type: integer
+        userAttributionInNotification:
+          description: User Attribution in Notification
+          type: boolean
+      type: object
+info:
+  contact: {}
+  description:
+    "Manage enterprise settings such as a user inactivity timeout, user
+    attribution for alerts, and global
+
+    settings for policies and alerts.
+
+    "
+  title: Prisma Cloud Enterprise Settings API Overview
+  version: Latest
+openapi: 3.0.0
+paths:
+  /settings/enterprise:
+    get:
+      description: Returns enterprise settings for your tenant.
+      operationId: get-enterprise-settings
+      responses:
+        "200":
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/EnterpriseSettingsRequestModel"
+          description: successful operation
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Enterprise Settings - GET
+      tags:
+        - Settings
+    post:
+      description: Configures enterprise settings for your tenant.
+      operationId: update-enterprise-settings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EnterpriseSettingsRequestModel"
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: bad_request
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Enterprise Settings - POST
+      tags:
+        - Settings
+servers:
+  - url: https://api.prismacloud.io
+tags:
+  - description: The Enterprise Settings endpoints are listed below.
+    name: Settings

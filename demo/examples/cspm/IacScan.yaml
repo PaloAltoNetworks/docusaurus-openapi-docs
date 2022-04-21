@@ -1,0 +1,1045 @@
+openapi: 3.0.0
+info:
+  title: IaC Scan API V2 Overview
+  description: |
+
+    **Note: This API is deprecated. See the [Prisma Cloud Code Security API](/api/cloud/code) for the latest programmatic code security solution.**
+
+    The Infrastructure-As-Code (IaC) scan service receives and assesses customer IaC resources.
+    With IaC Scan API V2, you can initiate IaC scans asynchronously to evaluate your templates against
+    Prisma Cloud policies and integrate your IaC scan results with Prisma Cloud. The basic steps to run an IaC scan
+    job in Prisma Cloud are as follows:
+
+    1. Create an IaC scan asset in Prisma Cloud with [Add Scan Asset](/api/cloud/cspm/iac-scan#operation/startAsyncScan).
+    2. Use the presigned URL from the IaC scan asset creation response to upload the templates to be scanned for evaluation.
+    3. Use the scan ID from the IaC scan asset creation response with [Initiate Scan Job](/api/cloud/cspm/iac-scan#operation/triggerAsyncScan) to start an asynchronous job to perform a scan of your uploaded templates.
+    4. You can query your job status with [Get Scan Job Status](/api/cloud/cspm/iac-scan#operation/getAsyncScanStatus).
+    5. Once the job has successfully completed, you can request the results with [Get Scan Result Details](/api/cloud/cspm/iac-scan#operation/getScanResult).
+
+    The IaC scan API V2 is [JSON:API](https://jsonapi.org/) compliant.
+
+    **Note:** The IaC scan API V2 is not available at https://api.uk.prismacloud.io.
+
+    For more information about the IaC scan API, see [Use the Prisma Cloud IaC Scan REST API](https://docs.paloaltonetworks.com/prisma/prisma-cloud/prisma-cloud-admin/prisma-cloud-devops-security/use-the-prisma-cloud-iac-scan-rest-api.html).
+
+    ### Error Handling
+
+    As with other Prisma Cloud public API requests, the IaC scan API V2 requests return standard HTTP response
+    codes. In addition, in an error response, the IaC scan API V2 requests return details about the error
+    in an array of objects in the response object. The following table lists the properties of a single object in
+    the array.
+
+    Property  | Type | Description
+    -----------| ---- | -----------
+    errors | array of objects | List of error details
+    error.status | string | HTTP status code
+    error.code | string  | Appication-specific error code
+    error.detail | string  | Detailed description of error
+    error.source | string  | The part of the request document that caused the error
+  version: Latest
+  contact: {}
+servers:
+  - url: https://api.prismacloud.io
+security:
+  - x-redlock-auth: []
+tags:
+  - description: The Asyncronous Scan APIs enable you to invoke IaC Scans.
+    name: Async Scan
+  - description: The IaC Scan Asset Inventory Dashboard APIs enable you to access IaC Scan results.
+    name: Asset Inventory
+paths:
+  /iac/v2/scans:
+    get:
+      deprecated: true
+      tags:
+        - Asset Inventory
+      summary: List IaC Scans
+      description: (JSON:API) Returns a list of IaC scans that meet the given conditions.
+      operationId: getScans
+      parameters:
+        - in: query
+          name: filter
+          style: deepObject
+          explode: true
+          description: |
+            Filters for scan results.
+
+            You can apply a time filter by specifying a **timeType**. Only certain **timeUnit**,
+            **startTime**, **endTime** query parameters apply to certain **timeType** values.
+            The table below lists the time-related parameters that are
+            both valid and required, for each **timeType** parameter.
+
+            timeType  | Valid and Required Time Parameters
+            -----------| ----
+            **to_now** | **timeUnit** where <br/>login=from last login<br/>epoch=from account onboarding<br/>day=from start of day<br/>week=from start of week<br/>month=from start of month<br/>year=from start of year
+            **absolute** | **startTime**<br/>**endTime**
+            **relative** | **timeUnit** hour, day, week, month, year<br/>**timeAmount**
+          schema:
+            $ref: "#/components/schemas/JsonApiModelFilterParameters"
+        - in: query
+          name: groupBy
+          schema:
+            type: string
+            description: Aggregate scan results by group of [assetType, assetName, resourceList]
+            enum:
+              - assetType
+              - assetName
+              - resourceList
+        - in: query
+          name: page
+          style: deepObject
+          explode: true
+          description: Pagination parameters
+          schema:
+            type: object
+            title: JsonApiModelPage
+            properties:
+              size:
+                type: integer
+                example: 10
+              number:
+                type: integer
+                example: 2
+        - in: query
+          name: sort
+          schema:
+            description:
+              Sorting parameters. The sort order is ascending unless the field
+              is prefixed with minus (-), in which case it is descending
+            type: string
+            example: -assetName
+      responses:
+        "200":
+          description: OK
+          content:
+            application/vnd.api+json:
+              schema:
+                title: JsonApiModelScansResponse
+                type: object
+                required:
+                  - meta
+                  - data
+                properties:
+                  meta:
+                    type: object
+                    properties:
+                      pass:
+                        description: Total number of passed scans
+                        type: integer
+                        format: int64
+                        example: 100
+                      fail:
+                        description: Total number of failed scans
+                        type: integer
+                        format: int64
+                        example: 10
+                      all:
+                        description: Total number of scans in the table view
+                        type: integer
+                        format: int64
+                        example: 100
+                      matchedPoliciesSummary:
+                        $ref: "#/components/schemas/IacMatchedPoliciesSummary"
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/JsonApiModelScanTableData"
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        format: url
+                        # example: /scans?timeType=to_now&filter[resourceList]=prisma-devops&page[size]=10&page[number]=3
+                      first:
+                        type: string
+                        format: url
+                        # example: /scans?timeType=to_now&filter[resourceList]=prisma-devops&page[size]=10&page[number]=1
+                      prev:
+                        type: string
+                        format: url
+                        # example: /scans?timeType=to_now&filter[resourceList]=prisma-devops&page[size]=10&page[number]=2
+                      next:
+                        type: string
+                        format: url
+                        # example: /scans?timeType=to_now&filter[resourceList]=prisma-devops&page[size]=10&page[number]=4
+                      last:
+                        type: string
+                        format: url
+                        # example: /scans?timeType=to_now&filter[resourceList]=prisma-devops&page[size]=10&page[number]=256
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "500":
+          $ref: "#/components/responses/ErrorResponse"
+    post:
+      deprecated: true
+      tags:
+        - Async Scan
+      summary: Add Scan Asset
+      description:
+        (JSON:API) Creates a new asynchronous scan asset in Prisma Cloud.
+        This creation is the first step in running an asynchronous IaC scan.
+      operationId: startAsyncScan
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: "#/components/schemas/JsonApiModelAsyncScanRequest"
+      responses:
+        "201":
+          description: OK
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: "#/components/schemas/JsonApiModelAsyncScanSession"
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "500":
+          $ref: "#/components/responses/ErrorResponse"
+  /iac/v2/scans/{scanId}:
+    post:
+      deprecated: true
+      tags:
+        - Async Scan
+      summary: Initiate Scan Job
+      description: |
+        (JSON:API) Initiates an asynchronous scan job. Before making this
+        request, you must use the presigned URL from your scan asset to upload your
+        file to be scanned. 
+
+        After you've created an IaC scan asset in Prisma Cloud but before you initiate an 
+        IaC scan job, you must upload the template(s) to be scanned, to the presigned URL 
+        from the response object of your scan asset creation request. An example of a curl 
+        command to upload a file is:
+        ```
+        curl -v -X PUT '<presigned URL>' -T <file name of file to be uploaded>
+        ```
+
+        See [Use the Prisma Cloud IaC Scan REST API](https://docs.paloaltonetworks.com/prisma/prisma-cloud/prisma-cloud-admin/prisma-cloud-devops-security/use-the-prisma-cloud-iac-scan-rest-api.html) for more details.
+      operationId: triggerAsyncScan
+      parameters:
+        - in: path
+          name: scanId
+          required: true
+          description: Scan UUID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: "#/components/schemas/JsonApiModelScanTrigger"
+      responses:
+        "200":
+          description: OK
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "500":
+          $ref: "#/components/responses/ErrorResponse"
+  /iac/v2/scans/{scanId}/status:
+    get:
+      deprecated: true
+      tags:
+        - Async Scan
+      summary: Get Scan Job Status
+      description:
+        (JSON:API) Returns the status of the asynchronous IaC scan job
+        that has the specified scan ID.
+      operationId: getAsyncScanStatus
+      parameters:
+        - in: path
+          name: scanId
+          required: true
+          description: Scan UUID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: "#/components/schemas/JsonApiModelScanStatusResponse"
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "500":
+          $ref: "#/components/responses/ErrorResponse"
+  /iac/v2/scans/{scanId}/results:
+    get:
+      deprecated: true
+      tags:
+        - Asset Inventory
+      summary: Get Scan Result Details
+      description:
+        (JSON:API) Returns scan result details for the completed scan that
+        has the specified scan ID.
+      operationId: getScanResult
+      parameters:
+        - in: path
+          name: scanId
+          description: Scan UUID
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/vnd.api+json:
+              schema:
+                title: JsonApiModelScanDetails
+                type: object
+                required:
+                  - meta
+                  - data
+                properties:
+                  meta:
+                    type: object
+                    properties:
+                      matchedPoliciesSummary:
+                        $ref: "#/components/schemas/IacMatchedPoliciesSummary"
+                      errorDetails:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/IacApiError"
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/IacPolicyViolation"
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "500":
+          $ref: "#/components/responses/ErrorResponse"
+  /iac/v2/scans/{scanId}/results/sarif:
+    get:
+      deprecated: true
+      tags:
+        - Asset Inventory
+      summary: Get Scan Result Details in OASIS SARIF Format
+      description:
+        Returns the scan result details in OASIS SARIF format for the completed
+        scan that has the specified scan ID.
+      operationId: exportScanResultToSarif
+      parameters:
+        - in: path
+          name: scanId
+          description: Scan UUID
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                title: Static Analysis Results Format (SARIF) Version 2.1.0 JSON Schema
+                type: object
+                additionalProperties: true
+                externalDocs:
+                  description: Static Analysis Results Format (SARIF) Version 2.1.0 JSON Schema
+                  url: "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json"
+                # example:
+                # "$schema": 'https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json'
+                # version: '2.1.0'
+                # runs:
+                # - tool:
+                # driver:
+                # name: Prisma Cloud IaC Scan
+                # properties:
+                # matchedPoliciesSummary:
+                # high: 6
+                # medium: 15
+                # low: 20
+                # automationDetails:
+                # description:
+                # text: Static Analysis Security Test results using Prisma Cloud
+                # IaC Scan
+                # guid: 00000000-...
+                # results:
+                # - ruleId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                # name: AWS Security Groups allow internet traffic to SSH port
+                #   (22)
+                # level: error
+                # properties:
+                # severity: "high"
+                # rule: "$.resource[*].aws_security_group exists and ($.resource.aws_security_group[*].ingress.cidr_blocks contains 0.0.0.0/0"
+                # docUrl: "https://docs.paloaltonetworks.com/prisma/prisma-cloud/prisma-cloud-policy-reference/configuration-policies/configuration-policies-build-phase/amazon-web-services-configuration-policies/policy_617b9138-584b-4e8e-ad15-7fbabafbed1a.html"
+                # message:
+                # text: "This policy identifies AWS Security Groups which do allow inbound traffic on SSH port (22) from public internet"
+                # locations:
+                # - physicalLocation:
+                # artifactLocation:
+                # uri: "main.tf"
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "500":
+          $ref: "#/components/responses/ErrorResponse"
+  /iac/v2/scans/export:
+    get:
+      deprecated: true
+      tags:
+        - Asset Inventory
+      summary: Export Assets Scans Report
+      description: (JSON:API) Exports the assets scans report.
+      operationId: exportScans
+      parameters:
+        - in: query
+          name: filter
+          style: deepObject
+          explode: true
+          description: |
+            Filters for scan results.
+
+            You can apply a time filter by specifying a **timeType**. Only certain **timeUnit**,
+            **startTime**, **endTime** query parameters apply to certain **timeType** values.
+            The table below lists the time-related parameters that are
+            both valid and required, for each **timeType** parameter.
+
+            timeType  | Valid and Required Time Parameters
+            -----------| ----
+            **to_now** | **timeUnit** where <br/>login=from last login<br/>epoch=from account onboarding<br/>day=from start of day<br/>week=from start of week<br/>month=from start of month<br/>year=from start of year
+            **absolute** | **startTime**<br/>**endTime**
+            **relative** | **timeUnit** hour, day, week, month, year<br/>**timeAmount**
+          schema:
+            $ref: "#/components/schemas/JsonApiModelFilterParameters"
+        - in: query
+          name: groupBy
+          schema:
+            type: string
+            enum:
+              - assetType
+              - assetName
+              - resourceList
+            description: supported group by fileds [assetType, assetName, resourceList]
+        - in: query
+          name: sort
+          schema:
+            type: string
+            example: -assetName
+            description:
+              Sorting parameters. The sort order is ascending unless the field
+              is prefixed with minus (-), in which case it is descending.
+        - in: query
+          name: fmt
+          schema:
+            type: string
+            example: csv
+            description: Export file format. Currently only CSV format is
+              supported.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+            text/csv:
+              schema:
+                type: string
+                format: binary
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "500":
+          $ref: "#/components/responses/ErrorResponse"
+components:
+  securitySchemes:
+    x-redlock-auth:
+      description: The x-redlock-auth value is a JSON Web Token (JWT).
+      in: header
+      name: x-redlock-auth
+      type: apiKey
+  responses:
+    ErrorResponse:
+      description: JSON.API error response
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: "#/components/schemas/IacApiErrorResponse"
+  schemas:
+    JsonApiModelScanAttributes:
+      description:
+        "Additonal attributes associated with the IaC scan job. The keys
+        below should be used for better display:
+
+        * buildNumber: For CI/CD, the build number associated with the IaC scan
+
+        * projectName: For CI/CD, the repo or project name associated with the IaC
+        scan
+
+        * prName: For CI/CD, the pull/merge request name associated with the IaC scan
+
+        * pipelineName: For CD pipeline, the pipeline name associated with the IaC
+        scan
+
+        * pipelineLambda: For CD pipeline, the lambda name associated with the IaC
+        scan
+
+        * pipelineJobId: For CD pipeline, the job ID associated with the IaC scan
+
+        * pipelineStageName: For CD pipeline, the stage name associated with the IaC
+        scan
+
+        * pipelineActionName: For CD pipeline, the action name associated with the
+        IaC scan
+
+        "
+      type: object
+      additionalProperties:
+        type: string
+      # example:
+      # projectName: my-project
+      # prName: SL-1234
+    JsonApiModelFailureCriteria:
+      description: Thresholds that define scan asset result failures after evaluation
+      type: object
+      required:
+        - high
+        - medium
+        - low
+        - operator
+      properties:
+        high:
+          type: integer
+          format: int32
+          example: 1
+          description:
+            Threshold for the number of high severity violations that define
+            an asset failure
+        medium:
+          type: integer
+          format: int32
+          example: 10
+          description:
+            Threshold for the number of medium severity violations that
+            define an asset failure
+        low:
+          type: integer
+          format: int32
+          example: 30
+          description:
+            Threshold for the number of low severity violations that define
+            an asset failure
+        operator:
+          description: Logic operator on failures
+          type: string
+          enum:
+            - and
+            - or
+          example: or
+    JsonApiModelAsyncScanRequest:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - type
+            - attributes
+          properties:
+            type:
+              description: Currently, you must set value to "async-scan"
+              type: string
+              enum:
+                - async-scan
+              example: async-scan
+            attributes:
+              type: object
+              required:
+                - assetName
+                - assetType
+              properties:
+                assetName:
+                  description:
+                    Registered asset name (255 character limit) that will
+                    appear as the resource name in the Prisma Cloud Devops Inventory
+                  type: string
+                  example: my-asset
+                assetType:
+                  description: "Supported asset types:
+
+                    * AzureDevOps: Azure DevOps Services
+
+                    * AWSCodePipeline: AWS CodePipeline
+
+                    * BitbucketServer: Bitbucket server
+
+                    * BitbucketCloud: Bitbucket Cloud
+
+                    * CircleCI: CircleCI project
+
+                    * GitHub: GitHub repo
+
+                    * GitLab-CICD: GitLab CI/CD Pipeline
+
+                    * GitLab-SCM: GitLab SCM Webhook
+
+                    * IaC-API: direct IAC API attachment
+
+                    * IntelliJ: IntelliJ IDE plugin managed files
+
+                    * Jenkins: Jenkins build server
+
+                    * VSCode: VSCode plugin managed files
+
+                    * twistcli: Twistlock CLI attachment
+
+                    "
+                  type: string
+                  enum:
+                    - AzureDevOps
+                    - AWSCodePipeline
+                    - BitbucketCloud
+                    - BitbucketServer
+                    - CircleCI
+                    - GitHub
+                    - GitLab-CICD
+                    - GitLab-SCM
+                    - IaC-API
+                    - IntelliJ
+                    - Jenkins
+                    - twistcli
+                    - VSCode
+                  example: AzureDevOps
+                tags:
+                  description:
+                    Tags assigned to the asset or the scan job. Both tag
+                    key and value have 255 character limit. Tags are searchable in Prisma Cloud.
+                  type: object
+                  additionalProperties:
+                    type: string
+                  # example:
+                  # env: dev
+                  # region: us-west-1
+                scanAttributes:
+                  allOf:
+                    - description: Any key/value data you want to associate with a scan. Scan attributes are not searchable in Prisma Cloud.
+                    - $ref: "#/components/schemas/JsonApiModelScanAttributes"
+                failureCriteria:
+                  allOf:
+                    - description: |
+                        Failure criteria default to "high"-  1, "medium"-  1, "low"-  1, "operator": or
+                    - $ref: "#/components/schemas/JsonApiModelFailureCriteria"
+    JsonApiModelFilterParameters:
+      type: object
+      properties:
+        timeType:
+          type: string
+          enum:
+            - to_now
+            - absolute
+            - relative
+          description: Time type
+        timeAmount:
+          type: integer
+          format: int32
+          example: 1
+          description: Number of time units
+        timeUnit:
+          type: string
+          enum:
+            - epoch
+            - login
+            - hour
+            - day
+            - week
+            - month
+            - year
+          description: Time unit
+        startTime:
+          type: integer
+          format: int64
+          description:
+            Start time in Unix time (the number of seconds that have elapsed
+            since the Unix epoch) for the absolute time type
+        endTime:
+          type: integer
+          format: int64
+          description:
+            End time in Unix time (the number of seconds that have elapsed
+            since the Unix epoch) for the absolute time type
+        resourceList:
+          type: array
+          items:
+            type: string
+          description: Resource list
+        tags:
+          type: array
+          items:
+            type: string
+          description: Tag string
+          # example: env:proc
+        assetType:
+          type: array
+          items:
+            type: string
+          description: Asset type
+        assetName:
+          type: array
+          items:
+            type: string
+          description: Asset name
+        failureCriteria:
+          type: array
+          items:
+            type: string
+          description: Scan failure criteria expression
+          # example: H:5 & M:2 & L:1
+        user:
+          type: array
+          items:
+            type: string
+          description: Username
+        status:
+          type: array
+          items:
+            type: string
+          description: Scan status
+          # example: passed
+    JsonApiModelScanTableData:
+      description: Aggregated scan result in {json.api} format
+      type: object
+      required:
+        - id
+        - attributes
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique ID of the scan result
+        attributes:
+          type: object
+          properties:
+            name:
+              type: array
+              items:
+                type: string
+              description: List of aggregated asset names
+            type:
+              type: array
+              items:
+                type: string
+              description: List of aggregated asset types
+            user:
+              type: array
+              items:
+                type: string
+              description: List of aggregated usernames
+            resourceList:
+              type: array
+              items:
+                type: string
+              description: List of aggregated resource lists
+            tags:
+              type: array
+              items:
+                $ref: "#/components/schemas/IacScanTag"
+              description: List of aggregated tags
+            failureCriteria:
+              type: string
+              description:
+                Last failure criteria expression in the aggregated scan
+                result
+            status:
+              $ref: "#/components/schemas/JsonApiModelScanStatus"
+            merged:
+              type: boolean
+              description: If or not the last scan is merged in the aggregated result
+            deployed:
+              type: boolean
+              description: If or not the last scan is deployed in the aggregated result
+            fail:
+              type: integer
+              format: int64
+              description: Number of failed scans in the aggregated result
+            pass:
+              type: integer
+              format: int64
+              description: Number of passed scans in the aggregated result
+            matchedPoliciesSummary:
+              $ref: "#/components/schemas/IacMatchedPoliciesSummary"
+            scanAttributes:
+              $ref: "#/components/schemas/JsonApiModelScanAttributes"
+            scanTime:
+              type: string
+              format: date-time
+              description: Latest scan time in the aggregated result
+        links:
+          type: object
+          description: Links to the scan result
+          properties:
+            self:
+              type: string
+              format: url
+              # example: /scans/3fa85f64-5717-4562-b3fc-2c963f66afa6
+              description: URL to the scan result
+        relationships:
+          type: object
+          description: Relationships to the scan result
+          properties:
+            scanResult:
+              type: object
+              description: Link to the detailed scan result object
+              properties:
+                links:
+                  type: object
+                  description: Links
+                  properties:
+                    related:
+                      type: string
+                      description: URL to the detailed scan result object
+                      format: url
+                      # example: /scans/3fa85f64-5717-4562-b3fc-2c963f66afa6/results
+    JsonApiModelAsyncScanSession:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: Scan UUID
+            links:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: url
+                  description:
+                    The presigned URL for template data uploading (only
+                    HTTP PUT is supported)
+    JsonApiModelScanTrigger:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - attributes
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: Scan UUID
+            attributes:
+              type: object
+              required:
+                - templateType
+              properties:
+                templateType:
+                  description: IaC template type
+                  type: string
+                  enum:
+                    - cft
+                    - k8s
+                    - tf
+                  example: cft
+                templateVersion:
+                  description: Template version
+                  type: string
+                  example: "0.13"
+                templateParameters:
+                  $ref: "#/components/schemas/IacTemplateParameters"
+    JsonApiModelScanStatusResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            attributes:
+              type: object
+              properties:
+                status:
+                  $ref: "#/components/schemas/JsonApiModelScanStatus"
+    JsonApiModelScanStatus:
+      type: string
+      description:
+        The scan job status. Valid values are processing, error, passed,
+        failed, failed_n_merged, failed_n_deployed.
+      enum:
+        - processing
+        - error
+        - passed
+        - failed
+        - failed_n_merged
+        - failed_n_deployed
+    IacApiErrorResponse:
+      type: object
+      required:
+        - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: "#/components/schemas/IacApiError"
+    IacScanTag:
+      type: object
+      required:
+        - name
+        - value
+      properties:
+        name:
+          type: string
+          example: env
+        value:
+          type: string
+          example: prod
+        source:
+          type: string
+    IacTemplateParameters:
+      type: object
+      properties:
+        variables:
+          description: Template variables and values list to be used for evaluation
+          type: object
+          additionalProperties:
+            type: string
+          # example:
+          # region: us-east-1
+          # image_id: amzn2-ami-hvm-2.0
+        variableFiles:
+          description:
+            Names of template variable files inside the template package to be used. Specify file path relative to the root of the zip file you uploaded.
+            for evaluation
+          type: array
+          items:
+            type: string
+          # example:
+          # - /dev.tfvars
+          # - /us/qa.tfvars
+        policyIdFilters:
+          description:
+            If list is populated, IaC scan service will evaluate with only
+            policies that have IDs in this list
+          type: array
+          items:
+            type: string
+            example: 123e4567-e89b-12d3-a456-426614174000
+        files:
+          description:
+            If you specify file paths, the IaC scan service will evaluate only files
+            in this list. Specify file paths relative to the root of the zip file you uploaded.
+          type: array
+          items:
+            type: string
+          # example:
+          # - /dev/auto_scale.tf
+          # - /dev/app.tf
+        folders:
+          description:
+            If you specify folder paths, the IaC scan service will evaluate only folders
+            in the list. Specify folder paths relative to the root of the zip file you uploaded.
+          type: array
+          items:
+            type: string
+          # example:
+          # - /dev
+          # - /under_develop
+          # - /modules/dev
+    IacMatchedPoliciesSummary:
+      type: object
+      properties:
+        high:
+          type: integer
+          format: int64
+          description: Number of high severity policies matched
+          example: 6
+        medium:
+          type: integer
+          format: int64
+          description: Number of medium severity policies matched
+          example: 15
+        low:
+          type: integer
+          format: int64
+          description: Number of low severity policies matched
+          example: 20
+    IacPolicyViolation:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        attributes:
+          type: object
+          properties:
+            severity:
+              allOf:
+                - description: IaC policy severity
+                - $ref: "#/components/schemas/IacPolicySeverity"
+            name:
+              type: string
+              description: Policy name
+              example: AWS Security Groups allow internet traffic to SSH port (22)
+            rule:
+              type: string
+              description: Violated rule
+              example:
+                $.resource[*].aws_security_group exists and ($.resource.aws_security_group[*].ingress.cidr_blocks
+                contains 0.0.0.0/0
+            desc:
+              type: string
+              description: Policy description
+              example:
+                This policy identifies AWS Security Groups which do allow inbound
+                traffic on SSH port (22) from public internet
+            files:
+              type: array
+              description: Files
+              items:
+                type: string
+                description: Items
+            policyId:
+              type: string
+              format: uuid
+              description: Policy ID
+            docUrl:
+              type: string
+              format: url
+              description: Policy documentation relevant to the violation
+              example: https://docs.paloaltonetworks.com/prisma/prisma-cloud/prisma-cloud-policy-reference/configuration-policies/configuration-policies-build-phase/amazon-web-services-configuration-policies/policy_617b9138-584b-4e8e-ad15-7fbabafbed1a.html
+    IacPolicySeverity:
+      type: string
+      description: The levels of policy severity
+      enum:
+        - high
+        - medium
+        - low
+    IacApiError:
+      type: object
+      required:
+        - status
+        - detail
+      properties:
+        status:
+          type: string
+          description: HTTP status code
+        code:
+          type: string
+          example: "405"
+          description: Application-specific error code
+        detail:
+          type: string
+          example: Invalid template file provided
+          description: Detailed description of the error
+        source:
+          type: string
+          example: Scan-worker-service
+          description:
+            Indicates the part of the request document that caused the
+            error

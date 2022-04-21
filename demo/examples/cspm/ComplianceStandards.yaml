@@ -1,0 +1,611 @@
+components:
+  requestBodies:
+    ComplianceRequirementModel:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ComplianceRequirementModel"
+    ComplianceSectionModel:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ComplianceSectionModel"
+    ComplianceStandardModel:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ComplianceStandardModel"
+  securitySchemes:
+    x-redlock-auth:
+      description: The x-redlock-auth value is a JSON Web Token (JWT).
+      in: header
+      name: x-redlock-auth
+      type: apiKey
+  schemas:
+    ComplianceRequirementModel:
+      description: Model for ComplianceRequirement
+      properties:
+        complianceId:
+          description: Compliance Standard ID
+          format: uuid
+          readOnly: true
+          type: string
+        createdBy:
+          description: Created By
+          readOnly: true
+          type: string
+        createdOn:
+          description: Created On
+          format: int64
+          readOnly: true
+          type: integer
+        description:
+          description: Description
+          type: string
+        id:
+          description: Compliance ID
+          format: uuid
+          readOnly: true
+          type: string
+        lastModifiedBy:
+          description: Last Modified By
+          readOnly: true
+          type: string
+        lastModifiedOn:
+          description: Last Modified On
+          format: int64
+          readOnly: true
+          type: integer
+        name:
+          description: Compliance Requirement Name
+          type: string
+        policiesAssignedCount:
+          description: Number Of Assigned Policies
+          format: int32
+          readOnly: true
+          type: integer
+        requirementId:
+          description: Compliance Requirement Number
+          type: string
+        standardName:
+          description: Compliance Standard Name
+          readOnly: true
+          type: string
+        systemDefault:
+          description: System Default
+          readOnly: true
+          type: boolean
+        viewOrder:
+          description: View Order
+          format: int32
+          readOnly: true
+          type: integer
+      required:
+        - name
+        - requirementId
+      type: object
+    ComplianceSectionModel:
+      description: Model for ComplianceSection
+      properties:
+        associatedPolicyIds:
+          description: Associated Policy IDs
+          items:
+            type: string
+          readOnly: true
+          type: array
+          uniqueItems: true
+        createdBy:
+          description: Created By
+          readOnly: true
+          type: string
+        createdOn:
+          description: Created On
+          format: int64
+          readOnly: true
+          type: integer
+        description:
+          description: Description
+          type: string
+        id:
+          description: Compliance ID
+          format: uuid
+          readOnly: true
+          type: string
+        label:
+          description: Section Label
+          readOnly: true
+          type: string
+        lastModifiedBy:
+          description: Last Modified By
+          readOnly: true
+          type: string
+        lastModifiedOn:
+          description: Last Modified On
+          format: int64
+          readOnly: true
+          type: integer
+        policiesAssignedCount:
+          description: Number Of Assigned Policies
+          format: int32
+          readOnly: true
+          type: integer
+        requirementId:
+          description: Compliance Requirement ID
+          format: uuid
+          readOnly: true
+          type: string
+        requirementName:
+          description: Compliance Requirement Name
+          readOnly: true
+          type: string
+        sectionId:
+          description: Compliance Section ID
+          type: string
+        standardName:
+          description: Compliance Standard Name
+          readOnly: true
+          type: string
+        systemDefault:
+          description: System Default
+          readOnly: true
+          type: boolean
+        viewOrder:
+          description: View Order
+          format: int32
+          readOnly: true
+          type: integer
+      type: object
+    ComplianceStandardModel:
+      description: Model for ComplianceStandard
+      properties:
+        cloudType:
+          description: Cloud Type (determined based on policies assigned)
+          items:
+            enum:
+              - ALL
+              - AWS
+              - AZURE
+              - GCP
+              - ALIBABA_CLOUD
+              - OCI
+            type: string
+          readOnly: true
+          type: array
+          uniqueItems: true
+        createdBy:
+          description: Created By
+          readOnly: true
+          type: string
+        createdOn:
+          description: Created On
+          format: int64
+          readOnly: true
+          type: integer
+        description:
+          description: Description
+          type: string
+        id:
+          description: Compliance ID
+          format: uuid
+          readOnly: true
+          type: string
+        lastModifiedBy:
+          description: Last Modified By
+          readOnly: true
+          type: string
+        lastModifiedOn:
+          description: Last Modified On
+          format: int64
+          readOnly: true
+          type: integer
+        name:
+          description: Compliance Standard Name
+          type: string
+        policiesAssignedCount:
+          description: Number Of Assigned Policies
+          format: int32
+          readOnly: true
+          type: integer
+        systemDefault:
+          description: System Default
+          readOnly: true
+          type: boolean
+      required:
+        - name
+      type: object
+info:
+  contact: {}
+  description:
+    "You can create your own custom compliance standards that are tailored\
+    \ to your own business needs, \nstandards, and organizational policies. When defining\
+    \ a custom compliance standard, you can add \nrequirements and sections. A custom\
+    \ compliance standard that has a minimum of one requirement and one \nsection\
+    \ can be associated with policies that check for adherence to your standards.\
+    \    \n"
+  title: Prisma Cloud Compliance Standards API Overview
+  version: Latest
+openapi: 3.0.0
+paths:
+  /compliance:
+    get:
+      description: Returns all system supported and custom compliance standards.
+      operationId: get-all-standards
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                items:
+                  $ref: "#/components/schemas/ComplianceStandardModel"
+                type: array
+          description: successful operation
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: List Compliance Standards
+      tags:
+        - Compliance Standards
+    post:
+      description: Allows for the creation of a custom compliance standard.
+      operationId: add-standard
+      requestBody:
+        $ref: "#/components/requestBodies/ComplianceStandardModel"
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: missing_required_parameter / duplicate_name / bad_request
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Add Compliance Standard
+      tags:
+        - Compliance Standards
+  /compliance/{complianceId}:
+    get:
+      description: Returns the compliance standard for the specified ID.
+      operationId: get-standards-by-id
+      parameters:
+        - description: Compliance Standard ID
+          in: path
+          name: complianceId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/ComplianceStandardModel"
+          description: successful operation
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Compliance Standard by ID
+      tags:
+        - Compliance Standards
+    put:
+      description: Updates existing compliance standard.
+      operationId: update-standard
+      parameters:
+        - description: Compliance Standard ID
+          in: path
+          name: complianceId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        $ref: "#/components/requestBodies/ComplianceStandardModel"
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: missing_required_parameter / duplicate_name / bad_request
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Update Compliance Standard
+      tags:
+        - Compliance Standards
+    delete:
+      description: Deletes the compliance standard for the specified ID.
+      operationId: delete-standard
+      parameters:
+        - description: Compliance Standard ID
+          in: path
+          name: complianceId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: missing_required_parameter
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Delete Compliance Standard
+      tags:
+        - Compliance Standards
+  /compliance/clone/{complianceId}:
+    post:
+      description: Clones the compliance standard with the specified compliance ID.
+      operationId: clone-standard
+      parameters:
+        - description: Compliance Standard ID
+          in: path
+          name: complianceId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        $ref: "#/components/requestBodies/ComplianceStandardModel"
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: missing_required_parameter / duplicate_name / bad_request
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Clone Compliance Standard
+      tags:
+        - Compliance Standards
+  /compliance/{complianceId}/requirement:
+    get:
+      description:
+        Returns a list of all compliance requirements for the specified
+        compliance standard ID.
+      operationId: get-requirements
+      parameters:
+        - description: Compliance Standard ID
+          in: path
+          name: complianceId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          content:
+            "*/*":
+              schema:
+                items:
+                  $ref: "#/components/schemas/ComplianceRequirementModel"
+                type: array
+          description: successful operation
+        "400":
+          description: missing_required_parameter
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: List Compliance Requirements
+      tags:
+        - Compliance Standards
+    post:
+      description: Adds a new compliance requirement to the provided compliance standard.
+      operationId: add-requirement
+      parameters:
+        - description: Compliance Standard ID
+          in: path
+          name: complianceId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        $ref: "#/components/requestBodies/ComplianceRequirementModel"
+      responses:
+        "200":
+          description: success
+        "400":
+          description: missing_required_parameter / duplicate_name / bad_request
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Add Compliance Requirement
+      tags:
+        - Compliance Standards
+  /compliance/requirement/{requirementId}:
+    get:
+      description:
+        Returns compliance requirement data for the specified requirements
+        ID.
+      operationId: get-requirement-by-id
+      parameters:
+        - description: Compliance Requirement ID
+          in: path
+          name: requirementId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/ComplianceRequirementModel"
+          description: successful operation
+        "400":
+          description: missing_required_parameter
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Compliance Requirement by ID
+      tags:
+        - Compliance Standards
+    put:
+      description: Updates information in the provided compliance requirement.
+      operationId: update-requirement
+      parameters:
+        - description: Compliance Requirement ID
+          in: path
+          name: requirementId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        $ref: "#/components/requestBodies/ComplianceRequirementModel"
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: missing_required_parameter / duplicate_name / bad_request
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Update Compliance Requirement
+      tags:
+        - Compliance Standards
+    delete:
+      description: Deletes the compliance requirement for the specified ID.
+      operationId: delete-requirement
+      parameters:
+        - description: Compliance Requirement ID
+          in: path
+          name: requirementId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: missing_required_parameter
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Delete Compliance Requirement
+      tags:
+        - Compliance Standards
+  /compliance/{requirementId}/section:
+    get:
+      description:
+        Returns a list of all compliance requirement sections for the specified
+        compliance requirement ID.
+      operationId: get-sections
+      parameters:
+        - description: Compliance Requirement ID
+          in: path
+          name: requirementId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          content:
+            "*/*":
+              schema:
+                items:
+                  $ref: "#/components/schemas/ComplianceSectionModel"
+                type: array
+          description: successful operation
+        "400":
+          description: missing_required_parameter
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: List Compliance Requirement Sections
+      tags:
+        - Compliance Standards
+    post:
+      description: Adds a new section to a compliance standard requirement.
+      operationId: add-section
+      parameters:
+        - description: Compliance Requirement ID
+          in: path
+          name: requirementId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        $ref: "#/components/requestBodies/ComplianceSectionModel"
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: missing_required_parameter
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Add Compliance Requirement Section
+      tags:
+        - Compliance Standards
+  /compliance/requirement/section/{sectionId}:
+    put:
+      description: Updates the compliance requirement section for the specified ID.
+      operationId: update-section
+      parameters:
+        - description: Compliance Section ID
+          in: path
+          name: sectionId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        $ref: "#/components/requestBodies/ComplianceSectionModel"
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: missing_required_parameter
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Update Compliance Requirement Section
+      tags:
+        - Compliance Standards
+    delete:
+      description: Deletes the compliance requirement section for the specified ID.
+      operationId: delete-section
+      parameters:
+        - description: Compliance Section ID
+          in: path
+          name: sectionId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: missing_required_parameter
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Delete Compliance Requirement Section
+      tags:
+        - Compliance Standards
+servers:
+  - url: https://api.prismacloud.io
+tags:
+  - description: The Compliance Standard endpoints are listed below.
+    name: Compliance Standards

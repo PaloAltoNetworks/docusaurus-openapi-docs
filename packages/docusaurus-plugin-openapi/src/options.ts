@@ -10,17 +10,11 @@ import { Joi } from "@docusaurus/utils-validation";
 import type { PluginOptions } from "./types";
 
 export const DEFAULT_OPTIONS: PluginOptions = {
-  path: "openapi.json", // Path to data on filesystem, relative to site dir.
-  showExecuteButton: true,
-  showManualAuthentication: true,
-  outputDir: "api",
+  id: "default",
+  config: {},
 };
 
 export const OptionsSchema = Joi.object({
-  path: Joi.string().default(DEFAULT_OPTIONS.path),
-  showExecuteButton: Joi.boolean().default(DEFAULT_OPTIONS.showExecuteButton),
-  showManualAuthentication: Joi.boolean().default(
-    DEFAULT_OPTIONS.showManualAuthentication
-  ),
-  outputDir: Joi.string().default(DEFAULT_OPTIONS.outputDir),
+  id: Joi.string().default(DEFAULT_OPTIONS.id),
+  config: Joi.object().default(DEFAULT_OPTIONS.config),
 });

@@ -1,0 +1,466 @@
+components:
+  requestBodies: {}
+  securitySchemes:
+    x-redlock-auth:
+      description: The x-redlock-auth value is a JSON Web Token (JWT).
+      in: header
+      name: x-redlock-auth
+      type: apiKey
+  schemas:
+    AbsoluteTimeRangeConfigModel:
+      allOf:
+        - $ref: "#/components/schemas/TimeRangeConfigModel"
+        - description: Model for AbsoluteTimeRangeConfig
+          properties:
+            type:
+              example: absolute
+              type: string
+            value:
+              allOf:
+                - $ref: "#/components/schemas/TimeModel"
+                - description: Time range object
+          required:
+            - value
+          type: object
+    RelativeTimeDurationModel:
+      description: Model for RelativeTimeDuration
+      properties:
+        amount:
+          description: Number of time units
+          format: int32
+          type: integer
+        unit:
+          description: Time unit
+          enum:
+            - minute
+            - hour
+            - day
+            - week
+            - month
+            - year
+          type: string
+      type: object
+    RelativeTimeRangeConfigModel:
+      allOf:
+        - $ref: "#/components/schemas/TimeRangeConfigModel"
+        - description: Model for RelativeTimeRangeConfig
+          properties:
+            relativeTimeType:
+              description: Direction in which to count time. Default = BACKWARD
+              enum:
+                - BACKWARD
+                - FORWARD
+              type: string
+            type:
+              example: relative
+              type: string
+            value:
+              allOf:
+                - $ref: "#/components/schemas/RelativeTimeDurationModel"
+                - description: Time range object
+          required:
+            - value
+          type: object
+    SavedRecentSearch:
+      properties:
+        createdBy:
+          type: string
+        description:
+          type: string
+        id:
+          type: string
+        lastModifiedBy:
+          type: string
+        policies:
+          items:
+            additionalProperties:
+              type: string
+            type: object
+          type: array
+        query:
+          type: string
+        searchModel:
+          $ref: "#/components/schemas/SearchModel"
+        searchName:
+          type: string
+        timestamp:
+          format: int64
+          type: integer
+      type: object
+    SearchModel:
+      properties:
+        alertId:
+          description: Alert ID
+          readOnly: true
+          type: string
+        async:
+          description: true = Is Async
+          readOnly: true
+          type: boolean
+        asyncResultUrl:
+          description: Async Result Url
+          example: /search/config/jobs/2df49d4f72e842b582b123bc2b7826b3/download
+          readOnly: true
+          type: string
+        cloudType:
+          description: Cloud Type
+          enum:
+            - aws
+            - azure
+            - gcp
+            - alibaba_cloud
+            - oci
+          type: string
+        cursor:
+          description: Cursor
+          format: int32
+          readOnly: true
+          type: integer
+        default:
+          type: boolean
+        description:
+          description: Search Description
+          type: string
+        filters:
+          description: View Order
+          items:
+            $ref: "#/components/schemas/UIFilterModel"
+          readOnly: true
+          type: array
+        groupBy:
+          description: Group By
+          items:
+            type: string
+          readOnly: true
+          type: array
+        id:
+          description: Search ID
+          type: string
+        name:
+          description: Search Name
+          type: string
+        query:
+          description: RQL Query
+          type: string
+        saved:
+          description: Search Exists
+          type: boolean
+        searchType:
+          description: Search Type
+          enum:
+            - network
+            - audit_event
+            - config
+          readOnly: true
+          type: string
+        timeGranularity:
+          description: Time Granularity
+          readOnly: true
+          type: string
+        timeRange:
+          allOf:
+            - $ref: "#/components/schemas/TimeRangeConfigModel"
+            - description: Time Range
+      required:
+        - query
+        - timeRange
+      type: object
+    SearchResponseModelSearchModel:
+      properties:
+        alertId:
+          description: Alert ID
+          readOnly: true
+          type: string
+        async:
+          description: true = Is Async
+          readOnly: true
+          type: boolean
+        asyncResultUrl:
+          description: Async Result Url
+          example: /search/config/jobs/2df49d4f72e842b582b123bc2b7826b3/download
+          readOnly: true
+          type: string
+        cloudType:
+          description: Cloud Type
+          enum:
+            - aws
+            - azure
+            - gcp
+            - alibaba_cloud
+            - oci
+          type: string
+        cursor:
+          description: Cursor
+          format: int32
+          readOnly: true
+          type: integer
+        data:
+          $ref: "#/components/schemas/SearchModel"
+        default:
+          type: boolean
+        description:
+          description: Search Description
+          type: string
+        filters:
+          description: View Order
+          items:
+            $ref: "#/components/schemas/UIFilterModel"
+          readOnly: true
+          type: array
+        groupBy:
+          description: Group By
+          items:
+            type: string
+          readOnly: true
+          type: array
+        id:
+          description: Search ID
+          type: string
+        name:
+          description: Search Name
+          type: string
+        query:
+          description: RQL Query
+          type: string
+        saved:
+          description: Search Exists
+          type: boolean
+        searchType:
+          description: Search Type
+          enum:
+            - network
+            - audit_event
+            - config
+          readOnly: true
+          type: string
+        timeGranularity:
+          description: Time Granularity
+          readOnly: true
+          type: string
+        timeRange:
+          allOf:
+            - $ref: "#/components/schemas/TimeRangeConfigModel"
+            - description: Time Range
+      required:
+        - query
+        - timeRange
+      type: object
+    TimeModel:
+      description: Model for Time
+      properties:
+        endTime:
+          description: End timestamp
+          format: int64
+          type: integer
+        startTime:
+          description: Start timestamp
+          format: int64
+          type: integer
+      type: object
+    TimeRangeConfigModel:
+      description:
+        "See the [Time Range Model](/api/cloud/api-time-range-model) for
+        details.
+
+        "
+      discriminator:
+        mapping:
+          absolute: "#/components/schemas/AbsoluteTimeRangeConfigModel"
+          relative: "#/components/schemas/RelativeTimeRangeConfigModel"
+          to_now: "#/components/schemas/ToNowTimeRangeConfigModel"
+        propertyName: type
+      oneOf:
+        - $ref: "#/components/schemas/RelativeTimeRangeConfigModel"
+        - $ref: "#/components/schemas/AbsoluteTimeRangeConfigModel"
+        - $ref: "#/components/schemas/ToNowTimeRangeConfigModel"
+      properties:
+        type:
+          description: Time type
+          type: string
+      required:
+        - type
+      type: object
+    ToNowTimeRangeConfigModel:
+      allOf:
+        - $ref: "#/components/schemas/TimeRangeConfigModel"
+        - description: Model for ToNowTimeRangeConfig
+          properties:
+            value:
+              description: Time range object
+              enum:
+                - MINUTE
+                - HOUR
+                - DAY
+                - WEEK
+                - MONTH
+                - YEAR
+                - EPOCH
+                - LOGIN
+              type: string
+          type: object
+    UIFilterModel:
+      description: Model for UIFilter
+      properties:
+        name:
+          description: Name
+          type: string
+        operator:
+          description: Operator
+          enum:
+            - =
+          type: string
+        value:
+          description: Value
+          type: string
+      type: object
+info:
+  contact: {}
+  description:
+    "The Search Manager APIs enable you to manage your recent \nand saved\
+    \ Resource Query Language (RQL) queries.\n"
+  title: Prisma Cloud Search Manager API Overview
+  version: Latest
+openapi: 3.0.0
+paths:
+  /search/history:
+    get:
+      description: Lists saved or recent search queries based on your filter.
+      operationId: search-history
+      parameters:
+        - description: "Available values: recent, saved"
+          in: query
+          name: filter
+          required: true
+          schema:
+            type: string
+        - description:
+            Maximum number of searches to be returned. A single API call
+            retrieves a maximum of 1000 searches, which is also the default. Setting
+            the limit to -1 will also return the default.
+          in: query
+          name: limit
+          required: false
+          schema:
+            format: int32
+            type: integer
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                items:
+                  $ref: "#/components/schemas/SavedRecentSearch"
+                type: array
+          description: successful operation
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: View Search History
+      tags:
+        - Search Manager
+  /search/history/{id}:
+    get:
+      description:
+        Returns a search query. You can access only queries that are either
+        saved or recent searches.
+      operationId: search-history-by-id
+      parameters:
+        - description: Search ID
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/SearchModel"
+          description: successful operation
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Get Search Query by ID
+      tags:
+        - Search Manager
+    post:
+      description:
+        "Saves a search query to the **Saved Searches** list under the\
+        \ specified ID.  \r\n\r\nRequired parameters include the search ID, the RQL\
+        \ query, the flag that \nmarks this search as saved, and a unique name for\
+        \ the saved search. A best \npractice is to copy data from the results of\
+        \ a search history, update the \ndata as necessary, and set the **saved**\
+        \ parameter to **true**.\n\nThis API requires Prisma Cloud system administrator\
+        \ role access if you don't own the search with the given search ID.\n"
+      operationId: search-history-save
+      parameters:
+        - description: Search ID
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SearchModel"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/SearchResponseModelSearchModel"
+          description: successful operation
+        "400":
+          description: bad_request / unsupported_search_query / duplicate_search_name
+        "403":
+          description: cannot_update_default_saved_search / not_owner_or_same_role
+        "404":
+          description: not_found
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Save Search Query
+      tags:
+        - Search Manager
+    delete:
+      description: Deletes a saved search query.
+      operationId: search-history-delete
+      parameters:
+        - description: Search ID
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: success
+        "400":
+          description: bad_request
+        "403":
+          description: unauthorized_access
+        "404":
+          description: not_found
+        "409":
+          description: conflict_saved_search
+        "500":
+          description: internal_error
+      security:
+        - x-redlock-auth: []
+      summary: Delete Saved Search Query
+      tags:
+        - Search Manager
+servers:
+  - url: https://api.prismacloud.io
+tags:
+  - description:
+      The endpoints to save a search and manage your saved searches are listed
+      below.
+    name: Search Manager
