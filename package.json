@@ -20,7 +20,7 @@
     "clean-api": "yarn workspace demo clean-api-docs",
     "cy:run": "cypress run",
     "cy:open": "cypress open",
-    "format": "prettier . --check --ignore-unknown --ignore-path .gitignore",
+    "format": "prettier . --check --ignore-unknown --ignore-path .prettierignore",
     "lint": "eslint . --ignore-path .gitignore --ext .ts,.tsx,.js",
     "test": "jest",
     "test:cypress:dev": "start-server-and-test watch:demo http://localhost:3000 cy:open",
