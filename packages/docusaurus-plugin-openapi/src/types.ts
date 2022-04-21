@@ -29,8 +29,6 @@ export interface PluginOptions {
 
 export interface APIOptions {
   specPath: string;
-  showExecuteButton: boolean;
-  showManualAuthentication: boolean;
   outputDir: string;
   template?: string;
   sidebarOptions?: SidebarOptions;

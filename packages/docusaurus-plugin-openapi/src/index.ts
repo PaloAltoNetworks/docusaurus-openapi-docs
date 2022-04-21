@@ -26,14 +26,7 @@ export default function pluginOpenAPI(
   let { siteDir } = context;
 
   async function generateApiDocs(options: APIOptions) {
-    let {
-      specPath,
-      showExecuteButton,
-      showManualAuthentication,
-      outputDir,
-      template,
-      sidebarOptions,
-    } = options;
+    let { specPath, outputDir, template, sidebarOptions } = options;
 
     const contentPath = path.resolve(siteDir, specPath);
 
