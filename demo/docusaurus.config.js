@@ -56,6 +56,18 @@ const config = {
             specPath: "examples/openapi-cos.json",
             outputDir: "api/cos",
           },
+          burgers: {
+            specPath: "examples/food/burgers/openapi.yaml",
+            outputDir: "api/food/burgers",
+          },
+          yogurt: {
+            specPath: "examples/food/yogurtstore/openapi.yaml",
+            outputDir: "api/food/yogurtstore",
+          },
+          "openapi-issue": {
+            specPath: "examples/openapi-issue-21.json",
+            outputDir: "api/openapi-issue",
+          },
         },
       },
     ],
