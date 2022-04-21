@@ -18,11 +18,9 @@ import { Provider } from "react-redux";
 
 import { ThemeConfig } from "../../types";
 import Accept from "./Accept";
-import Authorization from "./Authorization";
 import { createAuth } from "./Authorization/slice";
 import Body from "./Body";
 import Curl from "./Curl";
-import Execute from "./Execute";
 import MethodEndpoint from "./MethodEndpoint";
 import ParamOptions from "./ParamOptions";
 import { createPersistanceMiddleware } from "./persistanceMiddleware";
