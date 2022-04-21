@@ -118,7 +118,7 @@ const config = {
             label: "Examples",
             position: "left",
             items: [
-              { to: "/api/petstore/", label: "Petstore" },
+              { to: "/api/category/petstore-api", label: "Petstore" },
               {
                 to: "/api/cos/create-a-bucket",
                 label: "Cloud Object Storage",
