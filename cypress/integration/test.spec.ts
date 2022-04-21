@@ -8,10 +8,10 @@
 describe("test", () => {
   it("loads Petstore page", () => {
     cy.viewport("macbook-15");
-    cy.visit("/api/petstore");
+    cy.visit("/api/petstore/add-a-new-pet-to-the-store");
     navTo(
-      [/^petstore$/i, /add a new pet to the store/i],
-      /add a new pet to the store/i
+      [/^petstore$/i, /update an existing pet/i],
+      /update an existing pet/i
     );
   });
 });
