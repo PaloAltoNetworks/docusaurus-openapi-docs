@@ -25,7 +25,6 @@ export default function pluginOpenAPI(
   let { config } = options;
   let { siteDir } = context;
 
-  // Generate md/mdx before loadContent() life cycle method
   async function generateApiDocs(options: APIOptions) {
     let {
       specPath,
@@ -47,7 +46,10 @@ export default function pluginOpenAPI(
           fs.mkdirSync(outputDir, { recursive: true });
           console.log(chalk.green(`Successfully created "${outputDir}"`));
         } catch (err) {
-          console.error(chalk.red(`Failed to create "${outputDir}" | ${err}`));
+          console.error(
+            chalk.red(`Failed to create "${outputDir}"`),
+            chalk.yellow(err)
+          );
         }
       }
 
@@ -78,31 +80,12 @@ export default function pluginOpenAPI(
             );
           } catch (err) {
             console.error(
-              chalk.red(`Failed to write "${outputDir}/sidebar.js" | ${err}`)
+              chalk.red(`Failed to write "${outputDir}/sidebar.js"`),
+              chalk.yellow(err)
             );
           }
         }
       }
-
-      // TODO: Address race condition leading to "Module not found"
-      // TODO: Determine if mdx cleanup should be separate yarn script
-      //
-      // const mdFiles = await Globby(["*.mdx"], {
-      //   cwd: path.resolve(outputDir),
-      // });
-      // mdFiles.map((mdx) =>
-      //   fs.unlink(`${outputDir}/${mdx}`, (err) => {
-      //     if (err) {
-      //       console.error(
-      //         chalk.red(`Cleanup failed for "${outputDir}/${mdx}"`)
-      //       );
-      //     } else {
-      //       console.log(
-      //         chalk.green(`Cleanup succeeded for "${outputDir}/${mdx}"`)
-      //       );
-      //     }
-      //   })
-      // );
 
       const mdTemplate = template
         ? fs.readFileSync(template).toString()
@@ -150,9 +133,8 @@ sidebar_class_name: "{{{api.method}}} api-method"
               );
             } catch (err) {
               console.error(
-                chalk.red(
-                  `Failed to write "${outputDir}/${item.id}.api.mdx" | ${err}`
-                )
+                chalk.red(`Failed to write "${outputDir}/${item.id}.api.mdx"`),
+                chalk.yellow(err)
               );
             }
           }
@@ -168,9 +150,8 @@ sidebar_class_name: "{{{api.method}}} api-method"
               );
             } catch (err) {
               console.error(
-                chalk.red(
-                  `Failed to write "${outputDir}/index.api.mdx" | ${err}`
-                )
+                chalk.red(`Failed to write "${outputDir}/index.api.mdx"`),
+                chalk.yellow(err)
               );
             }
           }
@@ -185,28 +166,41 @@ sidebar_class_name: "{{{api.method}}} api-method"
   }
 
   async function cleanApiDocs(options: APIOptions) {
-    const apiDir = path.join(siteDir, options.outputDir);
+    const { outputDir } = options;
+    const apiDir = path.join(siteDir, outputDir);
     const apiMdxFiles = await Globby(["*.api.mdx"], {
+      cwd: path.resolve(apiDir),
+    });
+    const sidebarFile = await Globby(["sidebar.js"], {
       cwd: path.resolve(apiDir),
     });
     apiMdxFiles.map((mdx) =>
       fs.unlink(`${apiDir}/${mdx}`, (err) => {
         if (err) {
-          console.error(chalk.red(`Cleanup failed for "${apiDir}/${mdx}"`));
+          console.error(
+            chalk.red(`Cleanup failed for "${apiDir}/${mdx}"`),
+            chalk.yellow(err)
+          );
         } else {
           console.log(chalk.green(`Cleanup succeeded for "${apiDir}/${mdx}"`));
         }
       })
     );
-    fs.unlink(`${apiDir}/sidebar.js`, (err) => {
-      if (err) {
-        console.error(chalk.red(`No "${apiDir}/sidebar.js" to clear`));
-      } else {
-        console.log(
-          chalk.green(`Cleanup succeeded for "${apiDir}/sidebar.js"`)
-        );
-      }
-    });
+
+    sidebarFile.map((sidebar) =>
+      fs.unlink(`${apiDir}/${sidebar}`, (err) => {
+        if (err) {
+          console.error(
+            chalk.red(`Cleanup failed for "${apiDir}/${sidebar}"`),
+            chalk.yellow(err)
+          );
+        } else {
+          console.log(
+            chalk.green(`Cleanup succeeded for "${apiDir}/${sidebar}"`)
+          );
+        }
+      })
+    );
   }
 
   return {
