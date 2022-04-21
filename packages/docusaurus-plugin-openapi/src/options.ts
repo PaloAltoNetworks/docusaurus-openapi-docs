@@ -7,7 +7,7 @@
 
 import { Joi } from "@docusaurus/utils-validation";
 
-import type { PluginOptions, APIOptions } from "./types";
+import type { PluginOptions } from "./types";
 
 export const DEFAULT_OPTIONS: PluginOptions = {
   id: "default",
