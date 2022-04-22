@@ -2836,6 +2836,21 @@
   dependencies:
     "@octokit/openapi-types" "^11.2.0"
 
+"@paloaltonetworks/docusaurus-plugin-proxy@17.0.9":
+  version "17.0.9"
+  resolved "https://registry.yarnpkg.com/@paloaltonetworks/docusaurus-plugin-proxy/-/docusaurus-plugin-proxy-17.0.9.tgz#7f02d0a4c0092ccc2ead3c48c81353c06c62c331"
+  integrity sha512-uIWXSUP5kuOELZ2OUt+Xlt73oeCYeKdcQIE6aYTU6dh5oWsRuMoG3K5WWEsnnJ3UK67KAPsZTWaNijNrK9J1jw==
+
+"@paloaltonetworks/docusaurus-preset-openapi@17.0.9":
+  version "17.0.9"
+  resolved "https://registry.yarnpkg.com/@paloaltonetworks/docusaurus-preset-openapi/-/docusaurus-preset-openapi-17.0.9.tgz#cdb165a891df120813aab7f924eb5be89f361758"
+  integrity sha512-1echlw00HCBkoBf1M06LXLc0PpcNCZ/yJZBsRAg3SQ5IVrb7y8STgeQxEbpxiUjxLC/lAMQ+vgDWqv7H1ThpmQ==
+  dependencies:
+    "@docusaurus/preset-classic" "2.0.0-beta.17"
+    "@paloaltonetworks/docusaurus-plugin-openapi" "17.0.9"
+    "@paloaltonetworks/docusaurus-plugin-proxy" "17.0.9"
+    "@paloaltonetworks/docusaurus-theme-openapi" "17.0.9"
+
 "@paloaltonetworks/openapi-to-postmanv2@3.1.0-hotfix.1":
   version "3.1.0-hotfix.1"
   resolved "https://registry.yarnpkg.com/@paloaltonetworks/openapi-to-postmanv2/-/openapi-to-postmanv2-3.1.0-hotfix.1.tgz#4baf401d2e94ba86d888e6011a4c45d824e88114"
