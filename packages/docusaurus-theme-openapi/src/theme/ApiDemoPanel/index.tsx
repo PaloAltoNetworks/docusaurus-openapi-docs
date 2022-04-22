@@ -18,11 +18,9 @@ import { Provider } from "react-redux";
 
 import { ThemeConfig } from "../../types";
 import Accept from "./Accept";
-import Authorization from "./Authorization";
 import { createAuth } from "./Authorization/slice";
 import Body from "./Body";
 import Curl from "./Curl";
-import Execute from "./Execute";
 import MethodEndpoint from "./MethodEndpoint";
 import ParamOptions from "./ParamOptions";
 import { createPersistanceMiddleware } from "./persistanceMiddleware";
@@ -32,15 +30,7 @@ import Server from "./Server";
 import { createStoreWithState } from "./store";
 import styles from "./styles.module.css";
 
-function ApiDemoPanel({
-  item,
-  showExecuteButton,
-  showManualAuthentication,
-}: {
-  item: NonNullable<Metadata["api"]>;
-  showExecuteButton: boolean;
-  showManualAuthentication: boolean;
-}) {
+function ApiDemoPanel({ item }: { item: NonNullable<Metadata["api"]> }) {
   const { siteConfig } = useDocusaurusContext();
   const themeConfig = siteConfig.themeConfig as ThemeConfig;
   const options = themeConfig.api;
@@ -102,8 +92,6 @@ function ApiDemoPanel({
         className={styles.apiDemoPanelContainer}
         style={{ marginTop: "3.5em" }}
       >
-        {showManualAuthentication && <Authorization />}
-
         <MethodEndpoint method={method} path={path} />
 
         <SecuritySchemes />
@@ -123,10 +111,6 @@ function ApiDemoPanel({
           postman={postman}
           codeSamples={(item as any)["x-code-samples"] ?? []}
         />
-
-        {showExecuteButton && (
-          <Execute postman={postman} proxy={options?.proxy} />
-        )}
 
         <Response />
       </div>

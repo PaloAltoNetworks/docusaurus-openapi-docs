@@ -29,8 +29,6 @@ export interface PluginOptions {
 
 export interface APIOptions {
   specPath: string;
-  showExecuteButton: boolean;
-  showManualAuthentication: boolean;
   outputDir: string;
   template?: string;
   sidebarOptions?: SidebarOptions;
@@ -58,8 +56,6 @@ export interface ApiMetadataBase {
   permalink: string;
   sidebarPosition?: number;
   frontMatter: Record<string, unknown>;
-  showExecuteButton?: boolean;
-  showManualAuthentication?: boolean;
 }
 
 export interface ApiPageMetadata extends ApiMetadataBase {
