@@ -24,7 +24,7 @@ export default function pluginOpenAPI(
 ): Plugin<LoadedContent> {
   let { config } = options;
   let { siteDir } = context;
-
+  // Remove later
   async function generateApiDocs(options: APIOptions) {
     let {
       specPath,
