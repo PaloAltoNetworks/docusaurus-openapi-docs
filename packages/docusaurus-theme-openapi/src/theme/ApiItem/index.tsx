@@ -47,7 +47,7 @@ export default function ApiItem(props: typeof Props): JSX.Element {
             </div>
           </div>
           <div className="row">
-            <div className={clsx("col")}>
+            <div className={clsx("col col--7")}>
               <DocPaginator previous={previous} next={next} />
             </div>
           </div>
