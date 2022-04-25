@@ -120,10 +120,10 @@ const config = {
             items: [
               { to: "/api/category/petstore-api", label: "Petstore" },
               {
-                to: "/api/cos/create-a-bucket",
+                to: "/api/category/cos-api",
                 label: "Cloud Object Storage",
               },
-              { to: "api/food/burgers/", label: "Food" },
+              { to: "/api/category/food-apis", label: "Food" },
             ],
           },
           {

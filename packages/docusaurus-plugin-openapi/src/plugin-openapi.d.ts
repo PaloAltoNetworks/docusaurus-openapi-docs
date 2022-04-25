@@ -68,8 +68,6 @@ declare module "@theme/ApiItem" {
     readonly previous?: { readonly permalink: string; readonly title: string };
     readonly next?: { readonly permalink: string; readonly title: string };
     readonly api?: ApiItem & { postman: Request }; // TODO
-    readonly showExecuteButton?: boolean;
-    readonly showManualAuthentication?: boolean;
     readonly type?: string;
   };
 

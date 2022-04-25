@@ -26,14 +26,7 @@ export default function pluginOpenAPI(
   let { siteDir } = context;
 
   async function generateApiDocs(options: APIOptions) {
-    let {
-      specPath,
-      showExecuteButton,
-      showManualAuthentication,
-      outputDir,
-      template,
-      sidebarOptions,
-    } = options;
+    let { specPath, outputDir, template, sidebarOptions } = options;
 
     const contentPath = path.resolve(siteDir, specPath);
 
@@ -111,9 +104,6 @@ sidebar_class_name: "{{{api.method}}} api-method"
       `;
 
       loadedApi.map(async (item) => {
-        // Statically set custom plugin options
-        item.showExecuteButton = showExecuteButton;
-        item.showManualAuthentication = showManualAuthentication;
         const markdown =
           item.type === "api" ? createApiPageMD(item) : createInfoPageMD(item);
         item.markdown = markdown;
