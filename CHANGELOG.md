@@ -1,3 +1,31 @@
+## 18.0.0-beta.1 (Apr 25, 2022)
+
+High level enhancements
+
+- [New Feature]: Extend CLI to support generating API docs ([#55](https://github.com/PaloAltoNetworks/docusaurus-openapi/pull/55))
+- [Enhancement]: Wrap `DocItem` for `ApiItem` ([#60](https://github.com/PaloAltoNetworks/docusaurus-openapi/pull/60))
+- [Cleanup]: Remove unused code ([#57](https://github.com/PaloAltoNetworks/docusaurus-openapi/pull/57))
+
+Other enhancements and bug fixes
+
+- Merge pull request #60 from PaloAltoNetworks/update-ApiItem
+- fix page width
+- Update package.json
+- Merge pull request #52 from PaloAltoNetworks/api-demo-panel-styling
+- Add important flag to openapi-card-background-color
+- Update openapi variables
+- Merge branch 'panw-main' of https://github.com/PaloAltoNetworks/docusaurus-openapi into api-demo-panel-styling
+- [Workaround]: Ensure info/index doc is first item in sidebar ([#51](https://github.com/PaloAltoNetworks/docusaurus-openapi/pull/51))
+- Add background styling to demo panel
+- Merge pull request #50 from PaloAltoNetworks/editor-cleanup
+- Revert light bright styling
+- Define openapi-required css variable
+- Remove useMonaco hook and import Monaco type
+- Remove console log
+- Fix mustache template ([#49](https://github.com/PaloAltoNetworks/docusaurus-openapi/pull/49))
+- [Bug Fix]: CORS Issue - Monaco editor ([#48](https://github.com/PaloAltoNetworks/docusaurus-openapi/pull/48))
+- [Experimental] Enable prev/next for beforeApiDocs items ([#45](https://github.com/PaloAltoNetworks/docusaurus-openapi/pull/45))
+
 ## 17.0.9 (Apr 4, 2022)
 
 High level enhancements
