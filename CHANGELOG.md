@@ -1,8 +1,11 @@
 ## 18.0.0-beta.1 (Apr 25, 2022)
 
-High level enhancements
+💥 Breaking Changes
 
 - [New Feature]: Extend CLI to support generating API docs ([#55](https://github.com/PaloAltoNetworks/docusaurus-openapi/pull/55))
+
+High level enhancements
+
 - [Enhancement]: Wrap `DocItem` for `ApiItem` ([#60](https://github.com/PaloAltoNetworks/docusaurus-openapi/pull/60))
 - [Cleanup]: Remove unused code ([#57](https://github.com/PaloAltoNetworks/docusaurus-openapi/pull/57))
 
