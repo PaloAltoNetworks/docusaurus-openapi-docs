@@ -21,8 +21,8 @@
     "watch": "tsc --watch"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "2.0.0-beta.17",
-    "@docusaurus/types": "2.0.0-beta.17",
+    "@docusaurus/module-type-aliases": "2.0.0-beta.18",
+    "@docusaurus/types": "2.0.0-beta.18",
     "@types/fs-extra": "^9.0.13",
     "@types/json-schema": "^7.0.9",
     "@types/lodash": "^4.14.176",
@@ -30,10 +30,10 @@
     "utility-types": "^3.10.0"
   },
   "dependencies": {
-    "@docusaurus/mdx-loader": "2.0.0-beta.17",
-    "@docusaurus/plugin-content-docs": "2.0.0-beta.17",
-    "@docusaurus/utils": "2.0.0-beta.17",
-    "@docusaurus/utils-validation": "2.0.0-beta.17",
+    "@docusaurus/mdx-loader": "2.0.0-beta.18",
+    "@docusaurus/plugin-content-docs": "2.0.0-beta.18",
+    "@docusaurus/utils": "2.0.0-beta.18",
+    "@docusaurus/utils-validation": "2.0.0-beta.18",
     "@paloaltonetworks/openapi-to-postmanv2": "3.1.0-hotfix.1",
     "@paloaltonetworks/postman-collection": "^4.1.0",
     "@types/js-yaml": "^4.0.5",
