@@ -1,3 +1,12 @@
+## 18.0.0-beta.2 (Apr 26, 2022)
+
+High level enhancements
+
+- Upgrade to Docusaurus 2.0.0-beta.18
+- Remove docusaurus-template-openapi and create-docusaurus-openapi
+
+> Note that template moved to it's own [GitHub repository](https://github.com/PaloAltoNetworks/docusaurus-template-openapi-docs)
+
 ## 18.0.0-beta.1 (Apr 25, 2022)
 
 💥 Breaking Changes
