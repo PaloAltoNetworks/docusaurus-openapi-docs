@@ -1396,17 +1396,6 @@
     url-loader "^4.1.1"
     webpack "^5.70.0"
 
-"@docusaurus/module-type-aliases@2.0.0-beta.17":
-  version "2.0.0-beta.17"
-  resolved "https://registry.yarnpkg.com/@docusaurus/module-type-aliases/-/module-type-aliases-2.0.0-beta.17.tgz#73f6d34be202ac093e78769ff72613d353087cd7"
-  integrity sha512-Tu+8geC/wyygBudbSwvWIHEvt5RwyA7dEoE1JmPbgQtmqUxOZ9bgnfemwXpJW5mKuDiJASbN4of1DhbLqf4sPg==
-  dependencies:
-    "@docusaurus/types" "2.0.0-beta.17"
-    "@types/react" "*"
-    "@types/react-router-config" "*"
-    "@types/react-router-dom" "*"
-    react-helmet-async "*"
-
 "@docusaurus/module-type-aliases@2.0.0-beta.18":
   version "2.0.0-beta.18"
   resolved "https://registry.yarnpkg.com/@docusaurus/module-type-aliases/-/module-type-aliases-2.0.0-beta.18.tgz#001379229c58cbc3ed565e19437cbda86d5e8742"
@@ -1609,18 +1598,6 @@
   dependencies:
     fs-extra "^10.0.1"
     tslib "^2.3.1"
-
-"@docusaurus/types@2.0.0-beta.17":
-  version "2.0.0-beta.17"
-  resolved "https://registry.yarnpkg.com/@docusaurus/types/-/types-2.0.0-beta.17.tgz#582e3d961ce4409ed17454669b3f6a7a9f696cdd"
-  integrity sha512-4o7TXu5sKlQpybfFFtsGUElBXwSpiXKsQyyWaRKj7DRBkvMtkDX6ITZNnZO9+EHfLbP/cfrokB8C/oO7mCQ5BQ==
-  dependencies:
-    commander "^5.1.0"
-    joi "^17.6.0"
-    querystring "0.2.1"
-    utility-types "^3.10.0"
-    webpack "^5.69.1"
-    webpack-merge "^5.8.0"
 
 "@docusaurus/types@2.0.0-beta.18":
   version "2.0.0-beta.18"
@@ -11833,11 +11810,6 @@ querystring@0.2.0:
   resolved "https://registry.yarnpkg.com/querystring/-/querystring-0.2.0.tgz#b209849203bb25df820da756e747005878521620"
   integrity sha1-sgmEkgO7Jd+CDadW50cAWHhSFiA=
 
-querystring@0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/querystring/-/querystring-0.2.1.tgz#40d77615bb09d16902a85c3e38aa8b5ed761c2dd"
-  integrity sha512-wkvS7mL/JMugcup3/rMitHmd9ecIGd2lhFhK9N3UUQ450h66d1r3Y9nvXzQAW1Lq+wyx61k/1pfKS5KuKiyEbg==
-
 queue-microtask@^1.2.2:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/queue-microtask/-/queue-microtask-1.2.3.tgz#4929228bbc724dfac43e0efb058caf7b6cfb6243"
@@ -14709,7 +14681,7 @@ webpack-sources@^3.2.3:
   resolved "https://registry.yarnpkg.com/webpack-sources/-/webpack-sources-3.2.3.tgz#2d4daab8451fd4b240cc27055ff6a0c2ccea0cde"
   integrity sha512-/DyMEOrDgLKKIG0fmvtz+4dUX/3Ghozwgm6iPp8KRhvn+eQf9+Q7GWxVNMk3+uCPWfdXYC4ExGBckIXdFEfH1w==
 
-webpack@^5.61.0, webpack@^5.69.1, webpack@^5.70.0:
+webpack@^5.61.0, webpack@^5.70.0:
   version "5.72.0"
   resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.72.0.tgz#f8bc40d9c6bb489a4b7a8a685101d6022b8b6e28"
   integrity sha512-qmSmbspI0Qo5ld49htys8GY9XhS9CGqFoHTsOVAnjBdg0Zn79y135R+k4IR4rKK6+eKaabMhJwiVB7xw0SJu5w==
