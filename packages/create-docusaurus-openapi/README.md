@@ -1,1 +1,0 @@
-# `create-docusaurus-openapi`
