@@ -1,27 +1,28 @@
 /* ============================================================================
- * Copyright (c) Cloud Annotations
+ * Copyright (c) Palo Alto Networks
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
 import React, {
-  useState,
-  useRef,
-  cloneElement,
   Children,
+  cloneElement,
   isValidElement,
+  useRef,
+  useState,
 } from "react";
 
 import {
-  useScrollPositionBlocker,
   duplicates,
+  useScrollPositionBlocker,
   useTabGroupChoice,
 } from "@docusaurus/theme-common";
 import useIsBrowser from "@docusaurus/useIsBrowser";
 import clsx from "clsx";
 
 import styles from "./styles.module.css"; // A very rough duck type, but good enough to guard against mistakes while
+
 // allowing customization
 
 function isTabItem(comp) {
