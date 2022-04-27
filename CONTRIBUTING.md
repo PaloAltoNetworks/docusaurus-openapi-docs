@@ -1,118 +1,58 @@
-# Contributing to Docusaurus OpenAPI
+# How to contribute
 
-Our goal is to make API documentation a seamless experience for both the developers creating and the ones using them. In order to achieve this, we built Docusaurus OpenAPI from scratch to be a native extension to Docusaurus. If you're interested in contributing to Docusaurus OpenAPI, hopefully, this document makes the process for contributing easier.
+:+1::tada: First off, thanks for taking the time to contribute! :tada::+1:
 
-## Get Involved
+It's people like you that make security open source such a force in preventing
+successful cyber-attacks. Following these guidelines helps keep the project
+maintainable, easy to contribute to, and more secure. Thank you for taking the
+time to follow this guide.
 
-There are many ways to contribute, and many of them do not involve writing any code. Here's a few ideas to get started:
+## Where to start
 
-- Simply start using Docusaurus OpenAPI. Does everything work as expected? If not, we're always looking for improvements. Let us know by [opening an issue](https://github.com/cloud-annotations/docusaurus-plugin-openapi/issues/new).
-- Look through the [open issues](https://github.com/cloud-annotations/docusaurus-plugin-openapi/issues). Provide workarounds, ask for clarification, or suggest labels.
-- If you find an issue you would like to fix, [open a pull request](https://github.com/cloud-annotations/docusaurus-plugin-openapi/blob/main/CONTRIBUTING.md#your-first-pull-request). Issues tagged as _[Good first issue are](https://github.com/cloud-annotations/docusaurus-plugin-openapi/labels/Good%20first%20issue)_ a good place to get started.
-- Read through our documentation (READMEs or even this page). If you find anything that is confusing or can be improved, you can click the "pencil ✏️" icon at the top of the file, which will take you to the GitHub interface to make and propose changes.
+There are many ways to contribute. You can fix a bug, improve the documentation,
+submit bug reports and feature requests, or take a first shot at a feature you
+need for yourself.
 
-Contributions are very welcome. If you think you need help planning your contribution, please reach out to our maintainer on Twitter at [@bourdakos1](https://twitter.com/bourdakos1) and let us know you are looking for a bit of help.
+Pull requests are necessary for all contributions of code or documentation.
 
-## Our Development Process
+## New to open source?
 
-All work on Docusaurus OpenAPI happens directly on GitHub. All changes will be public through pull requests and go through the same review process.
+If you're **new to open source** and not sure what a pull request is, welcome!!
+We're glad to have you! All of us once had a contribution to make and didn't
+know where to start.
 
-All pull requests will be checked by the continuous integration system, GitHub actions. There are unit tests, end-to-end tests and code style/lint tests.
+Even if you don't write code for your job, don't worry, the skills you learn
+during your first contribution to open source can be applied in so many ways,
+you'll wonder what you ever did before you had this knowledge. It's worth
+learning.
 
-### Branch Organization
+[Learn how to make a pull request](https://github.com/PaloAltoNetworks/.github/blob/master/Learn-GitHub.md#learn-how-to-make-a-pull-request)
 
-Docusaurus OpenAPI has one primary branch `main`. We don't use separate branches for development or for upcoming releases.
+## Fixing a typo, or a one or two line fix
 
-## Proposing a Change
+Many fixes require little effort or review, such as:
 
-If you would like to request a new feature or enhancement, but are not yet thinking about opening a pull request, you can also [open an issue](https://github.com/cloud-annotations/docusaurus-plugin-openapi/issues/new).
+> - Spelling / grammar, typos, white space and formatting changes
+> - Comment clean up
+> - Change logging messages or debugging output
+>   These small changes can be made directly in GitHub if you like.
 
-If you intend to change the public API (e.g., changes to the options available to the user in `docusaurus.config.js`) or make any non-trivial changes to the implementation, we recommend filing an issue to propose your change. This lets us reach an agreement on your proposal before you put significant effort into it. These types of issues should be rare.
+Click the pencil icon in GitHub above the file to edit the file directly in
+GitHub. This will automatically create a fork and pull request with the change.
+See:
+[Make a small change with a Pull Request](https://www.freecodecamp.org/news/how-to-make-your-first-pull-request-on-github/)
 
-If you're only fixing a bug, it's fine to submit a pull request right away but we still recommend filing an issue detailing what you're fixing. This is helpful in case we don't accept that specific fix but want to keep track of the issue.
+## Bug fixes and features
 
-### Bugs
+For something that is bigger than a one or two line fix, go through the process
+of making a fork and pull request yourself:
 
-We use [GitHub Issues](https://github.com/cloud-annotations/docusaurus-plugin-openapi/issues) for our public bugs. If you would like to report a problem, take a look around and see if someone already opened an issue about it. If you are certain this is a new, unreported bug, you can submit a bug report.
-
-If you have questions about using Docusaurus OpenAPI, contact our maintainer on Twitter at [@bourdakos1](https://twitter.com/bourdakos1), and we will do our best to answer your questions.
-
-## Pull Requests
-
-### Your First Pull Request
-
-So you have decided to contribute code back to upstream by opening a pull request. You've invested a good chunk of time, and we appreciate it. We will do our best to work with you and get the PR looked at.
-
-#### Repo Setup
-
-1. Fork [the repository](https://github.com/cloud-annotations/docusaurus-plugin-openapi) and create your branch from `main`.
-
-```sh
-git clone git@github.com:your-username/docusaurus-plugin-openapi.git
-git checkout -b your-feature-or-fix-name
-```
-
-#### Installation
-
-1. Ensure you have [Yarn](https://classic.yarnpkg.com/lang/en/docs/install/) installed.
-2. After cloning the repository, run `yarn install` in the root of the repository.
-
-```sh
-cd where-you-cloned-docusaurus-plugin-openapi
-yarn install
-```
-
-#### Build
-
-1. Build all packages and generate the static content of the demo.
-
-```sh
-yarn build
-```
-
-2. Serve the generated demo site.
-
-```sh
-yarn serve
-```
-
-3. Visit [http://localhost:3000/](http://localhost:3000/) or wherever the build directory is being served.
-
-#### Development Workflow
-
-For faster iterations, packages can be built and watched by running:
-
-```sh
-yarn watch
-```
-
-And in a seperate terminal window, the demo can be built and watched by running:
-
-```sh
-yarn watch:demo
-```
-
-#### Testing
-
-Before we merge your code into our main branch, we expect it to pass four test groups (format, linting, unit tests and end-to-end tests).
-
-1. **Format**: We use Husky pre-commit hooks and Prettier to automatically format your code, so you shouldn't need to worry too much about this one.
-   Husky and Prettier
-
-2. **Linting**: We use ESLint to testing for linting errors and warnings. To check to see if your code has any linting issues you can run:
-
-```sh
-yarn lint
-```
-
-3. **Unit Tests**: We use Jest for unit testing. Run the unit tests with:
-
-```sh
-yarn test
-```
-
-4. **End-to-End Tests**: We use Cypress for end-to-end testing. Run the end-to-end with:
-
-```sh
-yarn test:cypress
-```
+> 1. Create your own fork of the code
+> 2. Clone the fork locally
+> 3. Make the changes in your local clone
+> 4. Push the changes from local to your fork
+> 5. Create a pull request to pull the changes from your fork back into the
+>    upstream repository
+>    Please use clear commit messages so we can understand what each commit does.
+>    We'll review every PR and might offer feedback or request changes before
+>    merging.

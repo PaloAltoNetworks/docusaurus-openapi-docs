@@ -68,3 +68,7 @@ For more insight into why we decided to completely fork see [#47](https://github
 <a href="https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=PaloAltoNetworks/docusaurus-openapi-docs" />
 </a>
+
+## Support
+
+Please read [SUPPORT.md](SUPPORT.md) for details on how to get support for this project.
