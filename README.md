@@ -1,7 +1,7 @@
 <h1 align="center">Docusaurus OpenAPI Doc Generator</h1>
 
 <div align="center">
-<img src="./logo.svg" />
+<img src="https://user-images.githubusercontent.com/9343811/165619985-c053e604-e266-45d2-84a2-4fca9ad79e3b.svg" />
 </div>
 
 <div align="center">
@@ -22,7 +22,7 @@ OpenAPI plugin for generating API reference docs in Docusaurus v2.
 
 <p align="center">
 
-![](delete-a-pet.png)
+<img width="650" alt="delete-a-pet" src="https://user-images.githubusercontent.com/9343811/165620346-d666db22-3587-4ddf-af58-947fddc9fe99.png">
 
 </p>
 
