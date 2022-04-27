@@ -38,7 +38,7 @@ Template Repository URL:
 https://github.com/PaloAltoNetworks/docusaurus-template-openapi-docs.git
 ```
 
-> When asked the template repo should be clone choose "Copy" unless you know better.
+> When asked how the template repo should be cloned choose "copy" (unless you know better).
 
 ```bash
 cd my-website
