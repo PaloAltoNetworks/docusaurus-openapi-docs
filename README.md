@@ -29,7 +29,7 @@ OpenAPI plugin for generating API reference docs in Docusaurus v2.
 ## User Quick Start
 
 ```bash
-npx create-docusaurus@2.0.0-beta.18 my-website "Git repository" --package-manager yarncd my-website
+npx create-docusaurus@2.0.0-beta.18 my-website "Git repository" --package-manager yarn
 ```
 
 Template Repository URL:
@@ -39,6 +39,11 @@ https://github.com/PaloAltoNetworks/docusaurus-template-openapi-docs.git
 ```
 
 > When asked the template repo should be clone choose "Copy" unless you know better.
+
+```bash
+cd my-website
+yarn start
+```
 
 ## Developer Quick Start
 
