@@ -14,6 +14,7 @@ import type { Props, FrontMatter } from "@theme/DocItem";
 import DocItemFooter from "@theme/DocItemFooter";
 import DocPaginator from "@theme/DocPaginator";
 import clsx from "clsx";
+import cloneDeep from "lodash/cloneDeep";
 
 import styles from "./styles.module.css";
 
@@ -26,19 +27,20 @@ interface ApiFrontMatter extends FrontMatter {
 }
 
 export default function ApiItem(props: Props): JSX.Element {
+  const { previous, next } = props.content.metadata;
+
   // Make deep copy of props so we can show/hide DocItem features
   // as needed when used to wrap api docs.
-  const apiDocItemProps = Object.assign({}, props);
-  const { content: DocItemContent } = apiDocItemProps;
-  const { metadata, frontMatter } = DocItemContent;
+  const apiDocItemProps = { ...props };
+  const { content: ApiItemContent } = apiDocItemProps;
+  const { metadata, frontMatter } = ApiItemContent;
   const { api } = frontMatter as ApiFrontMatter;
-  const { previous, next } = metadata;
 
   if (api) {
     (metadata.next as any) = null;
     (metadata.previous as any) = null;
-    (metadata.lastUpdatedAt as any) = null;
-    (metadata.lastUpdatedBy as any) = null;
+    // (metadata.lastUpdatedAt as any) = null;
+    // (metadata.lastUpdatedBy as any) = null;
     (frontMatter.hide_table_of_contents as any) = true;
     return (
       <div className={styles.apiItemContainer}>
@@ -51,6 +53,7 @@ export default function ApiItem(props: Props): JSX.Element {
               <ApiDemoPanel item={api} />
             </div>
           </div>
+
           <div className="row">
             <div className={clsx("col col--7")}>
               <DocItemFooter {...props} />
