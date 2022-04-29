@@ -77,7 +77,6 @@
 
 :global(.theme-api-markdown h2) {
   font-size: 2rem;
-  margin-top: 3rem;
 }
 
 :global(.schemaItem) {
