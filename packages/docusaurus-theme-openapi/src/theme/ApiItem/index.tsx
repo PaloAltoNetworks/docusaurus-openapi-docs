@@ -14,7 +14,7 @@ import type { Props, FrontMatter } from "@theme/DocItem";
 import DocItemFooter from "@theme/DocItemFooter";
 import DocPaginator from "@theme/DocPaginator";
 import clsx from "clsx";
-import cloneDeep from "lodash/cloneDeep";
+// import cloneDeep from "lodash/cloneDeep";
 
 import styles from "./styles.module.css";
 
