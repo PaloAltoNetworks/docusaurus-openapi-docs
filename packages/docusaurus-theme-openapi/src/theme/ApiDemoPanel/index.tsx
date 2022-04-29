@@ -88,10 +88,7 @@ function ApiDemoPanel({ item }: { item: NonNullable<Metadata["api"]> }) {
 
   return (
     <Provider store={store2}>
-      <div
-        className={styles.apiDemoPanelContainer}
-        style={{ marginTop: "3.5em" }}
-      >
+      <div className={styles.apiDemoPanelContainer}>
         <MethodEndpoint method={method} path={path} />
 
         <SecuritySchemes />

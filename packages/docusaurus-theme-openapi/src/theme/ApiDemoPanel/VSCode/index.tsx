@@ -20,7 +20,7 @@ interface Props {
 
 function VSCode({ value, language, onChange }: Props) {
   const [focused, setFocused] = useState(false);
-  const { isDarkTheme } = useColorMode();
+  const isDarkTheme = useColorMode().colorMode === "dark" ?? false;
 
   function handleEditorWillMount(monaco: Monaco) {
     const styles = getComputedStyle(document.documentElement);
