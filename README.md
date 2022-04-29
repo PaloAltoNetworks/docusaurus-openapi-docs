@@ -1,7 +1,7 @@
 <h1 align="center">Docusaurus OpenAPI Doc Generator</h1>
 
 <div align="center">
-<img src="https://user-images.githubusercontent.com/9343811/165619985-c053e604-e266-45d2-84a2-4fca9ad79e3b.svg" />
+<img width="200" src="https://user-images.githubusercontent.com/9343811/165975569-1bc29814-884c-4931-83df-860043b625b7.svg" />
 </div>
 
 <div align="center">
