@@ -57,58 +57,11 @@ yarn build-packages
 yarn watch:demo
 ```
 
-## Configuring OpenAPI Definitions
+## CLI Usage built-in with `docusaurus-plugin-openapi-docs`
 
-Configuring multiple OpenAPI definitions only require a single `docusaurus-plugin-openapi-docs` and `plugin-content-docs` instance. Any additional needed specs can be added and configured by defining their options within the `config` object of `docusaurus-plugin-openapi-docs`. Refer to the example below:
-
-```js
-// docusaurus.config.js
-
-{
-  plugins: [
-    [
-      'docusaurus-plugin-openapi-docs',
-      {
-        id: "apiDocs",
-        config: {
-          petstore: { // Note: petstore key is treated as the <id> and can be used to specify an API doc instance when using CLI commands
-            specPath: "examples/petstore.yaml", // Path to designated spec file
-            outputDir: "api/petstore", // Output directory for generated .mdx docs
-            sidebarOptions: {
-              groupPathsBy: "tags",
-            },
-          },
-          burgers: {
-            specPath: "examples/food/burgers/openapi.yaml",
-            outputDir: "api/food/burgers",
-          }
-        }
-      },
-    ],
-    [
-      "@docusaurus/plugin-content-docs",
-      {
-        id: "openapi",
-        path: "api",
-        breadcrumbs: true,
-        routeBasePath: "api",
-        include: ["**/*.md", "**/*.mdx"],
-        sidebarPath: "apiSidebars.js",
-        docLayoutComponent: "@theme/DocPage",
-        docItemComponent: "@theme/ApiItem",
-        showLastUpdateAuthor: true,
-        showLastUpdateTime: true,
-      },
-    ],
-  ],
-}
-```
-
-## CLI Usage
+The `docusaurus-plugin-openapi-docs` plugin is a CLI, that allows you to generate or clean API `MDX` docs from OAS files.
 
 ### Generating OpenAPI Docs
-
-After successfully configuring your `docusaurus.config.js` file, you are now ready to generate your OpenAPI docs with the provided CLI commands.
 
 To generate all OpenAPI Docs, simply run the following command from the root directory of your project:
 
@@ -143,97 +96,77 @@ yarn docusaurus clean-api-docs all
 You may also remove a particular set of API docs by specifying the unique `id` of your desired spec instance.
 
 ```bash
-yarn docusaurus gen-api-docs <id>
+yarn docusaurus clean-api-docs <id>
 ```
 
 Example:
 
 ```bash
-yarn docusaurus gen-api-docs burgers
+yarn docusaurus clean-api-docs burgers
 ```
 
 > This will remove all API docs relative to `burgers`, configured in the example `docusaurus.config.js` above.
 
-## Configuring API sidebars
+## Configuring `docusaurus.config.js` (Plugin and theme usage)
 
-Creating a sidebar enables you to create an ordered group of docs, render a sidebar for each doc of that group, and provide next/previous navigation.
-
-Let's take a brief moment to revisit the `docusaurus.config.js` example above. You may have noticed that `petstore` had a slightly different configuration, specifically the added `sidebarOptions` option. When `sidebarOptions` is defined _(optional)_, a custom `sidebar.js` slice will also be generated within the API doc's path after running the `gen-api-docs` command.
-
-Refer to the example below for configuring your API sidebars:
+Here is an example of properly configuring your `docusaurus.config.js` file for `docusaurus-plugin-openapi-docs` and `docusaurus-theme-openapi-docs` usage.
 
 ```js
 // docusaurus.config.js
 
-plugins: [
+{
+  presets: [
   [
-    'docusaurus-plugin-openapi-docs',
-    {
-      id: "apiDocs",
-      config: {
-        petstore: {
-          specPath: "examples/petstore.yaml",
-          outputDir: "api/petstore",
-          sidebarOptions: { // Passing in this option will generate a sidebar slice
-            groupPathsBy: "tags",
-          },
-        },
-        burgers: {
-          specPath: "examples/food/burgers/openapi.yaml",
-          outputDir: "api/food/burgers",
-        }
+    "classic",
+    /** @type {import('@docusaurus/preset-classic').Options} */
+    ({
+      docs: {
+        sidebarPath: require.resolve("./sidebars.js"),
+        // Please change this to your repo.
+        // Remove this to remove the "edit this page" links.
+        editUrl:
+          "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
+        docLayoutComponent: "@theme/DocPage",
+        docItemComponent: "@theme/ApiItem" // Derived from docusaurus-theme-openapi-docs
+      },
+      blog: {
+        showReadingTime: true,
+        // Please change this to your repo.
+        // Remove this to remove the "edit this page" links.
+        editUrl:
+          "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/"
+      },
+      theme: {
+        customCss: require.resolve("./src/css/custom.css")
       }
-    },
-  ],
-  [
-    "@docusaurus/plugin-content-docs",
-    {
-      id: "openapi",
-      path: "api",
-      breadcrumbs: true,
-      routeBasePath: "api",
-      include: ["**/*.md", "**/*.mdx"],
-      sidebarPath: "apiSidebars.js", // Specified path to sidebars file
-      ...
-      ...
-    },
-  ],
-```
+    })
+  ]
+],
 
-```js
-// apiSidebars.js
-
-const sidebars = {
-  openApiSidebar: [
-    {
-      type: "category",
-      label: "Petstore",
-      link: {
-        type: "generated-index",
-        title: "Petstore API",
-        description:
-          "This is a sample server Petstore server. You can find out more about Swagger at http://swagger.io or on irc.freenode.net, #swagger. For this sample, you can use the api key special-key to test the authorization filters.",
-        slug: "/category/petstore-api",
+  plugins: [
+    [
+      'docusaurus-plugin-openapi-docs',
+      {
+        id: "apiDocs",
+        config: {
+          petstore: { // Note: petstore key is treated as the <id> and can be used to specify an API doc instance when using CLI commands
+            specPath: "examples/petstore.yaml", // Path to designated spec file
+            outputDir: "api/petstore", // Output directory for generated .mdx docs
+            sidebarOptions: {
+              groupPathsBy: "tags",
+            },
+          },
+          burgers: {
+            specPath: "examples/food/burgers/openapi.yaml",
+            outputDir: "api/food/burgers",
+          }
+        }
       },
-      items: require("./api/petstore/sidebar.js").sidebar, // Path to generated sidebar.js slice
-    },
-    {
-      type: "category",
-      label: "Food",
-      link: {
-        type: "generated-index",
-        title: "Food APIs",
-        slug: "/category/food-apis",
-      },
-      items: [
-        {
-          type: "autogenerated",
-          dirName: "food",
-        },
-      ],
-    },
+    ]
+  ],
 
-    module.exports = sidebars;
+  themes: ["@paloaltonetworks/docusaurus-theme-openapi-docs"]
+}
 ```
 
 ## Credits

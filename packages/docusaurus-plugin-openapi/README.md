@@ -96,13 +96,13 @@ yarn docusaurus clean-api-docs all
 You may also remove a particular set of API docs by specifying the unique `id` of your desired spec instance.
 
 ```bash
-yarn docusaurus gen-api-docs <id>
+yarn docusaurus clean-api-docs <id>
 ```
 
 Example:
 
 ```bash
-yarn docusaurus gen-api-docs burgers
+yarn docusaurus clean-api-docs burgers
 ```
 
 > This will remove all API docs relative to `burgers`, configured in the example `docusaurus.config.js` above.
