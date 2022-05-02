@@ -5,11 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-module.exports = {
-  preset: "ts-jest",
-  testEnvironment: "node",
-  roots: [
-    "<rootDir>/packages/docusaurus-plugin-openapi-docs/src",
-    "<rootDir>/packages/docusaurus-theme-openapi-docs/src",
-  ],
-};
+declare module "@paloaltonetworks/postman-collection" {
+  export = Request.sdk;
+}

@@ -9,7 +9,7 @@ import type { FrontMatter as DocsFrontMatter } from "@docusaurus/types";
 import type { Props as DocsProps } from "@docusaurus/types";
 
 // TODO: figure out how to import this
-declare module "@paloaltonetworks/docusaurus-plugin-openapi" {
+declare module "docusaurus-plugin-openapi-docs" {
   import type { PropSidebars } from "@docusaurus/plugin-content-docs-types";
 
   export type Options = Partial<import("./types").APIOptions>;

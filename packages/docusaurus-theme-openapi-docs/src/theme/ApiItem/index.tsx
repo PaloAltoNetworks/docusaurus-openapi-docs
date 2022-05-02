@@ -14,7 +14,6 @@ import {
   ThemeClassNames,
   useWindowSize,
 } from "@docusaurus/theme-common";
-import type { ApiItem as ApiItemType } from "@paloaltonetworks/docusaurus-plugin-openapi/lib/types";
 import DocBreadcrumbs from "@theme/DocBreadcrumbs";
 import type { Props, FrontMatter } from "@theme/DocItem";
 import DocItemFooter from "@theme/DocItemFooter";
@@ -26,6 +25,7 @@ import MDXContent from "@theme/MDXContent";
 import TOC from "@theme/TOC";
 import TOCCollapsible from "@theme/TOCCollapsible";
 import clsx from "clsx";
+import type { ApiItem as ApiItemType } from "docusaurus-plugin-openapi-docs/lib/types";
 
 import styles from "./styles.module.css";
 
