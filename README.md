@@ -57,6 +57,118 @@ yarn build-packages
 yarn watch:demo
 ```
 
+## CLI Usage built-in with `docusaurus-plugin-openapi-docs`
+
+The `docusaurus-plugin-openapi-docs` plugin is a CLI, that allows you to generate or clean API `MDX` docs from OAS files.
+
+### Generating OpenAPI Docs
+
+To generate all OpenAPI Docs, simply run the following command from the root directory of your project:
+
+```bash
+yarn docusaurus gen-api-docs all
+```
+
+> This will generate API docs for all of the specs configured in your `docusaurus.config.js` file.
+
+You may also generate a particular set of OpenAPI docs by specifying the unique `id` of your desired spec instance.
+
+```bash
+yarn docusaurus gen-api-docs <id>
+```
+
+Example:
+
+```bash
+yarn docusaurus gen-api-docs burgers
+```
+
+> This will only generate API docs relative to `burgers`, configured in the example `docusaurus.config.js` above.
+
+### Cleaning API Docs
+
+To remove all API Docs, simply run the following command from the root directory of your project:
+
+```bash
+yarn docusaurus clean-api-docs all
+```
+
+You may also remove a particular set of API docs by specifying the unique `id` of your desired spec instance.
+
+```bash
+yarn docusaurus clean-api-docs <id>
+```
+
+Example:
+
+```bash
+yarn docusaurus clean-api-docs burgers
+```
+
+> This will remove all API docs relative to `burgers`, configured in the example `docusaurus.config.js` above.
+
+## Configuring `docusaurus.config.js` (Plugin and theme usage)
+
+Here is an example of properly configuring your `docusaurus.config.js` file for `docusaurus-plugin-openapi-docs` and `docusaurus-theme-openapi-docs` usage.
+
+```js
+// docusaurus.config.js
+
+{
+  presets: [
+  [
+    "classic",
+    /** @type {import('@docusaurus/preset-classic').Options} */
+    ({
+      docs: {
+        sidebarPath: require.resolve("./sidebars.js"),
+        // Please change this to your repo.
+        // Remove this to remove the "edit this page" links.
+        editUrl:
+          "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
+        docLayoutComponent: "@theme/DocPage",
+        docItemComponent: "@theme/ApiItem" // Derived from docusaurus-theme-openapi-docs
+      },
+      blog: {
+        showReadingTime: true,
+        // Please change this to your repo.
+        // Remove this to remove the "edit this page" links.
+        editUrl:
+          "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/"
+      },
+      theme: {
+        customCss: require.resolve("./src/css/custom.css")
+      }
+    })
+  ]
+],
+
+  plugins: [
+    [
+      'docusaurus-plugin-openapi-docs',
+      {
+        id: "apiDocs",
+        config: {
+          petstore: { // Note: petstore key is treated as the <id> and can be used to specify an API doc instance when using CLI commands
+            specPath: "examples/petstore.yaml", // Path to designated spec file
+            outputDir: "api/petstore", // Output directory for generated .mdx docs
+            sidebarOptions: {
+              groupPathsBy: "tags",
+            },
+          },
+          burgers: {
+            specPath: "examples/food/burgers/openapi.yaml",
+            outputDir: "api/food/burgers",
+          }
+        }
+      },
+    ]
+  ],
+
+  themes: ["@paloaltonetworks/docusaurus-theme-openapi-docs"]
+}
+```
+
 ## Credits
 
 Special thanks to @bourdakos1 (Nick Bourdakos), the author of [docusaurus-openapi](https://github.com/cloud-annotations/cloud-annotations), which this project is heavily based on.
