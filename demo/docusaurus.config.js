@@ -41,7 +41,7 @@ const config = {
 
   plugins: [
     [
-      "@paloaltonetworks/docusaurus-plugin-openapi",
+      "docusaurus-plugin-openapi-docs",
       {
         id: "here",
         config: {
@@ -92,7 +92,7 @@ const config = {
       },
     ],
   ],
-  themes: ["@paloaltonetworks/docusaurus-theme-openapi"],
+  themes: ["docusaurus-theme-openapi-docs"],
 
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
