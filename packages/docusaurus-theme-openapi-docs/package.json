@@ -1,5 +1,5 @@
 {
-  "name": "@paloaltonetworks/docusaurus-theme-openapi",
+  "name": "docusaurus-theme-openapi-docs",
   "description": "OpenAPI theme for Docusaurus.",
   "version": "18.0.0-beta.2",
   "license": "MIT",

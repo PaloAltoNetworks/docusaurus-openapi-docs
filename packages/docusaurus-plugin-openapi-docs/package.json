@@ -1,5 +1,5 @@
 {
-  "name": "@paloaltonetworks/docusaurus-plugin-openapi",
+  "name": "docusaurus-plugin-openapi-docs",
   "description": "OpenAPI plugin for Docusaurus.",
   "version": "18.0.0-beta.2",
   "license": "MIT",
