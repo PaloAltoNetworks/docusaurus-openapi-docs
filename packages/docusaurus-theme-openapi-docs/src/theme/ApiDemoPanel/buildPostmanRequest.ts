@@ -5,13 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import sdk from "@paloaltonetworks/postman-collection";
 import {
   ParameterObject,
   ServerObject,
   // @ts-ignore
-} from "@paloaltonetworks/docusaurus-plugin-openapi/src/openapi/types";
+} from "docusaurus-plugin-openapi-docs/src/openapi/types";
 // @ts-ignore
-import sdk from "@paloaltonetworks/postman-collection";
 import cloneDeep from "lodash/cloneDeep";
 
 import { AuthState, Scheme } from "./Authorization/slice";

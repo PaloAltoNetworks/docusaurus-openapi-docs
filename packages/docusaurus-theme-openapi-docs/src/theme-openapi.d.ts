@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-/// <reference types="@paloaltonetworks/docusaurus-plugin-openapi" />
+/// <reference types="docusaurus-plugin-openapi-docs" />
 
 declare module "@docusaurus/plugin-content-docs-types" {
   // Makes all properties visible when hovering over the type
@@ -43,6 +43,6 @@ declare module "@docusaurus/plugin-content-docs-types" {
   };
 }
 
-declare module "docusaurus-theme-openapi" {
+declare module "docusaurus-theme-openapi-docs" {
   export type ThemeConfig = Partial<import("./types").ThemeConfig>;
 }

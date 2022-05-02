@@ -5,8 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { ServerObject } from "@paloaltonetworks/docusaurus-plugin-openapi/src/openapi/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ServerObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 // TODO: we might want to export this
 
 export interface State {
