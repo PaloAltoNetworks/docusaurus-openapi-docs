@@ -9,7 +9,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/PaloAltoNetworks/docusaurus-openapi.git",
-    "directory": "packages/docusaurus-theme-openapi"
+    "directory": "packages/docusaurus-theme-openapi-docs"
   },
   "bugs": {
     "url": "https://github.com/PaloAltoNetworks/docusaurus-openapi/issues"
@@ -39,7 +39,7 @@
     "@docusaurus/theme-common": "2.0.0-beta.18",
     "@mdx-js/react": "^1.6.21",
     "@monaco-editor/react": "^4.3.1",
-    "@paloaltonetworks/docusaurus-plugin-openapi": "18.0.0-beta.2",
+    "docusaurus-plugin-openapi-docs": "18.0.0-beta.2",
     "@paloaltonetworks/postman-code-generators": "1.1.5-hotfix.5",
     "@paloaltonetworks/postman-collection": "^4.1.0",
     "@reduxjs/toolkit": "^1.7.1",
