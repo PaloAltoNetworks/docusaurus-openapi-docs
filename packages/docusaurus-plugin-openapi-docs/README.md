@@ -97,6 +97,28 @@ Here is an example of properly configuring your `docusaurus.config.js` file for 
 
 > Note: You may optionally configure a dedicated `@docusaurus/plugin-content-docs` instance for use with `docusaurus-theme-openapi-docs` by setting `docItemComponent` to `@theme/ApiItem`.
 
+### Plugin Configuration Options
+
+`docusaurus-plugin-openapi-docs` can be configured with the following options:
+
+| Name             | Type     | Default | Description                                                                                                          |
+| ---------------- | -------- | ------- | -------------------------------------------------------------------------------------------------------------------- |
+| `specPath`       | `string` | `null`  | Designated path to the source of an OpenAPI specification file or directory of multiple OpenAPI specification files. |
+| `ouputDir`       | `string` | `null`  | Desired output path for generated MDX files.                                                                         |
+| `template`       | `string` | `null`  | _Optional:_ Customize MDX content with a desired template.                                                           |
+| `sidebarOptions` | `object` | `null`  | _Optional:_ Set of options for sidebar configuration. See below for a list of supported options.                     |
+
+`sidebarOptions` can be configured with the following options:
+
+| Name                 | Type      | Default | Description                                                                                                                         |
+| -------------------- | --------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `groupPathsBy`       | `string`  | `null`  | Organize and group sidebar slice by specified option. Note: Currently, `groupPathsBy` only contains support for grouping by "tags". |
+| `sidebarCollapsible` | `boolean` | `true`  | Whether sidebar categories are collapsible by default.                                                                              |
+| `sidebarCollapsed`   | `boolean` | `true`  | Whether sidebar categories are collapsed by default.                                                                                |
+| `customProps`        | `object`  | `null`  | Additional props for customizing a sidebar item.                                                                                    |
+
+> Note: You may optionally configure a `sidebarOptions`. In doing so, an individual `sidebar.js` slice with the configured options will be generated within the respective `outputDir`.
+
 ## CLI Usage
 
 ```bash
