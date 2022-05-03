@@ -1,3 +1,14 @@
+## 1.0.0 (May 3, 2022)
+
+High level enhancements
+
+- Update README, LICENSE, and other supporting documentation
+- Remove @paloaltonetworks scope from package name
+- Rename main repository and packages to:
+  - Repository: `docusaurus-openapi-docs`
+  - Plugin: `docusaurus-plugin-openapi-docs`
+  - Theme: `docusaurus-theme-openapi-docs`
+
 ## 18.0.0-beta.2 (Apr 26, 2022)
 
 High level enhancements
