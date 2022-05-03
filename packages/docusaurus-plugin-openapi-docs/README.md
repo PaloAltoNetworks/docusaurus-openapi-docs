@@ -8,16 +8,6 @@
 
 OpenAPI plugin for generating API reference docs in Docusaurus v2.
 
-[![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/blob/HEAD/LICENSE)
-[![npm latest package](https://img.shields.io/npm/v/@paloaltonetworks/docusaurus-plugin-openapi/latest.svg)](https://www.npmjs.com/package/@paloaltonetworks/docusaurus-plugin-openapi)
-[![npm downloads](https://img.shields.io/npm/dm/@paloaltonetworks/docusaurus-plugin-openapi.svg)](https://www.npmjs.com/package/@paloaltonetworks/docusaurus-preset-openapi)
-[![build](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/actions/workflows/validate.yaml/badge.svg)](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/actions/workflows/validate.yaml)
-<br/>
-[![prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
-[![Cypress.io](https://img.shields.io/badge/tested%20with-Cypress-04C38E.svg)](https://www.cypress.io/)
-[![jest](https://jestjs.io/img/jest-badge.svg)](https://github.com/facebook/jest)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/blob/HEAD/CONTRIBUTING.md#pull-requests)
-
 </div>
 
 <p align="center">
@@ -26,86 +16,23 @@ OpenAPI plugin for generating API reference docs in Docusaurus v2.
 
 </p>
 
-## User Quick Start
+## Overview
+
+The `docusaurus-plugin-openapi-docs` package extends the Docusaurus CLI with commands for generating MDX using the OpenAPI specification as the source. The resulting MDX is fully compatible with [plugin-content-docs](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-docs) and can be rendered by setting `docItemComponent` to `@theme/ApiItem`, a custom component included in the `docusaurus-theme-openapi-docs` theme.
+
+## Installation
+
+Plugin:
 
 ```bash
-npx create-docusaurus@2.0.0-beta.18 my-website "Git repository" --package-manager yarn
+yarn add docusaurus-plugin-openapi-docs
 ```
 
-Template Repository URL:
+Theme:
 
 ```bash
-https://github.com/PaloAltoNetworks/docusaurus-template-openapi-docs.git
+yarn add docusaurus-theme-openapi-docs
 ```
-
-> When asked how the template repo should be cloned choose "copy" (unless you know better).
-
-```bash
-cd my-website
-yarn start
-```
-
-## Developer Quick Start
-
-> Start by forking the main repository
-
-```bash
-git clone https://github.com/<your account>/docusaurus-openapi-docs.git
-cd docusaurus-openapi-docs
-yarn
-yarn build-packages
-yarn watch:demo
-```
-
-## CLI Usage built-in with `docusaurus-plugin-openapi-docs`
-
-The `docusaurus-plugin-openapi-docs` plugin is a CLI, that allows you to generate or clean API `MDX` docs from OAS files.
-
-### Generating OpenAPI Docs
-
-To generate all OpenAPI Docs, simply run the following command from the root directory of your project:
-
-```bash
-yarn docusaurus gen-api-docs all
-```
-
-> This will generate API docs for all of the specs configured in your `docusaurus.config.js` file.
-
-You may also generate a particular set of OpenAPI docs by specifying the unique `id` of your desired spec instance.
-
-```bash
-yarn docusaurus gen-api-docs <id>
-```
-
-Example:
-
-```bash
-yarn docusaurus gen-api-docs burgers
-```
-
-> This will only generate API docs relative to `burgers`, configured in the example `docusaurus.config.js` above.
-
-### Cleaning API Docs
-
-To remove all API Docs, simply run the following command from the root directory of your project:
-
-```bash
-yarn docusaurus clean-api-docs all
-```
-
-You may also remove a particular set of API docs by specifying the unique `id` of your desired spec instance.
-
-```bash
-yarn docusaurus clean-api-docs <id>
-```
-
-Example:
-
-```bash
-yarn docusaurus clean-api-docs burgers
-```
-
-> This will remove all API docs relative to `burgers`, configured in the example `docusaurus.config.js` above.
 
 ## Configuring `docusaurus.config.js` (Plugin and theme usage)
 
@@ -164,22 +91,81 @@ Here is an example of properly configuring your `docusaurus.config.js` file for 
       },
     ]
   ],
-
-  themes: ["@paloaltonetworks/docusaurus-theme-openapi-docs"]
+  themes: ["docusaurus-theme-openapi-docs"] // Allows use of @theme/ApiItem and other components
 }
 ```
 
-## Credits
+> Note: You may optionally configure a dedicated `@docusaurus/plugin-content-docs` instance for use with `docusaurus-theme-openapi-docs` by setting `docItemComponent` to `@theme/ApiItem`.
 
-Special thanks to @bourdakos1 (Nick Bourdakos), the author of [docusaurus-openapi](https://github.com/cloud-annotations/cloud-annotations), which this project is heavily based on.
+## CLI Usage
 
-For more insight into why we decided to completely fork see [#47](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/47)
+```bash
+Usage: docusaurus <command> [options]
 
-## Contributors
+Options:
+  -V, --version                                            output the version number
+  -h, --help                                               display help for command
 
-<a href="https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=PaloAltoNetworks/docusaurus-openapi-docs" />
-</a>
+Commands:
+  build [options] [siteDir]                                Build website.
+  swizzle [options] [themeName] [componentName] [siteDir]  Wraps or ejects the original theme files into website folder for customization.
+  deploy [options] [siteDir]                               Deploy website to GitHub pages.
+  start [options] [siteDir]                                Start the development server.
+  serve [options] [siteDir]                                Serve website locally.
+  clear [siteDir]                                          Remove build artifacts.
+  write-translations [options] [siteDir]                   Extract required translations of your site.
+  write-heading-ids [options] [siteDir] [files...]         Generate heading ids in Markdown content.
+  docs:version <version>                                   Tag a new docs version
+  gen-api-docs <id>                                        Generates API Docs mdx and sidebars.
+  clean-api-docs <id>                                      Clears the Generated API Docs mdx and sidebars.
+  docs:version:openapi <version>                           Tag a new docs version (openapi)
+```
+
+### Generating OpenAPI Docs
+
+To generate all OpenAPI docs, run the following command from the root directory of your project:
+
+```bash
+yarn docusaurus gen-api-docs all
+```
+
+> This will generate API docs for all of the OpenAPI specification (OAS) files referenced in your `docusaurus-plugin-openapi-docs` config.
+
+You may also generate OpenAPI docs for a single path or OAS by specifying the unique `id`:
+
+```bash
+yarn docusaurus gen-api-docs <id>
+```
+
+Example:
+
+```bash
+yarn docusaurus gen-api-docs burgers
+```
+
+> The example above will only generate API docs relative to `burgers`.
+
+### Cleaning API Docs
+
+To clean/remove all API Docs, run the following command from the root directory of your project:
+
+```bash
+yarn docusaurus clean-api-docs all
+```
+
+You may also remove a particular set of API docs by specifying the unique `id` of your desired spec instance.
+
+```bash
+yarn docusaurus clean-api-docs <id>
+```
+
+Example:
+
+```bash
+yarn docusaurus clean-api-docs burgers
+```
+
+> The example above will remove all API docs relative to `burgers`.
 
 ## Support
 
