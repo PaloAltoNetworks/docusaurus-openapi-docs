@@ -43,7 +43,7 @@ const config = {
     [
       "docusaurus-plugin-openapi-docs",
       {
-        id: "here",
+        id: "openapi",
         config: {
           petstore: {
             specPath: "examples/petstore.yaml",
