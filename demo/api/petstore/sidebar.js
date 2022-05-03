@@ -1,7 +1,7 @@
 module.exports = [
   {
     type: "category",
-    label: "pet",
+    label: "Pets",
     items: [
       {
         type: "doc",
@@ -55,7 +55,7 @@ module.exports = [
   },
   {
     type: "category",
-    label: "Petstore orders",
+    label: "Petstore Orders",
     items: [
       {
         type: "doc",
@@ -91,7 +91,7 @@ module.exports = [
   },
   {
     type: "category",
-    label: "user",
+    label: "Users",
     items: [
       {
         type: "doc",
