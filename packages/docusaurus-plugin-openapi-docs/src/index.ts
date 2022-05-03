@@ -56,10 +56,7 @@ export default function pluginOpenAPI(
 
         const sidebarSliceTemplate = template
           ? fs.readFileSync(template).toString()
-          : `module.exports = {
-  sidebar: {{{slice}}},
-};
-      `;
+          : `module.exports = {{{slice}}};`;
 
         const view = render(sidebarSliceTemplate, {
           slice: JSON.stringify(sidebarSlice),
