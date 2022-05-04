@@ -1,3 +1,16 @@
+## 1.0.1 (May 4, 2022)
+
+High level enhancements
+
+- Pin Docusaurus to v2.0.0-beta.18
+- Adopt strategy of pinning Docusaurus version until viable upgrade path exists
+
+Other enhancements and bug fixes
+
+- [Fix Breaking Change] Pin to docusaurus 2.0.0-beta.18 ([#76](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/76))
+- Add keywords and update git URL ([#74](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/74))
+- Switch from panw-main to main
+
 ## 1.0.0 (May 3, 2022)
 
 High level enhancements
