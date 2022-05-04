@@ -11,8 +11,8 @@ import { getOutput } from "./utils/get-output";
 import { printBanner, printSpacer } from "./utils/print-utils";
 
 const ORG = "PaloAltoNetworks";
-const REPO = "docusaurus-openapi";
-const BRANCH = "panw-main";
+const REPO = "docusaurus-openapi-docs";
+const BRANCH = "main";
 
 const COMMIT_FILTERS = [/\(release\) v.*/];
 
