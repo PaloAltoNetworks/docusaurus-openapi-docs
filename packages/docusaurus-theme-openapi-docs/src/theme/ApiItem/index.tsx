@@ -15,7 +15,7 @@ import {
   useWindowSize,
 } from "@docusaurus/theme-common";
 import DocBreadcrumbs from "@theme/DocBreadcrumbs";
-import type { Props, FrontMatter } from "@theme/DocItem";
+import type { Props } from "@theme/DocItem";
 import DocItemFooter from "@theme/DocItemFooter";
 import DocPaginator from "@theme/DocPaginator";
 import DocVersionBadge from "@theme/DocVersionBadge";
@@ -25,8 +25,8 @@ import MDXContent from "@theme/MDXContent";
 import TOC from "@theme/TOC";
 import TOCCollapsible from "@theme/TOCCollapsible";
 import clsx from "clsx";
-import type { ApiItem as ApiItemType } from "docusaurus-plugin-openapi-docs/lib/types";
 
+import type { DocFrontMatter } from "../../types";
 import styles from "./styles.module.css";
 
 let ApiDemoPanel = (_: { item: any }) => <div style={{ marginTop: "3.5em" }} />;
@@ -34,9 +34,7 @@ if (ExecutionEnvironment.canUseDOM) {
   ApiDemoPanel = require("@theme/ApiDemoPanel").default;
 }
 
-interface ApiFrontMatter extends FrontMatter {
-  readonly api?: ApiItemType;
-}
+type ApiFrontMatter = DocFrontMatter & { api: string };
 
 function DocItemMetadata(props: Props): JSX.Element {
   const { content: DocContent } = props;
