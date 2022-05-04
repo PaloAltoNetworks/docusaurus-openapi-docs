@@ -3,7 +3,7 @@ name: Build Performance
 on:
   pull_request:
     branches:
-      - panw-main
+      - main
     paths-ignore:
       - demo/docs/**
 

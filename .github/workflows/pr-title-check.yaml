@@ -3,7 +3,7 @@ name: PR Title Check
 on:
   pull_request:
     branches:
-      - panw-main
+      - main
     types:
       - opened
       - synchronize

@@ -2,7 +2,7 @@ name: "Deploy Preview"
 
 on:
   pull_request_target:
-    branches: [panw-main]
+    branches: [main]
 
 jobs:
   analyze:
