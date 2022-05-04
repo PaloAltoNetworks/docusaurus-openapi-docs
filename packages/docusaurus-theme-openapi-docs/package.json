@@ -3,16 +3,23 @@
   "description": "OpenAPI theme for Docusaurus.",
   "version": "1.0.0",
   "license": "MIT",
+  "keywords": [
+    "openapi",
+    "documentation",
+    "docusaurus",
+    "websites",
+    "theme"
+  ],
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/PaloAltoNetworks/docusaurus-openapi.git",
+    "url": "https://github.com/PaloAltoNetworks/docusaurus-openapi-docs.git",
     "directory": "packages/docusaurus-theme-openapi-docs"
   },
   "bugs": {
-    "url": "https://github.com/PaloAltoNetworks/docusaurus-openapi/issues"
+    "url": "https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues"
   },
   "types": "src/theme-openapi.d.ts",
   "main": "lib/index.js",

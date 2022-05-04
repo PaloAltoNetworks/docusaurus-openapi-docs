@@ -3,16 +3,23 @@
   "description": "OpenAPI plugin for Docusaurus.",
   "version": "1.0.0",
   "license": "MIT",
+  "keywords": [
+    "openapi",
+    "documentation",
+    "docusaurus",
+    "websites",
+    "plugin"
+  ],
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/PaloAltoNetworks/docusaurus-openapi.git",
+    "url": "https://github.com/PaloAltoNetworks/docusaurus-openapi-docs.git",
     "directory": "packages/docusaurus-plugin-openapi-docs"
   },
   "bugs": {
-    "url": "https://github.com/PaloAltoNetworks/docusaurus-openapi/issues"
+    "url": "https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues"
   },
   "main": "lib/index.js",
   "types": "src/plugin-openapi.d.ts",
