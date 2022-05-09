@@ -1,3 +1,11 @@
+<h2 align="center">⚠️ Requires Docusaurus 2.0.0-beta.18 ⚠️</h2>
+
+<div align="center">
+  
+<i class="seondary">See issue https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/79 for details</i>
+  
+</div>
+
 <h1 align="center">Docusaurus OpenAPI Doc Generator</h1>
 
 <div align="center">
