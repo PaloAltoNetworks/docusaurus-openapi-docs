@@ -7,7 +7,6 @@
 
 import React, { useState } from "react";
 
-// @ts-ignore
 import MagicDropzone from "react-magic-dropzone";
 
 import FloatingButton from "../FloatingButton";

@@ -8,11 +8,7 @@
 import React from "react";
 
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
-// @ts-ignore
-// @ts-ignore
 import sdk from "@paloaltonetworks/postman-collection";
-// @ts-ignore
-import { Metadata } from "@theme/ApiItem";
 import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import { Provider } from "react-redux";
 
@@ -30,7 +26,7 @@ import Server from "./Server";
 import { createStoreWithState } from "./store";
 import styles from "./styles.module.css";
 
-function ApiDemoPanel({ item }: { item: NonNullable<Metadata["api"]> }) {
+function ApiDemoPanel({ item }: { item: NonNullable<any["api"]> }) {
   const { siteConfig } = useDocusaurusContext();
   const themeConfig = siteConfig.themeConfig as ThemeConfig;
   const options = themeConfig.api;
@@ -39,8 +35,7 @@ function ApiDemoPanel({ item }: { item: NonNullable<Metadata["api"]> }) {
   const acceptArray = Array.from(
     new Set(
       Object.values(item.responses ?? {})
-        // @ts-ignore
-        .map((response) => Object.keys(response.content ?? {}))
+        .map((response: any) => Object.keys(response.content ?? {}))
         .flat()
     )
   );
@@ -58,10 +53,13 @@ function ApiDemoPanel({ item }: { item: NonNullable<Metadata["api"]> }) {
     cookie: [] as ParameterObject[],
   };
 
-  item.parameters?.forEach((param: { in: string | number }) => {
-    // @ts-ignore
-    params[param.in].push(param);
-  });
+  item.parameters?.forEach(
+    (param: { in: "path" | "query" | "header" | "cookie" }) => {
+      const paramType = param.in;
+      const paramsArray: ParameterObject[] = params[paramType];
+      paramsArray.push(param as ParameterObject);
+    }
+  );
 
   const auth = createAuth({
     security: item.security,

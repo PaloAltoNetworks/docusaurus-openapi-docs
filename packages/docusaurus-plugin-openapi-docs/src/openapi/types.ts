@@ -182,6 +182,7 @@ export interface ParameterObject {
   examples?: Map<ExampleObject>;
   //
   content?: Map<MediaTypeObject>;
+  param?: Object;
   // ignoring stylings: matrix, label, form, simple, spaceDelimited,
   // pipeDelimited and deepObject
 }

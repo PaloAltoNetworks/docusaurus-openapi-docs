@@ -5,8 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-// @ts-ignore
-import type { Request } from "@paloaltonetworks/postman-collection";
+import type Request from "@paloaltonetworks/postman-collection";
 
 import {
   InfoObject,
