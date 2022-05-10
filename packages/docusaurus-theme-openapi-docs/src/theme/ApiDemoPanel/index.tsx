@@ -10,6 +10,7 @@ import React from "react";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import sdk from "@paloaltonetworks/postman-collection";
 import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
+import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 import { Provider } from "react-redux";
 
 import { ThemeConfig } from "../../types";
@@ -26,7 +27,7 @@ import Server from "./Server";
 import { createStoreWithState } from "./store";
 import styles from "./styles.module.css";
 
-function ApiDemoPanel({ item }: { item: NonNullable<any["api"]> }) {
+function ApiDemoPanel({ item }: { item: NonNullable<ApiItem> }) {
   const { siteConfig } = useDocusaurusContext();
   const themeConfig = siteConfig.themeConfig as ThemeConfig;
   const options = themeConfig.api;
