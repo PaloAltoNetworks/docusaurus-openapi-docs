@@ -9,9 +9,7 @@ import sdk from "@paloaltonetworks/postman-collection";
 import {
   ParameterObject,
   ServerObject,
-  // @ts-ignore
 } from "docusaurus-plugin-openapi-docs/src/openapi/types";
-// @ts-ignore
 import cloneDeep from "lodash/cloneDeep";
 
 import { AuthState, Scheme } from "./Authorization/slice";

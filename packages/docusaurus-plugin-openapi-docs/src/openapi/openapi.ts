@@ -9,8 +9,8 @@ import path from "path";
 
 import { Globby, GlobExcludeDefault } from "@docusaurus/utils";
 import Converter from "@paloaltonetworks/openapi-to-postmanv2";
-// @ts-ignore
-import sdk, { Collection } from "@paloaltonetworks/postman-collection";
+import sdk from "@paloaltonetworks/postman-collection";
+import Collection from "@paloaltonetworks/postman-collection";
 import chalk from "chalk";
 import fs from "fs-extra";
 import yaml from "js-yaml";
@@ -175,8 +175,7 @@ function bindCollectionToApiItems(
   items: ApiMetadata[],
   postmanCollection: sdk.Collection
 ) {
-  // @ts-ignore
-  postmanCollection.forEachItem((item) => {
+  postmanCollection.forEachItem((item: any) => {
     const method = item.request.method.toLowerCase();
     const path = item.request.url
       .getPath({ unresolved: true }) // unresolved returns "/:variableName" instead of "/<type>"
