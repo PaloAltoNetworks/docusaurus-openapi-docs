@@ -25,7 +25,7 @@ import MDXContent from "@theme/MDXContent";
 import TOC from "@theme/TOC";
 import TOCCollapsible from "@theme/TOCCollapsible";
 import clsx from "clsx";
-import type { ApiItem as ApiItemType } from "docusaurus-plugin-openapi-docs/lib/types";
+import type { ApiItem as ApiItemType } from "docusaurus-plugin-openapi-docs/src/types";
 
 import styles from "./styles.module.css";
 
