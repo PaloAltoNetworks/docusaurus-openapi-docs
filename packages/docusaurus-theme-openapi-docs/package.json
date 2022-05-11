@@ -42,6 +42,7 @@
     "concurrently": "^5.2.0"
   },
   "dependencies": {
+    "@docusaurus/theme-classic": "2.0.0-beta.20",
     "@docusaurus/theme-common": "2.0.0-beta.20",
     "@mdx-js/react": "^1.6.21",
     "@monaco-editor/react": "^4.3.1",
