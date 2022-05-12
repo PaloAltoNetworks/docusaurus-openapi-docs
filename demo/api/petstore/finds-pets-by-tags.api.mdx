@@ -9,7 +9,7 @@ sidebar_class_name: "get api-method"
 
 import ParamsItem from "@theme/ParamsItem";
 import SchemaItem from "@theme/SchemaItem"
-import Tabs from "@theme/Tabs";
+import ApiTabs from "@theme/ApiTabs";
 import TabItem from "@theme/TabItem";
 
 ## Finds Pets by tags
@@ -22,7 +22,7 @@ This endpoint has been deprecated and may be removed in future versions of the A
 
 Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.
 
-<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Query Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"name":"tags","in":"query","description":"Tags to filter by","required":true,"style":"form","schema":{"type":"array","items":{"type":"string"}}}}></ParamsItem></ul></div></details><div><Tabs><TabItem label={"200"} value={"200"}><div>
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Query Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"name":"tags","in":"query","description":"Tags to filter by","required":true,"style":"form","schema":{"type":"array","items":{"type":"string"}}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"200"} value={"200"}><div>
 
 successful operation
 
@@ -42,5 +42,5 @@ Test Sub Category
 
 Invalid tag value
 
-</div><div></div></TabItem></Tabs></div>
+</div><div></div></TabItem></ApiTabs></div>
       

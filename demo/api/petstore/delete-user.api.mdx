@@ -9,7 +9,7 @@ sidebar_class_name: "delete api-method"
 
 import ParamsItem from "@theme/ParamsItem";
 import SchemaItem from "@theme/SchemaItem"
-import Tabs from "@theme/Tabs";
+import ApiTabs from "@theme/ApiTabs";
 import TabItem from "@theme/TabItem";
 
 ## Delete user
@@ -18,7 +18,7 @@ import TabItem from "@theme/TabItem";
 
 This can only be done by the logged in user.
 
-<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"name":"username","in":"path","description":"The name that needs to be deleted","required":true,"schema":{"type":"string"}}}></ParamsItem></ul></div></details><div><Tabs><TabItem label={"400"} value={"400"}><div>
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"name":"username","in":"path","description":"The name that needs to be deleted","required":true,"schema":{"type":"string"}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"400"} value={"400"}><div>
 
 Invalid username supplied
 
@@ -26,5 +26,5 @@ Invalid username supplied
 
 User not found
 
-</div><div></div></TabItem></Tabs></div>
+</div><div></div></TabItem></ApiTabs></div>
       

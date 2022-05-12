@@ -9,7 +9,7 @@ sidebar_class_name: "post api-method"
 
 import ParamsItem from "@theme/ParamsItem";
 import SchemaItem from "@theme/SchemaItem"
-import Tabs from "@theme/Tabs";
+import ApiTabs from "@theme/ApiTabs";
 import TabItem from "@theme/TabItem";
 
 ## Place an order for a pet
@@ -26,7 +26,7 @@ Order ID
 
 Pet ID
 
-</div><div><span className={"badge badge--info"} style={{"marginBottom":"1rem"}}>allOf</span><ul className={"allOf"}></ul></div></div></details></SchemaItem><SchemaItem collapsible={false} name={"quantity"} required={false} schemaDescription={undefined} schemaName={"int32"} qualifierMessage={"**Possible values:** 1 ≤ value"}></SchemaItem><SchemaItem collapsible={false} name={"shipDate"} required={false} schemaDescription={"Estimated ship date"} schemaName={"date-time"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"status"} required={false} schemaDescription={"Order Status"} schemaName={"string"} qualifierMessage={"**Possible values:** [`placed`, `approved`, `delivered`]"}></SchemaItem><SchemaItem collapsible={false} name={"complete"} required={false} schemaDescription={"Indicates whenever order was completed or not"} schemaName={"boolean"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"requestId"} required={false} schemaDescription={"Unique Request Id"} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></details><div><Tabs><TabItem label={"200"} value={"200"}><div>
+</div><div><span className={"badge badge--info"} style={{"marginBottom":"1rem"}}>allOf</span><ul className={"allOf"}></ul></div></div></details></SchemaItem><SchemaItem collapsible={false} name={"quantity"} required={false} schemaDescription={undefined} schemaName={"int32"} qualifierMessage={"**Possible values:** 1 ≤ value"}></SchemaItem><SchemaItem collapsible={false} name={"shipDate"} required={false} schemaDescription={"Estimated ship date"} schemaName={"date-time"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"status"} required={false} schemaDescription={"Order Status"} schemaName={"string"} qualifierMessage={"**Possible values:** [`placed`, `approved`, `delivered`]"}></SchemaItem><SchemaItem collapsible={false} name={"complete"} required={false} schemaDescription={"Indicates whenever order was completed or not"} schemaName={"boolean"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"requestId"} required={false} schemaDescription={"Unique Request Id"} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></details><div><ApiTabs><TabItem label={"200"} value={"200"}><div>
 
 successful operation
 
@@ -42,5 +42,5 @@ Pet ID
 
 Invalid Order
 
-</div><div></div></TabItem></Tabs></div>
+</div><div></div></TabItem></ApiTabs></div>
       
