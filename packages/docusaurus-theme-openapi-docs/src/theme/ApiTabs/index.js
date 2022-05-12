@@ -29,7 +29,7 @@ function isTabItem(comp) {
   return typeof comp.props.value !== "undefined";
 }
 
-function ResponseCodeTabs(props) {
+function ApiTabsComponent(props) {
   const {
     lazy,
     block,
@@ -246,10 +246,10 @@ function ResponseCodeTabs(props) {
   );
 }
 
-export default function Tabs(props) {
+export default function ApiTabs(props) {
   const isBrowser = useIsBrowser();
   return (
-    <ResponseCodeTabs // Remount tabs after hydration
+    <ApiTabsComponent // Remount tabs after hydration
       // Temporary fix for https://github.com/facebook/docusaurus/issues/5653
       key={String(isBrowser)}
       {...props}

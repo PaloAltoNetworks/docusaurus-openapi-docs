@@ -9,7 +9,7 @@ sidebar_class_name: "get api-method"
 
 import ParamsItem from "@theme/ParamsItem";
 import SchemaItem from "@theme/SchemaItem"
-import Tabs from "@theme/Tabs";
+import ApiTabs from "@theme/ApiTabs";
 import TabItem from "@theme/TabItem";
 
 ## Finds Pets by status
@@ -18,7 +18,7 @@ import TabItem from "@theme/TabItem";
 
 Multiple status values can be provided with comma separated strings
 
-<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Query Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"name":"status","in":"query","description":"Status values that need to be considered for filter","required":true,"style":"form","schema":{"type":"array","minItems":1,"maxItems":3,"items":{"type":"string","enum":["available","pending","sold"],"default":"available"}}}}></ParamsItem></ul></div></details><div><Tabs><TabItem label={"200"} value={"200"}><div>
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Query Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"name":"status","in":"query","description":"Status values that need to be considered for filter","required":true,"style":"form","schema":{"type":"array","minItems":1,"maxItems":3,"items":{"type":"string","enum":["available","pending","sold"],"default":"available"}}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"200"} value={"200"}><div>
 
 successful operation
 
@@ -38,5 +38,5 @@ Test Sub Category
 
 Invalid status value
 
-</div><div></div></TabItem></Tabs></div>
+</div><div></div></TabItem></ApiTabs></div>
       

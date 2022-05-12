@@ -9,7 +9,7 @@ sidebar_class_name: "put api-method"
 
 import ParamsItem from "@theme/ParamsItem";
 import SchemaItem from "@theme/SchemaItem"
-import Tabs from "@theme/Tabs";
+import ApiTabs from "@theme/ApiTabs";
 import TabItem from "@theme/TabItem";
 
 ## Updated user
@@ -22,7 +22,7 @@ This can only be done by the logged in user.
 
 Updated user object
 
-</div></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"id"} required={false} schemaDescription={undefined} schemaName={"int64"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"pet"} required={false} schemaDescription={undefined} schemaName={""} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"username"} required={false} schemaDescription={"User supplied username"} schemaName={"string"} qualifierMessage={"**Possible values:** 4 ≤ length"}></SchemaItem><SchemaItem collapsible={false} name={"firstName"} required={false} schemaDescription={"User first name"} schemaName={"string"} qualifierMessage={"**Possible values:** 1 ≤ length"}></SchemaItem><SchemaItem collapsible={false} name={"lastName"} required={false} schemaDescription={"User last name"} schemaName={"string"} qualifierMessage={"**Possible values:** 1 ≤ length"}></SchemaItem><SchemaItem collapsible={false} name={"email"} required={false} schemaDescription={"User email address"} schemaName={"email"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"password"} required={false} schemaDescription={"User password, MUST contain a mix of upper and lower case letters, as well as digits"} schemaName={"password"} qualifierMessage={"**Possible values:** 8 ≤ length, Value must match regular expression `/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/`"}></SchemaItem><SchemaItem collapsible={false} name={"phone"} required={false} schemaDescription={"User phone number in international format"} schemaName={"string"} qualifierMessage={"**Possible values:** Value must match regular expression `/^\\+(?:[0-9]-?){6,14}[0-9]$/`"}></SchemaItem><SchemaItem collapsible={false} name={"userStatus"} required={false} schemaDescription={"User status"} schemaName={"int32"} qualifierMessage={undefined}></SchemaItem></ul></details><div><Tabs><TabItem label={"400"} value={"400"}><div>
+</div></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"id"} required={false} schemaDescription={undefined} schemaName={"int64"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"pet"} required={false} schemaDescription={undefined} schemaName={""} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"username"} required={false} schemaDescription={"User supplied username"} schemaName={"string"} qualifierMessage={"**Possible values:** 4 ≤ length"}></SchemaItem><SchemaItem collapsible={false} name={"firstName"} required={false} schemaDescription={"User first name"} schemaName={"string"} qualifierMessage={"**Possible values:** 1 ≤ length"}></SchemaItem><SchemaItem collapsible={false} name={"lastName"} required={false} schemaDescription={"User last name"} schemaName={"string"} qualifierMessage={"**Possible values:** 1 ≤ length"}></SchemaItem><SchemaItem collapsible={false} name={"email"} required={false} schemaDescription={"User email address"} schemaName={"email"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"password"} required={false} schemaDescription={"User password, MUST contain a mix of upper and lower case letters, as well as digits"} schemaName={"password"} qualifierMessage={"**Possible values:** 8 ≤ length, Value must match regular expression `/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/`"}></SchemaItem><SchemaItem collapsible={false} name={"phone"} required={false} schemaDescription={"User phone number in international format"} schemaName={"string"} qualifierMessage={"**Possible values:** Value must match regular expression `/^\\+(?:[0-9]-?){6,14}[0-9]$/`"}></SchemaItem><SchemaItem collapsible={false} name={"userStatus"} required={false} schemaDescription={"User status"} schemaName={"int32"} qualifierMessage={undefined}></SchemaItem></ul></details><div><ApiTabs><TabItem label={"400"} value={"400"}><div>
 
 Invalid user supplied
 
@@ -30,5 +30,5 @@ Invalid user supplied
 
 User not found
 
-</div><div></div></TabItem></Tabs></div>
+</div><div></div></TabItem></ApiTabs></div>
       

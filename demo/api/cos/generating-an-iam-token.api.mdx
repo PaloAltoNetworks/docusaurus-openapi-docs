@@ -9,7 +9,7 @@ sidebar_class_name: "post api-method"
 
 import ParamsItem from "@theme/ParamsItem";
 import SchemaItem from "@theme/SchemaItem"
-import Tabs from "@theme/Tabs";
+import ApiTabs from "@theme/ApiTabs";
 import TabItem from "@theme/TabItem";
 
 ## Generating an IAM token
@@ -29,9 +29,9 @@ An access token is a temporary credential that expires after 1 hour.
 After the acquired token expires, you must generate a new token to continue calling IBM Cloud or service APIs, and you can perform only actions that are allowed by your level of assigned access within all accounts.
 :::
 
-<details style={{}}><summary style={{"textAlign":"left"}}><strong>Request Body</strong><strong style={{"fontSize":"var(--ifm-code-font-size)","color":"var(--openapi-required)"}}> required</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"grant_type"} required={true} schemaDescription={undefined} schemaName={"string"} qualifierMessage={"**Possible values:** [`urn:ibm:params:oauth:grant-type:apikey`]"}></SchemaItem><SchemaItem collapsible={false} name={"apikey"} required={true} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></details><div><Tabs><TabItem label={"200"} value={"200"}><div>
+<details style={{}}><summary style={{"textAlign":"left"}}><strong>Request Body</strong><strong style={{"fontSize":"var(--ifm-code-font-size)","color":"var(--openapi-required)"}}> required</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"grant_type"} required={true} schemaDescription={undefined} schemaName={"string"} qualifierMessage={"**Possible values:** [`urn:ibm:params:oauth:grant-type:apikey`]"}></SchemaItem><SchemaItem collapsible={false} name={"apikey"} required={true} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></details><div><ApiTabs><TabItem label={"200"} value={"200"}><div>
 
 ok
 
-</div><div></div></TabItem></Tabs></div>
+</div><div></div></TabItem></ApiTabs></div>
       
