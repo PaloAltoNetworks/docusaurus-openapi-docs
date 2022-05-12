@@ -26,7 +26,7 @@ export function createStatusCodes({ responses }: Props) {
 
   return create("div", {
     children: [
-      create("Tabs", {
+      create("ApiTabs", {
         children: codes.map((code) => {
           return create("TabItem", {
             label: code,
