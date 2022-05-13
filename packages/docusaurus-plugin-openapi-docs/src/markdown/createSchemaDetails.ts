@@ -242,7 +242,12 @@ interface Props {
 }
 
 export function createSchemaDetails({ title, body, ...rest }: Props) {
-  if (body === undefined || body.content === undefined) {
+  if (
+    body === undefined ||
+    body.content === undefined ||
+    Object.keys(body).length === 0 ||
+    Object.keys(body.content).length === 0
+  ) {
     return undefined;
   }
 
@@ -250,7 +255,6 @@ export function createSchemaDetails({ title, body, ...rest }: Props) {
   // NOTE: We just pick a random content-type.
   // How common is it to have multiple?
   const randomFirstKey = Object.keys(body.content)[0];
-
   const firstBody = body.content[randomFirstKey].schema;
 
   if (firstBody === undefined) {
