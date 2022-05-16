@@ -1,5 +1,5 @@
-import React from "react";
 import clsx from "clsx";
+import React from "react";
 import styles from "./HomepageFeatures.module.css";
 
 const FeatureList = [
@@ -7,30 +7,30 @@ const FeatureList = [
     title: "Easy to Use",
     Svg: require("../../static/img/undraw_docusaurus_mountain.svg").default,
     description: (
-      <>
+      <React.Fragment>
         Docusaurus was designed from the ground up to be easily installed and
         used to get your website up and running quickly.
-      </>
+      </React.Fragment>
     ),
   },
   {
     title: "Focus on What Matters",
     Svg: require("../../static/img/undraw_docusaurus_tree.svg").default,
     description: (
-      <>
+      <React.Fragment>
         Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
         ahead and move your docs into the <code>docs</code> directory.
-      </>
+      </React.Fragment>
     ),
   },
   {
     title: "Powered by React",
     Svg: require("../../static/img/undraw_docusaurus_react.svg").default,
     description: (
-      <>
+      <React.Fragment>
         Extend or customize your website layout by reusing React. Docusaurus can
         be extended while reusing the same header and footer.
-      </>
+      </React.Fragment>
     ),
   },
 ];

@@ -70,7 +70,7 @@ function ParamOptions() {
   const optionalParams = allParams.filter((p) => !p.required);
 
   return (
-    <>
+    <React.Fragment>
       {/* Required Parameters */}
       {requiredParams.map((param) => (
         <ParamOptionWrapper key={`${param.in}-${param.name}`} param={param} />
@@ -78,7 +78,7 @@ function ParamOptions() {
 
       {/* Optional Parameters */}
       {optionalParams.length > 0 && (
-        <>
+        <React.Fragment>
           <button
             className={styles.showMoreButton}
             onClick={() => setShowOptional((prev) => !prev)}
@@ -128,9 +128,9 @@ function ParamOptions() {
               />
             ))}
           </div>
-        </>
+        </React.Fragment>
       )}
-    </>
+    </React.Fragment>
   );
 }
 
@@ -207,7 +207,7 @@ function ParamArrayFormItem({ param }: ParamProps) {
   }
 
   return (
-    <>
+    <React.Fragment>
       {items.map((item) => (
         <div key={item.id} style={{ display: "flex" }}>
           <ArrayItem param={param} onChange={handleChangeItem(item)} />
@@ -234,7 +234,7 @@ function ParamArrayFormItem({ param }: ParamProps) {
       <button className={styles.buttonThin} onClick={handleAddItem}>
         Add item
       </button>
-    </>
+    </React.Fragment>
   );
 }
 

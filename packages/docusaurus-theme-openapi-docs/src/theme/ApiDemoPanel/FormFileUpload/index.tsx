@@ -92,7 +92,7 @@ function FormFileUpload({ placeholder, onChange }: Props) {
         style={{ marginTop: "calc(var(--ifm-pre-padding) / 2)" }}
       >
         {file ? (
-          <>
+          <React.Fragment>
             <button
               style={{ marginTop: "calc(var(--ifm-pre-padding) / 2)" }}
               onClick={(e) => {
@@ -103,7 +103,7 @@ function FormFileUpload({ placeholder, onChange }: Props) {
               Clear
             </button>
             <RenderPreview file={file} />
-          </>
+          </React.Fragment>
         ) : (
           <div className={styles.dropzoneContent}>{placeholder}</div>
         )}

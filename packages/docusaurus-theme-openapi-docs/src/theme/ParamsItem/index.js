@@ -6,9 +6,7 @@
  * ========================================================================== */
 
 import React from "react";
-
 import ReactMarkdown from "react-markdown";
-
 import { createDescription } from "../../markdown/createDescription";
 import { getQualifierMessage, getSchemaName } from "../../markdown/schema";
 import { guard } from "../../markdown/utils";
@@ -44,11 +42,11 @@ function ParamsItem({
   const renderExamples = guard(examples, (examples) => {
     const exampleEntries = Object.entries(examples);
     return (
-      <>
+      <React.Fragment>
         {exampleEntries.map(([k, v]) => (
           <div>{`Example (${k}): ${v.value}`}</div>
         ))}
-      </>
+      </React.Fragment>
     );
   });
 

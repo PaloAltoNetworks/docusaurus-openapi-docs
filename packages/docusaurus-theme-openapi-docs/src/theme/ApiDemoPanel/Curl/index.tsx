@@ -218,7 +218,7 @@ function Curl({ postman, codeSamples }: Props) {
   }
 
   return (
-    <>
+    <React.Fragment>
       <div className={clsx(styles.buttonGroup, "api-code-tab-group")}>
         {langs.map((lang) => {
           return (
@@ -271,7 +271,7 @@ function Curl({ postman, codeSamples }: Props) {
           </FloatingButton>
         )}
       </Highlight>
-    </>
+    </React.Fragment>
   );
 }
 

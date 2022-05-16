@@ -42,13 +42,13 @@ function BodyWrap({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
   }
 
   return (
-    <>
+    <React.Fragment>
       <ContentType />
       <Body
         requestBodyMetadata={requestBodyMetadata}
         jsonRequestBodyExample={jsonRequestBodyExample}
       />
-    </>
+    </React.Fragment>
   );
 }
 
