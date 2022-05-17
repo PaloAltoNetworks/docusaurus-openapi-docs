@@ -18,16 +18,6 @@
   --ifm-color-success: #3cad6e;
   --ifm-color-warning: #ffcb06;
   --ifm-color-danger: #fa582d;
-  --ifm-code-font-size: 95%;
-  --openapi-input-background: rgba(110, 118, 129, 0.4) !important;
-  /* --openapi-monaco-border-color: #21262d !important;
-  --openapi-monaco-background-color-dark: #0d1117 !important; */
-  --openapi-code-green: var(--ifm-color-success) !important;
-  --openapi-code-blue: var(--ifm-color-primary) !important;
-  --openapi-code-red: var(--ifm-color-danger) !important;
-  --openapi-code-orange: var(--ifm-color-warning) !important;
-  /* Helps avoid #aaa bug in monaco-editor */
-  /* --openapi-code-dim-light: var(--ifm-color-secondary-lightest) !important; */
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
@@ -118,13 +108,6 @@ html[data-theme="dark"] .header-github-link:before {
   content: "patch";
   border-color: var(--openapi-code-orange);
   color: var(--openapi-code-orange);
-}
-
-.alert--success {
-  --ifm-alert-background-color: var(--ifm-color-success-contrast-background);
-  --ifm-alert-background-color-highlight: rgba(0, 164, 0, 0.15);
-  --ifm-alert-foreground-color: var(--ifm-color-success-contrast-foreground);
-  --ifm-alert-border-color: var(--ifm-color-success-dark);
 }
 
 .prism-code {
