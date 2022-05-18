@@ -400,6 +400,8 @@ export interface HttpSecuritySchemeObject {
   description?: string;
   scheme: string;
   bearerFormat?: string;
+  name?: string;
+  in?: string;
 }
 
 export interface Oauth2SecuritySchemeObject {

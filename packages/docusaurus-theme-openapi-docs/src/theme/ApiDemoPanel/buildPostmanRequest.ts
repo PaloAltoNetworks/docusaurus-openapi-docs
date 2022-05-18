@@ -248,6 +248,10 @@ function buildPostmanRequest(
     if (a.type === "http" && a.scheme === "bearer") {
       const { token } = auth.data[a.key];
       if (token === undefined) {
+        otherHeaders.push({
+          key: "Authorization",
+          value: "Bearer <TOKEN>",
+        });
         continue;
       }
       otherHeaders.push({
@@ -276,7 +280,7 @@ function buildPostmanRequest(
       if (apikey === undefined) {
         otherHeaders.push({
           key: a.name,
-          value: "API_KEY_VALUE",
+          value: "<API_KEY_VALUE>",
         });
         continue;
       }
