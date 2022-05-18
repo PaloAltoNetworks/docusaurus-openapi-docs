@@ -20,10 +20,15 @@ function SecuritySchemes() {
   return (
     <div style={{ marginBottom: "var(--ifm-table-cell-padding)" }}>
       {selectedAuth.map((auth) => {
-        if (auth.type === "apiKey") {
+        const isApiKey = auth.type === "apiKey";
+        const isBearer = auth.type === "http" && auth.key === "Bearer";
+        const isClientCredentials =
+          auth.type === "oauth2" && auth.key === "ClientCredentials";
+
+        if (isApiKey || isBearer) {
           return (
-            <React.Fragment key={selected + "-apiKey"}>
-              <b>Authorization: {auth.name}</b>
+            <React.Fragment key={selected}>
+              <b>Authorization: {auth.key}</b>
               <pre
                 style={{
                   display: "flex",
@@ -34,6 +39,24 @@ function SecuritySchemes() {
               >
                 <span>name: {auth.name}</span>
                 <span>in: {auth.in}</span>
+                <span>type: {auth.type}</span>
+              </pre>
+            </React.Fragment>
+          );
+        }
+
+        if (isClientCredentials) {
+          return (
+            <React.Fragment key={selected}>
+              <b>Authorization: {auth.key}</b>
+              <pre
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  background: "var(--openapi-card-background-color)",
+                  borderRadius: "var(--openapi-card-border-radius)",
+                }}
+              >
                 <span>type: {auth.type}</span>
               </pre>
             </React.Fragment>
