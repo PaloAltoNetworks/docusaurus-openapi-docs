@@ -32,8 +32,7 @@ export default function pluginOpenAPI(
 
     try {
       const openapiFiles = await readOpenapiFiles(contentPath, {});
-      const loadedApi = await processOpenapiFiles(openapiFiles);
-
+      const [loadedApi, tags] = await processOpenapiFiles(openapiFiles);
       if (!fs.existsSync(outputDir)) {
         try {
           fs.mkdirSync(outputDir, { recursive: true });
@@ -51,7 +50,8 @@ export default function pluginOpenAPI(
         const sidebarSlice = generateSidebarSlice(
           sidebarOptions!, // TODO: find a better way to handle null
           options,
-          loadedApi
+          loadedApi,
+          tags
         );
 
         const sidebarSliceTemplate = template

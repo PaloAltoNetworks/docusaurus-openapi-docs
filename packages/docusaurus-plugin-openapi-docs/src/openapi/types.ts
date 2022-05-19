@@ -294,7 +294,7 @@ export type HeaderObject = Omit<ParameterObject, "name" | "in">;
 export type HeaderObjectWithRef = Omit<ParameterObjectWithRef, "name" | "in">;
 
 export interface TagObject {
-  name: string;
+  name?: string;
   description?: string;
   externalDocs?: ExternalDocumentationObject;
   "x-displayName"?: string;

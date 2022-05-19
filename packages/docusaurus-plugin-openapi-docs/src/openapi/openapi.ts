@@ -245,28 +245,35 @@ export async function readOpenapiFiles(
 
 export async function processOpenapiFiles(
   files: OpenApiFiles[]
-): Promise<ApiMetadata[]> {
+): Promise<[ApiMetadata[], TagObject[]]> {
   const promises = files.map(async (file) => {
-    const items = await processOpenapiFile(file.data);
-    return items.map((item) => ({
+    const processedFile = await processOpenapiFile(file.data);
+    const itemsObjectsArray = processedFile[0].map((item) => ({
       ...item,
     }));
+    const tags = processedFile[1];
+    return [itemsObjectsArray, tags];
   });
   const metadata = await Promise.all(promises);
-  const items = metadata.flat();
-  return items;
+  const items = metadata[0][0].flat();
+  const tags = metadata[0][1];
+  return [items as ApiMetadata[], tags as TagObject[]];
 }
 
 export async function processOpenapiFile(
   openapiDataWithRefs: OpenApiObjectWithRef
-): Promise<ApiMetadata[]> {
+): Promise<[ApiMetadata[], TagObject[]]> {
   const openapiData = await resolveRefs(openapiDataWithRefs);
   const postmanCollection = await createPostmanCollection(openapiData);
   const items = createItems(openapiData);
 
   bindCollectionToApiItems(items, postmanCollection);
 
-  return items;
+  let tags: TagObject[] = [];
+  if (openapiData.tags !== undefined) {
+    tags = openapiData.tags;
+  }
+  return [items, tags];
 }
 
 // order for picking items as a display name of tags

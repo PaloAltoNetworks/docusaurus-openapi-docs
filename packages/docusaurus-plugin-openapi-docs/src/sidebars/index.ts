@@ -12,6 +12,7 @@ import {
 import clsx from "clsx";
 import uniq from "lodash/uniq";
 
+import { TagObject } from "../openapi/types";
 import type {
   SidebarOptions,
   APIOptions,
@@ -26,7 +27,8 @@ function isApiItem(item: ApiMetadata): item is ApiMetadata {
 function groupByTags(
   items: ApiPageMetadata[],
   sidebarOptions: SidebarOptions,
-  options: APIOptions
+  options: APIOptions,
+  tags: TagObject[]
 ): ProcessedSidebar {
   // TODO: Figure out how to handle these
   // const intros = items.filter(isInfoItem).map((item) => {
@@ -44,7 +46,7 @@ function groupByTags(
   const apiItems = items.filter(isApiItem);
 
   // TODO: make sure we only take the first tag
-  const tags = uniq(
+  const tags_ = uniq(
     apiItems
       .flatMap((item) => item.api.tags)
       .filter((item): item is string => !!item)
@@ -74,11 +76,19 @@ function groupByTags(
     };
   }
 
-  const tagged = tags
+  const tagged = tags_
     .map((tag) => {
       return {
         type: "category" as const,
         label: tag,
+        link: {
+          type: "generated-index",
+          title: tag,
+          description: "Learn about the most important Docusaurus concepts!",
+          slug: "/category/docusaurus-guides",
+          keywords: ["guides"],
+          image: "/img/docusaurus.png",
+        },
         collapsible: sidebarCollapsible,
         collapsed: sidebarCollapsed,
         items: apiItems
@@ -107,14 +117,16 @@ function groupByTags(
 export default function generateSidebarSlice(
   sidebarOptions: SidebarOptions,
   options: APIOptions,
-  api: ApiMetadata[]
+  api: ApiMetadata[],
+  tags: TagObject[]
 ) {
   let sidebarSlice: ProcessedSidebar = [];
   if (sidebarOptions.groupPathsBy === "tags") {
     sidebarSlice = groupByTags(
       api as ApiPageMetadata[],
       sidebarOptions,
-      options
+      options,
+      tags
     );
   }
   return sidebarSlice;
