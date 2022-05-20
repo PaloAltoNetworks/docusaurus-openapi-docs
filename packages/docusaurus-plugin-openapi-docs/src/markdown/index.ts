@@ -8,12 +8,16 @@
 import { escape } from "lodash";
 
 import { ApiPageMetadata, InfoPageMetadata } from "../types";
-import { createDeprecationNotice } from "./createDeprecationNotice";
-import { createDescription } from "./createDescription";
-import { createParamsDetails } from "./createParamsDetails";
-import { createRequestBodyDetails } from "./createRequestBodyDetails";
-import { createStatusCodes } from "./createStatusCodes";
-import { createVersionBadge } from "./createVersionBadge";
+import { ContactObject, LicenseObject } from "../openapi/types";
+import { createDeprecationNotice } from "./api-page/createDeprecationNotice";
+import { createDescription } from "./api-page/createDescription";
+import { createParamsDetails } from "./api-page/createParamsDetails";
+import { createRequestBodyDetails } from "./api-page/createRequestBodyDetails";
+import { createStatusCodes } from "./api-page/createStatusCodes";
+import { createVersionBadge } from "./info-page/createVersionBadge";
+import { createContactInfo } from "./info-page/createContactInfo";
+import { createTermsOfService } from "./info-page/createTermsOfService";
+import { createLicense } from "./info-page/createLicense";
 import { render } from "./utils";
 
 export function createApiPageMD({
@@ -45,11 +49,14 @@ export function createApiPageMD({
 }
 
 export function createInfoPageMD({
-  info: { title, version, description },
+  info: { title, version, description, contact, license, termsOfService },
 }: InfoPageMetadata) {
   return render([
     createVersionBadge(version),
     `# ${escape(title)}\n\n`,
     createDescription(description),
+    createContactInfo(contact as ContactObject),
+    createTermsOfService(termsOfService),
+    createLicense(license as LicenseObject),
   ]);
 }
