@@ -6,7 +6,9 @@
  * ========================================================================== */
 
 import React from "react";
+
 import ReactMarkdown from "react-markdown";
+
 import { createDescription } from "../../markdown/createDescription";
 import { getQualifierMessage, getSchemaName } from "../../markdown/schema";
 import { guard } from "../../markdown/utils";
