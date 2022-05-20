@@ -7,9 +7,11 @@
 
 import {
   ProcessedSidebar,
+  SidebarItemCategoryLinkConfig,
   SidebarItemDoc,
 } from "@docusaurus/plugin-content-docs/src/sidebars/types";
 import clsx from "clsx";
+import { kebabCase } from "lodash";
 import uniq from "lodash/uniq";
 
 import { TagObject } from "../openapi/types";
@@ -24,26 +26,29 @@ function isApiItem(item: ApiMetadata): item is ApiMetadata {
   return item.type === "api";
 }
 
+function isInfoItem(item: ApiMetadata): item is ApiMetadata {
+  return item.type === "info";
+}
+
 function groupByTags(
   items: ApiPageMetadata[],
   sidebarOptions: SidebarOptions,
   options: APIOptions,
   tags: TagObject[]
 ): ProcessedSidebar {
-  // TODO: Figure out how to handle these
-  // const intros = items.filter(isInfoItem).map((item) => {
-  //   return {
-  //     type: "link" as const,
-  //     label: item.title,
-  //     href: item.permalink,
-  //     docId: item.id,
-  //   };
-  // });
-
   const { outputDir } = options;
   const { sidebarCollapsed, sidebarCollapsible, customProps } = sidebarOptions;
 
   const apiItems = items.filter(isApiItem);
+  const infoItems = items.filter(isInfoItem);
+  const intros = infoItems.map((item: any) => {
+    return {
+      id: item.id,
+      title: item.title,
+      description: item.description,
+      tags: item.info.tags,
+    };
+  });
 
   // TODO: make sure we only take the first tag
   const tags_ = uniq(
@@ -76,19 +81,49 @@ function groupByTags(
     };
   }
 
+  let introDoc = undefined;
+  if (!sidebarOptions.useInfoAsCategoryLink) {
+    const infoItem = infoItems[0];
+    const id = infoItem.id;
+    introDoc = {
+      type: "doc" as const,
+      id: `${basePath}/${id}`,
+    };
+  }
+
   const tagged = tags_
     .map((tag) => {
+      // TODO: should we also use the info.title as generated-index title?
+      const infoObject = intros.find((i) => i.tags.includes(tag));
+      const tagObject = tags.flat().find(
+        (t) =>
+          (tag === t.name || tag === t["x-displayName"]) ?? {
+            name: tag,
+            description: `${tag} Index`,
+          }
+      );
+
+      // TODO: perhaps move all this into a getLinkConfig() function
+      let linkConfig = undefined;
+      if (infoObject !== undefined && sidebarOptions.useInfoAsCategoryLink) {
+        linkConfig = {
+          type: "doc",
+          id: `${basePath}/${infoObject.id}`,
+        } as SidebarItemCategoryLinkConfig;
+      } else {
+        const linkDescription = tagObject?.description;
+        linkConfig = {
+          type: "generated-index" as "generated-index",
+          title: tag,
+          description: linkDescription,
+          slug: "/category/" + kebabCase(tag),
+        } as SidebarItemCategoryLinkConfig;
+      }
+
       return {
         type: "category" as const,
         label: tag,
-        link: {
-          type: "generated-index",
-          title: tag,
-          description: "Learn about the most important Docusaurus concepts!",
-          slug: "/category/docusaurus-guides",
-          keywords: ["guides"],
-          image: "/img/docusaurus.png",
-        },
+        link: linkConfig,
         collapsible: sidebarCollapsible,
         collapsed: sidebarCollapsed,
         items: apiItems
@@ -98,19 +133,24 @@ function groupByTags(
     })
     .filter((item) => item.items.length > 0); // Filter out any categories with no items.
 
+  // TODO: determine how we want to handle these
   // const untagged = [
-  //   // TODO: determine if needed and how
   //   {
   //     type: "category" as const,
   //     label: "UNTAGGED",
-  //     // collapsible: options.sidebarCollapsible, TODO: add option
-  //     // collapsed: options.sidebarCollapsed, TODO: add option
+  //     collapsible: sidebarCollapsible,
+  //     collapsed: sidebarCollapsed,
   //     items: apiItems
-  //       //@ts-ignore
   //       .filter(({ api }) => api.tags === undefined || api.tags.length === 0)
   //       .map(createDocItem),
   //   },
   // ];
+
+  // Shift intro doc to top of sidebar
+  if (introDoc) {
+    tagged.unshift(introDoc as any);
+  }
+
   return [...tagged];
 }
 
