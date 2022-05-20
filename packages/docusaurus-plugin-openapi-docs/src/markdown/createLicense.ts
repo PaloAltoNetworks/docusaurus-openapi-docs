@@ -5,8 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { LicenseObject } from "../../openapi/types";
-import { create } from "../utils";
+import { LicenseObject } from "../openapi/types";
+import { create } from "./utils";
 
 export function createLicense(license: LicenseObject) {
   if (!license) return "";

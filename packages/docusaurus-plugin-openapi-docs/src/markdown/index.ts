@@ -9,15 +9,15 @@ import { escape } from "lodash";
 
 import { ContactObject, LicenseObject } from "../openapi/types";
 import { ApiPageMetadata, InfoPageMetadata } from "../types";
-import { createDeprecationNotice } from "./api-page/createDeprecationNotice";
-import { createDescription } from "./api-page/createDescription";
-import { createParamsDetails } from "./api-page/createParamsDetails";
-import { createRequestBodyDetails } from "./api-page/createRequestBodyDetails";
-import { createStatusCodes } from "./api-page/createStatusCodes";
-import { createContactInfo } from "./info-page/createContactInfo";
-import { createLicense } from "./info-page/createLicense";
-import { createTermsOfService } from "./info-page/createTermsOfService";
-import { createVersionBadge } from "./info-page/createVersionBadge";
+import { createDeprecationNotice } from "./createDeprecationNotice";
+import { createDescription } from "./createDescription";
+import { createParamsDetails } from "./createParamsDetails";
+import { createRequestBodyDetails } from "./createRequestBodyDetails";
+import { createStatusCodes } from "./createStatusCodes";
+import { createContactInfo } from "./createContactInfo";
+import { createLicense } from "./createLicense";
+import { createTermsOfService } from "./createTermsOfService";
+import { createVersionBadge } from "./createVersionBadge";
 import { render } from "./utils";
 
 export function createApiPageMD({

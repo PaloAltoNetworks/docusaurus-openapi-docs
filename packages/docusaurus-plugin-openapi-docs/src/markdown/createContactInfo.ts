@@ -5,8 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { ContactObject } from "../../openapi/types";
-import { create } from "../utils";
+import { ContactObject } from "../openapi/types";
+import { create } from "./utils";
 
 export function createContactInfo(contact: ContactObject) {
   if (!contact) return "";

@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { create } from "../utils";
+import { create } from "./utils";
 
 export function createTermsOfService(termsOfService: string | undefined) {
   if (!createTermsOfService) return "";

@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { guard, Props, render } from "../utils";
+import { guard, Props, render } from "./utils";
 
 function createAdmonition({ children }: Props) {
   return `:::caution deprecated\n\n${render(children)}\n\n:::`;
