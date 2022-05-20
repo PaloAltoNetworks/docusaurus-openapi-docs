@@ -1,7 +1,14 @@
 module.exports = [
+  { type: "doc", id: "petstore/swagger-petstore-yaml" },
   {
     type: "category",
     label: "Pets",
+    link: {
+      type: "generated-index",
+      title: "Pets",
+      description: "Everything about your Pets",
+      slug: "/category/pets",
+    },
     items: [
       {
         type: "doc",
@@ -56,6 +63,12 @@ module.exports = [
   {
     type: "category",
     label: "Petstore Orders",
+    link: {
+      type: "generated-index",
+      title: "Petstore Orders",
+      description: "Access to Petstore orders",
+      slug: "/category/petstore-orders",
+    },
     items: [
       {
         type: "doc",
@@ -92,6 +105,12 @@ module.exports = [
   {
     type: "category",
     label: "Users",
+    link: {
+      type: "generated-index",
+      title: "Users",
+      description: "Operations about user",
+      slug: "/category/users",
+    },
     items: [
       {
         type: "doc",
