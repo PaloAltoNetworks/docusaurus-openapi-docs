@@ -7,11 +7,14 @@
 
 import {
   ProcessedSidebar,
+  SidebarItemCategoryLinkConfig,
   SidebarItemDoc,
 } from "@docusaurus/plugin-content-docs/src/sidebars/types";
 import clsx from "clsx";
+import { kebabCase } from "lodash";
 import uniq from "lodash/uniq";
 
+import { TagObject } from "../openapi/types";
 import type {
   SidebarOptions,
   APIOptions,
@@ -23,28 +26,38 @@ function isApiItem(item: ApiMetadata): item is ApiMetadata {
   return item.type === "api";
 }
 
+function isInfoItem(item: ApiMetadata): item is ApiMetadata {
+  return item.type === "info";
+}
+
 function groupByTags(
   items: ApiPageMetadata[],
   sidebarOptions: SidebarOptions,
-  options: APIOptions
+  options: APIOptions,
+  tags: TagObject[]
 ): ProcessedSidebar {
-  // TODO: Figure out how to handle these
-  // const intros = items.filter(isInfoItem).map((item) => {
-  //   return {
-  //     type: "link" as const,
-  //     label: item.title,
-  //     href: item.permalink,
-  //     docId: item.id,
-  //   };
-  // });
-
   const { outputDir } = options;
-  const { sidebarCollapsed, sidebarCollapsible, customProps } = sidebarOptions;
+  const {
+    sidebarCollapsed,
+    sidebarCollapsible,
+    customProps,
+    categoryLinkSource,
+  } = sidebarOptions;
+  const linkSource = categoryLinkSource ?? "tag";
 
   const apiItems = items.filter(isApiItem);
+  const infoItems = items.filter(isInfoItem);
+  const intros = infoItems.map((item: any) => {
+    return {
+      id: item.id,
+      title: item.title,
+      description: item.description,
+      tags: item.info.tags,
+    };
+  });
 
   // TODO: make sure we only take the first tag
-  const tags = uniq(
+  const tags_ = uniq(
     apiItems
       .flatMap((item) => item.api.tags)
       .filter((item): item is string => !!item)
@@ -74,11 +87,51 @@ function groupByTags(
     };
   }
 
-  const tagged = tags
+  let introDoc = undefined;
+  if (linkSource === "info") {
+    const infoItem = infoItems[0];
+    const id = infoItem.id;
+    introDoc = {
+      type: "doc" as const,
+      id: `${basePath}/${id}`,
+    };
+  }
+
+  const tagged = tags_
     .map((tag) => {
+      // TODO: should we also use the info.title as generated-index title?
+      const infoObject = intros.find((i) => i.tags.includes(tag));
+      const tagObject = tags.flat().find(
+        (t) =>
+          (tag === t.name || tag === t["x-displayName"]) ?? {
+            name: tag,
+            description: `${tag} Index`,
+          }
+      );
+
+      // TODO: perhaps move all this into a getLinkConfig() function
+      let linkConfig = undefined;
+      if (infoObject !== undefined && linkSource === "info") {
+        linkConfig = {
+          type: "doc",
+          id: `${basePath}/${infoObject.id}`,
+        } as SidebarItemCategoryLinkConfig;
+      }
+
+      if (tagObject !== undefined && linkSource === "tag") {
+        const linkDescription = tagObject?.description;
+        linkConfig = {
+          type: "generated-index" as "generated-index",
+          title: tag,
+          description: linkDescription,
+          slug: "/category/" + kebabCase(tag),
+        } as SidebarItemCategoryLinkConfig;
+      }
+
       return {
         type: "category" as const,
         label: tag,
+        link: linkConfig,
         collapsible: sidebarCollapsible,
         collapsed: sidebarCollapsed,
         items: apiItems
@@ -88,33 +141,40 @@ function groupByTags(
     })
     .filter((item) => item.items.length > 0); // Filter out any categories with no items.
 
+  // TODO: determine how we want to handle these
   // const untagged = [
-  //   // TODO: determine if needed and how
   //   {
   //     type: "category" as const,
   //     label: "UNTAGGED",
-  //     // collapsible: options.sidebarCollapsible, TODO: add option
-  //     // collapsed: options.sidebarCollapsed, TODO: add option
+  //     collapsible: sidebarCollapsible,
+  //     collapsed: sidebarCollapsed,
   //     items: apiItems
-  //       //@ts-ignore
   //       .filter(({ api }) => api.tags === undefined || api.tags.length === 0)
   //       .map(createDocItem),
   //   },
   // ];
+
+  // Shift intro doc to top of sidebar
+  if (introDoc && linkSource === "info") {
+    tagged.unshift(introDoc as any);
+  }
+
   return [...tagged];
 }
 
 export default function generateSidebarSlice(
   sidebarOptions: SidebarOptions,
   options: APIOptions,
-  api: ApiMetadata[]
+  api: ApiMetadata[],
+  tags: TagObject[]
 ) {
   let sidebarSlice: ProcessedSidebar = [];
   if (sidebarOptions.groupPathsBy === "tags") {
     sidebarSlice = groupByTags(
       api as ApiPageMetadata[],
       sidebarOptions,
-      options
+      options,
+      tags
     );
   }
   return sidebarSlice;

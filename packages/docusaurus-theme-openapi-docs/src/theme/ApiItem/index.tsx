@@ -127,21 +127,11 @@ function DocItemContent(props: Props): JSX.Element {
                 </div>
               </MDXContent>
             </div>
-            <div
-              className={clsx(
-                "col",
-                api ? "col--7" : !canRenderTOC ? "col--9" : "col--12"
-              )}
-            >
+            <div className={clsx("col", api ? "col--7" : "col--12")}>
               <DocItemFooter {...props} />
             </div>
           </article>
-          <div
-            className={clsx(
-              "col",
-              api ? "col--7" : !canRenderTOC ? "col--9" : "col--12"
-            )}
-          >
+          <div className={clsx("col", api ? "col--7" : "col--12")}>
             <DocPaginator previous={metadata.previous} next={metadata.next} />
           </div>
         </div>

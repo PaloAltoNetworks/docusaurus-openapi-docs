@@ -81,16 +81,20 @@ function createItems(openapiData: OpenApiObject): ApiMetadata[] {
 
   // Only create an info page if we have a description.
   if (openapiData.info.description) {
+    const infoId = kebabCase(openapiData.info.title);
     const infoPage: PartialPage<InfoPageMetadata> = {
       type: "info",
-      id: "introduction",
-      unversionedId: "introduction",
-      title: "Introduction",
+      id: infoId,
+      unversionedId: infoId,
+      title: openapiData.info.title,
       description: openapiData.info.description,
-      slug: "/introduction",
+      slug: "/" + infoId,
       frontMatter: {},
       info: {
         ...openapiData.info,
+        tags: openapiData.tags?.map((tagName) =>
+          getTagDisplayName(tagName.name!, openapiData.tags ?? [])
+        ),
         title: openapiData.info.title ?? "Introduction",
       },
     };
@@ -245,34 +249,47 @@ export async function readOpenapiFiles(
 
 export async function processOpenapiFiles(
   files: OpenApiFiles[]
-): Promise<ApiMetadata[]> {
+): Promise<[ApiMetadata[], TagObject[]]> {
   const promises = files.map(async (file) => {
-    const items = await processOpenapiFile(file.data);
-    return items.map((item) => ({
+    const processedFile = await processOpenapiFile(file.data);
+    const itemsObjectsArray = processedFile[0].map((item) => ({
       ...item,
     }));
+    const tags = processedFile[1];
+    return [itemsObjectsArray, tags];
   });
   const metadata = await Promise.all(promises);
-  const items = metadata.flat();
-  return items;
+  const items = metadata
+    .map(function (x) {
+      return x[0];
+    })
+    .flat();
+  const tags = metadata.map(function (x) {
+    return x[1];
+  });
+  return [items as ApiMetadata[], tags as TagObject[]];
 }
 
 export async function processOpenapiFile(
   openapiDataWithRefs: OpenApiObjectWithRef
-): Promise<ApiMetadata[]> {
+): Promise<[ApiMetadata[], TagObject[]]> {
   const openapiData = await resolveRefs(openapiDataWithRefs);
   const postmanCollection = await createPostmanCollection(openapiData);
   const items = createItems(openapiData);
 
   bindCollectionToApiItems(items, postmanCollection);
 
-  return items;
+  let tags: TagObject[] = [];
+  if (openapiData.tags !== undefined) {
+    tags = openapiData.tags;
+  }
+  return [items, tags];
 }
 
 // order for picking items as a display name of tags
 const tagDisplayNameProperties = ["x-displayName", "name"] as const;
 
-function getTagDisplayName(tagName: string, tags: TagObject[]): string {
+export function getTagDisplayName(tagName: string, tags: TagObject[]): string {
   // find the very own tagObject
   const tagObject = tags.find((tagObject) => tagObject.name === tagName) ?? {
     // if none found, just fake one
