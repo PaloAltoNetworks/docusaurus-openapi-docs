@@ -90,6 +90,7 @@ export interface ApiNavLink {
 
 export interface SidebarOptions {
   groupPathsBy?: string;
+  useInfoAsCategoryLink?: boolean; // TODO: confirm name of option
   customProps?: { [key: string]: unknown };
   sidebarCollapsible?: boolean;
   sidebarCollapsed?: boolean;
