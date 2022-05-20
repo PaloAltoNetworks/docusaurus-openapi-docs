@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { create, guard } from "./utils";
+import { create, guard } from "../utils";
 
 export function createVersionBadge(version: string | undefined) {
   return guard(version, (version) => [

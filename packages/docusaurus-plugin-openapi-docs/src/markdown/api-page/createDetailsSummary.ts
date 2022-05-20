@@ -5,11 +5,11 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { create, Props } from "./utils";
+import { create, Props } from "../utils";
 
-export function createFullWidthTable({ children, style, ...rest }: Props) {
-  return create("table", {
-    style: { display: "table", width: "100%", ...style },
+export function createDetailsSummary({ children, style, ...rest }: Props) {
+  return create("summary", {
+    style: { ...style },
     ...rest,
     children,
   });

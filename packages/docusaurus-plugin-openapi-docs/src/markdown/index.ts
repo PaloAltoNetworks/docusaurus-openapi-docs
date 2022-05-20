@@ -7,17 +7,17 @@
 
 import { escape } from "lodash";
 
-import { ApiPageMetadata, InfoPageMetadata } from "../types";
 import { ContactObject, LicenseObject } from "../openapi/types";
+import { ApiPageMetadata, InfoPageMetadata } from "../types";
 import { createDeprecationNotice } from "./api-page/createDeprecationNotice";
 import { createDescription } from "./api-page/createDescription";
 import { createParamsDetails } from "./api-page/createParamsDetails";
 import { createRequestBodyDetails } from "./api-page/createRequestBodyDetails";
 import { createStatusCodes } from "./api-page/createStatusCodes";
-import { createVersionBadge } from "./info-page/createVersionBadge";
 import { createContactInfo } from "./info-page/createContactInfo";
-import { createTermsOfService } from "./info-page/createTermsOfService";
 import { createLicense } from "./info-page/createLicense";
+import { createTermsOfService } from "./info-page/createTermsOfService";
+import { createVersionBadge } from "./info-page/createVersionBadge";
 import { render } from "./utils";
 
 export function createApiPageMD({

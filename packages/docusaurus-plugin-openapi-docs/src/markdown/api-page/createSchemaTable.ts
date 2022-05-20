@@ -5,11 +5,11 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { MediaTypeObject, SchemaObject } from "../openapi/types";
+import { MediaTypeObject, SchemaObject } from "../../openapi/types";
+import { getQualifierMessage, getSchemaName } from "../schema";
+import { create, guard } from "../utils";
 import { createDescription } from "./createDescription";
 import { createFullWidthTable } from "./createFullWidthTable";
-import { getQualifierMessage, getSchemaName } from "./schema";
-import { create, guard } from "./utils";
 
 function resolveAllOf(allOf: SchemaObject[]) {
   // TODO: naive implementation (only supports objects, no directly nested allOf)

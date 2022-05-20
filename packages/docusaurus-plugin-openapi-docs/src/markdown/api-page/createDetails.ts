@@ -5,10 +5,10 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { create, Props } from "./utils";
+import { create, Props } from "../utils";
 
-export function createDetailsSummary({ children, style, ...rest }: Props) {
-  return create("summary", {
+export function createDetails({ children, style, ...rest }: Props) {
+  return create("details", {
     style: { ...style },
     ...rest,
     children,
