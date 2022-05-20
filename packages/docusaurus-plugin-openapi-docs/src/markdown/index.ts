@@ -9,13 +9,13 @@ import { escape } from "lodash";
 
 import { ContactObject, LicenseObject } from "../openapi/types";
 import { ApiPageMetadata, InfoPageMetadata } from "../types";
+import { createContactInfo } from "./createContactInfo";
 import { createDeprecationNotice } from "./createDeprecationNotice";
 import { createDescription } from "./createDescription";
+import { createLicense } from "./createLicense";
 import { createParamsDetails } from "./createParamsDetails";
 import { createRequestBodyDetails } from "./createRequestBodyDetails";
 import { createStatusCodes } from "./createStatusCodes";
-import { createContactInfo } from "./createContactInfo";
-import { createLicense } from "./createLicense";
 import { createTermsOfService } from "./createTermsOfService";
 import { createVersionBadge } from "./createVersionBadge";
 import { render } from "./utils";

@@ -6,9 +6,9 @@
  * ========================================================================== */
 
 import { ApiItem } from "../types";
-import { create } from "./utils";
 import { createDetails } from "./createDetails";
 import { createDetailsSummary } from "./createDetailsSummary";
+import { create } from "./utils";
 
 interface Props {
   parameters: ApiItem["parameters"];

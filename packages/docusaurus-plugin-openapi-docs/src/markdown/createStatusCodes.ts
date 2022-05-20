@@ -6,9 +6,9 @@
  * ========================================================================== */
 
 import { ApiItem } from "../types";
-import { create } from "./utils";
 import { createDescription } from "./createDescription";
 import { createSchemaDetails } from "./createSchemaDetails";
+import { create } from "./utils";
 
 interface Props {
   responses: ApiItem["responses"];
