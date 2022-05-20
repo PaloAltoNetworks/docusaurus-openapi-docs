@@ -16,8 +16,8 @@
     "clean-api-docs": "docusaurus clean-api-docs"
   },
   "dependencies": {
-    "@docusaurus/core": "0.0.0-5014",
-    "@docusaurus/preset-classic": "0.0.0-5014",
+    "@docusaurus/core": "0.0.0-5034",
+    "@docusaurus/preset-classic": "0.0.0-5034",
     "@mdx-js/react": "^1.6.21",
     "@svgr/webpack": "^5.5.0",
     "clsx": "^1.1.1",
