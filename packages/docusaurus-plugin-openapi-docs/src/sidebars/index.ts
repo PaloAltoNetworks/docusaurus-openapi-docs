@@ -37,7 +37,13 @@ function groupByTags(
   tags: TagObject[]
 ): ProcessedSidebar {
   const { outputDir } = options;
-  const { sidebarCollapsed, sidebarCollapsible, customProps } = sidebarOptions;
+  const {
+    sidebarCollapsed,
+    sidebarCollapsible,
+    customProps,
+    categoryLinkSource,
+  } = sidebarOptions;
+  const linkSource = categoryLinkSource ?? "tag";
 
   const apiItems = items.filter(isApiItem);
   const infoItems = items.filter(isInfoItem);
@@ -82,7 +88,7 @@ function groupByTags(
   }
 
   let introDoc = undefined;
-  if (!sidebarOptions.useInfoAsCategoryLink) {
+  if (linkSource === "info") {
     const infoItem = infoItems[0];
     const id = infoItem.id;
     introDoc = {
@@ -105,12 +111,14 @@ function groupByTags(
 
       // TODO: perhaps move all this into a getLinkConfig() function
       let linkConfig = undefined;
-      if (infoObject !== undefined && sidebarOptions.useInfoAsCategoryLink) {
+      if (infoObject !== undefined && linkSource === "info") {
         linkConfig = {
           type: "doc",
           id: `${basePath}/${infoObject.id}`,
         } as SidebarItemCategoryLinkConfig;
-      } else {
+      }
+
+      if (tagObject !== undefined && linkSource === "tag") {
         const linkDescription = tagObject?.description;
         linkConfig = {
           type: "generated-index" as "generated-index",
@@ -147,7 +155,7 @@ function groupByTags(
   // ];
 
   // Shift intro doc to top of sidebar
-  if (introDoc) {
+  if (introDoc && linkSource === "info") {
     tagged.unshift(introDoc as any);
   }
 
