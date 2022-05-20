@@ -40,6 +40,7 @@ export interface InfoObject {
   contact?: ContactObject;
   license?: LicenseObject;
   version: string;
+  tags?: String[];
 }
 
 export interface ContactObject {

@@ -155,7 +155,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
         if (item.type === "info") {
           if (!fs.existsSync(`${outputDir}/${item.id}.info.mdx`)) {
             try {
-              sidebarOptions?.useInfoDescription
+              sidebarOptions?.useInfoAsCategoryLink
                 ? fs.writeFileSync(
                     `${outputDir}/${item.id}.info.mdx`,
                     utils,
