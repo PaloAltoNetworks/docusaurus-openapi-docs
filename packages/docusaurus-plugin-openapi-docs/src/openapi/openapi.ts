@@ -81,16 +81,20 @@ function createItems(openapiData: OpenApiObject): ApiMetadata[] {
 
   // Only create an info page if we have a description.
   if (openapiData.info.description) {
+    const infoId = kebabCase(openapiData.info.title);
     const infoPage: PartialPage<InfoPageMetadata> = {
       type: "info",
-      id: "introduction",
-      unversionedId: "introduction",
-      title: "Introduction",
+      id: infoId,
+      unversionedId: infoId,
+      title: openapiData.info.title,
       description: openapiData.info.description,
-      slug: "/introduction",
+      slug: "/" + infoId,
       frontMatter: {},
       info: {
         ...openapiData.info,
+        tags: openapiData.tags?.map((tagName) =>
+          getTagDisplayName(tagName.name!, openapiData.tags ?? [])
+        ),
         title: openapiData.info.title ?? "Introduction",
       },
     };
@@ -255,8 +259,14 @@ export async function processOpenapiFiles(
     return [itemsObjectsArray, tags];
   });
   const metadata = await Promise.all(promises);
-  const items = metadata[0][0].flat();
-  const tags = metadata[0][1];
+  const items = metadata
+    .map(function (x) {
+      return x[0];
+    })
+    .flat();
+  const tags = metadata.map(function (x) {
+    return x[1];
+  });
   return [items as ApiMetadata[], tags as TagObject[]];
 }
 
@@ -279,7 +289,7 @@ export async function processOpenapiFile(
 // order for picking items as a display name of tags
 const tagDisplayNameProperties = ["x-displayName", "name"] as const;
 
-function getTagDisplayName(tagName: string, tags: TagObject[]): string {
+export function getTagDisplayName(tagName: string, tags: TagObject[]): string {
   // find the very own tagObject
   const tagObject = tags.find((tagObject) => tagObject.name === tagName) ?? {
     // if none found, just fake one
