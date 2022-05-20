@@ -81,7 +81,12 @@ export default function pluginOpenAPI(
         ? fs.readFileSync(template).toString()
         : `---
 id: {{{id}}}
+{{^api}}
+sidebar_label: Introduction
+{{/api}}
+{{#api}}
 sidebar_label: {{{title}}}
+{{/api}}
 {{^api}}
 sidebar_position: 0
 {{/api}}
@@ -100,6 +105,24 @@ sidebar_class_name: "{{{api.method}}} api-method"
 {{{markdown}}}
       `;
 
+      const infoMdTemplate = template
+        ? fs.readFileSync(template).toString()
+        : `---
+id: {{{id}}}
+sidebar_label: {{{title}}}
+hide_title: true
+---
+
+{{{markdown}}}
+
+\`\`\`mdx-code-block
+import DocCardList from '@theme/DocCardList';
+import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
+
+<DocCardList items={useCurrentSidebarCategory().items}/>
+\`\`\`
+      `;
+
       loadedApi.map(async (item) => {
         const markdown =
           item.type === "api" ? createApiPageMD(item) : createInfoPageMD(item);
@@ -108,6 +131,7 @@ sidebar_class_name: "{{{api.method}}} api-method"
           item.json = JSON.stringify(item.api);
         }
         const view = render(mdTemplate, item);
+        const utils = render(infoMdTemplate, item);
 
         if (item.type === "api") {
           if (!fs.existsSync(`${outputDir}/${item.id}.api.mdx`)) {
@@ -129,15 +153,27 @@ sidebar_class_name: "{{{api.method}}} api-method"
 
         // TODO: determine if we actually want/need this
         if (item.type === "info") {
-          if (!fs.existsSync(`${outputDir}/index.api.mdx`)) {
+          if (!fs.existsSync(`${outputDir}/${item.id}.info.mdx`)) {
             try {
-              fs.writeFileSync(`${outputDir}/index.api.mdx`, view, "utf8");
+              sidebarOptions?.useInfoDescription
+                ? fs.writeFileSync(
+                    `${outputDir}/${item.id}.info.mdx`,
+                    utils,
+                    "utf8"
+                  )
+                : fs.writeFileSync(
+                    `${outputDir}/${item.id}.info.mdx`,
+                    view,
+                    "utf8"
+                  );
               console.log(
-                chalk.green(`Successfully created "${outputDir}/index.api.mdx"`)
+                chalk.green(
+                  `Successfully created "${outputDir}/${item.id}.info.mdx"`
+                )
               );
             } catch (err) {
               console.error(
-                chalk.red(`Failed to write "${outputDir}/index.api.mdx"`),
+                chalk.red(`Failed to write "${outputDir}/${item.id}.info.mdx"`),
                 chalk.yellow(err)
               );
             }
@@ -155,7 +191,7 @@ sidebar_class_name: "{{{api.method}}} api-method"
   async function cleanApiDocs(options: APIOptions) {
     const { outputDir } = options;
     const apiDir = path.join(siteDir, outputDir);
-    const apiMdxFiles = await Globby(["*.api.mdx"], {
+    const apiMdxFiles = await Globby(["*.api.mdx", "*.info.mdx"], {
       cwd: path.resolve(apiDir),
     });
     const sidebarFile = await Globby(["sidebar.js"], {
