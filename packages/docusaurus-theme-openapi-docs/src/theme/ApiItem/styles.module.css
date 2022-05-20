@@ -79,9 +79,9 @@
   font-size: 14px;
 }
 
-:global(.theme-api-markdown h2) {
+/* :global(.theme-api-markdown h2) {
   font-size: 2rem;
-}
+} */
 
 :global(.schemaItem) {
   list-style: none;
