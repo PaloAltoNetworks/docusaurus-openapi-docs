@@ -6,10 +6,10 @@
  * ========================================================================== */
 
 import { LicenseObject } from "../openapi/types";
-import { create } from "./utils";
+import { create, guard } from "./utils";
 
 export function createLicense(license: LicenseObject) {
-  if (!license) return "";
+  if (!license || !Object.keys(license).length) return "";
   const { name, url } = license;
 
   return create("div", {
@@ -23,10 +23,12 @@ export function createLicense(license: LicenseObject) {
         },
         children: "License",
       }),
-      create("a", {
-        href: url,
-        children: name,
-      }),
+      guard(url, () =>
+        create("a", {
+          href: url,
+          children: name ?? url,
+        })
+      ),
     ],
   });
 }
