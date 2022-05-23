@@ -43,7 +43,6 @@ function groupByTags(
     customProps,
     categoryLinkSource,
   } = sidebarOptions;
-  const linkSource = categoryLinkSource ?? "tag";
 
   const apiItems = items.filter(isApiItem);
   const infoItems = items.filter(isInfoItem);
@@ -57,7 +56,7 @@ function groupByTags(
   });
 
   // TODO: make sure we only take the first tag
-  const tags_ = uniq(
+  const apiTags = uniq(
     apiItems
       .flatMap((item) => item.api.tags)
       .filter((item): item is string => !!item)
@@ -87,19 +86,19 @@ function groupByTags(
     };
   }
 
-  let introDoc = undefined;
-  if (linkSource === "info") {
+  let rootIntroDoc = undefined;
+  if (infoItems.length === 1) {
     const infoItem = infoItems[0];
     const id = infoItem.id;
-    introDoc = {
+    rootIntroDoc = {
       type: "doc" as const,
       id: `${basePath}/${id}`,
     };
   }
 
-  const tagged = tags_
+  const tagged = apiTags
     .map((tag) => {
-      // TODO: should we also use the info.title as generated-index title?
+      // Map info object to tag
       const infoObject = intros.find((i) => i.tags.includes(tag));
       const tagObject = tags.flat().find(
         (t) =>
@@ -109,21 +108,31 @@ function groupByTags(
           }
       );
 
-      // TODO: perhaps move all this into a getLinkConfig() function
+      // TODO: perhaps move this into a getLinkConfig() function
       let linkConfig = undefined;
-      if (infoObject !== undefined && linkSource === "info") {
+      if (infoObject !== undefined && categoryLinkSource === "info") {
         linkConfig = {
           type: "doc",
           id: `${basePath}/${infoObject.id}`,
         } as SidebarItemCategoryLinkConfig;
       }
 
-      if (tagObject !== undefined && linkSource === "tag") {
+      // TODO: perhaps move this into a getLinkConfig() function
+      if (tagObject !== undefined && categoryLinkSource === "tag") {
         const linkDescription = tagObject?.description;
         linkConfig = {
           type: "generated-index" as "generated-index",
           title: tag,
           description: linkDescription,
+          slug: "/category/" + kebabCase(tag),
+        } as SidebarItemCategoryLinkConfig;
+      }
+
+      // Default behavior
+      if (categoryLinkSource === undefined) {
+        linkConfig = {
+          type: "generated-index" as "generated-index",
+          title: tag,
           slug: "/category/" + kebabCase(tag),
         } as SidebarItemCategoryLinkConfig;
       }
@@ -154,9 +163,10 @@ function groupByTags(
   //   },
   // ];
 
-  // Shift intro doc to top of sidebar
-  if (introDoc && linkSource === "info") {
-    tagged.unshift(introDoc as any);
+  // Shift root intro doc to top of sidebar
+  // TODO: Add input validation for categoryLinkSource options
+  if (rootIntroDoc && categoryLinkSource !== "info") {
+    tagged.unshift(rootIntroDoc as any);
   }
 
   return [...tagged];
