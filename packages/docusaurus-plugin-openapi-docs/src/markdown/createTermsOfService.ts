@@ -8,7 +8,7 @@
 import { create } from "./utils";
 
 export function createTermsOfService(termsOfService: string | undefined) {
-  if (!createTermsOfService) return "";
+  if (!termsOfService) return "";
 
   return create("div", {
     style: {

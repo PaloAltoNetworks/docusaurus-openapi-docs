@@ -6,10 +6,10 @@
  * ========================================================================== */
 
 import { ContactObject } from "../openapi/types";
-import { create } from "./utils";
+import { create, guard } from "./utils";
 
 export function createContactInfo(contact: ContactObject) {
-  if (!contact) return "";
+  if (!contact || !Object.keys(contact).length) return "";
   const { name, url, email } = contact;
 
   return create("div", {
@@ -27,22 +27,26 @@ export function createContactInfo(contact: ContactObject) {
       }),
       create("span", {
         children: [
-          `${name}: `,
-          create("a", {
-            href: `mailto:${email}`,
-            children: `${email}`,
-          }),
+          guard(name, () => `${name}: `),
+          guard(email, () =>
+            create("a", {
+              href: `mailto:${email}`,
+              children: `${email}`,
+            })
+          ),
         ],
       }),
-      create("span", {
-        children: [
-          "URL: ",
-          create("a", {
-            href: `${url}`,
-            children: `${url}`,
-          }),
-        ],
-      }),
+      guard(url, () =>
+        create("span", {
+          children: [
+            "URL: ",
+            create("a", {
+              href: `${url}`,
+              children: `${url}`,
+            }),
+          ],
+        })
+      ),
     ],
   });
 }
