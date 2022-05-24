@@ -15,14 +15,16 @@ function colorForMethod(method: string) {
   switch (method.toLowerCase()) {
     case "get":
       return "primary";
-    case "put":
-      return "warning";
-    case "patch":
-      return "warning";
     case "post":
       return "success";
     case "delete":
       return "danger";
+    case "put":
+      return "info";
+    case "patch":
+      return "warning";
+    case "head":
+      return "secondary";
     default:
       return undefined;
   }
