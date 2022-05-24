@@ -824,7 +824,7 @@ paths:
     post:
       tags:
         - user
-      summary: Creates list of users with given input array
+      summary: Creates list of users with given input list
       description: ""
       operationId: createUsersWithListInput
       responses:
