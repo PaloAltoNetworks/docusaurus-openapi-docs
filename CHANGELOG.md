@@ -1,3 +1,24 @@
+## 1.0.2 (May 23, 2022)
+
+High level enhancements
+
+- Added support for defining `categoryLinkSource` when grouping paths by tag
+- Extend support for additional `SecuritySchemes`
+
+Other enhancements and bug fixes
+
+- Add categoryLinkSource to usage ([#101](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/101))
+- [Bug] Refactor categoryLinkSource option and usage ([#100](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/100))
+- Add extra conditions to check for undefined info properties ([#98](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/98))
+- [Enhancement] Improve category link support when grouping by tags ([#97](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/97))
+- [FR] Additional supported fields for index.api.mdx ([#96](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/96))
+- [FR] Added security schemes support for SecuritySchemes component ([#93](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/93))
+- [Bug] Add missing openapi code colors ([#87](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/87))
+- Add conditions for empty body or body content ([#86](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/86))
+- Add support for canary releases ([#85](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/85))
+- [Theme]: Fix @theme/Tabs namespace collision ([#84](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/84))
+- [Polish] Cleanup @ts-ignore usage throughout project ([#80](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/80))
+
 ## 1.0.1 (May 4, 2022)
 
 High level enhancements
