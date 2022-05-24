@@ -1,5 +1,5 @@
 # Ignore all generated MDX files
-demo/api/**/*.mdx
+demo/docs/**/*.mdx
 
 # Cypress
 cypress/videos

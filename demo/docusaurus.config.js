@@ -7,37 +7,125 @@ const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "Docusaurus OpenAPI",
-  tagline: "OpenAPI plugin for generating API reference docs in Docusaurus v2.",
+  tagline: "OpenAPI plugin for generating API reference docs in Docusaurus v2",
   url: "https://docusaurus-openapi.tryingpan.dev",
   baseUrl: "/",
-  onBrokenLinks: "warn",
+  onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
+
+  // GitHub pages deployment config.
+  // If you aren't using GitHub pages, you don't need these.
   organizationName: "PaloAltoNetworks", // Usually your GitHub org/user name.
-  projectName: "docusaurus-openapi", // Usually your repo name.
+  projectName: "docusaurus-openapi-docs", // Usually your repo name.
 
   presets: [
     [
-      "@docusaurus/preset-classic",
-      {
+      "classic",
+      /** @type {import('@docusaurus/preset-classic').Options} */
+      ({
         docs: {
           sidebarPath: require.resolve("./sidebars.js"),
           // Please change this to your repo.
+          // Remove this to remove the "edit this page" links.
           editUrl:
-            "https://github.com/facebook/docusaurus/edit/master/website/",
+            "https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/demo",
+          docLayoutComponent: "@theme/DocPage",
+          docItemComponent: "@theme/ApiItem", // Derived from docusaurus-theme-openapi
         },
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
+          // Remove this to remove the "edit this page" links.
           editUrl:
-            "https://github.com/facebook/docusaurus/edit/master/website/blog/",
+            "https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/demo",
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
         },
-      },
+      }),
     ],
   ],
+
+  themeConfig:
+    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
+    ({
+      navbar: {
+        title: "OpenAPI Docs",
+        logo: {
+          alt: "Keytar",
+          src: "img/docusaurus-openapi-docs-logo.svg",
+        },
+        items: [
+          {
+            type: "doc",
+            docId: "intro",
+            position: "left",
+            label: "Tutorial",
+          },
+          { to: "/blog", label: "Blog", position: "left" },
+          {
+            label: "API Reference",
+            position: "left",
+            to: "/docs/category/petstore-api",
+          },
+          {
+            href: "https://github.com/PaloAltoNetworks/docusaurus-openapi-docs",
+            label: "GitHub",
+            position: "right",
+          },
+        ],
+      },
+      footer: {
+        style: "dark",
+        links: [
+          {
+            title: "Docs",
+            items: [
+              {
+                label: "Tutorial",
+                to: "/docs/intro",
+              },
+            ],
+          },
+          {
+            title: "Community",
+            items: [
+              {
+                label: "Stack Overflow",
+                href: "https://stackoverflow.com/questions/tagged/docusaurus",
+              },
+              {
+                label: "Discord",
+                href: "https://discordapp.com/invite/docusaurus",
+              },
+              {
+                label: "Twitter",
+                href: "https://twitter.com/docusaurus",
+              },
+            ],
+          },
+          {
+            title: "More",
+            items: [
+              {
+                label: "Blog",
+                to: "/blog",
+              },
+              {
+                label: "GitHub",
+                href: "https://github.com/PaloAltoNetworks/docusaurus-openapi-docs",
+              },
+            ],
+          },
+        ],
+        copyright: `Copyright © ${new Date().getFullYear()} Palo Alto Networks, Inc. Built with Docusaurus.`,
+      },
+      prism: {
+        theme: lightCodeTheme,
+        darkTheme: darkCodeTheme,
+      },
+    }),
 
   plugins: [
     [
@@ -47,109 +135,37 @@ const config = {
         config: {
           petstore: {
             specPath: "examples/petstore.yaml",
-            outputDir: "api/petstore",
+            outputDir: "docs/petstore",
             sidebarOptions: {
               groupPathsBy: "tags",
+              categoryLinkSource: "tag",
             },
           },
           cos: {
             specPath: "examples/openapi-cos.json",
-            outputDir: "api/cos",
+            outputDir: "docs/cos",
+            sidebarOptions: {
+              groupPathsBy: "tags",
+            },
           },
           burgers: {
             specPath: "examples/food/burgers/openapi.yaml",
-            outputDir: "api/food/burgers",
+            outputDir: "docs/food/burgers",
           },
           yogurt: {
             specPath: "examples/food/yogurtstore/openapi.yaml",
-            outputDir: "api/food/yogurtstore",
+            outputDir: "docs/food/yogurtstore",
           },
           "openapi-issue": {
             specPath: "examples/openapi-issue-21.json",
-            outputDir: "api/openapi-issue",
+            outputDir: "docs/openapi-issue",
           },
         },
-      },
-    ],
-    // [require.resolve("./plugins/webpackOptimizer"), {}],
-    [
-      "@docusaurus/plugin-content-docs",
-      {
-        id: "openapi",
-        path: "api",
-        breadcrumbs: true,
-        routeBasePath: "api",
-        include: ["**/*.md", "**/*.mdx"],
-        sidebarPath: "apiSidebars.js",
-        docLayoutComponent: "@theme/DocPage", // This solves the providers issue and drop the need for ApiPage component
-        docItemComponent: "@theme/ApiItem", // Will probably need to clean this up/refactor to get it fully updated
-        remarkPlugins: [],
-        rehypePlugins: [],
-        beforeDefaultRemarkPlugins: [],
-        beforeDefaultRehypePlugins: [],
-        showLastUpdateAuthor: true, // We can now add stuff like this :)
-        showLastUpdateTime: true,
       },
     ],
   ],
-  themes: ["docusaurus-theme-openapi-docs"],
 
-  themeConfig:
-    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
-    ({
-      colorMode: {
-        disableSwitch: false,
-        defaultMode: "dark",
-      },
-      navbar: {
-        title: "OpenAPI",
-        logo: {
-          alt: "Docusaurus Logo",
-          src: "img/logo.svg",
-        },
-        items: [
-          {
-            type: "doc",
-            docId: "intro",
-            position: "left",
-            label: "Docs",
-          },
-          {
-            label: "Examples",
-            position: "left",
-            items: [
-              { to: "/api/category/petstore-api", label: "Petstore" },
-              {
-                to: "/api/category/cos-api",
-                label: "Cloud Object Storage",
-              },
-              { to: "/api/category/food-apis", label: "Food" },
-            ],
-          },
-          {
-            href: "https://github.com/PaloAltoNetworks/docusaurus-openapi",
-            position: "right",
-            className: "header-github-link",
-            "aria-label": "GitHub repository",
-          },
-        ],
-      },
-      footer: {
-        style: "dark",
-        logo: {
-          alt: "Deploys by Firebase",
-          src: "https://firebase.google.com/downloads/brand-guidelines/SVG/logo-built_knockout.svg",
-          width: 160,
-          height: 51,
-          href: "https://firebase.google.com",
-        },
-        copyright: `Copyright © ${new Date().getFullYear()} Palo Alto Networks. Built with Docusaurus.`,
-      },
-      prism: {
-        theme: lightCodeTheme,
-        darkTheme: darkCodeTheme,
-      },
-    }),
+  themes: ["docusaurus-theme-openapi-docs"],
 };
 
 module.exports = config;
