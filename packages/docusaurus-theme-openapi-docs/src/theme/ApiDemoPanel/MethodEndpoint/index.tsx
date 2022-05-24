@@ -21,6 +21,8 @@ function colorForMethod(method: string) {
       return "warning";
     case "post":
       return "success";
+    case "head":
+      return "warning";
     case "delete":
       return "danger";
     default:

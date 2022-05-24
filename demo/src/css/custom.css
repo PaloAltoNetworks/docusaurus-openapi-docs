@@ -23,7 +23,7 @@
   --openapi-code-green: var(--ifm-color-success) !important;
   --openapi-code-orange: var(--ifm-color-warning) !important;
   --openapi-code-red: var(--ifm-color-danger) !important;
-  --openapi-code-blue: var(--ifm-color-primary) !important;
+  --openapi-code-blue: var(--ifm-color-info) !important;
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
@@ -62,7 +62,7 @@
 
 .get > .menu__link::before {
   content: "get";
-  background-color: var(--openapi-code-blue);
+  background-color: var(--ifm-color-primary);
 }
 
 .put > .menu__link::before {
@@ -87,5 +87,5 @@
 
 .head > .menu__link::before {
   content: "head";
-  background-color: var(--openapi-code-blue);
+  background-color: var(--openapi-code-orange);
 }
