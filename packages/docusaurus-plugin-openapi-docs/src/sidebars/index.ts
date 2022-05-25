@@ -188,7 +188,7 @@ export default function generateSidebarSlice(
   tags: TagObject[]
 ) {
   let sidebarSlice: ProcessedSidebar = [];
-  if (sidebarOptions.groupPathsBy === "tags") {
+  if (sidebarOptions.groupPathsBy === "tag") {
     sidebarSlice = groupByTags(
       api as ApiPageMetadata[],
       sidebarOptions,

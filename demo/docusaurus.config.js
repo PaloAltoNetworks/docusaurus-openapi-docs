@@ -137,7 +137,7 @@ const config = {
             specPath: "examples/petstore.yaml",
             outputDir: "docs/petstore",
             sidebarOptions: {
-              groupPathsBy: "tags",
+              groupPathsBy: "tag",
               categoryLinkSource: "tag",
             },
           },
@@ -145,7 +145,7 @@ const config = {
             specPath: "examples/openapi-cos.json",
             outputDir: "docs/cos",
             sidebarOptions: {
-              groupPathsBy: "tags",
+              groupPathsBy: "tag",
             },
           },
           burgers: {
