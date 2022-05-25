@@ -7,6 +7,7 @@
 
 import {
   ProcessedSidebar,
+  SidebarItemCategory,
   SidebarItemCategoryLinkConfig,
   SidebarItemDoc,
 } from "@docusaurus/plugin-content-docs/src/sidebars/types";
@@ -152,24 +153,24 @@ function groupByTags(
     })
     .filter((item) => item.items.length > 0); // Filter out any categories with no items.
 
-  const untagged = [
-    {
-      type: "category" as const,
-      label: "UNTAGGED",
-      collapsible: sidebarCollapsible,
-      collapsed: sidebarCollapsed,
-      items: apiItems
-        .filter(({ api }) => api.tags === undefined || api.tags.length === 0)
-        .map(createDocItem),
-    },
-  ];
-
-  const untaggedIntros = intros.filter(
-    (infoObject) =>
-      infoObject.tags === undefined || infoObject.tags.length === 0
-  );
-
-  console.log(untaggedIntros);
+  // Handle items with no tag
+  const untaggedItems = apiItems
+    .filter(({ api }) => api.tags === undefined || api.tags.length === 0)
+    .map(createDocItem);
+  let untagged: SidebarItemCategory[] = [];
+  if (untaggedItems.length > 0) {
+    untagged = [
+      {
+        type: "category" as const,
+        label: "UNTAGGED",
+        collapsible: sidebarCollapsible!,
+        collapsed: sidebarCollapsed!,
+        items: apiItems
+          .filter(({ api }) => api.tags === undefined || api.tags.length === 0)
+          .map(createDocItem),
+      },
+    ];
+  }
 
   // Shift root intro doc to top of sidebar
   // TODO: Add input validation for categoryLinkSource options
