@@ -7,6 +7,7 @@
 
 import {
   ProcessedSidebar,
+  SidebarItemCategory,
   SidebarItemCategoryLinkConfig,
   SidebarItemDoc,
 } from "@docusaurus/plugin-content-docs/src/sidebars/types";
@@ -99,7 +100,9 @@ function groupByTags(
   const tagged = apiTags
     .map((tag) => {
       // Map info object to tag
-      const infoObject = intros.find((i) => i.tags.includes(tag));
+      const taggedInfoObject = intros.find((i) =>
+        i.tags ? i.tags.includes(tag) : undefined
+      );
       const tagObject = tags.flat().find(
         (t) =>
           (tag === t.name || tag === t["x-displayName"]) ?? {
@@ -110,10 +113,10 @@ function groupByTags(
 
       // TODO: perhaps move this into a getLinkConfig() function
       let linkConfig = undefined;
-      if (infoObject !== undefined && categoryLinkSource === "info") {
+      if (taggedInfoObject !== undefined && categoryLinkSource === "info") {
         linkConfig = {
           type: "doc",
-          id: `${basePath}/${infoObject.id}`,
+          id: `${basePath}/${taggedInfoObject.id}`,
         } as SidebarItemCategoryLinkConfig;
       }
 
@@ -150,18 +153,24 @@ function groupByTags(
     })
     .filter((item) => item.items.length > 0); // Filter out any categories with no items.
 
-  // TODO: determine how we want to handle these
-  // const untagged = [
-  //   {
-  //     type: "category" as const,
-  //     label: "UNTAGGED",
-  //     collapsible: sidebarCollapsible,
-  //     collapsed: sidebarCollapsed,
-  //     items: apiItems
-  //       .filter(({ api }) => api.tags === undefined || api.tags.length === 0)
-  //       .map(createDocItem),
-  //   },
-  // ];
+  // Handle items with no tag
+  const untaggedItems = apiItems
+    .filter(({ api }) => api.tags === undefined || api.tags.length === 0)
+    .map(createDocItem);
+  let untagged: SidebarItemCategory[] = [];
+  if (untaggedItems.length > 0) {
+    untagged = [
+      {
+        type: "category" as const,
+        label: "UNTAGGED",
+        collapsible: sidebarCollapsible!,
+        collapsed: sidebarCollapsed!,
+        items: apiItems
+          .filter(({ api }) => api.tags === undefined || api.tags.length === 0)
+          .map(createDocItem),
+      },
+    ];
+  }
 
   // Shift root intro doc to top of sidebar
   // TODO: Add input validation for categoryLinkSource options
@@ -169,7 +178,7 @@ function groupByTags(
     tagged.unshift(rootIntroDoc as any);
   }
 
-  return [...tagged];
+  return [...tagged, ...untagged];
 }
 
 export default function generateSidebarSlice(
@@ -179,7 +188,7 @@ export default function generateSidebarSlice(
   tags: TagObject[]
 ) {
   let sidebarSlice: ProcessedSidebar = [];
-  if (sidebarOptions.groupPathsBy === "tags") {
+  if (sidebarOptions.groupPathsBy === "tag") {
     sidebarSlice = groupByTags(
       api as ApiPageMetadata[],
       sidebarOptions,
