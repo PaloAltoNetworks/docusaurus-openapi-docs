@@ -1,0 +1,105 @@
+---
+id: delete-a-code-scanning-analysis-from-a-repository
+sidebar_label: Delete a code scanning analysis from a repository
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"Deletes a specified code scanning analysis from a repository. For\nprivate repositories, you must use an access token with the `repo` scope. For public repositories,\nyou must use an access token with `public_repo` and `repo:security_events` scopes.\nGitHub Apps must have the `security_events` write permission to use this endpoint.\n\nYou can delete one analysis at a time.\nTo delete a series of analyses, start with the most recent analysis and work backwards.\nConceptually, the process is similar to the undo function in a text editor.\n\nWhen you list the analyses for a repository,\none or more will be identified as deletable in the response:\n\n```\n\"deletable\": true\n```\n\nAn analysis is deletable when it's the most recent in a set of analyses.\nTypically, a repository will have multiple sets of analyses\nfor each enabled code scanning tool,\nwhere a set is determined by a unique combination of analysis values:\n\n* `ref`\n* `tool`\n* `analysis_key`\n* `environment`\n\nIf you attempt to delete an analysis that is not the most recent in a set,\nyou'll get a 400 response with the message:\n\n```\nAnalysis specified is not deletable.\n```\n\nThe response from a successful `DELETE` operation provides you with\ntwo alternative URLs for deleting the next analysis in the set\n(see the example default response below).\nUse the `next_analysis_url` URL if you want to avoid accidentally deleting the final analysis\nin the set. This is a useful option if you want to preserve at least one analysis\nfor the specified tool in your repository.\nUse the `confirm_delete_url` URL if you are content to remove all analyses for a tool.\nWhen you delete the last analysis in a set the value of `next_analysis_url` and `confirm_delete_url`\nin the 200 response is `null`.\n\nAs an example of the deletion process,\nlet's imagine that you added a workflow that configured a particular code scanning tool\nto analyze the code in a repository. This tool has added 15 analyses:\n10 on the default branch, and another 5 on a topic branch.\nYou therefore have two separate sets of analyses for this tool.\nYou've now decided that you want to remove all of the analyses for the tool.\nTo do this you must make 15 separate deletion requests.\nTo start, you must find the deletable analysis for one of the sets,\nstep through deleting the analyses in that set,\nand then repeat the process for the second set.\nThe procedure therefore consists of a nested loop:\n\n**Outer loop**:\n* List the analyses for the repository, filtered by tool.\n* Parse this list to find a deletable analysis. If found:\n\n  **Inner loop**:\n  * Delete the identified analysis.\n  * Parse the response for the value of `next_analysis_url` and, if found, use this in the next iteration.\n\nThe above process assumes that you want to remove all trace of the tool's analyses from the GitHub user interface, for the specified repository, and it therefore uses the `next_analysis_url` value. Alternatively, you could use the `confirm_delete_url` value, which would leave the last analysis in each set undeleted to avoid removing a tool's analysis entirely.","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/code-scanning#delete-a-code-scanning-analysis-from-a-repository"},"operationId":"code-scanning/delete-analysis","parameters":[{"in":"path","name":"owner","required":true,"schema":{"type":"string"}},{"in":"path","name":"repo","required":true,"schema":{"type":"string"}},{"description":"The ID of the analysis, as returned from the `GET /repos/{owner}/{repo}/code-scanning/analyses` operation.","in":"path","name":"analysis_id","required":true,"schema":{"type":"integer"}},{"description":"Allow deletion if the specified analysis is the last in a set. The parameter can be used without a value as the parameter value is not considered. If you attempt to delete the final analysis in a set without using this parameter you'll get a 400 response with the message: `Analysis is last of its type and deletion may result in the loss of historical alert data. Please specify confirm_delete.`","in":"query","name":"confirm_delete","required":false,"schema":{"nullable":true,"type":"string"}}],"responses":{"200":{"content":{"application/json":{"examples":{"default-response":{"summary":"Default response","value":{"confirm_delete_url":"https://api.github.com/repos/octocat/hello-world/code-scanning/analyses/41?confirm_delete","next_analysis_url":"https://api.github.com/repos/octocat/hello-world/code-scanning/analyses/41"}}},"schema":{"description":"Successful deletion of a code scanning analysis","properties":{"confirm_delete_url":{"description":"Next deletable analysis in chain, with last analysis deletion confirmation","format":"uri","nullable":true,"readOnly":true,"type":"string"},"next_analysis_url":{"description":"Next deletable analysis in chain, without last analysis deletion confirmation","format":"uri","nullable":true,"readOnly":true,"type":"string"}},"required":["next_analysis_url","confirm_delete_url"],"title":"Analysis deletion","type":"object"}}},"description":"response"},"400":{"content":{"application/json":{"schema":{"description":"Basic Error","properties":{"documentation_url":{"type":"string"},"message":{"type":"string"}},"title":"Basic Error","type":"object"}},"application/scim+json":{"schema":{"description":"Scim Error","properties":{"detail":{"nullable":true,"type":"string"},"documentation_url":{"nullable":true,"type":"string"},"message":{"nullable":true,"type":"string"},"schemas":{"items":{"type":"string"},"type":"array"},"scimType":{"nullable":true,"type":"string"},"status":{"type":"integer"}},"title":"Scim Error","type":"object"}}},"description":"Bad Request"},"403":{"content":{"application/json":{"schema":{"description":"Basic Error","properties":{"documentation_url":{"type":"string"},"message":{"type":"string"}},"title":"Basic Error","type":"object"}}},"description":"Response if the repository is archived or if github advanced security is not enabled for this repository"},"404":{"content":{"application/json":{"schema":{"description":"Basic Error","properties":{"documentation_url":{"type":"string"},"message":{"type":"string"}},"title":"Basic Error","type":"object"}}},"description":"Resource Not Found"},"503":{"content":{"application/json":{"schema":{"properties":{"code":{"type":"string"},"documentation_url":{"type":"string"},"message":{"type":"string"}},"type":"object"}}},"description":"Service Unavailable"}},"tags":["code-scanning"],"x-github":{"category":"code-scanning","enabledForGitHubApps":true,"githubCloudOnly":false,"previews":[]},"method":"delete","path":"/repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Delete a code scanning analysis from a repository","description":{"content":"Deletes a specified code scanning analysis from a repository. For\nprivate repositories, you must use an access token with the `repo` scope. For public repositories,\nyou must use an access token with `public_repo` and `repo:security_events` scopes.\nGitHub Apps must have the `security_events` write permission to use this endpoint.\n\nYou can delete one analysis at a time.\nTo delete a series of analyses, start with the most recent analysis and work backwards.\nConceptually, the process is similar to the undo function in a text editor.\n\nWhen you list the analyses for a repository,\none or more will be identified as deletable in the response:\n\n```\n\"deletable\": true\n```\n\nAn analysis is deletable when it's the most recent in a set of analyses.\nTypically, a repository will have multiple sets of analyses\nfor each enabled code scanning tool,\nwhere a set is determined by a unique combination of analysis values:\n\n* `ref`\n* `tool`\n* `analysis_key`\n* `environment`\n\nIf you attempt to delete an analysis that is not the most recent in a set,\nyou'll get a 400 response with the message:\n\n```\nAnalysis specified is not deletable.\n```\n\nThe response from a successful `DELETE` operation provides you with\ntwo alternative URLs for deleting the next analysis in the set\n(see the example default response below).\nUse the `next_analysis_url` URL if you want to avoid accidentally deleting the final analysis\nin the set. This is a useful option if you want to preserve at least one analysis\nfor the specified tool in your repository.\nUse the `confirm_delete_url` URL if you are content to remove all analyses for a tool.\nWhen you delete the last analysis in a set the value of `next_analysis_url` and `confirm_delete_url`\nin the 200 response is `null`.\n\nAs an example of the deletion process,\nlet's imagine that you added a workflow that configured a particular code scanning tool\nto analyze the code in a repository. This tool has added 15 analyses:\n10 on the default branch, and another 5 on a topic branch.\nYou therefore have two separate sets of analyses for this tool.\nYou've now decided that you want to remove all of the analyses for the tool.\nTo do this you must make 15 separate deletion requests.\nTo start, you must find the deletable analysis for one of the sets,\nstep through deleting the analyses in that set,\nand then repeat the process for the second set.\nThe procedure therefore consists of a nested loop:\n\n**Outer loop**:\n* List the analyses for the repository, filtered by tool.\n* Parse this list to find a deletable analysis. If found:\n\n  **Inner loop**:\n  * Delete the identified analysis.\n  * Parse the response for the value of `next_analysis_url` and, if found, use this in the next iteration.\n\nThe above process assumes that you want to remove all trace of the tool's analyses from the GitHub user interface, for the specified repository, and it therefore uses the `next_analysis_url` value. Alternatively, you could use the `confirm_delete_url` value, which would leave the last analysis in each set undeleted to avoid removing a tool's analysis entirely.","type":"text/plain"},"url":{"path":["repos",":owner",":repo","code-scanning","analyses",":analysis_id"],"host":["{{baseUrl}}"],"query":[{"disabled":false,"description":{"content":"Allow deletion if the specified analysis is the last in a set. The parameter can be used without a value as the parameter value is not considered. If you attempt to delete the final analysis in a set without using this parameter you'll get a 400 response with the message: `Analysis is last of its type and deletion may result in the loss of historical alert data. Please specify confirm_delete.`","type":"text/plain"},"key":"confirm_delete","value":""}],"variable":[{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"owner"},{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"repo"},{"disabled":false,"description":{"content":"(Required) The ID of the analysis, as returned from the `GET /repos/{owner}/{repo}/code-scanning/analyses` operation.","type":"text/plain"},"type":"any","value":"","key":"analysis_id"}]},"header":[{"key":"Accept","value":"application/json"}],"method":"DELETE"}}
+sidebar_class_name: "delete api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Delete a code scanning analysis from a repository
+
+
+
+Deletes a specified code scanning analysis from a repository. For
+private repositories, you must use an access token with the `repo` scope. For public repositories,
+you must use an access token with `public_repo` and `repo:security_events` scopes.
+GitHub Apps must have the `security_events` write permission to use this endpoint.
+
+You can delete one analysis at a time.
+To delete a series of analyses, start with the most recent analysis and work backwards.
+Conceptually, the process is similar to the undo function in a text editor.
+
+When you list the analyses for a repository,
+one or more will be identified as deletable in the response:
+
+```
+&quot;deletable&quot;: true
+```
+
+An analysis is deletable when it&#39;s the most recent in a set of analyses.
+Typically, a repository will have multiple sets of analyses
+for each enabled code scanning tool,
+where a set is determined by a unique combination of analysis values:
+
+* `ref`
+* `tool`
+* `analysis_key`
+* `environment`
+
+If you attempt to delete an analysis that is not the most recent in a set,
+you&#39;ll get a 400 response with the message:
+
+```
+Analysis specified is not deletable.
+```
+
+The response from a successful `DELETE` operation provides you with
+two alternative URLs for deleting the next analysis in the set
+(see the example default response below).
+Use the `next_analysis_url` URL if you want to avoid accidentally deleting the final analysis
+in the set. This is a useful option if you want to preserve at least one analysis
+for the specified tool in your repository.
+Use the `confirm_delete_url` URL if you are content to remove all analyses for a tool.
+When you delete the last analysis in a set the value of `next_analysis_url` and `confirm_delete_url`
+in the 200 response is `null`.
+
+As an example of the deletion process,
+let&#39;s imagine that you added a workflow that configured a particular code scanning tool
+to analyze the code in a repository. This tool has added 15 analyses:
+10 on the default branch, and another 5 on a topic branch.
+You therefore have two separate sets of analyses for this tool.
+You&#39;ve now decided that you want to remove all of the analyses for the tool.
+To do this you must make 15 separate deletion requests.
+To start, you must find the deletable analysis for one of the sets,
+step through deleting the analyses in that set,
+and then repeat the process for the second set.
+The procedure therefore consists of a nested loop:
+
+**Outer loop**:
+* List the analyses for the repository, filtered by tool.
+* Parse this list to find a deletable analysis. If found:
+
+  **Inner loop**:
+  * Delete the identified analysis.
+  * Parse the response for the value of `next_analysis_url` and, if found, use this in the next iteration.
+
+The above process assumes that you want to remove all trace of the tool&#39;s analyses from the GitHub user interface, for the specified repository, and it therefore uses the `next_analysis_url` value. Alternatively, you could use the `confirm_delete_url` value, which would leave the last analysis in each set undeleted to avoid removing a tool&#39;s analysis entirely.
+
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"in":"path","name":"owner","required":true,"schema":{"type":"string"}}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"in":"path","name":"repo","required":true,"schema":{"type":"string"}}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"description":"The ID of the analysis, as returned from the `GET /repos/{owner}/{repo}/code-scanning/analyses` operation.","in":"path","name":"analysis_id","required":true,"schema":{"type":"integer"}}}></ParamsItem></ul></div></details><details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Query Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"description":"Allow deletion if the specified analysis is the last in a set. The parameter can be used without a value as the parameter value is not considered. If you attempt to delete the final analysis in a set without using this parameter you'll get a 400 response with the message: `Analysis is last of its type and deletion may result in the loss of historical alert data. Please specify confirm_delete.`","in":"query","name":"confirm_delete","required":false,"schema":{"nullable":true,"type":"string"}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"200"} value={"200"}><div>
+
+response
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"confirm_delete_url"} required={true} schemaDescription={"Next deletable analysis in chain, with last analysis deletion confirmation"} schemaName={"uri"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"next_analysis_url"} required={true} schemaDescription={"Next deletable analysis in chain, without last analysis deletion confirmation"} schemaName={"uri"} qualifierMessage={undefined}></SchemaItem></ul></details></div></TabItem><TabItem label={"400"} value={"400"}><div>
+
+Bad Request
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"documentation_url"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"message"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></details></div></TabItem><TabItem label={"403"} value={"403"}><div>
+
+Response if the repository is archived or if github advanced security is not enabled for this repository
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"documentation_url"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"message"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></details></div></TabItem><TabItem label={"404"} value={"404"}><div>
+
+Resource Not Found
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"documentation_url"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"message"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></details></div></TabItem><TabItem label={"503"} value={"503"}><div>
+
+Service Unavailable
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"code"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"documentation_url"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"message"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></details></div></TabItem></ApiTabs></div>
+      

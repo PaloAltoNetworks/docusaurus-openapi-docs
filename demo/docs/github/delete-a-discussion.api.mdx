@@ -1,0 +1,28 @@
+---
+id: delete-a-discussion
+sidebar_label: Delete a discussion
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"Delete a discussion from a team's page. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).\n\n**Note:** You can also specify a team by `org_id` and `team_id` using the route `DELETE /organizations/{org_id}/team/{team_id}/discussions/{discussion_number}`.","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/teams#delete-a-discussion"},"operationId":"teams/delete-discussion-in-org","parameters":[{"in":"path","name":"org","required":true,"schema":{"type":"string"}},{"description":"team_slug parameter","in":"path","name":"team_slug","required":true,"schema":{"type":"string"}},{"in":"path","name":"discussion_number","required":true,"schema":{"type":"integer"}}],"responses":{"204":{"description":"Empty response"}},"tags":["teams"],"x-github":{"category":"teams","enabledForGitHubApps":true,"githubCloudOnly":false,"previews":[],"subcategory":"discussions"},"method":"delete","path":"/orgs/{org}/teams/{team_slug}/discussions/{discussion_number}","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Delete a discussion","description":{"content":"Delete a discussion from a team's page. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).\n\n**Note:** You can also specify a team by `org_id` and `team_id` using the route `DELETE /organizations/{org_id}/team/{team_id}/discussions/{discussion_number}`.","type":"text/plain"},"url":{"path":["orgs",":org","teams",":team_slug","discussions",":discussion_number"],"host":["{{baseUrl}}"],"query":[],"variable":[{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"org"},{"disabled":false,"description":{"content":"(Required) team_slug parameter","type":"text/plain"},"type":"any","value":"","key":"team_slug"},{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"discussion_number"}]},"method":"DELETE"}}
+sidebar_class_name: "delete api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Delete a discussion
+
+
+
+Delete a discussion from a team&#39;s page. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
+
+**Note:** You can also specify a team by `org_id` and `team_id` using the route `DELETE /organizations/{org_id}/team/{team_id}/discussions/{discussion_number}`.
+
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"in":"path","name":"org","required":true,"schema":{"type":"string"}}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"description":"team_slug parameter","in":"path","name":"team_slug","required":true,"schema":{"type":"string"}}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"in":"path","name":"discussion_number","required":true,"schema":{"type":"integer"}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"204"} value={"204"}><div>
+
+Empty response
+
+</div><div></div></TabItem></ApiTabs></div>
+      

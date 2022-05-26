@@ -1,0 +1,26 @@
+---
+id: remove-interaction-restrictions-for-an-organization
+sidebar_label: Remove interaction restrictions for an organization
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"Removes all interaction restrictions from public repositories in the given organization. You must be an organization owner to remove restrictions.","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/interactions#remove-interaction-restrictions-for-an-organization"},"operationId":"interactions/remove-restrictions-for-org","parameters":[{"in":"path","name":"org","required":true,"schema":{"type":"string"}}],"responses":{"204":{"description":"Empty response"}},"tags":["interactions"],"x-github":{"category":"interactions","enabledForGitHubApps":true,"githubCloudOnly":false,"previews":[],"subcategory":"orgs"},"method":"delete","path":"/orgs/{org}/interaction-limits","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Remove interaction restrictions for an organization","description":{"content":"Removes all interaction restrictions from public repositories in the given organization. You must be an organization owner to remove restrictions.","type":"text/plain"},"url":{"path":["orgs",":org","interaction-limits"],"host":["{{baseUrl}}"],"query":[],"variable":[{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"org"}]},"method":"DELETE"}}
+sidebar_class_name: "delete api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Remove interaction restrictions for an organization
+
+
+
+Removes all interaction restrictions from public repositories in the given organization. You must be an organization owner to remove restrictions.
+
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"in":"path","name":"org","required":true,"schema":{"type":"string"}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"204"} value={"204"}><div>
+
+Empty response
+
+</div><div></div></TabItem></ApiTabs></div>
+      

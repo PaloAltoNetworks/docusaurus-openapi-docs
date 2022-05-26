@@ -1,0 +1,30 @@
+---
+id: remove-interaction-restrictions-for-a-repository
+sidebar_label: Remove interaction restrictions for a repository
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"Removes all interaction restrictions from the given repository. You must have owner or admin access to remove restrictions. If the interaction limit is set for the user or organization that owns this repository, you will receive a `409 Conflict` response and will not be able to use this endpoint to change the interaction limit for a single repository.","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/interactions#remove-interaction-restrictions-for-a-repository"},"operationId":"interactions/remove-restrictions-for-repo","parameters":[{"in":"path","name":"owner","required":true,"schema":{"type":"string"}},{"in":"path","name":"repo","required":true,"schema":{"type":"string"}}],"responses":{"204":{"description":"Empty response"},"409":{"description":"Conflict"}},"tags":["interactions"],"x-github":{"category":"interactions","enabledForGitHubApps":true,"githubCloudOnly":false,"previews":[],"subcategory":"repos"},"method":"delete","path":"/repos/{owner}/{repo}/interaction-limits","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Remove interaction restrictions for a repository","description":{"content":"Removes all interaction restrictions from the given repository. You must have owner or admin access to remove restrictions. If the interaction limit is set for the user or organization that owns this repository, you will receive a `409 Conflict` response and will not be able to use this endpoint to change the interaction limit for a single repository.","type":"text/plain"},"url":{"path":["repos",":owner",":repo","interaction-limits"],"host":["{{baseUrl}}"],"query":[],"variable":[{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"owner"},{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"repo"}]},"method":"DELETE"}}
+sidebar_class_name: "delete api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Remove interaction restrictions for a repository
+
+
+
+Removes all interaction restrictions from the given repository. You must have owner or admin access to remove restrictions. If the interaction limit is set for the user or organization that owns this repository, you will receive a `409 Conflict` response and will not be able to use this endpoint to change the interaction limit for a single repository.
+
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"in":"path","name":"owner","required":true,"schema":{"type":"string"}}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"in":"path","name":"repo","required":true,"schema":{"type":"string"}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"204"} value={"204"}><div>
+
+Empty response
+
+</div><div></div></TabItem><TabItem label={"409"} value={"409"}><div>
+
+Conflict
+
+</div><div></div></TabItem></ApiTabs></div>
+      

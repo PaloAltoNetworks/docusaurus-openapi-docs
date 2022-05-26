@@ -1,0 +1,26 @@
+---
+id: get-octocat
+sidebar_label: Get Octocat
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"Get the octocat as ASCII art","operationId":"meta/get-octocat","parameters":[{"description":"The words to show in Octocat's speech bubble","in":"query","name":"s","required":false,"schema":{"type":"string"}}],"responses":{"200":{"content":{"application/octocat-stream":{"schema":{"type":"string"}}},"description":"response"}},"tags":["meta"],"x-github":{"category":"meta","enabledForGitHubApps":true,"githubCloudOnly":false,"previews":[]},"method":"get","path":"/octocat","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Get Octocat","description":{"content":"Get the octocat as ASCII art","type":"text/plain"},"url":{"path":["octocat"],"host":["{{baseUrl}}"],"query":[{"disabled":false,"description":{"content":"The words to show in Octocat's speech bubble","type":"text/plain"},"key":"s","value":""}],"variable":[]},"header":[{"key":"Accept","value":"application/octocat-stream"}],"method":"GET"}}
+sidebar_class_name: "get api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Get Octocat
+
+
+
+Get the octocat as ASCII art
+
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Query Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"description":"The words to show in Octocat's speech bubble","in":"query","name":"s","required":false,"schema":{"type":"string"}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"200"} value={"200"}><div>
+
+response
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><li><div><span style={{"opacity":"0.6"}}> string</span></div></li></ul></details></div></TabItem></ApiTabs></div>
+      

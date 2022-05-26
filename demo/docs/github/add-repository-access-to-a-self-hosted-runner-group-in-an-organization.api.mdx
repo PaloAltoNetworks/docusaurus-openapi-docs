@@ -1,0 +1,32 @@
+---
+id: add-repository-access-to-a-self-hosted-runner-group-in-an-organization
+sidebar_label: Add repository access to a self-hosted runner group in an organization
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"The self-hosted runner groups REST API is available with GitHub Enterprise Cloud. For more information, see \"[GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products).\"\n\n\nAdds a repository to the list of selected repositories that can access a self-hosted runner group. The runner group must have `visibility` set to `selected`. For more information, see \"[Create a self-hosted runner group for an organization](#create-a-self-hosted-runner-group-for-an-organization).\"\n\nYou must authenticate using an access token with the `admin:org`\nscope to use this endpoint.","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/actions#add-repository-acess-to-a-self-hosted-runner-group-in-an-organization"},"operationId":"actions/add-repo-access-to-self-hosted-runner-group-in-org","parameters":[{"in":"path","name":"org","required":true,"schema":{"type":"string"}},{"description":"Unique identifier of the self-hosted runner group.","in":"path","name":"runner_group_id","required":true,"schema":{"type":"integer"}},{"in":"path","name":"repository_id","required":true,"schema":{"type":"integer"}}],"responses":{"204":{"description":"Empty response"}},"tags":["actions"],"x-github":{"category":"actions","enabledForGitHubApps":true,"githubCloudOnly":true,"previews":[],"subcategory":"self-hosted-runner-groups"},"method":"put","path":"/orgs/{org}/actions/runner-groups/{runner_group_id}/repositories/{repository_id}","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Add repository access to a self-hosted runner group in an organization","description":{"content":"The self-hosted runner groups REST API is available with GitHub Enterprise Cloud. For more information, see \"[GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products).\"\n\n\nAdds a repository to the list of selected repositories that can access a self-hosted runner group. The runner group must have `visibility` set to `selected`. For more information, see \"[Create a self-hosted runner group for an organization](#create-a-self-hosted-runner-group-for-an-organization).\"\n\nYou must authenticate using an access token with the `admin:org`\nscope to use this endpoint.","type":"text/plain"},"url":{"path":["orgs",":org","actions","runner-groups",":runner_group_id","repositories",":repository_id"],"host":["{{baseUrl}}"],"query":[],"variable":[{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"org"},{"disabled":false,"description":{"content":"(Required) Unique identifier of the self-hosted runner group.","type":"text/plain"},"type":"any","value":"","key":"runner_group_id"},{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"repository_id"}]},"method":"PUT"}}
+sidebar_class_name: "put api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Add repository access to a self-hosted runner group in an organization
+
+
+
+The self-hosted runner groups REST API is available with GitHub Enterprise Cloud. For more information, see &quot;[GitHub&#39;s products](https://docs.github.com/github/getting-started-with-github/githubs-products).&quot;
+
+
+Adds a repository to the list of selected repositories that can access a self-hosted runner group. The runner group must have `visibility` set to `selected`. For more information, see &quot;[Create a self-hosted runner group for an organization](#create-a-self-hosted-runner-group-for-an-organization).&quot;
+
+You must authenticate using an access token with the `admin:org`
+scope to use this endpoint.
+
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"in":"path","name":"org","required":true,"schema":{"type":"string"}}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"description":"Unique identifier of the self-hosted runner group.","in":"path","name":"runner_group_id","required":true,"schema":{"type":"integer"}}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"in":"path","name":"repository_id","required":true,"schema":{"type":"integer"}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"204"} value={"204"}><div>
+
+Empty response
+
+</div><div></div></TabItem></ApiTabs></div>
+      

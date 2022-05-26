@@ -1,0 +1,28 @@
+---
+id: disable-a-workflow
+sidebar_label: Disable a workflow
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"Disables a workflow and sets the `state` of the workflow to `disabled_manually`. You can replace `workflow_id` with the workflow file name. For example, you could use `main.yaml`.\n\nYou must authenticate using an access token with the `repo` scope to use this endpoint. GitHub Apps must have the `actions:write` permission to use this endpoint.","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/actions#disable-a-workflow"},"operationId":"actions/disable-workflow","parameters":[{"in":"path","name":"owner","required":true,"schema":{"type":"string"}},{"in":"path","name":"repo","required":true,"schema":{"type":"string"}},{"description":"The ID of the workflow. You can also pass the workflow file name as a string.","in":"path","name":"workflow_id","required":true,"schema":{"oneOf":[{"type":"integer"},{"type":"string"}]}}],"responses":{"204":{"description":"Empty response"}},"tags":["actions"],"x-github":{"category":"actions","enabledForGitHubApps":true,"githubCloudOnly":false,"previews":[],"subcategory":"workflows"},"method":"put","path":"/repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Disable a workflow","description":{"content":"Disables a workflow and sets the `state` of the workflow to `disabled_manually`. You can replace `workflow_id` with the workflow file name. For example, you could use `main.yaml`.\n\nYou must authenticate using an access token with the `repo` scope to use this endpoint. GitHub Apps must have the `actions:write` permission to use this endpoint.","type":"text/plain"},"url":{"path":["repos",":owner",":repo","actions","workflows",":workflow_id","disable"],"host":["{{baseUrl}}"],"query":[],"variable":[{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"owner"},{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"repo"},{"disabled":false,"description":{"content":"(Required) The ID of the workflow. You can also pass the workflow file name as a string.","type":"text/plain"},"type":"any","value":"","key":"workflow_id"}]},"method":"PUT"}}
+sidebar_class_name: "put api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Disable a workflow
+
+
+
+Disables a workflow and sets the `state` of the workflow to `disabled_manually`. You can replace `workflow_id` with the workflow file name. For example, you could use `main.yaml`.
+
+You must authenticate using an access token with the `repo` scope to use this endpoint. GitHub Apps must have the `actions:write` permission to use this endpoint.
+
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"in":"path","name":"owner","required":true,"schema":{"type":"string"}}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"in":"path","name":"repo","required":true,"schema":{"type":"string"}}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"description":"The ID of the workflow. You can also pass the workflow file name as a string.","in":"path","name":"workflow_id","required":true,"schema":{"oneOf":[{"type":"integer"},{"type":"string"}]}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"204"} value={"204"}><div>
+
+Empty response
+
+</div><div></div></TabItem></ApiTabs></div>
+      

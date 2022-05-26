@@ -1,0 +1,30 @@
+---
+id: delete-a-self-hosted-runner-group-from-an-organization
+sidebar_label: Delete a self-hosted runner group from an organization
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"The self-hosted runner groups REST API is available with GitHub Enterprise Cloud. For more information, see \"[GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products).\"\n\nDeletes a self-hosted runner group for an organization.\n\nYou must authenticate using an access token with the `admin:org` scope to use this endpoint.","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/actions#delete-a-self-hosted-runner-group-from-an-organization"},"operationId":"actions/delete-self-hosted-runner-group-from-org","parameters":[{"in":"path","name":"org","required":true,"schema":{"type":"string"}},{"description":"Unique identifier of the self-hosted runner group.","in":"path","name":"runner_group_id","required":true,"schema":{"type":"integer"}}],"responses":{"204":{"description":"Empty response"}},"tags":["actions"],"x-github":{"category":"actions","enabledForGitHubApps":true,"githubCloudOnly":false,"previews":[],"subcategory":"self-hosted-runner-groups"},"method":"delete","path":"/orgs/{org}/actions/runner-groups/{runner_group_id}","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Delete a self-hosted runner group from an organization","description":{"content":"The self-hosted runner groups REST API is available with GitHub Enterprise Cloud. For more information, see \"[GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products).\"\n\nDeletes a self-hosted runner group for an organization.\n\nYou must authenticate using an access token with the `admin:org` scope to use this endpoint.","type":"text/plain"},"url":{"path":["orgs",":org","actions","runner-groups",":runner_group_id"],"host":["{{baseUrl}}"],"query":[],"variable":[{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"org"},{"disabled":false,"description":{"content":"(Required) Unique identifier of the self-hosted runner group.","type":"text/plain"},"type":"any","value":"","key":"runner_group_id"}]},"method":"DELETE"}}
+sidebar_class_name: "delete api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Delete a self-hosted runner group from an organization
+
+
+
+The self-hosted runner groups REST API is available with GitHub Enterprise Cloud. For more information, see &quot;[GitHub&#39;s products](https://docs.github.com/github/getting-started-with-github/githubs-products).&quot;
+
+Deletes a self-hosted runner group for an organization.
+
+You must authenticate using an access token with the `admin:org` scope to use this endpoint.
+
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"in":"path","name":"org","required":true,"schema":{"type":"string"}}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"description":"Unique identifier of the self-hosted runner group.","in":"path","name":"runner_group_id","required":true,"schema":{"type":"integer"}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"204"} value={"204"}><div>
+
+Empty response
+
+</div><div></div></TabItem></ApiTabs></div>
+      

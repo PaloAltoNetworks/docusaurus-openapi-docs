@@ -1,0 +1,32 @@
+---
+id: set-public-organization-membership-for-the-authenticated-user
+sidebar_label: Set public organization membership for the authenticated user
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"The user can publicize their own membership. (A user cannot publicize the membership for another user.)\n\nNote that you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see \"[HTTP verbs](https://docs.github.com/rest/overview/resources-in-the-rest-api#http-verbs).\"","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/orgs#set-public-organization-membership-for-the-authenticated-user"},"operationId":"orgs/set-public-membership-for-authenticated-user","parameters":[{"in":"path","name":"org","required":true,"schema":{"type":"string"}},{"in":"path","name":"username","required":true,"schema":{"type":"string"}}],"responses":{"204":{"description":"Empty response"},"403":{"content":{"application/json":{"schema":{"description":"Basic Error","properties":{"documentation_url":{"type":"string"},"message":{"type":"string"}},"title":"Basic Error","type":"object"}}},"description":"Forbidden"}},"tags":["orgs"],"x-github":{"category":"orgs","enabledForGitHubApps":false,"githubCloudOnly":false,"previews":[],"subcategory":"members"},"method":"put","path":"/orgs/{org}/public_members/{username}","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Set public organization membership for the authenticated user","description":{"content":"The user can publicize their own membership. (A user cannot publicize the membership for another user.)\n\nNote that you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see \"[HTTP verbs](https://docs.github.com/rest/overview/resources-in-the-rest-api#http-verbs).\"","type":"text/plain"},"url":{"path":["orgs",":org","public_members",":username"],"host":["{{baseUrl}}"],"query":[],"variable":[{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"org"},{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"username"}]},"header":[{"key":"Accept","value":"application/json"}],"method":"PUT"}}
+sidebar_class_name: "put api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Set public organization membership for the authenticated user
+
+
+
+The user can publicize their own membership. (A user cannot publicize the membership for another user.)
+
+Note that you&#39;ll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see &quot;[HTTP verbs](https://docs.github.com/rest/overview/resources-in-the-rest-api#http-verbs).&quot;
+
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"in":"path","name":"org","required":true,"schema":{"type":"string"}}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"in":"path","name":"username","required":true,"schema":{"type":"string"}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"204"} value={"204"}><div>
+
+Empty response
+
+</div><div></div></TabItem><TabItem label={"403"} value={"403"}><div>
+
+Forbidden
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"documentation_url"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"message"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></details></div></TabItem></ApiTabs></div>
+      

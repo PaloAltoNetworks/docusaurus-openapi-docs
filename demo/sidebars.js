@@ -65,6 +65,16 @@ const sidebars = {
         },
       ],
     },
+    {
+      type: "category",
+      label: "GitHub API",
+      link: {
+        type: "generated-index",
+        title: "GitHub API",
+        slug: "/category/github-api",
+      },
+      items: require("./docs/github/sidebar.js"),
+    },
   ],
 
   // But you can create a sidebar manually

@@ -1,0 +1,29 @@
+---
+id: download-job-logs-for-a-workflow-run
+sidebar_label: Download job logs for a workflow run
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"Gets a redirect URL to download a plain text file of logs for a workflow job. This link expires after 1 minute. Look\nfor `Location:` in the response header to find the URL for the download. Anyone with read access to the repository can\nuse this endpoint. If the repository is private you must use an access token with the `repo` scope. GitHub Apps must\nhave the `actions:read` permission to use this endpoint.","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/actions#download-job-logs-for-a-workflow-run"},"operationId":"actions/download-job-logs-for-workflow-run","parameters":[{"in":"path","name":"owner","required":true,"schema":{"type":"string"}},{"in":"path","name":"repo","required":true,"schema":{"type":"string"}},{"description":"job_id parameter","in":"path","name":"job_id","required":true,"schema":{"type":"integer"}}],"responses":{"302":{"description":"response","headers":{"Location":{"example":"https://pipelines.actions.githubusercontent.com/ab1f3cCFPB34Nd6imvFxpGZH5hNlDp2wijMwl2gDoO0bcrrlJj/_apis/pipelines/1/jobs/19/signedlogcontent?urlExpires=2020-01-22T22%3A44%3A54.1389777Z&urlSigningMethod=HMACV1&urlSignature=2TUDfIg4fm36OJmfPy6km5QD5DLCOkBVzvhWZM8B%2BUY%3D","schema":{"type":"string"}}}}},"tags":["actions"],"x-github":{"category":"actions","enabledForGitHubApps":true,"githubCloudOnly":false,"previews":[],"subcategory":"workflow-jobs"},"method":"get","path":"/repos/{owner}/{repo}/actions/jobs/{job_id}/logs","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Download job logs for a workflow run","description":{"content":"Gets a redirect URL to download a plain text file of logs for a workflow job. This link expires after 1 minute. Look\nfor `Location:` in the response header to find the URL for the download. Anyone with read access to the repository can\nuse this endpoint. If the repository is private you must use an access token with the `repo` scope. GitHub Apps must\nhave the `actions:read` permission to use this endpoint.","type":"text/plain"},"url":{"path":["repos",":owner",":repo","actions","jobs",":job_id","logs"],"host":["{{baseUrl}}"],"query":[],"variable":[{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"owner"},{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"repo"},{"disabled":false,"description":{"content":"(Required) job_id parameter","type":"text/plain"},"type":"any","value":"","key":"job_id"}]},"method":"GET"}}
+sidebar_class_name: "get api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Download job logs for a workflow run
+
+
+
+Gets a redirect URL to download a plain text file of logs for a workflow job. This link expires after 1 minute. Look
+for `Location:` in the response header to find the URL for the download. Anyone with read access to the repository can
+use this endpoint. If the repository is private you must use an access token with the `repo` scope. GitHub Apps must
+have the `actions:read` permission to use this endpoint.
+
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"in":"path","name":"owner","required":true,"schema":{"type":"string"}}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"in":"path","name":"repo","required":true,"schema":{"type":"string"}}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"description":"job_id parameter","in":"path","name":"job_id","required":true,"schema":{"type":"integer"}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"302"} value={"302"}><div>
+
+response
+
+</div><div></div></TabItem></ApiTabs></div>
+      

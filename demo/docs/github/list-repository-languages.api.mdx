@@ -1,0 +1,30 @@
+---
+id: list-repository-languages
+sidebar_label: List repository languages
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"Lists languages for the specified repository. The value shown for each language is the number of bytes of code written in that language.","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/repos/#list-repository-languages"},"operationId":"repos/list-languages","parameters":[{"in":"path","name":"owner","required":true,"schema":{"type":"string"}},{"in":"path","name":"repo","required":true,"schema":{"type":"string"}}],"responses":{"200":{"content":{"application/json":{"examples":{"default":{"value":{"C":78769,"Python":7769}}},"schema":{"additionalProperties":{"type":"integer"},"description":"Language","title":"Language","type":"object"}}},"description":"response"}},"tags":["repos"],"x-github":{"category":"repos","enabledForGitHubApps":true,"githubCloudOnly":false,"previews":[],"subcategory":null},"method":"get","path":"/repos/{owner}/{repo}/languages","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"List repository languages","description":{"content":"Lists languages for the specified repository. The value shown for each language is the number of bytes of code written in that language.","type":"text/plain"},"url":{"path":["repos",":owner",":repo","languages"],"host":["{{baseUrl}}"],"query":[],"variable":[{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"owner"},{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"repo"}]},"header":[{"key":"Accept","value":"application/json"}],"method":"GET"}}
+sidebar_class_name: "get api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## List repository languages
+
+
+
+Lists languages for the specified repository. The value shown for each language is the number of bytes of code written in that language.
+
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"in":"path","name":"owner","required":true,"schema":{"type":"string"}}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"in":"path","name":"repo","required":true,"schema":{"type":"string"}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"200"} value={"200"}><div>
+
+response
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><li><div><span style={{"opacity":"0.6"}}> object</span><div style={{"marginTop":"var(--ifm-table-cell-padding)"}}>
+
+Language
+
+</div></div></li></ul></details></div></TabItem></ApiTabs></div>
+      

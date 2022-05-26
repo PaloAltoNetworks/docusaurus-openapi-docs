@@ -1,0 +1,28 @@
+---
+id: enable-a-selected-repository-for-git-hub-actions-in-an-organization
+sidebar_label: Enable a selected repository for GitHub Actions in an organization
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"Adds a repository to the list of selected repositories that are enabled for GitHub Actions in an organization. To use this endpoint, the organization permission policy for `enabled_repositories` must be must be configured to `selected`. For more information, see \"[Set GitHub Actions permissions for an organization](#set-github-actions-permissions-for-an-organization).\"\n\nYou must authenticate using an access token with the `admin:org` scope to use this endpoint. GitHub Apps must have the `administration` organization permission to use this API.","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/actions#enable-a-selected-repository-for-github-actions-in-an-organization"},"operationId":"actions/enable-selected-repository-github-actions-organization","parameters":[{"in":"path","name":"org","required":true,"schema":{"type":"string"}},{"in":"path","name":"repository_id","required":true,"schema":{"type":"integer"}}],"responses":{"204":{"description":"Empty response"}},"tags":["actions"],"x-github":{"category":"actions","enabledForGitHubApps":true,"githubCloudOnly":false,"previews":[],"subcategory":"permissions"},"method":"put","path":"/orgs/{org}/actions/permissions/repositories/{repository_id}","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Enable a selected repository for GitHub Actions in an organization","description":{"content":"Adds a repository to the list of selected repositories that are enabled for GitHub Actions in an organization. To use this endpoint, the organization permission policy for `enabled_repositories` must be must be configured to `selected`. For more information, see \"[Set GitHub Actions permissions for an organization](#set-github-actions-permissions-for-an-organization).\"\n\nYou must authenticate using an access token with the `admin:org` scope to use this endpoint. GitHub Apps must have the `administration` organization permission to use this API.","type":"text/plain"},"url":{"path":["orgs",":org","actions","permissions","repositories",":repository_id"],"host":["{{baseUrl}}"],"query":[],"variable":[{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"org"},{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"repository_id"}]},"method":"PUT"}}
+sidebar_class_name: "put api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Enable a selected repository for GitHub Actions in an organization
+
+
+
+Adds a repository to the list of selected repositories that are enabled for GitHub Actions in an organization. To use this endpoint, the organization permission policy for `enabled_repositories` must be must be configured to `selected`. For more information, see &quot;[Set GitHub Actions permissions for an organization](#set-github-actions-permissions-for-an-organization).&quot;
+
+You must authenticate using an access token with the `admin:org` scope to use this endpoint. GitHub Apps must have the `administration` organization permission to use this API.
+
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"in":"path","name":"org","required":true,"schema":{"type":"string"}}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"in":"path","name":"repository_id","required":true,"schema":{"type":"integer"}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"204"} value={"204"}><div>
+
+Empty response
+
+</div><div></div></TabItem></ApiTabs></div>
+      

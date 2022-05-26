@@ -1,0 +1,29 @@
+---
+id: get-git-hub-actions-permissions-for-a-repository
+sidebar_label: Get GitHub Actions permissions for a repository
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"Gets the GitHub Actions permissions policy for a repository, including whether GitHub Actions is enabled and the actions allowed to run in the repository.\n\nYou must authenticate using an access token with the `repo` scope to use this\nendpoint. GitHub Apps must have the `administration` repository permission to use this API.","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/actions#get-github-actions-permissions-for-a-repository"},"operationId":"actions/get-github-actions-permissions-repository","parameters":[{"in":"path","name":"owner","required":true,"schema":{"type":"string"}},{"in":"path","name":"repo","required":true,"schema":{"type":"string"}}],"responses":{"200":{"content":{"application/json":{"examples":{"default":{"value":{"allowed_actions":"selected","enabled":true,"selected_actions_url":"https://api.github.com/repositories/42/actions/permissions/selected-actions"}}},"schema":{"properties":{"allowed_actions":{"description":"The permissions policy that controls the actions that are allowed to run. Can be one of: `all`, `local_only`, or `selected`.","enum":["all","local_only","selected"],"type":"string"},"enabled":{"description":"Whether GitHub Actions is enabled on the repository.","type":"boolean"},"selected_actions_url":{"description":"The API URL to use to get or set the actions that are allowed to run, when `allowed_actions` is set to `selected`.","type":"string"}},"required":["enabled","allowed_actions"],"type":"object"}}},"description":"response"}},"tags":["actions"],"x-github":{"category":"actions","enabledForGitHubApps":true,"githubCloudOnly":false,"previews":[],"subcategory":"permissions"},"method":"get","path":"/repos/{owner}/{repo}/actions/permissions","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Get GitHub Actions permissions for a repository","description":{"content":"Gets the GitHub Actions permissions policy for a repository, including whether GitHub Actions is enabled and the actions allowed to run in the repository.\n\nYou must authenticate using an access token with the `repo` scope to use this\nendpoint. GitHub Apps must have the `administration` repository permission to use this API.","type":"text/plain"},"url":{"path":["repos",":owner",":repo","actions","permissions"],"host":["{{baseUrl}}"],"query":[],"variable":[{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"owner"},{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"repo"}]},"header":[{"key":"Accept","value":"application/json"}],"method":"GET"}}
+sidebar_class_name: "get api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Get GitHub Actions permissions for a repository
+
+
+
+Gets the GitHub Actions permissions policy for a repository, including whether GitHub Actions is enabled and the actions allowed to run in the repository.
+
+You must authenticate using an access token with the `repo` scope to use this
+endpoint. GitHub Apps must have the `administration` repository permission to use this API.
+
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"in":"path","name":"owner","required":true,"schema":{"type":"string"}}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"in":"path","name":"repo","required":true,"schema":{"type":"string"}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"200"} value={"200"}><div>
+
+response
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"allowed_actions"} required={true} schemaDescription={"The permissions policy that controls the actions that are allowed to run. Can be one of: `all`, `local_only`, or `selected`."} schemaName={"string"} qualifierMessage={"**Possible values:** [`all`, `local_only`, `selected`]"}></SchemaItem><SchemaItem collapsible={false} name={"enabled"} required={true} schemaDescription={"Whether GitHub Actions is enabled on the repository."} schemaName={"boolean"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"selected_actions_url"} required={false} schemaDescription={"The API URL to use to get or set the actions that are allowed to run, when `allowed_actions` is set to `selected`."} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></details></div></TabItem></ApiTabs></div>
+      

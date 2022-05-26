@@ -1,0 +1,30 @@
+---
+id: get-shared-storage-billing-for-an-organization
+sidebar_label: Get shared storage billing for an organization
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"Gets the estimated paid and estimated total storage used for GitHub Actions and Github Packages.\n\nPaid minutes only apply to packages stored for private repositories. For more information, see \"[Managing billing for GitHub Packages](https://help.github.com/github/setting-up-and-managing-billing-and-payments-on-github/managing-billing-for-github-packages).\"\n\nAccess tokens must have the `repo` or `admin:org` scope.","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/billing/#get-shared-storage-billing-for-an-organization"},"operationId":"billing/get-shared-storage-billing-org","parameters":[{"in":"path","name":"org","required":true,"schema":{"type":"string"}}],"responses":{"200":{"content":{"application/json":{"examples":{"default":{"value":{"days_left_in_billing_cycle":20,"estimated_paid_storage_for_month":15,"estimated_storage_for_month":40}}},"schema":{"properties":{"days_left_in_billing_cycle":{"description":"Numbers of days left in billing cycle.","type":"integer"},"estimated_paid_storage_for_month":{"description":"Estimated storage space (GB) used in billing cycle.","type":"integer"},"estimated_storage_for_month":{"description":"Estimated sum of free and paid storage space (GB) used in billing cycle.","type":"integer"}},"required":["days_left_in_billing_cycle","estimated_paid_storage_for_month","estimated_storage_for_month"],"type":"object"}}},"description":"response"}},"tags":["billing"],"x-github":{"category":"billing","enabledForGitHubApps":false,"githubCloudOnly":false,"previews":[],"subcategory":null},"method":"get","path":"/orgs/{org}/settings/billing/shared-storage","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Get shared storage billing for an organization","description":{"content":"Gets the estimated paid and estimated total storage used for GitHub Actions and Github Packages.\n\nPaid minutes only apply to packages stored for private repositories. For more information, see \"[Managing billing for GitHub Packages](https://help.github.com/github/setting-up-and-managing-billing-and-payments-on-github/managing-billing-for-github-packages).\"\n\nAccess tokens must have the `repo` or `admin:org` scope.","type":"text/plain"},"url":{"path":["orgs",":org","settings","billing","shared-storage"],"host":["{{baseUrl}}"],"query":[],"variable":[{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"org"}]},"header":[{"key":"Accept","value":"application/json"}],"method":"GET"}}
+sidebar_class_name: "get api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Get shared storage billing for an organization
+
+
+
+Gets the estimated paid and estimated total storage used for GitHub Actions and Github Packages.
+
+Paid minutes only apply to packages stored for private repositories. For more information, see &quot;[Managing billing for GitHub Packages](https://help.github.com/github/setting-up-and-managing-billing-and-payments-on-github/managing-billing-for-github-packages).&quot;
+
+Access tokens must have the `repo` or `admin:org` scope.
+
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"in":"path","name":"org","required":true,"schema":{"type":"string"}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"200"} value={"200"}><div>
+
+response
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"days_left_in_billing_cycle"} required={true} schemaDescription={"Numbers of days left in billing cycle."} schemaName={"integer"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"estimated_paid_storage_for_month"} required={true} schemaDescription={"Estimated storage space (GB) used in billing cycle."} schemaName={"integer"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"estimated_storage_for_month"} required={true} schemaDescription={"Estimated sum of free and paid storage space (GB) used in billing cycle."} schemaName={"integer"} qualifierMessage={undefined}></SchemaItem></ul></details></div></TabItem></ApiTabs></div>
+      

@@ -1,0 +1,26 @@
+---
+id: check-public-organization-membership-for-a-user
+sidebar_label: Check public organization membership for a user
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/orgs#check-public-organization-membership-for-a-user"},"operationId":"orgs/check-public-membership-for-user","parameters":[{"in":"path","name":"org","required":true,"schema":{"type":"string"}},{"in":"path","name":"username","required":true,"schema":{"type":"string"}}],"responses":{"204":{"description":"Response if user is a public member"},"404":{"description":"Response if user is not a public member"}},"tags":["orgs"],"x-github":{"category":"orgs","enabledForGitHubApps":true,"githubCloudOnly":false,"previews":[],"subcategory":"members"},"method":"get","path":"/orgs/{org}/public_members/{username}","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Check public organization membership for a user","description":{"content":"","type":"text/plain"},"url":{"path":["orgs",":org","public_members",":username"],"host":["{{baseUrl}}"],"query":[],"variable":[{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"org"},{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"username"}]},"method":"GET"}}
+sidebar_class_name: "get api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Check public organization membership for a user
+
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"in":"path","name":"org","required":true,"schema":{"type":"string"}}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"in":"path","name":"username","required":true,"schema":{"type":"string"}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"204"} value={"204"}><div>
+
+Response if user is a public member
+
+</div><div></div></TabItem><TabItem label={"404"} value={"404"}><div>
+
+Response if user is not a public member
+
+</div><div></div></TabItem></ApiTabs></div>
+      

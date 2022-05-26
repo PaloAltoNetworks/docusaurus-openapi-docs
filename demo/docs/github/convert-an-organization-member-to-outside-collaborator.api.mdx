@@ -1,0 +1,38 @@
+---
+id: convert-an-organization-member-to-outside-collaborator
+sidebar_label: Convert an organization member to outside collaborator
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"When an organization member is converted to an outside collaborator, they'll only have access to the repositories that their current team membership allows. The user will no longer be a member of the organization. For more information, see \"[Converting an organization member to an outside collaborator](https://help.github.com/articles/converting-an-organization-member-to-an-outside-collaborator/)\".","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/orgs#convert-an-organization-member-to-outside-collaborator"},"operationId":"orgs/convert-member-to-outside-collaborator","parameters":[{"in":"path","name":"org","required":true,"schema":{"type":"string"}},{"in":"path","name":"username","required":true,"schema":{"type":"string"}}],"responses":{"202":{"description":"User is getting converted asynchronously"},"204":{"description":"User was converted"},"403":{"content":{"application/json":{"examples":{"response-if-user-is-not-a-member-of-the-organization":{"summary":"Response if user is not a member of the organization","value":{"documentation_url":"https://docs.github.com/rest/reference/orgs#convert-member-to-outside-collaborator","message":"<user> is not a member of the <organization> organization."}},"response-if-user-is-the-last-owner-of-the-organization":{"summary":"Response if user is the last owner of the organization","value":{"documentation_url":"https://docs.github.com/rest/reference/orgs#convert-member-to-outside-collaborator","message":"Cannot convert the last owner to an outside collaborator"}}},"schema":{"properties":{"documentation_url":{"type":"string"},"message":{"type":"string"}},"type":"object"}}},"description":"response"},"404":{"content":{"application/json":{"schema":{"description":"Basic Error","properties":{"documentation_url":{"type":"string"},"message":{"type":"string"}},"title":"Basic Error","type":"object"}}},"description":"Resource Not Found"}},"tags":["orgs"],"x-github":{"category":"orgs","enabledForGitHubApps":true,"githubCloudOnly":false,"previews":[],"subcategory":"outside-collaborators"},"method":"put","path":"/orgs/{org}/outside_collaborators/{username}","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Convert an organization member to outside collaborator","description":{"content":"When an organization member is converted to an outside collaborator, they'll only have access to the repositories that their current team membership allows. The user will no longer be a member of the organization. For more information, see \"[Converting an organization member to an outside collaborator](https://help.github.com/articles/converting-an-organization-member-to-an-outside-collaborator/)\".","type":"text/plain"},"url":{"path":["orgs",":org","outside_collaborators",":username"],"host":["{{baseUrl}}"],"query":[],"variable":[{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"org"},{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"username"}]},"header":[{"key":"Accept","value":"application/json"}],"method":"PUT"}}
+sidebar_class_name: "put api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Convert an organization member to outside collaborator
+
+
+
+When an organization member is converted to an outside collaborator, they&#39;ll only have access to the repositories that their current team membership allows. The user will no longer be a member of the organization. For more information, see &quot;[Converting an organization member to an outside collaborator](https://help.github.com/articles/converting-an-organization-member-to-an-outside-collaborator/)&quot;.
+
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"in":"path","name":"org","required":true,"schema":{"type":"string"}}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"in":"path","name":"username","required":true,"schema":{"type":"string"}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"202"} value={"202"}><div>
+
+User is getting converted asynchronously
+
+</div><div></div></TabItem><TabItem label={"204"} value={"204"}><div>
+
+User was converted
+
+</div><div></div></TabItem><TabItem label={"403"} value={"403"}><div>
+
+response
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"documentation_url"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"message"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></details></div></TabItem><TabItem label={"404"} value={"404"}><div>
+
+Resource Not Found
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"documentation_url"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"message"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></details></div></TabItem></ApiTabs></div>
+      

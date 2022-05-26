@@ -1,0 +1,26 @@
+---
+id: delete-an-environment
+sidebar_label: Delete an environment
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"You must authenticate using an access token with the repo scope to use this endpoint.","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/repos#delete-an-environment"},"operationId":"repos/delete-an-environment","parameters":[{"in":"path","name":"owner","required":true,"schema":{"type":"string"}},{"in":"path","name":"repo","required":true,"schema":{"type":"string"}},{"description":"The name of the environment","in":"path","name":"environment_name","required":true,"schema":{"type":"string"}}],"responses":{"204":{"description":"Empty response"}},"tags":["repos"],"x-github":{"category":"repos","enabledForGitHubApps":true,"githubCloudOnly":false,"previews":[],"subcategory":"environments"},"method":"delete","path":"/repos/{owner}/{repo}/environments/{environment_name}","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Delete an environment","description":{"content":"You must authenticate using an access token with the repo scope to use this endpoint.","type":"text/plain"},"url":{"path":["repos",":owner",":repo","environments",":environment_name"],"host":["{{baseUrl}}"],"query":[],"variable":[{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"owner"},{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"repo"},{"disabled":false,"description":{"content":"(Required) The name of the environment","type":"text/plain"},"type":"any","value":"","key":"environment_name"}]},"method":"DELETE"}}
+sidebar_class_name: "delete api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Delete an environment
+
+
+
+You must authenticate using an access token with the repo scope to use this endpoint.
+
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"in":"path","name":"owner","required":true,"schema":{"type":"string"}}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"in":"path","name":"repo","required":true,"schema":{"type":"string"}}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"description":"The name of the environment","in":"path","name":"environment_name","required":true,"schema":{"type":"string"}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"204"} value={"204"}><div>
+
+Empty response
+
+</div><div></div></TabItem></ApiTabs></div>
+      

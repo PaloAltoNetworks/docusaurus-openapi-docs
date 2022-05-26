@@ -1,0 +1,34 @@
+---
+id: unstar-a-gist
+sidebar_label: Unstar a gist
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/gists/#unstar-a-gist"},"operationId":"gists/unstar","parameters":[{"description":"gist_id parameter","in":"path","name":"gist_id","required":true,"schema":{"type":"string"}}],"responses":{"204":{"description":"Empty response"},"304":{"description":"Not Modified"},"403":{"content":{"application/json":{"schema":{"description":"Basic Error","properties":{"documentation_url":{"type":"string"},"message":{"type":"string"}},"title":"Basic Error","type":"object"}}},"description":"Forbidden"},"404":{"content":{"application/json":{"schema":{"description":"Basic Error","properties":{"documentation_url":{"type":"string"},"message":{"type":"string"}},"title":"Basic Error","type":"object"}}},"description":"Resource Not Found"}},"tags":["gists"],"x-github":{"category":"gists","enabledForGitHubApps":false,"githubCloudOnly":false,"previews":[],"subcategory":null},"method":"delete","path":"/gists/{gist_id}/star","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Unstar a gist","description":{"content":"","type":"text/plain"},"url":{"path":["gists",":gist_id","star"],"host":["{{baseUrl}}"],"query":[],"variable":[{"disabled":false,"description":{"content":"(Required) gist_id parameter","type":"text/plain"},"type":"any","value":"","key":"gist_id"}]},"header":[{"key":"Accept","value":"application/json"}],"method":"DELETE"}}
+sidebar_class_name: "delete api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Unstar a gist
+
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"description":"gist_id parameter","in":"path","name":"gist_id","required":true,"schema":{"type":"string"}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"204"} value={"204"}><div>
+
+Empty response
+
+</div><div></div></TabItem><TabItem label={"304"} value={"304"}><div>
+
+Not Modified
+
+</div><div></div></TabItem><TabItem label={"403"} value={"403"}><div>
+
+Forbidden
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"documentation_url"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"message"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></details></div></TabItem><TabItem label={"404"} value={"404"}><div>
+
+Resource Not Found
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"documentation_url"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"message"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></details></div></TabItem></ApiTabs></div>
+      

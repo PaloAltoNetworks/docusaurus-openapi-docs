@@ -1,0 +1,42 @@
+---
+id: mark-notifications-as-read
+sidebar_label: Mark notifications as read
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"Marks all notifications as \"read\" removes it from the [default view on GitHub](https://github.com/notifications). If the number of notifications is too large to complete in one request, you will receive a `202 Accepted` status and GitHub will run an asynchronous process to mark notifications as \"read.\" To check whether any \"unread\" notifications remain, you can use the [List notifications for the authenticated user](https://docs.github.com/rest/reference/activity#list-notifications-for-the-authenticated-user) endpoint and pass the query parameter `all=false`.","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/activity#mark-notifications-as-read"},"operationId":"activity/mark-notifications-as-read","parameters":[],"requestBody":{"content":{"application/json":{"schema":{"properties":{"last_read_at":{"description":"Describes the last point that notifications were checked.","format":"date-time","type":"string"},"read":{"description":"Whether the notification has been read.","type":"boolean"}},"type":"object"}}}},"responses":{"202":{"content":{"application/json":{"schema":{"properties":{"message":{"type":"string"}},"type":"object"}}},"description":"response"},"205":{"description":"response"},"304":{"description":"Not Modified"},"401":{"content":{"application/json":{"schema":{"description":"Basic Error","properties":{"documentation_url":{"type":"string"},"message":{"type":"string"}},"title":"Basic Error","type":"object"}}},"description":"Requires Authentication"},"403":{"content":{"application/json":{"schema":{"description":"Basic Error","properties":{"documentation_url":{"type":"string"},"message":{"type":"string"}},"title":"Basic Error","type":"object"}}},"description":"Forbidden"}},"tags":["activity"],"x-github":{"category":"activity","enabledForGitHubApps":false,"githubCloudOnly":false,"previews":[],"subcategory":"notifications"},"method":"put","path":"/notifications","servers":[{"url":"https://api.github.com"}],"jsonRequestBodyExample":{"last_read_at":"string","read":true},"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Mark notifications as read","description":{"content":"Marks all notifications as \"read\" removes it from the [default view on GitHub](https://github.com/notifications). If the number of notifications is too large to complete in one request, you will receive a `202 Accepted` status and GitHub will run an asynchronous process to mark notifications as \"read.\" To check whether any \"unread\" notifications remain, you can use the [List notifications for the authenticated user](https://docs.github.com/rest/reference/activity#list-notifications-for-the-authenticated-user) endpoint and pass the query parameter `all=false`.","type":"text/plain"},"url":{"path":["notifications"],"host":["{{baseUrl}}"],"query":[],"variable":[]},"header":[{"key":"Content-Type","value":"application/json"},{"key":"Accept","value":"application/json"}],"method":"PUT","body":{"mode":"raw","raw":"\"\"","options":{"raw":{"language":"json"}}}}}
+sidebar_class_name: "put api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Mark notifications as read
+
+
+
+Marks all notifications as &quot;read&quot; removes it from the [default view on GitHub](https://github.com/notifications). If the number of notifications is too large to complete in one request, you will receive a `202 Accepted` status and GitHub will run an asynchronous process to mark notifications as &quot;read.&quot; To check whether any &quot;unread&quot; notifications remain, you can use the [List notifications for the authenticated user](https://docs.github.com/rest/reference/activity#list-notifications-for-the-authenticated-user) endpoint and pass the query parameter `all=false`.
+
+<details style={{}}><summary style={{"textAlign":"left"}}><strong>Request Body</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"last_read_at"} required={false} schemaDescription={"Describes the last point that notifications were checked."} schemaName={"date-time"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"read"} required={false} schemaDescription={"Whether the notification has been read."} schemaName={"boolean"} qualifierMessage={undefined}></SchemaItem></ul></details><div><ApiTabs><TabItem label={"202"} value={"202"}><div>
+
+response
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"message"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></details></div></TabItem><TabItem label={"205"} value={"205"}><div>
+
+response
+
+</div><div></div></TabItem><TabItem label={"304"} value={"304"}><div>
+
+Not Modified
+
+</div><div></div></TabItem><TabItem label={"401"} value={"401"}><div>
+
+Requires Authentication
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"documentation_url"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"message"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></details></div></TabItem><TabItem label={"403"} value={"403"}><div>
+
+Forbidden
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"documentation_url"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"message"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></details></div></TabItem></ApiTabs></div>
+      

@@ -1,0 +1,31 @@
+---
+id: get-a-gitignore-template
+sidebar_label: Get a gitignore template
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"The API also allows fetching the source of a single template.\nUse the raw [media type](https://docs.github.com/rest/overview/media-types/) to get the raw contents.","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/gitignore/#get-a-gitignore-template"},"operationId":"gitignore/get-template","parameters":[{"in":"path","name":"name","required":true,"schema":{"type":"string"}}],"responses":{"200":{"content":{"application/json":{"examples":{"default":{"value":{"name":"C","source":"# Object files\n*.o\n\n# Libraries\n*.lib\n*.a\n\n# Shared objects (inc. Windows DLLs)\n*.dll\n*.so\n*.so.*\n*.dylib\n\n# Executables\n*.exe\n*.out\n*.app\n"}}},"schema":{"description":"Gitignore Template","properties":{"name":{"example":"C","type":"string"},"source":{"example":"# Object files\n*.o\n\n# Libraries\n*.lib\n*.a\n\n# Shared objects (inc. Windows DLLs)\n*.dll\n*.so\n*.so.*\n*.dylib\n\n# Executables\n*.exe\n*.out\n*.app\n","type":"string"}},"required":["name","source"],"title":"Gitignore Template","type":"object"}}},"description":"response"},"304":{"description":"Not Modified"}},"tags":["gitignore"],"x-github":{"category":"gitignore","enabledForGitHubApps":true,"githubCloudOnly":false,"previews":[],"subcategory":null},"method":"get","path":"/gitignore/templates/{name}","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Get a gitignore template","description":{"content":"The API also allows fetching the source of a single template.\nUse the raw [media type](https://docs.github.com/rest/overview/media-types/) to get the raw contents.","type":"text/plain"},"url":{"path":["gitignore","templates",":name"],"host":["{{baseUrl}}"],"query":[],"variable":[{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"name"}]},"header":[{"key":"Accept","value":"application/json"}],"method":"GET"}}
+sidebar_class_name: "get api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Get a gitignore template
+
+
+
+The API also allows fetching the source of a single template.
+Use the raw [media type](https://docs.github.com/rest/overview/media-types/) to get the raw contents.
+
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"in":"path","name":"name","required":true,"schema":{"type":"string"}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"200"} value={"200"}><div>
+
+response
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"name"} required={true} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"source"} required={true} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></details></div></TabItem><TabItem label={"304"} value={"304"}><div>
+
+Not Modified
+
+</div><div></div></TabItem></ApiTabs></div>
+      

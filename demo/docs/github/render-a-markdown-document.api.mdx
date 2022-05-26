@@ -1,0 +1,26 @@
+---
+id: render-a-markdown-document
+sidebar_label: Render a Markdown document
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/markdown/#render-a-markdown-document"},"operationId":"markdown/render","parameters":[],"requestBody":{"content":{"application/json":{"schema":{"properties":{"context":{"description":"The repository context to use when creating references in `gfm` mode.","type":"string"},"mode":{"default":"markdown","description":"The rendering mode.","enum":["markdown","gfm"],"example":"markdown","type":"string"},"text":{"description":"The Markdown text to render in HTML.","type":"string"}},"required":["text"],"type":"object"}}}},"responses":{"200":{"content":{"text/html":{"schema":{"type":"string"}}},"description":"response","headers":{"Content-Length":{"example":"279","schema":{"type":"string"}},"Content-Type":{"example":"text/html","schema":{"type":"string"}},"X-CommonMarker-Version":{"example":"0.17.4","schema":{"type":"string"}}}},"304":{"description":"Not Modified"}},"tags":["markdown"],"x-github":{"category":"markdown","enabledForGitHubApps":true,"githubCloudOnly":false,"previews":[],"subcategory":null},"method":"post","path":"/markdown","servers":[{"url":"https://api.github.com"}],"jsonRequestBodyExample":{"context":"string","mode":"markdown","text":"string"},"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Render a Markdown document","description":{"content":"","type":"text/plain"},"url":{"path":["markdown"],"host":["{{baseUrl}}"],"query":[],"variable":[]},"header":[{"key":"Content-Type","value":"application/json"},{"key":"Accept","value":"text/html"}],"method":"POST","body":{"mode":"raw","raw":"\"\"","options":{"raw":{"language":"json"}}}}}
+sidebar_class_name: "post api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Render a Markdown document
+
+<details style={{}}><summary style={{"textAlign":"left"}}><strong>Request Body</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"context"} required={false} schemaDescription={"The repository context to use when creating references in `gfm` mode."} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"mode"} required={false} schemaDescription={"The rendering mode."} schemaName={"string"} qualifierMessage={"**Possible values:** [`markdown`, `gfm`]"}></SchemaItem><SchemaItem collapsible={false} name={"text"} required={true} schemaDescription={"The Markdown text to render in HTML."} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></details><div><ApiTabs><TabItem label={"200"} value={"200"}><div>
+
+response
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><li><div><span style={{"opacity":"0.6"}}> string</span></div></li></ul></details></div></TabItem><TabItem label={"304"} value={"304"}><div>
+
+Not Modified
+
+</div><div></div></TabItem></ApiTabs></div>
+      

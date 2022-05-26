@@ -1,0 +1,26 @@
+---
+id: disable-automated-security-fixes
+sidebar_label: Disable automated security fixes
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"Disables automated security fixes for a repository. The authenticated user must have admin access to the repository. For more information, see \"[Configuring automated security fixes](https://help.github.com/en/articles/configuring-automated-security-fixes)\".","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/repos/#disable-automated-security-fixes"},"operationId":"repos/disable-automated-security-fixes","parameters":[{"in":"path","name":"owner","required":true,"schema":{"type":"string"}},{"in":"path","name":"repo","required":true,"schema":{"type":"string"}}],"responses":{"204":{"description":"Empty response"}},"tags":["repos"],"x-github":{"category":"repos","enabledForGitHubApps":true,"githubCloudOnly":false,"previews":[{"name":"london","note":"Enabling or disabling automated security fixes is currently available for developers to preview. To access this new endpoint during the preview period, you must provide a custom [media type](https://docs.github.com/rest/overview/media-types) in the `Accept` header:\n```shell\napplication/vnd.github.london-preview+json\n```","required":true}],"subcategory":null},"method":"delete","path":"/repos/{owner}/{repo}/automated-security-fixes","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Disable automated security fixes","description":{"content":"Disables automated security fixes for a repository. The authenticated user must have admin access to the repository. For more information, see \"[Configuring automated security fixes](https://help.github.com/en/articles/configuring-automated-security-fixes)\".","type":"text/plain"},"url":{"path":["repos",":owner",":repo","automated-security-fixes"],"host":["{{baseUrl}}"],"query":[],"variable":[{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"owner"},{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"repo"}]},"method":"DELETE"}}
+sidebar_class_name: "delete api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Disable automated security fixes
+
+
+
+Disables automated security fixes for a repository. The authenticated user must have admin access to the repository. For more information, see &quot;[Configuring automated security fixes](https://help.github.com/en/articles/configuring-automated-security-fixes)&quot;.
+
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"in":"path","name":"owner","required":true,"schema":{"type":"string"}}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"in":"path","name":"repo","required":true,"schema":{"type":"string"}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"204"} value={"204"}><div>
+
+Empty response
+
+</div><div></div></TabItem></ApiTabs></div>
+      

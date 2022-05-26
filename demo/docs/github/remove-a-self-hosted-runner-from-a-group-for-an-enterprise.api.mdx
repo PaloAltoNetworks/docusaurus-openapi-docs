@@ -1,0 +1,28 @@
+---
+id: remove-a-self-hosted-runner-from-a-group-for-an-enterprise
+sidebar_label: Remove a self-hosted runner from a group for an enterprise
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"Removes a self-hosted runner from a group configured in an enterprise. The runner is then returned to the default group.\n\nYou must authenticate using an access token with the `admin:enterprise` scope to use this endpoint.","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/enterprise-admin#remove-a-self-hosted-runner-from-a-group-for-an-enterprise"},"operationId":"enterprise-admin/remove-self-hosted-runner-from-group-for-enterprise","parameters":[{"description":"The slug version of the enterprise name. You can also substitute this value with the enterprise id.","in":"path","name":"enterprise","required":true,"schema":{"type":"string"}},{"description":"Unique identifier of the self-hosted runner group.","in":"path","name":"runner_group_id","required":true,"schema":{"type":"integer"}},{"description":"Unique identifier of the self-hosted runner.","in":"path","name":"runner_id","required":true,"schema":{"type":"integer"}}],"responses":{"204":{"description":"Empty response"}},"tags":["enterprise-admin"],"x-github":{"category":"enterprise-admin","enabledForGitHubApps":false,"githubCloudOnly":false,"previews":[],"subcategory":"actions"},"method":"delete","path":"/enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/runners/{runner_id}","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Remove a self-hosted runner from a group for an enterprise","description":{"content":"Removes a self-hosted runner from a group configured in an enterprise. The runner is then returned to the default group.\n\nYou must authenticate using an access token with the `admin:enterprise` scope to use this endpoint.","type":"text/plain"},"url":{"path":["enterprises",":enterprise","actions","runner-groups",":runner_group_id","runners",":runner_id"],"host":["{{baseUrl}}"],"query":[],"variable":[{"disabled":false,"description":{"content":"(Required) The slug version of the enterprise name. You can also substitute this value with the enterprise id.","type":"text/plain"},"type":"any","value":"","key":"enterprise"},{"disabled":false,"description":{"content":"(Required) Unique identifier of the self-hosted runner group.","type":"text/plain"},"type":"any","value":"","key":"runner_group_id"},{"disabled":false,"description":{"content":"(Required) Unique identifier of the self-hosted runner.","type":"text/plain"},"type":"any","value":"","key":"runner_id"}]},"method":"DELETE"}}
+sidebar_class_name: "delete api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Remove a self-hosted runner from a group for an enterprise
+
+
+
+Removes a self-hosted runner from a group configured in an enterprise. The runner is then returned to the default group.
+
+You must authenticate using an access token with the `admin:enterprise` scope to use this endpoint.
+
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"description":"The slug version of the enterprise name. You can also substitute this value with the enterprise id.","in":"path","name":"enterprise","required":true,"schema":{"type":"string"}}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"description":"Unique identifier of the self-hosted runner group.","in":"path","name":"runner_group_id","required":true,"schema":{"type":"integer"}}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"description":"Unique identifier of the self-hosted runner.","in":"path","name":"runner_id","required":true,"schema":{"type":"integer"}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"204"} value={"204"}><div>
+
+Empty response
+
+</div><div></div></TabItem></ApiTabs></div>
+      

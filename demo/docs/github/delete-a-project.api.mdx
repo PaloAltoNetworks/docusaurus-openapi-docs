@@ -1,0 +1,46 @@
+---
+id: delete-a-project
+sidebar_label: Delete a project
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"Deletes a project board. Returns a `404 Not Found` status if projects are disabled.","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/projects/#delete-a-project"},"operationId":"projects/delete","parameters":[{"in":"path","name":"project_id","required":true,"schema":{"type":"integer"}}],"responses":{"204":{"description":"Delete Success"},"304":{"description":"Not Modified"},"401":{"content":{"application/json":{"schema":{"description":"Basic Error","properties":{"documentation_url":{"type":"string"},"message":{"type":"string"}},"title":"Basic Error","type":"object"}}},"description":"Requires Authentication"},"403":{"content":{"application/json":{"schema":{"properties":{"documentation_url":{"type":"string"},"errors":{"items":{"type":"string"},"type":"array"},"message":{"type":"string"}},"type":"object"}}},"description":"Forbidden"},"404":{"content":{"application/json":{"schema":{"description":"Basic Error","properties":{"documentation_url":{"type":"string"},"message":{"type":"string"}},"title":"Basic Error","type":"object"}}},"description":"Resource Not Found"},"410":{"content":{"application/json":{"schema":{"description":"Basic Error","properties":{"documentation_url":{"type":"string"},"message":{"type":"string"}},"title":"Basic Error","type":"object"}}},"description":"Gone"}},"tags":["projects"],"x-github":{"category":"projects","enabledForGitHubApps":true,"githubCloudOnly":false,"previews":[{"name":"inertia","note":"The Projects API is currently available for developers to preview. During the preview period, the API may change without advance notice. Please see the [blog post](https://developer.github.com/changes/2016-10-27-changes-to-projects-api) for full details. To access the API during the preview period, you must provide a custom [media type](https://docs.github.com/rest/overview/media-types) in the `Accept` header:\n```shell\napplication/vnd.github.inertia-preview+json\n```","required":true}],"subcategory":null},"method":"delete","path":"/projects/{project_id}","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Delete a project","description":{"content":"Deletes a project board. Returns a `404 Not Found` status if projects are disabled.","type":"text/plain"},"url":{"path":["projects",":project_id"],"host":["{{baseUrl}}"],"query":[],"variable":[{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"project_id"}]},"header":[{"key":"Accept","value":"application/json"}],"method":"DELETE"}}
+sidebar_class_name: "delete api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Delete a project
+
+
+
+Deletes a project board. Returns a `404 Not Found` status if projects are disabled.
+
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"in":"path","name":"project_id","required":true,"schema":{"type":"integer"}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"204"} value={"204"}><div>
+
+Delete Success
+
+</div><div></div></TabItem><TabItem label={"304"} value={"304"}><div>
+
+Not Modified
+
+</div><div></div></TabItem><TabItem label={"401"} value={"401"}><div>
+
+Requires Authentication
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"documentation_url"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"message"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></details></div></TabItem><TabItem label={"403"} value={"403"}><div>
+
+Forbidden
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"documentation_url"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"errors"} required={false} schemaDescription={undefined} schemaName={"string[]"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"message"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></details></div></TabItem><TabItem label={"404"} value={"404"}><div>
+
+Resource Not Found
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"documentation_url"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"message"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></details></div></TabItem><TabItem label={"410"} value={"410"}><div>
+
+Gone
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"documentation_url"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"message"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></details></div></TabItem></ApiTabs></div>
+      

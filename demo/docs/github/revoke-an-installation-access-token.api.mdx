@@ -1,0 +1,30 @@
+---
+id: revoke-an-installation-access-token
+sidebar_label: Revoke an installation access token
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"Revokes the installation token you're using to authenticate as an installation and access this endpoint.\n\nOnce an installation token is revoked, the token is invalidated and cannot be used. Other endpoints that require the revoked installation token must have a new installation token to work. You can create a new token using the \"[Create an installation access token for an app](https://docs.github.com/rest/reference/apps#create-an-installation-access-token-for-an-app)\" endpoint.\n\nYou must use an [installation access token](https://docs.github.com/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-an-installation) to access this endpoint.","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/apps#revoke-an-installation-access-token"},"operationId":"apps/revoke-installation-access-token","parameters":[],"responses":{"204":{"description":"Empty response"}},"tags":["apps"],"x-github":{"category":"apps","enabledForGitHubApps":true,"githubCloudOnly":false,"previews":[],"subcategory":"installations"},"method":"delete","path":"/installation/token","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Revoke an installation access token","description":{"content":"Revokes the installation token you're using to authenticate as an installation and access this endpoint.\n\nOnce an installation token is revoked, the token is invalidated and cannot be used. Other endpoints that require the revoked installation token must have a new installation token to work. You can create a new token using the \"[Create an installation access token for an app](https://docs.github.com/rest/reference/apps#create-an-installation-access-token-for-an-app)\" endpoint.\n\nYou must use an [installation access token](https://docs.github.com/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-an-installation) to access this endpoint.","type":"text/plain"},"url":{"path":["installation","token"],"host":["{{baseUrl}}"],"query":[],"variable":[]},"method":"DELETE"}}
+sidebar_class_name: "delete api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Revoke an installation access token
+
+
+
+Revokes the installation token you&#39;re using to authenticate as an installation and access this endpoint.
+
+Once an installation token is revoked, the token is invalidated and cannot be used. Other endpoints that require the revoked installation token must have a new installation token to work. You can create a new token using the &quot;[Create an installation access token for an app](https://docs.github.com/rest/reference/apps#create-an-installation-access-token-for-an-app)&quot; endpoint.
+
+You must use an [installation access token](https://docs.github.com/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-an-installation) to access this endpoint.
+
+<div><ApiTabs><TabItem label={"204"} value={"204"}><div>
+
+Empty response
+
+</div><div></div></TabItem></ApiTabs></div>
+      

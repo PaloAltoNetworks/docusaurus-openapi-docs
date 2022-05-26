@@ -1,0 +1,28 @@
+---
+id: set-git-hub-actions-permissions-for-an-enterprise
+sidebar_label: Set GitHub Actions permissions for an enterprise
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"Sets the GitHub Actions permissions policy for organizations and allowed actions in an enterprise.\n\nYou must authenticate using an access token with the `admin:enterprise` scope to use this endpoint.","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/enterprise-admin#set-github-actions-permissions-for-an-enterprise"},"operationId":"enterprise-admin/set-github-actions-permissions-enterprise","parameters":[{"description":"The slug version of the enterprise name. You can also substitute this value with the enterprise id.","in":"path","name":"enterprise","required":true,"schema":{"type":"string"}}],"requestBody":{"content":{"application/json":{"example":{"allowed_actions":"selected","enabled_organizations":"all"},"schema":{"properties":{"allowed_actions":{"description":"The permissions policy that controls the actions that are allowed to run. Can be one of: `all`, `local_only`, or `selected`.","enum":["all","local_only","selected"],"type":"string"},"enabled_organizations":{"description":"The policy that controls the organizations in the enterprise that are allowed to run GitHub Actions. Can be one of: `all`, `none`, or `selected`.","enum":["all","none","selected"],"type":"string"}},"required":["enabled_organizations"],"type":"object"}}}},"responses":{"204":{"description":"Empty response"}},"tags":["enterprise-admin"],"x-github":{"category":"enterprise-admin","enabledForGitHubApps":false,"githubCloudOnly":false,"previews":[],"subcategory":"actions"},"method":"put","path":"/enterprises/{enterprise}/actions/permissions","servers":[{"url":"https://api.github.com"}],"jsonRequestBodyExample":{"allowed_actions":"all","enabled_organizations":"all"},"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Set GitHub Actions permissions for an enterprise","description":{"content":"Sets the GitHub Actions permissions policy for organizations and allowed actions in an enterprise.\n\nYou must authenticate using an access token with the `admin:enterprise` scope to use this endpoint.","type":"text/plain"},"url":{"path":["enterprises",":enterprise","actions","permissions"],"host":["{{baseUrl}}"],"query":[],"variable":[{"disabled":false,"description":{"content":"(Required) The slug version of the enterprise name. You can also substitute this value with the enterprise id.","type":"text/plain"},"type":"any","value":"","key":"enterprise"}]},"header":[{"key":"Content-Type","value":"application/json"}],"method":"PUT","body":{"mode":"raw","raw":"\"\"","options":{"raw":{"language":"json"}}}}}
+sidebar_class_name: "put api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Set GitHub Actions permissions for an enterprise
+
+
+
+Sets the GitHub Actions permissions policy for organizations and allowed actions in an enterprise.
+
+You must authenticate using an access token with the `admin:enterprise` scope to use this endpoint.
+
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"description":"The slug version of the enterprise name. You can also substitute this value with the enterprise id.","in":"path","name":"enterprise","required":true,"schema":{"type":"string"}}}></ParamsItem></ul></div></details><details style={{}}><summary style={{"textAlign":"left"}}><strong>Request Body</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"allowed_actions"} required={false} schemaDescription={"The permissions policy that controls the actions that are allowed to run. Can be one of: `all`, `local_only`, or `selected`."} schemaName={"string"} qualifierMessage={"**Possible values:** [`all`, `local_only`, `selected`]"}></SchemaItem><SchemaItem collapsible={false} name={"enabled_organizations"} required={true} schemaDescription={"The policy that controls the organizations in the enterprise that are allowed to run GitHub Actions. Can be one of: `all`, `none`, or `selected`."} schemaName={"string"} qualifierMessage={"**Possible values:** [`all`, `none`, `selected`]"}></SchemaItem></ul></details><div><ApiTabs><TabItem label={"204"} value={"204"}><div>
+
+Empty response
+
+</div><div></div></TabItem></ApiTabs></div>
+      

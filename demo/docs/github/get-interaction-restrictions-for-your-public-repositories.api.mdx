@@ -1,0 +1,26 @@
+---
+id: get-interaction-restrictions-for-your-public-repositories
+sidebar_label: Get interaction restrictions for your public repositories
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"Shows which type of GitHub user can interact with your public repositories and when the restriction expires. If there are no restrictions, you will see an empty response.","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/interactions#get-interaction-restrictions-for-your-public-repositories"},"operationId":"interactions/get-restrictions-for-authenticated-user","responses":{"200":{"content":{"application/json":{"examples":{"default":{"value":{"expires_at":"2018-08-17T04:18:39.000Z","limit":"collaborators_only","origin":"user"}}},"schema":{"description":"Interaction limit settings.","properties":{"expires_at":{"example":"2018-08-17T04:18:39.000Z","format":"date-time","type":"string"},"limit":{"description":"The type of GitHub user that can comment, open issues, or create pull requests while the interaction limit is in effect. Can be one of: `existing_users`, `contributors_only`, `collaborators_only`.","enum":["existing_users","contributors_only","collaborators_only"],"example":"collaborators_only","type":"string"},"origin":{"example":"repository","type":"string"}},"required":["limit","origin","expires_at"],"title":"Interaction Limits","type":"object"}}},"description":"response"}},"tags":["interactions"],"x-github":{"category":"interactions","enabledForGitHubApps":false,"githubCloudOnly":false,"previews":[],"subcategory":"user"},"method":"get","path":"/user/interaction-limits","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Get interaction restrictions for your public repositories","description":{"content":"Shows which type of GitHub user can interact with your public repositories and when the restriction expires. If there are no restrictions, you will see an empty response.","type":"text/plain"},"url":{"path":["user","interaction-limits"],"host":["{{baseUrl}}"],"query":[],"variable":[]},"header":[{"key":"Accept","value":"application/json"}],"method":"GET"}}
+sidebar_class_name: "get api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Get interaction restrictions for your public repositories
+
+
+
+Shows which type of GitHub user can interact with your public repositories and when the restriction expires. If there are no restrictions, you will see an empty response.
+
+<div><ApiTabs><TabItem label={"200"} value={"200"}><div>
+
+response
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"expires_at"} required={true} schemaDescription={undefined} schemaName={"date-time"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"limit"} required={true} schemaDescription={"The type of GitHub user that can comment, open issues, or create pull requests while the interaction limit is in effect. Can be one of: `existing_users`, `contributors_only`, `collaborators_only`."} schemaName={"string"} qualifierMessage={"**Possible values:** [`existing_users`, `contributors_only`, `collaborators_only`]"}></SchemaItem><SchemaItem collapsible={false} name={"origin"} required={true} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></details></div></TabItem></ApiTabs></div>
+      

@@ -1,0 +1,46 @@
+---
+id: delete-an-email-address-for-the-authenticated-user
+sidebar_label: Delete an email address for the authenticated user
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"This endpoint is accessible with the `user` scope.","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/users#delete-an-email-address-for-the-authenticated-user"},"operationId":"users/delete-email-for-authenticated","parameters":[],"requestBody":{"content":{"application/json":{"schema":{"oneOf":[{"description":"Deletes one or more email addresses from your GitHub account. Must contain at least one email address. **Note:** Alternatively, you can pass a single email address or an `array` of emails addresses directly, but we recommend that you pass an object using the `emails` key.","example":{"emails":["octocat@github.com","mona@github.com"]},"properties":{"emails":{"description":"Email addresses associated with the GitHub user account.","items":{"example":"username@example.com","minItems":1,"type":"string"},"type":"array"}},"required":["emails"],"type":"object"},{"items":{"example":"username@example.com","minItems":1,"type":"string"},"type":"array"},{"type":"string"}]}}}},"responses":{"204":{"description":"Empty response"},"304":{"description":"Not Modified"},"401":{"content":{"application/json":{"schema":{"description":"Basic Error","properties":{"documentation_url":{"type":"string"},"message":{"type":"string"}},"title":"Basic Error","type":"object"}}},"description":"Requires Authentication"},"403":{"content":{"application/json":{"schema":{"description":"Basic Error","properties":{"documentation_url":{"type":"string"},"message":{"type":"string"}},"title":"Basic Error","type":"object"}}},"description":"Forbidden"},"404":{"content":{"application/json":{"schema":{"description":"Basic Error","properties":{"documentation_url":{"type":"string"},"message":{"type":"string"}},"title":"Basic Error","type":"object"}}},"description":"Resource Not Found"},"422":{"content":{"application/json":{"schema":{"description":"Validation Error","properties":{"documentation_url":{"type":"string"},"errors":{"items":{"properties":{"code":{"type":"string"},"field":{"type":"string"},"index":{"type":"integer"},"message":{"type":"string"},"resource":{"type":"string"},"value":{"oneOf":[{"nullable":true,"type":"string"},{"nullable":true,"type":"integer"},{"items":{"type":"string"},"nullable":true,"type":"array"}]}},"required":["code"],"type":"object"},"type":"array"},"message":{"type":"string"}},"required":["message","documentation_url"],"title":"Validation Error","type":"object"}}},"description":"Validation Failed"}},"tags":["users"],"x-github":{"category":"users","enabledForGitHubApps":false,"githubCloudOnly":false,"previews":[],"subcategory":"emails"},"method":"delete","path":"/user/emails","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Delete an email address for the authenticated user","description":{"content":"This endpoint is accessible with the `user` scope.","type":"text/plain"},"url":{"path":["user","emails"],"host":["{{baseUrl}}"],"query":[],"variable":[]},"header":[{"key":"Content-Type","value":"application/json"},{"key":"Accept","value":"application/json"}],"method":"DELETE","body":{"mode":"raw","raw":"\"\"","options":{"raw":{"language":"json"}}}}}
+sidebar_class_name: "delete api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Delete an email address for the authenticated user
+
+
+
+This endpoint is accessible with the `user` scope.
+
+<details style={{}}><summary style={{"textAlign":"left"}}><strong>Request Body</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><li><div><span style={{"opacity":"0.6"}}> undefined</span></div></li></ul></details><div><ApiTabs><TabItem label={"204"} value={"204"}><div>
+
+Empty response
+
+</div><div></div></TabItem><TabItem label={"304"} value={"304"}><div>
+
+Not Modified
+
+</div><div></div></TabItem><TabItem label={"401"} value={"401"}><div>
+
+Requires Authentication
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"documentation_url"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"message"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></details></div></TabItem><TabItem label={"403"} value={"403"}><div>
+
+Forbidden
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"documentation_url"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"message"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></details></div></TabItem><TabItem label={"404"} value={"404"}><div>
+
+Resource Not Found
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"documentation_url"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"message"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></details></div></TabItem><TabItem label={"422"} value={"422"}><div>
+
+Validation Failed
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"documentation_url"} required={true} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={true} className={"schemaItem"}><details style={{}}><summary style={{}}><strong>errors</strong><span style={{"opacity":"0.6"}}> object[]</span></summary><div style={{"marginLeft":"1rem"}}><ul><SchemaItem collapsible={false} name={"code"} required={true} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"field"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"index"} required={false} schemaDescription={undefined} schemaName={"integer"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"message"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"resource"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"value"} required={false} schemaDescription={undefined} schemaName={""} qualifierMessage={undefined}></SchemaItem></ul></div></details></SchemaItem><SchemaItem collapsible={false} name={"message"} required={true} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></details></div></TabItem></ApiTabs></div>
+      

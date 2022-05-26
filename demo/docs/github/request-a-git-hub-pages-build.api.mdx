@@ -1,0 +1,28 @@
+---
+id: request-a-git-hub-pages-build
+sidebar_label: Request a GitHub Pages build
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"You can request that your site be built from the latest revision on the default branch. This has the same effect as pushing a commit to your default branch, but does not require an additional commit. Manually triggering page builds can be helpful when diagnosing build warnings and failures.\n\nBuild requests are limited to one concurrent build per repository and one concurrent build per requester. If you request a build while another is still in progress, the second request will be queued until the first completes.","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/repos#request-a-github-pages-build"},"operationId":"repos/request-pages-build","parameters":[{"in":"path","name":"owner","required":true,"schema":{"type":"string"}},{"in":"path","name":"repo","required":true,"schema":{"type":"string"}}],"responses":{"201":{"content":{"application/json":{"examples":{"default":{"value":{"status":"queued","url":"https://api.github.com/repos/github/developer.github.com/pages/builds/latest"}}},"schema":{"description":"Page Build Status","properties":{"status":{"example":"queued","type":"string"},"url":{"example":"https://api.github.com/repos/github/hello-world/pages/builds/latest","format":"uri","type":"string"}},"required":["url","status"],"title":"Page Build Status","type":"object"}}},"description":"response"}},"tags":["repos"],"x-github":{"category":"repos","enabledForGitHubApps":true,"githubCloudOnly":false,"previews":[],"subcategory":"pages"},"method":"post","path":"/repos/{owner}/{repo}/pages/builds","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Request a GitHub Pages build","description":{"content":"You can request that your site be built from the latest revision on the default branch. This has the same effect as pushing a commit to your default branch, but does not require an additional commit. Manually triggering page builds can be helpful when diagnosing build warnings and failures.\n\nBuild requests are limited to one concurrent build per repository and one concurrent build per requester. If you request a build while another is still in progress, the second request will be queued until the first completes.","type":"text/plain"},"url":{"path":["repos",":owner",":repo","pages","builds"],"host":["{{baseUrl}}"],"query":[],"variable":[{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"owner"},{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"repo"}]},"header":[{"key":"Accept","value":"application/json"}],"method":"POST"}}
+sidebar_class_name: "post api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Request a GitHub Pages build
+
+
+
+You can request that your site be built from the latest revision on the default branch. This has the same effect as pushing a commit to your default branch, but does not require an additional commit. Manually triggering page builds can be helpful when diagnosing build warnings and failures.
+
+Build requests are limited to one concurrent build per repository and one concurrent build per requester. If you request a build while another is still in progress, the second request will be queued until the first completes.
+
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"in":"path","name":"owner","required":true,"schema":{"type":"string"}}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"in":"path","name":"repo","required":true,"schema":{"type":"string"}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"201"} value={"201"}><div>
+
+response
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"status"} required={true} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"url"} required={true} schemaDescription={undefined} schemaName={"uri"} qualifierMessage={undefined}></SchemaItem></ul></details></div></TabItem></ApiTabs></div>
+      

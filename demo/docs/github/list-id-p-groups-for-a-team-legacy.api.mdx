@@ -1,0 +1,46 @@
+---
+id: list-id-p-groups-for-a-team-legacy
+sidebar_label: List IdP groups for a team (Legacy)
+hide_title: true
+hide_table_of_contents: true
+api: {"deprecated":true,"description":"**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`List IdP groups for a team`](https://docs.github.com/rest/reference/teams#list-idp-groups-for-a-team) endpoint.\n\nTeam synchronization is available for organizations using GitHub Enterprise Cloud. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.\n\nList IdP groups connected to a team on GitHub.","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/teams#list-idp-groups-for-a-team-legacy"},"operationId":"teams/list-idp-groups-for-legacy","parameters":[{"in":"path","name":"team_id","required":true,"schema":{"type":"integer"}}],"responses":{"200":{"content":{"application/json":{"examples":{"default":{"value":{"groups":[{"group_description":"The people who configure your octoworld.","group_id":"123","group_name":"Octocat admins"},{"group_description":"The people who make your octoworld come to life.","group_id":"456","group_name":"Octocat docs members"}]}}},"schema":{"description":"External Groups to be mapped to a team for membership","properties":{"groups":{"description":"Array of groups to be mapped to this team","example":[{"group_description":"A group of Developers working on AzureAD SAML SSO","group_id":"111a1a11-aaa1-1aaa-11a1-a1a1a1a1a1aa","group_name":"saml-azuread-test"},{"group_description":"Another group of Developers working on AzureAD SAML SSO","group_id":"2bb2bb2b-bb22-22bb-2bb2-bb2bbb2bb2b2","group_name":"saml-azuread-test2"}],"items":{"properties":{"group_description":{"description":"a description of the group","example":"A group of Developers working on AzureAD SAML SSO","type":"string"},"group_id":{"description":"The ID of the group","example":"111a1a11-aaa1-1aaa-11a1-a1a1a1a1a1aa","type":"string"},"group_name":{"description":"The name of the group","example":"saml-azuread-test","type":"string"},"status":{"description":"synchronization status for this group mapping","example":"unsynced","type":"string"},"synced_at":{"description":"the time of the last sync for this group-mapping","example":"2019-06-03 22:27:15:000 -700","type":"string"}},"required":["group_id","group_name","group_description"],"type":"object"},"type":"array"}},"title":"GroupMapping","type":"object"}}},"description":"response"},"403":{"content":{"application/json":{"schema":{"description":"Basic Error","properties":{"documentation_url":{"type":"string"},"message":{"type":"string"}},"title":"Basic Error","type":"object"}}},"description":"Forbidden"},"404":{"content":{"application/json":{"schema":{"description":"Basic Error","properties":{"documentation_url":{"type":"string"},"message":{"type":"string"}},"title":"Basic Error","type":"object"}}},"description":"Resource Not Found"}},"tags":["teams"],"x-github":{"category":"teams","deprecationDate":"2020-01-21T00:00:00.000Z","enabledForGitHubApps":false,"githubCloudOnly":true,"previews":[],"removalDate":"2021-02-01T00:00:00.000Z","subcategory":"team-sync"},"method":"get","path":"/teams/{team_id}/team-sync/group-mappings","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"List IdP groups for a team (Legacy)","description":{"content":"**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`List IdP groups for a team`](https://docs.github.com/rest/reference/teams#list-idp-groups-for-a-team) endpoint.\n\nTeam synchronization is available for organizations using GitHub Enterprise Cloud. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.\n\nList IdP groups connected to a team on GitHub.","type":"text/plain"},"url":{"path":["teams",":team_id","team-sync","group-mappings"],"host":["{{baseUrl}}"],"query":[],"variable":[{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"team_id"}]},"header":[{"key":"Accept","value":"application/json"}],"method":"GET"}}
+sidebar_class_name: "get api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## List IdP groups for a team (Legacy)
+
+:::caution deprecated
+
+This endpoint has been deprecated and may be removed in future versions of the API.
+
+:::
+
+**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`List IdP groups for a team`](https://docs.github.com/rest/reference/teams#list-idp-groups-for-a-team) endpoint.
+
+Team synchronization is available for organizations using GitHub Enterprise Cloud. For more information, see [GitHub&#39;s products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+
+List IdP groups connected to a team on GitHub.
+
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"in":"path","name":"team_id","required":true,"schema":{"type":"integer"}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"200"} value={"200"}><div>
+
+response
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={true} className={"schemaItem"}><details style={{}}><summary style={{}}><strong>groups</strong><span style={{"opacity":"0.6"}}> object[]</span></summary><div style={{"marginLeft":"1rem"}}><div style={{"marginTop":".5rem","marginBottom":".5rem"}}>
+
+Array of groups to be mapped to this team
+
+</div><ul><SchemaItem collapsible={false} name={"group_description"} required={true} schemaDescription={"a description of the group"} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"group_id"} required={true} schemaDescription={"The ID of the group"} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"group_name"} required={true} schemaDescription={"The name of the group"} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"status"} required={false} schemaDescription={"synchronization status for this group mapping"} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"synced_at"} required={false} schemaDescription={"the time of the last sync for this group-mapping"} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></div></details></SchemaItem></ul></details></div></TabItem><TabItem label={"403"} value={"403"}><div>
+
+Forbidden
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"documentation_url"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"message"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></details></div></TabItem><TabItem label={"404"} value={"404"}><div>
+
+Resource Not Found
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"documentation_url"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"message"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></details></div></TabItem></ApiTabs></div>
+      

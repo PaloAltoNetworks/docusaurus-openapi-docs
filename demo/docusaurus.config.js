@@ -133,6 +133,14 @@ const config = {
       {
         id: "openapi",
         config: {
+          github: {
+            specPath: "examples/github-openapi.yml",
+            outputDir: "docs/github",
+            sidebarOptions: {
+              groupPathsBy: "tag",
+              categoryLinkSource: "tag",
+            },
+          },
           petstore: {
             specPath: "examples/petstore.yaml",
             outputDir: "docs/petstore",

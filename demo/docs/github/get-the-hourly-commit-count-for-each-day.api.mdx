@@ -1,0 +1,32 @@
+---
+id: get-the-hourly-commit-count-for-each-day
+sidebar_label: Get the hourly commit count for each day
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"Each array contains the day number, hour number, and number of commits:\n\n*   `0-6`: Sunday - Saturday\n*   `0-23`: Hour of day\n*   Number of commits\n\nFor example, `[2, 14, 25]` indicates that there were 25 total commits, during the 2:00pm hour on Tuesdays. All times are based on the time zone of individual commits.","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/repos#get-the-hourly-commit-count-for-each-day"},"operationId":"repos/get-punch-card-stats","parameters":[{"in":"path","name":"owner","required":true,"schema":{"type":"string"}},{"in":"path","name":"repo","required":true,"schema":{"type":"string"}}],"responses":{"200":{"content":{"application/json":{"examples":{"default":{"value":[[0,0,5],[0,1,43],[0,2,21]]}},"schema":{"items":{"description":"Code Frequency Stat","items":{"type":"integer"},"title":"Code Frequency Stat","type":"array"},"type":"array"}}},"description":"For example, `[2, 14, 25]` indicates that there were 25 total commits, during the 2:00pm hour on Tuesdays. All times are based on the time zone of individual commits."}},"tags":["repos"],"x-github":{"category":"repos","enabledForGitHubApps":true,"githubCloudOnly":false,"previews":[],"subcategory":"statistics"},"method":"get","path":"/repos/{owner}/{repo}/stats/punch_card","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Get the hourly commit count for each day","description":{"content":"Each array contains the day number, hour number, and number of commits:\n\n*   `0-6`: Sunday - Saturday\n*   `0-23`: Hour of day\n*   Number of commits\n\nFor example, `[2, 14, 25]` indicates that there were 25 total commits, during the 2:00pm hour on Tuesdays. All times are based on the time zone of individual commits.","type":"text/plain"},"url":{"path":["repos",":owner",":repo","stats","punch_card"],"host":["{{baseUrl}}"],"query":[],"variable":[{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"owner"},{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"repo"}]},"header":[{"key":"Accept","value":"application/json"}],"method":"GET"}}
+sidebar_class_name: "get api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Get the hourly commit count for each day
+
+
+
+Each array contains the day number, hour number, and number of commits:
+
+*   `0-6`: Sunday - Saturday
+*   `0-23`: Hour of day
+*   Number of commits
+
+For example, `[2, 14, 25]` indicates that there were 25 total commits, during the 2:00pm hour on Tuesdays. All times are based on the time zone of individual commits.
+
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"in":"path","name":"owner","required":true,"schema":{"type":"string"}}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"in":"path","name":"repo","required":true,"schema":{"type":"string"}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"200"} value={"200"}><div>
+
+For example, `[2, 14, 25]` indicates that there were 25 total commits, during the 2:00pm hour on Tuesdays. All times are based on the time zone of individual commits.
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><li><div></div></li></ul></details></div></TabItem></ApiTabs></div>
+      

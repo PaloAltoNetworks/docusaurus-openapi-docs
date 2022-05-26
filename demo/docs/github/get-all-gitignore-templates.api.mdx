@@ -1,0 +1,30 @@
+---
+id: get-all-gitignore-templates
+sidebar_label: Get all gitignore templates
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"List all templates available to pass as an option when [creating a repository](https://docs.github.com/rest/reference/repos#create-a-repository-for-the-authenticated-user).","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/gitignore/#get-all-gitignore-templates"},"operationId":"gitignore/get-all-templates","parameters":[],"responses":{"200":{"content":{"application/json":{"example":["Actionscript","Android","AppceleratorTitanium","Autotools","Bancha","C","C++"],"schema":{"items":{"type":"string"},"type":"array"}}},"description":"response"},"304":{"description":"Not Modified"}},"tags":["gitignore"],"x-github":{"category":"gitignore","enabledForGitHubApps":true,"githubCloudOnly":false,"previews":[],"subcategory":null},"method":"get","path":"/gitignore/templates","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Get all gitignore templates","description":{"content":"List all templates available to pass as an option when [creating a repository](https://docs.github.com/rest/reference/repos#create-a-repository-for-the-authenticated-user).","type":"text/plain"},"url":{"path":["gitignore","templates"],"host":["{{baseUrl}}"],"query":[],"variable":[]},"header":[{"key":"Accept","value":"application/json"}],"method":"GET"}}
+sidebar_class_name: "get api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Get all gitignore templates
+
+
+
+List all templates available to pass as an option when [creating a repository](https://docs.github.com/rest/reference/repos#create-a-repository-for-the-authenticated-user).
+
+<div><ApiTabs><TabItem label={"200"} value={"200"}><div>
+
+response
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><li><div></div></li></ul></details></div></TabItem><TabItem label={"304"} value={"304"}><div>
+
+Not Modified
+
+</div><div></div></TabItem></ApiTabs></div>
+      

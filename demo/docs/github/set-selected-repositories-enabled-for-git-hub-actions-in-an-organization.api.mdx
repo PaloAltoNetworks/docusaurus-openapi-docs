@@ -1,0 +1,28 @@
+---
+id: set-selected-repositories-enabled-for-git-hub-actions-in-an-organization
+sidebar_label: Set selected repositories enabled for GitHub Actions in an organization
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"Replaces the list of selected repositories that are enabled for GitHub Actions in an organization. To use this endpoint, the organization permission policy for `enabled_repositories` must be configured to `selected`. For more information, see \"[Set GitHub Actions permissions for an organization](#set-github-actions-permissions-for-an-organization).\"\n\nYou must authenticate using an access token with the `admin:org` scope to use this endpoint. GitHub Apps must have the `administration` organization permission to use this API.","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/actions#set-selected-repositories-enabled-for-github-actions-in-an-organization"},"operationId":"actions/set-selected-repositories-enabled-github-actions-organization","parameters":[{"in":"path","name":"org","required":true,"schema":{"type":"string"}}],"requestBody":{"content":{"application/json":{"example":{"selected_repository_ids":[32,42]},"schema":{"properties":{"selected_repository_ids":{"description":"List of repository IDs to enable for GitHub Actions.","items":{"description":"Unique identifier of the repository.","type":"integer"},"type":"array"}},"required":["selected_repository_ids"],"type":"object"}}}},"responses":{"204":{"description":"Empty response"}},"tags":["actions"],"x-github":{"category":"actions","enabledForGitHubApps":true,"githubCloudOnly":false,"previews":[],"subcategory":"permissions"},"method":"put","path":"/orgs/{org}/actions/permissions/repositories","servers":[{"url":"https://api.github.com"}],"jsonRequestBodyExample":{"selected_repository_ids":[0]},"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Set selected repositories enabled for GitHub Actions in an organization","description":{"content":"Replaces the list of selected repositories that are enabled for GitHub Actions in an organization. To use this endpoint, the organization permission policy for `enabled_repositories` must be configured to `selected`. For more information, see \"[Set GitHub Actions permissions for an organization](#set-github-actions-permissions-for-an-organization).\"\n\nYou must authenticate using an access token with the `admin:org` scope to use this endpoint. GitHub Apps must have the `administration` organization permission to use this API.","type":"text/plain"},"url":{"path":["orgs",":org","actions","permissions","repositories"],"host":["{{baseUrl}}"],"query":[],"variable":[{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"org"}]},"header":[{"key":"Content-Type","value":"application/json"}],"method":"PUT","body":{"mode":"raw","raw":"\"\"","options":{"raw":{"language":"json"}}}}}
+sidebar_class_name: "put api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Set selected repositories enabled for GitHub Actions in an organization
+
+
+
+Replaces the list of selected repositories that are enabled for GitHub Actions in an organization. To use this endpoint, the organization permission policy for `enabled_repositories` must be configured to `selected`. For more information, see &quot;[Set GitHub Actions permissions for an organization](#set-github-actions-permissions-for-an-organization).&quot;
+
+You must authenticate using an access token with the `admin:org` scope to use this endpoint. GitHub Apps must have the `administration` organization permission to use this API.
+
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"in":"path","name":"org","required":true,"schema":{"type":"string"}}}></ParamsItem></ul></div></details><details style={{}}><summary style={{"textAlign":"left"}}><strong>Request Body</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"selected_repository_ids"} required={true} schemaDescription={"List of repository IDs to enable for GitHub Actions."} schemaName={"integer[]"} qualifierMessage={undefined}></SchemaItem></ul></details><div><ApiTabs><TabItem label={"204"} value={"204"}><div>
+
+Empty response
+
+</div><div></div></TabItem></ApiTabs></div>
+      

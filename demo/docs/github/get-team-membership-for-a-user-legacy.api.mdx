@@ -1,0 +1,40 @@
+---
+id: get-team-membership-for-a-user-legacy
+sidebar_label: Get team membership for a user (Legacy)
+hide_title: true
+hide_table_of_contents: true
+api: {"deprecated":true,"description":"**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Get team membership for a user](https://docs.github.com/rest/reference/teams#get-team-membership-for-a-user) endpoint.\n\nTeam members will include the members of child teams.\n\nTo get a user's membership with a team, the team must be visible to the authenticated user.\n\n**Note:** The `role` for organization owners returns as `maintainer`. For more information about `maintainer` roles, see [Create a team](https://docs.github.com/rest/reference/teams#create-a-team).","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/teams#get-team-membership-for-a-user-legacy"},"operationId":"teams/get-membership-for-user-legacy","parameters":[{"in":"path","name":"team_id","required":true,"schema":{"type":"integer"}},{"in":"path","name":"username","required":true,"schema":{"type":"string"}}],"responses":{"200":{"content":{"application/json":{"examples":{"response-if-user-has-a-pending-membership-with-team":{"summary":"Response if user has a pending membership with team","value":{"role":"member","state":"pending","url":"https://api.github.com/teams/1/memberships/octocat"}},"response-if-user-has-an-active-membership-with-team":{"summary":"Response if user has an active membership with team","value":{"role":"member","state":"active","url":"https://api.github.com/teams/1/memberships/octocat"}},"response-if-user-is-a-team-maintainer":{"summary":"Response if user is a team maintainer","value":{"role":"maintainer","state":"active","url":"https://api.github.com/teams/1/memberships/octocat"}}},"schema":{"description":"Team Membership","properties":{"role":{"default":"member","description":"The role of the user in the team.","enum":["member","maintainer"],"example":"member","type":"string"},"state":{"type":"string"},"url":{"format":"uri","type":"string"}},"required":["role","state","url"],"title":"Team Membership","type":"object"}}},"description":"response"},"404":{"content":{"application/json":{"schema":{"description":"Basic Error","properties":{"documentation_url":{"type":"string"},"message":{"type":"string"}},"title":"Basic Error","type":"object"}}},"description":"Resource Not Found"}},"tags":["teams"],"x-github":{"category":"teams","deprecationDate":"2020-01-21T00:00:00.000Z","enabledForGitHubApps":true,"githubCloudOnly":false,"previews":[],"removalDate":"2021-02-01T00:00:00.000Z","subcategory":"members"},"method":"get","path":"/teams/{team_id}/memberships/{username}","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Get team membership for a user (Legacy)","description":{"content":"**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Get team membership for a user](https://docs.github.com/rest/reference/teams#get-team-membership-for-a-user) endpoint.\n\nTeam members will include the members of child teams.\n\nTo get a user's membership with a team, the team must be visible to the authenticated user.\n\n**Note:** The `role` for organization owners returns as `maintainer`. For more information about `maintainer` roles, see [Create a team](https://docs.github.com/rest/reference/teams#create-a-team).","type":"text/plain"},"url":{"path":["teams",":team_id","memberships",":username"],"host":["{{baseUrl}}"],"query":[],"variable":[{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"team_id"},{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"username"}]},"header":[{"key":"Accept","value":"application/json"}],"method":"GET"}}
+sidebar_class_name: "get api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Get team membership for a user (Legacy)
+
+:::caution deprecated
+
+This endpoint has been deprecated and may be removed in future versions of the API.
+
+:::
+
+**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Get team membership for a user](https://docs.github.com/rest/reference/teams#get-team-membership-for-a-user) endpoint.
+
+Team members will include the members of child teams.
+
+To get a user&#39;s membership with a team, the team must be visible to the authenticated user.
+
+**Note:** The `role` for organization owners returns as `maintainer`. For more information about `maintainer` roles, see [Create a team](https://docs.github.com/rest/reference/teams#create-a-team).
+
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"in":"path","name":"team_id","required":true,"schema":{"type":"integer"}}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"in":"path","name":"username","required":true,"schema":{"type":"string"}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"200"} value={"200"}><div>
+
+response
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"role"} required={true} schemaDescription={"The role of the user in the team."} schemaName={"string"} qualifierMessage={"**Possible values:** [`member`, `maintainer`]"}></SchemaItem><SchemaItem collapsible={false} name={"state"} required={true} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"url"} required={true} schemaDescription={undefined} schemaName={"uri"} qualifierMessage={undefined}></SchemaItem></ul></details></div></TabItem><TabItem label={"404"} value={"404"}><div>
+
+Resource Not Found
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"documentation_url"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"message"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem></ul></details></div></TabItem></ApiTabs></div>
+      

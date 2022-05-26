@@ -1,0 +1,26 @@
+---
+id: get-large-files
+sidebar_label: Get large files
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"List files larger than 100MB found during the import","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/migrations#get-large-files"},"operationId":"migrations/get-large-files","parameters":[{"in":"path","name":"owner","required":true,"schema":{"type":"string"}},{"in":"path","name":"repo","required":true,"schema":{"type":"string"}}],"responses":{"200":{"content":{"application/json":{"examples":{"default":{"value":[{"oid":"d3d9446802a44259755d38e6d163e820","path":"foo/bar/1","ref_name":"refs/heads/master","size":10485760},{"oid":"6512bd43d9caa6e02c990b0a82652dca","path":"foo/bar/2","ref_name":"refs/heads/master","size":11534336},{"oid":"c20ad4d76fe97759aa27a0c99bff6710","path":"foo/bar/3","ref_name":"refs/heads/master","size":12582912}]}},"schema":{"items":{"description":"Porter Large File","properties":{"oid":{"type":"string"},"path":{"type":"string"},"ref_name":{"type":"string"},"size":{"type":"integer"}},"required":["oid","path","ref_name","size"],"title":"Porter Large File","type":"object"},"type":"array"}}},"description":"response"}},"tags":["migrations"],"x-github":{"category":"migrations","enabledForGitHubApps":true,"githubCloudOnly":false,"previews":[],"subcategory":"source-imports"},"method":"get","path":"/repos/{owner}/{repo}/import/large_files","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Get large files","description":{"content":"List files larger than 100MB found during the import","type":"text/plain"},"url":{"path":["repos",":owner",":repo","import","large_files"],"host":["{{baseUrl}}"],"query":[],"variable":[{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"owner"},{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"repo"}]},"header":[{"key":"Accept","value":"application/json"}],"method":"GET"}}
+sidebar_class_name: "get api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Get large files
+
+
+
+List files larger than 100MB found during the import
+
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"in":"path","name":"owner","required":true,"schema":{"type":"string"}}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"in":"path","name":"repo","required":true,"schema":{"type":"string"}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"200"} value={"200"}><div>
+
+response
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><li><div><ul><SchemaItem collapsible={false} name={"oid"} required={true} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"path"} required={true} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"ref_name"} required={true} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"size"} required={true} schemaDescription={undefined} schemaName={"integer"} qualifierMessage={undefined}></SchemaItem></ul></div></li></ul></details></div></TabItem></ApiTabs></div>
+      

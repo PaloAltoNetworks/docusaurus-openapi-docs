@@ -1,0 +1,30 @@
+---
+id: get-git-hub-packages-billing-for-a-user
+sidebar_label: Get GitHub Packages billing for a user
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"Gets the free and paid storage used for GitHub Packages in gigabytes.\n\nPaid minutes only apply to packages stored for private repositories. For more information, see \"[Managing billing for GitHub Packages](https://help.github.com/github/setting-up-and-managing-billing-and-payments-on-github/managing-billing-for-github-packages).\"\n\nAccess tokens must have the `user` scope.","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/billing/#get-github-packages-billing-for-a-user"},"operationId":"billing/get-github-packages-billing-user","parameters":[{"in":"path","name":"username","required":true,"schema":{"type":"string"}}],"responses":{"200":{"content":{"application/json":{"examples":{"default":{"value":{"included_gigabytes_bandwidth":10,"total_gigabytes_bandwidth_used":50,"total_paid_gigabytes_bandwidth_used":40}}},"schema":{"properties":{"included_gigabytes_bandwidth":{"description":"Free storage space (GB) for GitHub Packages.","type":"integer"},"total_gigabytes_bandwidth_used":{"description":"Sum of the free and paid storage space (GB) for GitHuub Packages.","type":"integer"},"total_paid_gigabytes_bandwidth_used":{"description":"Total paid storage space (GB) for GitHuub Packages.","type":"integer"}},"required":["total_gigabytes_bandwidth_used","total_paid_gigabytes_bandwidth_used","included_gigabytes_bandwidth"],"type":"object"}}},"description":"response"}},"tags":["billing"],"x-github":{"category":"billing","enabledForGitHubApps":false,"githubCloudOnly":false,"previews":[],"subcategory":null},"method":"get","path":"/users/{username}/settings/billing/packages","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Get GitHub Packages billing for a user","description":{"content":"Gets the free and paid storage used for GitHub Packages in gigabytes.\n\nPaid minutes only apply to packages stored for private repositories. For more information, see \"[Managing billing for GitHub Packages](https://help.github.com/github/setting-up-and-managing-billing-and-payments-on-github/managing-billing-for-github-packages).\"\n\nAccess tokens must have the `user` scope.","type":"text/plain"},"url":{"path":["users",":username","settings","billing","packages"],"host":["{{baseUrl}}"],"query":[],"variable":[{"disabled":false,"description":{"content":"(Required) ","type":"text/plain"},"type":"any","value":"","key":"username"}]},"header":[{"key":"Accept","value":"application/json"}],"method":"GET"}}
+sidebar_class_name: "get api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Get GitHub Packages billing for a user
+
+
+
+Gets the free and paid storage used for GitHub Packages in gigabytes.
+
+Paid minutes only apply to packages stored for private repositories. For more information, see &quot;[Managing billing for GitHub Packages](https://help.github.com/github/setting-up-and-managing-billing-and-payments-on-github/managing-billing-for-github-packages).&quot;
+
+Access tokens must have the `user` scope.
+
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"in":"path","name":"username","required":true,"schema":{"type":"string"}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"200"} value={"200"}><div>
+
+response
+
+</div><div><details style={{}}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"included_gigabytes_bandwidth"} required={true} schemaDescription={"Free storage space (GB) for GitHub Packages."} schemaName={"integer"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"total_gigabytes_bandwidth_used"} required={true} schemaDescription={"Sum of the free and paid storage space (GB) for GitHuub Packages."} schemaName={"integer"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"total_paid_gigabytes_bandwidth_used"} required={true} schemaDescription={"Total paid storage space (GB) for GitHuub Packages."} schemaName={"integer"} qualifierMessage={undefined}></SchemaItem></ul></details></div></TabItem></ApiTabs></div>
+      

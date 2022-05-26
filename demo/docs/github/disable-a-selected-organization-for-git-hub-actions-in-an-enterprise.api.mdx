@@ -1,0 +1,28 @@
+---
+id: disable-a-selected-organization-for-git-hub-actions-in-an-enterprise
+sidebar_label: Disable a selected organization for GitHub Actions in an enterprise
+hide_title: true
+hide_table_of_contents: true
+api: {"description":"Removes an organization from the list of selected organizations that are enabled for GitHub Actions in an enterprise. To use this endpoint, the enterprise permission policy for `enabled_organizations` must be configured to `selected`. For more information, see \"[Set GitHub Actions permissions for an enterprise](#set-github-actions-permissions-for-an-enterprise).\"\n\nYou must authenticate using an access token with the `admin:enterprise` scope to use this endpoint.","externalDocs":{"description":"API method documentation","url":"https://docs.github.com/rest/reference/enterprise-admin#disable-a-selected-organization-for-github-actions-in-an-enterprise"},"operationId":"enterprise-admin/disable-selected-organization-github-actions-enterprise","parameters":[{"description":"The slug version of the enterprise name. You can also substitute this value with the enterprise id.","in":"path","name":"enterprise","required":true,"schema":{"type":"string"}},{"description":"Unique identifier of an organization.","in":"path","name":"org_id","required":true,"schema":{"type":"integer"}}],"responses":{"204":{"description":"Empty response"}},"tags":["enterprise-admin"],"x-github":{"category":"enterprise-admin","enabledForGitHubApps":false,"githubCloudOnly":false,"previews":[],"subcategory":"actions"},"method":"delete","path":"/enterprises/{enterprise}/actions/permissions/organizations/{org_id}","servers":[{"url":"https://api.github.com"}],"info":{"contact":{"name":"Support","url":"https://support.github.com/contact"},"description":"GitHub's v3 REST API.","license":{"name":"MIT","url":"https://spdx.org/licenses/MIT"},"termsOfService":"https://docs.github.com/articles/github-terms-of-service","title":"GitHub v3 REST API","version":"1.1.4","x-apisguru-categories":["collaboration","developer_tools"],"x-logo":{"url":"https://twitter.com/github/profile_image?size=original"},"x-origin":[{"format":"openapi","url":"https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json","version":"3.0"}],"x-providerName":"github.com"},"postman":{"name":"Disable a selected organization for GitHub Actions in an enterprise","description":{"content":"Removes an organization from the list of selected organizations that are enabled for GitHub Actions in an enterprise. To use this endpoint, the enterprise permission policy for `enabled_organizations` must be configured to `selected`. For more information, see \"[Set GitHub Actions permissions for an enterprise](#set-github-actions-permissions-for-an-enterprise).\"\n\nYou must authenticate using an access token with the `admin:enterprise` scope to use this endpoint.","type":"text/plain"},"url":{"path":["enterprises",":enterprise","actions","permissions","organizations",":org_id"],"host":["{{baseUrl}}"],"query":[],"variable":[{"disabled":false,"description":{"content":"(Required) The slug version of the enterprise name. You can also substitute this value with the enterprise id.","type":"text/plain"},"type":"any","value":"","key":"enterprise"},{"disabled":false,"description":{"content":"(Required) Unique identifier of an organization.","type":"text/plain"},"type":"any","value":"","key":"org_id"}]},"method":"DELETE"}}
+sidebar_class_name: "delete api-method"
+---
+
+import ParamsItem from "@theme/ParamsItem";
+import SchemaItem from "@theme/SchemaItem"
+import ApiTabs from "@theme/ApiTabs";
+import TabItem from "@theme/TabItem";
+
+## Disable a selected organization for GitHub Actions in an enterprise
+
+
+
+Removes an organization from the list of selected organizations that are enabled for GitHub Actions in an enterprise. To use this endpoint, the enterprise permission policy for `enabled_organizations` must be configured to `selected`. For more information, see &quot;[Set GitHub Actions permissions for an enterprise](#set-github-actions-permissions-for-an-enterprise).&quot;
+
+You must authenticate using an access token with the `admin:enterprise` scope to use this endpoint.
+
+<details style={{"marginBottom":"1rem"}}><summary style={{}}><strong>Path Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"description":"The slug version of the enterprise name. You can also substitute this value with the enterprise id.","in":"path","name":"enterprise","required":true,"schema":{"type":"string"}}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"description":"Unique identifier of an organization.","in":"path","name":"org_id","required":true,"schema":{"type":"integer"}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"204"} value={"204"}><div>
+
+Empty response
+
+</div><div></div></TabItem></ApiTabs></div>
+      
