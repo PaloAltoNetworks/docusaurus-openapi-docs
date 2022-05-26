@@ -10,7 +10,7 @@ const config = {
   tagline: "OpenAPI plugin for generating API reference docs in Docusaurus v2",
   url: "https://docusaurus-openapi.tryingpan.dev",
   baseUrl: "/",
-  onBrokenLinks: "throw",
+  onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
 
