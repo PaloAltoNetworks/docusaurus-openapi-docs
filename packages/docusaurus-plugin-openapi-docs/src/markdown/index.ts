@@ -7,8 +7,13 @@
 
 import { escape } from "lodash";
 
-import { ContactObject, LicenseObject } from "../openapi/types";
+import {
+  ContactObject,
+  LicenseObject,
+  SecuritySchemeObject,
+} from "../openapi/types";
 import { ApiPageMetadata, InfoPageMetadata, TagPageMetadata } from "../types";
+import { createAuthentication } from "./createAuthentication";
 import { createContactInfo } from "./createContactInfo";
 import { createDeprecationNotice } from "./createDeprecationNotice";
 import { createDescription } from "./createDescription";
@@ -50,11 +55,15 @@ export function createApiPageMD({
 
 export function createInfoPageMD({
   info: { title, version, description, contact, license, termsOfService },
+  securitySchemes,
 }: InfoPageMetadata) {
   return render([
+    `import Tabs from "@theme/Tabs";\n`,
+    `import TabItem from "@theme/TabItem";\n`,
     createVersionBadge(version),
     `# ${escape(title)}\n\n`,
     createDescription(description),
+    createAuthentication(securitySchemes as unknown as SecuritySchemeObject),
     createContactInfo(contact as ContactObject),
     createTermsOfService(termsOfService),
     createLicense(license as LicenseObject),
