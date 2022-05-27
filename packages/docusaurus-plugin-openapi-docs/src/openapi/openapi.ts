@@ -128,6 +128,7 @@ function createItems(
       description: openapiData.info.description,
       slug: "/" + infoId,
       frontMatter: {},
+      securitySchemes: openapiData.components?.securitySchemes,
       info: {
         ...openapiData.info,
         tags: openapiData.tags?.map((tagName) =>
