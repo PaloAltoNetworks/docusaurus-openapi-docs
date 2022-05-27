@@ -80,6 +80,9 @@ export interface InfoPageMetadata extends ApiMetadataBase {
   type: "info";
   info: ApiInfo;
   markdown?: string;
+  securitySchemes?: {
+    [key: string]: SecuritySchemeObject;
+  };
 }
 
 export interface TagPageMetadata extends ApiMetadataBase {
