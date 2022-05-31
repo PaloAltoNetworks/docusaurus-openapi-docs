@@ -12,9 +12,8 @@ import { create, guard } from "./utils";
 export function createAuthentication(securitySchemes: SecuritySchemeObject) {
   if (!securitySchemes || !Object.keys(securitySchemes).length) return "";
 
-  const createAuthenticationContent = (securityScheme: any) => {
-    const { bearerFormat, description, flows, name, scheme, type } =
-      securityScheme;
+  const createAuthenticationTable = (securityScheme: any) => {
+    const { bearerFormat, flows, name, scheme, type } = securityScheme;
 
     const createSecuritySchemeTypeRow = () =>
       create("tr", {
@@ -64,49 +63,55 @@ export function createAuthentication(securitySchemes: SecuritySchemeObject) {
       case "apiKey":
         return create("div", {
           children: [
-            createDescription(description),
             create("table", {
-              children: [
-                createSecuritySchemeTypeRow(),
-                create("tr", {
-                  children: [
-                    create("th", { children: "Header parameter name:" }),
-                    create("td", { children: name }),
-                  ],
-                }),
-              ],
+              children: create("tbody", {
+                children: [
+                  createSecuritySchemeTypeRow(),
+                  create("tr", {
+                    children: [
+                      create("th", { children: "Header parameter name:" }),
+                      create("td", { children: name }),
+                    ],
+                  }),
+                ],
+              }),
             }),
           ],
         });
       case "http":
         return create("div", {
           children: [
-            createDescription(description),
             create("table", {
-              children: [
-                createSecuritySchemeTypeRow(),
-                create("tr", {
-                  children: [
-                    create("th", { children: "HTTP Authorization Scheme:" }),
-                    create("td", { children: scheme }),
-                  ],
-                }),
-                create("tr", {
-                  children: [
-                    create("th", { children: "Bearer format:" }),
-                    create("td", { children: bearerFormat }),
-                  ],
-                }),
-              ],
+              children: create("tbody", {
+                children: [
+                  createSecuritySchemeTypeRow(),
+                  create("tr", {
+                    children: [
+                      create("th", { children: "HTTP Authorization Scheme:" }),
+                      create("td", { children: scheme }),
+                    ],
+                  }),
+                  create("tr", {
+                    children: [
+                      create("th", { children: "Bearer format:" }),
+                      create("td", { children: bearerFormat }),
+                    ],
+                  }),
+                ],
+              }),
             }),
           ],
         });
       case "oauth2":
         return create("div", {
           children: [
-            createDescription(description),
             create("table", {
-              children: [createSecuritySchemeTypeRow(), createOAuthFlowRows()],
+              children: create("tbody", {
+                children: [
+                  createSecuritySchemeTypeRow(),
+                  createOAuthFlowRows(),
+                ],
+              }),
             }),
           ],
         });
@@ -119,6 +124,7 @@ export function createAuthentication(securitySchemes: SecuritySchemeObject) {
     children: [
       create("h2", {
         children: "Authentication",
+        id: "authentication",
         style: { marginBottom: "1rem" },
       }),
       create("Tabs", {
@@ -127,7 +133,10 @@ export function createAuthentication(securitySchemes: SecuritySchemeObject) {
             create("TabItem", {
               label: `${schemeType}`,
               value: `${schemeType}`,
-              children: createAuthenticationContent(schemeObj),
+              children: [
+                createDescription(schemeObj.description),
+                createAuthenticationTable(schemeObj),
+              ],
             })
         ),
       }),
