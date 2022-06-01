@@ -93,13 +93,14 @@ function createItems(
     const tags: TagObject[] = openapiData.tags ?? [];
     // eslint-disable-next-line array-callback-return
     tags.map((tag) => {
+      const description = getTagDisplayName(tag.name!, openapiData.tags ?? []);
       const tagId = kebabCase(tag.name);
       const tagPage: PartialPage<TagPageMetadata> = {
         type: "tag",
         id: tagId,
         unversionedId: tagId,
-        title: tag.description ?? "",
-        description: tag.description ?? "",
+        title: description ?? "",
+        description: description ?? "",
         slug: "/" + tagId,
         frontMatter: {},
         tag: {
