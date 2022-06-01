@@ -241,7 +241,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
   async function cleanApiDocs(options: APIOptions) {
     const { outputDir } = options;
     const apiDir = path.join(siteDir, outputDir);
-    const apiMdxFiles = await Globby(["*.api.mdx", "*.info.mdx"], {
+    const apiMdxFiles = await Globby(["*.api.mdx", "*.info.mdx", "*.tag.mdx"], {
       cwd: path.resolve(apiDir),
     });
     const sidebarFile = await Globby(["sidebar.js"], {
