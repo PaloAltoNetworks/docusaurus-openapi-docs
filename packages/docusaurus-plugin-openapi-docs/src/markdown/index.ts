@@ -8,7 +8,7 @@
 import { escape } from "lodash";
 
 import { ContactObject, LicenseObject } from "../openapi/types";
-import { ApiPageMetadata, InfoPageMetadata } from "../types";
+import { ApiPageMetadata, InfoPageMetadata, TagPageMetadata } from "../types";
 import { createContactInfo } from "./createContactInfo";
 import { createDeprecationNotice } from "./createDeprecationNotice";
 import { createDescription } from "./createDescription";
@@ -59,4 +59,10 @@ export function createInfoPageMD({
     createTermsOfService(termsOfService),
     createLicense(license as LicenseObject),
   ]);
+}
+
+export function createTagPageMD({
+  tag: { name, description },
+}: TagPageMetadata) {
+  return render([`# ${escape(name)}\n\n`, createDescription(description)]);
 }
