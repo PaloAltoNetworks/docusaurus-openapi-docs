@@ -92,23 +92,29 @@ function createItems(
     // Only create an tag pages if categoryLinkSource set to tag.
     const tags: TagObject[] = openapiData.tags ?? [];
     // eslint-disable-next-line array-callback-return
-    tags.map((tag) => {
-      const description = getTagDisplayName(tag.name!, openapiData.tags ?? []);
-      const tagId = kebabCase(tag.name);
-      const tagPage: PartialPage<TagPageMetadata> = {
-        type: "tag",
-        id: tagId,
-        unversionedId: tagId,
-        title: description ?? "",
-        description: description ?? "",
-        slug: "/" + tagId,
-        frontMatter: {},
-        tag: {
-          ...tag,
-        },
-      };
-      items.push(tagPage);
-    });
+    tags
+      .filter((tag) => !tag.description?.includes("SchemaDefinition"))
+      // eslint-disable-next-line array-callback-return
+      .map((tag) => {
+        const description = getTagDisplayName(
+          tag.name!,
+          openapiData.tags ?? []
+        );
+        const tagId = kebabCase(tag.name);
+        const tagPage: PartialPage<TagPageMetadata> = {
+          type: "tag",
+          id: tagId,
+          unversionedId: tagId,
+          title: description ?? "",
+          description: description ?? "",
+          slug: "/" + tagId,
+          frontMatter: {},
+          tag: {
+            ...tag,
+          },
+        };
+        items.push(tagPage);
+      });
   }
 
   if (openapiData.info.description) {
