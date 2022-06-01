@@ -3,12 +3,7 @@ module.exports = [
   {
     type: "category",
     label: "Pets",
-    link: {
-      type: "generated-index",
-      title: "Pets",
-      description: "Everything about your Pets",
-      slug: "/category/pets",
-    },
+    link: { type: "doc", id: "petstore/pet" },
     items: [
       {
         type: "doc",
@@ -63,12 +58,7 @@ module.exports = [
   {
     type: "category",
     label: "Petstore Orders",
-    link: {
-      type: "generated-index",
-      title: "Petstore Orders",
-      description: "Access to Petstore orders",
-      slug: "/category/petstore-orders",
-    },
+    link: { type: "doc", id: "petstore/store" },
     items: [
       {
         type: "doc",
@@ -105,12 +95,7 @@ module.exports = [
   {
     type: "category",
     label: "Users",
-    link: {
-      type: "generated-index",
-      title: "Users",
-      description: "Operations about user",
-      slug: "/category/users",
-    },
+    link: { type: "doc", id: "petstore/user" },
     items: [
       {
         type: "doc",
