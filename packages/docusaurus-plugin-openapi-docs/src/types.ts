@@ -11,6 +11,7 @@ import {
   InfoObject,
   OperationObject,
   SecuritySchemeObject,
+  TagObject,
 } from "./openapi/types";
 
 export type {
@@ -38,7 +39,7 @@ export interface LoadedContent {
   // loadedDocs: DocPageMetadata[]; TODO: cleanup
 }
 
-export type ApiMetadata = ApiPageMetadata | InfoPageMetadata;
+export type ApiMetadata = ApiPageMetadata | InfoPageMetadata | TagPageMetadata;
 
 export interface ApiMetadataBase {
   sidebar?: string;
@@ -78,6 +79,12 @@ export interface ApiItem extends OperationObject {
 export interface InfoPageMetadata extends ApiMetadataBase {
   type: "info";
   info: ApiInfo;
+  markdown?: string;
+}
+
+export interface TagPageMetadata extends ApiMetadataBase {
+  type: "tag";
+  tag: TagObject;
   markdown?: string;
 }
 

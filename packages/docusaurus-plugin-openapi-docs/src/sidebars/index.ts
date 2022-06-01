@@ -122,12 +122,10 @@ function groupByTags(
 
       // TODO: perhaps move this into a getLinkConfig() function
       if (tagObject !== undefined && categoryLinkSource === "tag") {
-        const linkDescription = tagObject?.description;
+        const tagId = kebabCase(tagObject.name);
         linkConfig = {
-          type: "generated-index" as "generated-index",
-          title: tag,
-          description: linkDescription,
-          slug: "/category/" + kebabCase(tag),
+          type: "doc",
+          id: `${basePath}/${tagId}`,
         } as SidebarItemCategoryLinkConfig;
       }
 

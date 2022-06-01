@@ -13,7 +13,7 @@ import { Globby } from "@docusaurus/utils";
 import chalk from "chalk";
 import { render } from "mustache";
 
-import { createApiPageMD, createInfoPageMD } from "./markdown";
+import { createApiPageMD, createInfoPageMD, createTagPageMD } from "./markdown";
 import { readOpenapiFiles, processOpenapiFiles } from "./openapi";
 import generateSidebarSlice from "./sidebars";
 import type { PluginOptions, LoadedContent, APIOptions } from "./types";
@@ -32,7 +32,10 @@ export default function pluginOpenAPI(
 
     try {
       const openapiFiles = await readOpenapiFiles(contentPath, {});
-      const [loadedApi, tags] = await processOpenapiFiles(openapiFiles);
+      const [loadedApi, tags] = await processOpenapiFiles(
+        openapiFiles,
+        sidebarOptions!
+      );
       if (!fs.existsSync(outputDir)) {
         try {
           fs.mkdirSync(outputDir, { recursive: true });
@@ -123,15 +126,39 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
 \`\`\`
       `;
 
+      const tagMdTemplate = template
+        ? fs.readFileSync(template).toString()
+        : `---
+id: {{{id}}}
+title: {{{description}}}
+description: {{{description}}}
+---
+
+{{{markdown}}}
+
+\`\`\`mdx-code-block
+import DocCardList from '@theme/DocCardList';
+import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
+
+<DocCardList items={useCurrentSidebarCategory().items}/>
+\`\`\`
+      `;
+
       loadedApi.map(async (item) => {
         const markdown =
-          item.type === "api" ? createApiPageMD(item) : createInfoPageMD(item);
+          item.type === "api"
+            ? createApiPageMD(item)
+            : item.type === "info"
+            ? createInfoPageMD(item)
+            : createTagPageMD(item);
         item.markdown = markdown;
         if (item.type === "api") {
           item.json = JSON.stringify(item.api);
         }
         const view = render(mdTemplate, item);
         const utils = render(infoMdTemplate, item);
+        // eslint-disable-next-line testing-library/render-result-naming-convention
+        const tagUtils = render(tagMdTemplate, item);
 
         if (item.type === "api") {
           if (!fs.existsSync(`${outputDir}/${item.id}.api.mdx`)) {
@@ -179,8 +206,31 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
             }
           }
         }
+
+        if (item.type === "tag") {
+          if (!fs.existsSync(`${outputDir}/${item.id}.tag.mdx`)) {
+            try {
+              fs.writeFileSync(
+                `${outputDir}/${item.id}.tag.mdx`,
+                tagUtils,
+                "utf8"
+              );
+              console.log(
+                chalk.green(
+                  `Successfully created "${outputDir}/${item.id}.tag.mdx"`
+                )
+              );
+            } catch (err) {
+              console.error(
+                chalk.red(`Failed to write "${outputDir}/${item.id}.tag.mdx"`),
+                chalk.yellow(err)
+              );
+            }
+          }
+        }
         return;
       });
+
       return;
     } catch (e) {
       console.error(chalk.red(`Loading of api failed for "${contentPath}"`));
@@ -191,7 +241,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
   async function cleanApiDocs(options: APIOptions) {
     const { outputDir } = options;
     const apiDir = path.join(siteDir, outputDir);
-    const apiMdxFiles = await Globby(["*.api.mdx", "*.info.mdx"], {
+    const apiMdxFiles = await Globby(["*.api.mdx", "*.info.mdx", "*.tag.mdx"], {
       cwd: path.resolve(apiDir),
     });
     const sidebarFile = await Globby(["sidebar.js"], {
