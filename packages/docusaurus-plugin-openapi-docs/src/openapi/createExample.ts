@@ -5,6 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import chalk from "chalk";
+
 import { SchemaObject } from "./types";
 
 interface OASTypeToTypeMap {
@@ -48,71 +50,78 @@ const primitives: Primitives = {
 };
 
 export const sampleFromSchema = (schema: SchemaObject = {}): any => {
-  let { type, example, allOf, properties, items } = schema;
+  try {
+    let { type, example, allOf, properties, items } = schema;
 
-  if (example !== undefined) {
-    return example;
-  }
+    if (example !== undefined) {
+      return example;
+    }
 
-  if (allOf) {
-    // TODO: We are just assuming it will always be an object for now
-    let obj: SchemaObject = {
-      type: "object",
-      properties: {},
-      required: [], // NOTE: We shouldn't need to worry about required
-    };
-    for (let item of allOf) {
-      if (item.properties) {
-        obj.properties = {
-          ...obj.properties,
-          ...item.properties,
-        };
+    if (allOf) {
+      // TODO: We are just assuming it will always be an object for now
+      let obj: SchemaObject = {
+        type: "object",
+        properties: {},
+        required: [], // NOTE: We shouldn't need to worry about required
+      };
+      for (let item of allOf) {
+        if (item.properties) {
+          obj.properties = {
+            ...obj.properties,
+            ...item.properties,
+          };
+        }
+      }
+      return sampleFromSchema(obj);
+    }
+
+    if (!type) {
+      if (properties) {
+        type = "object";
+      } else if (items) {
+        type = "array";
+      } else {
+        return;
       }
     }
-    return sampleFromSchema(obj);
-  }
 
-  if (!type) {
-    if (properties) {
-      type = "object";
-    } else if (items) {
-      type = "array";
-    } else {
-      return;
-    }
-  }
-
-  if (type === "object") {
-    let obj: any = {};
-    for (let [name, prop] of Object.entries(properties ?? {})) {
-      if (prop.deprecated) {
-        continue;
+    if (type === "object") {
+      let obj: any = {};
+      for (let [name, prop] of Object.entries(properties ?? {})) {
+        if (prop.deprecated) {
+          continue;
+        }
+        obj[name] = sampleFromSchema(prop);
       }
-      obj[name] = sampleFromSchema(prop);
+      return obj;
     }
-    return obj;
+
+    if (type === "array") {
+      if (Array.isArray(items?.anyOf)) {
+        return items?.anyOf.map((item) => sampleFromSchema(item));
+      }
+
+      if (Array.isArray(items?.oneOf)) {
+        return items?.oneOf.map((item) => sampleFromSchema(item));
+      }
+
+      return [sampleFromSchema(items)];
+    }
+
+    if (schema.enum) {
+      if (schema.default) {
+        return schema.default;
+      }
+      return normalizeArray(schema.enum)[0];
+    }
+
+    return primitive(schema);
+  } catch (err) {
+    console.error(
+      chalk.yellow("WARNING: failed to create example from schema object:", err)
+    );
+    return;
   }
-
-  if (type === "array") {
-    if (Array.isArray(items?.anyOf)) {
-      return items?.anyOf.map((item) => sampleFromSchema(item));
-    }
-
-    if (Array.isArray(items?.oneOf)) {
-      return items?.oneOf.map((item) => sampleFromSchema(item));
-    }
-
-    return [sampleFromSchema(items)];
-  }
-
-  if (schema.enum) {
-    if (schema.default) {
-      return schema.default;
-    }
-    return normalizeArray(schema.enum)[0];
-  }
-
-  return primitive(schema);
 };
 
 function primitive(schema: SchemaObject = {}) {
