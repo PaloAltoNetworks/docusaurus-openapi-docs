@@ -61,8 +61,6 @@ export function createInfoPageMD({
   ]);
 }
 
-export function createTagPageMD({
-  tag: { name, description },
-}: TagPageMetadata) {
-  return render([`# ${escape(name)}\n\n`, createDescription(description)]);
+export function createTagPageMD({ tag: { description } }: TagPageMetadata) {
+  return render([createDescription(description)]);
 }
