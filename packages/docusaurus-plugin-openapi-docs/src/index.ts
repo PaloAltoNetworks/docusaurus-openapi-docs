@@ -130,11 +130,11 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
         ? fs.readFileSync(template).toString()
         : `---
 id: {{{id}}}
-sidebar_label: {{{title}}}
-hide_title: true
+title: {{{description}}}
+description: {{{description}}}
 ---
 
-{{{description}}}
+{{{markdown}}}
 
 \`\`\`mdx-code-block
 import DocCardList from '@theme/DocCardList';
