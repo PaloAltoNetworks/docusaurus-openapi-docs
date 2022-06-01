@@ -17,7 +17,13 @@ import yaml from "js-yaml";
 import JsonRefs from "json-refs";
 import { kebabCase } from "lodash";
 
-import { ApiMetadata, ApiPageMetadata, InfoPageMetadata } from "../types";
+import {
+  ApiMetadata,
+  ApiPageMetadata,
+  InfoPageMetadata,
+  SidebarOptions,
+  TagPageMetadata,
+} from "../types";
 import { sampleFromSchema } from "./createExample";
 import { OpenApiObject, OpenApiObjectWithRef, TagObject } from "./types";
 
@@ -75,12 +81,37 @@ async function createPostmanCollection(
 
 type PartialPage<T> = Omit<T, "permalink" | "source" | "sourceDirName">;
 
-function createItems(openapiData: OpenApiObject): ApiMetadata[] {
+function createItems(
+  openapiData: OpenApiObject,
+  sidebarOptions: SidebarOptions
+): ApiMetadata[] {
   // TODO: Find a better way to handle this
   let items: PartialPage<ApiMetadata>[] = [];
 
-  // Only create an info page if we have a description.
+  if (sidebarOptions?.categoryLinkSource === "tag") {
+    // Only create an tag pages if categoryLinkSource set to tag.
+    const tags: TagObject[] = openapiData.tags ?? [];
+    // eslint-disable-next-line array-callback-return
+    tags.map((tag) => {
+      const tagId = kebabCase(tag.name);
+      const tagPage: PartialPage<TagPageMetadata> = {
+        type: "tag",
+        id: tagId,
+        unversionedId: tagId,
+        title: tag.description ?? "",
+        description: tag.description ?? "",
+        slug: "/" + tagId,
+        frontMatter: {},
+        tag: {
+          ...tag,
+        },
+      };
+      items.push(tagPage);
+    });
+  }
+
   if (openapiData.info.description) {
+    // Only create an info page if we have a description.
     const infoId = kebabCase(openapiData.info.title);
     const infoPage: PartialPage<InfoPageMetadata> = {
       type: "info",
@@ -186,7 +217,7 @@ function bindCollectionToApiItems(
       .replace(/:([a-z0-9-_]+)/gi, "{$1}"); // replace "/:variableName" with "/{variableName}"
 
     const apiItem = items.find((item) => {
-      if (item.type === "info") {
+      if (item.type === "info" || item.type === "tag") {
         return false;
       }
       return item.api.path === path && item.api.method === method;
@@ -248,10 +279,11 @@ export async function readOpenapiFiles(
 }
 
 export async function processOpenapiFiles(
-  files: OpenApiFiles[]
+  files: OpenApiFiles[],
+  sidebarOptions: SidebarOptions
 ): Promise<[ApiMetadata[], TagObject[]]> {
   const promises = files.map(async (file) => {
-    const processedFile = await processOpenapiFile(file.data);
+    const processedFile = await processOpenapiFile(file.data, sidebarOptions);
     const itemsObjectsArray = processedFile[0].map((item) => ({
       ...item,
     }));
@@ -271,11 +303,12 @@ export async function processOpenapiFiles(
 }
 
 export async function processOpenapiFile(
-  openapiDataWithRefs: OpenApiObjectWithRef
+  openapiDataWithRefs: OpenApiObjectWithRef,
+  sidebarOptions: SidebarOptions
 ): Promise<[ApiMetadata[], TagObject[]]> {
   const openapiData = await resolveRefs(openapiDataWithRefs);
   const postmanCollection = await createPostmanCollection(openapiData);
-  const items = createItems(openapiData);
+  const items = createItems(openapiData, sidebarOptions);
 
   bindCollectionToApiItems(items, postmanCollection);
 
