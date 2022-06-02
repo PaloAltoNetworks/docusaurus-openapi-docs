@@ -30,7 +30,9 @@ import type { ApiItem as ApiItemType } from "docusaurus-plugin-openapi-docs/lib/
 import { DocFrontMatter } from "../../types";
 import styles from "./styles.module.css";
 
-let ApiDemoPanel = (_: { item: any }) => <div style={{ marginTop: "3.5em" }} />;
+let ApiDemoPanel = (_: { item: any; infoPath: any }) => (
+  <div style={{ marginTop: "3.5em" }} />
+);
 if (ExecutionEnvironment.canUseDOM) {
   ApiDemoPanel = require("@theme/ApiDemoPanel").default;
 }
@@ -53,11 +55,12 @@ function DocItemContent(props: Props): JSX.Element {
   const { content: DocContent } = props;
   const { metadata, frontMatter } = DocContent;
   const {
+    info_path: infoPath,
     hide_title: hideTitle,
     hide_table_of_contents: hideTableOfContents,
     toc_min_heading_level: tocMinHeadingLevel,
     toc_max_heading_level: tocMaxHeadingLevel,
-  } = frontMatter;
+  } = frontMatter as DocFrontMatter;
   const { title } = metadata;
 
   const { api } = frontMatter as ApiFrontMatter;
@@ -122,7 +125,7 @@ function DocItemContent(props: Props): JSX.Element {
                   </div>
                   {api && (
                     <div className="col col--5">
-                      <ApiDemoPanel item={api} />
+                      <ApiDemoPanel item={api} infoPath={infoPath} />
                     </div>
                   )}
                 </div>

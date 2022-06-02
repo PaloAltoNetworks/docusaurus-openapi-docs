@@ -48,6 +48,8 @@ export interface ApiMetadataBase {
   //
   id: string; // TODO legacy versioned id => try to remove
   unversionedId: string; // TODO new unversioned id => try to rename to "id"
+  infoId?: string;
+  infoPath?: string;
   title: string;
   description: string;
   source: string; // @site aliased source => "@site/docs/folder/subFolder/subSubFolder/myDoc.md"
@@ -80,6 +82,9 @@ export interface InfoPageMetadata extends ApiMetadataBase {
   type: "info";
   info: ApiInfo;
   markdown?: string;
+  securitySchemes?: {
+    [key: string]: SecuritySchemeObject;
+  };
 }
 
 export interface TagPageMetadata extends ApiMetadataBase {
