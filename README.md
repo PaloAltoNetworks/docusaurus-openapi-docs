@@ -18,7 +18,7 @@ OpenAPI plugin for generating API reference docs in Docusaurus v2.
 
 <p align="center">
 
-<img width="650" alt="delete-a-pet" src="https://user-images.githubusercontent.com/9343811/165620346-d666db22-3587-4ddf-af58-947fddc9fe99.png">
+<img src="https://user-images.githubusercontent.com/9343811/171651288-0d4b5a64-4818-4862-b41d-29a5e30b3ab1.gif" width="750" />
 
 </p>
 
