@@ -120,6 +120,20 @@ export function createAuthentication(securitySchemes: SecuritySchemeObject) {
     }
   };
 
+  const formatTabLabel = (str: string) => {
+    const formattedLabel = str
+      .replace(/(_|-)/g, " ")
+      .trim()
+      .replace(/\w\S*/g, (str) => str.charAt(0).toUpperCase() + str.substr(1))
+      .replace(/([a-z])([A-Z])/g, "$1 $2")
+      .replace(/([A-Z])([A-Z][a-z])/g, "$1 $2");
+
+    const isOAuth = formattedLabel.toLowerCase().includes("oauth2");
+    const isApiKey = formattedLabel.toLowerCase().includes("api");
+
+    return isOAuth ? "OAuth 2.0" : isApiKey ? "API Key" : formattedLabel;
+  };
+
   return create("div", {
     children: [
       create("h2", {
@@ -131,7 +145,7 @@ export function createAuthentication(securitySchemes: SecuritySchemeObject) {
         children: Object.entries(securitySchemes).map(
           ([schemeType, schemeObj]) =>
             create("TabItem", {
-              label: `${schemeType}`,
+              label: formatTabLabel(schemeType),
               value: `${schemeType}`,
               children: [
                 createDescription(schemeObj.description),
