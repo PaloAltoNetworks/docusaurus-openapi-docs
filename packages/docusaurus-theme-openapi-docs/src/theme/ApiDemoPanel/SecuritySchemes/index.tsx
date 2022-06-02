@@ -6,12 +6,14 @@
  * ========================================================================== */
 
 import React from "react";
+import Link from "@docusaurus/Link";
 
 import { useTypedSelector } from "../hooks";
 
-function SecuritySchemes() {
+function SecuritySchemes(props: any) {
   const options = useTypedSelector((state) => state.auth.options);
   const selected = useTypedSelector((state) => state.auth.selected);
+  const infoAuthPath = `/${props.infoPath}#authentication`;
 
   if (selected === undefined) return null;
 
@@ -28,7 +30,9 @@ function SecuritySchemes() {
         if (isApiKey || isBearer) {
           return (
             <React.Fragment key={selected}>
-              <b>Authorization: {auth.key}</b>
+              <b>
+                Authorization: <Link to={infoAuthPath}>{auth.key}</Link>
+              </b>
               <pre
                 style={{
                   display: "flex",

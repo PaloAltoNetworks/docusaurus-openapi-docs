@@ -177,4 +177,6 @@ export type DocFrontMatter = {
   draft?: boolean;
   /** Allows overriding the last updated author and/or date. */
   last_update?: FileChange;
+  /** Provides OpenAPI Docs with a reference path to their respective Info Doc */
+  info_path?: string;
 };

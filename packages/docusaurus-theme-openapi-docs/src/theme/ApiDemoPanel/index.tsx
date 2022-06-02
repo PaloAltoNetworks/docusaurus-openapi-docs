@@ -27,7 +27,13 @@ import Server from "./Server";
 import { createStoreWithState } from "./store";
 import styles from "./styles.module.css";
 
-function ApiDemoPanel({ item }: { item: NonNullable<ApiItem> }) {
+function ApiDemoPanel({
+  item,
+  infoPath,
+}: {
+  item: NonNullable<ApiItem>;
+  infoPath: string;
+}) {
   const { siteConfig } = useDocusaurusContext();
   const themeConfig = siteConfig.themeConfig as ThemeConfig;
   const options = themeConfig.api;
@@ -89,9 +95,7 @@ function ApiDemoPanel({ item }: { item: NonNullable<ApiItem> }) {
     <Provider store={store2}>
       <div className={styles.apiDemoPanelContainer}>
         <MethodEndpoint method={method} path={path} />
-
-        <SecuritySchemes />
-
+        <SecuritySchemes infoPath={infoPath} />
         <div className={styles.optionsPanel}>
           <ParamOptions />
           <Body
@@ -100,14 +104,11 @@ function ApiDemoPanel({ item }: { item: NonNullable<ApiItem> }) {
           />
           <Accept />
         </div>
-
         <Server />
-
         <Curl
           postman={postman}
           codeSamples={(item as any)["x-code-samples"] ?? []}
         />
-
         <Response />
       </div>
     </Provider>

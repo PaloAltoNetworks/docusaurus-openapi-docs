@@ -103,6 +103,9 @@ api: {{{json}}}
 {{#api.method}}
 sidebar_class_name: "{{{api.method}}} api-method"
 {{/api.method}}
+{{#infoPath}}
+info_path: {{{infoPath}}}
+{{/infoPath}}
 ---
 
 {{{markdown}}}
@@ -154,7 +157,9 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
         item.markdown = markdown;
         if (item.type === "api") {
           item.json = JSON.stringify(item.api);
+          if (item.infoId) item.infoPath = `${outputDir}/${item.infoId}`;
         }
+
         const view = render(mdTemplate, item);
         const utils = render(infoMdTemplate, item);
         // eslint-disable-next-line testing-library/render-result-naming-convention

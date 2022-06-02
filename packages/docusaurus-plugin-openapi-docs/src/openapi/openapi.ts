@@ -87,6 +87,7 @@ function createItems(
 ): ApiMetadata[] {
   // TODO: Find a better way to handle this
   let items: PartialPage<ApiMetadata>[] = [];
+  const infoId = kebabCase(openapiData.info.title);
 
   if (sidebarOptions?.categoryLinkSource === "tag") {
     // Only create an tag pages if categoryLinkSource set to tag.
@@ -119,7 +120,6 @@ function createItems(
 
   if (openapiData.info.description) {
     // Only create an info page if we have a description.
-    const infoId = kebabCase(openapiData.info.title);
     const infoPage: PartialPage<InfoPageMetadata> = {
       type: "info",
       id: infoId,
@@ -184,6 +184,7 @@ function createItems(
       const apiPage: PartialPage<ApiPageMetadata> = {
         type: "api",
         id: baseId,
+        infoId: infoId ?? "",
         unversionedId: baseId,
         title: title,
         description: description ?? "",
