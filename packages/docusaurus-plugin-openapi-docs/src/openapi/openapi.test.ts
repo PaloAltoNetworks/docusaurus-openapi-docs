@@ -26,12 +26,6 @@ describe("openapi", () => {
       const yaml = results.find((x) => x.source.endsWith("openapi.yaml"));
       expect(yaml).toBeTruthy();
       expect(yaml?.sourceDirName).toBe(".");
-      const froyo = results.find((x) => x.source.endsWith("froyo.yaml"));
-      expect(froyo).toBeTruthy();
-      expect(froyo?.sourceDirName).toBe("yogurtstore");
-      const nested = results.find((x) => x.source.endsWith("nested.yaml"));
-      expect(nested).toBeTruthy();
-      expect(nested?.sourceDirName).toBe("yogurtstore/nested");
     });
   });
 });
