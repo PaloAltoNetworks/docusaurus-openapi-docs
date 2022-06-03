@@ -42,6 +42,7 @@
     "@docusaurus/utils-validation": "2.0.0-beta.21",
     "@paloaltonetworks/openapi-to-postmanv2": "3.1.0-hotfix.1",
     "@paloaltonetworks/postman-collection": "^4.1.0",
+    "@redocly/openapi-core": "^1.0.0-beta.100",
     "@types/js-yaml": "^4.0.5",
     "@types/mustache": "^4.1.2",
     "chalk": "^4.1.2",
@@ -52,6 +53,7 @@
     "json-schema-merge-allof": "^0.8.1",
     "lodash": "^4.17.20",
     "mustache": "^4.2.0",
+    "swagger2openapi": "^7.0.8",
     "webpack": "^5.61.0"
   },
   "peerDependencies": {

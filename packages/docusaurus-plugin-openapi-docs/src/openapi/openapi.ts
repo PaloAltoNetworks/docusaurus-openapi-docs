@@ -13,7 +13,6 @@ import sdk from "@paloaltonetworks/postman-collection";
 import Collection from "@paloaltonetworks/postman-collection";
 import chalk from "chalk";
 import fs from "fs-extra";
-import yaml from "js-yaml";
 import JsonRefs from "json-refs";
 import { kebabCase } from "lodash";
 
@@ -26,6 +25,7 @@ import {
 } from "../types";
 import { sampleFromSchema } from "./createExample";
 import { OpenApiObject, OpenApiObjectWithRef, TagObject } from "./types";
+import { loadAndBundleSpec } from "./utils/loadAndBundleSpec";
 
 /**
  * Finds any reference objects in the OpenAPI definition and resolves them to a finalized value.
@@ -260,14 +260,16 @@ export async function readOpenapiFiles(
     const allFiles = await Globby(["**/*.{json,yaml,yml}"], {
       cwd: openapiPath,
       ignore: GlobExcludeDefault,
+      deep: 1,
     });
     const sources = allFiles.filter((x) => !x.includes("_category_")); // todo: regex exclude?
     return Promise.all(
       sources.map(async (source) => {
         // TODO: make a function for this
         const fullPath = path.join(openapiPath, source);
-        const openapiString = await fs.readFile(fullPath, "utf-8");
-        const data = yaml.load(openapiString) as OpenApiObjectWithRef;
+        const data = (await loadAndBundleSpec(
+          fullPath
+        )) as OpenApiObjectWithRef;
         return {
           source: fullPath, // This will be aliased in process.
           sourceDirName: path.dirname(source),
@@ -276,8 +278,7 @@ export async function readOpenapiFiles(
       })
     );
   }
-  const openapiString = await fs.readFile(openapiPath, "utf-8");
-  const data = yaml.load(openapiString) as OpenApiObjectWithRef;
+  const data = (await loadAndBundleSpec(openapiPath)) as OpenApiObjectWithRef;
   return [
     {
       source: openapiPath, // This will be aliased in process.
