@@ -13,7 +13,6 @@ import sdk from "@paloaltonetworks/postman-collection";
 import Collection from "@paloaltonetworks/postman-collection";
 import chalk from "chalk";
 import fs from "fs-extra";
-import yaml from "js-yaml";
 import JsonRefs from "json-refs";
 import { kebabCase } from "lodash";
 
