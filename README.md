@@ -203,7 +203,7 @@ yarn docusaurus clean-api-docs burgers
 Run the following to bootstrap a Docsaurus v2 site (classic theme) with `docusaurus-openapi-docs`:
 
 ```bash
-npx create-docusaurus@2.0.0-beta.18 my-website "Git repository" --package-manager yarn
+npx create-docusaurus@2.0.0-beta.21 my-website "Git repository" --package-manager yarn
 ```
 
 Template Repository URL:
