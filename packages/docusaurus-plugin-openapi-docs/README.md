@@ -103,7 +103,7 @@ Here is an example of properly configuring your `docusaurus.config.js` file for 
 
 | Name             | Type     | Default | Description                                                                                                          |
 | ---------------- | -------- | ------- | -------------------------------------------------------------------------------------------------------------------- |
-| `specPath`       | `string` | `null`  | Designated path to the source of an OpenAPI specification file or directory of multiple OpenAPI specification files. |
+| `specPath`       | `string` | `null`  | Designated URL or path to the source of an OpenAPI specification file or directory of multiple OpenAPI specification files. |
 | `ouputDir`       | `string` | `null`  | Desired output path for generated MDX files.                                                                         |
 | `template`       | `string` | `null`  | _Optional:_ Customize MDX content with a desired template.                                                           |
 | `sidebarOptions` | `object` | `null`  | _Optional:_ Set of options for sidebar configuration. See below for a list of supported options.                     |
