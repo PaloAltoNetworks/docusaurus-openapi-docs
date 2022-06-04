@@ -1,3 +1,21 @@
+## 1.0.3 (Jun 3, 2022)
+
+High level enhancements
+
+- Upgrade to Docusaurus 2.0.0-beta.21 ([#116](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/116))
+- Add support for URL specPath ([#120](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/120))
+- [Enhancement] Implement new OpenAPI parser ([#118](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/118))
+- [Experimental] Info Docs: Added Authentication section with support for Security Schemes ([#110](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/110))
+- [Enhancement] Use docs with embedded links as category link ([#114](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/114))
+
+Other enhancements and bug fixes
+
+- Update README.md
+- Add try/catch to createExample ([#115](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/115))
+- [Bug] Reinstate support for untagged paths ([#107](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/107))
+- [Polish] Add support for head method and badge ([#105](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/105))
+- [Polish] Update demo ([#104](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/104))
+
 ## 1.0.2 (May 23, 2022)
 
 High level enhancements
