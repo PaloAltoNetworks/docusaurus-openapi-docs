@@ -16,6 +16,7 @@ import fs from "fs-extra";
 import JsonRefs from "json-refs";
 import { kebabCase } from "lodash";
 
+import { isURL } from "../index";
 import {
   ApiMetadata,
   ApiPageMetadata,
@@ -248,35 +249,37 @@ export async function readOpenapiFiles(
   openapiPath: string,
   _options: {}
 ): Promise<OpenApiFiles[]> {
-  const stat = await fs.lstat(openapiPath);
-  if (stat.isDirectory()) {
-    console.warn(
-      chalk.yellow(
-        "WARNING: Loading a directory of OpenAPI definitions is experimental and subject to unannounced breaking changes."
-      )
-    );
+  if (!isURL(openapiPath)) {
+    const stat = await fs.lstat(openapiPath);
+    if (stat.isDirectory()) {
+      console.warn(
+        chalk.yellow(
+          "WARNING: Loading a directory of OpenAPI definitions is experimental and subject to unannounced breaking changes."
+        )
+      );
 
-    // TODO: Add config for inlcude/ignore
-    const allFiles = await Globby(["**/*.{json,yaml,yml}"], {
-      cwd: openapiPath,
-      ignore: GlobExcludeDefault,
-      deep: 1,
-    });
-    const sources = allFiles.filter((x) => !x.includes("_category_")); // todo: regex exclude?
-    return Promise.all(
-      sources.map(async (source) => {
-        // TODO: make a function for this
-        const fullPath = path.join(openapiPath, source);
-        const data = (await loadAndBundleSpec(
-          fullPath
-        )) as OpenApiObjectWithRef;
-        return {
-          source: fullPath, // This will be aliased in process.
-          sourceDirName: path.dirname(source),
-          data,
-        };
-      })
-    );
+      // TODO: Add config for inlcude/ignore
+      const allFiles = await Globby(["**/*.{json,yaml,yml}"], {
+        cwd: openapiPath,
+        ignore: GlobExcludeDefault,
+        deep: 1,
+      });
+      const sources = allFiles.filter((x) => !x.includes("_category_")); // todo: regex exclude?
+      return Promise.all(
+        sources.map(async (source) => {
+          // TODO: make a function for this
+          const fullPath = path.join(openapiPath, source);
+          const data = (await loadAndBundleSpec(
+            fullPath
+          )) as OpenApiObjectWithRef;
+          return {
+            source: fullPath, // This will be aliased in process.
+            sourceDirName: path.dirname(source),
+            data,
+          };
+        })
+      );
+    }
   }
   const data = (await loadAndBundleSpec(openapiPath)) as OpenApiObjectWithRef;
   return [

@@ -18,6 +18,10 @@ import { readOpenapiFiles, processOpenapiFiles } from "./openapi";
 import generateSidebarSlice from "./sidebars";
 import type { PluginOptions, LoadedContent, APIOptions } from "./types";
 
+export function isURL(str: string): boolean {
+  return /^(https?:)\/\//m.test(str);
+}
+
 export default function pluginOpenAPI(
   context: LoadContext,
   options: PluginOptions
@@ -28,7 +32,9 @@ export default function pluginOpenAPI(
   async function generateApiDocs(options: APIOptions) {
     let { specPath, outputDir, template, sidebarOptions } = options;
 
-    const contentPath = path.resolve(siteDir, specPath);
+    const contentPath = isURL(specPath)
+      ? specPath
+      : path.resolve(siteDir, specPath);
 
     try {
       const openapiFiles = await readOpenapiFiles(contentPath, {});
