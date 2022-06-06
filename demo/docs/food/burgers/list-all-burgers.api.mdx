@@ -3,41 +3,19 @@ id: list-all-burgers
 sidebar_label: List All Burgers
 hide_title: true
 hide_table_of_contents: true
-api:
-  {
-    "description": "Burgers",
-    "responses": { "200": { "description": "OK" } },
-    "method": "get",
-    "path": "/flavors",
-    "info":
-      {
-        "title": "Burger Example",
-        "version": "1.0.0",
-        "description": "Sample description.",
-      },
-    "postman":
-      {
-        "name": "List All Burgers",
-        "description": { "content": "Burgers", "type": "text/plain" },
-        "url":
-          {
-            "path": ["flavors"],
-            "host": ["{{baseUrl}}"],
-            "query": [],
-            "variable": [],
-          },
-        "method": "GET",
-      },
-  }
+api: {"description":"Burgers","responses":{"200":{"description":"OK"}},"method":"get","path":"/flavors","info":{"title":"Burger Example","version":"1.0.0","description":"Sample description."},"postman":{"name":"List All Burgers","description":{"content":"Burgers","type":"text/plain"},"url":{"path":["flavors"],"host":["{{baseUrl}}"],"query":[],"variable":[]},"method":"GET"}}
 sidebar_class_name: "get api-method"
+info_path: docs/food/burgers/burger-example
 ---
 
 import ParamsItem from "@theme/ParamsItem";
-import SchemaItem from "@theme/SchemaItem";
+import SchemaItem from "@theme/SchemaItem"
 import ApiTabs from "@theme/ApiTabs";
 import TabItem from "@theme/TabItem";
 
 ## List All Burgers
+
+
 
 Burgers
 
@@ -46,4 +24,4 @@ Burgers
 OK
 
 </div><div></div></TabItem></ApiTabs></div>
-
+      
