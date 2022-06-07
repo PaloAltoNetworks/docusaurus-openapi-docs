@@ -101,6 +101,7 @@ export interface ApiNavLink {
 }
 
 export interface SidebarOptions {
+  contentDocsPath?: string;
   groupPathsBy?: string;
   categoryLinkSource?: string;
   customProps?: { [key: string]: unknown };
