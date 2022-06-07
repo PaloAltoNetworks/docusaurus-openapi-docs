@@ -25,6 +25,8 @@ export function createParamsDetails({ parameters, type }: Props) {
   }
 
   return createDetails({
+    "data-collapsed": false,
+    open: true,
     style: { marginBottom: "1rem" },
     children: [
       createDetailsSummary({

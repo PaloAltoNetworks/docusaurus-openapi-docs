@@ -269,6 +269,8 @@ export function createSchemaDetails({ title, body, ...rest }: Props) {
   }
 
   return createDetails({
+    "data-collapsed": false,
+    open: true,
     ...rest,
     children: [
       createDetailsSummary({
