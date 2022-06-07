@@ -7,14 +7,26 @@
 
 import { Joi } from "@docusaurus/utils-validation";
 
-import type { PluginOptions } from "./types";
-
-export const DEFAULT_OPTIONS: PluginOptions = {
-  id: "default",
-  config: {},
-};
+const sidebarOptions = Joi.object({
+  contentDocsPath: Joi.string(),
+  groupPathsBy: Joi.string().valid("tag"),
+  categoryLinkSource: Joi.string().valid("tag", "info"),
+  customProps: Joi.object(),
+  sidebarCollapsible: Joi.boolean(),
+  sidebarCollapsed: Joi.boolean(),
+}).with("groupPathsBy", "contentDocsPath");
 
 export const OptionsSchema = Joi.object({
-  id: Joi.string().default(DEFAULT_OPTIONS.id),
-  config: Joi.object().default(DEFAULT_OPTIONS.config),
+  id: Joi.string().required(),
+  config: Joi.object()
+    .pattern(
+      /^/,
+      Joi.object({
+        specPath: Joi.string().required(),
+        outputDir: Joi.string().required(),
+        template: Joi.string(),
+        sidebarOptions: sidebarOptions,
+      })
+    )
+    .required(),
 });

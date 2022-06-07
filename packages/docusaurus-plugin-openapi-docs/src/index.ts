@@ -15,6 +15,7 @@ import { render } from "mustache";
 
 import { createApiPageMD, createInfoPageMD, createTagPageMD } from "./markdown";
 import { readOpenapiFiles, processOpenapiFiles } from "./openapi";
+import { OptionsSchema } from "./options";
 import generateSidebarSlice from "./sidebars";
 import type { PluginOptions, LoadedContent, APIOptions } from "./types";
 
@@ -22,7 +23,7 @@ export function isURL(str: string): boolean {
   return /^(https?:)\/\//m.test(str);
 }
 
-export default function pluginOpenAPI(
+export default function pluginOpenAPIDocs(
   context: LoadContext,
   options: PluginOptions
 ): Plugin<LoadedContent> {
@@ -57,7 +58,7 @@ export default function pluginOpenAPI(
       // TODO: figure out better way to set default
       if (Object.keys(sidebarOptions ?? {}).length > 0) {
         const sidebarSlice = generateSidebarSlice(
-          sidebarOptions!, // TODO: find a better way to handle null
+          sidebarOptions!,
           options,
           loadedApi,
           tags
@@ -288,7 +289,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
   }
 
   return {
-    name: `docusaurus-plugin-openapi`,
+    name: `docusaurus-plugin-openapi-docs`,
 
     extendCli(cli): void {
       cli
@@ -339,3 +340,8 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
     },
   };
 }
+
+pluginOpenAPIDocs.validateOptions = ({ options, validate }: any) => {
+  const validatedOptions = validate(OptionsSchema, options);
+  return validatedOptions;
+};
