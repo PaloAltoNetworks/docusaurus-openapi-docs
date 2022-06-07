@@ -5,6 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import { GlobalPluginData } from "@docusaurus/plugin-content-docs/client";
 import {
   ProcessedSidebar,
   SidebarItemCategory,
@@ -43,6 +44,7 @@ function groupByTags(
     sidebarCollapsible,
     customProps,
     categoryLinkSource,
+    contentDocsPath,
   } = sidebarOptions;
 
   const apiItems = items.filter(isApiItem);
@@ -63,10 +65,9 @@ function groupByTags(
       .filter((item): item is string => !!item)
   );
 
-  // TODO: optimize this or make it a function
-  const basePath = outputDir
-    .slice(outputDir.indexOf("/", 1))
-    .replace(/^\/+/g, "");
+  const basePath = contentDocsPath
+    ? outputDir.split(contentDocsPath!)[1].replace(/^\/+/g, "")
+    : outputDir.slice(outputDir.indexOf("/", 1)).replace(/^\/+/g, "");
 
   function createDocItem(item: ApiPageMetadata): SidebarItemDoc {
     const sidebar_label = item.frontMatter.sidebar_label;
@@ -74,7 +75,8 @@ function groupByTags(
     const id = item.id;
     return {
       type: "doc" as const,
-      id: `${basePath}/${item.id}`,
+      id:
+        basePath === "" || undefined ? `${item.id}` : `${basePath}/${item.id}`,
       label: (sidebar_label as string) ?? title ?? id,
       customProps: customProps,
       className: clsx(
