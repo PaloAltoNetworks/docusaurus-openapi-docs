@@ -139,6 +139,7 @@ const config = {
             sidebarOptions: {
               groupPathsBy: "tag",
               categoryLinkSource: "tag",
+              contentDocsPath: "docs",
             },
           },
           cos: {
@@ -146,6 +147,7 @@ const config = {
             outputDir: "docs/cos",
             sidebarOptions: {
               groupPathsBy: "tag",
+              contentDocsPath: "docs",
             },
           },
           burgers: {
