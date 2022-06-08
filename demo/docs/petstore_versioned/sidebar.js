@@ -1,0 +1,150 @@
+module.exports = [
+  { type: "doc", id: "petstore_versioned/swagger-petstore-yaml" },
+  {
+    type: "category",
+    label: "Pets",
+    link: { type: "doc", id: "petstore_versioned/pet" },
+    items: [
+      {
+        type: "doc",
+        id: "petstore_versioned/add-a-new-pet-to-the-store",
+        label: "Add a new pet to the store",
+        className: "api-method post",
+      },
+      {
+        type: "doc",
+        id: "petstore_versioned/update-an-existing-pet",
+        label: "Update an existing pet",
+        className: "api-method put",
+      },
+      {
+        type: "doc",
+        id: "petstore_versioned/find-pet-by-id",
+        label: "Find pet by ID",
+        className: "api-method get",
+      },
+      {
+        type: "doc",
+        id: "petstore_versioned/updates-a-pet-in-the-store-with-form-data",
+        label: "Updates a pet in the store with form data",
+        className: "api-method post",
+      },
+      {
+        type: "doc",
+        id: "petstore_versioned/deletes-a-pet",
+        label: "Deletes a pet",
+        className: "api-method delete",
+      },
+      {
+        type: "doc",
+        id: "petstore_versioned/uploads-an-image",
+        label: "uploads an image",
+        className: "api-method post",
+      },
+      {
+        type: "doc",
+        id: "petstore_versioned/finds-pets-by-status",
+        label: "Finds Pets by status",
+        className: "api-method get",
+      },
+      {
+        type: "doc",
+        id: "petstore_versioned/finds-pets-by-tags",
+        label: "Finds Pets by tags",
+        className: "menu__list-item--deprecated api-method get",
+      },
+    ],
+  },
+  {
+    type: "category",
+    label: "Petstore Orders",
+    link: { type: "doc", id: "petstore_versioned/store" },
+    items: [
+      {
+        type: "doc",
+        id: "petstore_versioned/returns-pet-inventories-by-status",
+        label: "Returns pet inventories by status",
+        className: "api-method get",
+      },
+      {
+        type: "doc",
+        id: "petstore_versioned/place-an-order-for-a-pet",
+        label: "Place an order for a pet",
+        className: "api-method post",
+      },
+      {
+        type: "doc",
+        id: "petstore_versioned/find-purchase-order-by-id",
+        label: "Find purchase order by ID",
+        className: "api-method get",
+      },
+      {
+        type: "doc",
+        id: "petstore_versioned/delete-purchase-order-by-id",
+        label: "Delete purchase order by ID",
+        className: "api-method delete",
+      },
+      {
+        type: "doc",
+        id: "petstore_versioned/subscribe-to-the-store-events",
+        label: "Subscribe to the Store events",
+        className: "api-method post",
+      },
+    ],
+  },
+  {
+    type: "category",
+    label: "Users",
+    link: { type: "doc", id: "petstore_versioned/user" },
+    items: [
+      {
+        type: "doc",
+        id: "petstore_versioned/create-user",
+        label: "Create user",
+        className: "api-method post",
+      },
+      {
+        type: "doc",
+        id: "petstore_versioned/get-user-by-user-name",
+        label: "Get user by user name",
+        className: "api-method get",
+      },
+      {
+        type: "doc",
+        id: "petstore_versioned/updated-user",
+        label: "Updated user",
+        className: "api-method put",
+      },
+      {
+        type: "doc",
+        id: "petstore_versioned/delete-user",
+        label: "Delete user",
+        className: "api-method delete",
+      },
+      {
+        type: "doc",
+        id: "petstore_versioned/creates-list-of-users-with-given-input-array",
+        label: "Creates list of users with given input array",
+        className: "api-method post",
+      },
+      {
+        type: "doc",
+        id: "petstore_versioned/creates-list-of-users-with-given-input-list",
+        label: "Creates list of users with given input list",
+        className: "api-method post",
+      },
+      {
+        type: "doc",
+        id: "petstore_versioned/logs-user-into-the-system",
+        label: "Logs user into the system",
+        className: "api-method get",
+      },
+      {
+        type: "doc",
+        id: "petstore_versioned/logs-out-current-logged-in-user-session",
+        label: "Logs out current logged in user session",
+        className: "api-method get",
+      },
+    ],
+  },
+];
