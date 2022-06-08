@@ -26,6 +26,27 @@ export const OptionsSchema = Joi.object({
         outputDir: Joi.string().required(),
         template: Joi.string(),
         sidebarOptions: sidebarOptions,
+        version: Joi.string().when("versions", {
+          is: Joi.exist(),
+          then: Joi.required(),
+        }),
+        label: Joi.string().when("versions", {
+          is: Joi.exist(),
+          then: Joi.required(),
+        }),
+        baseUrl: Joi.string().when("versions", {
+          is: Joi.exist(),
+          then: Joi.required(),
+        }),
+        versions: Joi.object().pattern(
+          /^/,
+          Joi.object({
+            specPath: Joi.string().required(),
+            outputDir: Joi.string().required(),
+            label: Joi.string().required(),
+            baseUrl: Joi.string().required(),
+          })
+        ),
       })
     )
     .required(),
