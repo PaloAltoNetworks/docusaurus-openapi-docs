@@ -65,9 +65,19 @@ const config = {
           },
           { to: "/blog", label: "Blog", position: "left" },
           {
+            type: "dropdown",
             label: "API Reference",
             position: "left",
-            to: "/docs/category/petstore-api",
+            items: [
+              {
+                label: "Example APIs",
+                to: "/docs/category/petstore-api",
+              },
+              {
+                label: "Petstore (versioned)",
+                to: "/docs/category/petstore-versioned-api",
+              },
+            ],
           },
           {
             href: "https://github.com/PaloAltoNetworks/docusaurus-openapi-docs",
@@ -133,6 +143,32 @@ const config = {
       {
         id: "openapi",
         config: {
+          petstore_versioned: {
+            specPath: "examples/petstore.yaml",
+            outputDir: "docs/petstore_versioned", // No trailing slash
+            sidebarOptions: {
+              groupPathsBy: "tag",
+              categoryLinkSource: "tag",
+              contentDocsPath: "docs",
+            },
+            version: "2.0.0", // Current version
+            label: "Current", // Current version label
+            baseUrl: "/docs/petstore_versioned/swagger-petstore-yaml", // Leading slash is important
+            versions: {
+              "1.0.0": {
+                specPath: "examples/petstore-1.0.0.yaml",
+                outputDir: "docs/petstore_versioned/1.0.0", // No trailing slash
+                label: "Deprecated",
+                baseUrl: "/docs/petstore_versioned/1.0.0/swagger-petstore-yaml", // Leading slash is important
+              },
+              beta: {
+                specPath: "examples/petstore-beta.yaml",
+                outputDir: "docs/petstore_versioned/beta", // No trailing slash
+                label: "Beta",
+                baseUrl: "/docs/petstore_versioned/beta/swagger-petstore-yaml", // Leading slash is important
+              },
+            },
+          },
           petstore: {
             specPath: "examples/petstore.yaml",
             outputDir: "docs/petstore",
