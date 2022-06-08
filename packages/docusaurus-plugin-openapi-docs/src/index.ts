@@ -255,9 +255,11 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
     const apiDir = path.join(siteDir, outputDir);
     const apiMdxFiles = await Globby(["*.api.mdx", "*.info.mdx", "*.tag.mdx"], {
       cwd: path.resolve(apiDir),
+      deep: 1,
     });
     const sidebarFile = await Globby(["sidebar.js"], {
       cwd: path.resolve(apiDir),
+      deep: 1,
     });
     apiMdxFiles.map((mdx) =>
       fs.unlink(`${apiDir}/${mdx}`, (err) => {
@@ -288,21 +290,66 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
     );
   }
 
+  async function generateVersions(versions: object, outputDir: string) {
+    let versionsArray = [] as object[];
+    for (const [version, metadata] of Object.entries(versions)) {
+      versionsArray.push({
+        version: version,
+        label: metadata.label,
+        baseUrl: metadata.baseUrl,
+      });
+    }
+
+    const versionsJson = JSON.stringify(versionsArray, null, 2);
+    try {
+      fs.writeFileSync(`${outputDir}/versions.json`, versionsJson, "utf8");
+      console.log(
+        chalk.green(`Successfully created "${outputDir}/versions.json"`)
+      );
+    } catch (err) {
+      console.error(
+        chalk.red(`Failed to write "${outputDir}/versions.json"`),
+        chalk.yellow(err)
+      );
+    }
+  }
+
+  async function cleanVersions(outputDir: string) {
+    if (fs.existsSync(`${outputDir}/versions.json`)) {
+      fs.unlink(`${outputDir}/versions.json`, (err) => {
+        if (err) {
+          console.error(
+            chalk.red(`Cleanup failed for "${outputDir}/versions.json"`),
+            chalk.yellow(err)
+          );
+        } else {
+          console.log(
+            chalk.green(`Cleanup succeeded for "${outputDir}/versions.json"`)
+          );
+        }
+      });
+    }
+  }
+
   return {
     name: `docusaurus-plugin-openapi-docs`,
 
     extendCli(cli): void {
       cli
         .command(`gen-api-docs`)
-        .description(`Generates API Docs mdx and sidebars.`)
-        .usage(
-          "[options] <id key value in plugin config within docusaurus.config.js>"
+        .description(
+          `Generates OpenAPI docs in MDX file format and sidebar.js (if enabled).`
         )
+        .usage("<id>")
         .arguments("<id>")
         .action(async (id) => {
           if (id === "all") {
             if (config[id]) {
-              console.error(chalk.red("Can't use id 'all' for API Doc."));
+              console.error(
+                chalk.red(
+                  "Can't use id 'all' for OpenAPI docs configuration key."
+                )
+              );
             } else {
               Object.keys(config).forEach(async function (key) {
                 await generateApiDocs(config[key]);
@@ -310,7 +357,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
             }
           } else if (!config[id]) {
             console.error(
-              chalk.red(`ID ${id} does not exist in openapi-plugin config`)
+              chalk.red(`ID '${id}' does not exist in OpenAPI docs config.`)
             );
           } else {
             await generateApiDocs(config[id]);
@@ -318,16 +365,83 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
         });
 
       cli
-        .command(`clean-api-docs`)
-        .description(`Clears the Generated API Docs mdx and sidebars.`)
-        .usage(
-          "[options] <id key value in plugin config within docusaurus.config.js>"
+        .command(`gen-api-docs:version`)
+        .description(
+          `Generates versioned OpenAPI docs in MDX file format, versions.js and sidebar.js (if enabled).`
         )
+        .usage("<id:version>")
+        .arguments("<id:version>")
+        .action(async (id) => {
+          const [parentId, versionId] = id.split(":");
+          const parentConfig = Object.assign({}, config[parentId]);
+
+          const version = parentConfig.version as string;
+          const label = parentConfig.label as string;
+          const baseUrl = parentConfig.baseUrl as string;
+
+          let parentVersion = {} as any;
+          parentVersion[version] = { label: label, baseUrl: baseUrl };
+
+          const { versions } = config[parentId] as any;
+          const mergedVersions = Object.assign(parentVersion, versions);
+
+          // Prepare for merge
+          delete parentConfig.versions;
+          delete parentConfig.version;
+          delete parentConfig.label;
+          delete parentConfig.baseUrl;
+
+          // TODO: handle when no versions are defined by version command is passed
+          if (versionId === "all") {
+            if (versions[id]) {
+              console.error(
+                chalk.red(
+                  "Can't use id 'all' for OpenAPI docs versions configuration key."
+                )
+              );
+            } else {
+              await generateVersions(mergedVersions, parentConfig.outputDir);
+              Object.keys(versions).forEach(async (key) => {
+                const versionConfig = versions[key];
+                const mergedConfig = {
+                  ...parentConfig,
+                  ...versionConfig,
+                };
+                await generateApiDocs(mergedConfig);
+              });
+            }
+          } else if (!versions[versionId]) {
+            console.error(
+              chalk.red(
+                `Version ID '${versionId}' does not exist in OpenAPI docs versions config.`
+              )
+            );
+          } else {
+            const versionConfig = versions[versionId];
+            const mergedConfig = {
+              ...parentConfig,
+              ...versionConfig,
+            };
+            await generateVersions(mergedVersions, parentConfig.outputDir);
+            await generateApiDocs(mergedConfig);
+          }
+        });
+
+      cli
+        .command(`clean-api-docs`)
+        .description(
+          `Clears the generated OpenAPI docs MDX files and sidebar.js (if enabled).`
+        )
+        .usage("<id>")
         .arguments("<id>")
         .action(async (id) => {
           if (id === "all") {
             if (config[id]) {
-              console.error(chalk.red("Can't use id 'all' for API Doc."));
+              console.error(
+                chalk.red(
+                  "Can't use id 'all' for OpenAPI docs configuration key."
+                )
+              );
             } else {
               Object.keys(config).forEach(async function (key) {
                 await cleanApiDocs(config[key]);
@@ -335,6 +449,46 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
             }
           } else {
             await cleanApiDocs(config[id]);
+          }
+        });
+
+      cli
+        .command(`clean-api-docs:version`)
+        .description(
+          `Clears the versioned, generated OpenAPI docs MDX files, versions.json and sidebar.js (if enabled).`
+        )
+        .usage("<id:version>")
+        .arguments("<id:version>")
+        .action(async (id) => {
+          const [parentId, versionId] = id.split(":");
+          const { versions } = config[parentId] as any;
+
+          const parentConfig = Object.assign({}, config[parentId]);
+          delete parentConfig.versions;
+
+          if (versionId === "all") {
+            if (versions[id]) {
+              chalk.red(
+                "Can't use id 'all' for OpenAPI docs versions configuration key."
+              );
+            } else {
+              await cleanVersions(parentConfig.outputDir);
+              Object.keys(versions).forEach(async (key) => {
+                const versionConfig = versions[key];
+                const mergedConfig = {
+                  ...parentConfig,
+                  ...versionConfig,
+                };
+                await cleanApiDocs(mergedConfig);
+              });
+            }
+          } else {
+            const versionConfig = versions[versionId];
+            const mergedConfig = {
+              ...parentConfig,
+              ...versionConfig,
+            };
+            await cleanApiDocs(mergedConfig);
           }
         });
     },
