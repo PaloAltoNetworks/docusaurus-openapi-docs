@@ -59,7 +59,7 @@ export function createInfoPageMD({
 }: InfoPageMetadata) {
   return render([
     `import Tabs from "@theme/Tabs";\n`,
-    `import TabItem from "@theme/TabItem";\n`,
+    `import TabItem from "@theme/TabItem";\n\n`,
     createVersionBadge(version),
     `# ${escape(title)}\n\n`,
     createDescription(description),
