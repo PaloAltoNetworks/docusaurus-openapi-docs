@@ -124,6 +124,9 @@ You may optionally configure a dedicated `@docusaurus/plugin-content-docs` insta
 | ---------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------- |
 | `specPath`       | `string` | `null`  | Designated URL or path to the source of an OpenAPI specification file or directory of multiple OpenAPI specification files. |
 | `ouputDir`       | `string` | `null`  | Desired output path for generated MDX files.                                                                                |
+| `contentDocsPath`| `string` | `null`  | Should be equal to the `path` value set in `plugin-content-docs` or preset.                                                 |
+| `ouputDir`       | `string` | `null`  | Desired output path for generated MDX files.                                                                                |
+| `routeBasePath`  | `string` | `null`  | _Optional:_ Should be equal to the `routeBasePath` value set in `plugin-content-docs or preset (if present).                |
 | `template`       | `string` | `null`  | _Optional:_ Customize MDX content with a desired template.                                                                  |
 | `sidebarOptions` | `object` | `null`  | _Optional:_ Set of options for sidebar configuration. See below for a list of supported options.                            |
 | `version`        | `string` | `null`  | _Optional:_ Version assigned to single or micro-spec API specified in `specPath`.                                           |

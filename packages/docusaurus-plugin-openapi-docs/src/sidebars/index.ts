@@ -43,8 +43,9 @@ function groupByTags(
     sidebarCollapsible,
     customProps,
     categoryLinkSource,
-    contentDocsPath,
   } = sidebarOptions;
+
+  const { contentDocsPath } = options;
 
   const apiItems = items.filter(isApiItem);
   const infoItems = items.filter(isInfoItem);

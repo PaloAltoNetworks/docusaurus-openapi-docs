@@ -30,6 +30,8 @@ export interface PluginOptions {
 export interface APIOptions {
   specPath: string;
   outputDir: string;
+  contentDocsPath: string;
+  routeBasePath?: string;
   template?: string;
   sidebarOptions?: SidebarOptions;
   version?: string;
@@ -38,6 +40,14 @@ export interface APIOptions {
   versions?: {
     [key: string]: APIVersionOptions;
   };
+}
+
+export interface SidebarOptions {
+  groupPathsBy?: string;
+  categoryLinkSource?: string;
+  customProps?: { [key: string]: unknown };
+  sidebarCollapsible?: boolean;
+  sidebarCollapsed?: boolean;
 }
 
 export interface APIVersionOptions {
@@ -111,13 +121,4 @@ export type ApiInfo = InfoObject;
 export interface ApiNavLink {
   title: string;
   permalink: string;
-}
-
-export interface SidebarOptions {
-  contentDocsPath?: string;
-  groupPathsBy?: string;
-  categoryLinkSource?: string;
-  customProps?: { [key: string]: unknown };
-  sidebarCollapsible?: boolean;
-  sidebarCollapsed?: boolean;
 }
