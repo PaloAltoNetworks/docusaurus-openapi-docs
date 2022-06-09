@@ -9,8 +9,10 @@
  Create as many sidebars as you want.
  */
 const petstoreVersions = require("./docs/petstore_versioned/versions.json");
-const versionSelector =
-  require("docusaurus-plugin-openapi-docs/lib/sidebars/utils").default;
+const {
+  versionSelector,
+  versionCrumb,
+} = require("docusaurus-plugin-openapi-docs/lib/sidebars/utils");
 
 const sidebars = {
   tutorialSidebar: [
@@ -87,6 +89,11 @@ const sidebars = {
       className: "version-button",
     },
     {
+      type: "html",
+      defaultStyle: true,
+      value: versionCrumb(`v2.0.0`),
+    },
+    {
       type: "category",
       label: "Petstore",
       link: {
@@ -106,6 +113,11 @@ const sidebars = {
       defaultStyle: true,
       value: versionSelector(petstoreVersions),
       className: "version-button",
+    },
+    {
+      type: "html",
+      defaultStyle: true,
+      value: versionCrumb(`v1.0.0`),
     },
     {
       type: "category",
