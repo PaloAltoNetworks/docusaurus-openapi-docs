@@ -8,6 +8,6 @@
 describe("test", () => {
   it("loads Petstore index page", () => {
     cy.viewport("macbook-15");
-    cy.visit("/docs/petstore/swagger-petstore-yaml");
+    cy.visit("/petstore/swagger-petstore-yaml");
   });
 });
