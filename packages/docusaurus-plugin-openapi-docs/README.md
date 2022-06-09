@@ -249,9 +249,10 @@ https://github.com/PaloAltoNetworks/docusaurus-template-openapi-docs.git
 
 > When asked how the template repo should be cloned choose "copy" (unless you know better).
 
-````bash
+```bash
 cd my-website
 yarn
+```
 
 ## Developer Quick Start
 
@@ -265,7 +266,7 @@ cd docusaurus-openapi-docs
 yarn
 yarn build-packages
 yarn watch:demo
-````
+```
 
 ## Support
 
