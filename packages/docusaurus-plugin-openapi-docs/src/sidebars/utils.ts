@@ -9,7 +9,7 @@ import { render } from "mustache";
 
 export default function generateDropdownHtml(versions: object[]) {
   const template = `<div class="dropdown dropdown--hoverable dropdown--right">
-  <button class="button button--block button--sm button--secondary">Select API Version</button>
+  <button class="button button--block button--sm button--secondary"><span>Select API Version</span></button>
   <ul class="dropdown__menu">
     {{#.}}<li><a class="dropdown__link" href="{{{baseUrl}}}">{{{label}}}</a></li>{{/.}}
   </ul>
