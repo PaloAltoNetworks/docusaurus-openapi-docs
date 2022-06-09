@@ -11,6 +11,10 @@
   margin-top: 0;
 }
 
+:global(.version-button div) {
+  display: unset;
+}
+
 /* default markdown margins look really silly in a table */
 :global(.theme-api-markdown table *:last-child) {
   margin-bottom: 0;
