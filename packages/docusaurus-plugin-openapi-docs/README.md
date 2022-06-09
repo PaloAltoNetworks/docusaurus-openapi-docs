@@ -107,16 +107,19 @@ Here is an example of properly configuring your `docusaurus.config.js` file for 
 
 `docusaurus-plugin-openapi-docs` can be configured with the following options:
 
-| Name             | Type     | Default | Description                                                                                                                 |
-| ---------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `specPath`       | `string` | `null`  | Designated URL or path to the source of an OpenAPI specification file or directory of multiple OpenAPI specification files. |
-| `ouputDir`       | `string` | `null`  | Desired output path for generated MDX files.                                                                                |
-| `template`       | `string` | `null`  | _Optional:_ Customize MDX content with a desired template.                                                                  |
-| `sidebarOptions` | `object` | `null`  | _Optional:_ Set of options for sidebar configuration. See below for a list of supported options.                            |
-| `version`        | `string` | `null`  | _Optional:_ Version assigned to single or micro-spec API specified in `specPath`.                                           |
-| `label`          | `string` | `null`  | _Optional:_ Version label used when generating version selector dropdown menu.                                              |
-| `baseUrl`        | `string` | `null`  | _Optional:_ Version base URL used when generating version selector dropdown menu.                                           |
-| `versions`       | `object` | `null`  | _Optional:_ Set of options for versioning configuration. See below for a list of supported options.                         |
+| Name              | Type     | Default | Description                                                                                                                 |
+| ----------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `specPath`        | `string` | `null`  | Designated URL or path to the source of an OpenAPI specification file or directory of multiple OpenAPI specification files. |
+| `ouputDir`        | `string` | `null`  | Desired output path for generated MDX files.                                                                                |
+| `contentDocsPath` | `string` | `null`  | Should be equal to the `path` value set in `plugin-content-docs` or preset.                                                 |
+| `ouputDir`        | `string` | `null`  | Desired output path for generated MDX files.                                                                                |
+| `routeBasePath`   | `string` | `null`  | _Optional:_ Should be equal to the `routeBasePath` value set in `plugin-content-docs or preset (if present).                |
+| `template`        | `string` | `null`  | _Optional:_ Customize MDX content with a desired template.                                                                  |
+| `sidebarOptions`  | `object` | `null`  | _Optional:_ Set of options for sidebar configuration. See below for a list of supported options.                            |
+| `version`         | `string` | `null`  | _Optional:_ Version assigned to single or micro-spec API specified in `specPath`.                                           |
+| `label`           | `string` | `null`  | _Optional:_ Version label used when generating version selector dropdown menu.                                              |
+| `baseUrl`         | `string` | `null`  | _Optional:_ Version base URL used when generating version selector dropdown menu.                                           |
+| `versions`        | `object` | `null`  | _Optional:_ Set of options for versioning configuration. See below for a list of supported options.                         |
 
 `sidebarOptions` can be configured with the following options:
 
