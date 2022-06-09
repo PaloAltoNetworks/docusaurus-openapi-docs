@@ -1,0 +1,12 @@
+[
+  {
+    "version": "2.0.0",
+    "label": "v2.0.0",
+    "baseUrl": "/petstore_versioned/swagger-petstore-yaml"
+  },
+  {
+    "version": "1.0.0",
+    "label": "v1.0.0",
+    "baseUrl": "/petstore_versioned/1.0.0/swagger-petstore-yaml"
+  }
+]

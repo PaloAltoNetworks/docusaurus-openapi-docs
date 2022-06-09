@@ -32,6 +32,19 @@ export interface APIOptions {
   outputDir: string;
   template?: string;
   sidebarOptions?: SidebarOptions;
+  version?: string;
+  label?: string;
+  baseUrl?: string;
+  versions?: {
+    [key: string]: APIVersionOptions;
+  };
+}
+
+export interface APIVersionOptions {
+  specPath: string;
+  outputDir: string;
+  label: string;
+  baseUrl: string;
 }
 
 export interface LoadedContent {

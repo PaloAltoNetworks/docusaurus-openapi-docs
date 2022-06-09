@@ -11,6 +11,23 @@
   margin-top: 0;
 }
 
+:global(.version-button div) {
+  display: block;
+}
+
+:global(.version-button div > button > span::after) {
+  border-color: currentcolor transparent;
+  border-style: solid;
+  border-width: 0.4em 0.4em 0;
+  content: "";
+  margin-left: 0.3em;
+  position: relative;
+  transform: translateY(-50%);
+  display: inline-block;
+  font-size: 0.8rem;
+  top: 1px;
+}
+
 /* default markdown margins look really silly in a table */
 :global(.theme-api-markdown table *:last-child) {
   margin-bottom: 0;
