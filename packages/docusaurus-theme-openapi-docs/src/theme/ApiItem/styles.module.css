@@ -12,7 +12,7 @@
 }
 
 :global(.version-button div) {
-  display: unset;
+  display: block;
 }
 
 /* default markdown margins look really silly in a table */
