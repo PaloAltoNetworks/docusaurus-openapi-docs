@@ -1,17 +1,17 @@
 [
   {
     "version": "2.0.0",
-    "label": "Current",
+    "label": "v2.0.0",
     "baseUrl": "/docs/petstore_versioned/swagger-petstore-yaml"
   },
   {
     "version": "1.0.0",
-    "label": "Deprecated",
+    "label": "v1.0.0",
     "baseUrl": "/docs/petstore_versioned/1.0.0/swagger-petstore-yaml"
   },
   {
     "version": "beta",
-    "label": "Beta",
+    "label": "v1.0.0-beta",
     "baseUrl": "/docs/petstore_versioned/beta/swagger-petstore-yaml"
   }
 ]

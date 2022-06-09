@@ -79,6 +79,7 @@ const sidebars = {
       type: "html",
       defaultStyle: true,
       value: versionSelector(petstoreVersions),
+      className: "version-button",
     },
     {
       type: "category",
@@ -99,13 +100,14 @@ const sidebars = {
       type: "html",
       defaultStyle: true,
       value: versionSelector(petstoreVersions),
+      className: "version-button",
     },
     {
       type: "category",
-      label: "Petstore (1.0.0)",
+      label: "Petstore",
       link: {
         type: "generated-index",
-        title: "Petstore API (1.0.0)",
+        title: "Petstore API (v1.0.0)",
         description:
           "This is a sample server Petstore server. You can find out more about Swagger at http://swagger.io or on irc.freenode.net, #swagger. For this sample, you can use the api key special-key to test the authorization filters.",
         slug: "/category/petstore-api-1.0.0",
@@ -119,13 +121,14 @@ const sidebars = {
       type: "html",
       defaultStyle: true,
       value: versionSelector(petstoreVersions),
+      className: "version-button",
     },
     {
       type: "category",
-      label: "Petstore (beta)",
+      label: "Petstore",
       link: {
         type: "generated-index",
-        title: "Petstore API (beta)",
+        title: "Petstore API (v1.0.0-beta)",
         description:
           "This is a sample server Petstore server. You can find out more about Swagger at http://swagger.io or on irc.freenode.net, #swagger. For this sample, you can use the api key special-key to test the authorization filters.",
         slug: "/category/petstore-api-beta",

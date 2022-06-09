@@ -152,19 +152,19 @@ const config = {
               contentDocsPath: "docs",
             },
             version: "2.0.0", // Current version
-            label: "Current", // Current version label
+            label: "v2.0.0", // Current version label
             baseUrl: "/docs/petstore_versioned/swagger-petstore-yaml", // Leading slash is important
             versions: {
               "1.0.0": {
                 specPath: "examples/petstore-1.0.0.yaml",
                 outputDir: "docs/petstore_versioned/1.0.0", // No trailing slash
-                label: "Deprecated",
+                label: "v1.0.0",
                 baseUrl: "/docs/petstore_versioned/1.0.0/swagger-petstore-yaml", // Leading slash is important
               },
               beta: {
                 specPath: "examples/petstore-beta.yaml",
                 outputDir: "docs/petstore_versioned/beta", // No trailing slash
-                label: "Beta",
+                label: "v1.0.0-beta",
                 baseUrl: "/docs/petstore_versioned/beta/swagger-petstore-yaml", // Leading slash is important
               },
             },
