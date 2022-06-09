@@ -31,7 +31,14 @@ export default function pluginOpenAPIDocs(
   let { siteDir } = context;
 
   async function generateApiDocs(options: APIOptions) {
-    let { specPath, outputDir, template, sidebarOptions } = options;
+    let {
+      specPath,
+      outputDir,
+      contentDocsPath,
+      routeBasePath,
+      template,
+      sidebarOptions,
+    } = options;
 
     const contentPath = isURL(specPath)
       ? specPath
@@ -164,7 +171,13 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
         item.markdown = markdown;
         if (item.type === "api") {
           item.json = JSON.stringify(item.api);
-          if (item.infoId) item.infoPath = `${outputDir}/${item.infoId}`;
+          let infoBasePath = `${outputDir}/${item.infoId}`;
+          if (routeBasePath) {
+            infoBasePath = `${routeBasePath}/${outputDir
+              .split(contentDocsPath!)[1]
+              .replace(/^\/+/g, "")}/${item.infoId}`.replace(/^\/+/g, "");
+          }
+          if (item.infoId) item.infoPath = infoBasePath;
         }
 
         const view = render(mdTemplate, item);

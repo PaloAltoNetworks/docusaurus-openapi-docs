@@ -8,13 +8,12 @@
 import { Joi } from "@docusaurus/utils-validation";
 
 const sidebarOptions = Joi.object({
-  contentDocsPath: Joi.string(),
   groupPathsBy: Joi.string().valid("tag"),
   categoryLinkSource: Joi.string().valid("tag", "info"),
   customProps: Joi.object(),
   sidebarCollapsible: Joi.boolean(),
   sidebarCollapsed: Joi.boolean(),
-}).with("groupPathsBy", "contentDocsPath");
+});
 
 export const OptionsSchema = Joi.object({
   id: Joi.string().required(),
@@ -24,6 +23,8 @@ export const OptionsSchema = Joi.object({
       Joi.object({
         specPath: Joi.string().required(),
         outputDir: Joi.string().required(),
+        contentDocsPath: Joi.string().required(),
+        routeBasePath: Joi.string(),
         template: Joi.string(),
         sidebarOptions: sidebarOptions,
         version: Joi.string().when("versions", {
