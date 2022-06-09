@@ -10,14 +10,11 @@ const config = {
   tagline: "OpenAPI plugin for generating API reference docs in Docusaurus v2",
   url: "https://docusaurus-openapi.tryingpan.dev",
   baseUrl: "/",
-  onBrokenLinks: "throw",
+  onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
-
-  // GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
-  organizationName: "PaloAltoNetworks", // Usually your GitHub org/user name.
-  projectName: "docusaurus-openapi-docs", // Usually your repo name.
+  organizationName: "PaloAltoNetworks",
+  projectName: "docusaurus-openapi-docs",
 
   presets: [
     [
@@ -25,21 +22,14 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
+          routeBasePath: "/",
           sidebarPath: require.resolve("./sidebars.js"),
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
           editUrl:
             "https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/demo",
           docLayoutComponent: "@theme/DocPage",
           docItemComponent: "@theme/ApiItem", // Derived from docusaurus-theme-openapi
         },
-        blog: {
-          showReadingTime: true,
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            "https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/demo",
-        },
+        blog: false,
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
         },
@@ -61,28 +51,34 @@ const config = {
             type: "doc",
             docId: "intro",
             position: "left",
-            label: "Tutorial",
+            label: "Docs",
           },
-          { to: "/blog", label: "Blog", position: "left" },
           {
             type: "dropdown",
-            label: "API Reference",
+            label: "Demos",
             position: "left",
             items: [
               {
-                label: "Example APIs",
-                to: "/docs/category/petstore-api",
+                label: "API Zoo",
+                to: "/category/petstore-api",
               },
               {
                 label: "Petstore (versioned)",
-                to: "/docs/category/petstore-versioned-api",
+                to: "/category/petstore-versioned-api",
               },
             ],
           },
           {
-            href: "https://github.com/PaloAltoNetworks/docusaurus-openapi-docs",
-            label: "GitHub",
+            href: "https://medium.com/palo-alto-networks-developer-blog",
             position: "right",
+            className: "header-medium-link",
+            "aria-label": "Palo Alto Networks Developer Blog",
+          },
+          {
+            href: "https://github.com/PaloAltoNetworks/docusaurus-openapi-docs",
+            position: "right",
+            className: "header-github-link",
+            "aria-label": "GitHub repository",
           },
         ],
       },
@@ -93,8 +89,8 @@ const config = {
             title: "Docs",
             items: [
               {
-                label: "Tutorial",
-                to: "/docs/intro",
+                label: "OpenAPI Docs",
+                to: "/",
               },
             ],
           },
@@ -120,7 +116,7 @@ const config = {
             items: [
               {
                 label: "Blog",
-                to: "/blog",
+                href: "https://medium.com/palo-alto-networks-developer-blog",
               },
               {
                 label: "GitHub",
@@ -153,19 +149,13 @@ const config = {
             },
             version: "2.0.0", // Current version
             label: "v2.0.0", // Current version label
-            baseUrl: "/docs/petstore_versioned/swagger-petstore-yaml", // Leading slash is important
+            baseUrl: "/petstore_versioned/swagger-petstore-yaml", // Leading slash is important
             versions: {
               "1.0.0": {
                 specPath: "examples/petstore-1.0.0.yaml",
                 outputDir: "docs/petstore_versioned/1.0.0", // No trailing slash
                 label: "v1.0.0",
-                baseUrl: "/docs/petstore_versioned/1.0.0/swagger-petstore-yaml", // Leading slash is important
-              },
-              beta: {
-                specPath: "examples/petstore-beta.yaml",
-                outputDir: "docs/petstore_versioned/beta", // No trailing slash
-                label: "v1.0.0-beta",
-                baseUrl: "/docs/petstore_versioned/beta/swagger-petstore-yaml", // Leading slash is important
+                baseUrl: "/petstore_versioned/1.0.0/swagger-petstore-yaml", // Leading slash is important
               },
             },
           },
@@ -200,6 +190,12 @@ const config = {
   ],
 
   themes: ["docusaurus-theme-openapi-docs"],
+  stylesheets: [
+    {
+      href: "https://use.fontawesome.com/releases/v5.11.0/css/all.css",
+      type: "text/css",
+    },
+  ],
 };
 
 module.exports = config;

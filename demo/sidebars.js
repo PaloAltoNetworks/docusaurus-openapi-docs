@@ -15,6 +15,11 @@ const versionSelector =
 const sidebars = {
   tutorialSidebar: [
     {
+      type: "html",
+      value: `<p style="color: var(--ifm-color-secondary-darkest)">DOCUMENTATION</p>`, // The HTML to be rendered
+      defaultStyle: true, // Use the default menu item styling
+    },
+    {
       type: "doc",
       id: "intro",
     },
@@ -113,27 +118,6 @@ const sidebars = {
         slug: "/category/petstore-api-1.0.0",
       },
       items: require("./docs/petstore_versioned/1.0.0/sidebar.js"),
-    },
-  ],
-
-  "petstore-beta": [
-    {
-      type: "html",
-      defaultStyle: true,
-      value: versionSelector(petstoreVersions),
-      className: "version-button",
-    },
-    {
-      type: "category",
-      label: "Petstore",
-      link: {
-        type: "generated-index",
-        title: "Petstore API (v1.0.0-beta)",
-        description:
-          "This is a sample server Petstore server. You can find out more about Swagger at http://swagger.io or on irc.freenode.net, #swagger. For this sample, you can use the api key special-key to test the authorization filters.",
-        slug: "/category/petstore-api-beta",
-      },
-      items: require("./docs/petstore_versioned/beta/sidebar.js"),
     },
   ],
 };
