@@ -1,3 +1,20 @@
+## 1.0.4 (Jun 10, 2022)
+
+High level enhancements
+
+- Converted demo site to official documentation site.
+- Added support for generating versioned OpenAPI docs.
+
+Other enhancements and bug fixes
+
+- [Enhancement] Use `docPluginId` to derive `routeBasePath` and `path` ([#127](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/127))
+- [Enhancement] Add route base path support ([#126](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/126))
+- Re-gen versioned petstore docs
+- [Enhancement] Add versioning support to OpenAPI docs plugin ([#125](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/125))
+- [FR] OpenApi Docs: Expand details by 1L for Desktop ([#122](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/122))
+- [Enhancement] Use plugin-content-docs path when generating sidebar doc items ([#124](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/124))
+- Update README.md and documentation
+
 ## 1.0.3 (Jun 3, 2022)
 
 High level enhancements
