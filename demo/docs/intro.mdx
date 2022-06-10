@@ -116,23 +116,33 @@ Here is an example of properly configuring your `docusaurus.config.js` file for 
 You may optionally configure a dedicated `@docusaurus/plugin-content-docs` instance for use with `docusaurus-theme-openapi-docs` by setting `docItemComponent` to `@theme/ApiItem`.
 :::
 
-### Plugin Configuration Options
+## Plugin Configuration Options
 
-`docusaurus-plugin-openapi-docs` can be configured with the following options:
+The `docusaurus-plugin-openapi-docs` plugin can be configured with the following options:
+
+| Name          | Type     | Default | Description                                                                                                                                          |
+| ------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------  |
+| `id`          | `string` | `null`  | A unique document id.                                                                                                                                |
+| `docPluginId` | `string` | `null`  | The ID associated with the `plugin-content-docs` or `preset` instance used to render the OpenAPI docs (e.g. "your-plugin-id", "classic", "default"). |
+
+### config
+
+`config` can be configured with the following options:
 
 | Name             | Type     | Default | Description                                                                                                                 |
 | ---------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------- |
 | `specPath`       | `string` | `null`  | Designated URL or path to the source of an OpenAPI specification file or directory of multiple OpenAPI specification files. |
 | `ouputDir`       | `string` | `null`  | Desired output path for generated MDX files.                                                                                |
-| `contentDocsPath`| `string` | `null`  | Should be equal to the `path` value set in `plugin-content-docs` or preset.                                                 |
 | `ouputDir`       | `string` | `null`  | Desired output path for generated MDX files.                                                                                |
-| `routeBasePath`  | `string` | `null`  | _Optional:_ Should be equal to the `routeBasePath` value set in `plugin-content-docs or preset (if present).                |
 | `template`       | `string` | `null`  | _Optional:_ Customize MDX content with a desired template.                                                                  |
 | `sidebarOptions` | `object` | `null`  | _Optional:_ Set of options for sidebar configuration. See below for a list of supported options.                            |
 | `version`        | `string` | `null`  | _Optional:_ Version assigned to single or micro-spec API specified in `specPath`.                                           |
 | `label`          | `string` | `null`  | _Optional:_ Version label used when generating version selector dropdown menu.                                              |
 | `baseUrl`        | `string` | `null`  | _Optional:_ Version base URL used when generating version selector dropdown menu.                                           |
 | `versions`       | `object` | `null`  | _Optional:_ Set of options for versioning configuration. See below for a list of supported options.                         |
+
+### sidebarOptions
+
 
 `sidebarOptions` can be configured with the following options:
 
@@ -147,6 +157,8 @@ You may optionally configure a dedicated `@docusaurus/plugin-content-docs` insta
 :::info TIP
 You may optionally configure a `sidebarOptions`. In doing so, an individual `sidebar.js` slice with the configured options will be generated within the respective `outputDir`.
 :::
+
+### versions
 
 `versions` can be configured with the following options:
 
