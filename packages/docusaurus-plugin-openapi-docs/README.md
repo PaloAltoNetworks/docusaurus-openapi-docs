@@ -81,6 +81,7 @@ Here is an example of properly configuring your `docusaurus.config.js` file for 
       'docusaurus-plugin-openapi-docs',
       {
         id: "apiDocs",
+        docPluginId: "classic",
         config: {
           petstore: { // Note: petstore key is treated as the <id> and can be used to specify an API doc instance when using CLI commands
             specPath: "examples/petstore.yaml", // Path to designated spec file
