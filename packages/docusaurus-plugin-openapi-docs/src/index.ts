@@ -23,22 +23,58 @@ export function isURL(str: string): boolean {
   return /^(https?:)\/\//m.test(str);
 }
 
+export function getDocsData(
+  dataArray: any[],
+  filter: string
+): Object | undefined {
+  // eslint-disable-next-line array-callback-return
+  const filteredData = dataArray.filter((data) => {
+    if (data[0] === filter) {
+      return data[1];
+    }
+
+    // Search plugin-content-docs instances
+    if (data[0] === "@docusaurus/plugin-content-docs") {
+      const pluginId = data[1].id ? data[1].id : "default";
+      if (pluginId === filter) {
+        return data[1];
+      }
+    }
+  })[0];
+  if (filteredData) {
+    // Search presets, e.g. "classic"
+    if (filteredData[0] === filter) {
+      return filteredData[1].docs;
+    }
+
+    // Search plugin-content-docs instances
+    if (filteredData[0] === "@docusaurus/plugin-content-docs") {
+      const pluginId = filteredData[1].id ? filteredData[1].id : "default";
+      if (pluginId === filter) {
+        return filteredData[1];
+      }
+    }
+  }
+  return;
+}
+
 export default function pluginOpenAPIDocs(
   context: LoadContext,
   options: PluginOptions
 ): Plugin<LoadedContent> {
-  let { config } = options;
-  let { siteDir } = context;
+  const { config, docPluginId } = options;
+  const { siteDir, siteConfig } = context;
+
+  // Get routeBasePath and path from plugin-content-docs or preset
+  const presets: any = siteConfig.presets;
+  const plugins: any = siteConfig.plugins;
+  const presetsPlugins = presets.concat(plugins);
+  const docData: any = getDocsData(presetsPlugins, docPluginId);
+  const docRouteBasePath = docData ? docData.routeBasePath : undefined;
+  const docPath = docData ? (docData.path ? docData.path : "docs") : undefined;
 
   async function generateApiDocs(options: APIOptions) {
-    let {
-      specPath,
-      outputDir,
-      contentDocsPath,
-      routeBasePath,
-      template,
-      sidebarOptions,
-    } = options;
+    let { specPath, outputDir, template, sidebarOptions } = options;
 
     const contentPath = isURL(specPath)
       ? specPath
@@ -68,7 +104,8 @@ export default function pluginOpenAPIDocs(
           sidebarOptions!,
           options,
           loadedApi,
-          tags
+          tags,
+          docPath
         );
 
         const sidebarSliceTemplate = template
@@ -172,9 +209,9 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
         if (item.type === "api") {
           item.json = JSON.stringify(item.api);
           let infoBasePath = `${outputDir}/${item.infoId}`;
-          if (routeBasePath) {
-            infoBasePath = `${routeBasePath}/${outputDir
-              .split(contentDocsPath!)[1]
+          if (docRouteBasePath) {
+            infoBasePath = `${docRouteBasePath}/${outputDir
+              .split(docPath!)[1]
               .replace(/^\/+/g, "")}/${item.infoId}`.replace(/^\/+/g, "");
           }
           if (item.infoId) item.infoPath = infoBasePath;

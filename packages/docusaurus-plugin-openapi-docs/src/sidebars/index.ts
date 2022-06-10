@@ -35,7 +35,8 @@ function groupByTags(
   items: ApiPageMetadata[],
   sidebarOptions: SidebarOptions,
   options: APIOptions,
-  tags: TagObject[]
+  tags: TagObject[],
+  docPath: string
 ): ProcessedSidebar {
   const { outputDir } = options;
   const {
@@ -44,8 +45,6 @@ function groupByTags(
     customProps,
     categoryLinkSource,
   } = sidebarOptions;
-
-  const { contentDocsPath } = options;
 
   const apiItems = items.filter(isApiItem);
   const infoItems = items.filter(isInfoItem);
@@ -65,8 +64,8 @@ function groupByTags(
       .filter((item): item is string => !!item)
   );
 
-  const basePath = contentDocsPath
-    ? outputDir.split(contentDocsPath!)[1].replace(/^\/+/g, "")
+  const basePath = docPath
+    ? outputDir.split(docPath!)[1].replace(/^\/+/g, "")
     : outputDir.slice(outputDir.indexOf("/", 1)).replace(/^\/+/g, "");
 
   function createDocItem(item: ApiPageMetadata): SidebarItemDoc {
@@ -185,7 +184,8 @@ export default function generateSidebarSlice(
   sidebarOptions: SidebarOptions,
   options: APIOptions,
   api: ApiMetadata[],
-  tags: TagObject[]
+  tags: TagObject[],
+  docPath: string
 ) {
   let sidebarSlice: ProcessedSidebar = [];
   if (sidebarOptions.groupPathsBy === "tag") {
@@ -193,7 +193,8 @@ export default function generateSidebarSlice(
       api as ApiPageMetadata[],
       sidebarOptions,
       options,
-      tags
+      tags,
+      docPath
     );
   }
   return sidebarSlice;
