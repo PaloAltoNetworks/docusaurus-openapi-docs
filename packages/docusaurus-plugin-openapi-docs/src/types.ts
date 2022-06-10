@@ -22,6 +22,7 @@ export type {
 } from "@docusaurus/plugin-content-docs-types";
 export interface PluginOptions {
   id?: string;
+  docPluginId: string;
   config: {
     [key: string]: APIOptions;
   };
@@ -30,8 +31,6 @@ export interface PluginOptions {
 export interface APIOptions {
   specPath: string;
   outputDir: string;
-  contentDocsPath: string;
-  routeBasePath?: string;
   template?: string;
   sidebarOptions?: SidebarOptions;
   version?: string;
