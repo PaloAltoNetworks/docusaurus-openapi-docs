@@ -17,14 +17,13 @@ const sidebarOptions = Joi.object({
 
 export const OptionsSchema = Joi.object({
   id: Joi.string().required(),
+  docPluginId: Joi.string().required(),
   config: Joi.object()
     .pattern(
       /^/,
       Joi.object({
         specPath: Joi.string().required(),
         outputDir: Joi.string().required(),
-        contentDocsPath: Joi.string().required(),
-        routeBasePath: Joi.string(),
         template: Joi.string(),
         sidebarOptions: sidebarOptions,
         version: Joi.string().when("versions", {
