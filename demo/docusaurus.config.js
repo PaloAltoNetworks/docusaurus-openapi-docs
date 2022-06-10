@@ -138,12 +138,11 @@ const config = {
       "docusaurus-plugin-openapi-docs",
       {
         id: "openapi",
+        docPluginId: "classic",
         config: {
           petstore_versioned: {
             specPath: "examples/petstore.yaml",
             outputDir: "docs/petstore_versioned", // No trailing slash
-            contentDocsPath: "docs",
-            routeBasePath: "/", // Same as preset/plugin-content-docs if present
             sidebarOptions: {
               groupPathsBy: "tag",
               categoryLinkSource: "tag",
@@ -163,8 +162,6 @@ const config = {
           petstore: {
             specPath: "examples/petstore.yaml",
             outputDir: "docs/petstore",
-            contentDocsPath: "docs",
-            routeBasePath: "/",
             sidebarOptions: {
               groupPathsBy: "tag",
               categoryLinkSource: "tag",
@@ -173,8 +170,6 @@ const config = {
           cos: {
             specPath: "examples/openapi-cos.json",
             outputDir: "docs/cos",
-            contentDocsPath: "docs",
-            routeBasePath: "/",
             sidebarOptions: {
               groupPathsBy: "tag",
             },
@@ -182,14 +177,10 @@ const config = {
           burgers: {
             specPath: "examples/food/burgers/openapi.yaml",
             outputDir: "docs/food/burgers",
-            contentDocsPath: "docs",
-            routeBasePath: "/",
           },
           yogurt: {
             specPath: "examples/food/yogurtstore/openapi.yaml",
             outputDir: "docs/food/yogurtstore",
-            contentDocsPath: "docs",
-            routeBasePath: "/",
           },
         },
       },
