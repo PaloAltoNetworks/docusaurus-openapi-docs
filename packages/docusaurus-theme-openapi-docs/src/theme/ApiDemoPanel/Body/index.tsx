@@ -12,17 +12,18 @@ import { RequestBodyObject } from "docusaurus-plugin-openapi-docs/src/openapi/ty
 import ContentType from "../ContentType";
 import FormSelect from "../FormSelect";
 import { useTypedDispatch, useTypedSelector } from "../hooks";
+import LiveApp from "../LiveEditor";
 import FormFileUpload from "./../FormFileUpload";
 import FormItem from "./../FormItem";
 import FormTextInput from "./../FormTextInput";
-import VSCode from "./../VSCode";
+// @ts-ignore
+import json2xml from "./json2xml";
 import {
   clearFormBodyKey,
   clearRawBody,
   setFileFormBody,
   setFileRawBody,
   setStringFormBody,
-  setStringRawBody,
 } from "./slice";
 
 interface Props {
@@ -195,22 +196,17 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
   }
 
   if (contentType === "application/xml") {
+    if (jsonRequestBodyExample) {
+      exampleBodyString = json2xml(jsonRequestBodyExample);
+    }
     language = "xml";
   }
 
   return (
     <FormItem label="Body">
-      <VSCode
-        value={exampleBodyString}
-        language={language}
-        onChange={(value) => {
-          if (value.trim() === "") {
-            dispatch(clearRawBody());
-            return;
-          }
-          dispatch(setStringRawBody(value));
-        }}
-      />
+      <LiveApp action={dispatch} language={language}>
+        {exampleBodyString}
+      </LiveApp>
     </FormItem>
   );
 }
