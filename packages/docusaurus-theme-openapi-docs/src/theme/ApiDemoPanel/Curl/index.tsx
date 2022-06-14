@@ -5,32 +5,35 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import codegen from "@paloaltonetworks/postman-code-generators";
 import sdk from "@paloaltonetworks/postman-collection";
+import CodeBlock from "@theme/CodeBlock";
 import clsx from "clsx";
-import Highlight, { defaultProps } from "prism-react-renderer";
 
+import CodeTabs from "../CodeTabs";
 import { useTypedSelector } from "../hooks";
 import buildPostmanRequest from "./../buildPostmanRequest";
-import FloatingButton from "./../FloatingButton";
 import styles from "./styles.module.css";
 
 interface Language {
   tabName: string;
   highlight: string;
   language: string;
+  codeLanguage?: string;
   variant: string;
   options: { [key: string]: boolean };
+  source?: string;
 }
 
-const languageSet: Language[] = [
+export const languageSet: Language[] = [
   {
     tabName: "cURL",
     highlight: "bash",
     language: "curl",
+    codeLanguage: "bash",
     variant: "curl",
     options: {
       longFormat: false,
@@ -39,12 +42,12 @@ const languageSet: Language[] = [
     },
   },
   {
-    tabName: "Node",
-    highlight: "javascript",
-    language: "nodejs",
-    variant: "axios",
+    tabName: "Python",
+    highlight: "python",
+    language: "python",
+    codeLanguage: "python",
+    variant: "requests",
     options: {
-      ES6_enabled: true,
       followRedirect: true,
       trimRequestBody: true,
     },
@@ -53,6 +56,7 @@ const languageSet: Language[] = [
     tabName: "Go",
     highlight: "go",
     language: "go",
+    codeLanguage: "go",
     variant: "native",
     options: {
       followRedirect: true,
@@ -60,78 +64,40 @@ const languageSet: Language[] = [
     },
   },
   {
-    tabName: "Python",
-    highlight: "python",
-    language: "python",
-    variant: "requests",
+    tabName: "Node",
+    highlight: "javascript",
+    language: "nodejs",
+    codeLanguage: "javascript",
+    variant: "axios",
     options: {
+      ES6_enabled: true,
       followRedirect: true,
       trimRequestBody: true,
     },
   },
 ];
 
-const languageTheme = {
-  plain: {
-    color: "var(--ifm-code-color)",
-  },
-  styles: [
-    {
-      types: ["inserted", "attr-name"],
-      style: {
-        color: "var(--openapi-code-green)",
-      },
-    },
-    {
-      types: ["string", "url"],
-      style: {
-        color: "var(--openapi-code-green)",
-      },
-    },
-    {
-      types: ["builtin", "char", "constant", "function"],
-      style: {
-        color: "var(--openapi-code-blue)",
-      },
-    },
-    {
-      types: ["punctuation", "operator"],
-      style: {
-        color: "var(--openapi-code-dim)",
-      },
-    },
-    {
-      types: ["class-name"],
-      style: {
-        color: "var(--openapi-code-orange)",
-      },
-    },
-    {
-      types: ["tag", "arrow", "keyword"],
-      style: {
-        color: "var(--openapi-code-purple)",
-      },
-    },
-    {
-      types: ["boolean"],
-      style: {
-        color: "var(--openapi-code-red)",
-      },
-    },
-  ],
-};
-
 interface Props {
   postman: sdk.Request;
   codeSamples: any; // TODO: Type this...
+}
+
+function CodeTab({ children, hidden, className, onClick }: any): JSX.Element {
+  return (
+    <div
+      role="tabpanel"
+      className={clsx(styles.tabItem, className)}
+      {...{ hidden }}
+    >
+      {children}
+    </div>
+  );
 }
 
 function Curl({ postman, codeSamples }: Props) {
   // TODO: match theme for vscode.
 
   const { siteConfig } = useDocusaurusContext();
-
-  const [copyText, setCopyText] = useState("Copy");
 
   const contentType = useTypedSelector((state) => state.contentType.value);
   const accept = useTypedSelector((state) => state.accept.value);
@@ -152,7 +118,12 @@ function Curl({ postman, codeSamples }: Props) {
     ...codeSamples,
   ];
 
-  const [language, setLanguage] = useState(langs[0]);
+  const defaultLang: Language[] = languageSet.filter(
+    (lang) =>
+      lang.codeLanguage === localStorage.getItem("docusaurus.tab.code-samples")
+  );
+
+  const [language, setLanguage] = useState(defaultLang[0] ?? langs[0]);
 
   const [codeText, setCodeText] = useState("");
 
@@ -201,76 +172,26 @@ function Curl({ postman, codeSamples }: Props) {
     auth,
   ]);
 
-  const ref = useRef<HTMLDivElement>(null);
-
-  const handleCurlCopy = () => {
-    setCopyText("Copied");
-    setTimeout(() => {
-      setCopyText("Copy");
-    }, 2000);
-    if (ref.current?.innerText) {
-      navigator.clipboard.writeText(ref.current.innerText);
-    }
-  };
-
   if (language === undefined) {
     return null;
   }
 
   return (
     <>
-      <div className={clsx(styles.buttonGroup, "api-code-tab-group")}>
+      <CodeTabs groupId="code-samples" action={setLanguage}>
         {langs.map((lang) => {
           return (
-            <button
+            <CodeTab
+              value={lang.language}
+              label={""}
               key={lang.tabName || lang.label}
-              className={clsx(
-                language === lang ? styles.selected : undefined,
-                language === lang ? "api-code-tab--active" : undefined,
-                "api-code-tab"
-              )}
-              onClick={() => setLanguage(lang)}
+              attributes={{ className: `code__tab--${lang.codeLanguage}` }}
             >
-              {lang.tabName || lang.label}
-            </button>
+              <CodeBlock language={lang.codeLanguage}>{codeText}</CodeBlock>
+            </CodeTab>
           );
         })}
-      </div>
-
-      <Highlight
-        {...defaultProps}
-        theme={languageTheme}
-        code={codeText}
-        language={language.highlight || language.lang}
-      >
-        {({ className, tokens, getLineProps, getTokenProps }) => (
-          <FloatingButton onClick={handleCurlCopy} label={copyText}>
-            <pre
-              className={className}
-              style={{
-                background: "var(--openapi-card-background-color)",
-                paddingRight: "60px",
-                borderRadius:
-                  "2px 2px var(--openapi-card-border-radius) var(--openapi-card-border-radius)",
-              }}
-            >
-              <code ref={ref}>
-                {tokens.map((line, i) => (
-                  <span {...getLineProps({ line, key: i })}>
-                    {line.map((token, key) => {
-                      if (token.types.includes("arrow")) {
-                        token.types = ["arrow"];
-                      }
-                      return <span {...getTokenProps({ token, key })} />;
-                    })}
-                    {"\n"}
-                  </span>
-                ))}
-              </code>
-            </pre>
-          </FloatingButton>
-        )}
-      </Highlight>
+      </CodeTabs>
     </>
   );
 }

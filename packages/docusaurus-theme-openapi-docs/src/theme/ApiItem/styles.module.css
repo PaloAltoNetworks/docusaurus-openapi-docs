@@ -128,3 +128,75 @@
   margin-top: 0 !important;
   padding-left: 2px;
 }
+
+:global(.code__tab--python::after) {
+  content: "";
+  width: 32px;
+  height: 32px;
+  background: url(./icons/python-original.svg);
+  margin-block: auto;
+}
+
+:global(.code__tab--python) {
+  color: var(--ifm-color-success);
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+:global(.code__tab--python.tabs__item--active) {
+  border-bottom-color: var(--ifm-color-success);
+}
+
+:global(.code__tab--go::after) {
+  content: "";
+  width: 32px;
+  height: 32px;
+  background: url(./icons/go-original-wordmark.svg);
+  margin-block: auto;
+}
+
+:global(.code__tab--go) {
+  color: var(--ifm-color-info);
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+:global(.code__tab--go.tabs__item--active) {
+  border-bottom-color: var(--ifm-color-info);
+}
+
+:global(.code__tab--javascript::after) {
+  content: "";
+  width: 32px;
+  height: 32px;
+  background: url(./icons/javascript-original.svg);
+  margin-block: auto;
+}
+
+:global(.code__tab--javascript) {
+  color: var(--ifm-color-warning);
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+:global(.code__tab--javascript.tabs__item--active) {
+  border-bottom-color: var(--ifm-color-warning);
+}
+
+:global(.code__tab--bash::after) {
+  content: "";
+  width: 32px;
+  height: 32px;
+  background: url(./icons/linux-original.svg);
+  margin-block: auto;
+}
+
+:global(.code__tab--bash) {
+  color: var(--ifm-color-danger);
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+:global(.code__tab--bash.tabs__item--active) {
+  border-bottom-color: var(--ifm-color-danger);
+}
