@@ -1,3 +1,15 @@
+## 1.0.5 (Jun 14, 2022)
+
+High level enhancements
+
+- Extended Docusaurus syntax handling to code samples.
+- Implemented CodeTab choice synching for code samples.
+- Cleanup XML body editing.
+
+Other enhancements and bug fixes
+
+- [Experimental] Code block/editor optimizations ([#132](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/132))
+
 ## 1.0.4 (Jun 10, 2022)
 
 High level enhancements
