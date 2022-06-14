@@ -174,6 +174,7 @@ function TabsComponent(props: Props): JSX.Element {
           {
             "tabs--block": block,
           },
+          styles.code__tabs,
           className
         )}
       >
