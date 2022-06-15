@@ -36,6 +36,7 @@
     "utility-types": "^3.10.0"
   },
   "dependencies": {
+    "@apidevtools/json-schema-ref-parser": "^9.0.9",
     "@docusaurus/mdx-loader": "2.0.0-beta.21",
     "@docusaurus/plugin-content-docs": "2.0.0-beta.21",
     "@docusaurus/utils": "2.0.0-beta.21",

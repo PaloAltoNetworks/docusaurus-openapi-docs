@@ -17,7 +17,7 @@ const sidebarOptions = Joi.object({
 
 export const OptionsSchema = Joi.object({
   id: Joi.string().required(),
-  docPluginId: Joi.string().required(),
+  docsPluginId: Joi.string().required(),
   config: Joi.object()
     .pattern(
       /^/,

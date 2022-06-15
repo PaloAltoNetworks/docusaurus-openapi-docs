@@ -7,16 +7,34 @@
 
 // @ts-nocheck
 
+import $RefParser from "@apidevtools/json-schema-ref-parser";
 import type { Source, Document } from "@redocly/openapi-core";
 import { bundle } from "@redocly/openapi-core/lib/bundle";
 import type { ResolvedConfig } from "@redocly/openapi-core/lib/config";
 import { Config } from "@redocly/openapi-core/lib/config/config";
+import chalk from "chalk";
 import { convertObj } from "swagger2openapi";
 
 import { OpenAPISpec } from "./types";
 
+async function resolveJsonRefs(specUrlOrObject: object | string) {
+  try {
+    let schema = await $RefParser.dereference(specUrlOrObject, {
+      continueOnError: true,
+      dereference: {
+        circular: "ignore",
+      },
+    });
+    return schema;
+  } catch (err) {
+    console.error(chalk.yellow(err.errors[0]?.message ?? err));
+    return;
+  }
+}
+
 export async function loadAndBundleSpec(
-  specUrlOrObject: object | string
+  specUrlOrObject: object | string,
+  parseJsonRefs: boolean | undefined
 ): Promise<OpenAPISpec> {
   const config = new Config({} as ResolvedConfig);
   const bundleOpts = {
@@ -39,6 +57,14 @@ export async function loadAndBundleSpec(
   const {
     bundle: { parsed },
   } = await bundle(bundleOpts);
+  if (parseJsonRefs) {
+    const resolved = resolveJsonRefs(parsed);
+    return typeof resolved === Object
+      ? resolved.swagger !== undefined
+        ? convertSwagger2OpenAPI(resolved)
+        : resolved
+      : parsed;
+  }
   return parsed.swagger !== undefined ? convertSwagger2OpenAPI(parsed) : parsed;
 }
 

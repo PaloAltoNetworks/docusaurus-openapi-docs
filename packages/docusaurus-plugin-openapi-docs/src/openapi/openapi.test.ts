@@ -16,7 +16,7 @@ describe("openapi", () => {
     it("readOpenapiFiles", async () => {
       const results = await readOpenapiFiles(
         path.join(__dirname, "__fixtures__/examples"),
-        {}
+        { specPath: "./", outputDir: "./" }
       );
       const categoryMeta = results.find((x) =>
         x.source.endsWith("_category_.json")

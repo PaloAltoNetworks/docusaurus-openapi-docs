@@ -91,7 +91,7 @@ Here is an example of properly configuring your `docusaurus.config.js` file for 
       'docusaurus-plugin-openapi-docs',
       {
         id: "apiDocs",
-        docPluginId: "classic",
+        docsPluginId: "classic",
         config: {
           petstore: { // Note: petstore key is treated as the <id> and can be used to specify an API doc instance when using CLI commands
             specPath: "examples/petstore.yaml", // Path to designated spec file
@@ -118,10 +118,10 @@ Here is an example of properly configuring your `docusaurus.config.js` file for 
 
 The `docusaurus-plugin-openapi-docs` plugin can be configured with the following options:
 
-| Name          | Type     | Default | Description                                                                                                                                          |
-| ------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `id`          | `string` | `null`  | A unique document id.                                                                                                                                |
-| `docPluginId` | `string` | `null`  | The ID associated with the `plugin-content-docs` or `preset` instance used to render the OpenAPI docs (e.g. "your-plugin-id", "classic", "default"). |
+| Name           | Type     | Default | Description                                                                                                                                          |
+| -------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`           | `string` | `null`  | A unique document id.                                                                                                                                |
+| `docsPluginId` | `string` | `null`  | The ID associated with the `plugin-content-docs` or `preset` instance used to render the OpenAPI docs (e.g. "your-plugin-id", "classic", "default"). |
 
 ### config
 

@@ -19,6 +19,7 @@ import { kebabCase } from "lodash";
 import { isURL } from "../index";
 import {
   ApiMetadata,
+  APIOptions,
   ApiPageMetadata,
   InfoPageMetadata,
   SidebarOptions,
@@ -247,8 +248,12 @@ interface OpenApiFiles {
 
 export async function readOpenapiFiles(
   openapiPath: string,
-  _options: {}
+  options: APIOptions
 ): Promise<OpenApiFiles[]> {
+  // TODO: determine if this should be an API option
+  // Forces the json-schema-ref-parser
+  const parseJsonRefs = true;
+
   if (!isURL(openapiPath)) {
     const stat = await fs.lstat(openapiPath);
     if (stat.isDirectory()) {
@@ -270,7 +275,8 @@ export async function readOpenapiFiles(
           // TODO: make a function for this
           const fullPath = path.join(openapiPath, source);
           const data = (await loadAndBundleSpec(
-            fullPath
+            fullPath,
+            parseJsonRefs
           )) as OpenApiObjectWithRef;
           return {
             source: fullPath, // This will be aliased in process.
@@ -281,7 +287,10 @@ export async function readOpenapiFiles(
       );
     }
   }
-  const data = (await loadAndBundleSpec(openapiPath)) as OpenApiObjectWithRef;
+  const data = (await loadAndBundleSpec(
+    openapiPath,
+    parseJsonRefs
+  )) as OpenApiObjectWithRef;
   return [
     {
       source: openapiPath, // This will be aliased in process.

@@ -38,7 +38,7 @@ function groupByTags(
   tags: TagObject[],
   docPath: string
 ): ProcessedSidebar {
-  const { outputDir } = options;
+  const { outputDir, label } = options;
   const {
     sidebarCollapsed,
     sidebarCollapsible,
@@ -135,7 +135,9 @@ function groupByTags(
         linkConfig = {
           type: "generated-index" as "generated-index",
           title: tag,
-          slug: "/category/" + kebabCase(tag),
+          slug: label
+            ? "/category/" + kebabCase(label) + "/" + kebabCase(tag)
+            : "/category/" + kebabCase(tag),
         } as SidebarItemCategoryLinkConfig;
       }
 
