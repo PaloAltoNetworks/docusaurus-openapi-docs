@@ -62,14 +62,14 @@ export default function pluginOpenAPIDocs(
   context: LoadContext,
   options: PluginOptions
 ): Plugin<LoadedContent> {
-  const { config, docPluginId } = options;
+  const { config, docsPluginId } = options;
   const { siteDir, siteConfig } = context;
 
   // Get routeBasePath and path from plugin-content-docs or preset
   const presets: any = siteConfig.presets;
   const plugins: any = siteConfig.plugins;
   const presetsPlugins = presets.concat(plugins);
-  const docData: any = getDocsData(presetsPlugins, docPluginId);
+  const docData: any = getDocsData(presetsPlugins, docsPluginId);
   const docRouteBasePath = docData ? docData.routeBasePath : undefined;
   const docPath = docData ? (docData.path ? docData.path : "docs") : undefined;
 
@@ -81,7 +81,7 @@ export default function pluginOpenAPIDocs(
       : path.resolve(siteDir, specPath);
 
     try {
-      const openapiFiles = await readOpenapiFiles(contentPath, {});
+      const openapiFiles = await readOpenapiFiles(contentPath, options);
       const [loadedApi, tags] = await processOpenapiFiles(
         openapiFiles,
         sidebarOptions!
