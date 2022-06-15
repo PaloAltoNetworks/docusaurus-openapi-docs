@@ -21,6 +21,11 @@ async function resolveJsonRefs(specUrlOrObject: object | string) {
   try {
     let schema = await $RefParser.dereference(specUrlOrObject, {
       continueOnError: true,
+      resolve: {
+        http: {
+          timeout: 15000, // 15 sec timeout
+        },
+      },
       dereference: {
         circular: "ignore",
       },
