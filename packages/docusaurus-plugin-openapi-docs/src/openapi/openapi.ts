@@ -250,7 +250,10 @@ export async function readOpenapiFiles(
   openapiPath: string,
   options: APIOptions
 ): Promise<OpenApiFiles[]> {
-  const { parseJsonRefs } = options;
+  // TODO: determine if this should be an API option
+  // Forces the json-schema-ref-parser
+  const parseJsonRefs = true;
+
   if (!isURL(openapiPath)) {
     const stat = await fs.lstat(openapiPath);
     if (stat.isDirectory()) {

@@ -32,7 +32,6 @@ export interface APIOptions {
   specPath: string;
   outputDir: string;
   template?: string;
-  parseJsonRefs?: boolean;
   sidebarOptions?: SidebarOptions;
   version?: string;
   label?: string;
