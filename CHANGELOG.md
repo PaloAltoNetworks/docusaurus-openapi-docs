@@ -1,3 +1,16 @@
+## 1.0.6 (Jun 15, 2022)
+
+High level enhancements
+
+- Rename `docPluginId` option to `docsPluginId`.
+- Ensure unique category link for versioned docs when `groupTagsBy` is set to "tag".
+- Introduce lower-level `json-schema-ref-parser` for handling non-OpenAPI-compliant `$ref` pointers.
+
+Other enhancements and bug fixes
+
+- Increase dereference timeout ([#135](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/135))
+- [Bug] Re-introduce json-schema-ref-parser ([#134](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/134))
+
 ## 1.0.5 (Jun 14, 2022)
 
 High level enhancements
