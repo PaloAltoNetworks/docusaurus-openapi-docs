@@ -25,6 +25,14 @@ const sidebars = {
       type: "doc",
       id: "intro",
     },
+    {
+      type: "doc",
+      id: "sidebars",
+    },
+    {
+      type: "doc",
+      id: "versioning",
+    },
   ],
   petstore: [
     {
