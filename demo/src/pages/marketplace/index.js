@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation } from "@docusaurus/router";
 
 function MarketPlace() {
@@ -7,7 +7,9 @@ function MarketPlace() {
     ? `https://xsoar-marketplace.pan.dev/${location.search}`
     : "https://xsoar-marketplace.pan.dev";
 
-  window.location.href = newLocation;
+  useEffect(() => {
+    window.location.href = newLocation;
+  }, []);
 
   return (
     <span>
