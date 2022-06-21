@@ -7,9 +7,7 @@ function MarketPlace() {
     ? `https://xsoar-marketplace.pan.dev/${location.search}`
     : "https://xsoar-marketplace.pan.dev";
 
-  setTimeout(() => {
-    window.location.href = newLocation;
-  }, 10000);
+  window.location.href = newLocation;
 
   return (
     <span>
