@@ -74,6 +74,10 @@ const config = {
             ],
           },
           {
+            label: "Marketplace",
+            to: "/marketplace",
+          },
+          {
             href: "https://medium.com/palo-alto-networks-developer-blog",
             position: "right",
             className: "header-medium-link",
