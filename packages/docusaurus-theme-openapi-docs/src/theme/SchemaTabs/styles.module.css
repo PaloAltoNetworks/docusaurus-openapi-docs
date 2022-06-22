@@ -12,10 +12,8 @@
   height: 1.8rem;
   margin-top: 0 !important;
   margin-right: 0.5rem;
-  border: 1px solid var(--openapi-code-dim-dark);
   border-radius: var(--ifm-global-radius);
   font-size: 12px;
-  color: var(--openapi-code-dim-dark);
 }
 
 .tabItem:hover {
