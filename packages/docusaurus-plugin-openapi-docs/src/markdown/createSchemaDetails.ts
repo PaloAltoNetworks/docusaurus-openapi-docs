@@ -6,6 +6,7 @@
  * ========================================================================== */
 
 import { MediaTypeObject, SchemaObject } from "../openapi/types";
+import { createAnyOneOf } from "./createAnyOneOf";
 import { createDescription } from "./createDescription";
 import { createDetails } from "./createDetails";
 import { createDetailsSummary } from "./createDetailsSummary";
@@ -169,7 +170,7 @@ interface RowsRootProps {
   schema: SchemaObject;
 }
 
-function createRowsRoot({ schema }: RowsRootProps) {
+function createRowsRoot({ schema }: RowsRootProps): any {
   // object
   if (schema.properties !== undefined) {
     return Object.entries(schema.properties).map(([key, val]) =>
@@ -193,6 +194,15 @@ function createRowsRoot({ schema }: RowsRootProps) {
         required: Array.isArray(required) ? required.includes(key) : false,
       })
     );
+  }
+
+  // TODO: This is top-level only - add support for nested oneOf/anyOf
+  if (schema.oneOf !== undefined) {
+    return createAnyOneOf(schema.oneOf, "oneOf");
+  }
+
+  if (schema.anyOf !== undefined) {
+    return createAnyOneOf(schema.anyOf, "anyOf");
   }
 
   // array
