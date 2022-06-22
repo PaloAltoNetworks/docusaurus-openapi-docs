@@ -70,10 +70,6 @@
   padding-top: 5px;
 }
 
-:global(.theme-api-markdown details li:last-child) {
-  border-left: none;
-}
-
 :global(.theme-api-markdown details p) {
   margin-bottom: 0;
 }
