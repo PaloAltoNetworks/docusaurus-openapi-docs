@@ -1,0 +1,25 @@
+---
+id: billing
+title: Billing
+description: Billing
+---
+
+
+
+The billing endpoints allow you to retrieve your account balance, invoices and billing history.
+
+**Balance:** By sending requests to the `/v2/customers/my/balance` endpoint, you can retrieve the balance information for the requested customer account.
+
+**Invoices:** [Invoices](https://www.digitalocean.com/docs/accounts/billing/invoices/) are generated on the first of each month for every DigitalOcean customer. An invoice preview is generated daily, which can be accessed with the `preview` keyword in place of `$INVOICE_UUID`. To interact with invoices, you will generally send requests to the invoices endpoint at `/v2/customers/my/invoices`.
+
+**Billing History:** Billing history is a record of billing events for your account. For example, entries may include events like payments made, invoices issued, or credits granted. To interact with invoices, you will generally send requests to the invoices endpoint at `/v2/customers/my/billing_history`.
+
+
+
+```mdx-code-block
+import DocCardList from '@theme/DocCardList';
+import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
+
+<DocCardList items={useCurrentSidebarCategory().items}/>
+```
+      

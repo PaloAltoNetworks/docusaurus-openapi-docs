@@ -1,0 +1,21 @@
+---
+id: actions
+title: Actions
+description: Actions
+---
+
+
+
+Actions are records of events that have occurred on the resources in your account. These can be things like rebooting a Droplet, or transferring an image to a new region.
+An action object is created every time one of these actions is initiated. The action object contains information about the current status of the action, start and complete timestamps, and the associated resource type and ID.
+Every action that creates an action object is available through this endpoint. Completed actions are not removed from this list and are always available for querying.
+
+
+
+```mdx-code-block
+import DocCardList from '@theme/DocCardList';
+import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
+
+<DocCardList items={useCurrentSidebarCategory().items}/>
+```
+      

@@ -1,0 +1,46 @@
+---
+id: databases
+title: Databases
+description: Databases
+---
+
+
+
+DigitalOcean's [managed database service](https://www.digitalocean.com/docs/databases)
+simplifies the creation and management of highly available database clusters. Currently, it
+offers support for [PostgreSQL](http://www.digitalocean.com/docs/databases/postgresql/),
+[Redis](https://www.digitalocean.com/docs/databases/redis/),
+[MySQL](https://www.digitalocean.com/docs/databases/mysql/), and
+[MongoDB](https://www.digitalocean.com/docs/databases/mongodb/).
+
+By sending requests to the `/v2/databases` endpoint, you can list, create, or delete
+database clusters as well as scale the size of a cluster, add or remove read-only replicas,
+and manage other configuration details.
+
+The size of individual nodes in a database cluster is represented by a human-readable slug.
+These slugs denote the underlying Droplet class, amount of RAM, and CPU count for the node.
+Database clusters may be deployed in a multi-node, highly available configuration. In
+addition to the primary node, up to two standby nodes may be added to a cluster with one
+exception. High availability configurations are not available when using the smallest node
+size. The currently available sizes and their corresponding slugs are:
+
+Size Slug        | RAM   | CPU     | Storage | High Availability Plans
+-----------------|-------|---------|---------|------------------------
+db-s-1vcpu-1gb   | 1 GB  | 1 vCPU  | 10 GB   | False
+db-s-1vcpu-2gb   | 2 GB  | 1 vCPU  | 25 GB   | True
+db-s-2vcpu-4gb   | 4 GB  | 2 vCPU  | 38 GB   | True
+db-s-4vcpu-8gb   | 8 GB  | 4 vCPU  | 115 GB  | True
+db-s-6vcpu-16gb  | 16 GB | 6 vCPU  | 270 GB  | True
+db-s-8vcpu-32gb  | 32 GB | 8 vCPU  | 580 GB  | True
+db-s-16vcpu-64gb | 64 GB | 16 vCPU | 1.12 TB | True
+
+
+
+
+```mdx-code-block
+import DocCardList from '@theme/DocCardList';
+import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
+
+<DocCardList items={useCurrentSidebarCategory().items}/>
+```
+      

@@ -1,0 +1,25 @@
+---
+id: images
+title: Images
+description: Images
+---
+
+
+
+A DigitalOcean [image](https://www.digitalocean.com/docs/images/) can be used to create a Droplet and may come in a number of flavors. Currently, there are five types of images: snapshots, backups, applications, distributions, and custom images.
+* [Snapshots](https://www.digitalocean.com/docs/images/snapshots/) provide a full copy of an existing Droplet instance taken on demand.
+* [Backups](https://www.digitalocean.com/docs/images/backups/) are similar to snapshots but are created automatically at regular intervals when enabled for a Droplet.
+* [Custom images](https://www.digitalocean.com/docs/images/custom-images/) are Linux-based virtual machine images (raw, qcow2, vhdx, vdi, and vmdk formats are supported) that you may upload for use on DigitalOcean.
+* Distributions are the public Linux distributions that are available to be used as a base to create Droplets.
+* Applications, or [1-Click Apps](https://www.digitalocean.com/docs/one-clicks/), are distributions pre-configured with additional software.
+To interact with images, you will generally send requests to the images endpoint at /v2/images.
+
+
+
+```mdx-code-block
+import DocCardList from '@theme/DocCardList';
+import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
+
+<DocCardList items={useCurrentSidebarCategory().items}/>
+```
+      

@@ -87,6 +87,16 @@ const sidebars = {
         },
       ],
     },
+    {
+      type: "category",
+      label: "Digital Ocean 2.0",
+      link: {
+        type: "generated-index",
+        title: "Digital Ocean API",
+        slug: "/category/do-api",
+      },
+      items: require("./docs/do/sidebar.js"),
+    },
   ],
 
   "petstore-2.0.0": [
