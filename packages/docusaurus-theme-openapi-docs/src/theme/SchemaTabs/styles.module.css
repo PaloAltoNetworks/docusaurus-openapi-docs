@@ -10,6 +10,7 @@
   align-items: center;
   justify-content: center;
   height: 1.8rem;
+  max-width: 175px;
   margin-top: 0 !important;
   margin-right: 0.5rem;
   border: 1px solid var(--openapi-code-dim-dark);
@@ -55,6 +56,12 @@
 
 .schemaTabsListContainer::-webkit-scrollbar {
   display: none;
+}
+
+.schemaTabLabel {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 /* Response Code Tabs - Colored Dots */

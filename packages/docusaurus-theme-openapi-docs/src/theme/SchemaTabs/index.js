@@ -196,7 +196,9 @@ function SchemaTabsComponent(props) {
                     }
                   )}
                 >
-                  {label ?? value}
+                  <span className={styles.schemaTabLabel}>
+                    {label ?? value}
+                  </span>
                 </li>
               );
             })}
