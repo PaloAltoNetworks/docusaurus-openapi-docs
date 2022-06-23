@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-export type Children = string | undefined | (string | undefined)[];
+export type Children = string | undefined | (string | string[] | undefined)[];
 
 export type Props = Record<string, any> & { children?: Children };
 
@@ -33,7 +33,10 @@ export function guard<T>(
 
 export function render(children: Children): string {
   if (Array.isArray(children)) {
-    return children.filter((c) => c !== undefined).join("");
+    const filteredChildren = children.filter((c) => c !== undefined);
+    return filteredChildren
+      .map((i: any) => (Array.isArray(i) ? i.join("") : i))
+      .join("");
   }
   return children ?? "";
 }
