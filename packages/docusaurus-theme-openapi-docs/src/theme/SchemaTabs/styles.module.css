@@ -62,6 +62,10 @@
   color: var(--ifm-color-primary);
 }
 
+.schemaTabLabel {
+  white-space: nowrap;
+}
+
 .schemaTabsContainer {
   max-width: 600px;
 }
