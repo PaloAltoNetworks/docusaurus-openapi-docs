@@ -9,6 +9,7 @@ import React, {
   Children,
   cloneElement,
   isValidElement,
+  useEffect,
   useRef,
   useState,
 } from "react";
@@ -142,7 +143,16 @@ function ApiTabsComponent(props) {
   };
 
   const tabItemListContainerRef = useRef(null);
-  const showTabArrows = values.length >= 5;
+  const [showTabArrows, setShowTabArrows] = useState(false);
+
+  useEffect(() => {
+    const tabOffsetWidth = tabItemListContainerRef.current.offsetWidth;
+    const tabScrollWidth = tabItemListContainerRef.current.scrollWidth;
+
+    if (tabOffsetWidth < tabScrollWidth) {
+      setShowTabArrows(true);
+    }
+  }, []);
 
   const handleRightClick = () => {
     tabItemListContainerRef.current.scrollLeft += 90;
