@@ -10,7 +10,6 @@
   align-items: center;
   justify-content: center;
   height: 1.8rem;
-  max-width: 175px;
   margin-top: 0 !important;
   margin-right: 0.5rem;
   border: 1px solid var(--openapi-code-dim-dark);
@@ -27,7 +26,7 @@
   margin-right: 0 !important;
 }
 
-/* Open API Response Code Tabs */
+/* Open API Schema Tabs */
 .schemaTabsTopSection {
   margin-top: 1rem;
   display: flex;
@@ -56,32 +55,6 @@
 
 .schemaTabsListContainer::-webkit-scrollbar {
   display: none;
-}
-
-.schemaTabLabel {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-/* Response Code Tabs - Colored Dots */
-.schemaTabDot {
-  width: 12.5px;
-  height: 12.5px;
-  margin-right: 5px;
-  border-radius: 50%;
-}
-
-.schemaTabDotSuccess {
-  background-color: var(--ifm-color-success);
-}
-
-.schemaTabDotDanger {
-  background-color: var(--ifm-color-danger);
-}
-
-.schemaTabDotInfo {
-  background-color: var(--ifm-color-info);
 }
 
 .tabItem.schemaTabActive {
