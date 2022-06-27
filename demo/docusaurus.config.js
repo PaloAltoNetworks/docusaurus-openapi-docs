@@ -145,15 +145,6 @@ const config = {
         id: "openapi",
         docsPluginId: "classic",
         config: {
-          do: {
-            specPath:
-              "https://raw.githubusercontent.com/APIs-guru/openapi-directory/main/APIs/digitalocean.com/2.0/openapi.yaml",
-            outputDir: "docs/do",
-            sidebarOptions: {
-              groupPathsBy: "tag",
-              categoryLinkSource: "tag",
-            },
-          },
           petstore_versioned: {
             specPath: "examples/petstore.yaml",
             outputDir: "docs/petstore_versioned", // No trailing slash
