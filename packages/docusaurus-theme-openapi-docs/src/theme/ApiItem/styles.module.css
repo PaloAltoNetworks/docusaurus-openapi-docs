@@ -70,10 +70,6 @@
   padding-top: 5px;
 }
 
-:global(.theme-api-markdown details li:last-child) {
-  border-left: none;
-}
-
 :global(.theme-api-markdown details p) {
   margin-bottom: 0;
 }
@@ -147,6 +143,11 @@
   border-bottom-color: var(--ifm-color-success);
 }
 
+:global(.language-python) {
+  max-height: 500px;
+  overflow: auto;
+}
+
 :global(.code__tab--go::after) {
   content: "";
   width: 32px;
@@ -163,6 +164,11 @@
 
 :global(.code__tab--go.tabs__item--active) {
   border-bottom-color: var(--ifm-color-info);
+}
+
+:global(.language-go) {
+  max-height: 500px;
+  overflow: auto;
 }
 
 :global(.code__tab--javascript::after) {
@@ -183,6 +189,11 @@
   border-bottom-color: var(--ifm-color-warning);
 }
 
+:global(.language-javascript) {
+  max-height: 500px;
+  overflow: auto;
+}
+
 :global(.code__tab--bash::after) {
   content: "";
   width: 32px;
@@ -199,4 +210,9 @@
 
 :global(.code__tab--bash.tabs__item--active) {
   border-bottom-color: var(--ifm-color-danger);
+}
+
+:global(.language-bash) {
+  max-height: 500px;
+  overflow: auto;
 }

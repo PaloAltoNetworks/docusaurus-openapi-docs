@@ -30,7 +30,7 @@ function isTabItem(comp) {
   return typeof comp.props.value !== "undefined";
 }
 
-function ApiTabsComponent(props) {
+function SchemaTabsComponent(props) {
   const {
     lazy,
     block,
@@ -164,9 +164,8 @@ function ApiTabsComponent(props) {
 
   return (
     <div className="tabs__container">
-      <div className={styles.responseTabsTopSection}>
-        <strong>Responses</strong>
-        <div className={styles.responseTabsContainer}>
+      <div className={styles.schemaTabsTopSection}>
+        <div className={styles.schemaTabsContainer}>
           {showTabArrows && (
             <button
               className={clsx(styles.tabArrow, styles.tabArrowLeft)}
@@ -178,7 +177,7 @@ function ApiTabsComponent(props) {
             role="tablist"
             aria-orientation="horizontal"
             className={clsx(
-              styles.responseTabsListContainer,
+              styles.schemaTabsListContainer,
               "tabs",
               {
                 "tabs--block": block,
@@ -187,13 +186,6 @@ function ApiTabsComponent(props) {
             )}
           >
             {values.map(({ value, label, attributes }) => {
-              const responseTabDotStyle =
-                parseInt(value) >= 400
-                  ? styles.responseTabDotDanger
-                  : parseInt(value) >= 200 && parseInt(value) < 300
-                  ? styles.responseTabDotSuccess
-                  : styles.responseTabDotInfo;
-
               return (
                 <li
                   role="tab"
@@ -210,14 +202,13 @@ function ApiTabsComponent(props) {
                     styles.tabItem,
                     attributes?.className,
                     {
-                      [styles.responseTabActive]: selectedValue === value,
+                      [styles.schemaTabActive]: selectedValue === value,
                     }
                   )}
                 >
-                  <div
-                    className={clsx(styles.responseTabDot, responseTabDotStyle)}
-                  />
-                  {label ?? value}
+                  <span className={styles.schemaTabLabel}>
+                    {label ?? value}
+                  </span>
                 </li>
               );
             })}
@@ -237,13 +228,11 @@ function ApiTabsComponent(props) {
             (tabItem) => tabItem.props.value === selectedValue
           )[0],
           {
-            className: clsx("margin-vert--md", styles.responseSchemaContainer),
+            className: clsx("margin-vert--md", styles.schemaTabsContainer),
           }
         )
       ) : (
-        <div
-          className={clsx("margin-vert--md", styles.responseSchemaContainer)}
-        >
+        <div className={clsx("margin-vert--md", styles.schemaTabsContainer)}>
           {children.map((tabItem, i) =>
             cloneElement(tabItem, {
               key: i,
@@ -256,10 +245,10 @@ function ApiTabsComponent(props) {
   );
 }
 
-export default function ApiTabs(props) {
+export default function SchemaTabs(props) {
   const isBrowser = useIsBrowser();
   return (
-    <ApiTabsComponent // Remount tabs after hydration
+    <SchemaTabsComponent // Remount tabs after hydration
       // Temporary fix for https://github.com/facebook/docusaurus/issues/5653
       key={String(isBrowser)}
       {...props}

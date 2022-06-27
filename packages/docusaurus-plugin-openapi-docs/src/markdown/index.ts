@@ -40,6 +40,7 @@ export function createApiPageMD({
     `import ParamsItem from "@theme/ParamsItem";\n`,
     `import SchemaItem from "@theme/SchemaItem"\n`,
     `import ApiTabs from "@theme/ApiTabs";\n`,
+    `import SchemaTabs from "@theme/SchemaTabs";\n`,
     `import TabItem from "@theme/TabItem";\n\n`,
     `## ${escape(title)}\n\n`,
     createDeprecationNotice({ deprecated, description: deprecatedDescription }),

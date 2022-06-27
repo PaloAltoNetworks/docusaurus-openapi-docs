@@ -6,6 +6,7 @@
  * ========================================================================== */
 
 import { MediaTypeObject, SchemaObject } from "../openapi/types";
+import { createAnyOneOf } from "./createAnyOneOf";
 import { createDescription } from "./createDescription";
 import { createDetails } from "./createDetails";
 import { createDetailsSummary } from "./createDetailsSummary";
@@ -140,20 +141,24 @@ function createRows({ schema }: RowsProps): string | undefined {
           style: { marginBottom: "1rem" },
           children: "allOf",
         }),
-        create("ul", {
-          className: "allOf",
-          children: Object.entries(properties).map(([key, val]) =>
-            createRow({
-              name: key,
-              schema: val,
-              required: Array.isArray(required)
-                ? required.includes(key)
-                : false,
-            })
-          ),
-        }),
+        Object.entries(properties).map(([key, val]) =>
+          createRow({
+            name: key,
+            schema: val,
+            required: Array.isArray(required) ? required.includes(key) : false,
+          })
+        ),
       ],
     });
+  }
+
+  // Adds support one more level deep
+  if (schema.oneOf !== undefined) {
+    return createAnyOneOf(schema.oneOf, "oneOf");
+  }
+
+  if (schema.anyOf !== undefined) {
+    return createAnyOneOf(schema.anyOf, "anyOf");
   }
 
   // array
@@ -169,7 +174,7 @@ interface RowsRootProps {
   schema: SchemaObject;
 }
 
-function createRowsRoot({ schema }: RowsRootProps) {
+function createRowsRoot({ schema }: RowsRootProps): any {
   // object
   if (schema.properties !== undefined) {
     return Object.entries(schema.properties).map(([key, val]) =>
@@ -186,13 +191,31 @@ function createRowsRoot({ schema }: RowsRootProps) {
   // TODO: This can be a bit complicated types can be missmatched and there can be nested allOfs which need to be resolved before merging properties
   if (schema.allOf !== undefined) {
     const { properties, required } = resolveAllOf(schema.allOf);
-    return Object.entries(properties).map(([key, val]) =>
-      createRow({
-        name: key,
-        schema: val,
-        required: Array.isArray(required) ? required.includes(key) : false,
-      })
-    );
+    return create("div", {
+      children: [
+        create("span", {
+          className: "badge badge--info",
+          style: { marginBottom: "1rem" },
+          children: "allOf",
+        }),
+        Object.entries(properties).map(([key, val]) =>
+          createRow({
+            name: key,
+            schema: val,
+            required: Array.isArray(required) ? required.includes(key) : false,
+          })
+        ),
+      ],
+    });
+  }
+
+  // TODO: This is top-level only - add support for nested oneOf/anyOf
+  if (schema.oneOf !== undefined) {
+    return createAnyOneOf(schema.oneOf, "oneOf");
+  }
+
+  if (schema.anyOf !== undefined) {
+    return createAnyOneOf(schema.anyOf, "anyOf");
   }
 
   // array
