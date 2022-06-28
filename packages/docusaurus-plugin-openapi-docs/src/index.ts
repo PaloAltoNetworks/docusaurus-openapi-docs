@@ -16,7 +16,6 @@ import { render } from "mustache";
 
 import { createApiPageMD, createInfoPageMD, createTagPageMD } from "./markdown";
 import { readOpenapiFiles, processOpenapiFiles } from "./openapi";
-import { Extensions } from "./openapi/types";
 import { OptionsSchema } from "./options";
 import generateSidebarSlice from "./sidebars";
 import type {
