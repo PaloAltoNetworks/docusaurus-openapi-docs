@@ -1,4 +1,8 @@
 openapi: 3.0.0
+x-docusaurus-extensions:
+  root-category-label: Petstore API
+  root-category-description: |
+    This is a sample server Petstore server. You can find out more about Swagger at http://swagger.io or on irc.freenode.net, #swagger. For this sample, you can use the api key special-key to test the authorization filters.
 servers:
   - url: https://petstore.swagger.io/v2
     description: Default server

@@ -35,18 +35,7 @@ const sidebars = {
     },
   ],
   petstore: [
-    {
-      type: "category",
-      label: "Petstore",
-      link: {
-        type: "generated-index",
-        title: "Petstore API",
-        description:
-          "This is a sample server Petstore server. You can find out more about Swagger at http://swagger.io or on irc.freenode.net, #swagger. For this sample, you can use the api key special-key to test the authorization filters.",
-        slug: "/category/petstore-api",
-      },
-      items: require("./docs/petstore/sidebar.js"),
-    },
+    require("./docs/petstore/sidebar.js"),
     {
       type: "category",
       label: "Cloud Object Storage",
