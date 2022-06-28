@@ -8,6 +8,7 @@
 import type Request from "@paloaltonetworks/postman-collection";
 
 import {
+  Extensions,
   InfoObject,
   OperationObject,
   SecuritySchemeObject,
@@ -61,7 +62,11 @@ export interface LoadedContent {
   // loadedDocs: DocPageMetadata[]; TODO: cleanup
 }
 
-export type ApiMetadata = ApiPageMetadata | InfoPageMetadata | TagPageMetadata;
+export type ApiMetadata =
+  | ApiPageMetadata
+  | InfoPageMetadata
+  | TagPageMetadata
+  | ExtensionsMetadata;
 
 export interface ApiMetadataBase {
   sidebar?: string;
@@ -112,6 +117,12 @@ export interface InfoPageMetadata extends ApiMetadataBase {
 export interface TagPageMetadata extends ApiMetadataBase {
   type: "tag";
   tag: TagObject;
+  markdown?: string;
+}
+
+export interface ExtensionsMetadata {
+  type: "extensions";
+  extensions: Extensions;
   markdown?: string;
 }
 
