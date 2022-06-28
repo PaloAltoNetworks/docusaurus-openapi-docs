@@ -21,6 +21,7 @@ import {
   ApiMetadata,
   APIOptions,
   ApiPageMetadata,
+  ExtensionsMetadata,
   InfoPageMetadata,
   SidebarOptions,
   TagPageMetadata,
@@ -142,6 +143,14 @@ function createItems(
     items.push(infoPage);
   }
 
+  if (openapiData["x-docusaurus-extensions"]) {
+    const extensions: ExtensionsMetadata = {
+      type: "extensions",
+      extensions: openapiData["x-docusaurus-extensions"],
+    };
+    items.push(extensions);
+  }
+
   for (let [path, pathObject] of Object.entries(openapiData.paths)) {
     const { $ref, description, parameters, servers, summary, ...rest } =
       pathObject;
@@ -228,7 +237,11 @@ function bindCollectionToApiItems(
       .replace(/:([a-z0-9-_]+)/gi, "{$1}"); // replace "/:variableName" with "/{variableName}"
 
     const apiItem = items.find((item) => {
-      if (item.type === "info" || item.type === "tag") {
+      if (
+        item.type === "info" ||
+        item.type === "tag" ||
+        item.type === "extensions"
+      ) {
         return false;
       }
       return item.api.path === path && item.api.method === method;
