@@ -11,6 +11,11 @@ interface Map<T> {
   [key: string]: T;
 }
 
+export interface Extensions {
+  "root-category-label"?: string;
+  "root-category-description"?: string;
+}
+
 export interface OpenApiObject {
   openapi: string;
   info: InfoObject;
@@ -20,6 +25,7 @@ export interface OpenApiObject {
   security?: SecurityRequirementObject[];
   tags?: TagObject[];
   externalDocs?: ExternalDocumentationObject;
+  "x-docusaurus-extensions"?: Extensions;
 }
 
 export interface OpenApiObjectWithRef {
