@@ -11,13 +11,20 @@ import path from "path";
 import type { LoadContext, Plugin } from "@docusaurus/types";
 import { Globby } from "@docusaurus/utils";
 import chalk from "chalk";
+import { kebabCase } from "lodash";
 import { render } from "mustache";
 
 import { createApiPageMD, createInfoPageMD, createTagPageMD } from "./markdown";
 import { readOpenapiFiles, processOpenapiFiles } from "./openapi";
+import { Extensions } from "./openapi/types";
 import { OptionsSchema } from "./options";
 import generateSidebarSlice from "./sidebars";
-import type { PluginOptions, LoadedContent, APIOptions } from "./types";
+import type {
+  PluginOptions,
+  LoadedContent,
+  APIOptions,
+  ExtensionsMetadata,
+} from "./types";
 
 export function isURL(str: string): boolean {
   return /^(https?:)\/\//m.test(str);
@@ -108,12 +115,37 @@ export default function pluginOpenAPIDocs(
           docPath
         );
 
+        let extendedSidebar;
+        const extensionsItem = loadedApi.filter(
+          (item) => item.type === "extensions"
+        ) as ExtensionsMetadata[];
+        const extensions = extensionsItem[0]?.extensions;
+        if (extensions) {
+          const label = extensions["root-category-label"];
+          const description = extensions["root-category-description"];
+          extendedSidebar = {
+            type: "category",
+            label: label,
+            link: {
+              type: "generated-index",
+              title: label,
+              ...(description && {
+                description: description,
+              }),
+              slug: "/category/" + kebabCase(label),
+            },
+            items: sidebarSlice,
+          };
+        }
+
         const sidebarSliceTemplate = template
           ? fs.readFileSync(template).toString()
           : `module.exports = {{{slice}}};`;
 
         const view = render(sidebarSliceTemplate, {
-          slice: JSON.stringify(sidebarSlice),
+          slice: extendedSidebar
+            ? JSON.stringify(extendedSidebar)
+            : JSON.stringify(sidebarSlice),
         });
 
         if (!fs.existsSync(`${outputDir}/sidebar.js`)) {
@@ -204,7 +236,9 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
             ? createApiPageMD(item)
             : item.type === "info"
             ? createInfoPageMD(item)
-            : createTagPageMD(item);
+            : item.type === "tag"
+            ? createTagPageMD(item)
+            : ""; // TODO do we want to write MDX for root-category-description?
         item.markdown = markdown;
         if (item.type === "api") {
           item.json = JSON.stringify(item.api);
