@@ -15,7 +15,7 @@ import clsx from "clsx";
 import { kebabCase } from "lodash";
 import uniq from "lodash/uniq";
 
-import { TagObject } from "../openapi/types";
+import { Extensions, TagObject } from "../openapi/types";
 import type {
   SidebarOptions,
   APIOptions,
@@ -182,15 +182,72 @@ function groupByTags(
   return [...tagged, ...untagged];
 }
 
+function groupBySpec(
+  items: ApiPageMetadata[],
+  options: APIOptions,
+  docPath: string
+): ProcessedSidebar {
+  const { outputDir } = options;
+
+  const apiItems = items.filter(isApiItem);
+  const infoItems = items.filter(isInfoItem);
+
+  const basePath = docPath
+    ? outputDir.split(docPath!)[1].replace(/^\/+/g, "")
+    : outputDir.slice(outputDir.indexOf("/", 1)).replace(/^\/+/g, "");
+
+  function createDocItem(item: ApiPageMetadata): SidebarItemDoc {
+    const sidebar_label = item.frontMatter.sidebar_label;
+    const title = item.title;
+    const id = item.id;
+    return {
+      type: "doc" as const,
+      id:
+        basePath === "" || undefined ? `${item.id}` : `${basePath}/${item.id}`,
+      label: (sidebar_label as string) ?? title ?? id,
+      className: clsx(
+        {
+          "menu__list-item--deprecated": item.api.deprecated,
+          "api-method": !!item.api.method,
+        },
+        item.api.method
+      ),
+    };
+  }
+
+  let rootIntroDoc = undefined;
+  if (infoItems.length === 1) {
+    const infoItem = infoItems[0];
+    const id = infoItem.id;
+    rootIntroDoc = {
+      type: "doc" as const,
+      id: `${basePath}/${id}`,
+    };
+  }
+
+  // Handle items with no tag
+  const untaggedItems = apiItems
+    .filter(({ api }) => api.tags === undefined || api.tags.length === 0)
+    .map(createDocItem);
+
+  // Shift root intro doc to top of sidebar
+  if (rootIntroDoc) {
+    untaggedItems.unshift(rootIntroDoc as any);
+  }
+
+  return [...untaggedItems];
+}
+
 export default function generateSidebarSlice(
   sidebarOptions: SidebarOptions,
   options: APIOptions,
   api: ApiMetadata[],
   tags: TagObject[],
-  docPath: string
+  docPath: string,
+  extensions: Extensions
 ) {
   let sidebarSlice: ProcessedSidebar = [];
-  if (sidebarOptions.groupPathsBy === "tag") {
+  if (sidebarOptions?.groupPathsBy === "tag") {
     sidebarSlice = groupByTags(
       api as ApiPageMetadata[],
       sidebarOptions,
@@ -198,6 +255,9 @@ export default function generateSidebarSlice(
       tags,
       docPath
     );
+  }
+  if (extensions["root-category-label"]) {
+    sidebarSlice = groupBySpec(api as ApiPageMetadata[], options, docPath);
   }
   return sidebarSlice;
 }
