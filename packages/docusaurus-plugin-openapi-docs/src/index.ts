@@ -110,70 +110,17 @@ export default function pluginOpenAPIDocs(
       const extensions = extensionsItem[0]?.extensions;
 
       let extendedSidebar; // Undefined extended sidebar
-      // TODO: figure out better way to set default
-      if (Object.keys(sidebarOptions ?? {}).length > 0) {
-        const sidebarSlice = generateSidebarSlice(
-          sidebarOptions!,
-          options,
-          loadedApi,
-          tags,
-          docPath,
-          extensions
-        );
-        if (extensions && sidebarSlice) {
-          const label = extensions["root-category-label"];
-          const description = extensions["root-category-description"];
-          extendedSidebar = {
-            type: "category",
-            label: label,
-            link: {
-              type: "generated-index",
-              title: label,
-              ...(description && {
-                description: description,
-              }),
-              slug: "/category/" + kebabCase(label),
-            },
-            items: sidebarSlice,
-          };
-        }
+      const sidebarSlice = generateSidebarSlice(
+        sidebarOptions!,
+        options,
+        loadedApi,
+        tags,
+        docPath,
+        extensions // groupBySpec if present
+      ); // Can return undefined
 
-        const sidebarSliceTemplate = template
-          ? fs.readFileSync(template).toString()
-          : `module.exports = {{{slice}}};`;
-
-        const view = render(sidebarSliceTemplate, {
-          slice: extendedSidebar
-            ? JSON.stringify(extendedSidebar)
-            : JSON.stringify(sidebarSlice),
-        });
-
-        if (!fs.existsSync(`${outputDir}/sidebar.js`)) {
-          try {
-            fs.writeFileSync(`${outputDir}/sidebar.js`, view, "utf8");
-            console.log(
-              chalk.green(`Successfully created "${outputDir}/sidebar.js"`)
-            );
-          } catch (err) {
-            console.error(
-              chalk.red(`Failed to write "${outputDir}/sidebar.js"`),
-              chalk.yellow(err)
-            );
-          }
-        }
-      }
-
-      // Handle extensions with no sidebarOptions
-      if (extensions["root-category-label"]) {
-        const sidebarSlice = generateSidebarSlice(
-          sidebarOptions!,
-          options,
-          loadedApi,
-          tags,
-          docPath,
-          extensions
-        );
-        if (extensions && sidebarSlice) {
+      if (sidebarSlice) {
+        if (extensions && extensions["root-category-label"] && sidebarSlice) {
           const label = extensions["root-category-label"];
           const description = extensions["root-category-description"];
           extendedSidebar = {

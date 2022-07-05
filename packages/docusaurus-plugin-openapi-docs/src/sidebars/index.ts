@@ -255,9 +255,17 @@ export default function generateSidebarSlice(
       tags,
       docPath
     );
+    return sidebarSlice;
   }
-  if (extensions["root-category-label"]) {
+  if (
+    !sidebarOptions?.groupPathsBy &&
+    extensions &&
+    extensions["root-category-label"]
+  ) {
+    console.log("Burgers!");
     sidebarSlice = groupBySpec(api as ApiPageMetadata[], options, docPath);
+    return sidebarSlice;
   }
-  return sidebarSlice;
+
+  return;
 }
