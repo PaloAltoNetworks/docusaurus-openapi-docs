@@ -13,8 +13,10 @@ import { bundle } from "@redocly/openapi-core/lib/bundle";
 import type { ResolvedConfig } from "@redocly/openapi-core/lib/config";
 import { Config } from "@redocly/openapi-core/lib/config/config";
 import chalk from "chalk";
+import { merge } from "lodash";
 import { convertObj } from "swagger2openapi";
 
+import { OpenAPIParser } from "./services/OpenAPIParser";
 import { OpenAPISpec } from "./types";
 
 async function resolveJsonRefs(specUrlOrObject: object | string) {
@@ -64,6 +66,19 @@ export async function loadAndBundleSpec(
   } = await bundle(bundleOpts);
   if (parseJsonRefs) {
     const resolved = await resolveJsonRefs(parsed);
+    const parser = new OpenAPIParser(resolved);
+    const resolvedAgain = parser.deref(resolved, true, true);
+    const body =
+      resolvedAgain.paths["/search/history/{id}"].post.requestBody.content[
+        "application/json"
+      ];
+    const schema = parser.deref(body.schema);
+    const timeRange = schema.properties.timeRange;
+    const mergedAllOf = parser.mergeAllOf(
+      timeRange,
+      "#/components/schemas/TimeRangeConfigModel"
+    );
+    console.log(mergedAllOf);
     return typeof resolved === Object
       ? resolved.swagger !== undefined
         ? convertSwagger2OpenAPI(resolved)
