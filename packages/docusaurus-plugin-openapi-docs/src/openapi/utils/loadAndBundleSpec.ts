@@ -63,7 +63,7 @@ export async function loadAndBundleSpec(
     bundle: { parsed },
   } = await bundle(bundleOpts);
   if (parseJsonRefs) {
-    const resolved = resolveJsonRefs(parsed);
+    const resolved = await resolveJsonRefs(parsed);
     return typeof resolved === Object
       ? resolved.swagger !== undefined
         ? convertSwagger2OpenAPI(resolved)
