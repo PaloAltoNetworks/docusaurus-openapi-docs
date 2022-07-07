@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React, { useState } from "react";
+import React from "react";
 
 import { usePrismTheme } from "@docusaurus/theme-common";
 import useIsBrowser from "@docusaurus/useIsBrowser";
@@ -16,25 +16,15 @@ import styles from "./styles.module.css";
 
 function Live({ onEdit }: any) {
   const isBrowser = useIsBrowser();
-  const [editorDisabled, setEditorDisabled] = useState(false);
-
-  const handleKeydown = (event: React.KeyboardEvent) => {
-    if (event.key === "Tab") {
-      event.preventDefault();
-      setEditorDisabled(true);
-    }
-  };
 
   return (
-    <div onClick={() => setEditorDisabled(false)}>
+    <>
       <LiveEditor
         key={String(isBrowser)}
         className={styles.playgroundEditor}
         onChange={onEdit}
-        disabled={editorDisabled}
-        onKeyDown={handleKeydown}
       />
-    </div>
+    </>
   );
 }
 
@@ -50,6 +40,13 @@ function App({
 }: any): JSX.Element {
   const prismTheme = usePrismTheme();
   const [code, setCode] = React.useState(children);
+
+  // Skip over Editor when navigating through keyboard tab
+  const editorTextArea = document.querySelector(
+    ".npm__react-simple-code-editor__textarea"
+  );
+  editorTextArea?.setAttribute("tabindex", "-1");
+
   action(setStringRawBody(code));
   return (
     <div className={styles.playgroundContainer}>
