@@ -17,8 +17,12 @@ interface Props {
 
 function FloatingButton({ label, onClick, children }: Props) {
   return (
-    <div className={styles.floatingButton}>
-      {label && <button onClick={onClick}>{label}</button>}
+    <div tabIndex={0} className={styles.floatingButton}>
+      {label && (
+        <button tabIndex={0} onClick={onClick}>
+          {label}
+        </button>
+      )}
       {children}
     </div>
   );
