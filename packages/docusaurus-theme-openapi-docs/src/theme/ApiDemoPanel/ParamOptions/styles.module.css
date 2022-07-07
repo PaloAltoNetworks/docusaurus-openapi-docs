@@ -41,10 +41,6 @@
   display: block;
 }
 
-.showMoreButton:focus {
-  outline: 0;
-}
-
 .showMoreButton:hover {
   /* text-decoration: underline; */
   /* background-color: red; */
