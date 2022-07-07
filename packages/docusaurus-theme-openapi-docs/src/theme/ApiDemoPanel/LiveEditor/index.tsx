@@ -24,7 +24,7 @@ function Live({ onEdit }: any) {
         className={styles.playgroundEditor}
         onChange={onEdit}
         // @ts-ignore
-        ignoreTabKey
+        ignoreTabKey={true}
       />
     </>
   );
