@@ -197,7 +197,7 @@ function ApiTabsComponent(props) {
               return (
                 <li
                   role="tab"
-                  tabIndex={selectedValue === value ? 0 : -1}
+                  tabIndex={0}
                   aria-selected={selectedValue === value}
                   key={value}
                   ref={(tabControl) => tabRefs.push(tabControl)}
