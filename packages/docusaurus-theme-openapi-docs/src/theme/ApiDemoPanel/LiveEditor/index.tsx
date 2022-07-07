@@ -23,6 +23,8 @@ function Live({ onEdit }: any) {
         key={String(isBrowser)}
         className={styles.playgroundEditor}
         onChange={onEdit}
+        // @ts-ignore
+        ignoreTabKey
       />
     </>
   );
@@ -40,13 +42,6 @@ function App({
 }: any): JSX.Element {
   const prismTheme = usePrismTheme();
   const [code, setCode] = React.useState(children);
-
-  // Skip over Editor when navigating through keyboard tab
-  const editorTextArea = document.querySelector(
-    ".npm__react-simple-code-editor__textarea"
-  );
-  editorTextArea?.setAttribute("tabindex", "-1");
-
   action(setStringRawBody(code));
   return (
     <div className={styles.playgroundContainer}>
