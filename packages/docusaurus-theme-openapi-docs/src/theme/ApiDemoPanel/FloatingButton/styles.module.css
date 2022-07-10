@@ -9,7 +9,6 @@
   border-radius: var(--ifm-global-radius);
   color: var(--ifm-color-white);
   cursor: pointer;
-  outline: none;
   padding: 0.4rem 0.5rem;
   opacity: 0;
   visibility: hidden;
@@ -20,7 +19,9 @@
   right: calc(var(--ifm-pre-padding) / 2);
 }
 
-.floatingButton:hover button {
+.floatingButton:hover button,
+.floatingButton:focus-visible button,
+.floatingButton button:focus-visible {
   visibility: visible;
   opacity: 1;
 }

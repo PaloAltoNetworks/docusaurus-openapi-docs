@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React from "react";
+import React, { useState } from "react";
 
 import { usePrismTheme } from "@docusaurus/theme-common";
 import useIsBrowser from "@docusaurus/useIsBrowser";
@@ -16,14 +16,26 @@ import styles from "./styles.module.css";
 
 function Live({ onEdit }: any) {
   const isBrowser = useIsBrowser();
+  const [editorDisabled, setEditorDisabled] = useState(false);
+
+  // TODO: Temporary solution for disabling tab key
+  const handleKeydown = (event: React.KeyboardEvent) => {
+    if (event.key === "Tab") {
+      event.preventDefault();
+      setEditorDisabled(true);
+    }
+  };
+
   return (
-    <>
+    <div onClick={() => setEditorDisabled(false)}>
       <LiveEditor
         key={String(isBrowser)}
         className={styles.playgroundEditor}
         onChange={onEdit}
+        disabled={editorDisabled}
+        onKeyDown={handleKeydown}
       />
-    </>
+    </div>
   );
 }
 
