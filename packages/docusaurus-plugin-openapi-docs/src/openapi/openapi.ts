@@ -13,7 +13,6 @@ import sdk from "@paloaltonetworks/postman-collection";
 import Collection from "@paloaltonetworks/postman-collection";
 import chalk from "chalk";
 import fs from "fs-extra";
-import JsonRefs from "json-refs";
 import { kebabCase } from "lodash";
 
 import { isURL } from "../index";
@@ -26,16 +25,8 @@ import {
   TagPageMetadata,
 } from "../types";
 import { sampleFromSchema } from "./createExample";
-import { OpenApiObject, OpenApiObjectWithRef, TagObject } from "./types";
-import { loadAndBundleSpec } from "./utils/loadAndBundleSpec";
-
-/**
- * Finds any reference objects in the OpenAPI definition and resolves them to a finalized value.
- */
-async function resolveRefs(openapiData: OpenApiObjectWithRef) {
-  const { resolved } = await JsonRefs.resolveRefs(openapiData);
-  return resolved as OpenApiObject;
-}
+import { OpenApiObject, TagObject } from "./types";
+import { loadAndResolveSpec } from "./utils/loadAndResolveSpec";
 
 /**
  * Convenience function for converting raw JSON to a Postman Collection object.
@@ -62,7 +53,7 @@ function jsonToCollection(data: OpenApiObject): Promise<Collection> {
 async function createPostmanCollection(
   openapiData: OpenApiObject
 ): Promise<Collection> {
-  const data = JSON.parse(JSON.stringify(openapiData)) as OpenApiObject;
+  const data = openapiData as OpenApiObject;
 
   // Including `servers` breaks postman, so delete all of them.
   delete data.servers;
@@ -243,17 +234,13 @@ function bindCollectionToApiItems(
 interface OpenApiFiles {
   source: string;
   sourceDirName: string;
-  data: OpenApiObjectWithRef;
+  data: OpenApiObject;
 }
 
 export async function readOpenapiFiles(
   openapiPath: string,
   options: APIOptions
 ): Promise<OpenApiFiles[]> {
-  // TODO: determine if this should be an API option
-  // Forces the json-schema-ref-parser
-  const parseJsonRefs = true;
-
   if (!isURL(openapiPath)) {
     const stat = await fs.lstat(openapiPath);
     if (stat.isDirectory()) {
@@ -274,10 +261,9 @@ export async function readOpenapiFiles(
         sources.map(async (source) => {
           // TODO: make a function for this
           const fullPath = path.join(openapiPath, source);
-          const data = (await loadAndBundleSpec(
-            fullPath,
-            parseJsonRefs
-          )) as OpenApiObjectWithRef;
+          const data = (await loadAndResolveSpec(
+            fullPath
+          )) as unknown as OpenApiObject;
           return {
             source: fullPath, // This will be aliased in process.
             sourceDirName: path.dirname(source),
@@ -287,10 +273,9 @@ export async function readOpenapiFiles(
       );
     }
   }
-  const data = (await loadAndBundleSpec(
-    openapiPath,
-    parseJsonRefs
-  )) as OpenApiObjectWithRef;
+  const data = (await loadAndResolveSpec(
+    openapiPath
+  )) as unknown as OpenApiObject;
   return [
     {
       source: openapiPath, // This will be aliased in process.
@@ -325,10 +310,9 @@ export async function processOpenapiFiles(
 }
 
 export async function processOpenapiFile(
-  openapiDataWithRefs: OpenApiObjectWithRef,
+  openapiData: OpenApiObject,
   sidebarOptions: SidebarOptions
 ): Promise<[ApiMetadata[], TagObject[]]> {
-  const openapiData = await resolveRefs(openapiDataWithRefs);
   const postmanCollection = await createPostmanCollection(openapiData);
   const items = createItems(openapiData, sidebarOptions);
 
