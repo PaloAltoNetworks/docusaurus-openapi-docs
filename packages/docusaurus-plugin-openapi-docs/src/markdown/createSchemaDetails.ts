@@ -17,7 +17,6 @@ const mergeAllOf = require("json-schema-merge-allof");
 
 function resolveAllOf(allOf: SchemaObject[]) {
   // Use external library to resolve and merge nested allOf schemas
-  let properties: SchemaObject = {};
   const mergedSchemas = mergeAllOf(allOf, {
     resolvers: {
       readOnly: function () {
@@ -29,10 +28,6 @@ function resolveAllOf(allOf: SchemaObject[]) {
     },
   });
 
-  if (mergedSchemas.properties) {
-    properties = mergedSchemas.properties;
-  }
-
   const required = allOf.reduce((acc, cur) => {
     if (Array.isArray(cur.required)) {
       const next = [...acc, ...cur.required];
@@ -41,7 +36,7 @@ function resolveAllOf(allOf: SchemaObject[]) {
     return acc;
   }, [] as string[]);
 
-  return { properties, required };
+  return { mergedSchemas, required };
 }
 
 interface RowProps {
@@ -133,37 +128,47 @@ function createRows({ schema }: RowsProps): string | undefined {
 
   // TODO: This can be a bit complicated types can be missmatched and there can be nested allOfs which need to be resolved before merging properties
   if (schema.allOf !== undefined) {
-    const { properties, required } = resolveAllOf(schema.allOf);
-    return create("div", {
-      children: [
-        create("span", {
-          className: "badge badge--info",
-          style: { marginBottom: "1rem" },
-          children: "allOf",
-        }),
-        Object.entries(properties).map(([key, val]) =>
-          createRow({
-            name: key,
-            schema: val,
-            required: Array.isArray(required) ? required.includes(key) : false,
-          })
-        ),
-      ],
-    });
-  }
+    const {
+      mergedSchemas,
+      required,
+    }: { mergedSchemas: SchemaObject; required: string[] } = resolveAllOf(
+      schema.allOf
+    );
+    // Adds support one more level deep
+    if (mergedSchemas.oneOf !== undefined) {
+      return createAnyOneOf(mergedSchemas.oneOf, "oneOf");
+    }
 
-  // Adds support one more level deep
-  if (schema.oneOf !== undefined) {
-    return createAnyOneOf(schema.oneOf, "oneOf");
-  }
+    if (mergedSchemas.anyOf !== undefined) {
+      return createAnyOneOf(mergedSchemas.anyOf, "anyOf");
+    }
 
-  if (schema.anyOf !== undefined) {
-    return createAnyOneOf(schema.anyOf, "anyOf");
-  }
+    // array
+    if (mergedSchemas.items !== undefined) {
+      return createRows({ schema: schema.items as SchemaObject });
+    }
 
-  // array
-  if (schema.items !== undefined) {
-    return createRows({ schema: schema.items });
+    if (mergedSchemas.properties !== undefined) {
+      return create("div", {
+        children: [
+          create("span", {
+            className: "badge badge--info",
+            style: { marginBottom: "1rem" },
+            children: "allOf",
+          }),
+          Object.entries(mergedSchemas.properties as SchemaObject).map(
+            ([key, val]) =>
+              createRow({
+                name: key,
+                schema: val as SchemaObject,
+                required: Array.isArray(required)
+                  ? required.includes(key)
+                  : false,
+              })
+          ),
+        ],
+      });
+    }
   }
 
   // primitive
@@ -190,7 +195,12 @@ function createRowsRoot({ schema }: RowsRootProps): any {
 
   // TODO: This can be a bit complicated types can be missmatched and there can be nested allOfs which need to be resolved before merging properties
   if (schema.allOf !== undefined) {
-    const { properties, required } = resolveAllOf(schema.allOf);
+    const {
+      mergedSchemas,
+      required,
+    }: { mergedSchemas: SchemaObject; required: string[] } = resolveAllOf(
+      schema.allOf
+    );
     return create("div", {
       children: [
         create("span", {
@@ -198,12 +208,15 @@ function createRowsRoot({ schema }: RowsRootProps): any {
           style: { marginBottom: "1rem" },
           children: "allOf",
         }),
-        Object.entries(properties).map(([key, val]) =>
-          createRow({
-            name: key,
-            schema: val,
-            required: Array.isArray(required) ? required.includes(key) : false,
-          })
+        Object.entries(mergedSchemas.properties as SchemaObject).map(
+          ([key, val]) =>
+            createRow({
+              name: key,
+              schema: val as SchemaObject,
+              required: Array.isArray(required)
+                ? required.includes(key)
+                : false,
+            })
         ),
       ],
     });
