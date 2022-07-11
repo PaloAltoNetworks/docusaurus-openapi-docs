@@ -20,6 +20,7 @@ export interface OpenApiObject {
   security?: SecurityRequirementObject[];
   tags?: TagObject[];
   externalDocs?: ExternalDocumentationObject;
+  swagger?: string;
 }
 
 export interface OpenApiObjectWithRef {
