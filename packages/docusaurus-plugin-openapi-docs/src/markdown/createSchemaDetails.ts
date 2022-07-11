@@ -46,7 +46,7 @@ interface RowProps {
 }
 
 function createRow({ name, schema, required }: RowProps) {
-  const schemaName = getSchemaName(schema, true);
+  const schemaName = getSchemaName(schema);
   if (schemaName && (schemaName === "object" || schemaName === "object[]")) {
     return create("SchemaItem", {
       collapsible: true,
@@ -101,7 +101,7 @@ function createRow({ name, schema, required }: RowProps) {
     name,
     required,
     schemaDescription: schema.description,
-    schemaName: getSchemaName(schema, true),
+    schemaName: schemaName,
     qualifierMessage: getQualifierMessage(schema),
   });
 }
@@ -110,7 +110,17 @@ interface RowsProps {
   schema: SchemaObject;
 }
 
-function createRows({ schema }: RowsProps): string | undefined {
+export function createRows({ schema }: RowsProps): string | undefined {
+  // oneOf
+  if (schema.oneOf !== undefined) {
+    return createAnyOneOf(schema.oneOf, "oneOf");
+  }
+
+  // anyOf
+  if (schema.anyOf !== undefined) {
+    return createAnyOneOf(schema.anyOf, "anyOf");
+  }
+
   // object
   if (schema.properties !== undefined) {
     return create("ul", {

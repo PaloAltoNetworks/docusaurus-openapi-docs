@@ -8,17 +8,25 @@
 import { SchemaObject } from "../openapi/types";
 
 function prettyName(schema: SchemaObject, circular?: boolean) {
-  if (schema.$ref) {
-    return schema.$ref.replace("#/components/schemas/", "") + circular
-      ? " (circular)"
-      : "";
-  }
-
   if (schema.format) {
     return schema.format;
   }
 
   if (schema.allOf) {
+    if (typeof schema.allOf[0] === "string") {
+      // @ts-ignore
+      if (schema.allOf[0].includes("circular")) {
+        return schema.allOf[0];
+      }
+    }
+    return "object";
+  }
+
+  if (schema.oneOf) {
+    return "object";
+  }
+
+  if (schema.anyOf) {
     return "object";
   }
 
