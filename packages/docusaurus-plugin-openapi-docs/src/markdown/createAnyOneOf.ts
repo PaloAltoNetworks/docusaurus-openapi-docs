@@ -5,17 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { createSchemaDetails } from "./createSchemaDetails";
+import { createRows } from "./createSchemaDetails";
 import { create } from "./utils";
-
-// {
-//   'application/json': {
-//     schema: { properties: [Object], required: [Array], type: 'object' }
-//   }
-// }
-// {
-//   'application/json': { schema: { allOf: [Array], example: [Object] } }
-// }
 
 export function createAnyOneOf(anyOneOf: any[], type: string) {
   if (anyOneOf === undefined) {
@@ -34,49 +25,21 @@ export function createAnyOneOf(anyOneOf: any[], type: string) {
       }),
       create("SchemaTabs", {
         children: anyOneOf.map((schema, index) => {
-          // Prep schema details
-          let schemaDetails: any = {};
-          schemaDetails["application/json"] = {}; // Placeholder content type
-          schemaDetails["application/json"].schema = {};
           const label = schema.title ? schema.title : `MOD${index + 1}`;
 
           if (schema.properties !== undefined) {
-            schemaDetails["application/json"].schema.properties =
-              schema.properties;
-            schemaDetails["application/json"].schema.required = schema.required;
-            schemaDetails["application/json"].schema.type = "object";
             return create("TabItem", {
               label: label,
               value: `${index}-properties`,
-              children: [
-                create("div", {
-                  children: createSchemaDetails({
-                    title: "Schema",
-                    body: {
-                      content: schemaDetails,
-                    },
-                  }),
-                }),
-              ],
+              children: [createRows({ schema: schema })],
             });
           }
 
           if (schema.allOf !== undefined) {
-            schemaDetails["application/json"].schema.allOf = schema.allOf;
-            schemaDetails["application/json"].schema.example = schema.example;
             return create("TabItem", {
               label: label,
               value: `${index}-allOf`,
-              children: [
-                create("div", {
-                  children: createSchemaDetails({
-                    title: "Schema",
-                    body: {
-                      content: schemaDetails,
-                    },
-                  }),
-                }),
-              ],
+              children: [createRows({ schema: schema })],
             });
           }
 
