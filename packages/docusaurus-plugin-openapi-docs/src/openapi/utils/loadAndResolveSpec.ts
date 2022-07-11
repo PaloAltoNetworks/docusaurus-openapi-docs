@@ -19,12 +19,10 @@ function serializer(replacer: any, cycleReplacer: any) {
   var stack: any = [],
     keys: any = [];
 
-  if (cycleReplacer == null)
+  if (cycleReplacer === undefined)
     cycleReplacer = function (key: any, value: any) {
-      if (stack[0] === value) return "[Circular ~]";
-      return (
-        "[Circular ~." + keys.slice(0, stack.indexOf(value)).join(".") + "]"
-      );
+      if (stack[0] === value) return "circular()";
+      return value.title ? `circular(${value.title})` : "circular()";
     };
 
   return function (key: any, value: any) {
@@ -39,7 +37,7 @@ function serializer(replacer: any, cycleReplacer: any) {
     } else stack.push(value);
 
     // @ts-ignore
-    return replacer == null ? value : replacer.call(this, key, value);
+    return replacer === undefined ? value : replacer.call(this, key, value);
   };
 }
 
