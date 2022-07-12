@@ -12,11 +12,11 @@ import React, {
   type ReactElement,
 } from "react";
 
-import {
+import { duplicates } from "@docusaurus/theme-common";
+const {
   useScrollPositionBlocker,
-  duplicates,
   useTabGroupChoice,
-} from "@docusaurus/theme-common";
+} = require("@docusaurus/theme-common/internal");
 import useIsBrowser from "@docusaurus/useIsBrowser";
 import type { Props as TabItemProps } from "@theme/TabItem";
 import clsx from "clsx";

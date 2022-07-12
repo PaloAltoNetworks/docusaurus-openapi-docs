@@ -14,11 +14,11 @@ import React, {
   useState,
 } from "react";
 
-import {
-  duplicates,
+import { duplicates } from "@docusaurus/theme-common";
+const {
   useScrollPositionBlocker,
   useTabGroupChoice,
-} from "@docusaurus/theme-common";
+} = require("@docusaurus/theme-common/internal");
 import useIsBrowser from "@docusaurus/useIsBrowser";
 import clsx from "clsx";
 
