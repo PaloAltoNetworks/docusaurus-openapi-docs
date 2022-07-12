@@ -16,10 +16,11 @@ import {
 } from "@docusaurus/theme-common";
 import DocBreadcrumbs from "@theme/DocBreadcrumbs";
 import type { Props } from "@theme/DocItem";
-import DocItemFooter from "@theme/DocItemFooter";
+import DocItemFooter from "@theme/DocItem/Footer";
 import DocPaginator from "@theme/DocPaginator";
 import DocVersionBadge from "@theme/DocVersionBadge";
 import DocVersionBanner from "@theme/DocVersionBanner";
+const { DocProvider } = require("@docusaurus/theme-common/internal");
 import Heading from "@theme/Heading";
 import MDXContent from "@theme/MDXContent";
 import TOC from "@theme/TOC";
@@ -132,7 +133,7 @@ function DocItemContent(props: Props): JSX.Element {
               </MDXContent>
             </div>
             <div className={clsx("col", api ? "col--7" : "col--12")}>
-              <DocItemFooter {...props} />
+              <DocItemFooter />
             </div>
           </article>
           <div className={clsx("col", api ? "col--7" : "col--12")}>
@@ -157,9 +158,11 @@ function DocItemContent(props: Props): JSX.Element {
 export default function DocItem(props: Props): JSX.Element {
   const docHtmlClassName = `docs-doc-id-${props.content.metadata.unversionedId}`;
   return (
-    <HtmlClassNameProvider className={docHtmlClassName}>
-      <DocItemMetadata {...props} />
-      <DocItemContent {...props} />
-    </HtmlClassNameProvider>
+    <DocProvider content={props.content}>
+      <HtmlClassNameProvider className={docHtmlClassName}>
+        <DocItemMetadata {...props} />
+        <DocItemContent {...props} />
+      </HtmlClassNameProvider>
+    </DocProvider>
   );
 }
