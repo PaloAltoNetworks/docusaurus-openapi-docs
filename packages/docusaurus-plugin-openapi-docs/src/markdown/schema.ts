@@ -32,6 +32,12 @@ function prettyName(schema: SchemaObject, circular?: boolean) {
 
   if (schema.type === "object") {
     return schema.xml?.name ?? schema.type;
+    // return schema.type;
+  }
+
+  if (schema.type === "array") {
+    return schema.xml?.name ?? schema.type;
+    // return schema.type;
   }
 
   return schema.title ?? schema.type;
@@ -50,8 +56,6 @@ export function getSchemaName(
 
 export function getQualifierMessage(schema?: SchemaObject): string | undefined {
   // TODO:
-  // - maxItems
-  // - minItems
   // - uniqueItems
   // - maxProperties
   // - minProperties
@@ -60,9 +64,10 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
     return undefined;
   }
 
-  if (schema.items) {
-    return getQualifierMessage(schema.items);
-  }
+  // TODO: This doesn't seem right
+  // if (schema.items) {
+  //   return getQualifierMessage(schema.items);
+  // }
 
   let message = "**Possible values:** ";
 
@@ -113,6 +118,14 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
 
   if (schema.enum) {
     qualifierGroups.push(`[${schema.enum.map((e) => `\`${e}\``).join(", ")}]`);
+  }
+
+  if (schema.minItems) {
+    qualifierGroups.push(`items >= ${schema.minItems}`);
+  }
+
+  if (schema.maxItems) {
+    qualifierGroups.push(`items <= ${schema.maxItems}`);
   }
 
   if (qualifierGroups.length === 0) {
