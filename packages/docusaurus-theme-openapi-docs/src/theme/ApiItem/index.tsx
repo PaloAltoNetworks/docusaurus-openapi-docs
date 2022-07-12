@@ -20,7 +20,6 @@ import DocItemFooter from "@theme/DocItem/Footer";
 import DocPaginator from "@theme/DocPaginator";
 import DocVersionBadge from "@theme/DocVersionBadge";
 import DocVersionBanner from "@theme/DocVersionBanner";
-const { DocProvider } = require("@docusaurus/theme-common/internal");
 import Heading from "@theme/Heading";
 import MDXContent from "@theme/MDXContent";
 import TOC from "@theme/TOC";
@@ -30,6 +29,8 @@ import type { ApiItem as ApiItemType } from "docusaurus-plugin-openapi-docs/lib/
 
 import { DocFrontMatter } from "../../types";
 import styles from "./styles.module.css";
+
+const { DocProvider } = require("@docusaurus/theme-common/internal");
 
 let ApiDemoPanel = (_: { item: any; infoPath: any }) => (
   <div style={{ marginTop: "3.5em" }} />

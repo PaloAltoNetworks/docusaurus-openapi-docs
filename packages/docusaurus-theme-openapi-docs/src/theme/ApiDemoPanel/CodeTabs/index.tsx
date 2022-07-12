@@ -13,16 +13,17 @@ import React, {
 } from "react";
 
 import { duplicates } from "@docusaurus/theme-common";
-const {
-  useScrollPositionBlocker,
-  useTabGroupChoice,
-} = require("@docusaurus/theme-common/internal");
 import useIsBrowser from "@docusaurus/useIsBrowser";
 import type { Props as TabItemProps } from "@theme/TabItem";
 import clsx from "clsx";
 
 import { languageSet } from "../Curl";
 import styles from "./styles.module.css";
+
+const {
+  useScrollPositionBlocker,
+  useTabGroupChoice,
+} = require("@docusaurus/theme-common/internal");
 
 // A very rough duck type, but good enough to guard against mistakes while
 // allowing customization
