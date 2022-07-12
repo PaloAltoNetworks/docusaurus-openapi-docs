@@ -47,54 +47,6 @@ interface RowProps {
 
 function createRow({ name, schema, required }: RowProps) {
   const schemaName = getSchemaName(schema);
-  if (schemaName && (schemaName === "object" || schemaName === "object[]")) {
-    return create("SchemaItem", {
-      collapsible: true,
-      className: "schemaItem",
-      children: [
-        createDetails({
-          children: [
-            createDetailsSummary({
-              children: [
-                create("strong", { children: name }),
-                create("span", {
-                  style: { opacity: "0.6" },
-                  children: ` ${schemaName}`,
-                }),
-                guard(required, () => [
-                  create("strong", {
-                    style: {
-                      fontSize: "var(--ifm-code-font-size)",
-                      color: "var(--openapi-required)",
-                    },
-                    children: " required",
-                  }),
-                ]),
-              ],
-            }),
-            create("div", {
-              style: { marginLeft: "1rem" },
-              children: [
-                guard(getQualifierMessage(schema), (message) =>
-                  create("div", {
-                    style: { marginTop: ".5rem", marginBottom: ".5rem" },
-                    children: createDescription(message),
-                  })
-                ),
-                guard(schema.description, (description) =>
-                  create("div", {
-                    style: { marginTop: ".5rem", marginBottom: ".5rem" },
-                    children: createDescription(description),
-                  })
-                ),
-                createRows({ schema: schema }),
-              ],
-            }),
-          ],
-        }),
-      ],
-    });
-  }
 
   // array
   if (schema.type === "array" && schema.items) {
@@ -138,6 +90,55 @@ function createRow({ name, schema, required }: RowProps) {
                   })
                 ),
                 createRows({ schema: schema.items }),
+              ],
+            }),
+          ],
+        }),
+      ],
+    });
+  }
+
+  if (schemaName && (schemaName === "object" || schemaName === "object[]")) {
+    return create("SchemaItem", {
+      collapsible: true,
+      className: "schemaItem",
+      children: [
+        createDetails({
+          children: [
+            createDetailsSummary({
+              children: [
+                create("strong", { children: name }),
+                create("span", {
+                  style: { opacity: "0.6" },
+                  children: ` ${schemaName}`,
+                }),
+                guard(required, () => [
+                  create("strong", {
+                    style: {
+                      fontSize: "var(--ifm-code-font-size)",
+                      color: "var(--openapi-required)",
+                    },
+                    children: " required",
+                  }),
+                ]),
+              ],
+            }),
+            create("div", {
+              style: { marginLeft: "1rem" },
+              children: [
+                guard(getQualifierMessage(schema), (message) =>
+                  create("div", {
+                    style: { marginTop: ".5rem", marginBottom: ".5rem" },
+                    children: createDescription(message),
+                  })
+                ),
+                guard(schema.description, (description) =>
+                  create("div", {
+                    style: { marginTop: ".5rem", marginBottom: ".5rem" },
+                    children: createDescription(description),
+                  })
+                ),
+                createRows({ schema: schema }),
               ],
             }),
           ],
