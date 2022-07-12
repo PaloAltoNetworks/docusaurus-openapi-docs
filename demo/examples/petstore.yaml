@@ -1016,6 +1016,7 @@ components:
       xml:
         name: Order
     Pet:
+      title: pet
       type: object
       required:
         - name
@@ -1081,6 +1082,7 @@ components:
       xml:
         name: Pet
     Tag:
+      title: tag
       type: object
       properties:
         id:
