@@ -96,6 +96,57 @@ function createRow({ name, schema, required }: RowProps) {
     });
   }
 
+  // array
+  if (schema.type === "array" && schema.items) {
+    return create("SchemaItem", {
+      collapsible: true,
+      className: "schemaItem",
+      children: [
+        createDetails({
+          children: [
+            createDetailsSummary({
+              children: [
+                create("strong", { children: name }),
+                create("span", {
+                  style: { opacity: "0.6" },
+                  children: ` ${schemaName}`,
+                }),
+                guard(required, () => [
+                  create("strong", {
+                    style: {
+                      fontSize: "var(--ifm-code-font-size)",
+                      color: "var(--openapi-required)",
+                    },
+                    children: " required",
+                  }),
+                ]),
+              ],
+            }),
+            create("div", {
+              style: { marginLeft: "1rem" },
+              children: [
+                guard(getQualifierMessage(schema), (message) =>
+                  create("div", {
+                    style: { marginTop: ".5rem", marginBottom: ".5rem" },
+                    children: createDescription(message),
+                  })
+                ),
+                guard(schema.description, (description) =>
+                  create("div", {
+                    style: { marginTop: ".5rem", marginBottom: ".5rem" },
+                    children: createDescription(description),
+                  })
+                ),
+                createRows({ schema: schema.items }),
+              ],
+            }),
+          ],
+        }),
+      ],
+    });
+  }
+
+  // primitive
   return create("SchemaItem", {
     collapsible: false,
     name,
@@ -136,7 +187,7 @@ export function createRows({ schema }: RowsProps): string | undefined {
     });
   }
 
-  // TODO: This can be a bit complicated types can be missmatched and there can be nested allOfs which need to be resolved before merging properties
+  // allOf
   if (schema.allOf !== undefined) {
     const {
       mergedSchemas,
@@ -203,7 +254,7 @@ function createRowsRoot({ schema }: RowsRootProps): any {
     );
   }
 
-  // TODO: This can be a bit complicated types can be missmatched and there can be nested allOfs which need to be resolved before merging properties
+  // allOf
   if (schema.allOf !== undefined) {
     const {
       mergedSchemas,
@@ -232,11 +283,12 @@ function createRowsRoot({ schema }: RowsRootProps): any {
     });
   }
 
-  // TODO: This is top-level only - add support for nested oneOf/anyOf
+  // oneOf
   if (schema.oneOf !== undefined) {
     return createAnyOneOf(schema.oneOf, "oneOf");
   }
 
+  // anyOf
   if (schema.anyOf !== undefined) {
     return createAnyOneOf(schema.anyOf, "anyOf");
   }
