@@ -14,15 +14,16 @@ import React, {
   useState,
 } from "react";
 
-import {
-  duplicates,
-  useScrollPositionBlocker,
-  useTabGroupChoice,
-} from "@docusaurus/theme-common";
+import { duplicates } from "@docusaurus/theme-common";
 import useIsBrowser from "@docusaurus/useIsBrowser";
 import clsx from "clsx";
 
 import styles from "./styles.module.css"; // A very rough duck type, but good enough to guard against mistakes while
+
+const {
+  useScrollPositionBlocker,
+  useTabGroupChoice,
+} = require("@docusaurus/theme-common/internal");
 
 // allowing customization
 

@@ -37,6 +37,11 @@
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
 
+/* Override --ifm text-decoration */
+a:any-link:hover {
+  text-decoration: none;
+}
+
 /* Sidebar Method labels */
 .api-method > .menu__link {
   align-items: center;

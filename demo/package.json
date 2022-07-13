@@ -16,8 +16,8 @@
     "clean-api-docs": "docusaurus clean-api-docs"
   },
   "dependencies": {
-    "@docusaurus/core": "2.0.0-beta.21",
-    "@docusaurus/preset-classic": "2.0.0-beta.21",
+    "@docusaurus/core": "2.0.0-beta.22",
+    "@docusaurus/preset-classic": "2.0.0-beta.22",
     "@mdx-js/react": "^1.6.22",
     "clsx": "^1.1.1",
     "docusaurus-plugin-openapi-docs": "^1.0.6",
