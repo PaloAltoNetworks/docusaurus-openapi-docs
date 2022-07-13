@@ -67,7 +67,6 @@ function groupByTags(
   const basePath = docPath
     ? outputDir.split(docPath!)[1].replace(/^\/+/g, "")
     : outputDir.slice(outputDir.indexOf("/", 1)).replace(/^\/+/g, "");
-
   function createDocItem(item: ApiPageMetadata): SidebarItemDoc {
     const sidebar_label = item.frontMatter.sidebar_label;
     const title = item.title;
@@ -94,7 +93,7 @@ function groupByTags(
     const id = infoItem.id;
     rootIntroDoc = {
       type: "doc" as const,
-      id: `${basePath}/${id}`,
+      id: basePath === "" || undefined ? `${id}` : `${basePath}/${id}`,
     };
   }
 
@@ -117,7 +116,10 @@ function groupByTags(
       if (taggedInfoObject !== undefined && categoryLinkSource === "info") {
         linkConfig = {
           type: "doc",
-          id: `${basePath}/${taggedInfoObject.id}`,
+          id:
+            basePath === "" || undefined
+              ? `${taggedInfoObject.id}`
+              : `${basePath}/${taggedInfoObject.id}`,
         } as SidebarItemCategoryLinkConfig;
       }
 
@@ -126,7 +128,8 @@ function groupByTags(
         const tagId = kebabCase(tagObject.name);
         linkConfig = {
           type: "doc",
-          id: `${basePath}/${tagId}`,
+          id:
+            basePath === "" || undefined ? `${tagId}` : `${basePath}/${tagId}`,
         } as SidebarItemCategoryLinkConfig;
       }
 
