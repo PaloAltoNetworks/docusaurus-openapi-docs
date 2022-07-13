@@ -109,9 +109,13 @@ export async function loadAndResolveSpec(specUrlOrObject: object | string) {
   // Force serialization and replace circular $ref pointers
   // @ts-ignore
   const serialized = JSON.stringify(resolved, serializer());
-  const decycled = JSON.parse(serialized);
-
-  return typeof decycled === "object"
+  let decycled;
+  try {
+    decycled = JSON.parse(serialized);
+  } catch (err: any) {
+    console.error(chalk.yellow(err));
+  }
+  return decycled !== undefined && typeof decycled === "object"
     ? decycled.swagger !== undefined
       ? convertSwagger2OpenAPI(decycled)
       : decycled
