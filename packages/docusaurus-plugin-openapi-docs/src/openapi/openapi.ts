@@ -290,22 +290,39 @@ export async function processOpenapiFiles(
   sidebarOptions: SidebarOptions
 ): Promise<[ApiMetadata[], TagObject[]]> {
   const promises = files.map(async (file) => {
-    const processedFile = await processOpenapiFile(file.data, sidebarOptions);
-    const itemsObjectsArray = processedFile[0].map((item) => ({
-      ...item,
-    }));
-    const tags = processedFile[1];
-    return [itemsObjectsArray, tags];
+    if (file.data !== undefined) {
+      const processedFile = await processOpenapiFile(file.data, sidebarOptions);
+      const itemsObjectsArray = processedFile[0].map((item) => ({
+        ...item,
+      }));
+      const tags = processedFile[1];
+      return [itemsObjectsArray, tags];
+    }
+    console.warn(
+      chalk.yellow(
+        `WARNING: the following OpenAPI spec returned undefined: ${file.source}`
+      )
+    );
+    return [];
   });
   const metadata = await Promise.all(promises);
   const items = metadata
     .map(function (x) {
       return x[0];
     })
-    .flat();
-  const tags = metadata.map(function (x) {
-    return x[1];
-  });
+    .flat()
+    .filter(function (x) {
+      // Remove undefined items due to transient parsing errors
+      return x !== undefined;
+    });
+  const tags = metadata
+    .map(function (x) {
+      return x[1];
+    })
+    .filter(function (x) {
+      // Remove undefined tags due to transient parsing errors
+      return x !== undefined;
+    });
   return [items as ApiMetadata[], tags as TagObject[]];
 }
 
