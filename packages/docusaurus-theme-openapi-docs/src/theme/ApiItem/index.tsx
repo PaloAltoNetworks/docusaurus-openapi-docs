@@ -10,12 +10,12 @@ import React from "react";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import { HtmlClassNameProvider } from "@docusaurus/theme-common";
 import type { Props } from "@theme/DocItem";
-import DocItemMetadata from "./Metadata";
-import DocItemLayout from "./Layout";
 import clsx from "clsx";
 import type { ApiItem as ApiItemType } from "docusaurus-plugin-openapi-docs/lib/types";
 
 import { DocFrontMatter } from "../../types";
+import DocItemLayout from "./Layout";
+import DocItemMetadata from "./Metadata";
 
 const { DocProvider } = require("@docusaurus/theme-common/internal");
 

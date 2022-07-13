@@ -6,20 +6,21 @@
  * ========================================================================== */
 
 import React from "react";
-import clsx from "clsx";
+
 import { useWindowSize } from "@docusaurus/theme-common";
 // @ts-ignore
 import { useDoc } from "@docusaurus/theme-common/internal";
-import DocItemPaginator from "../Paginator";
-import DocVersionBanner from "@theme/DocVersionBanner";
-import DocVersionBadge from "@theme/DocVersionBadge";
-import DocItemFooter from "../Footer";
-import DocItemTOCMobile from "../TOC/Mobile";
-import DocItemTOCDesktop from "../TOC/Desktop";
-import DocItemContent from "../Content";
 import DocBreadcrumbs from "@theme/DocBreadcrumbs";
 import type { Props } from "@theme/DocItem/Layout";
+import DocVersionBadge from "@theme/DocVersionBadge";
+import DocVersionBanner from "@theme/DocVersionBanner";
+import clsx from "clsx";
 
+import DocItemContent from "../Content";
+import DocItemFooter from "../Footer";
+import DocItemPaginator from "../Paginator";
+import DocItemTOCDesktop from "../TOC/Desktop";
+import DocItemTOCMobile from "../TOC/Mobile";
 import styles from "./styles.module.css";
 
 /**

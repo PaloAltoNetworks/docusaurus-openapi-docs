@@ -6,18 +6,19 @@
  * ========================================================================== */
 
 import React from "react";
-import clsx from "clsx";
+
 import { ThemeClassNames } from "@docusaurus/theme-common";
 import {
   useDoc,
   type DocContextValue,
   // @ts-ignore
 } from "@docusaurus/theme-common/internal";
-import LastUpdated from "@theme/LastUpdated";
 import EditThisPage from "@theme/EditThisPage";
+import LastUpdated from "@theme/LastUpdated";
 import TagsListInline, {
   type Props as TagsListInlineProps,
 } from "@theme/TagsListInline";
+import clsx from "clsx";
 
 import styles from "./styles.module.css";
 

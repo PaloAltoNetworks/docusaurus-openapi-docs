@@ -6,6 +6,7 @@
  * ========================================================================== */
 
 import React from "react";
+
 // @ts-ignore
 import { useDoc } from "@docusaurus/theme-common/internal";
 import DocPaginator from "@theme/DocPaginator";

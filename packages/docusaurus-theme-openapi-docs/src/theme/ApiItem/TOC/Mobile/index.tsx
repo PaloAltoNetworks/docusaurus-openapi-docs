@@ -6,12 +6,12 @@
  * ========================================================================== */
 
 import React from "react";
-import clsx from "clsx";
+
 import { ThemeClassNames } from "@docusaurus/theme-common";
 // @ts-ignore
 import { useDoc } from "@docusaurus/theme-common/internal";
-
 import TOCCollapsible from "@theme/TOCCollapsible";
+import clsx from "clsx";
 
 import styles from "./styles.module.css";
 
