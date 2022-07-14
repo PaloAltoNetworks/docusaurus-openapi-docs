@@ -43,6 +43,16 @@ export function createAnyOneOf(anyOneOf: any[], type: string) {
             });
           }
 
+          if (schema.items !== undefined) {
+            if (schema.items.properties !== undefined) {
+              return create("TabItem", {
+                label: label,
+                value: `${index}-item-properties`,
+                children: [createRows({ schema: schema.items })],
+              });
+            }
+          }
+
           return undefined;
         }),
       }),
