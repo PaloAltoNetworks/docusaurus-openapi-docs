@@ -8,22 +8,36 @@
 import { SchemaObject } from "../openapi/types";
 
 function prettyName(schema: SchemaObject, circular?: boolean) {
-  if (schema.$ref) {
-    return schema.$ref.replace("#/components/schemas/", "") + circular
-      ? " (circular)"
-      : "";
-  }
-
   if (schema.format) {
     return schema.format;
   }
 
   if (schema.allOf) {
+    if (typeof schema.allOf[0] === "string") {
+      // @ts-ignore
+      if (schema.allOf[0].includes("circular")) {
+        return schema.allOf[0];
+      }
+    }
+    return "object";
+  }
+
+  if (schema.oneOf) {
+    return "object";
+  }
+
+  if (schema.anyOf) {
     return "object";
   }
 
   if (schema.type === "object") {
     return schema.xml?.name ?? schema.type;
+    // return schema.type;
+  }
+
+  if (schema.type === "array") {
+    return schema.xml?.name ?? schema.type;
+    // return schema.type;
   }
 
   return schema.title ?? schema.type;
@@ -42,8 +56,6 @@ export function getSchemaName(
 
 export function getQualifierMessage(schema?: SchemaObject): string | undefined {
   // TODO:
-  // - maxItems
-  // - minItems
   // - uniqueItems
   // - maxProperties
   // - minProperties
@@ -52,9 +64,10 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
     return undefined;
   }
 
-  if (schema.items) {
-    return getQualifierMessage(schema.items);
-  }
+  // TODO: This doesn't seem right
+  // if (schema.items) {
+  //   return getQualifierMessage(schema.items);
+  // }
 
   let message = "**Possible values:** ";
 
@@ -105,6 +118,14 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
 
   if (schema.enum) {
     qualifierGroups.push(`[${schema.enum.map((e) => `\`${e}\``).join(", ")}]`);
+  }
+
+  if (schema.minItems) {
+    qualifierGroups.push(`items >= ${schema.minItems}`);
+  }
+
+  if (schema.maxItems) {
+    qualifierGroups.push(`items <= ${schema.maxItems}`);
   }
 
   if (qualifierGroups.length === 0) {
