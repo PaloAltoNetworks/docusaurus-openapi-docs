@@ -6,18 +6,19 @@
  * ========================================================================== */
 
 import { MediaTypeObject, SchemaObject } from "../openapi/types";
-import { createAnyOneOf } from "./createAnyOneOf";
 import { createDescription } from "./createDescription";
 import { createDetails } from "./createDetails";
 import { createDetailsSummary } from "./createDetailsSummary";
 import { getQualifierMessage, getSchemaName } from "./schema";
 import { create, guard } from "./utils";
 
-const mergeAllOf = require("json-schema-merge-allof");
+const jsonSchemaMergeAllOf = require("json-schema-merge-allof");
 
-function resolveAllOf(allOf: SchemaObject[]) {
-  // Use external library to resolve and merge nested allOf schemas
-  const mergedSchemas = mergeAllOf(allOf, {
+/**
+ * Returns a merged representation of allOf array of schemas.
+ */
+function mergeAllOf(allOf: SchemaObject[]) {
+  const mergedSchemas = jsonSchemaMergeAllOf(allOf, {
     resolvers: {
       readOnly: function () {
         return true;
@@ -39,271 +40,131 @@ function resolveAllOf(allOf: SchemaObject[]) {
   return { mergedSchemas, required };
 }
 
-interface RowProps {
-  name: string;
-  schema: SchemaObject;
-  required: boolean;
-}
-
-function createRow({ name, schema, required }: RowProps) {
-  const schemaName = getSchemaName(schema);
-
-  // array
-  if (schema.type === "array" && schema.items) {
-    return create("SchemaItem", {
-      collapsible: true,
-      className: "schemaItem",
-      children: [
-        createDetails({
-          children: [
-            createDetailsSummary({
-              children: [
-                create("strong", { children: name }),
-                create("span", {
-                  style: { opacity: "0.6" },
-                  children: ` ${schemaName}`,
-                }),
-                guard(required, () => [
-                  create("strong", {
-                    style: {
-                      fontSize: "var(--ifm-code-font-size)",
-                      color: "var(--openapi-required)",
-                    },
-                    children: " required",
+// Details
+function createAnyOneOf(
+  name: string,
+  schemaName: string,
+  schema: SchemaObject,
+  required: any
+) {
+  const type = schema.oneOf ? "oneOf" : "anyOf";
+  return create("li", {
+    children: [
+      create("SchemaItem", {
+        collapsible: true,
+        className: "schemaItem",
+        children: [
+          createDetails({
+            children: [
+              createDetailsSummary({
+                children: [
+                  create("strong", { children: name }),
+                  create("span", {
+                    style: { opacity: "0.6" },
+                    children: ` ${schemaName}`,
                   }),
-                ]),
-              ],
-            }),
-            create("div", {
-              style: { marginLeft: "1rem" },
-              children: [
-                guard(getQualifierMessage(schema), (message) =>
-                  create("div", {
-                    style: { marginTop: ".5rem", marginBottom: ".5rem" },
-                    children: createDescription(message),
-                  })
-                ),
-                guard(schema.description, (description) =>
-                  create("div", {
-                    style: { marginTop: ".5rem", marginBottom: ".5rem" },
-                    children: createDescription(description),
-                  })
-                ),
-                createRows({ schema: schema.items }),
-              ],
-            }),
-          ],
-        }),
-      ],
-    });
-  }
-
-  if (schemaName && (schemaName === "object" || schemaName === "object[]")) {
-    return create("SchemaItem", {
-      collapsible: true,
-      className: "schemaItem",
-      children: [
-        createDetails({
-          children: [
-            createDetailsSummary({
-              children: [
-                create("strong", { children: name }),
-                create("span", {
-                  style: { opacity: "0.6" },
-                  children: ` ${schemaName}`,
-                }),
-                guard(required, () => [
-                  create("strong", {
-                    style: {
-                      fontSize: "var(--ifm-code-font-size)",
-                      color: "var(--openapi-required)",
-                    },
-                    children: " required",
+                  guard(required, () => [
+                    create("strong", {
+                      style: {
+                        fontSize: "var(--ifm-code-font-size)",
+                        color: "var(--openapi-required)",
+                      },
+                      children: " required",
+                    }),
+                  ]),
+                ],
+              }),
+              create("div", {
+                style: { marginLeft: "1rem" },
+                children: [
+                  guard(getQualifierMessage(schema), (message) =>
+                    create("div", {
+                      style: { marginTop: ".5rem", marginBottom: ".5rem" },
+                      children: createDescription(message),
+                    })
+                  ),
+                  guard(schema.description, (description) =>
+                    create("div", {
+                      style: { marginTop: ".5rem", marginBottom: ".5rem" },
+                      children: createDescription(description),
+                    })
+                  ),
+                  create("span", {
+                    className: "badge badge--info",
+                    children: type,
                   }),
-                ]),
-              ],
-            }),
-            create("div", {
-              style: { marginLeft: "1rem" },
-              children: [
-                guard(getQualifierMessage(schema), (message) =>
-                  create("div", {
-                    style: { marginTop: ".5rem", marginBottom: ".5rem" },
-                    children: createDescription(message),
-                  })
-                ),
-                guard(schema.description, (description) =>
-                  create("div", {
-                    style: { marginTop: ".5rem", marginBottom: ".5rem" },
-                    children: createDescription(description),
-                  })
-                ),
-                createRows({ schema: schema }),
-              ],
-            }),
-          ],
-        }),
-      ],
-    });
-  }
+                  create("SchemaTabs", {
+                    children: schema[type]!.map((schema, index) => {
+                      const label = schema.title
+                        ? schema.title
+                        : `MOD${index + 1}`;
 
-  // primitive
-  return create("SchemaItem", {
-    collapsible: false,
-    name,
-    required,
-    schemaDescription: schema.description,
-    schemaName: schemaName,
-    qualifierMessage: getQualifierMessage(schema),
+                      if (schema.properties !== undefined) {
+                        return create("TabItem", {
+                          label: label,
+                          value: `${index}-properties`,
+                          children: [createNodes(schema)],
+                        });
+                      }
+
+                      if (schema.allOf !== undefined) {
+                        return create("TabItem", {
+                          label: label,
+                          value: `${index}-allOf`,
+                          children: [createNodes(schema)],
+                        });
+                      }
+
+                      if (schema.items !== undefined) {
+                        if (schema.items.properties !== undefined) {
+                          return create("TabItem", {
+                            label: label,
+                            value: `${index}-item-properties`,
+                            children: [createNodes(schema.items)],
+                          });
+                        }
+                      }
+                      return undefined;
+                    }),
+                  }),
+                ],
+              }),
+            ],
+          }),
+        ],
+      }),
+    ],
   });
 }
 
-interface RowsProps {
-  schema: SchemaObject;
+// Details
+function createProperties(schema: SchemaObject) {
+  return Object.entries(schema.properties!).map(([key, val]) =>
+    createEdges({
+      name: key,
+      schema: val,
+      required: Array.isArray(schema.required)
+        ? schema.required.includes(key)
+        : false,
+    })
+  );
 }
 
-export function createRows({ schema }: RowsProps): string | undefined {
-  // oneOf
-  if (schema.oneOf !== undefined) {
-    return createAnyOneOf(schema.oneOf, "oneOf");
-  }
-
-  // anyOf
-  if (schema.anyOf !== undefined) {
-    return createAnyOneOf(schema.anyOf, "anyOf");
-  }
-
-  // object
-  if (schema.properties !== undefined) {
-    return create("ul", {
-      children: Object.entries(schema.properties).map(([key, val]) =>
-        createRow({
-          name: key,
-          schema: val,
-          required: Array.isArray(schema.required)
-            ? schema.required.includes(key)
-            : false,
-        })
-      ),
-    });
-  }
-
-  // allOf
-  if (schema.allOf !== undefined) {
-    const {
-      mergedSchemas,
-      required,
-    }: { mergedSchemas: SchemaObject; required: string[] } = resolveAllOf(
-      schema.allOf
-    );
-    // Adds support one more level deep
-    if (mergedSchemas.oneOf !== undefined) {
-      return createAnyOneOf(mergedSchemas.oneOf, "oneOf");
-    }
-
-    if (mergedSchemas.anyOf !== undefined) {
-      return createAnyOneOf(mergedSchemas.anyOf, "anyOf");
-    }
-
-    // array
-    if (mergedSchemas.items !== undefined) {
-      return createRows({ schema: schema.items as SchemaObject });
-    }
-
-    if (mergedSchemas.properties !== undefined) {
-      return create("div", {
-        children: [
-          create("span", {
-            className: "badge badge--info",
-            style: { marginBottom: "1rem" },
-            children: "allOf",
-          }),
-          Object.entries(mergedSchemas.properties as SchemaObject).map(
-            ([key, val]) =>
-              createRow({
-                name: key,
-                schema: val as SchemaObject,
-                required: Array.isArray(required)
-                  ? required.includes(key)
-                  : false,
-              })
-          ),
-        ],
-      });
-    }
-  }
-
-  // primitive
-  return undefined;
+// TODO: figure out how to handle array of objects
+function createItems(schema: SchemaObject) {
+  return Object.entries(schema.items!).map(([key, val]) =>
+    createEdges({
+      name: key,
+      schema: val,
+      required: Array.isArray(schema.required)
+        ? schema.required.includes(key)
+        : false,
+    })
+  );
 }
 
-interface RowsRootProps {
-  schema: SchemaObject;
-}
-
-function createRowsRoot({ schema }: RowsRootProps): any {
-  // object
-  if (schema.properties !== undefined) {
-    return Object.entries(schema.properties).map(([key, val]) =>
-      createRow({
-        name: key,
-        schema: val,
-        required: Array.isArray(schema.required)
-          ? schema.required.includes(key)
-          : false,
-      })
-    );
-  }
-
-  // allOf
-  if (schema.allOf !== undefined) {
-    const {
-      mergedSchemas,
-      required,
-    }: { mergedSchemas: SchemaObject; required: string[] } = resolveAllOf(
-      schema.allOf
-    );
-    return create("div", {
-      children: [
-        create("span", {
-          className: "badge badge--info",
-          style: { marginBottom: "1rem" },
-          children: "allOf",
-        }),
-        Object.entries(mergedSchemas.properties as SchemaObject).map(
-          ([key, val]) =>
-            createRow({
-              name: key,
-              schema: val as SchemaObject,
-              required: Array.isArray(required)
-                ? required.includes(key)
-                : false,
-            })
-        ),
-      ],
-    });
-  }
-
-  // oneOf
-  if (schema.oneOf !== undefined) {
-    return createAnyOneOf(schema.oneOf, "oneOf");
-  }
-
-  // anyOf
-  if (schema.anyOf !== undefined) {
-    return createAnyOneOf(schema.anyOf, "anyOf");
-  }
-
-  // array
-  if (schema.items !== undefined) {
-    return create("li", {
-      children: create("div", {
-        children: [createRows({ schema: schema.items })],
-      }),
-    });
-  }
-
-  // primitive
+// TODO: refactor to use
+function createPrimitive(schema: SchemaObject) {
   return create("li", {
     children: create("div", {
       children: [
@@ -326,6 +187,120 @@ function createRowsRoot({ schema }: RowsRootProps): any {
       ],
     }),
   });
+}
+
+function createDetailsNode({ name, schemaName, schema, required }: any) {
+  return create("SchemaItem", {
+    collapsible: true,
+    className: "schemaItem",
+    children: [
+      createDetails({
+        children: [
+          createDetailsSummary({
+            children: [
+              create("strong", { children: name }),
+              create("span", {
+                style: { opacity: "0.6" },
+                children: ` ${schemaName}`,
+              }),
+              guard(required, () => [
+                create("strong", {
+                  style: {
+                    fontSize: "var(--ifm-code-font-size)",
+                    color: "var(--openapi-required)",
+                  },
+                  children: " required",
+                }),
+              ]),
+            ],
+          }),
+          create("div", {
+            style: { marginLeft: "1rem" },
+            children: [
+              guard(getQualifierMessage(schema), (message) =>
+                create("div", {
+                  style: { marginTop: ".5rem", marginBottom: ".5rem" },
+                  children: createDescription(message),
+                })
+              ),
+              guard(schema.description, (description) =>
+                create("div", {
+                  style: { marginTop: ".5rem", marginBottom: ".5rem" },
+                  children: createDescription(description),
+                })
+              ),
+              createNodes(schema),
+            ],
+          }),
+        ],
+      }),
+    ],
+  });
+}
+
+interface EdgeProps {
+  name: string;
+  schema: SchemaObject;
+  required: boolean;
+}
+
+/**
+ * Creates the edges or "leaves" of a schema tree. Edges can branch into sub-nodes with createDetails().
+ */
+function createEdges({ name, schema, required }: EdgeProps): any {
+  const schemaName = getSchemaName(schema);
+
+  // oneOf or anyOf
+  if (schema.oneOf !== undefined || schema.anyOf !== undefined) {
+    return createAnyOneOf(name, schemaName, schema, required);
+  }
+
+  // object
+  if (schema.properties !== undefined) {
+    return createDetailsNode({
+      name: name,
+      schemaName: schemaName,
+      schema: schema,
+      required: required,
+    });
+  }
+
+  // primitive
+  return create("SchemaItem", {
+    collapsible: false,
+    name,
+    required,
+    schemaDescription: schema.description,
+    schemaName: schemaName,
+    qualifierMessage: getQualifierMessage(schema),
+  });
+}
+
+/**
+ * Creates a hierarchical level of a schema tree. Nodes produce edges that can branch into sub-nodes with edges, recursively.
+ */
+function createNodes(schema: SchemaObject): any {
+  // allOf
+  if (schema.allOf !== undefined) {
+    const { mergedSchemas }: { mergedSchemas: SchemaObject } = mergeAllOf(
+      schema.allOf
+    );
+    return createNodes(mergedSchemas);
+  }
+
+  // object
+  if (schema.properties !== undefined) {
+    return createProperties(schema);
+  }
+
+  // TODO: handle when array of objects/properties
+  // array
+  if (schema.items !== undefined) {
+    return createItems(schema);
+  }
+
+  // Unknown node/schema type should return undefined
+  return undefined;
 }
 
 interface Props {
@@ -367,6 +342,7 @@ export function createSchemaDetails({ title, body, ...rest }: Props) {
     }
   }
 
+  // Top-level schema dropdown
   return createDetails({
     "data-collapsed": false,
     open: true,
@@ -400,7 +376,7 @@ export function createSchemaDetails({ title, body, ...rest }: Props) {
       }),
       create("ul", {
         style: { marginLeft: "1rem" },
-        children: createRowsRoot({ schema: firstBody }),
+        children: createNodes(firstBody),
       }),
     ],
   });
