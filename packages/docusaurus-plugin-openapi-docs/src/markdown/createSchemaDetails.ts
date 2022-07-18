@@ -45,7 +45,7 @@ function createAnyOneOf(
   schemaName: string,
   schema: SchemaObject,
   required: any
-) {
+): any {
   const type = schema.oneOf ? "oneOf" : "anyOf";
   return create("div", {
     children: [
@@ -93,42 +93,122 @@ function createAnyOneOf(
                     children: type,
                   }),
                   create("SchemaTabs", {
-                    children: schema[type]!.map((schema, index) => {
-                      const label = schema.title
-                        ? schema.title
+                    children: schema[type]!.map((anyOneSchema, index) => {
+                      const label = anyOneSchema.title
+                        ? anyOneSchema.title
                         : `MOD${index + 1}`;
 
-                      if (schema.properties !== undefined) {
+                      if (anyOneSchema.properties !== undefined) {
                         return create("TabItem", {
                           label: label,
                           value: `${index}-properties`,
-                          children: [createNodes(schema)],
+                          children: [createNodes(anyOneSchema)],
                         });
                       }
 
-                      if (schema.allOf !== undefined) {
+                      if (anyOneSchema.allOf !== undefined) {
                         return create("TabItem", {
                           label: label,
                           value: `${index}-allOf`,
-                          children: [createNodes(schema)],
+                          children: [createNodes(anyOneSchema)],
                         });
                       }
 
-                      if (schema.items !== undefined) {
-                        if (schema.items.properties !== undefined) {
+                      if (anyOneSchema.items !== undefined) {
+                        if (anyOneSchema.items.properties !== undefined) {
                           return create("TabItem", {
                             label: label,
                             value: `${index}-item-properties`,
-                            children: [createNodes(schema.items)],
+                            children: [createNodes(anyOneSchema.items)],
+                          });
+                        }
+
+                        if (
+                          anyOneSchema.items.anyOf !== undefined ||
+                          anyOneSchema.items.oneOf !== undefined
+                        ) {
+                          return create("TabItem", {
+                            label: label,
+                            value: `${index}-anyOneOf`,
+                            children: [
+                              createNestedAnyOneOf(anyOneSchema.items),
+                            ],
                           });
                         }
                       }
+
                       return undefined;
                     }),
                   }),
                 ],
               }),
             ],
+          }),
+        ],
+      }),
+    ],
+  });
+}
+
+/**
+ * For handling nested anyOf/oneOf.
+ */
+function createNestedAnyOneOf(schema: SchemaObject): any {
+  const type = schema.oneOf ? "oneOf" : "anyOf";
+  return create("div", {
+    children: [
+      create("div", {
+        children: [
+          guard(getQualifierMessage(schema), (message) =>
+            create("div", {
+              style: { marginTop: ".5rem", marginBottom: ".5rem" },
+              children: createDescription(message),
+            })
+          ),
+          guard(schema.description, (description) =>
+            create("div", {
+              style: { marginTop: ".5rem", marginBottom: ".5rem" },
+              children: createDescription(description),
+            })
+          ),
+          create("span", {
+            className: "badge badge--info",
+            children: type,
+          }),
+          create("SchemaTabs", {
+            children: schema[type]!.map((anyOneSchema, index) => {
+              const label = anyOneSchema.title
+                ? anyOneSchema.title
+                : `MOD${index + 1}`;
+
+              if (anyOneSchema.properties !== undefined) {
+                return create("TabItem", {
+                  label: label,
+                  value: `${index}-properties`,
+                  children: [createNodes(anyOneSchema)],
+                });
+              }
+
+              if (anyOneSchema.allOf !== undefined) {
+                return create("TabItem", {
+                  label: label,
+                  value: `${index}-allOf`,
+                  children: [createNodes(anyOneSchema)],
+                });
+              }
+
+              if (anyOneSchema.items !== undefined) {
+                if (anyOneSchema.items.properties !== undefined) {
+                  return create("TabItem", {
+                    label: label,
+                    value: `${index}-item-properties`,
+                    children: [createNodes(anyOneSchema.items)],
+                  });
+                }
+              }
+
+              return undefined;
+            }),
           }),
         ],
       }),
@@ -150,6 +230,12 @@ function createProperties(schema: SchemaObject) {
 
 // TODO: figure out how to handle array of objects
 function createItems(schema: SchemaObject) {
+  // if (schema.items?.properties !== undefined) {
+  //   return createProperties(schema.items);
+  // }
+  // if (schema.items?.anyOf !== undefined) {
+  //   console.log(schema, schema.items.anyOf);
+  // }
   return Object.entries(schema.items!).map(([key, val]) =>
     createEdges({
       name: key,
@@ -271,6 +357,7 @@ function createEdges({ name, schema, required }: EdgeProps): any {
     });
   }
 
+  // array of objects
   if (schema.items?.properties !== undefined) {
     return createDetailsNode({
       name: name,
@@ -280,7 +367,7 @@ function createEdges({ name, schema, required }: EdgeProps): any {
     });
   }
 
-  // primitive
+  // primitives and array of non-objects
   return create("SchemaItem", {
     collapsible: false,
     name,
@@ -297,13 +384,10 @@ function createEdges({ name, schema, required }: EdgeProps): any {
 function createNodes(schema: SchemaObject): any {
   if (schema.allOf !== undefined) {
     const { mergedSchemas } = mergeAllOf(schema.allOf);
+
+    // allOf seems to always result in properties
     if (mergedSchemas.properties !== undefined) {
       return createProperties(mergedSchemas);
-    }
-
-    // TODO: figure out how to handle array of objects
-    if (mergedSchemas.items !== undefined) {
-      return createItems(mergedSchemas);
     }
   }
 
@@ -313,9 +397,6 @@ function createNodes(schema: SchemaObject): any {
 
   // TODO: figure out how to handle array of objects
   if (schema.items !== undefined) {
-    if (schema.items.properties !== undefined) {
-      return createProperties(schema.items);
-    }
     return createItems(schema);
   }
 
@@ -349,6 +430,7 @@ function createNodes(schema: SchemaObject): any {
   }
 
   // Unknown node/schema type should return undefined
+  // So far, haven't seen this hit in testing
   return undefined;
 }
 
