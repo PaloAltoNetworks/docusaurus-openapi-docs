@@ -271,6 +271,15 @@ function createEdges({ name, schema, required }: EdgeProps): any {
     });
   }
 
+  if (schema.items?.properties !== undefined) {
+    return createDetailsNode({
+      name: name,
+      schemaName: schemaName,
+      schema: schema.items,
+      required: required,
+    });
+  }
+
   // primitive
   return create("SchemaItem", {
     collapsible: false,
