@@ -35,12 +35,11 @@ function mergeAllOf(allOf: SchemaObject[]) {
       return next;
     }
     return acc;
-  }, [] as string[]);
+  }, [] as any);
 
   return { mergedSchemas, required };
 }
 
-// Details
 function createAnyOneOf(
   name: string,
   schemaName: string,
@@ -48,7 +47,7 @@ function createAnyOneOf(
   required: any
 ) {
   const type = schema.oneOf ? "oneOf" : "anyOf";
-  return create("li", {
+  return create("div", {
     children: [
       create("SchemaItem", {
         collapsible: true,
@@ -137,7 +136,6 @@ function createAnyOneOf(
   });
 }
 
-// Details
 function createProperties(schema: SchemaObject) {
   return Object.entries(schema.properties!).map(([key, val]) =>
     createEdges({
@@ -161,32 +159,6 @@ function createItems(schema: SchemaObject) {
         : false,
     })
   );
-}
-
-// TODO: refactor to use
-function createPrimitive(schema: SchemaObject) {
-  return create("li", {
-    children: create("div", {
-      children: [
-        create("span", {
-          style: { opacity: "0.6" },
-          children: ` ${schema.type}`,
-        }),
-        guard(getQualifierMessage(schema), (message) =>
-          create("div", {
-            style: { marginTop: "var(--ifm-table-cell-padding)" },
-            children: createDescription(message),
-          })
-        ),
-        guard(schema.description, (description) =>
-          create("div", {
-            style: { marginTop: "var(--ifm-table-cell-padding)" },
-            children: createDescription(description),
-          })
-        ),
-      ],
-    }),
-  });
 }
 
 function createDetailsNode({ name, schemaName, schema, required }: any) {
@@ -250,9 +222,43 @@ interface EdgeProps {
 function createEdges({ name, schema, required }: EdgeProps): any {
   const schemaName = getSchemaName(schema);
 
-  // oneOf or anyOf
   if (schema.oneOf !== undefined || schema.anyOf !== undefined) {
     return createAnyOneOf(name, schemaName, schema, required);
+  }
+
+  if (schema.allOf !== undefined) {
+    const {
+      mergedSchemas,
+      required,
+    }: { mergedSchemas: SchemaObject; required: any } = mergeAllOf(
+      schema.allOf
+    );
+    const mergedSchemaName = getSchemaName(mergedSchemas);
+
+    if (
+      mergedSchemas.oneOf !== undefined ||
+      mergedSchemas.anyOf !== undefined
+    ) {
+      return createAnyOneOf(name, mergedSchemaName, mergedSchemas, required);
+    }
+
+    if (mergedSchemas.properties !== undefined) {
+      return createDetailsNode({
+        name: name,
+        schemaName: mergedSchemaName,
+        schema: mergedSchemas,
+        required: required,
+      });
+    }
+
+    return create("SchemaItem", {
+      collapsible: false,
+      name,
+      required,
+      schemaDescription: mergedSchemas.description,
+      schemaName: schemaName,
+      qualifierMessage: getQualifierMessage(schema),
+    });
   }
 
   // object
@@ -280,23 +286,57 @@ function createEdges({ name, schema, required }: EdgeProps): any {
  * Creates a hierarchical level of a schema tree. Nodes produce edges that can branch into sub-nodes with edges, recursively.
  */
 function createNodes(schema: SchemaObject): any {
-  // allOf
   if (schema.allOf !== undefined) {
-    const { mergedSchemas }: { mergedSchemas: SchemaObject } = mergeAllOf(
-      schema.allOf
-    );
-    return createNodes(mergedSchemas);
+    const { mergedSchemas } = mergeAllOf(schema.allOf);
+    if (mergedSchemas.properties !== undefined) {
+      return createProperties(mergedSchemas);
+    }
+
+    // TODO: figure out how to handle array of objects
+    if (mergedSchemas.items !== undefined) {
+      return createItems(mergedSchemas);
+    }
   }
 
-  // object
   if (schema.properties !== undefined) {
     return createProperties(schema);
   }
 
-  // TODO: handle when array of objects/properties
-  // array
+  // TODO: figure out how to handle array of objects
   if (schema.items !== undefined) {
+    if (schema.items.properties !== undefined) {
+      return createProperties(schema.items);
+    }
     return createItems(schema);
+  }
+
+  // primitive
+  if (schema.type !== undefined) {
+    return create("li", {
+      children: create("div", {
+        children: [
+          create("strong", { children: schema.type }),
+          guard(schema.format, (format) =>
+            create("span", {
+              style: { opacity: "0.6" },
+              children: ` ${format}`,
+            })
+          ),
+          guard(getQualifierMessage(schema), (message) =>
+            create("div", {
+              style: { marginTop: "var(--ifm-table-cell-padding)" },
+              children: createDescription(message),
+            })
+          ),
+          guard(schema.description, (description) =>
+            create("div", {
+              style: { marginTop: "var(--ifm-table-cell-padding)" },
+              children: createDescription(description),
+            })
+          ),
+        ],
+      }),
+    });
   }
 
   // Unknown node/schema type should return undefined
@@ -342,7 +382,7 @@ export function createSchemaDetails({ title, body, ...rest }: Props) {
     }
   }
 
-  // Top-level schema dropdown
+  // Root-level schema dropdown
   return createDetails({
     "data-collapsed": false,
     open: true,
@@ -352,6 +392,12 @@ export function createSchemaDetails({ title, body, ...rest }: Props) {
         style: { textAlign: "left" },
         children: [
           create("strong", { children: `${title}` }),
+          guard(firstBody.type === "array", (format) =>
+            create("span", {
+              style: { opacity: "0.6" },
+              children: ` array`,
+            })
+          ),
           guard(body.required, () => [
             create("strong", {
               style: {
