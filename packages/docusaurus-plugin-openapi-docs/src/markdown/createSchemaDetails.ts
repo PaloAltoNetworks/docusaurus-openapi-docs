@@ -40,137 +40,15 @@ function mergeAllOf(allOf: SchemaObject[]) {
   return { mergedSchemas, required };
 }
 
-function createAnyOneOf(
-  name: string,
-  schemaName: string,
-  schema: SchemaObject,
-  required: any
-): any {
-  const type = schema.oneOf ? "oneOf" : "anyOf";
-  return create("div", {
-    children: [
-      create("SchemaItem", {
-        collapsible: true,
-        className: "schemaItem",
-        children: [
-          createDetails({
-            children: [
-              createDetailsSummary({
-                children: [
-                  create("strong", { children: name }),
-                  create("span", {
-                    style: { opacity: "0.6" },
-                    children: ` ${schemaName}`,
-                  }),
-                  guard(required, () => [
-                    create("strong", {
-                      style: {
-                        fontSize: "var(--ifm-code-font-size)",
-                        color: "var(--openapi-required)",
-                      },
-                      children: " required",
-                    }),
-                  ]),
-                ],
-              }),
-              create("div", {
-                style: { marginLeft: "1rem" },
-                children: [
-                  guard(getQualifierMessage(schema), (message) =>
-                    create("div", {
-                      style: { marginTop: ".5rem", marginBottom: ".5rem" },
-                      children: createDescription(message),
-                    })
-                  ),
-                  guard(schema.description, (description) =>
-                    create("div", {
-                      style: { marginTop: ".5rem", marginBottom: ".5rem" },
-                      children: createDescription(description),
-                    })
-                  ),
-                  create("span", {
-                    className: "badge badge--info",
-                    children: type,
-                  }),
-                  create("SchemaTabs", {
-                    children: schema[type]!.map((anyOneSchema, index) => {
-                      const label = anyOneSchema.title
-                        ? anyOneSchema.title
-                        : `MOD${index + 1}`;
-
-                      if (anyOneSchema.properties !== undefined) {
-                        return create("TabItem", {
-                          label: label,
-                          value: `${index}-properties`,
-                          children: [createNodes(anyOneSchema)],
-                        });
-                      }
-
-                      if (anyOneSchema.allOf !== undefined) {
-                        return create("TabItem", {
-                          label: label,
-                          value: `${index}-allOf`,
-                          children: [createNodes(anyOneSchema)],
-                        });
-                      }
-
-                      if (anyOneSchema.items !== undefined) {
-                        if (anyOneSchema.items.properties !== undefined) {
-                          return create("TabItem", {
-                            label: label,
-                            value: `${index}-item-properties`,
-                            children: [createNodes(anyOneSchema.items)],
-                          });
-                        }
-
-                        if (
-                          anyOneSchema.items.anyOf !== undefined ||
-                          anyOneSchema.items.oneOf !== undefined
-                        ) {
-                          return create("TabItem", {
-                            label: label,
-                            value: `${index}-anyOneOf`,
-                            children: [
-                              createNestedAnyOneOf(anyOneSchema.items),
-                            ],
-                          });
-                        }
-                      }
-
-                      return undefined;
-                    }),
-                  }),
-                ],
-              }),
-            ],
-          }),
-        ],
-      }),
-    ],
-  });
-}
-
 /**
  * For handling nested anyOf/oneOf.
  */
-function createNestedAnyOneOf(schema: SchemaObject): any {
+function createAnyOneOf(schema: SchemaObject): any {
   const type = schema.oneOf ? "oneOf" : "anyOf";
   return create("li", {
     children: [
       create("div", {
         children: [
-          guard(getQualifierMessage(schema), (message) =>
-            create("div", {
-              style: { marginTop: ".5rem", marginBottom: ".5rem" },
-              children: createDescription(message),
-            })
-          ),
-          guard(schema.description, (description) =>
-            create("div", {
-              style: { marginTop: ".5rem", marginBottom: ".5rem" },
-              children: createDescription(description),
-            })
-          ),
           create("span", {
             className: "badge badge--info",
             children: type,
@@ -180,31 +58,30 @@ function createNestedAnyOneOf(schema: SchemaObject): any {
               const label = anyOneSchema.title
                 ? anyOneSchema.title
                 : `MOD${index + 1}`;
+              const anyOneChildren = [];
 
               if (anyOneSchema.properties !== undefined) {
-                return create("TabItem", {
-                  label: label,
-                  value: `${index}-properties`,
-                  children: [createNodes(anyOneSchema)],
-                });
+                anyOneChildren.push(createProperties(anyOneSchema));
               }
 
               if (anyOneSchema.allOf !== undefined) {
-                return create("TabItem", {
-                  label: label,
-                  value: `${index}-allOf`,
-                  children: [createNodes(anyOneSchema)],
-                });
+                anyOneChildren.push(createNodes(anyOneSchema));
               }
 
               if (anyOneSchema.items !== undefined) {
-                if (anyOneSchema.items.properties !== undefined) {
-                  return create("TabItem", {
-                    label: label,
-                    value: `${index}-item-properties`,
-                    children: [createNodes(anyOneSchema.items)],
-                  });
-                }
+                anyOneChildren.push(createItems(anyOneSchema));
+              }
+
+              if (anyOneSchema.type === "string") {
+                anyOneChildren.push(createNodes(anyOneSchema));
+              }
+
+              if (anyOneChildren.length) {
+                return create("TabItem", {
+                  label: label,
+                  value: `${index}-item-properties`,
+                  children: anyOneChildren,
+                });
               }
 
               return undefined;
@@ -228,14 +105,118 @@ function createProperties(schema: SchemaObject) {
   );
 }
 
+function createAdditionalProperties(schema: SchemaObject) {
+  // TODO?:
+  //   {
+  //   description: 'Integration configuration. See \n' +
+  //     '[Integration Configurations](https://prisma.pan.dev/api/cloud/api-integration-config/).\n',
+  //   example: { webhookUrl: 'https://hooks.slack.com/abcdef' },
+  //   externalDocs: { url: 'https://prisma.pan.dev/api/cloud/api-integration-config' },
+  //   type: 'object'
+  // }
+
+  // TODO?:
+  // {
+  // items: {
+  //     properties: {
+  //       aliasField: [Object],
+  //       displayName: [Object],
+  //       fieldName: [Object],
+  //       maxLength: [Object],
+  //       options: [Object],
+  //       redlockMapping: [Object],
+  //       required: [Object],
+  //       type: [Object],
+  //       typeaheadUri: [Object],
+  //       value: [Object]
+  //     },
+  //     type: 'object'
+  //   },
+  //   type: 'array'
+  // }
+
+  if (
+    schema.additionalProperties?.type === "string" ||
+    schema.additionalProperties?.type === "object" ||
+    schema.additionalProperties?.type === "boolean"
+  ) {
+    const type = schema.additionalProperties?.type;
+    const additionalProperties =
+      schema.additionalProperties?.additionalProperties;
+    if (additionalProperties !== undefined) {
+      const type = schema.additionalProperties?.additionalProperties?.type;
+      const format = schema.additionalProperties?.additionalProperties?.format;
+      return create("li", {
+        children: create("div", {
+          children: [
+            create("code", { children: `property name*` }),
+            guard(type, (type) =>
+              create("span", {
+                style: { opacity: "0.6" },
+                children: ` ${type}`,
+              })
+            ),
+            guard(format, (format) =>
+              create("span", {
+                style: { opacity: "0.6" },
+                children: ` (${format})`,
+              })
+            ),
+            guard(getQualifierMessage(schema.additionalProperties), (message) =>
+              create("div", {
+                style: { marginTop: "var(--ifm-table-cell-padding)" },
+                children: createDescription(message),
+              })
+            ),
+          ],
+        }),
+      });
+    }
+    return create("li", {
+      children: create("div", {
+        children: [
+          create("code", { children: `property name*` }),
+          guard(type, (type) =>
+            create("span", {
+              style: { opacity: "0.6" },
+              children: ` ${type}`,
+            })
+          ),
+          guard(getQualifierMessage(schema.additionalProperties), (message) =>
+            create("div", {
+              style: { marginTop: "var(--ifm-table-cell-padding)" },
+              children: createDescription(message),
+            })
+          ),
+        ],
+      }),
+    });
+  }
+  return Object.entries(schema.additionalProperties!).map(([key, val]) =>
+    createEdges({
+      name: key,
+      schema: val,
+      required: Array.isArray(schema.required)
+        ? schema.required.includes(key)
+        : false,
+    })
+  );
+}
+
 // TODO: figure out how to handle array of objects
 function createItems(schema: SchemaObject) {
-  // if (schema.items?.properties !== undefined) {
-  //   return createProperties(schema.items);
-  // }
-  // if (schema.items?.anyOf !== undefined) {
-  //   console.log(schema, schema.items.anyOf);
-  // }
+  if (schema.items?.properties !== undefined) {
+    return createProperties(schema.items);
+  }
+
+  if (schema.items?.additionalProperties !== undefined) {
+    return createAdditionalProperties(schema.items);
+  }
+
+  if (schema.items?.oneOf !== undefined || schema.items?.anyOf !== undefined) {
+    return createAnyOneOf(schema.items!);
+  }
+
   if (schema.items?.allOf !== undefined) {
     const { mergedSchemas }: { mergedSchemas: SchemaObject; required: any } =
       mergeAllOf(schema.items?.allOf);
@@ -248,7 +229,7 @@ function createItems(schema: SchemaObject) {
     ) {
       return create("div", {
         children: [
-          createNestedAnyOneOf(mergedSchemas),
+          createAnyOneOf(mergedSchemas),
           createProperties(mergedSchemas),
         ],
       });
@@ -261,11 +242,15 @@ function createItems(schema: SchemaObject) {
     ) {
       return create("div", {
         children: [
-          createNestedAnyOneOf(mergedSchemas),
+          createAnyOneOf(mergedSchemas),
           createProperties(mergedSchemas),
         ],
       });
     }
+  }
+
+  if (schema.items?.type === "string") {
+    return createNodes(schema.items);
   }
 
   // TODO: clean this up or eliminate it?
@@ -280,7 +265,12 @@ function createItems(schema: SchemaObject) {
   );
 }
 
-function createDetailsNode({ name, schemaName, schema, required }: any) {
+function createDetailsNode(
+  name: string,
+  schemaName: string,
+  schema: SchemaObject,
+  required: any
+): any {
   return create("SchemaItem", {
     collapsible: true,
     className: "schemaItem",
@@ -341,8 +331,12 @@ interface EdgeProps {
 function createEdges({ name, schema, required }: EdgeProps): any {
   const schemaName = getSchemaName(schema);
 
+  if (name === "defaultPoliciesEnabled") {
+    console.log(name, schemaName, schema);
+  }
+
   if (schema.oneOf !== undefined || schema.anyOf !== undefined) {
-    return createAnyOneOf(name, schemaName, schema, required);
+    return createDetailsNode(name, schemaName, schema, required);
   }
 
   if (schema.allOf !== undefined) {
@@ -358,16 +352,15 @@ function createEdges({ name, schema, required }: EdgeProps): any {
       mergedSchemas.oneOf !== undefined ||
       mergedSchemas.anyOf !== undefined
     ) {
-      return createAnyOneOf(name, mergedSchemaName, mergedSchemas, required);
+      return createDetailsNode(name, mergedSchemaName, mergedSchemas, required);
     }
 
     if (mergedSchemas.properties !== undefined) {
-      return createDetailsNode({
-        name: name,
-        schemaName: mergedSchemaName,
-        schema: mergedSchemas,
-        required: required,
-      });
+      return createDetailsNode(name, mergedSchemaName, mergedSchemas, required);
+    }
+
+    if (mergedSchemas.additionalProperties !== undefined) {
+      return createDetailsNode(name, mergedSchemaName, mergedSchemas, required);
     }
 
     return create("SchemaItem", {
@@ -380,24 +373,17 @@ function createEdges({ name, schema, required }: EdgeProps): any {
     });
   }
 
-  // object
   if (schema.properties !== undefined) {
-    return createDetailsNode({
-      name: name,
-      schemaName: schemaName,
-      schema: schema,
-      required: required,
-    });
+    return createDetailsNode(name, schemaName, schema, required);
+  }
+
+  if (schema.additionalProperties !== undefined) {
+    return createDetailsNode(name, schemaName, schema, required);
   }
 
   // array of objects
   if (schema.items?.properties !== undefined) {
-    return createDetailsNode({
-      name: name,
-      schemaName: schemaName,
-      schema: schema.items,
-      required: required,
-    });
+    return createDetailsNode(name, schemaName, schema, required);
   }
 
   // primitives and array of non-objects
@@ -416,7 +402,7 @@ function createEdges({ name, schema, required }: EdgeProps): any {
  */
 function createNodes(schema: SchemaObject): any {
   if (schema.oneOf !== undefined || schema.anyOf !== undefined) {
-    return createNestedAnyOneOf(schema);
+    return createAnyOneOf(schema);
   }
 
   if (schema.allOf !== undefined) {
@@ -430,6 +416,10 @@ function createNodes(schema: SchemaObject): any {
 
   if (schema.properties !== undefined) {
     return createProperties(schema);
+  }
+
+  if (schema.additionalProperties !== undefined) {
+    return createAdditionalProperties(schema);
   }
 
   // TODO: figure out how to handle array of objects
