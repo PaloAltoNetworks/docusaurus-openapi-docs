@@ -64,9 +64,9 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
     return undefined;
   }
 
-  // if (schema.items) {
-  //   return getQualifierMessage(schema.items);
-  // }
+  if (schema.items) {
+    return getQualifierMessage(schema.items);
+  }
 
   let message = "**Possible values:** ";
 
