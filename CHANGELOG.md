@@ -1,3 +1,20 @@
+## 1.1.0 (Jul 19, 2022)
+
+High level enhancements
+
+- Refactor `createSchemaDetails.ts` to improve support for `anyOf`, `oneOf`, and `allOf` schemas ([#160](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/160))
+- [Enhancement] Improve support for circular $ref pointers ([#154](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/154))
+- [Upgrade] Docusaurus Beta 22 support ([#155](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/155))
+
+Other enhancements and bug fixes
+
+- Check for basePath before defining intro and category link doc ids ([#159](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/159))
+- [Enhancement] Integrate ReDoc OpenAPIParser ([#148](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/148))
+- [FR] ApiDemoPanel (a11y): Improve keyboard tab support ([#149](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/149))
+- Add await to resolveJsonRefs ([#147](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/147))
+- [Enhancement] Add oneOf and anyOf support ([#139](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/139))
+- Add sidebar and versioning docs ([#137](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/137))
+
 ## 1.0.6 (Jun 15, 2022)
 
 High level enhancements
