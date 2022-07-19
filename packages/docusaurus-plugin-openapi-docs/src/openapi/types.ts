@@ -326,7 +326,7 @@ export type SchemaObject = Omit<
   not?: SchemaObject;
   items?: SchemaObject;
   properties?: Map<SchemaObject>;
-  additionalProperties?: boolean | SchemaObject;
+  additionalProperties?: Map<SchemaObject>;
 
   // OpenAPI additions
   nullable?: boolean;
