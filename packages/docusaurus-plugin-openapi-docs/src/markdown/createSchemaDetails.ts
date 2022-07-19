@@ -155,7 +155,7 @@ function createAnyOneOf(
  */
 function createNestedAnyOneOf(schema: SchemaObject): any {
   const type = schema.oneOf ? "oneOf" : "anyOf";
-  return create("div", {
+  return create("li", {
     children: [
       create("div", {
         children: [
@@ -236,6 +236,39 @@ function createItems(schema: SchemaObject) {
   // if (schema.items?.anyOf !== undefined) {
   //   console.log(schema, schema.items.anyOf);
   // }
+  if (schema.items?.allOf !== undefined) {
+    const { mergedSchemas }: { mergedSchemas: SchemaObject; required: any } =
+      mergeAllOf(schema.items?.allOf);
+
+    // Handles combo anyOf/oneOf + properties
+    if (
+      (mergedSchemas.oneOf !== undefined ||
+        mergedSchemas.anyOf !== undefined) &&
+      mergedSchemas.properties
+    ) {
+      return create("div", {
+        children: [
+          createNestedAnyOneOf(mergedSchemas),
+          createProperties(mergedSchemas),
+        ],
+      });
+    }
+
+    // Handles only anyOf/oneOf
+    if (
+      mergedSchemas.oneOf !== undefined ||
+      mergedSchemas.anyOf !== undefined
+    ) {
+      return create("div", {
+        children: [
+          createNestedAnyOneOf(mergedSchemas),
+          createProperties(mergedSchemas),
+        ],
+      });
+    }
+  }
+
+  // TODO: clean this up or eliminate it?
   return Object.entries(schema.items!).map(([key, val]) =>
     createEdges({
       name: key,
@@ -382,6 +415,10 @@ function createEdges({ name, schema, required }: EdgeProps): any {
  * Creates a hierarchical level of a schema tree. Nodes produce edges that can branch into sub-nodes with edges, recursively.
  */
 function createNodes(schema: SchemaObject): any {
+  if (schema.oneOf !== undefined || schema.anyOf !== undefined) {
+    return createNestedAnyOneOf(schema);
+  }
+
   if (schema.allOf !== undefined) {
     const { mergedSchemas } = mergeAllOf(schema.allOf);
 
@@ -456,7 +493,6 @@ export function createSchemaDetails({ title, body, ...rest }: Props) {
     return undefined;
   }
 
-  // TODO:
   // NOTE: We just pick a random content-type.
   // How common is it to have multiple?
   const randomFirstKey = Object.keys(body.content)[0];
