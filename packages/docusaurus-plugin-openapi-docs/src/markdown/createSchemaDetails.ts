@@ -72,7 +72,12 @@ function createAnyOneOf(schema: SchemaObject): any {
                 anyOneChildren.push(createItems(anyOneSchema));
               }
 
-              if (anyOneSchema.type === "string") {
+              if (
+                anyOneSchema.type === "string" ||
+                anyOneSchema.type === "number" ||
+                anyOneSchema.type === "integer" ||
+                anyOneSchema.type === "boolean"
+              ) {
                 anyOneChildren.push(createNodes(anyOneSchema));
               }
 
@@ -138,7 +143,9 @@ function createAdditionalProperties(schema: SchemaObject) {
   if (
     schema.additionalProperties?.type === "string" ||
     schema.additionalProperties?.type === "object" ||
-    schema.additionalProperties?.type === "boolean"
+    schema.additionalProperties?.type === "boolean" ||
+    schema.additionalProperties?.type === "integer" ||
+    schema.additionalProperties?.type === "number"
   ) {
     const type = schema.additionalProperties?.type;
     const additionalProperties =
@@ -249,7 +256,12 @@ function createItems(schema: SchemaObject) {
     }
   }
 
-  if (schema.items?.type === "string") {
+  if (
+    schema.items?.type === "string" ||
+    schema.items?.type === "number" ||
+    schema.items?.type === "integer" ||
+    schema.items?.type === "boolean"
+  ) {
     return createNodes(schema.items);
   }
 
