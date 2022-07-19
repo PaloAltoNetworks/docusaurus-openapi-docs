@@ -331,10 +331,6 @@ interface EdgeProps {
 function createEdges({ name, schema, required }: EdgeProps): any {
   const schemaName = getSchemaName(schema);
 
-  if (name === "defaultPoliciesEnabled") {
-    console.log(name, schemaName, schema);
-  }
-
   if (schema.oneOf !== undefined || schema.anyOf !== undefined) {
     return createDetailsNode(name, schemaName, schema, required);
   }
