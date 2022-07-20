@@ -1,3 +1,13 @@
+## 1.1.1 (Jul 20, 2022)
+
+High level enhancements
+
+- Upgrade to docusaurus 2.0.0-rc.1
+
+Other enhancements and bug fixes
+
+- Upgrade to docusaurus 2.0.0-rc.1 ([#164](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/164))
+
 ## 1.1.0 (Jul 19, 2022)
 
 High level enhancements
