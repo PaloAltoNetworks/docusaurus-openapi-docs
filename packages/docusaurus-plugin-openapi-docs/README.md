@@ -121,7 +121,6 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 | ---------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------- |
 | `specPath`       | `string` | `null`  | Designated URL or path to the source of an OpenAPI specification file or directory of multiple OpenAPI specification files. |
 | `ouputDir`       | `string` | `null`  | Desired output path for generated MDX files.                                                                                |
-| `ouputDir`       | `string` | `null`  | Desired output path for generated MDX files.                                                                                |
 | `template`       | `string` | `null`  | _Optional:_ Customize MDX content with a desired template.                                                                  |
 | `sidebarOptions` | `object` | `null`  | _Optional:_ Set of options for sidebar configuration. See below for a list of supported options.                            |
 | `version`        | `string` | `null`  | _Optional:_ Version assigned to single or micro-spec API specified in `specPath`.                                           |
