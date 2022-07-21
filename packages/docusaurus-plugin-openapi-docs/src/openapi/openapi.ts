@@ -147,7 +147,9 @@ function createItems(
           operationObject.summary ?? operationObject.operationId ?? "";
       }
 
-      const baseId = kebabCase(title);
+      const baseId = operationObject.operationId
+        ? kebabCase(operationObject.operationId)
+        : kebabCase(operationObject.summary);
 
       const servers =
         operationObject.servers ?? pathObject.servers ?? openapiData.servers;
