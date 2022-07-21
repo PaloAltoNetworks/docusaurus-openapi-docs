@@ -1,3 +1,15 @@
+## 1.1.2 (Jul 21, 2022)
+
+High level enhancements
+
+- Rename Endpoint to Base URL.
+- Display Base URL form field even if only one URL option is available to select.
+- Default `baseId` to `operationId` instead of `summary` to avoid duplicate routes.
+
+Other enhancements and bug fixes
+
+- [Bug] Use copy of openapiData to generate postman collection ([#167](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/167))
+
 ## 1.1.1 (Jul 20, 2022)
 
 High level enhancements
