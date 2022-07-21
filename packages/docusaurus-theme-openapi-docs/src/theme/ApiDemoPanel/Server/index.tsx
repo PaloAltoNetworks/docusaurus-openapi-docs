@@ -26,7 +26,7 @@ function Server() {
     return null;
   }
 
-  if (options.length <= 1 && value?.variables === undefined) {
+  if (options.length < 1 && value?.variables === undefined) {
     return null;
   }
 
@@ -66,7 +66,7 @@ function Server() {
       >
         Hide
       </button>
-      <FormItem label="Endpoint">
+      <FormItem label="Base URL">
         <FormSelect
           options={options.map((s) => s.url)}
           onChange={(e) => dispatch(setServer(e.target.value))}
