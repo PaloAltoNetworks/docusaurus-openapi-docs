@@ -26,7 +26,7 @@ function Server() {
     return null;
   }
 
-  if (options.length <= 1 && value?.variables === undefined) {
+  if (options.length < 1 && value?.variables === undefined) {
     return null;
   }
 
