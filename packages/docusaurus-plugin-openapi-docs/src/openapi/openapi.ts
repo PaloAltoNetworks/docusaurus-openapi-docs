@@ -53,7 +53,8 @@ function jsonToCollection(data: OpenApiObject): Promise<Collection> {
 async function createPostmanCollection(
   openapiData: OpenApiObject
 ): Promise<Collection> {
-  const data = openapiData as OpenApiObject;
+  // Create copy of openapiData
+  const data = Object.assign({}, openapiData) as OpenApiObject;
 
   // Including `servers` breaks postman, so delete all of them.
   delete data.servers;
