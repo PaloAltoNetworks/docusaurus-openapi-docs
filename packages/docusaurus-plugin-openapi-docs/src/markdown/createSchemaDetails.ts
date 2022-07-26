@@ -99,6 +99,7 @@ function createAnyOneOf(schema: SchemaObject): any {
 }
 
 function createProperties(schema: SchemaObject) {
+  const discriminator = schema.discriminator;
   return Object.entries(schema.properties!).map(([key, val]) =>
     createEdges({
       name: key,
@@ -106,6 +107,7 @@ function createProperties(schema: SchemaObject) {
       required: Array.isArray(schema.required)
         ? schema.required.includes(key)
         : false,
+      discriminator,
     })
   );
 }
@@ -331,17 +333,106 @@ function createDetailsNode(
   });
 }
 
+function createDiscriminatorNode(
+  name: string,
+  schemaName: string,
+  schema: SchemaObject,
+  discriminator: any,
+  required: any
+): any {
+  if (schema === undefined) {
+    return undefined;
+  }
+
+  if (discriminator.mapping === undefined) {
+    return undefined;
+  }
+
+  return create("li", {
+    className: "discriminatorItem",
+    children: create("div", {
+      children: [
+        create("strong", { style: { paddingLeft: "1rem" }, children: name }),
+        guard(schemaName, (name) =>
+          create("span", {
+            style: { opacity: "0.6" },
+            children: ` ${schemaName}`,
+          })
+        ),
+        guard(required, () => [
+          create("strong", {
+            style: {
+              fontSize: "var(--ifm-code-font-size)",
+              color: "var(--openapi-required)",
+            },
+            children: " required",
+          }),
+        ]),
+        guard(schema.description, (description) =>
+          create("div", {
+            style: {
+              marginTop: "var(--ifm-table-cell-padding)",
+              paddingLeft: "1rem",
+            },
+            children: createDescription(description),
+          })
+        ),
+        guard(getQualifierMessage(discriminator), (message) =>
+          create("div", {
+            style: {
+              marginTop: "var(--ifm-table-cell-padding)",
+              paddingLeft: "1rem",
+            },
+            children: createDescription(message),
+          })
+        ),
+        create("DiscriminatorTabs", {
+          children: Object.keys(discriminator?.mapping!).map((key, index) => {
+            const label = key;
+            return create("TabItem", {
+              label: label,
+              value: `${index}-item-discriminator`,
+              children: [
+                create("div", {
+                  style: { marginLeft: "-4px" },
+                  children: createNodes(discriminator?.mapping[key]),
+                }),
+              ],
+            });
+          }),
+        }),
+      ],
+    }),
+  });
+}
+
 interface EdgeProps {
   name: string;
   schema: SchemaObject;
   required: boolean;
+  discriminator?: any | unknown;
 }
 
 /**
  * Creates the edges or "leaves" of a schema tree. Edges can branch into sub-nodes with createDetails().
  */
-function createEdges({ name, schema, required }: EdgeProps): any {
+function createEdges({
+  name,
+  schema,
+  required,
+  discriminator,
+}: EdgeProps): any {
   const schemaName = getSchemaName(schema);
+
+  if (discriminator !== undefined && discriminator.propertyName === name) {
+    return createDiscriminatorNode(
+      name,
+      "string",
+      schema,
+      discriminator,
+      required
+    );
+  }
 
   if (schema.oneOf !== undefined || schema.anyOf !== undefined) {
     return createDetailsNode(name, schemaName, schema, required);
