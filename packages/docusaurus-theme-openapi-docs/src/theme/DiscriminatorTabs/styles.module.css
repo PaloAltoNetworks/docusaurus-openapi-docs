@@ -1,0 +1,111 @@
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+.tabItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.8rem;
+  margin-top: 0 !important;
+  margin-right: 0.5rem;
+  border: 1px solid var(--openapi-code-dim-dark);
+  border-radius: var(--ifm-global-radius);
+  color: var(--openapi-code-dim-dark);
+  font-size: 12px;
+}
+
+.tabItem:hover {
+  color: var(--ifm-color-emphasis-500) !important;
+}
+
+.tabItem:last-child {
+  margin-right: 0 !important;
+}
+
+/* Open API Schema Tabs */
+.discriminatorTabsTopSection {
+  margin-top: 1rem;
+  margin-left: 0.9rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.discriminatorTabsTopSection + hr {
+  display: none;
+}
+
+.discriminatorTabsContainer {
+  display: flex;
+  align-items: center;
+  max-width: 390px;
+  padding-left: 3px;
+  overflow: hidden;
+}
+
+.discriminatorTabsListContainer {
+  padding: 0 0.25rem;
+  overflow-y: hidden;
+  overflow-x: scroll;
+  scroll-behavior: smooth;
+}
+
+.discriminatorTabsListContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.tabItem.discriminatorTabActive {
+  border: 1px solid var(--ifm-color-primary);
+  color: var(--ifm-color-primary);
+}
+
+.discriminatorTabLabel {
+  white-space: nowrap;
+}
+
+.discriminatorTabsContainer {
+  max-width: 600px;
+}
+
+/* Tab Arrows */
+.tabArrow {
+  content: "";
+  height: 1.25rem;
+  width: 1.25rem;
+  padding: 0 0.75rem;
+  border: none;
+  min-width: 1.25rem;
+  background: var(--ifm-menu-link-sublist-icon) 50% / 2rem 2rem;
+  filter: var(--ifm-menu-link-sublist-icon-filter);
+}
+
+.tabArrow:hover {
+  cursor: pointer;
+}
+
+.tabArrowLeft {
+  transform: rotate(270deg);
+}
+
+.tabArrowRight {
+  transform: rotate(90deg);
+}
+
+@media screen and (max-width: 500px) {
+  .discriminatorTabsTopSection {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .discriminatorTabsContainer {
+    width: 100%;
+  }
+
+  .tabItem {
+    height: 100%;
+  }
+}
