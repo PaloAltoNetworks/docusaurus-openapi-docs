@@ -102,7 +102,6 @@ function createItems(
           unversionedId: tagId,
           title: description ?? "",
           description: description ?? "",
-          slug: "/" + tagId,
           frontMatter: {},
           tag: {
             ...tag,
@@ -120,7 +119,6 @@ function createItems(
       unversionedId: infoId,
       title: openapiData.info.title,
       description: openapiData.info.description,
-      slug: "/" + infoId,
       frontMatter: {},
       securitySchemes: openapiData.components?.securitySchemes,
       info: {
@@ -184,7 +182,6 @@ function createItems(
         unversionedId: baseId,
         title: title,
         description: description ?? "",
-        slug: "/" + baseId,
         frontMatter: {},
         api: {
           ...defaults,

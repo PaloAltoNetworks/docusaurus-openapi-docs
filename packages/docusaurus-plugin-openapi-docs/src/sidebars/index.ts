@@ -14,6 +14,7 @@ import {
 import clsx from "clsx";
 import { kebabCase } from "lodash";
 import uniq from "lodash/uniq";
+import path from "path";
 
 import { TagObject } from "../openapi/types";
 import type {
@@ -139,8 +140,8 @@ function groupByTags(
           type: "generated-index" as "generated-index",
           title: tag,
           slug: label
-            ? "/category/" + kebabCase(label) + "/" + kebabCase(tag)
-            : "/category/" + kebabCase(tag),
+            ? path.join("/category", basePath, kebabCase(label), kebabCase(tag))
+            : path.join("/category", basePath, kebabCase(tag)),
         } as SidebarItemCategoryLinkConfig;
       }
 
