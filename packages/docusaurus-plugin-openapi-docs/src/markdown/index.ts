@@ -41,6 +41,7 @@ export function createApiPageMD({
     `import SchemaItem from "@theme/SchemaItem"\n`,
     `import ApiTabs from "@theme/ApiTabs";\n`,
     `import SchemaTabs from "@theme/SchemaTabs";\n`,
+    `import DiscriminatorTabs from "@theme/DiscriminatorTabs";\n`,
     `import TabItem from "@theme/TabItem";\n\n`,
     `## ${escape(title)}\n\n`,
     createDeprecationNotice({ deprecated, description: deprecatedDescription }),
