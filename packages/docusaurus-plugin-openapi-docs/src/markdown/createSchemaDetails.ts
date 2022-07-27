@@ -368,22 +368,20 @@ function createDiscriminatorNode(
             children: " required",
           }),
         ]),
-        guard(schema.description, (description) =>
-          create("div", {
-            style: {
-              marginTop: "var(--ifm-table-cell-padding)",
-              paddingLeft: "1rem",
-            },
-            children: createDescription(description),
-          })
-        ),
         guard(getQualifierMessage(discriminator), (message) =>
           create("div", {
             style: {
-              marginTop: "var(--ifm-table-cell-padding)",
               paddingLeft: "1rem",
             },
             children: createDescription(message),
+          })
+        ),
+        guard(schema.description, (description) =>
+          create("div", {
+            style: {
+              paddingLeft: "1rem",
+            },
+            children: createDescription(description),
           })
         ),
         create("DiscriminatorTabs", {
