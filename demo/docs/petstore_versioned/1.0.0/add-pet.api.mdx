@@ -37,13 +37,13 @@ Test Sub Category
 
 Tags attached to the pet
 
-</div><SchemaItem collapsible={false} name={"id"} required={false} schemaDescription={"Tag ID"} schemaName={"int64"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"name"} required={false} schemaDescription={"Tag name"} schemaName={"string"} qualifierMessage={"**Possible values:** 1 ≤ length"}></SchemaItem></div></details></SchemaItem><SchemaItem collapsible={false} name={"status"} required={false} schemaDescription={"Pet status in the store"} schemaName={"string"} qualifierMessage={"**Possible values:** [`available`, `pending`, `sold`]"}></SchemaItem><li className={"discriminatorItem"}><div><strong style={{"paddingLeft":"1rem"}}>petType</strong><span style={{"opacity":"0.6"}}> string</span><div style={{"marginTop":"var(--ifm-table-cell-padding)","paddingLeft":"1rem"}}>
-
-Type of a pet
-
-</div><div style={{"marginTop":"var(--ifm-table-cell-padding)","paddingLeft":"1rem"}}>
+</div><SchemaItem collapsible={false} name={"id"} required={false} schemaDescription={"Tag ID"} schemaName={"int64"} qualifierMessage={undefined}></SchemaItem><SchemaItem collapsible={false} name={"name"} required={false} schemaDescription={"Tag name"} schemaName={"string"} qualifierMessage={"**Possible values:** 1 ≤ length"}></SchemaItem></div></details></SchemaItem><SchemaItem collapsible={false} name={"status"} required={false} schemaDescription={"Pet status in the store"} schemaName={"string"} qualifierMessage={"**Possible values:** [`available`, `pending`, `sold`]"}></SchemaItem><li className={"discriminatorItem"}><div><strong style={{"paddingLeft":"1rem"}}>petType</strong><span style={{"opacity":"0.6"}}> string</span><div style={{"paddingLeft":"1rem"}}>
 
 **Possible values:** [`cat`, `dog`, `bee`]
+
+</div><div style={{"paddingLeft":"1rem"}}>
+
+Type of a pet
 
 </div><DiscriminatorTabs><TabItem label={"cat"} value={"0-item-discriminator"}><div style={{"marginLeft":"-4px"}}><SchemaItem collapsible={false} name={"huntingSkill"} required={true} schemaDescription={"The measured skill for hunting"} schemaName={"string"} qualifierMessage={"**Possible values:** [`clueless`, `lazy`, `adventurous`, `aggressive`]"}></SchemaItem></div></TabItem><TabItem label={"dog"} value={"1-item-discriminator"}><div style={{"marginLeft":"-4px"}}><SchemaItem collapsible={false} name={"packSize"} required={true} schemaDescription={"The size of the pack the dog is from"} schemaName={"int32"} qualifierMessage={"**Possible values:** 1 ≤ value"}></SchemaItem></div></TabItem><TabItem label={"bee"} value={"2-item-discriminator"}><div style={{"marginLeft":"-4px"}}><SchemaItem collapsible={false} name={"honeyPerDay"} required={true} schemaDescription={"Average amount of honey produced per day in ounces"} schemaName={"number"} qualifierMessage={undefined}></SchemaItem></div></TabItem></DiscriminatorTabs></div></li></ul></details><div><ApiTabs><TabItem label={"405"} value={"405"}><div>
 
