@@ -1,0 +1,7 @@
+.responseSamplesContainer {
+  margin-top: 2rem;
+}
+
+.responseSamplesCodeBlock code {
+  max-height: 400px;
+}

@@ -39,13 +39,18 @@ function ResponseSamples({ responseExamples }) {
         2
       );
 
-      return <CodeBlock>{responseSampleContent}</CodeBlock>;
+      return (
+        <CodeBlock className={styles.responseSamplesCodeBlock}>
+          {responseSampleContent}
+        </CodeBlock>
+      );
     }
   };
 
   return (
     <div className={styles.responseSamplesContainer}>
       <strong className={styles.responseSamplesHeader}>Response Samples</strong>
+      <hr />
       {renderResponseSamples()}
     </div>
   );
