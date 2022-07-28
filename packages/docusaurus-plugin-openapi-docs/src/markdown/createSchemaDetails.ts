@@ -299,7 +299,7 @@ function createDiscriminator(schema: SchemaObject) {
   const firstMappingSchema = mapping[Object.keys(mapping)[0]];
   if (firstMappingSchema.properties !== undefined) {
     propertyDescription =
-      firstMappingSchema.properties[propertyName!].description;
+      firstMappingSchema.properties![propertyName!].description;
   }
   if (firstMappingSchema.allOf !== undefined) {
     const { mergedSchemas }: { mergedSchemas: SchemaObject } = mergeAllOf(
@@ -307,16 +307,16 @@ function createDiscriminator(schema: SchemaObject) {
     );
     if (mergedSchemas.properties !== undefined) {
       propertyDescription =
-        mergedSchemas.properties![propertyName!].description;
+        mergedSchemas.properties[propertyName!]?.description;
     }
   }
 
   if (propertyDescription === undefined) {
     if (
       schema.properties !== undefined &&
-      schema.properties[propertyName!] !== undefined
+      schema.properties![propertyName!] !== undefined
     ) {
-      propertyDescription = schema.properties[propertyName!].description;
+      propertyDescription = schema.properties![propertyName!].description;
     }
   }
 
