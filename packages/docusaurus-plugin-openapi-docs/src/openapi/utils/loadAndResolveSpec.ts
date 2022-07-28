@@ -28,7 +28,7 @@ function serializer(replacer: any, cycleReplacer: any) {
 
   return function (key: any, value: any) {
     // Resolve discriminator ref pointers
-    if (value.discriminator !== undefined) {
+    if (value?.discriminator !== undefined) {
       const parser = new OpenAPIParser(stack[0]);
       for (let [k, v] of Object.entries(value.discriminator.mapping)) {
         const discriminator = k as string;
