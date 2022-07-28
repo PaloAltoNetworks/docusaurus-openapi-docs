@@ -82,6 +82,12 @@ export function createStatusCodes({ responses }: Props) {
       create("ApiTabs", {
         children: codes.map((code) => {
           const responseHeaders: any = responses[code].headers;
+          const responseContent: any = responses[code].content;
+          const responseContentKey: any =
+            responseContent && Object.keys(responseContent)[0];
+          const responseExamples: any =
+            responseContentKey && responseContent[responseContentKey].examples;
+
           return create("TabItem", {
             label: code,
             value: code,
@@ -111,6 +117,10 @@ export function createStatusCodes({ responses }: Props) {
                   },
                 }),
               }),
+              responseExamples &&
+                create("ResponseSamples", {
+                  responseExamples: responseExamples,
+                }),
             ],
           });
         }),
