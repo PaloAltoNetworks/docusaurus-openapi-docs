@@ -293,6 +293,33 @@ function createDiscriminator(schema: SchemaObject) {
     return undefined;
   }
 
+  // Attempt to get the property description we want to display
+  // TODO: how to make it predictable when handling allOf
+  let propertyDescription;
+  const firstMappingSchema = mapping[Object.keys(mapping)[0]];
+  if (firstMappingSchema.properties !== undefined) {
+    propertyDescription =
+      firstMappingSchema.properties[propertyName!].description;
+  }
+  if (firstMappingSchema.allOf !== undefined) {
+    const { mergedSchemas }: { mergedSchemas: SchemaObject } = mergeAllOf(
+      firstMappingSchema.allOf
+    );
+    if (mergedSchemas.properties !== undefined) {
+      propertyDescription =
+        mergedSchemas.properties![propertyName!].description;
+    }
+  }
+
+  if (propertyDescription === undefined) {
+    if (
+      schema.properties !== undefined &&
+      schema.properties[propertyName!] !== undefined
+    ) {
+      propertyDescription = schema.properties[propertyName!].description;
+    }
+  }
+
   return create("li", {
     className: "discriminatorItem",
     children: create("div", {
@@ -315,27 +342,26 @@ function createDiscriminator(schema: SchemaObject) {
             children: createDescription(message),
           })
         ),
-        // TODO: determine if we should include this or not
-        // guard(schema.description, (description) =>
-        //   create("div", {
-        //     style: {
-        //       paddingLeft: "1rem",
-        //     },
-        //     children: createDescription(description),
-        //   })
-        // ),
+        guard(propertyDescription, (description) =>
+          create("div", {
+            style: {
+              paddingLeft: "1rem",
+            },
+            children: createDescription(description),
+          })
+        ),
         create("DiscriminatorTabs", {
           children: Object.keys(mapping!).map((key, index) => {
             if (mapping[key].allOf !== undefined) {
               const { mergedSchemas }: { mergedSchemas: SchemaObject } =
                 mergeAllOf(mapping[key].allOf);
-              // Cleanup property from mapping schema
+              // Cleanup duplicate property from mapping schema
               delete mergedSchemas.properties![propertyName!];
               mapping[key] = mergedSchemas;
             }
 
             if (mapping[key].properties !== undefined) {
-              // Cleanup property from mapping schema
+              // Cleanup duplicate property from mapping schema
               delete mapping[key].properties![propertyName!];
             }
 
