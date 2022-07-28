@@ -6,9 +6,11 @@
  * ========================================================================== */
 
 import React from "react";
+
 import CodeBlock from "@theme/CodeBlock";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
+
 import styles from "./styles.module.css";
 
 function ResponseSamples({ responseExamples }) {
