@@ -5,6 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import path from "path";
+
 import {
   ProcessedSidebar,
   SidebarItemCategory,
@@ -14,7 +16,6 @@ import {
 import clsx from "clsx";
 import { kebabCase } from "lodash";
 import uniq from "lodash/uniq";
-import path from "path";
 
 import { TagObject } from "../openapi/types";
 import type {
