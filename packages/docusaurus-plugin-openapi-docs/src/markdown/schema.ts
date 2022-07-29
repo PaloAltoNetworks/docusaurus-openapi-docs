@@ -74,12 +74,14 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
 
   if (schema.minLength || schema.maxLength) {
     let lengthQualifier = "";
-    if (schema.minLength) {
-      lengthQualifier += `${schema.minLength} ≤ `;
+    if (schema.minLength && schema.minLength > 1) {
+      lengthQualifier += `\`>= ${schema.minLength} characters\``;
     }
-    lengthQualifier += "length";
+    if (schema.minLength && schema.minLength === 1) {
+      lengthQualifier += `\`non-empty\``;
+    }
     if (schema.maxLength) {
-      lengthQualifier += ` ≤ ${schema.maxLength}`;
+      lengthQualifier += `\`<= ${schema.maxLength} characters\``;
     }
     qualifierGroups.push(lengthQualifier);
   }
@@ -92,19 +94,18 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
   ) {
     let minmaxQualifier = "";
     if (typeof schema.exclusiveMinimum === "number") {
-      minmaxQualifier += `${schema.exclusiveMinimum} < `;
+      minmaxQualifier += `\`> ${schema.exclusiveMinimum}\``;
     } else if (schema.minimum && !schema.exclusiveMinimum) {
-      minmaxQualifier += `${schema.minimum} ≤ `;
+      minmaxQualifier += `\`>= ${schema.minimum}\``;
     } else if (schema.minimum && schema.exclusiveMinimum === true) {
-      minmaxQualifier += `${schema.minimum} < `;
+      minmaxQualifier += `\`> ${schema.minimum}\``;
     }
-    minmaxQualifier += "value";
     if (typeof schema.exclusiveMaximum === "number") {
-      minmaxQualifier += ` < ${schema.exclusiveMaximum}`;
+      minmaxQualifier += `\`< ${schema.exclusiveMaximum}\``;
     } else if (schema.maximum && !schema.exclusiveMaximum) {
-      minmaxQualifier += ` ≤ ${schema.maximum}`;
+      minmaxQualifier += `\`<= ${schema.maximum}\``;
     } else if (schema.maximum && schema.exclusiveMaximum === true) {
-      minmaxQualifier += ` < ${schema.maximum}`;
+      minmaxQualifier += `\`< ${schema.maximum}\``;
     }
     qualifierGroups.push(minmaxQualifier);
   }
@@ -127,11 +128,11 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
   }
 
   if (schema.minItems) {
-    qualifierGroups.push(`items >= ${schema.minItems}`);
+    qualifierGroups.push(`\`>= ${schema.minItems}\``);
   }
 
   if (schema.maxItems) {
-    qualifierGroups.push(`items <= ${schema.maxItems}`);
+    qualifierGroups.push(`\`<= ${schema.maxItems}\``);
   }
 
   if (qualifierGroups.length === 0) {
