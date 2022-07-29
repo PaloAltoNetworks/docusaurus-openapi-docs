@@ -74,13 +74,28 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
 
   if (schema.minLength || schema.maxLength) {
     let lengthQualifier = "";
-    if (schema.minLength) {
-      lengthQualifier += `${schema.minLength} ≤ `;
+    let minLength;
+    let maxLength;
+    if (schema.minLength && schema.minLength > 1) {
+      minLength = `\`>= ${schema.minLength} characters\``;
     }
-    lengthQualifier += "length";
+    if (schema.minLength && schema.minLength === 1) {
+      minLength = `\`non-empty\``;
+    }
     if (schema.maxLength) {
-      lengthQualifier += ` ≤ ${schema.maxLength}`;
+      maxLength = `\`<= ${schema.maxLength} characters\``;
     }
+
+    if (minLength && !maxLength) {
+      lengthQualifier += minLength;
+    }
+    if (maxLength && !minLength) {
+      lengthQualifier += maxLength;
+    }
+    if (minLength && maxLength) {
+      lengthQualifier += `${minLength} and ${maxLength}`;
+    }
+
     qualifierGroups.push(lengthQualifier);
   }
 
@@ -91,21 +106,33 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
     typeof schema.exclusiveMaximum === "number"
   ) {
     let minmaxQualifier = "";
+    let minimum;
+    let maximum;
     if (typeof schema.exclusiveMinimum === "number") {
-      minmaxQualifier += `${schema.exclusiveMinimum} < `;
+      minimum = `\`> ${schema.exclusiveMinimum}\``;
     } else if (schema.minimum && !schema.exclusiveMinimum) {
-      minmaxQualifier += `${schema.minimum} ≤ `;
+      minimum = `\`>= ${schema.minimum}\``;
     } else if (schema.minimum && schema.exclusiveMinimum === true) {
-      minmaxQualifier += `${schema.minimum} < `;
+      minimum = `\`> ${schema.minimum}\``;
     }
-    minmaxQualifier += "value";
     if (typeof schema.exclusiveMaximum === "number") {
-      minmaxQualifier += ` < ${schema.exclusiveMaximum}`;
+      maximum = `\`< ${schema.exclusiveMaximum}\``;
     } else if (schema.maximum && !schema.exclusiveMaximum) {
-      minmaxQualifier += ` ≤ ${schema.maximum}`;
+      maximum = `\`<= ${schema.maximum}\``;
     } else if (schema.maximum && schema.exclusiveMaximum === true) {
-      minmaxQualifier += ` < ${schema.maximum}`;
+      maximum = `\`< ${schema.maximum}\``;
     }
+
+    if (minimum && !maximum) {
+      minmaxQualifier += minimum;
+    }
+    if (maximum && !minimum) {
+      minmaxQualifier += maximum;
+    }
+    if (minimum && maximum) {
+      minmaxQualifier += `${minimum} and ${maximum}`;
+    }
+
     qualifierGroups.push(minmaxQualifier);
   }
 
@@ -127,11 +154,11 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
   }
 
   if (schema.minItems) {
-    qualifierGroups.push(`items >= ${schema.minItems}`);
+    qualifierGroups.push(`\`>= ${schema.minItems}\``);
   }
 
   if (schema.maxItems) {
-    qualifierGroups.push(`items <= ${schema.maxItems}`);
+    qualifierGroups.push(`\`<= ${schema.maxItems}\``);
   }
 
   if (qualifierGroups.length === 0) {
