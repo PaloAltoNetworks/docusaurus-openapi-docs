@@ -99,6 +99,7 @@ function createAnyOneOf(schema: SchemaObject): any {
 }
 
 function createProperties(schema: SchemaObject) {
+  const discriminator = schema.discriminator;
   return Object.entries(schema.properties!).map(([key, val]) =>
     createEdges({
       name: key,
@@ -106,6 +107,7 @@ function createProperties(schema: SchemaObject) {
       required: Array.isArray(schema.required)
         ? schema.required.includes(key)
         : false,
+      discriminator,
     })
   );
 }
@@ -277,6 +279,110 @@ function createItems(schema: SchemaObject) {
   );
 }
 
+/**
+ * For handling discriminators that do not map to a same-level property
+ */
+function createDiscriminator(schema: SchemaObject) {
+  const discriminator = schema.discriminator;
+  const propertyName = discriminator?.propertyName;
+  const propertyType = "string"; // should always be string
+  const mapping: any = discriminator?.mapping;
+
+  // Explicit mapping is required since we can't support implicit
+  if (mapping === undefined) {
+    return undefined;
+  }
+
+  // Attempt to get the property description we want to display
+  // TODO: how to make it predictable when handling allOf
+  let propertyDescription;
+  const firstMappingSchema = mapping[Object.keys(mapping)[0]];
+  if (firstMappingSchema.properties !== undefined) {
+    propertyDescription =
+      firstMappingSchema.properties![propertyName!].description;
+  }
+  if (firstMappingSchema.allOf !== undefined) {
+    const { mergedSchemas }: { mergedSchemas: SchemaObject } = mergeAllOf(
+      firstMappingSchema.allOf
+    );
+    if (mergedSchemas.properties !== undefined) {
+      propertyDescription =
+        mergedSchemas.properties[propertyName!]?.description;
+    }
+  }
+
+  if (propertyDescription === undefined) {
+    if (
+      schema.properties !== undefined &&
+      schema.properties![propertyName!] !== undefined
+    ) {
+      propertyDescription = schema.properties![propertyName!].description;
+    }
+  }
+
+  return create("li", {
+    className: "discriminatorItem",
+    children: create("div", {
+      children: [
+        create("strong", {
+          style: { paddingLeft: "1rem" },
+          children: propertyName,
+        }),
+        guard(propertyType, (name) =>
+          create("span", {
+            style: { opacity: "0.6" },
+            children: ` ${propertyType}`,
+          })
+        ),
+        guard(getQualifierMessage(schema.discriminator as any), (message) =>
+          create("div", {
+            style: {
+              paddingLeft: "1rem",
+            },
+            children: createDescription(message),
+          })
+        ),
+        guard(propertyDescription, (description) =>
+          create("div", {
+            style: {
+              paddingLeft: "1rem",
+            },
+            children: createDescription(description),
+          })
+        ),
+        create("DiscriminatorTabs", {
+          children: Object.keys(mapping!).map((key, index) => {
+            if (mapping[key].allOf !== undefined) {
+              const { mergedSchemas }: { mergedSchemas: SchemaObject } =
+                mergeAllOf(mapping[key].allOf);
+              // Cleanup duplicate property from mapping schema
+              delete mergedSchemas.properties![propertyName!];
+              mapping[key] = mergedSchemas;
+            }
+
+            if (mapping[key].properties !== undefined) {
+              // Cleanup duplicate property from mapping schema
+              delete mapping[key].properties![propertyName!];
+            }
+
+            const label = key;
+            return create("TabItem", {
+              label: label,
+              value: `${index}-item-discriminator`,
+              children: [
+                create("div", {
+                  style: { marginLeft: "-4px" },
+                  children: createNodes(mapping[key]),
+                }),
+              ],
+            });
+          }),
+        }),
+      ],
+    }),
+  });
+}
+
 function createDetailsNode(
   name: string,
   schemaName: string,
@@ -331,17 +437,108 @@ function createDetailsNode(
   });
 }
 
+/**
+ * For handling discriminators that map to a same-level property (like 'petType').
+ * Note: These should only be encountered while iterating through properties.
+ */
+function createPropertyDiscriminator(
+  name: string,
+  schemaName: string,
+  schema: SchemaObject,
+  discriminator: any,
+  required: any
+): any {
+  if (schema === undefined) {
+    return undefined;
+  }
+
+  if (discriminator.mapping === undefined) {
+    return undefined;
+  }
+
+  return create("li", {
+    className: "discriminatorItem",
+    children: create("div", {
+      children: [
+        create("strong", { style: { paddingLeft: "1rem" }, children: name }),
+        guard(schemaName, (name) =>
+          create("span", {
+            style: { opacity: "0.6" },
+            children: ` ${schemaName}`,
+          })
+        ),
+        guard(required, () => [
+          create("strong", {
+            style: {
+              fontSize: "var(--ifm-code-font-size)",
+              color: "var(--openapi-required)",
+            },
+            children: " required",
+          }),
+        ]),
+        guard(getQualifierMessage(discriminator), (message) =>
+          create("div", {
+            style: {
+              paddingLeft: "1rem",
+            },
+            children: createDescription(message),
+          })
+        ),
+        guard(schema.description, (description) =>
+          create("div", {
+            style: {
+              paddingLeft: "1rem",
+            },
+            children: createDescription(description),
+          })
+        ),
+        create("DiscriminatorTabs", {
+          children: Object.keys(discriminator?.mapping!).map((key, index) => {
+            const label = key;
+            return create("TabItem", {
+              label: label,
+              value: `${index}-item-discriminator`,
+              children: [
+                create("div", {
+                  style: { marginLeft: "-4px" },
+                  children: createNodes(discriminator?.mapping[key]),
+                }),
+              ],
+            });
+          }),
+        }),
+      ],
+    }),
+  });
+}
+
 interface EdgeProps {
   name: string;
   schema: SchemaObject;
   required: boolean;
+  discriminator?: any | unknown;
 }
 
 /**
  * Creates the edges or "leaves" of a schema tree. Edges can branch into sub-nodes with createDetails().
  */
-function createEdges({ name, schema, required }: EdgeProps): any {
+function createEdges({
+  name,
+  schema,
+  required,
+  discriminator,
+}: EdgeProps): any {
   const schemaName = getSchemaName(schema);
+
+  if (discriminator !== undefined && discriminator.propertyName === name) {
+    return createPropertyDiscriminator(
+      name,
+      "string",
+      schema,
+      discriminator,
+      required
+    );
+  }
 
   if (schema.oneOf !== undefined || schema.anyOf !== undefined) {
     return createDetailsNode(name, schemaName, schema, required);
@@ -409,6 +606,10 @@ function createEdges({ name, schema, required }: EdgeProps): any {
  * Creates a hierarchical level of a schema tree. Nodes produce edges that can branch into sub-nodes with edges, recursively.
  */
 function createNodes(schema: SchemaObject): any {
+  if (schema.discriminator !== undefined) {
+    return createDiscriminator(schema);
+  }
+
   if (schema.oneOf !== undefined || schema.anyOf !== undefined) {
     return createAnyOneOf(schema);
   }

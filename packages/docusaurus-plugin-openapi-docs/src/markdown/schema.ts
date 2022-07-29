@@ -115,6 +115,13 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
     );
   }
 
+  // Check if discriminator mapping
+  const discriminator = schema as any;
+  if (discriminator.mapping) {
+    const values = Object.keys(discriminator.mapping);
+    qualifierGroups.push(`[${values.map((e) => `\`${e}\``).join(", ")}]`);
+  }
+
   if (schema.enum) {
     qualifierGroups.push(`[${schema.enum.map((e) => `\`${e}\``).join(", ")}]`);
   }

@@ -14,6 +14,7 @@ import chalk from "chalk";
 import { convertObj } from "swagger2openapi";
 
 import { OpenApiObject } from "../types";
+import { OpenAPIParser } from "./services/OpenAPIParser";
 
 function serializer(replacer: any, cycleReplacer: any) {
   var stack: any = [],
@@ -26,6 +27,18 @@ function serializer(replacer: any, cycleReplacer: any) {
     };
 
   return function (key: any, value: any) {
+    // Resolve discriminator ref pointers
+    if (value?.discriminator !== undefined) {
+      const parser = new OpenAPIParser(stack[0]);
+      for (let [k, v] of Object.entries(value.discriminator.mapping)) {
+        const discriminator = k as string;
+        if (typeof v === "string" && v.charAt(0) === "#") {
+          const ref = v as string;
+          const resolvedRef = parser.byRef(ref);
+          value.discriminator.mapping[discriminator] = resolvedRef;
+        }
+      }
+    }
     if (stack.length > 0) {
       // @ts-ignore
       var thisPos = stack.indexOf(this);
