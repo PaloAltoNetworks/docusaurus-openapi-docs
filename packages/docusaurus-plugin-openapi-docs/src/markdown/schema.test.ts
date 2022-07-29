@@ -17,19 +17,19 @@ describe("getQualifierMessage", () => {
   // minLength + maxLength
   //
   it("should render minLength", () => {
-    const expected = "**Possible values:** 1 ≤ length";
+    const expected = "**Possible values:** `non-empty`";
     const actual = getQualifierMessage({ minLength: 1 });
     expect(actual).toBe(expected);
   });
 
   it("should render maxLength", () => {
-    const expected = "**Possible values:** length ≤ 40";
+    const expected = "**Possible values:** `<= 40 characters`";
     const actual = getQualifierMessage({ maxLength: 40 });
     expect(actual).toBe(expected);
   });
 
   it("should render minLength and maxLength", () => {
-    const expected = "**Possible values:** 1 ≤ length ≤ 40";
+    const expected = "**Possible values:** `non-empty` and `<= 40 characters`";
     const actual = getQualifierMessage({ minLength: 1, maxLength: 40 });
     expect(actual).toBe(expected);
   });
@@ -46,7 +46,7 @@ describe("getQualifierMessage", () => {
 
   it("should render multiple string qualifiers", () => {
     const expected =
-      "**Possible values:** 1 ≤ length ≤ 40, Value must match regular expression `^[a-zA-Z0-9_-]*$`";
+      "**Possible values:** `non-empty` and `<= 40 characters`, Value must match regular expression `^[a-zA-Z0-9_-]*$`";
     const actual = getQualifierMessage({
       minLength: 1,
       maxLength: 40,
@@ -68,49 +68,49 @@ describe("getQualifierMessage", () => {
   // minimum + maximum + exclusiveMinimum + exclusiveMaximum
   //
   it("should render minimum", () => {
-    const expected = "**Possible values:** 1 ≤ value";
+    const expected = "**Possible values:** `>= 1`";
     const actual = getQualifierMessage({ minimum: 1 });
     expect(actual).toBe(expected);
   });
 
   it("should render maximum", () => {
-    const expected = "**Possible values:** value ≤ 40";
+    const expected = "**Possible values:** `<= 40`";
     const actual = getQualifierMessage({ maximum: 40 });
     expect(actual).toBe(expected);
   });
 
   it("should render numeric exclusiveMinimum", () => {
-    const expected = "**Possible values:** 1 < value";
+    const expected = "**Possible values:** `> 1`";
     const actual = getQualifierMessage({ exclusiveMinimum: 1 });
     expect(actual).toBe(expected);
   });
 
   it("should render numeric exclusiveMaximum", () => {
-    const expected = "**Possible values:** value < 40";
+    const expected = "**Possible values:** `< 40`";
     const actual = getQualifierMessage({ exclusiveMaximum: 40 });
     expect(actual).toBe(expected);
   });
 
   it("should render boolean exclusiveMinimum", () => {
-    const expected = "**Possible values:** 1 < value";
+    const expected = "**Possible values:** `> 1`";
     const actual = getQualifierMessage({ minimum: 1, exclusiveMinimum: true });
     expect(actual).toBe(expected);
   });
 
   it("should render boolean exclusiveMaximum", () => {
-    const expected = "**Possible values:** value < 40";
+    const expected = "**Possible values:** `< 40`";
     const actual = getQualifierMessage({ maximum: 40, exclusiveMaximum: true });
     expect(actual).toBe(expected);
   });
 
   it("should render minimum when exclusiveMinimum is false", () => {
-    const expected = "**Possible values:** 1 ≤ value";
+    const expected = "**Possible values:** `>= 1`";
     const actual = getQualifierMessage({ minimum: 1, exclusiveMinimum: false });
     expect(actual).toBe(expected);
   });
 
   it("should render maximum when exclusiveMaximum is false", () => {
-    const expected = "**Possible values:** value ≤ 40";
+    const expected = "**Possible values:** `<= 40`";
     const actual = getQualifierMessage({
       maximum: 40,
       exclusiveMaximum: false,
@@ -119,13 +119,13 @@ describe("getQualifierMessage", () => {
   });
 
   it("should render minimum and maximum", () => {
-    const expected = "**Possible values:** 1 ≤ value ≤ 40";
+    const expected = "**Possible values:** `>= 1` and `<= 40`";
     const actual = getQualifierMessage({ minimum: 1, maximum: 40 });
     expect(actual).toBe(expected);
   });
 
   it("should render boolean exclusiveMinimum and maximum", () => {
-    const expected = "**Possible values:** 1 < value ≤ 40";
+    const expected = "**Possible values:** `> 1` and `<= 40`";
     const actual = getQualifierMessage({
       minimum: 1,
       maximum: 40,
@@ -135,7 +135,7 @@ describe("getQualifierMessage", () => {
   });
 
   it("should render minimum and boolean exclusiveMaximum", () => {
-    const expected = "**Possible values:** 1 ≤ value < 40";
+    const expected = "**Possible values:** `>= 1` and `< 40`";
     const actual = getQualifierMessage({
       minimum: 1,
       maximum: 40,
@@ -145,7 +145,7 @@ describe("getQualifierMessage", () => {
   });
 
   it("should render numeric exclusiveMinimum and maximum", () => {
-    const expected = "**Possible values:** 1 < value ≤ 40";
+    const expected = "**Possible values:** `> 1` and `<= 40`";
     const actual = getQualifierMessage({
       exclusiveMinimum: 1,
       maximum: 40,
@@ -154,7 +154,7 @@ describe("getQualifierMessage", () => {
   });
 
   it("should render minimum and numeric exclusiveMaximum", () => {
-    const expected = "**Possible values:** 1 ≤ value < 40";
+    const expected = "**Possible values:** `>= 1` and `< 40`";
     const actual = getQualifierMessage({
       minimum: 1,
       exclusiveMaximum: 40,
@@ -163,7 +163,7 @@ describe("getQualifierMessage", () => {
   });
 
   it("should render numeric exclusiveMinimum and boolean exclusiveMaximum", () => {
-    const expected = "**Possible values:** 1 < value < 40";
+    const expected = "**Possible values:** `> 1` and `< 40`";
     const actual = getQualifierMessage({
       exclusiveMinimum: 1,
       maximum: 40,
