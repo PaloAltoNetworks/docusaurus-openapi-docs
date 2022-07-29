@@ -5,7 +5,7 @@ module.exports = [
     link: {
       type: "generated-index",
       title: "Authentication",
-      slug: "/category/authentication",
+      slug: "/category/cos/authentication",
     },
     items: [
       {
@@ -22,7 +22,7 @@ module.exports = [
     link: {
       type: "generated-index",
       title: "Bucket operations",
-      slug: "/category/bucket-operations",
+      slug: "/category/cos/bucket-operations",
     },
     items: [
       {

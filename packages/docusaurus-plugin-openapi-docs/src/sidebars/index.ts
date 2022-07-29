@@ -5,6 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import path from "path";
+
 import {
   ProcessedSidebar,
   SidebarItemCategory,
@@ -139,8 +141,8 @@ function groupByTags(
           type: "generated-index" as "generated-index",
           title: tag,
           slug: label
-            ? "/category/" + kebabCase(label) + "/" + kebabCase(tag)
-            : "/category/" + kebabCase(tag),
+            ? path.join("/category", basePath, kebabCase(label), kebabCase(tag))
+            : path.join("/category", basePath, kebabCase(tag)),
         } as SidebarItemCategoryLinkConfig;
       }
 

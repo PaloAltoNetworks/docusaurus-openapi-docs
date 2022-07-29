@@ -76,7 +76,7 @@ export interface ApiMetadataBase {
   description: string;
   source: string; // @site aliased source => "@site/docs/folder/subFolder/subSubFolder/myDoc.md"
   sourceDirName: string; // relative to the versioned docs folder (can be ".") => "folder/subFolder/subSubFolder"
-  slug: string;
+  slug?: string;
   permalink: string;
   sidebarPosition?: number;
   frontMatter: Record<string, unknown>;
