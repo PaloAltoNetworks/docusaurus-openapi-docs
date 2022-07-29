@@ -74,15 +74,28 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
 
   if (schema.minLength || schema.maxLength) {
     let lengthQualifier = "";
+    let minLength;
+    let maxLength;
     if (schema.minLength && schema.minLength > 1) {
-      lengthQualifier += `\`>= ${schema.minLength} characters\``;
+      minLength = `\`>= ${schema.minLength} characters\``;
     }
     if (schema.minLength && schema.minLength === 1) {
-      lengthQualifier += `\`non-empty\``;
+      minLength = `\`non-empty\``;
     }
     if (schema.maxLength) {
-      lengthQualifier += `\`<= ${schema.maxLength} characters\``;
+      maxLength = `\`<= ${schema.maxLength} characters\``;
     }
+
+    if (minLength && !maxLength) {
+      lengthQualifier += minLength;
+    }
+    if (maxLength && !minLength) {
+      lengthQualifier += maxLength;
+    }
+    if (minLength && maxLength) {
+      lengthQualifier += `${minLength} and ${maxLength}`;
+    }
+
     qualifierGroups.push(lengthQualifier);
   }
 
@@ -93,20 +106,33 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
     typeof schema.exclusiveMaximum === "number"
   ) {
     let minmaxQualifier = "";
+    let minimum;
+    let maximum;
     if (typeof schema.exclusiveMinimum === "number") {
-      minmaxQualifier += `\`> ${schema.exclusiveMinimum}\``;
+      minimum = `\`> ${schema.exclusiveMinimum}\``;
     } else if (schema.minimum && !schema.exclusiveMinimum) {
-      minmaxQualifier += `\`>= ${schema.minimum}\``;
+      minimum = `\`>= ${schema.minimum}\``;
     } else if (schema.minimum && schema.exclusiveMinimum === true) {
-      minmaxQualifier += `\`> ${schema.minimum}\``;
+      minimum = `\`> ${schema.minimum}\``;
     }
     if (typeof schema.exclusiveMaximum === "number") {
-      minmaxQualifier += `\`< ${schema.exclusiveMaximum}\``;
+      maximum = `\`< ${schema.exclusiveMaximum}\``;
     } else if (schema.maximum && !schema.exclusiveMaximum) {
-      minmaxQualifier += `\`<= ${schema.maximum}\``;
+      maximum = `\`<= ${schema.maximum}\``;
     } else if (schema.maximum && schema.exclusiveMaximum === true) {
-      minmaxQualifier += `\`< ${schema.maximum}\``;
+      maximum = `\`< ${schema.maximum}\``;
     }
+
+    if (minimum && !maximum) {
+      minmaxQualifier += minimum;
+    }
+    if (maximum && !minimum) {
+      minmaxQualifier += maximum;
+    }
+    if (minimum && maximum) {
+      minmaxQualifier += `${minimum} and ${maximum}`;
+    }
+
     qualifierGroups.push(minmaxQualifier);
   }
 
