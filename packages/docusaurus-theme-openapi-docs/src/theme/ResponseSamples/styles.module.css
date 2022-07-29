@@ -1,7 +1,31 @@
+:root {
+  --prism-color: #393a34;
+  --prism-background-color: #f6f8fa;
+}
+
+[data-theme="dark"]:root {
+  --prism-color: #f8f8f2;
+  --prism-background-color: #282a36;
+}
+
 .responseSamplesContainer {
   margin-top: 2rem;
 }
 
 .responseSamplesCodeBlock code {
-  max-height: 400px;
+  padding-top: 0;
+}
+
+.responseSamplesCodeBlock {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.contentType {
+  width: 100%;
+  margin-bottom: 0;
+  background: var(--prism-background-color);
+  color: var(--prism-color);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }

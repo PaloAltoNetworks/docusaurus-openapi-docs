@@ -119,7 +119,8 @@ export function createStatusCodes({ responses }: Props) {
               }),
               responseExamples &&
                 create("ResponseSamples", {
-                  responseExamples: responseExamples,
+                  responseContentKey,
+                  responseExamples,
                 }),
             ],
           });
