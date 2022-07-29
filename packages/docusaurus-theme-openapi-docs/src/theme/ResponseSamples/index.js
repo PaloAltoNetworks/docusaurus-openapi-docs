@@ -10,10 +10,14 @@ import React from "react";
 import CodeBlock from "@theme/CodeBlock";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
+import clsx from "clsx";
 
 import styles from "./styles.module.css";
 
-function ResponseSamples({ responseExamples }) {
+function ResponseSamples({
+  responseExamples,
+  responseContentKey: contentType,
+}) {
   const hasMultipleExamples = Object.keys(responseExamples).length > 1;
 
   const renderResponseSamples = () => {
@@ -23,7 +27,13 @@ function ResponseSamples({ responseExamples }) {
           {Object.entries(responseExamples).map(
             ([exampleKey, exampleValue]) => (
               <TabItem label={exampleKey} value={exampleKey}>
-                <CodeBlock>
+                <pre
+                  className={clsx(styles.contentType, "codeBlock")}
+                >{`Content Type: ${contentType}`}</pre>
+                <CodeBlock
+                  language="javascript"
+                  className={styles.responseSamplesCodeBlock}
+                >
                   {JSON.stringify(exampleValue.value, null, 2)}
                 </CodeBlock>
               </TabItem>
@@ -40,9 +50,17 @@ function ResponseSamples({ responseExamples }) {
       );
 
       return (
-        <CodeBlock className={styles.responseSamplesCodeBlock}>
-          {responseSampleContent}
-        </CodeBlock>
+        <>
+          <pre
+            className={clsx(styles.contentType, "codeBlock")}
+          >{`Content Type: ${contentType}`}</pre>
+          <CodeBlock
+            language="javascript"
+            className={styles.responseSamplesCodeBlock}
+          >
+            {responseSampleContent}
+          </CodeBlock>
+        </>
       );
     }
   };
