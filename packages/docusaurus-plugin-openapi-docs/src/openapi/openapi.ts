@@ -13,7 +13,7 @@ import sdk from "@paloaltonetworks/postman-collection";
 import Collection from "@paloaltonetworks/postman-collection";
 import chalk from "chalk";
 import fs from "fs-extra";
-import { kebabCase } from "lodash";
+import { kebabCase, cloneDeep } from "lodash";
 
 import { isURL } from "../index";
 import {
@@ -54,7 +54,7 @@ async function createPostmanCollection(
   openapiData: OpenApiObject
 ): Promise<Collection> {
   // Create copy of openapiData
-  const data = Object.assign({}, openapiData) as OpenApiObject;
+  const data = cloneDeep(openapiData) as OpenApiObject;
 
   // Including `servers` breaks postman, so delete all of them.
   delete data.servers;
