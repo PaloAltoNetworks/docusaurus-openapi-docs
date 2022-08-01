@@ -18,6 +18,7 @@ import { createContactInfo } from "./createContactInfo";
 import { createDeprecationNotice } from "./createDeprecationNotice";
 import { createDescription } from "./createDescription";
 import { createLicense } from "./createLicense";
+import { createLogo } from "./createLogo";
 import { createParamsDetails } from "./createParamsDetails";
 import { createRequestBodyDetails } from "./createRequestBodyDetails";
 import { createStatusCodes } from "./createStatusCodes";
@@ -56,14 +57,26 @@ export function createApiPageMD({
 }
 
 export function createInfoPageMD({
-  info: { title, version, description, contact, license, termsOfService },
+  info: {
+    title,
+    version,
+    description,
+    contact,
+    license,
+    termsOfService,
+    logo,
+    darkLogo,
+  },
   securitySchemes,
 }: InfoPageMetadata) {
   return render([
+    `import ApiLogo from "@theme/ApiLogo";\n`,
     `import Tabs from "@theme/Tabs";\n`,
     `import TabItem from "@theme/TabItem";\n\n`,
+
     createVersionBadge(version),
     `# ${escape(title)}\n\n`,
+    createLogo(logo, darkLogo),
     createDescription(description),
     createAuthentication(securitySchemes as unknown as SecuritySchemeObject),
     createContactInfo(contact as ContactObject),
