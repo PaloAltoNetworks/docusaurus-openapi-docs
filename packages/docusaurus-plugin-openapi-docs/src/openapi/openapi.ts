@@ -13,7 +13,8 @@ import sdk from "@paloaltonetworks/postman-collection";
 import Collection from "@paloaltonetworks/postman-collection";
 import chalk from "chalk";
 import fs from "fs-extra";
-import { kebabCase, cloneDeep } from "lodash";
+import cloneDeep from "lodash/cloneDeep";
+import kebabCase from "lodash/kebabCase";
 
 import { isURL } from "../index";
 import {
