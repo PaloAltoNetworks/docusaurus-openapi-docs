@@ -246,7 +246,7 @@ yarn docusaurus gen-api-docs:version petstore:all
 Run the following to bootstrap a Docsaurus v2 site (classic theme) with `docusaurus-openapi-docs`:
 
 ```bash
-npx create-docusaurus@2.0.0-rc.1 my-website --package-manager yarn
+npx create-docusaurus@2.0.1 my-website --package-manager yarn
 ```
 
 > When prompted to select a template choose `Git repository`.
