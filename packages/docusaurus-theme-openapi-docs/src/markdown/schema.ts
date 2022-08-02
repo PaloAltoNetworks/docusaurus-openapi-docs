@@ -8,22 +8,36 @@
 import { SchemaObject } from "../types";
 
 function prettyName(schema: SchemaObject, circular?: boolean) {
-  if (schema.$ref) {
-    return schema.$ref.replace("#/components/schemas/", "") + circular
-      ? " (circular)"
-      : "";
-  }
-
   if (schema.format) {
     return schema.format;
   }
 
   if (schema.allOf) {
+    if (typeof schema.allOf[0] === "string") {
+      // @ts-ignore
+      if (schema.allOf[0].includes("circular")) {
+        return schema.allOf[0];
+      }
+    }
+    return "object";
+  }
+
+  if (schema.oneOf) {
+    return "object";
+  }
+
+  if (schema.anyOf) {
     return "object";
   }
 
   if (schema.type === "object") {
     return schema.xml?.name ?? schema.type;
+    // return schema.type;
+  }
+
+  if (schema.type === "array") {
+    return schema.xml?.name ?? schema.type;
+    // return schema.type;
   }
 
   return schema.title ?? schema.type;
@@ -42,8 +56,6 @@ export function getSchemaName(
 
 export function getQualifierMessage(schema?: SchemaObject): string | undefined {
   // TODO:
-  // - maxItems
-  // - minItems
   // - uniqueItems
   // - maxProperties
   // - minProperties
@@ -52,7 +64,11 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
     return undefined;
   }
 
-  if (schema.items) {
+  if (
+    schema.items &&
+    schema.minItems === undefined &&
+    schema.maxItems === undefined
+  ) {
     return getQualifierMessage(schema.items);
   }
 
@@ -60,15 +76,38 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
 
   let qualifierGroups = [];
 
+  if (schema.items && schema.items.enum) {
+    if (schema.items.enum) {
+      qualifierGroups.push(
+        `[${schema.items.enum.map((e) => `\`${e}\``).join(", ")}]`
+      );
+    }
+  }
+
   if (schema.minLength || schema.maxLength) {
     let lengthQualifier = "";
-    if (schema.minLength) {
-      lengthQualifier += `${schema.minLength} ≤ `;
+    let minLength;
+    let maxLength;
+    if (schema.minLength && schema.minLength > 1) {
+      minLength = `\`>= ${schema.minLength} characters\``;
     }
-    lengthQualifier += "length";
+    if (schema.minLength && schema.minLength === 1) {
+      minLength = `\`non-empty\``;
+    }
     if (schema.maxLength) {
-      lengthQualifier += ` ≤ ${schema.maxLength}`;
+      maxLength = `\`<= ${schema.maxLength} characters\``;
     }
+
+    if (minLength && !maxLength) {
+      lengthQualifier += minLength;
+    }
+    if (maxLength && !minLength) {
+      lengthQualifier += maxLength;
+    }
+    if (minLength && maxLength) {
+      lengthQualifier += `${minLength} and ${maxLength}`;
+    }
+
     qualifierGroups.push(lengthQualifier);
   }
 
@@ -79,21 +118,33 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
     typeof schema.exclusiveMaximum === "number"
   ) {
     let minmaxQualifier = "";
+    let minimum;
+    let maximum;
     if (typeof schema.exclusiveMinimum === "number") {
-      minmaxQualifier += `${schema.exclusiveMinimum} < `;
+      minimum = `\`> ${schema.exclusiveMinimum}\``;
     } else if (schema.minimum && !schema.exclusiveMinimum) {
-      minmaxQualifier += `${schema.minimum} ≤ `;
+      minimum = `\`>= ${schema.minimum}\``;
     } else if (schema.minimum && schema.exclusiveMinimum === true) {
-      minmaxQualifier += `${schema.minimum} < `;
+      minimum = `\`> ${schema.minimum}\``;
     }
-    minmaxQualifier += "value";
     if (typeof schema.exclusiveMaximum === "number") {
-      minmaxQualifier += ` < ${schema.exclusiveMaximum}`;
+      maximum = `\`< ${schema.exclusiveMaximum}\``;
     } else if (schema.maximum && !schema.exclusiveMaximum) {
-      minmaxQualifier += ` ≤ ${schema.maximum}`;
+      maximum = `\`<= ${schema.maximum}\``;
     } else if (schema.maximum && schema.exclusiveMaximum === true) {
-      minmaxQualifier += ` < ${schema.maximum}`;
+      maximum = `\`< ${schema.maximum}\``;
     }
+
+    if (minimum && !maximum) {
+      minmaxQualifier += minimum;
+    }
+    if (maximum && !minimum) {
+      minmaxQualifier += maximum;
+    }
+    if (minimum && maximum) {
+      minmaxQualifier += `${minimum} and ${maximum}`;
+    }
+
     qualifierGroups.push(minmaxQualifier);
   }
 
@@ -103,8 +154,23 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
     );
   }
 
+  // Check if discriminator mapping
+  const discriminator = schema as any;
+  if (discriminator.mapping) {
+    const values = Object.keys(discriminator.mapping);
+    qualifierGroups.push(`[${values.map((e) => `\`${e}\``).join(", ")}]`);
+  }
+
   if (schema.enum) {
     qualifierGroups.push(`[${schema.enum.map((e) => `\`${e}\``).join(", ")}]`);
+  }
+
+  if (schema.minItems) {
+    qualifierGroups.push(`\`>= ${schema.minItems}\``);
+  }
+
+  if (schema.maxItems) {
+    qualifierGroups.push(`\`<= ${schema.maxItems}\``);
   }
 
   if (qualifierGroups.length === 0) {

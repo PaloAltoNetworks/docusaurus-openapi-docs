@@ -8,9 +8,10 @@ sidebar_class_name: "get api-method"
 info_path: petstore_versioned/swagger-petstore-yaml
 ---
 
-import ParamsItem from "@theme/ParamsItem";
-import SchemaItem from "@theme/SchemaItem"
 import ApiTabs from "@theme/ApiTabs";
+import ParamsItem from "@theme/ParamsItem";
+import ResponseSamples from "@theme/ResponseSamples";
+import SchemaItem from "@theme/SchemaItem"
 import SchemaTabs from "@theme/SchemaTabs";
 import DiscriminatorTabs from "@theme/DiscriminatorTabs";
 import TabItem from "@theme/TabItem";
@@ -25,7 +26,7 @@ Returns a single pet
 
 successful operation
 
-</div><div><details style={{}} data-collapsed={false} open={true}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><li className={"discriminatorItem"}><div><strong style={{"paddingLeft":"1rem"}}>petType</strong><span style={{"opacity":"0.6"}}> string</span><div style={{"paddingLeft":"1rem"}}>
+</div><div><details style={{}} data-collapsed={false} open={true}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><div className={"discriminatorItem"}><div><strong style={{"paddingLeft":"1rem"}}>petType</strong><span style={{"opacity":"0.6"}}> string</span><div style={{"paddingLeft":"1rem"}}>
 
 **Possible values:** [`cat`, `dog`, `bee`]
 
@@ -33,7 +34,7 @@ successful operation
 
 Type of a pet
 
-</div><DiscriminatorTabs><TabItem label={"cat"} value={"0-item-discriminator"}><div style={{"marginLeft":"-4px"}}><SchemaItem collapsible={false} name={"huntingSkill"} required={true} schemaDescription={"The measured skill for hunting"} schemaName={"string"} qualifierMessage={"**Possible values:** [`clueless`, `lazy`, `adventurous`, `aggressive`]"}></SchemaItem></div></TabItem><TabItem label={"dog"} value={"1-item-discriminator"}><div style={{"marginLeft":"-4px"}}><SchemaItem collapsible={false} name={"packSize"} required={true} schemaDescription={"The size of the pack the dog is from"} schemaName={"int32"} qualifierMessage={"**Possible values:** `>= 1`"}></SchemaItem></div></TabItem><TabItem label={"bee"} value={"2-item-discriminator"}><div style={{"marginLeft":"-4px"}}><SchemaItem collapsible={false} name={"honeyPerDay"} required={true} schemaDescription={"Average amount of honey produced per day in ounces"} schemaName={"number"} qualifierMessage={undefined}></SchemaItem></div></TabItem></DiscriminatorTabs></div></li></ul></details></div></TabItem><TabItem label={"400"} value={"400"}><div>
+</div><DiscriminatorTabs><TabItem label={"cat"} value={"0-item-discriminator"}><div style={{"marginLeft":"-4px"}}><SchemaItem collapsible={false} name={"huntingSkill"} required={true} schemaDescription={"The measured skill for hunting"} schemaName={"string"} qualifierMessage={"**Possible values:** [`clueless`, `lazy`, `adventurous`, `aggressive`]"}></SchemaItem></div></TabItem><TabItem label={"dog"} value={"1-item-discriminator"}><div style={{"marginLeft":"-4px"}}><SchemaItem collapsible={false} name={"packSize"} required={true} schemaDescription={"The size of the pack the dog is from"} schemaName={"int32"} qualifierMessage={"**Possible values:** `>= 1`"}></SchemaItem></div></TabItem><TabItem label={"bee"} value={"2-item-discriminator"}><div style={{"marginLeft":"-4px"}}><SchemaItem collapsible={false} name={"honeyPerDay"} required={true} schemaDescription={"Average amount of honey produced per day in ounces"} schemaName={"number"} qualifierMessage={undefined}></SchemaItem></div></TabItem></DiscriminatorTabs></div></div></ul></details></div></TabItem><TabItem label={"400"} value={"400"}><div>
 
 Invalid ID supplied
 

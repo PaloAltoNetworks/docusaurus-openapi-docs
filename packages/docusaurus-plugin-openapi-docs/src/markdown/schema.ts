@@ -64,13 +64,25 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
     return undefined;
   }
 
-  if (schema.items) {
+  if (
+    schema.items &&
+    schema.minItems === undefined &&
+    schema.maxItems === undefined
+  ) {
     return getQualifierMessage(schema.items);
   }
 
   let message = "**Possible values:** ";
 
   let qualifierGroups = [];
+
+  if (schema.items && schema.items.enum) {
+    if (schema.items.enum) {
+      qualifierGroups.push(
+        `[${schema.items.enum.map((e) => `\`${e}\``).join(", ")}]`
+      );
+    }
+  }
 
   if (schema.minLength || schema.maxLength) {
     let lengthQualifier = "";
