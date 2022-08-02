@@ -128,6 +128,8 @@ function createItems(
           getTagDisplayName(tagName.name!, openapiData.tags ?? [])
         ),
         title: openapiData.info.title ?? "Introduction",
+        logo: openapiData.info["x-logo"]! as any,
+        darkLogo: openapiData.info["x-dark-logo"]! as any,
       },
     };
     items.push(infoPage);
