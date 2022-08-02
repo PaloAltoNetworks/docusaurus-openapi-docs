@@ -320,7 +320,7 @@ function createDiscriminator(schema: SchemaObject) {
     }
   }
 
-  return create("li", {
+  return create("div", {
     className: "discriminatorItem",
     children: create("div", {
       children: [
@@ -456,7 +456,7 @@ function createPropertyDiscriminator(
     return undefined;
   }
 
-  return create("li", {
+  return create("div", {
     className: "discriminatorItem",
     children: create("div", {
       children: [
