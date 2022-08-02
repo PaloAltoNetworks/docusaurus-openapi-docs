@@ -1,3 +1,26 @@
+## 1.1.3 (Aug 2, 2022)
+
+High level enhancements
+
+- Upgraded to Docusaurus v2.0.1
+- Refactored qualifiers to improve readability
+- Added support for response headers
+- Added support for x-logo and x-dark-logo extensions
+- Added support for discriminators
+- Added support for response status code examples
+
+Other enhancements and bug fixes
+
+- [Bug] Improve handling of schema.items qualifiers ([#186](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/186))
+- Upgrade to Docusaurus v2.0.1 ([#185](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/185))
+- [FR] Support for response status code examples ([#176](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/176))
+- [Enhancement] Add support for x-logo and x-dark-logo extensions ([#184](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/184))
+- [Bug] Fix createPostmanCollection method where a copy of openapiData is generated ([#183](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/183))
+- [Enhancement] Refactor qualifiers to improve readability ([#181](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/181))
+- [Bug] Use basePath in place of slug to avoid duplicate routes ([#173](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/173))
+- [Enhancement] Add support for discriminators ([#174](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/174))
+- Add support for response headers ([#171](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/171))
+
 ## 1.1.2 (Jul 21, 2022)
 
 High level enhancements
