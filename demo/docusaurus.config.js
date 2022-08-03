@@ -31,7 +31,7 @@ const config = {
         },
         blog: false,
         theme: {
-          customCss: require.resolve("./src/css/custom.css"),
+          customCss: require.resolve("./src/css/custom.scss"),
         },
       }),
     ],
@@ -139,6 +139,7 @@ const config = {
     }),
 
   plugins: [
+    "docusaurus-plugin-sass",
     [
       "docusaurus-plugin-openapi-docs",
       {
