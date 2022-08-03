@@ -21,6 +21,7 @@ function SchemaItem({
   required,
   schemaDescription,
   schemaName,
+  defaultValue,
 }) {
   const renderRequired = guard(required, () => (
     <strong className={styles.required}> required</strong>
@@ -38,12 +39,19 @@ function SchemaItem({
     </div>
   ));
 
+  const renderDefaultValue = guard(defaultValue, (value) => (
+    <div className={styles.schemaQualifierMessage}>
+      <ReactMarkdown children={`**Default value:** \`${value}\``} />
+    </div>
+  ));
+
   const schemaContent = (
     <div>
       <strong>{name}</strong>
       <span className={styles.schemaName}> {schemaName}</span>
       {renderRequired}
       {renderQualifierMessage}
+      {renderDefaultValue}
       {renderSchemaDescription}
     </div>
   );
