@@ -17,7 +17,7 @@ html[data-theme="dark"] {
   --docusaurus-highlighted-code-line-bg: var(--ifm-color-emphasis-200);
 
   code {
-    background-color: var(--color-gray-78);
+    background-color: var(--ifm-color-emphasis-200);
   }
 
   pre {
@@ -29,7 +29,7 @@ html[data-theme="dark"] {
   .alert {
     pre {
       code {
-        --ifm-code-background: var(--color-gray-78);
+        --ifm-code-background: var(--ifm-color-emphasis-200);
       }
     }
   }
