@@ -568,6 +568,11 @@ function createEdges({
       return createDetailsNode(name, mergedSchemaName, mergedSchemas, required);
     }
 
+    // array of objects
+    if (mergedSchemas.items?.properties !== undefined) {
+      return createDetailsNode(name, mergedSchemaName, mergedSchemas, required);
+    }
+
     return create("SchemaItem", {
       collapsible: false,
       name,
@@ -575,6 +580,7 @@ function createEdges({
       schemaDescription: mergedSchemas.description,
       schemaName: schemaName,
       qualifierMessage: getQualifierMessage(schema),
+      defaultValue: schema.default,
     });
   }
 
@@ -599,6 +605,7 @@ function createEdges({
     schemaDescription: schema.description,
     schemaName: schemaName,
     qualifierMessage: getQualifierMessage(schema),
+    defaultValue: schema.default,
   });
 }
 

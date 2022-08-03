@@ -37,6 +37,15 @@ function ParamsItem({
     </div>
   ));
 
+  const renderDefaultValue = guard(
+    schema.items ? schema.items.default : schema.default,
+    (value) => (
+      <div>
+        <ReactMarkdown children={`**Default value:** \`${value}\``} />
+      </div>
+    )
+  );
+
   const renderExample = guard(example, (example) => (
     <div>{`Example: ${example}`}</div>
   ));
@@ -58,6 +67,7 @@ function ParamsItem({
       {renderSchemaName}
       {renderSchemaRequired}
       {renderSchema}
+      {renderDefaultValue}
       {renderDescription}
       {renderExample}
       {renderExamples}
