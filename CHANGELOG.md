@@ -1,3 +1,9 @@
+## 1.1.4 (Aug 4, 2022)
+
+Other enhancements and bug fixes
+
+- [Enhancement] Add support for rendering default value ([#189](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/189))
+
 ## 1.1.3 (Aug 2, 2022)
 
 High level enhancements
