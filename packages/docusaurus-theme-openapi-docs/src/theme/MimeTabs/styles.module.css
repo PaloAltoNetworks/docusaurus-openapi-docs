@@ -1,0 +1,120 @@
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+.tabItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.8rem;
+  margin-top: 0 !important;
+  margin-right: 0.5rem;
+  border: 1px solid var(--openapi-code-dim-dark);
+  border-radius: var(--ifm-global-radius);
+  font-weight: var(--ifm-font-weight-normal);
+  color: var(--openapi-code-dim-dark);
+  font-size: 12px;
+}
+
+.tabItem:hover {
+  color: var(--ifm-color-emphasis-500) !important;
+}
+
+.tabItem:last-child {
+  margin-right: 0 !important;
+}
+
+/* Open API Response Code Tabs */
+.responseTabsTopSection {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.responseTabsContainer {
+  display: flex;
+  align-items: center;
+  max-width: 390px;
+  /* padding-left: 1rem; */
+  overflow: hidden;
+}
+
+.responseTabsListContainer {
+  padding: 0 0.25rem;
+  overflow-y: hidden;
+  overflow-x: scroll;
+  scroll-behavior: smooth;
+}
+
+.responseTabsListContainer::-webkit-scrollbar {
+  display: none;
+}
+
+/* Response Code Tabs - Colored Dots */
+.responseTabDot {
+  width: 12.5px;
+  height: 12.5px;
+  margin-right: 5px;
+  border-radius: 50%;
+}
+
+.responseTabDotSuccess {
+  background-color: var(--ifm-color-success);
+}
+
+.responseTabDotDanger {
+  background-color: var(--ifm-color-danger);
+}
+
+.responseTabDotInfo {
+  background-color: var(--ifm-color-info);
+}
+
+.responseTabActive {
+  border: 1px solid var(--ifm-color-primary);
+  color: var(--ifm-color-primary);
+}
+
+.responseSchemaContainer {
+  max-width: 600px;
+}
+
+/* Tab Arrows */
+.tabArrow {
+  content: "";
+  height: 1.25rem;
+  width: 1.25rem;
+  border: none;
+  min-width: 1.25rem;
+  background: var(--ifm-menu-link-sublist-icon) 50% / 2rem 2rem;
+  filter: var(--ifm-menu-link-sublist-icon-filter);
+}
+
+.tabArrow:hover {
+  cursor: pointer;
+}
+
+.tabArrowLeft {
+  transform: rotate(270deg);
+}
+
+.tabArrowRight {
+  transform: rotate(90deg);
+}
+
+@media screen and (max-width: 500px) {
+  .responseTabsTopSection {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .responseTabsContainer {
+    width: 100%;
+    margin-top: var(--ifm-spacing-vertical);
+    padding: 0;
+  }
+}

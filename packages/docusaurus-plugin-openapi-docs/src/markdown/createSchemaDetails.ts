@@ -699,8 +699,75 @@ export function createSchemaDetails({ title, body, ...rest }: Props) {
     return undefined;
   }
 
-  // NOTE: We just pick a random content-type.
-  // How common is it to have multiple?
+  // Get all MIME types, including vendor-specific
+  const mimeTypes = Object.keys(body.content);
+
+  if (mimeTypes && mimeTypes.length > 1) {
+    return create("MimeTabs", {
+      groupId: "mime-type",
+      children: mimeTypes.map((mimeType) => {
+        const firstBody = body.content![mimeType].schema;
+        if (firstBody === undefined) {
+          return undefined;
+        }
+        if (firstBody.properties !== undefined) {
+          if (Object.keys(firstBody.properties).length === 0) {
+            return undefined;
+          }
+        }
+        return create("TabItem", {
+          label: mimeType,
+          value: `${mimeType}-schema`,
+          children: [
+            createDetails({
+              "data-collapsed": false,
+              open: true,
+              ...rest,
+              children: [
+                createDetailsSummary({
+                  style: { textAlign: "left" },
+                  children: [
+                    create("strong", { children: `${title}` }),
+                    guard(firstBody.type === "array", (format) =>
+                      create("span", {
+                        style: { opacity: "0.6" },
+                        children: ` array`,
+                      })
+                    ),
+                    guard(body.required, () => [
+                      create("strong", {
+                        style: {
+                          fontSize: "var(--ifm-code-font-size)",
+                          color: "var(--openapi-required)",
+                        },
+                        children: " required",
+                      }),
+                    ]),
+                  ],
+                }),
+                create("div", {
+                  style: { textAlign: "left", marginLeft: "1rem" },
+                  children: [
+                    guard(body.description, () => [
+                      create("div", {
+                        style: { marginTop: "1rem", marginBottom: "1rem" },
+                        children: createDescription(body.description),
+                      }),
+                    ]),
+                  ],
+                }),
+                create("ul", {
+                  style: { marginLeft: "1rem" },
+                  children: createNodes(firstBody),
+                }),
+              ],
+            }),
+          ],
+        });
+      }),
+    });
+  }
+
   const randomFirstKey = Object.keys(body.content)[0];
   const firstBody = body.content[randomFirstKey].schema;
 
@@ -714,8 +781,6 @@ export function createSchemaDetails({ title, body, ...rest }: Props) {
       return undefined;
     }
   }
-
-  // Root-level schema dropdown
   return createDetails({
     "data-collapsed": false,
     open: true,
