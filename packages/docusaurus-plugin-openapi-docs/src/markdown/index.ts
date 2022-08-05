@@ -10,6 +10,7 @@ import { escape } from "lodash";
 import {
   ContactObject,
   LicenseObject,
+  MediaTypeObject,
   SecuritySchemeObject,
 } from "../openapi/types";
 import { ApiPageMetadata, InfoPageMetadata, TagPageMetadata } from "../types";
@@ -26,6 +27,17 @@ import { createTermsOfService } from "./createTermsOfService";
 import { createVersionBadge } from "./createVersionBadge";
 import { render } from "./utils";
 
+interface Props {
+  title: string;
+  body: {
+    content?: {
+      [key: string]: MediaTypeObject;
+    };
+    description?: string;
+    required?: boolean;
+  };
+}
+
 export function createApiPageMD({
   title,
   api: {
@@ -39,6 +51,7 @@ export function createApiPageMD({
 }: ApiPageMetadata) {
   return render([
     `import ApiTabs from "@theme/ApiTabs";\n`,
+    `import MimeTabs from "@theme/MimeTabs";\n`,
     `import ParamsItem from "@theme/ParamsItem";\n`,
     `import ResponseSamples from "@theme/ResponseSamples";\n`,
     `import SchemaItem from "@theme/SchemaItem"\n`,
@@ -52,7 +65,10 @@ export function createApiPageMD({
     createParamsDetails({ parameters, type: "query" }),
     createParamsDetails({ parameters, type: "header" }),
     createParamsDetails({ parameters, type: "cookie" }),
-    createRequestBodyDetails({ title: "Request Body", body: requestBody }),
+    createRequestBodyDetails({
+      title: "Request Body",
+      body: requestBody,
+    } as Props),
     createStatusCodes({ responses }),
   ]);
 }
