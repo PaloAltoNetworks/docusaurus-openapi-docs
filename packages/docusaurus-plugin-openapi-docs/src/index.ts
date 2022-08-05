@@ -148,9 +148,6 @@ hide_title: true
 {{#api}}
 hide_table_of_contents: true
 {{/api}}
-{{#json}}
-api: {{{json}}}
-{{/json}}
 {{#api.method}}
 sidebar_class_name: "{{{api.method}}} api-method"
 {{/api.method}}
