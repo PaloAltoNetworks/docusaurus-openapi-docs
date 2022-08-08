@@ -717,7 +717,7 @@ export function createSchemaDetails({ title, body, ...rest }: Props) {
         }
         return create("TabItem", {
           label: mimeType,
-          value: `${mimeType}-schema`,
+          value: `${mimeType}`,
           children: [
             createDetails({
               "data-collapsed": false,
