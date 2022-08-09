@@ -9,6 +9,7 @@ info_path: petstore/swagger-petstore-yaml
 ---
 
 import ApiTabs from "@theme/ApiTabs";
+import MimeTabs from "@theme/MimeTabs";
 import ParamsItem from "@theme/ParamsItem";
 import ResponseSamples from "@theme/ResponseSamples";
 import SchemaItem from "@theme/SchemaItem"
@@ -22,9 +23,9 @@ import TabItem from "@theme/TabItem";
 
 Add subscription for a store events
 
-<details style={{}} data-collapsed={false} open={true}><summary style={{"textAlign":"left"}}><strong>Request Body</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"callbackUrl"} required={true} schemaDescription={"This URL will be called by the server when the desired event will occur"} schemaName={"uri"} qualifierMessage={undefined} defaultValue={undefined}></SchemaItem><SchemaItem collapsible={false} name={"eventName"} required={true} schemaDescription={"Event name for the subscription"} schemaName={"string"} qualifierMessage={"**Possible values:** [`orderInProgress`, `orderShipped`, `orderDelivered`]"} defaultValue={undefined}></SchemaItem></ul></details><div><ApiTabs><TabItem label={"201"} value={"201"}><div>
+<MimeTabs><TabItem label={"application/json"} value={"application/json-schema"}><details style={{}} data-collapsed={false} open={true}><summary style={{"textAlign":"left"}}><strong>Request Body</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"callbackUrl"} required={true} schemaDescription={"This URL will be called by the server when the desired event will occur"} schemaName={"uri"} qualifierMessage={undefined} defaultValue={undefined}></SchemaItem><SchemaItem collapsible={false} name={"eventName"} required={true} schemaDescription={"Event name for the subscription"} schemaName={"string"} qualifierMessage={"**Possible values:** [`orderInProgress`, `orderShipped`, `orderDelivered`]"} defaultValue={undefined}></SchemaItem></ul></details></TabItem></MimeTabs><div><ApiTabs><TabItem label={"201"} value={"201"}><div>
 
 Subscription added
 
-</div><div><details style={{}} data-collapsed={false} open={true}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"subscriptionId"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined} defaultValue={undefined}></SchemaItem></ul></details></div></TabItem></ApiTabs></div>
+</div><div><MimeTabs><TabItem label={"application/json"} value={"application/json-schema"}><details style={{}} data-collapsed={false} open={true}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"subscriptionId"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined} defaultValue={undefined}></SchemaItem></ul></details></TabItem></MimeTabs></div></TabItem></ApiTabs></div>
       

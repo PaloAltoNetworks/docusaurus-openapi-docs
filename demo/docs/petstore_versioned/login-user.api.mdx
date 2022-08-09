@@ -9,6 +9,7 @@ info_path: petstore_versioned/swagger-petstore-yaml
 ---
 
 import ApiTabs from "@theme/ApiTabs";
+import MimeTabs from "@theme/MimeTabs";
 import ParamsItem from "@theme/ParamsItem";
 import ResponseSamples from "@theme/ResponseSamples";
 import SchemaItem from "@theme/SchemaItem"
@@ -22,15 +23,7 @@ import TabItem from "@theme/TabItem";
 
 successful operation
 
-</div><SchemaTabs><TabTtem label={"Schema"} value={"Schema"}><details style={{"textAlign":"left"}} data-collaposed={false} open={true}><summary style={{}}><strong>Response Headers</strong></summary><ul style={{"marginLeft":"1rem"}}><li class={"schemaItem"}><summary style={{}}><strong>X-Rate-Limit</strong><span style={{"opacity":"0.6"}}> integer</span></summary><div><div style={{"marginTop":".5rem","marginBottom":".5rem"}}>
-
-calls per hour allowed by the user
-
-</div></div></li><li class={"schemaItem"}><summary style={{}}><strong>X-Expires-After</strong><span style={{"opacity":"0.6"}}> string</span></summary><div><div style={{"marginTop":".5rem","marginBottom":".5rem"}}>
-
-date in UTC when token expires
-
-</div></div></li></ul></details><div><details style={{}} data-collapsed={false} open={true}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><li><div><strong>string</strong></div></li></ul></details></div></TabTtem><TabItem label={"Response"} value={"Response"}><ResponseSamples responseExample={"\"OK\""}></ResponseSamples></TabItem></SchemaTabs><details style={{"textAlign":"left"}} data-collaposed={false} open={true}><summary style={{}}><strong>Response Headers</strong></summary><ul style={{"marginLeft":"1rem"}}><li class={"schemaItem"}><summary style={{}}><strong>X-Rate-Limit</strong><span style={{"opacity":"0.6"}}> integer</span></summary><div><div style={{"marginTop":".5rem","marginBottom":".5rem"}}>
+</div><SchemaTabs><TabTtem label={"Schema"} value={"Schema"}><div><MimeTabs groupId={"mime-type"}><TabItem label={"application/json"} value={"application/json"}><details style={{}} data-collapsed={false} open={true}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><li><div><strong>string</strong></div></li></ul></details></TabItem><TabItem label={"application/xml"} value={"application/xml"}><details style={{}} data-collapsed={false} open={true}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><li><div><strong>string</strong></div></li></ul></details></TabItem></MimeTabs></div></TabTtem><TabItem label={"Response"} value={"Response"}><ResponseSamples responseExample={"\"OK\""}></ResponseSamples></TabItem></SchemaTabs><details style={{"textAlign":"left"}} data-collaposed={false} open={true}><summary style={{}}><strong>Response Headers</strong></summary><ul style={{"marginLeft":"1rem"}}><li class={"schemaItem"}><summary style={{}}><strong>X-Rate-Limit</strong><span style={{"opacity":"0.6"}}> integer</span></summary><div><div style={{"marginTop":".5rem","marginBottom":".5rem"}}>
 
 calls per hour allowed by the user
 

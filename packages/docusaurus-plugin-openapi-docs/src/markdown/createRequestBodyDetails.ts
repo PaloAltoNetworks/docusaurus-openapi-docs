@@ -5,13 +5,20 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import { MediaTypeObject } from "../openapi/types";
 import { createSchemaDetails } from "./createSchemaDetails";
 
 interface Props {
   title: string;
-  body: any;
+  body: {
+    content?: {
+      [key: string]: MediaTypeObject;
+    };
+    description?: string;
+    required?: boolean;
+  };
 }
 
-export function createRequestBodyDetails({ title, body }: Props) {
+export function createRequestBodyDetails({ title, body }: Props): any {
   return createSchemaDetails({ title, body });
 }
