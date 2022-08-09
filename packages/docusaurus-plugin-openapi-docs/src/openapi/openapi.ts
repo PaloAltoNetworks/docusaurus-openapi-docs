@@ -175,6 +175,18 @@ function createItems(
         jsonRequestBodyExample = sampleFromSchema(body.schema);
       }
 
+      // Handle vendor JSON media types
+      const bodyContent = operationObject.requestBody?.content;
+      if (bodyContent) {
+        const firstBodyContentKey = Object.keys(bodyContent)[0];
+        if (firstBodyContentKey.endsWith("+json")) {
+          const firstBody = bodyContent[firstBodyContentKey];
+          if (firstBody?.schema) {
+            jsonRequestBodyExample = sampleFromSchema(firstBody.schema);
+          }
+        }
+      }
+
       // TODO: Don't include summary temporarilly
       const { summary, ...defaults } = operationObject;
 

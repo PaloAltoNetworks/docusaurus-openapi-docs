@@ -188,7 +188,7 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
   let language = "plaintext";
   let exampleBodyString = ""; //"body content";
 
-  if (contentType === "application/json") {
+  if (contentType === "application/json" || contentType.endsWith("+json")) {
     if (jsonRequestBodyExample) {
       exampleBodyString = JSON.stringify(jsonRequestBodyExample, null, 2);
     }
