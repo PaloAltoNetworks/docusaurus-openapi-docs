@@ -151,13 +151,13 @@
   --ifm-color-danger-contrast-foreground: #6a0808;
 
   --ifm-color-gray-100: var(--color-gray-12);
-  /*--ifm-color-gray-200: #EBF1F6;
-  --ifm-color-gray-300: #D5DEE5;
-  --ifm-color-gray-400: #B1BCC7;
-  --ifm-color-gray-500: #909DA6;
-  --ifm-color-gray-600: #74818A;
-  --ifm-color-gray-700: #616D75;
-  --ifm-color-gray-800: #404955; */
+  // --ifm-color-gray-200: #EBF1F6;
+  // --ifm-color-gray-300: #D5DEE5;
+  // --ifm-color-gray-400: #B1BCC7;
+  // --ifm-color-gray-500: #909DA6;
+  // --ifm-color-gray-600: #74818A;
+  // --ifm-color-gray-700: #616D75;
+  // --ifm-color-gray-800: #404955;
   --ifm-color-gray-900: var(--color-gray-90);
 
   /* --ifm-navbar-background-color; */
@@ -220,6 +220,8 @@
   --ifm-footer-padding-vertical: 3rem;
 
   --docusaurus-highlighted-code-line-bg: var(--ifm-color-emphasis-300);
+
+  --ifm-color-emphasis-100: var(--ifm-color-emphasis-200) !important;
 }
 
 /* Docusaurus Specific Styles */
