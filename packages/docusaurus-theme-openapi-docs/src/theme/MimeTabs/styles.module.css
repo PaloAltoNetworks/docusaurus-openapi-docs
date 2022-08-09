@@ -9,33 +9,36 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 1.8rem;
+  height: 2rem;
   margin-top: 0 !important;
   margin-right: 0.5rem;
-  border: 1px solid var(--openapi-code-dim-dark);
-  border-radius: var(--ifm-global-radius);
+  /* border: 1px solid var(--openapi-code-dim-dark);
+  border-radius: 0; */
   font-weight: var(--ifm-font-weight-normal);
-  color: var(--openapi-code-dim-dark);
+  /* color: var(--openapi-code-dim-dark); */
   font-size: 12px;
 }
 
-.tabItem:hover {
-  color: var(--ifm-color-emphasis-500) !important;
+.tabItem:active {
+  background-color: var(--ifm-color-emphasis-100);
 }
+
+/* .tabItem:hover {
+  color: var(--ifm-color-emphasis-500) !important;
+} */
 
 .tabItem:last-child {
   margin-right: 0 !important;
 }
 
 /* Open API Response Code Tabs */
-.responseTabsTopSection {
-  margin-top: 2rem;
+.mimeTabsTopSection {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.responseTabsContainer {
+.mimeTabsContainer {
   display: flex;
   align-items: center;
   max-width: 390px;
@@ -43,43 +46,45 @@
   overflow: hidden;
 }
 
-.responseTabsListContainer {
-  padding: 0 0.25rem;
+.mimeTabsListContainer {
   overflow-y: hidden;
   overflow-x: scroll;
   scroll-behavior: smooth;
 }
 
-.responseTabsListContainer::-webkit-scrollbar {
+.mimeTabsListContainer::-webkit-scrollbar {
   display: none;
 }
 
 /* Response Code Tabs - Colored Dots */
-.responseTabDot {
+.mimeTabDot {
   width: 12.5px;
   height: 12.5px;
   margin-right: 5px;
   border-radius: 50%;
 }
 
-.responseTabDotSuccess {
+.mimeTabDotSuccess {
   background-color: var(--ifm-color-success);
 }
 
-.responseTabDotDanger {
+.mimeTabDotDanger {
   background-color: var(--ifm-color-danger);
 }
 
-.responseTabDotInfo {
+.mimeTabDotInfo {
   background-color: var(--ifm-color-info);
 }
 
-.responseTabActive {
-  border: 1px solid var(--ifm-color-primary);
-  color: var(--ifm-color-primary);
+.mimeTabActive {
+  border-bottom-color: var(--ifm-tabs-color-active-border);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  color: var(--ifm-tabs-color-active);
+  background-color: var(--ifm-color-emphasis-100);
 }
 
-.responseSchemaContainer {
+.mimeSchemaContainer {
   max-width: 600px;
 }
 
@@ -107,12 +112,12 @@
 }
 
 @media screen and (max-width: 500px) {
-  .responseTabsTopSection {
+  .mimeTabsTopSection {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .responseTabsContainer {
+  .mimeTabsContainer {
     width: 100%;
     margin-top: var(--ifm-spacing-vertical);
     padding: 0;

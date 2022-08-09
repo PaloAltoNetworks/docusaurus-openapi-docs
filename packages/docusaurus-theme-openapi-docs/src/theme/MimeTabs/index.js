@@ -165,9 +165,9 @@ function MimeTabsComponent(props) {
 
   return (
     <div className="tabs__container">
-      <div className={styles.responseTabsTopSection}>
+      <div className={styles.mimeTabsTopSection}>
         {/* <strong>MIME Type</strong> */}
-        <div className={styles.responseTabsContainer}>
+        <div className={styles.mimeTabsContainer}>
           {showTabArrows && (
             <button
               className={clsx(styles.tabArrow, styles.tabArrowLeft)}
@@ -179,7 +179,7 @@ function MimeTabsComponent(props) {
             role="tablist"
             aria-orientation="horizontal"
             className={clsx(
-              styles.responseTabsListContainer,
+              styles.mimeTabsListContainer,
               "tabs",
               {
                 "tabs--block": block,
@@ -204,12 +204,12 @@ function MimeTabsComponent(props) {
                     styles.tabItem,
                     attributes?.className,
                     {
-                      [styles.responseTabActive]: selectedValue === value,
+                      [styles.mimeTabActive]: selectedValue === value,
                     }
                   )}
                 >
                   {/* <div
-                    className={clsx(styles.responseTabDot, responseTabDotStyle)}
+                    className={clsx(styles.mimeTabDot, mimeTabDotStyle)}
                   /> */}
                   {label ?? value}
                 </li>
@@ -231,13 +231,11 @@ function MimeTabsComponent(props) {
             (tabItem) => tabItem.props.value === selectedValue
           )[0],
           {
-            className: clsx("margin-vert--md", styles.responseSchemaContainer),
+            className: clsx("margin-vert--md", styles.mimeSchemaContainer),
           }
         )
       ) : (
-        <div
-          className={clsx("margin-vert--md", styles.responseSchemaContainer)}
-        >
+        <div className={clsx("margin-vert--md", styles.mimeSchemaContainer)}>
           {children.map((tabItem, i) =>
             cloneElement(tabItem, {
               key: i,
