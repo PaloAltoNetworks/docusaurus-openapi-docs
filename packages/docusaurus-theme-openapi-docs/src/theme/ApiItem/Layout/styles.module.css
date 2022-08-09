@@ -175,6 +175,7 @@
 
 :global(.code__tab--python.tabs__item--active) {
   border-bottom-color: var(--ifm-color-success);
+  background-color: var(--ifm-color-emphasis-100);
 }
 
 :global(.language-python) {
@@ -198,6 +199,7 @@
 
 :global(.code__tab--go.tabs__item--active) {
   border-bottom-color: var(--ifm-color-info);
+  background-color: var(--ifm-color-emphasis-100);
 }
 
 :global(.language-go) {
@@ -221,6 +223,7 @@
 
 :global(.code__tab--javascript.tabs__item--active) {
   border-bottom-color: var(--ifm-color-warning);
+  background-color: var(--ifm-color-emphasis-100);
 }
 
 :global(.language-javascript) {
@@ -244,6 +247,7 @@
 
 :global(.code__tab--bash.tabs__item--active) {
   border-bottom-color: var(--ifm-color-danger);
+  background-color: var(--ifm-color-emphasis-100);
 }
 
 :global(.language-bash) {
