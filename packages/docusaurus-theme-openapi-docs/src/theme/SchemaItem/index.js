@@ -23,9 +23,10 @@ function SchemaItem({
   schemaName,
   defaultValue,
 }) {
-  const renderRequired = guard(required, () => (
-    <strong className={styles.required}> required</strong>
-  ));
+  const renderRequired = guard(
+    Array.isArray(required) ? required.includes(name) : required,
+    () => <strong className={styles.required}> required</strong>
+  );
 
   const renderSchemaDescription = guard(schemaDescription, (description) => (
     <div className={styles.schemaDescription}>
@@ -39,11 +40,14 @@ function SchemaItem({
     </div>
   ));
 
-  const renderDefaultValue = guard(defaultValue, (value) => (
-    <div className={styles.schemaQualifierMessage}>
-      <ReactMarkdown children={`**Default value:** \`${value}\``} />
-    </div>
-  ));
+  const renderDefaultValue = guard(
+    typeof defaultValue === "boolean" ? defaultValue.toString() : defaultValue,
+    (value) => (
+      <div className={styles.schemaQualifierMessage}>
+        <ReactMarkdown children={`**Default value:** \`${value}\``} />
+      </div>
+    )
+  );
 
   const schemaContent = (
     <div>
