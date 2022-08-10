@@ -338,7 +338,7 @@ export async function processOpenapiFiles(
       // Remove undefined tags due to transient parsing errors
       return x !== undefined;
     });
-  return [items as ApiMetadata[], tags as TagObject[]];
+  return [items as ApiMetadata[], tags[0] as TagObject[]];
 }
 
 export async function processOpenapiFile(
