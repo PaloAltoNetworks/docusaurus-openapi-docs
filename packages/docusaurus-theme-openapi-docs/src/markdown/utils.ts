@@ -24,9 +24,6 @@ export function guard<T>(
   value: T | undefined | string,
   cb: (value: T) => Children
 ): string {
-  if (typeof value === "boolean") {
-    value = value.toString();
-  }
   if (value) {
     const children = cb(value as T);
     return render(children);
