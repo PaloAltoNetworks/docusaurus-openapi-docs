@@ -64,7 +64,7 @@ function groupByTags(
     apiItems
       .flatMap((item) => item.api.tags)
       .filter((item): item is string => !!item)
-  );
+  ).sort();
 
   const basePath = docPath
     ? outputDir.split(docPath!)[1].replace(/^\/+/g, "")
