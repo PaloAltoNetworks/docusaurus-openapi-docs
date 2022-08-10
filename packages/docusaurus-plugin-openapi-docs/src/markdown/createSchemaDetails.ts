@@ -227,8 +227,12 @@ function createItems(schema: SchemaObject) {
   }
 
   if (schema.items?.allOf !== undefined) {
-    const { mergedSchemas }: { mergedSchemas: SchemaObject; required: any } =
-      mergeAllOf(schema.items?.allOf);
+    // TODO: figure out if and how we should pass merged required array
+    const {
+      mergedSchemas,
+    }: { mergedSchemas: SchemaObject; required: string[] } = mergeAllOf(
+      schema.items?.allOf
+    );
 
     // Handles combo anyOf/oneOf + properties
     if (
@@ -387,7 +391,7 @@ function createDetailsNode(
   name: string,
   schemaName: string,
   schema: SchemaObject,
-  required: any
+  required: string[] | boolean
 ): any {
   return create("SchemaItem", {
     collapsible: true,
@@ -402,7 +406,7 @@ function createDetailsNode(
                 style: { opacity: "0.6" },
                 children: ` ${schemaName}`,
               }),
-              guard(required, () => [
+              guard(schema.required && schema.required === true, () => [
                 create("strong", {
                   style: {
                     fontSize: "var(--ifm-code-font-size)",
@@ -446,7 +450,7 @@ function createPropertyDiscriminator(
   schemaName: string,
   schema: SchemaObject,
   discriminator: any,
-  required: any
+  required: string[] | boolean
 ): any {
   if (schema === undefined) {
     return undefined;
@@ -515,7 +519,7 @@ function createPropertyDiscriminator(
 interface EdgeProps {
   name: string;
   schema: SchemaObject;
-  required: boolean;
+  required: string[] | boolean;
   discriminator?: any | unknown;
 }
 
@@ -529,6 +533,8 @@ function createEdges({
   discriminator,
 }: EdgeProps): any {
   const schemaName = getSchemaName(schema);
+
+  // if (name === "id") console.log(name, schema, required);
 
   if (discriminator !== undefined && discriminator.propertyName === name) {
     return createPropertyDiscriminator(
@@ -548,9 +554,8 @@ function createEdges({
     const {
       mergedSchemas,
       required,
-    }: { mergedSchemas: SchemaObject; required: any } = mergeAllOf(
-      schema.allOf
-    );
+    }: { mergedSchemas: SchemaObject; required: string[] | boolean } =
+      mergeAllOf(schema.allOf);
     const mergedSchemaName = getSchemaName(mergedSchemas);
 
     if (
@@ -576,7 +581,7 @@ function createEdges({
     return create("SchemaItem", {
       collapsible: false,
       name,
-      required,
+      required: Array.isArray(required) ? required.includes(name) : required,
       schemaDescription: mergedSchemas.description,
       schemaName: schemaName,
       qualifierMessage: getQualifierMessage(schema),
@@ -601,7 +606,7 @@ function createEdges({
   return create("SchemaItem", {
     collapsible: false,
     name,
-    required,
+    required: Array.isArray(required) ? required.includes(name) : required,
     schemaDescription: schema.description,
     schemaName: schemaName,
     qualifierMessage: getQualifierMessage(schema),
@@ -685,7 +690,7 @@ interface Props {
       [key: string]: MediaTypeObject;
     };
     description?: string;
-    required?: boolean;
+    required?: string[] | boolean;
   };
 }
 
@@ -734,7 +739,7 @@ export function createSchemaDetails({ title, body, ...rest }: Props) {
                         children: ` array`,
                       })
                     ),
-                    guard(body.required, () => [
+                    guard(body.required && body.required === true, () => [
                       create("strong", {
                         style: {
                           fontSize: "var(--ifm-code-font-size)",
