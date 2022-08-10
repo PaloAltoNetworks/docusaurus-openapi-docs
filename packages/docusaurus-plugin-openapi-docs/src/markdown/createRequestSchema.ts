@@ -578,6 +578,10 @@ function createEdges({
       return createDetailsNode(name, mergedSchemaName, mergedSchemas, required);
     }
 
+    // if (mergedSchemas.readOnly && mergedSchemas.readOnly === true) {
+    //   return undefined;
+    // }
+
     return create("SchemaItem", {
       collapsible: false,
       name,
@@ -601,6 +605,10 @@ function createEdges({
   if (schema.items?.properties !== undefined) {
     return createDetailsNode(name, schemaName, schema, required);
   }
+
+  // if (schema.readOnly && schema.readOnly === true) {
+  //   return undefined;
+  // }
 
   // primitives and array of non-objects
   return create("SchemaItem", {
@@ -694,7 +702,7 @@ interface Props {
   };
 }
 
-export function createSchemaDetails({ title, body, ...rest }: Props) {
+export function createRequestSchema({ title, body, ...rest }: Props) {
   if (
     body === undefined ||
     body.content === undefined ||
