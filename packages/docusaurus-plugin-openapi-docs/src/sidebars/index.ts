@@ -60,11 +60,18 @@ function groupByTags(
   });
 
   // TODO: make sure we only take the first tag
-  const apiTags = uniq(
+  const operationTags = uniq(
     apiItems
       .flatMap((item) => item.api.tags)
       .filter((item): item is string => !!item)
-  ).sort();
+  );
+  const apiTags: string[] = [];
+  // eslint-disable-next-line array-callback-return
+  tags.map((tag) => {
+    if (operationTags.includes(tag.name!)) {
+      apiTags.push(tag.name!);
+    }
+  });
 
   const basePath = docPath
     ? outputDir.split(docPath!)[1].replace(/^\/+/g, "")
