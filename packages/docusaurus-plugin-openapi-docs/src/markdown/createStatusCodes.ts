@@ -132,7 +132,7 @@ export function createStatusCodes({ responses }: Props) {
                           createDetails({
                             "data-collaposed": false,
                             open: true,
-                            style: { textAlign: "left" },
+                            style: { textAlign: "left", marginBottom: "1rem" },
                             children: [
                               createDetailsSummary({
                                 children: [
@@ -158,7 +158,7 @@ export function createStatusCodes({ responses }: Props) {
                   ],
                 })
               ),
-              guard(responseHeaders, () =>
+              guard(responseHeaders && !responseExamples, () =>
                 createDetails({
                   "data-collaposed": false,
                   open: true,
