@@ -1,3 +1,21 @@
+## 1.1.5 (Aug 11, 2022)
+
+High level enhancements
+
+- Expanded support for response examples.
+- Added support for `readOnly` and `writeOnly`.
+- Now retains natural tag order in OAS when grouping by tag.
+- Expanded support for MIME types.
+
+Other enhancements and bug fixes
+
+- [Enhancement] Add support for single response example ([#206](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/206))
+- [Enhancement] Respect readOnly/writeOnly and improve body sample ([#203](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/203))
+- [Bug] Ensure operation tags match global tags before building sidebar ([#202](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/202))
+- [Enhancement] Apply sorting to tags/sidebar categories ([#200](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/200))
+- [Bug] Ensure required label is consistently applied ([#198](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/198))
+- [Enhancement] Expand support for MIME types ([#195](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/195))
+
 ## 1.1.4 (Aug 4, 2022)
 
 Other enhancements and bug fixes
