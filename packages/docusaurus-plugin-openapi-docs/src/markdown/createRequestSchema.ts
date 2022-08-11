@@ -17,7 +17,7 @@ const jsonSchemaMergeAllOf = require("json-schema-merge-allof");
 /**
  * Returns a merged representation of allOf array of schemas.
  */
-function mergeAllOf(allOf: SchemaObject[]) {
+export function mergeAllOf(allOf: SchemaObject[]) {
   const mergedSchemas = jsonSchemaMergeAllOf(allOf, {
     resolvers: {
       readOnly: function () {
@@ -534,8 +534,6 @@ function createEdges({
 }: EdgeProps): any {
   const schemaName = getSchemaName(schema);
 
-  // if (name === "id") console.log(name, schema, required);
-
   if (discriminator !== undefined && discriminator.propertyName === name) {
     return createPropertyDiscriminator(
       name,
@@ -578,9 +576,9 @@ function createEdges({
       return createDetailsNode(name, mergedSchemaName, mergedSchemas, required);
     }
 
-    // if (mergedSchemas.readOnly && mergedSchemas.readOnly === true) {
-    //   return undefined;
-    // }
+    if (mergedSchemas.readOnly && mergedSchemas.readOnly === true) {
+      return undefined;
+    }
 
     return create("SchemaItem", {
       collapsible: false,
@@ -589,7 +587,7 @@ function createEdges({
       schemaDescription: mergedSchemas.description,
       schemaName: schemaName,
       qualifierMessage: getQualifierMessage(schema),
-      defaultValue: schema.default,
+      defaultValue: mergedSchemas.default,
     });
   }
 
@@ -606,9 +604,9 @@ function createEdges({
     return createDetailsNode(name, schemaName, schema, required);
   }
 
-  // if (schema.readOnly && schema.readOnly === true) {
-  //   return undefined;
-  // }
+  if (schema.readOnly && schema.readOnly === true) {
+    return undefined;
+  }
 
   // primitives and array of non-objects
   return create("SchemaItem", {
