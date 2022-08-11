@@ -79,7 +79,11 @@ function createResponseExamples(responseExamples: any) {
         value: `${finalFormattedName}`,
         children: [
           create("ResponseSamples", {
-            responseExample: JSON.stringify(exampleValue.value, null, 2),
+            responseExample: JSON.stringify(
+              exampleValue.value ?? exampleValue,
+              null,
+              2
+            ),
           }),
         ],
       });
@@ -106,7 +110,9 @@ export function createStatusCodes({ responses }: Props) {
           const responseContentKey: any =
             responseContent && Object.keys(responseContent)[0];
           const responseExamples: any =
-            responseContentKey && responseContent[responseContentKey].examples;
+            responseContentKey &&
+            (responseContent[responseContentKey].examples ||
+              responseContent[responseContentKey].example);
 
           return create("TabItem", {
             label: code,
