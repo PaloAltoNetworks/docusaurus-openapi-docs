@@ -9,7 +9,7 @@ import { ApiItem } from "../types";
 import { createDescription } from "./createDescription";
 import { createDetails } from "./createDetails";
 import { createDetailsSummary } from "./createDetailsSummary";
-import { createRequestSchema } from "./createRequestSchema";
+import { createResponseSchema } from "./createResponseSchema";
 import { create } from "./utils";
 import { guard } from "./utils";
 
@@ -139,7 +139,7 @@ export function createStatusCodes({ responses }: Props) {
                             ],
                           }),
                         create("div", {
-                          children: createRequestSchema({
+                          children: createResponseSchema({
                             title: "Schema",
                             body: {
                               content: responses[code].content,
@@ -169,7 +169,7 @@ export function createStatusCodes({ responses }: Props) {
               ),
               guard(!responseExamples, () =>
                 create("div", {
-                  children: createRequestSchema({
+                  children: createResponseSchema({
                     title: "Schema",
                     body: {
                       content: responses[code].content,
