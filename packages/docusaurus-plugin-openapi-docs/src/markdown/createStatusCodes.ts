@@ -79,7 +79,11 @@ function createResponseExamples(responseExamples: any) {
         value: `${finalFormattedName}`,
         children: [
           create("ResponseSamples", {
-            responseExample: JSON.stringify(exampleValue.value, null, 2),
+            responseExample: JSON.stringify(
+              exampleValue.value ?? exampleValue,
+              null,
+              2
+            ),
           }),
         ],
       });
@@ -106,7 +110,9 @@ export function createStatusCodes({ responses }: Props) {
           const responseContentKey: any =
             responseContent && Object.keys(responseContent)[0];
           const responseExamples: any =
-            responseContentKey && responseContent[responseContentKey].examples;
+            responseContentKey &&
+            (responseContent[responseContentKey].examples ||
+              responseContent[responseContentKey].example);
 
           return create("TabItem", {
             label: code,
@@ -126,7 +132,7 @@ export function createStatusCodes({ responses }: Props) {
                           createDetails({
                             "data-collaposed": false,
                             open: true,
-                            style: { textAlign: "left" },
+                            style: { textAlign: "left", marginBottom: "1rem" },
                             children: [
                               createDetailsSummary({
                                 children: [
@@ -152,7 +158,7 @@ export function createStatusCodes({ responses }: Props) {
                   ],
                 })
               ),
-              guard(responseHeaders, () =>
+              guard(responseHeaders && !responseExamples, () =>
                 createDetails({
                   "data-collaposed": false,
                   open: true,
