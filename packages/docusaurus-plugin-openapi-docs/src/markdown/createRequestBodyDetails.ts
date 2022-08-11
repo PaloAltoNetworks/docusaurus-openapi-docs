@@ -6,7 +6,7 @@
  * ========================================================================== */
 
 import { MediaTypeObject } from "../openapi/types";
-import { createSchemaDetails } from "./createSchemaDetails";
+import { createRequestSchema } from "./createRequestSchema";
 
 interface Props {
   title: string;
@@ -20,5 +20,5 @@ interface Props {
 }
 
 export function createRequestBodyDetails({ title, body }: Props): any {
-  return createSchemaDetails({ title, body });
+  return createRequestSchema({ title, body });
 }

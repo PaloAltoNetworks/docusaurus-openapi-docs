@@ -299,7 +299,7 @@ export async function readOpenapiFiles(
 export async function processOpenapiFiles(
   files: OpenApiFiles[],
   sidebarOptions: SidebarOptions
-): Promise<[ApiMetadata[], TagObject[]]> {
+): Promise<[ApiMetadata[], TagObject[][]]> {
   const promises = files.map(async (file) => {
     if (file.data !== undefined) {
       const processedFile = await processOpenapiFile(file.data, sidebarOptions);
@@ -334,7 +334,7 @@ export async function processOpenapiFiles(
       // Remove undefined tags due to transient parsing errors
       return x !== undefined;
     });
-  return [items as ApiMetadata[], tags[0] as TagObject[]];
+  return [items as ApiMetadata[], tags as TagObject[][]];
 }
 
 export async function processOpenapiFile(
