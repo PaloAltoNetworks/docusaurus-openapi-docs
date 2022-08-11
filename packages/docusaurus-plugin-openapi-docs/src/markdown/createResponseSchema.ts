@@ -578,14 +578,18 @@ function createEdges({
       return createDetailsNode(name, mergedSchemaName, mergedSchemas, required);
     }
 
+    if (mergedSchemas.writeOnly && mergedSchemas.writeOnly === true) {
+      return undefined;
+    }
+
     return create("SchemaItem", {
       collapsible: false,
       name,
-      required: Array.isArray(required) ? required.includes(name) : required,
+      required: false,
       schemaDescription: mergedSchemas.description,
       schemaName: schemaName,
       qualifierMessage: getQualifierMessage(schema),
-      defaultValue: schema.default,
+      defaultValue: mergedSchemas.default,
     });
   }
 
@@ -602,11 +606,15 @@ function createEdges({
     return createDetailsNode(name, schemaName, schema, required);
   }
 
+  if (schema.writeOnly && schema.writeOnly === true) {
+    return undefined;
+  }
+
   // primitives and array of non-objects
   return create("SchemaItem", {
     collapsible: false,
     name,
-    required: Array.isArray(required) ? required.includes(name) : required,
+    required: false,
     schemaDescription: schema.description,
     schemaName: schemaName,
     qualifierMessage: getQualifierMessage(schema),
@@ -694,7 +702,7 @@ interface Props {
   };
 }
 
-export function createRequestSchema({ title, body, ...rest }: Props) {
+export function createResponseSchema({ title, body, ...rest }: Props) {
   if (
     body === undefined ||
     body.content === undefined ||
