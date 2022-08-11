@@ -7,6 +7,7 @@
 
 import chalk from "chalk";
 
+import { mergeAllOf } from "../markdown/createRequestSchema";
 import { SchemaObject } from "./types";
 
 interface OASTypeToTypeMap {
@@ -29,6 +30,7 @@ const primitives: Primitives = {
     default: () => "string",
     email: () => "user@example.com",
     date: () => new Date().toISOString().substring(0, 10),
+    "date-time": () => new Date().toISOString().substring(0, 10),
     uuid: () => "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     hostname: () => "example.com",
     ipv4: () => "198.51.100.42",
@@ -58,21 +60,16 @@ export const sampleFromSchema = (schema: SchemaObject = {}): any => {
     }
 
     if (allOf) {
-      // TODO: We are just assuming it will always be an object for now
-      let obj: SchemaObject = {
-        type: "object",
-        properties: {},
-        required: [], // NOTE: We shouldn't need to worry about required
-      };
-      for (let item of allOf) {
-        if (item.properties) {
-          obj.properties = {
-            ...obj.properties,
-            ...item.properties,
-          };
+      const { mergedSchemas }: { mergedSchemas: SchemaObject } =
+        mergeAllOf(allOf);
+      if (mergedSchemas.properties) {
+        for (const [key, value] of Object.entries(mergedSchemas.properties)) {
+          if (value.readOnly && value.readOnly === true) {
+            delete mergedSchemas.properties[key];
+          }
         }
       }
-      return sampleFromSchema(obj);
+      return sampleFromSchema(mergedSchemas);
     }
 
     if (!type) {
@@ -88,6 +85,22 @@ export const sampleFromSchema = (schema: SchemaObject = {}): any => {
     if (type === "object") {
       let obj: any = {};
       for (let [name, prop] of Object.entries(properties ?? {})) {
+        if (prop.properties) {
+          for (const [key, value] of Object.entries(prop.properties)) {
+            if (value.readOnly && value.readOnly === true) {
+              delete prop.properties[key];
+            }
+          }
+        }
+
+        if (prop.items && prop.items.properties) {
+          for (const [key, value] of Object.entries(prop.items.properties)) {
+            if (value.readOnly && value.readOnly === true) {
+              delete prop.items.properties[key];
+            }
+          }
+        }
+
         if (prop.deprecated) {
           continue;
         }
@@ -115,6 +128,10 @@ export const sampleFromSchema = (schema: SchemaObject = {}): any => {
       return normalizeArray(schema.enum)[0];
     }
 
+    if (schema.readOnly && schema.readOnly === true) {
+      return undefined;
+    }
+
     return primitive(schema);
   } catch (err) {
     console.error(
@@ -131,7 +148,7 @@ function primitive(schema: SchemaObject = {}) {
     return;
   }
 
-  let fn = primitives[type].default;
+  let fn = schema.default ? () => schema.default : primitives[type].default;
 
   if (format !== undefined) {
     fn = primitives[type][format] || fn;
