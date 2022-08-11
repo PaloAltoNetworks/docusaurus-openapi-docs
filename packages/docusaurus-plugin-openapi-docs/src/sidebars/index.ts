@@ -37,7 +37,7 @@ function groupByTags(
   items: ApiPageMetadata[],
   sidebarOptions: SidebarOptions,
   options: APIOptions,
-  tags: TagObject[],
+  tags: TagObject[][],
   docPath: string
 ): ProcessedSidebar {
   const { outputDir, label } = options;
@@ -68,7 +68,7 @@ function groupByTags(
 
   // Only include operation tags that are globally defined
   const apiTags: string[] = [];
-  tags.forEach((tag) => {
+  tags.flat().forEach((tag) => {
     if (operationTags.includes(tag.name!)) {
       apiTags.push(tag.name!);
     }
@@ -199,7 +199,7 @@ export default function generateSidebarSlice(
   sidebarOptions: SidebarOptions,
   options: APIOptions,
   api: ApiMetadata[],
-  tags: TagObject[],
+  tags: TagObject[][],
   docPath: string
 ) {
   let sidebarSlice: ProcessedSidebar = [];
