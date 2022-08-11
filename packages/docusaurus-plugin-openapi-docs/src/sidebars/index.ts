@@ -65,9 +65,10 @@ function groupByTags(
       .flatMap((item) => item.api.tags)
       .filter((item): item is string => !!item)
   );
+
+  // Only include operation tags that are globally defined
   const apiTags: string[] = [];
-  // eslint-disable-next-line array-callback-return
-  tags.map((tag) => {
+  tags.forEach((tag) => {
     if (operationTags.includes(tag.name!)) {
       apiTags.push(tag.name!);
     }
@@ -114,7 +115,7 @@ function groupByTags(
       );
       const tagObject = tags.flat().find(
         (t) =>
-          (tag === t.name || tag === t["x-displayName"]) ?? {
+          tag === t.name ?? {
             name: tag,
             description: `${tag} Index`,
           }
@@ -155,7 +156,7 @@ function groupByTags(
 
       return {
         type: "category" as const,
-        label: tag,
+        label: tagObject?.["x-displayName"] ?? tag,
         link: linkConfig,
         collapsible: sidebarCollapsible,
         collapsed: sidebarCollapsed,

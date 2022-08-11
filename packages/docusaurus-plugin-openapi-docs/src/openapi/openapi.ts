@@ -124,9 +124,7 @@ function createItems(
       securitySchemes: openapiData.components?.securitySchemes,
       info: {
         ...openapiData.info,
-        tags: openapiData.tags?.map((tagName) =>
-          getTagDisplayName(tagName.name!, openapiData.tags ?? [])
-        ),
+        tags: openapiData.tags,
         title: openapiData.info.title ?? "Introduction",
         logo: openapiData.info["x-logo"]! as any,
         darkLogo: openapiData.info["x-dark-logo"]! as any,
@@ -200,9 +198,7 @@ function createItems(
         frontMatter: {},
         api: {
           ...defaults,
-          tags: operationObject.tags?.map((tagName) =>
-            getTagDisplayName(tagName, openapiData.tags ?? [])
-          ),
+          tags: operationObject.tags,
           method,
           path,
           servers,

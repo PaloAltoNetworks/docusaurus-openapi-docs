@@ -41,7 +41,7 @@ export interface InfoObject {
   contact?: ContactObject;
   license?: LicenseObject;
   version: string;
-  tags?: String[];
+  tags?: TagObject[];
   "x-logo"?: LogoObject;
   "x-dark-logo"?: LogoObject;
   logo?: LogoObject;
