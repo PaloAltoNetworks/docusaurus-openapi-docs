@@ -68,27 +68,41 @@ function createResponseHeaders(responseHeaders: any) {
 }
 
 function createResponseExamples(responseExamples: any) {
-  return Object.entries(responseExamples).map(
-    ([exampleName, exampleValue]: any) => {
-      const camelToSpaceName = exampleName.replace(/([A-Z])/g, " $1");
-      let finalFormattedName =
-        camelToSpaceName.charAt(0).toUpperCase() + camelToSpaceName.slice(1);
+  if (Array.isArray(responseExamples)) {
+    return Object.entries(responseExamples).map(
+      ([exampleName, exampleValue]: any) => {
+        const camelToSpaceName = exampleName.replace(/([A-Z])/g, " $1");
+        let finalFormattedName =
+          camelToSpaceName.charAt(0).toUpperCase() + camelToSpaceName.slice(1);
 
-      return create("TabItem", {
-        label: `${finalFormattedName}`,
-        value: `${finalFormattedName}`,
-        children: [
-          create("ResponseSamples", {
-            responseExample: JSON.stringify(
-              exampleValue.value ?? exampleValue,
-              null,
-              2
-            ),
-          }),
-        ],
-      });
-    }
-  );
+        return create("TabItem", {
+          label: `${finalFormattedName}`,
+          value: `${finalFormattedName}`,
+          children: [
+            create("ResponseSamples", {
+              responseExample: JSON.stringify(
+                exampleValue.value ?? exampleValue,
+                null,
+                2
+              ),
+            }),
+          ],
+        });
+      }
+    );
+  }
+  if (typeof responseExamples === "object") {
+    return create("TabItem", {
+      label: `Example`,
+      value: `Example`,
+      children: [
+        create("ResponseSamples", {
+          responseExample: JSON.stringify(responseExamples, null, 2),
+        }),
+      ],
+    });
+  }
+  return undefined;
 }
 
 export function createStatusCodes({ responses }: Props) {
