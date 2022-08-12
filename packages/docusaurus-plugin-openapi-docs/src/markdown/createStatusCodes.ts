@@ -74,16 +74,23 @@ export function createResponseExamples(responseExamples: any) {
       let finalFormattedName =
         camelToSpaceName.charAt(0).toUpperCase() + camelToSpaceName.slice(1);
 
+      if (typeof exampleValue.value === "object") {
+        return create("TabItem", {
+          label: `${finalFormattedName}`,
+          value: `${finalFormattedName}`,
+          children: [
+            create("ResponseSamples", {
+              responseExample: JSON.stringify(exampleValue.value, null, 2),
+            }),
+          ],
+        });
+      }
       return create("TabItem", {
         label: `${finalFormattedName}`,
         value: `${finalFormattedName}`,
         children: [
           create("ResponseSamples", {
-            responseExample: JSON.stringify(
-              exampleValue.value ?? exampleValue,
-              null,
-              2
-            ),
+            responseExample: exampleValue.value,
           }),
         ],
       });
@@ -92,12 +99,23 @@ export function createResponseExamples(responseExamples: any) {
 }
 
 export function createResponseExample(responseExample: any) {
+  if (typeof responseExample === "object") {
+    return create("TabItem", {
+      label: `Example`,
+      value: `Example`,
+      children: [
+        create("ResponseSamples", {
+          responseExample: JSON.stringify(responseExample, null, 2),
+        }),
+      ],
+    });
+  }
   return create("TabItem", {
     label: `Example`,
     value: `Example`,
     children: [
       create("ResponseSamples", {
-        responseExample: JSON.stringify(responseExample, null, 2),
+        responseExample: responseExample,
       }),
     ],
   });
