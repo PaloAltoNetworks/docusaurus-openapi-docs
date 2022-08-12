@@ -9,6 +9,10 @@ import { MediaTypeObject, SchemaObject } from "../openapi/types";
 import { createDescription } from "./createDescription";
 import { createDetails } from "./createDetails";
 import { createDetailsSummary } from "./createDetailsSummary";
+import {
+  createResponseExample,
+  createResponseExamples,
+} from "./createStatusCodes";
 import { getQualifierMessage, getSchemaName } from "./schema";
 import { create, guard } from "./utils";
 
@@ -534,8 +538,6 @@ function createEdges({
 }: EdgeProps): any {
   const schemaName = getSchemaName(schema);
 
-  // if (name === "id") console.log(name, schema, required);
-
   if (discriminator !== undefined && discriminator.propertyName === name) {
     return createPropertyDiscriminator(
       name,
@@ -647,7 +649,8 @@ function createNodes(schema: SchemaObject): any {
     return createProperties(schema);
   }
 
-  if (schema.additionalProperties !== undefined) {
+  // Could be set to false to just check if evals to true
+  if (schema.additionalProperties) {
     return createAdditionalProperties(schema);
   }
 
@@ -715,64 +718,93 @@ export function createResponseSchema({ title, body, ...rest }: Props) {
   // Get all MIME types, including vendor-specific
   const mimeTypes = Object.keys(body.content);
 
-  if (mimeTypes && mimeTypes.length > 1) {
+  if (mimeTypes && mimeTypes.length) {
     return create("MimeTabs", {
       groupId: "mime-type",
-      children: mimeTypes.map((mimeType) => {
+      children: mimeTypes.map((mimeType: any) => {
+        const responseExamples = body.content![mimeType].examples;
+        const responseExample = body.content![mimeType].example;
         const firstBody = body.content![mimeType].schema;
-        if (firstBody === undefined) {
+
+        if (
+          firstBody === undefined &&
+          responseExample === undefined &&
+          responseExamples === undefined
+        ) {
           return undefined;
         }
-        if (firstBody.properties !== undefined) {
-          if (Object.keys(firstBody.properties).length === 0) {
+
+        if (firstBody?.properties !== undefined) {
+          if (Object.keys(firstBody?.properties).length === 0) {
             return undefined;
           }
         }
+
         return create("TabItem", {
-          label: mimeType,
+          label: `${mimeType}`,
           value: `${mimeType}`,
           children: [
-            createDetails({
-              "data-collapsed": false,
-              open: true,
-              ...rest,
+            create("SchemaTabs", {
+              groupId: "schema-tabs",
               children: [
-                createDetailsSummary({
-                  style: { textAlign: "left" },
-                  children: [
-                    create("strong", { children: `${title}` }),
-                    guard(firstBody.type === "array", (format) =>
-                      create("span", {
-                        style: { opacity: "0.6" },
-                        children: ` array`,
-                      })
-                    ),
-                    guard(body.required && body.required === true, () => [
-                      create("strong", {
-                        style: {
-                          fontSize: "var(--ifm-code-font-size)",
-                          color: "var(--openapi-required)",
-                        },
-                        children: " required",
+                firstBody &&
+                  create("TabTtem", {
+                    label: `${title}`,
+                    value: `${title}`,
+                    children: [
+                      createDetails({
+                        "data-collapsed": false,
+                        open: true,
+                        ...rest,
+                        children: [
+                          createDetailsSummary({
+                            style: { textAlign: "left" },
+                            children: [
+                              create("strong", { children: `${title}` }),
+                              guard(firstBody!.type === "array", (format) =>
+                                create("span", {
+                                  style: { opacity: "0.6" },
+                                  children: ` array`,
+                                })
+                              ),
+                              guard(
+                                body.required && body.required === true,
+                                () => [
+                                  create("strong", {
+                                    style: {
+                                      fontSize: "var(--ifm-code-font-size)",
+                                      color: "var(--openapi-required)",
+                                    },
+                                    children: " required",
+                                  }),
+                                ]
+                              ),
+                            ],
+                          }),
+                          create("div", {
+                            style: { textAlign: "left", marginLeft: "1rem" },
+                            children: [
+                              guard(body.description, () => [
+                                create("div", {
+                                  style: {
+                                    marginTop: "1rem",
+                                    marginBottom: "1rem",
+                                  },
+                                  children: createDescription(body.description),
+                                }),
+                              ]),
+                            ],
+                          }),
+                          create("ul", {
+                            style: { marginLeft: "1rem" },
+                            children: createNodes(firstBody!),
+                          }),
+                        ],
                       }),
-                    ]),
-                  ],
-                }),
-                create("div", {
-                  style: { textAlign: "left", marginLeft: "1rem" },
-                  children: [
-                    guard(body.description, () => [
-                      create("div", {
-                        style: { marginTop: "1rem", marginBottom: "1rem" },
-                        children: createDescription(body.description),
-                      }),
-                    ]),
-                  ],
-                }),
-                create("ul", {
-                  style: { marginLeft: "1rem" },
-                  children: createNodes(firstBody),
-                }),
+                    ],
+                  }),
+                responseExamples && createResponseExamples(responseExamples),
+                responseExample && createResponseExample(responseExample),
               ],
             }),
           ],
@@ -781,70 +813,5 @@ export function createResponseSchema({ title, body, ...rest }: Props) {
     });
   }
 
-  const randomFirstKey = Object.keys(body.content)[0];
-  const firstBody = body.content[randomFirstKey].schema;
-
-  if (firstBody === undefined) {
-    return undefined;
-  }
-
-  // we don't show the table if there is no properties to show
-  if (firstBody.properties !== undefined) {
-    if (Object.keys(firstBody.properties).length === 0) {
-      return undefined;
-    }
-  }
-  return create("MimeTabs", {
-    children: [
-      create("TabItem", {
-        label: randomFirstKey,
-        value: `${randomFirstKey}-schema`,
-        children: [
-          createDetails({
-            "data-collapsed": false,
-            open: true,
-            ...rest,
-            children: [
-              createDetailsSummary({
-                style: { textAlign: "left" },
-                children: [
-                  create("strong", { children: `${title}` }),
-                  guard(firstBody.type === "array", (format) =>
-                    create("span", {
-                      style: { opacity: "0.6" },
-                      children: ` array`,
-                    })
-                  ),
-                  guard(body.required, () => [
-                    create("strong", {
-                      style: {
-                        fontSize: "var(--ifm-code-font-size)",
-                        color: "var(--openapi-required)",
-                      },
-                      children: " required",
-                    }),
-                  ]),
-                ],
-              }),
-              create("div", {
-                style: { textAlign: "left", marginLeft: "1rem" },
-                children: [
-                  guard(body.description, () => [
-                    create("div", {
-                      style: { marginTop: "1rem", marginBottom: "1rem" },
-                      children: createDescription(body.description),
-                    }),
-                  ]),
-                ],
-              }),
-              create("ul", {
-                style: { marginLeft: "1rem" },
-                children: createNodes(firstBody),
-              }),
-            ],
-          }),
-        ],
-      }),
-    ],
-  });
+  return undefined;
 }
