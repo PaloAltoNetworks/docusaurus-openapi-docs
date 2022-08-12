@@ -1,3 +1,13 @@
+## 1.1.6 (Aug 12, 2022)
+
+High level enhancements
+
+- Polish and bug fixes.
+
+Other enhancements and bug fixes
+
+- [Bug] Improve handling of response schemas and examples ([#208](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/208))
+
 ## 1.1.5 (Aug 11, 2022)
 
 High level enhancements
