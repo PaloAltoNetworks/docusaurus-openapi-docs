@@ -39,7 +39,7 @@
 }
 
 .schemaTabsListContainer {
-  padding: 0 0.25rem;
+  /* padding: 0 0.25rem; */
   overflow-y: hidden;
   overflow-x: scroll;
   scroll-behavior: smooth;
@@ -94,9 +94,5 @@
 
   .schemaTabsContainer {
     width: 100%;
-  }
-
-  .tabItem {
-    height: 100%;
   }
 }

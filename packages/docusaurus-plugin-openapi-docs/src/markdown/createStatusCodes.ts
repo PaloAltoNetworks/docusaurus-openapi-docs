@@ -67,28 +67,58 @@ function createResponseHeaders(responseHeaders: any) {
   );
 }
 
-function createResponseExamples(responseExamples: any) {
+export function createResponseExamples(responseExamples: any) {
   return Object.entries(responseExamples).map(
     ([exampleName, exampleValue]: any) => {
       const camelToSpaceName = exampleName.replace(/([A-Z])/g, " $1");
       let finalFormattedName =
         camelToSpaceName.charAt(0).toUpperCase() + camelToSpaceName.slice(1);
 
+      if (typeof exampleValue.value === "object") {
+        return create("TabItem", {
+          label: `${finalFormattedName}`,
+          value: `${finalFormattedName}`,
+          children: [
+            create("ResponseSamples", {
+              responseExample: JSON.stringify(exampleValue.value, null, 2),
+            }),
+          ],
+        });
+      }
       return create("TabItem", {
         label: `${finalFormattedName}`,
         value: `${finalFormattedName}`,
         children: [
           create("ResponseSamples", {
-            responseExample: JSON.stringify(
-              exampleValue.value ?? exampleValue,
-              null,
-              2
-            ),
+            responseExample: exampleValue.value,
           }),
         ],
       });
     }
   );
+}
+
+export function createResponseExample(responseExample: any) {
+  if (typeof responseExample === "object") {
+    return create("TabItem", {
+      label: `Example`,
+      value: `Example`,
+      children: [
+        create("ResponseSamples", {
+          responseExample: JSON.stringify(responseExample, null, 2),
+        }),
+      ],
+    });
+  }
+  return create("TabItem", {
+    label: `Example`,
+    value: `Example`,
+    children: [
+      create("ResponseSamples", {
+        responseExample: responseExample,
+      }),
+    ],
+  });
 }
 
 export function createStatusCodes({ responses }: Props) {
@@ -104,16 +134,10 @@ export function createStatusCodes({ responses }: Props) {
   return create("div", {
     children: [
       create("ApiTabs", {
+        // TODO: determine if we should persist status code selection
+        // groupId: "api-tabs",
         children: codes.map((code) => {
           const responseHeaders: any = responses[code].headers;
-          const responseContent: any = responses[code].content;
-          const responseContentKey: any =
-            responseContent && Object.keys(responseContent)[0];
-          const responseExamples: any =
-            responseContentKey &&
-            (responseContent[responseContentKey].examples ||
-              responseContent[responseContentKey].example);
-
           return create("TabItem", {
             label: code,
             value: code,
@@ -121,68 +145,30 @@ export function createStatusCodes({ responses }: Props) {
               create("div", {
                 children: createDescription(responses[code].description),
               }),
-              guard(responseExamples, () =>
-                create("SchemaTabs", {
-                  children: [
-                    create("TabTtem", {
-                      label: "Schema",
-                      value: "Schema",
-                      children: [
-                        responseHeaders &&
-                          createDetails({
-                            "data-collaposed": false,
-                            open: true,
-                            style: { textAlign: "left", marginBottom: "1rem" },
-                            children: [
-                              createDetailsSummary({
-                                children: [
-                                  create("strong", {
-                                    children: "Response Headers",
-                                  }),
-                                ],
-                              }),
-                              createResponseHeaders(responseHeaders),
-                            ],
-                          }),
-                        create("div", {
-                          children: createResponseSchema({
-                            title: "Schema",
-                            body: {
-                              content: responses[code].content,
-                            },
-                          }),
-                        }),
-                      ],
-                    }),
-                    createResponseExamples(responseExamples),
-                  ],
-                })
-              ),
-              guard(responseHeaders && !responseExamples, () =>
+              responseHeaders &&
                 createDetails({
                   "data-collaposed": false,
                   open: true,
-                  style: { textAlign: "left" },
+                  style: { textAlign: "left", marginBottom: "1rem" },
                   children: [
                     createDetailsSummary({
                       children: [
-                        create("strong", { children: "Response Headers" }),
+                        create("strong", {
+                          children: "Response Headers",
+                        }),
                       ],
                     }),
                     createResponseHeaders(responseHeaders),
                   ],
-                })
-              ),
-              guard(!responseExamples, () =>
-                create("div", {
-                  children: createResponseSchema({
-                    title: "Schema",
-                    body: {
-                      content: responses[code].content,
-                    },
-                  }),
-                })
-              ),
+                }),
+              create("div", {
+                children: createResponseSchema({
+                  title: "Schema",
+                  body: {
+                    content: responses[code].content,
+                  },
+                }),
+              }),
             ],
           });
         }),
