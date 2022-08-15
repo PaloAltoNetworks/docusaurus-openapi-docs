@@ -7,6 +7,7 @@
 
 import React from "react";
 
+import CodeBlock from "@theme/CodeBlock";
 import ReactMarkdown from "react-markdown";
 
 import { createDescription } from "../../markdown/createDescription";
@@ -29,8 +30,22 @@ function SchemaItem({
   );
 
   const renderSchemaDescription = guard(schemaDescription, (description) => (
-    <div className={styles.schemaDescription}>
-      <ReactMarkdown children={createDescription(description)} />
+    <div>
+      <ReactMarkdown
+        children={createDescription(description)}
+        components={{
+          pre: "div",
+          code({ node, inline, className, children, ...props }) {
+            const match = /language-(\w+)/.exec(className || "");
+            if (inline) return <code>{children}</code>;
+            return !inline && match ? (
+              <CodeBlock className={className}>{children}</CodeBlock>
+            ) : (
+              <CodeBlock>{children}</CodeBlock>
+            );
+          },
+        }}
+      />
     </div>
   ));
 
