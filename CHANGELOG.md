@@ -1,3 +1,13 @@
+## 1.1.7 (Aug 15, 2022)
+
+High level enhancements
+
+- Improved consistency of code block styling.
+
+Other enhancements and bug fixes
+
+- Use CodeBlock to render code fences ([#210](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/210))
+
 ## 1.1.6 (Aug 12, 2022)
 
 High level enhancements
