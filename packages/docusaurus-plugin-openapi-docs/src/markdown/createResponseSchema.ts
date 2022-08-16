@@ -748,7 +748,7 @@ export function createResponseSchema({ title, body, ...rest }: Props) {
               groupId: "schema-tabs",
               children: [
                 firstBody &&
-                  create("TabTtem", {
+                  create("TabItem", {
                     label: `${title}`,
                     value: `${title}`,
                     children: [
