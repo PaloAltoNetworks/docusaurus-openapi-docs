@@ -1,3 +1,13 @@
+## 1.1.8 (Aug 17, 2022)
+
+High level enhancements
+
+- Bug fixes.
+
+Other enhancements and bug fixes
+
+- Fix typo TabTtem -> TabItem ([#212](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/212))
+
 ## 1.1.7 (Aug 15, 2022)
 
 High level enhancements
