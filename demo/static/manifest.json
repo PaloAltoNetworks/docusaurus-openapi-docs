@@ -14,7 +14,7 @@
   ],
   "icons": [
     {
-      "src": "img/icons/docusaurus-openapi-docs-logo.svg",
+      "src": "img/docusaurus-openapi-docs-logo.svg",
       "sizes": "144x144",
       "type": "image/svg"
     }
