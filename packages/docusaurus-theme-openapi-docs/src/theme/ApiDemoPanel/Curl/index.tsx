@@ -14,7 +14,7 @@ import CodeBlock from "@theme/CodeBlock";
 import clsx from "clsx";
 
 import CodeTabs from "../CodeTabs";
-import { useTypedSelector } from "../hooks";
+import { useTypedSelector } from "../../ApiItem/hooks";
 import buildPostmanRequest from "./../buildPostmanRequest";
 import styles from "./styles.module.css";
 

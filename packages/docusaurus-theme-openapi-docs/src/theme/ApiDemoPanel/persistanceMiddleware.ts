@@ -10,7 +10,7 @@ import { Middleware } from "@reduxjs/toolkit";
 import { ThemeConfig } from "../../types";
 import { setAuthData, setSelectedAuth } from "./Authorization/slice";
 import { createStorage, hashArray } from "./storage-utils";
-import { AppDispatch, RootState } from "./store";
+import { AppDispatch, RootState } from "../ApiItem/store";
 
 export function createPersistanceMiddleware(options: ThemeConfig["api"]) {
   const persistanceMiddleware: Middleware<{}, RootState, AppDispatch> =

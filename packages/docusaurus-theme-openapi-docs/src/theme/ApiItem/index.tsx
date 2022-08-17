@@ -17,6 +17,14 @@ import { DocFrontMatter } from "../../types";
 import DocItemLayout from "./Layout";
 import DocItemMetadata from "./Metadata";
 
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
+import { Provider } from "react-redux";
+import { ThemeConfig } from "../../types";
+import { createAuth } from "../ApiDemoPanel/Authorization/slice";
+import { createPersistanceMiddleware } from "../ApiDemoPanel/persistanceMiddleware";
+import { createStoreWithState } from "./store";
+
 const { DocProvider } = require("@docusaurus/theme-common/internal");
 
 let ApiDemoPanel = (_: { item: any; infoPath: any }) => (
@@ -32,13 +40,63 @@ interface ApiFrontMatter extends DocFrontMatter {
 
 export default function DocItem(props: Props): JSX.Element {
   const docHtmlClassName = `docs-doc-id-${props.content.metadata.unversionedId}`;
+  const MDXComponent = props.content;
+  const { frontMatter } = MDXComponent;
+  const { info_path: infoPath } = frontMatter as DocFrontMatter;
+  const { api } = frontMatter as ApiFrontMatter;
+  const { siteConfig } = useDocusaurusContext();
+  const themeConfig = siteConfig.themeConfig as ThemeConfig;
+  const options = themeConfig.api;
+
+  const acceptArray = Array.from(
+    new Set(
+      Object.values(api?.responses ?? {})
+        .map((response: any) => Object.keys(response.content ?? {}))
+        .flat()
+    )
+  );
+
+  const content = api?.requestBody?.content ?? {};
+  const contentTypeArray = Object.keys(content);
+  const servers = api?.servers ?? [];
+
+  const params = {
+    path: [] as ParameterObject[],
+    query: [] as ParameterObject[],
+    header: [] as ParameterObject[],
+    cookie: [] as ParameterObject[],
+  };
+
+  api?.parameters?.forEach(
+    (param: { in: "path" | "query" | "header" | "cookie" }) => {
+      const paramType = param.in;
+      const paramsArray: ParameterObject[] = params[paramType];
+      paramsArray.push(param as ParameterObject);
+    }
+  );
+
+  const auth = createAuth({
+    security: api?.security,
+    securitySchemes: api?.securitySchemes,
+    options,
+  });
+
+  const persistanceMiddleware = createPersistanceMiddleware(options);
+
+  const store2 = createStoreWithState(
+    {
+      accept: { value: acceptArray[0], options: acceptArray },
+      contentType: { value: contentTypeArray[0], options: contentTypeArray },
+      server: { value: servers[0], options: servers },
+      response: { value: undefined },
+      body: { type: "empty" },
+      params,
+      auth,
+    },
+    [persistanceMiddleware]
+  );
 
   const DocContent = () => {
-    const MDXComponent = props.content;
-    const { frontMatter } = MDXComponent;
-    const { info_path: infoPath } = frontMatter as DocFrontMatter;
-    const { api } = frontMatter as ApiFrontMatter;
-
     return (
       <div className="row">
         <div className={clsx("col", api ? "col--7" : "col--12")}>
@@ -54,13 +112,15 @@ export default function DocItem(props: Props): JSX.Element {
   };
 
   return (
-    <DocProvider content={props.content}>
-      <HtmlClassNameProvider className={docHtmlClassName}>
-        <DocItemMetadata />
-        <DocItemLayout>
-          <DocContent />
-        </DocItemLayout>
-      </HtmlClassNameProvider>
-    </DocProvider>
+    <Provider store={store2}>
+      <DocProvider content={props.content}>
+        <HtmlClassNameProvider className={docHtmlClassName}>
+          <DocItemMetadata />
+          <DocItemLayout>
+            <DocContent />
+          </DocItemLayout>
+        </HtmlClassNameProvider>
+      </DocProvider>
+    </Provider>
   );
 }

@@ -18,6 +18,9 @@ import { duplicates } from "@docusaurus/theme-common";
 import useIsBrowser from "@docusaurus/useIsBrowser";
 import clsx from "clsx";
 
+import { useTypedDispatch } from "../ApiItem/hooks";
+import { setContentType } from "../ApiDemoPanel/ContentType/slice";
+
 import styles from "./styles.module.css"; // A very rough duck type, but good enough to guard against mistakes while
 
 const {
@@ -163,6 +166,8 @@ function MimeTabsComponent(props) {
     tabItemListContainerRef.current.scrollLeft -= 90;
   };
 
+  const dispatch = useTypedDispatch();
+
   return (
     <div className="tabs__container">
       <div className={styles.mimeTabsTopSection}>
@@ -188,6 +193,7 @@ function MimeTabsComponent(props) {
             )}
           >
             {values.map(({ value, label, attributes }) => {
+              console.log({ label });
               return (
                 <li
                   role="tab"
@@ -197,7 +203,9 @@ function MimeTabsComponent(props) {
                   ref={(tabControl) => tabRefs.push(tabControl)}
                   onKeyDown={handleKeydown}
                   onFocus={handleTabChange}
-                  onClick={handleTabChange}
+                  onClick={() => {
+                    dispatch(setContentType(label));
+                  }}
                   {...attributes}
                   className={clsx(
                     "tabs__item",

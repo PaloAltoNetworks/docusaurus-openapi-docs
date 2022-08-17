@@ -7,7 +7,7 @@
 
 import React from "react";
 
-import { useTypedDispatch, useTypedSelector } from "../hooks";
+import { useTypedDispatch, useTypedSelector } from "../../ApiItem/hooks";
 import FloatingButton from "./../FloatingButton";
 import { clearResponse } from "./slice";
 

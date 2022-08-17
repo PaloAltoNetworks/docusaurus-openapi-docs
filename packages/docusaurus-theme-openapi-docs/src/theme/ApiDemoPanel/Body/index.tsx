@@ -11,7 +11,7 @@ import { RequestBodyObject } from "docusaurus-plugin-openapi-docs/src/openapi/ty
 
 import ContentType from "../ContentType";
 import FormSelect from "../FormSelect";
-import { useTypedDispatch, useTypedSelector } from "../hooks";
+import { useTypedDispatch, useTypedSelector } from "../../ApiItem/hooks";
 import LiveApp from "../LiveEditor";
 import FormFileUpload from "./../FormFileUpload";
 import FormItem from "./../FormItem";
