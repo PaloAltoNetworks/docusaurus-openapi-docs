@@ -1,7 +1,7 @@
 {
   "name": "Docusaurus OpenAPI Docs",
   "short_name": "OpenAPI Docs",
-  "theme_color": "#2196f3",
+  "theme_color": "#2980b9",
   "background_color": "#424242",
   "display": "standalone",
   "scope": "./",
@@ -16,6 +16,10 @@
     {
       "src": "img/docusaurus-openapi-docs-logo.svg",
       "sizes": "72x72 144x144 200x200"
+    },
+    {
+      "src": "img/docusaurus-openapi-splash.png",
+      "sizes": "500x500"
     }
   ]
 }
