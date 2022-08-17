@@ -458,6 +458,11 @@
       "sizes": "192x192"
     },
     {
+      "src": "ios/maskable_icon_x192.png",
+      "sizes": "192x192",
+      "purpose": "maskable"
+    },
+    {
       "src": "ios/256.png",
       "sizes": "256x256"
     },
