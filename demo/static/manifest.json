@@ -1,0 +1,22 @@
+{
+  "name": "Docusaurus OpenAPI Docs",
+  "short_name": "OpenAPI Docs",
+  "theme_color": "#2196f3",
+  "background_color": "#424242",
+  "display": "standalone",
+  "scope": "./",
+  "start_url": "./index.html",
+  "related_applications": [
+    {
+      "platform": "webapp",
+      "url": "https://docusaurus-openapi-36b86--pr216-crv79ctv.web.app/manifest.json"
+    }
+  ],
+  "icons": [
+    {
+      "src": "img/icons/docusaurus-openapi-docs-logo.svg",
+      "sizes": "72x72",
+      "type": "image/svg"
+    }
+  ]
+}
