@@ -20,6 +20,7 @@ import clsx from "clsx";
 
 import { useTypedDispatch } from "../ApiItem/hooks";
 import { setContentType } from "../ApiDemoPanel/ContentType/slice";
+import { setAccept } from "../ApiDemoPanel/Accept/slice";
 
 import styles from "./styles.module.css"; // A very rough duck type, but good enough to guard against mistakes while
 
@@ -42,6 +43,7 @@ function MimeTabsComponent(props) {
     values: valuesProp,
     groupId,
     className,
+    schemaType,
   } = props;
   const children = Children.map(props.children, (child) => {
     if (isValidElement(child) && isTabItem(child)) {
@@ -167,6 +169,7 @@ function MimeTabsComponent(props) {
   };
 
   const dispatch = useTypedDispatch();
+  const isRequestSchema = schemaType.toLowerCase() === "request";
 
   return (
     <div className="tabs__container">
@@ -204,7 +207,10 @@ function MimeTabsComponent(props) {
                   onKeyDown={handleKeydown}
                   onFocus={handleTabChange}
                   onClick={() => {
-                    dispatch(setContentType(label));
+                    handleTabChange;
+                    isRequestSchema
+                      ? dispatch(setContentType(label))
+                      : dispatch(setAccept(label));
                   }}
                   {...attributes}
                   className={clsx(
