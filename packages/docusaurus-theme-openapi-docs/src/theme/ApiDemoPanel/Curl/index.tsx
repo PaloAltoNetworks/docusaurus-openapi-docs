@@ -13,8 +13,8 @@ import sdk from "@paloaltonetworks/postman-collection";
 import CodeBlock from "@theme/CodeBlock";
 import clsx from "clsx";
 
-import CodeTabs from "../CodeTabs";
 import { useTypedSelector } from "../../ApiItem/hooks";
+import CodeTabs from "../CodeTabs";
 import buildPostmanRequest from "./../buildPostmanRequest";
 import styles from "./styles.module.css";
 

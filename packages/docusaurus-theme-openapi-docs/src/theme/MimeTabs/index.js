@@ -18,10 +18,9 @@ import { duplicates } from "@docusaurus/theme-common";
 import useIsBrowser from "@docusaurus/useIsBrowser";
 import clsx from "clsx";
 
-import { useTypedDispatch } from "../ApiItem/hooks";
-import { setContentType } from "../ApiDemoPanel/ContentType/slice";
 import { setAccept } from "../ApiDemoPanel/Accept/slice";
-
+import { setContentType } from "../ApiDemoPanel/ContentType/slice";
+import { useTypedDispatch } from "../ApiItem/hooks";
 import styles from "./styles.module.css"; // A very rough duck type, but good enough to guard against mistakes while
 
 const {
@@ -207,7 +206,6 @@ function MimeTabsComponent(props) {
                   onKeyDown={handleKeydown}
                   onFocus={handleTabChange}
                   onClick={() => {
-                    handleTabChange;
                     isRequestSchema
                       ? dispatch(setContentType(label))
                       : dispatch(setAccept(label));

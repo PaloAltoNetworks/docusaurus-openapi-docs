@@ -9,20 +9,19 @@ import React from "react";
 
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import { HtmlClassNameProvider } from "@docusaurus/theme-common";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import type { Props } from "@theme/DocItem";
 import clsx from "clsx";
 import type { ApiItem as ApiItemType } from "docusaurus-plugin-openapi-docs/lib/types";
-
-import { DocFrontMatter } from "../../types";
-import DocItemLayout from "./Layout";
-import DocItemMetadata from "./Metadata";
-
-import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import { Provider } from "react-redux";
+
+import { DocFrontMatter } from "../../types";
 import { ThemeConfig } from "../../types";
 import { createAuth } from "../ApiDemoPanel/Authorization/slice";
 import { createPersistanceMiddleware } from "../ApiDemoPanel/persistanceMiddleware";
+import DocItemLayout from "./Layout";
+import DocItemMetadata from "./Metadata";
 import { createStoreWithState } from "./store";
 
 const { DocProvider } = require("@docusaurus/theme-common/internal");
