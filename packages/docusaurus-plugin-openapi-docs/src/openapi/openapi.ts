@@ -25,7 +25,7 @@ import {
   SidebarOptions,
   TagPageMetadata,
 } from "../types";
-import { sampleFromSchema } from "./createExample";
+import { sampleRequestFromSchema } from "./createRequestExample";
 import { OpenApiObject, TagObject } from "./types";
 import { loadAndResolveSpec } from "./utils/loadAndResolveSpec";
 
@@ -170,7 +170,7 @@ function createItems(
       let jsonRequestBodyExample;
       const body = operationObject.requestBody?.content?.["application/json"];
       if (body?.schema) {
-        jsonRequestBodyExample = sampleFromSchema(body.schema);
+        jsonRequestBodyExample = sampleRequestFromSchema(body.schema);
       }
 
       // Handle vendor JSON media types
@@ -180,7 +180,7 @@ function createItems(
         if (firstBodyContentKey.endsWith("+json")) {
           const firstBody = bodyContent[firstBodyContentKey];
           if (firstBody?.schema) {
-            jsonRequestBodyExample = sampleFromSchema(firstBody.schema);
+            jsonRequestBodyExample = sampleRequestFromSchema(firstBody.schema);
           }
         }
       }

@@ -51,7 +51,7 @@ const primitives: Primitives = {
   array: {},
 };
 
-export const sampleFromSchema = (schema: SchemaObject = {}): any => {
+export const sampleResponseFromSchema = (schema: SchemaObject = {}): any => {
   try {
     let { type, example, allOf, properties, items } = schema;
 
@@ -69,7 +69,7 @@ export const sampleFromSchema = (schema: SchemaObject = {}): any => {
           }
         }
       }
-      return sampleFromSchema(mergedSchemas);
+      return sampleResponseFromSchema(mergedSchemas);
     }
 
     if (!type) {
@@ -104,21 +104,21 @@ export const sampleFromSchema = (schema: SchemaObject = {}): any => {
         if (prop.deprecated) {
           continue;
         }
-        obj[name] = sampleFromSchema(prop);
+        obj[name] = sampleResponseFromSchema(prop);
       }
       return obj;
     }
 
     if (type === "array") {
       if (Array.isArray(items?.anyOf)) {
-        return items?.anyOf.map((item) => sampleFromSchema(item));
+        return items?.anyOf.map((item) => sampleResponseFromSchema(item));
       }
 
       if (Array.isArray(items?.oneOf)) {
-        return items?.oneOf.map((item) => sampleFromSchema(item));
+        return items?.oneOf.map((item) => sampleResponseFromSchema(item));
       }
 
-      return [sampleFromSchema(items)];
+      return [sampleResponseFromSchema(items)];
     }
 
     if (schema.enum) {
@@ -128,7 +128,7 @@ export const sampleFromSchema = (schema: SchemaObject = {}): any => {
       return normalizeArray(schema.enum)[0];
     }
 
-    if (schema.readOnly && schema.readOnly === true) {
+    if (schema.writeOnly && schema.writeOnly === true) {
       return undefined;
     }
 
