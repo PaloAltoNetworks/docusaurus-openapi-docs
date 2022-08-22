@@ -10,6 +10,7 @@ import { createDescription } from "./createDescription";
 import { createDetails } from "./createDetails";
 import { createDetailsSummary } from "./createDetailsSummary";
 import {
+  createExampleFromSchema,
   createResponseExample,
   createResponseExamples,
 } from "./createStatusCodes";
@@ -628,9 +629,9 @@ function createEdges({
  * Creates a hierarchical level of a schema tree. Nodes produce edges that can branch into sub-nodes with edges, recursively.
  */
 function createNodes(schema: SchemaObject): any {
-  if (schema.discriminator !== undefined) {
-    return createDiscriminator(schema);
-  }
+  // if (schema.discriminator !== undefined) {
+  //   return createDiscriminator(schema);
+  // }
 
   if (schema.oneOf !== undefined || schema.anyOf !== undefined) {
     return createAnyOneOf(schema);
@@ -803,6 +804,7 @@ export function createResponseSchema({ title, body, ...rest }: Props) {
                       }),
                     ],
                   }),
+                firstBody && createExampleFromSchema(firstBody, mimeType),
                 responseExamples && createResponseExamples(responseExamples),
                 responseExample && createResponseExample(responseExample),
               ],
