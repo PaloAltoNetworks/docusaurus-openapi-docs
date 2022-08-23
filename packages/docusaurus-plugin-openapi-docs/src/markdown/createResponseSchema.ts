@@ -291,106 +291,106 @@ function createItems(schema: SchemaObject) {
 /**
  * For handling discriminators that do not map to a same-level property
  */
-function createDiscriminator(schema: SchemaObject) {
-  const discriminator = schema.discriminator;
-  const propertyName = discriminator?.propertyName;
-  const propertyType = "string"; // should always be string
-  const mapping: any = discriminator?.mapping;
+// function createDiscriminator(schema: SchemaObject) {
+//   const discriminator = schema.discriminator;
+//   const propertyName = discriminator?.propertyName;
+//   const propertyType = "string"; // should always be string
+//   const mapping: any = discriminator?.mapping;
 
-  // Explicit mapping is required since we can't support implicit
-  if (mapping === undefined) {
-    return undefined;
-  }
+//   // Explicit mapping is required since we can't support implicit
+//   if (mapping === undefined) {
+//     return undefined;
+//   }
 
-  // Attempt to get the property description we want to display
-  // TODO: how to make it predictable when handling allOf
-  let propertyDescription;
-  const firstMappingSchema = mapping[Object.keys(mapping)[0]];
-  if (firstMappingSchema.properties !== undefined) {
-    propertyDescription =
-      firstMappingSchema.properties![propertyName!].description;
-  }
-  if (firstMappingSchema.allOf !== undefined) {
-    const { mergedSchemas }: { mergedSchemas: SchemaObject } = mergeAllOf(
-      firstMappingSchema.allOf
-    );
-    if (mergedSchemas.properties !== undefined) {
-      propertyDescription =
-        mergedSchemas.properties[propertyName!]?.description;
-    }
-  }
+//   // Attempt to get the property description we want to display
+//   // TODO: how to make it predictable when handling allOf
+//   let propertyDescription;
+//   const firstMappingSchema = mapping[Object.keys(mapping)[0]];
+//   if (firstMappingSchema.properties !== undefined) {
+//     propertyDescription =
+//       firstMappingSchema.properties![propertyName!].description;
+//   }
+//   if (firstMappingSchema.allOf !== undefined) {
+//     const { mergedSchemas }: { mergedSchemas: SchemaObject } = mergeAllOf(
+//       firstMappingSchema.allOf
+//     );
+//     if (mergedSchemas.properties !== undefined) {
+//       propertyDescription =
+//         mergedSchemas.properties[propertyName!]?.description;
+//     }
+//   }
 
-  if (propertyDescription === undefined) {
-    if (
-      schema.properties !== undefined &&
-      schema.properties![propertyName!] !== undefined
-    ) {
-      propertyDescription = schema.properties![propertyName!].description;
-    }
-  }
+//   if (propertyDescription === undefined) {
+//     if (
+//       schema.properties !== undefined &&
+//       schema.properties![propertyName!] !== undefined
+//     ) {
+//       propertyDescription = schema.properties![propertyName!].description;
+//     }
+//   }
 
-  return create("div", {
-    className: "discriminatorItem",
-    children: create("div", {
-      children: [
-        create("strong", {
-          style: { paddingLeft: "1rem" },
-          children: propertyName,
-        }),
-        guard(propertyType, (name) =>
-          create("span", {
-            style: { opacity: "0.6" },
-            children: ` ${propertyType}`,
-          })
-        ),
-        guard(getQualifierMessage(schema.discriminator as any), (message) =>
-          create("div", {
-            style: {
-              paddingLeft: "1rem",
-            },
-            children: createDescription(message),
-          })
-        ),
-        guard(propertyDescription, (description) =>
-          create("div", {
-            style: {
-              paddingLeft: "1rem",
-            },
-            children: createDescription(description),
-          })
-        ),
-        create("DiscriminatorTabs", {
-          children: Object.keys(mapping!).map((key, index) => {
-            if (mapping[key].allOf !== undefined) {
-              const { mergedSchemas }: { mergedSchemas: SchemaObject } =
-                mergeAllOf(mapping[key].allOf);
-              // Cleanup duplicate property from mapping schema
-              delete mergedSchemas.properties![propertyName!];
-              mapping[key] = mergedSchemas;
-            }
+//   return create("div", {
+//     className: "discriminatorItem",
+//     children: create("div", {
+//       children: [
+//         create("strong", {
+//           style: { paddingLeft: "1rem" },
+//           children: propertyName,
+//         }),
+//         guard(propertyType, (name) =>
+//           create("span", {
+//             style: { opacity: "0.6" },
+//             children: ` ${propertyType}`,
+//           })
+//         ),
+//         guard(getQualifierMessage(schema.discriminator as any), (message) =>
+//           create("div", {
+//             style: {
+//               paddingLeft: "1rem",
+//             },
+//             children: createDescription(message),
+//           })
+//         ),
+//         guard(propertyDescription, (description) =>
+//           create("div", {
+//             style: {
+//               paddingLeft: "1rem",
+//             },
+//             children: createDescription(description),
+//           })
+//         ),
+//         create("DiscriminatorTabs", {
+//           children: Object.keys(mapping!).map((key, index) => {
+//             if (mapping[key].allOf !== undefined) {
+//               const { mergedSchemas }: { mergedSchemas: SchemaObject } =
+//                 mergeAllOf(mapping[key].allOf);
+//               // Cleanup duplicate property from mapping schema
+//               delete mergedSchemas.properties![propertyName!];
+//               mapping[key] = mergedSchemas;
+//             }
 
-            if (mapping[key].properties !== undefined) {
-              // Cleanup duplicate property from mapping schema
-              delete mapping[key].properties![propertyName!];
-            }
+//             if (mapping[key].properties !== undefined) {
+//               // Cleanup duplicate property from mapping schema
+//               delete mapping[key].properties![propertyName!];
+//             }
 
-            const label = key;
-            return create("TabItem", {
-              label: label,
-              value: `${index}-item-discriminator`,
-              children: [
-                create("div", {
-                  style: { marginLeft: "-4px" },
-                  children: createNodes(mapping[key]),
-                }),
-              ],
-            });
-          }),
-        }),
-      ],
-    }),
-  });
-}
+//             const label = key;
+//             return create("TabItem", {
+//               label: label,
+//               value: `${index}-item-discriminator`,
+//               children: [
+//                 create("div", {
+//                   style: { marginLeft: "-4px" },
+//                   children: createNodes(mapping[key]),
+//                 }),
+//               ],
+//             });
+//           }),
+//         }),
+//       ],
+//     }),
+//   });
+// }
 
 function createDetailsNode(
   name: string,
