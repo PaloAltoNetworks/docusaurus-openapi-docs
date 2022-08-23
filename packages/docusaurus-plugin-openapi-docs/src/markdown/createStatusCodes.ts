@@ -173,8 +173,8 @@ export function createStatusCodes({ responses }: Props) {
               }),
               responseHeaders &&
                 createDetails({
-                  "data-collaposed": false,
-                  open: true,
+                  "data-collaposed": true,
+                  open: false,
                   style: { textAlign: "left", marginBottom: "1rem" },
                   children: [
                     createDetailsSummary({
