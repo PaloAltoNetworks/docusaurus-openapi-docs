@@ -51,6 +51,22 @@ const primitives: Primitives = {
   array: {},
 };
 
+function sampleRequestFromProp(name: string, prop: any, obj: any): any {
+  if (prop.oneOf) {
+    obj[name] = sampleRequestFromSchema(prop.oneOf[0]);
+  } else if (prop.anyOf) {
+    obj[name] = sampleRequestFromSchema(prop.anyOf[0]);
+  } else if (prop.allOf) {
+    const { mergedSchemas }: { mergedSchemas: SchemaObject } = mergeAllOf(
+      prop.allOf
+    );
+    sampleRequestFromProp(name, mergedSchemas, obj);
+  } else {
+    obj[name] = sampleRequestFromSchema(prop);
+  }
+  return obj;
+}
+
 export const sampleRequestFromSchema = (schema: SchemaObject = {}): any => {
   try {
     let { type, example, allOf, properties, items } = schema;
@@ -104,7 +120,9 @@ export const sampleRequestFromSchema = (schema: SchemaObject = {}): any => {
         if (prop.deprecated) {
           continue;
         }
-        obj[name] = sampleRequestFromSchema(prop);
+
+        // Resolve schema from prop recursively
+        obj = sampleRequestFromProp(name, prop, obj);
       }
       return obj;
     }
