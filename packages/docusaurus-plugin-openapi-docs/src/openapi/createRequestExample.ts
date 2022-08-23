@@ -52,6 +52,12 @@ const primitives: Primitives = {
 };
 
 function sampleRequestFromProp(name: string, prop: any, obj: any): any {
+  // Handle resolved circular props
+  if (typeof prop === "object" && Object.keys(prop).length === 0) {
+    obj[name] = prop;
+    return obj;
+  }
+
   if (prop.oneOf) {
     obj[name] = sampleRequestFromSchema(prop.oneOf[0]);
   } else if (prop.anyOf) {

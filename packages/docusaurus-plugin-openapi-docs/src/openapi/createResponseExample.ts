@@ -52,6 +52,12 @@ const primitives: Primitives = {
 };
 
 function sampleResponseFromProp(name: string, prop: any, obj: any): any {
+  // Handle resolved circular props
+  if (typeof prop === "object" && Object.keys(prop).length === 0) {
+    obj[name] = prop;
+    return obj;
+  }
+
   if (prop.oneOf) {
     obj[name] = sampleResponseFromSchema(prop.oneOf[0]);
   } else if (prop.anyOf) {
@@ -123,8 +129,6 @@ export const sampleResponseFromSchema = (schema: SchemaObject = {}): any => {
 
         // Resolve schema from prop recursively
         obj = sampleResponseFromProp(name, prop, obj);
-
-        obj[name] = sampleResponseFromSchema(prop);
       }
       return obj;
     }
