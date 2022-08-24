@@ -5,6 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import format from "xml-formatter";
+
 import { sampleResponseFromSchema } from "../openapi/createResponseExample";
 import { ApiItem } from "../types";
 import { createDescription } from "./createDescription";
@@ -13,6 +15,43 @@ import { createDetailsSummary } from "./createDetailsSummary";
 import { createResponseSchema } from "./createResponseSchema";
 import { create } from "./utils";
 import { guard } from "./utils";
+
+export default function json2xml(o: any, tab: any) {
+  var toXml = function (v: any, name: string, ind: any) {
+      var xml = "";
+      if (v instanceof Array) {
+        for (var i = 0, n = v.length; i < n; i++)
+          xml += ind + toXml(v[i], name, ind + "\t") + "\n";
+      } else if (typeof v == "object") {
+        var hasChild = false;
+        xml += ind + "<" + name;
+        for (var m in v) {
+          if (m.charAt(0) === "@")
+            xml += " " + m.substr(1) + '="' + v[m].toString() + '"';
+          else hasChild = true;
+        }
+        xml += hasChild ? ">" : "/>";
+        if (hasChild) {
+          for (var m2 in v) {
+            if (m2 === "#text") xml += v[m2];
+            else if (m2 === "#cdata") xml += "<![CDATA[" + v[m2] + "]]>";
+            else if (m2.charAt(0) !== "@") xml += toXml(v[m2], m2, ind + "\t");
+          }
+          xml +=
+            (xml.charAt(xml.length - 1) === "\n" ? ind : "") +
+            "</" +
+            name +
+            ">";
+        }
+      } else {
+        xml += ind + "<" + name + ">" + v.toString() + "</" + name + ">";
+      }
+      return xml;
+    },
+    xml = "";
+  for (var m3 in o) xml += toXml(o[m3], m3, "");
+  return tab ? xml.replace(/\t/g, tab) : xml.replace(/\t|\n/g, "");
+}
 
 interface Props {
   responses: ApiItem["responses"];
@@ -129,8 +168,44 @@ export function createResponseExample(responseExample: any) {
 export function createExampleFromSchema(schema: any, mimeType: string) {
   const responseExample = sampleResponseFromSchema(schema);
   if (mimeType.endsWith("xml")) {
-    // TODO: determine if there's an appropriate way to handle XML with no root node
-    return undefined;
+    let responseExampleObject;
+    try {
+      responseExampleObject = JSON.parse(JSON.stringify(responseExample));
+    } catch {
+      return undefined;
+    }
+
+    if (typeof responseExampleObject === "object") {
+      let xmlExample;
+      try {
+        xmlExample = format(json2xml(responseExampleObject, ""), {
+          indentation: "  ",
+          lineSeparator: "\n",
+          collapseContent: true,
+        });
+      } catch {
+        const xmlExampleWithRoot = { root: responseExampleObject };
+        try {
+          xmlExample = format(json2xml(xmlExampleWithRoot, ""), {
+            indentation: "  ",
+            lineSeparator: "\n",
+            collapseContent: true,
+          });
+        } catch {
+          xmlExample = json2xml(responseExampleObject, "");
+        }
+      }
+      return create("TabItem", {
+        label: `Example (from schema)`,
+        value: `Example (from schema)`,
+        children: [
+          create("ResponseSamples", {
+            responseExample: xmlExample,
+            language: "xml",
+          }),
+        ],
+      });
+    }
   }
   if (typeof responseExample === "object") {
     return create("TabItem", {
