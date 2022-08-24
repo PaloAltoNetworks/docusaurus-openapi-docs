@@ -172,6 +172,14 @@ const config = {
               categoryLinkSource: "tag",
             },
           },
+          panos: {
+            specPath: "examples/panos-rest-api.yaml",
+            outputDir: "docs/panos",
+            sidebarOptions: {
+              groupPathsBy: "tag",
+              categoryLinkSource: "tag",
+            },
+          },
           cos: {
             specPath: "examples/openapi-cos.json",
             outputDir: "docs/cos",

@@ -1,0 +1,28 @@
+---
+id: objects-sctp-protection-security-profiles
+title: SCTP Protection Security Profiles
+description: SCTP Protection Security Profiles
+---
+
+
+
+Manages SCTP Protection security profiles used to validate and filter SCTP chunks on firewalls with SCTP Security enabled. An SCTP packet includes
+a common SCTP header and a variable number of chunks, which can be control chunks or data chunks with encapsulated user data.
+
+The firewall provides a multilayered approach for securing SCTP traffic, enabling validation of SCTP packets to ensure they comply with RFC 4960, filtering
+of SCTP traffic based on payload protocol IDs (PPIDs), and granular-level filtering on Diameter traffic over SCTP and SS7
+traffic over SCTP. You can also protect against flooding of SCTP initiation (INIT) packets. In the case of mobile networks, these security measures
+prevent attackers from causing network congestion and outages that disrupt data and voice services of mobile subscribers and IoT devices connected to
+these networks. Additionally, you can view SCTP logs, ACC information, and reports to verify configurations and gain visibility into the SCTP events
+and traffic between two endpoints.
+
+
+
+
+```mdx-code-block
+import DocCardList from '@theme/DocCardList';
+import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
+
+<DocCardList items={useCurrentSidebarCategory().items}/>
+```
+      

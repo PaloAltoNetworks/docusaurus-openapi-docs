@@ -1,0 +1,30 @@
+---
+id: objects-decryption-forwarding-profiles
+title: Decryption Forwarding Profiles
+description: Decryption Forwarding Profiles
+---
+
+
+
+Manages Decryption Forwarding profiles that enable the firewall to act as a decryption broker. A decryption broker firewall forwards
+traffic that it has already decrypted and inspected to a security chain—a set of inline, third-party security appliances—for additional enforcement.
+When the firewall receives traffic back from the security chain, it re-encrypts the traffic and forwards it to the appropriate destination.
+See <a href="https://docs.paloaltonetworks.com/pan-os/9-1/pan-os-admin/decryption/decryption-broker.html">Decryption Broker</a> for more information.
+
+Before you create a Decryption Forwarding profile to enable decryption brokering, you must:
+* Enable SSL Forward Proxy decryption.
+* Activate the free Decryption Broker license.
+* Dedicate at least two Layer 3 interfaces on the firewall for forwarding decrypted traffic to the security chain (Network> Interfaces > Ethernet)
+ After you complete these tasks, create a Decryption Forwarding profile to pair the two interfaces and define settings for the security chain to which
+ the firewall will forward decrypted traffic.
+
+
+
+
+```mdx-code-block
+import DocCardList from '@theme/DocCardList';
+import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
+
+<DocCardList items={useCurrentSidebarCategory().items}/>
+```
+      

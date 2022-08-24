@@ -1,0 +1,25 @@
+---
+id: policies-nat-rules
+title: NAT Rules
+description: NAT Rules
+---
+
+
+
+Manages Network Address Translation (NAT) policy rules. These rules specify whether source or destination IP addresses and ports
+are converted between public and private addresses and ports.
+
+NAT rules are based on source and destination zones, source and destination addresses, and application service (such as HTTP).
+Like security policies, NAT policy rules are compared sequentially against incoming traffic; the first rule that matches
+the traffic is applied.
+
+
+
+
+```mdx-code-block
+import DocCardList from '@theme/DocCardList';
+import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
+
+<DocCardList items={useCurrentSidebarCategory().items}/>
+```
+      

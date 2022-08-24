@@ -1,0 +1,32 @@
+---
+id: gen-api-key
+sidebar_label: Generate API Key
+hide_title: true
+hide_table_of_contents: true
+api: {"operationId":"genApiKey","parameters":[{"name":"type","in":"query","required":true,"schema":{"type":"string","enum":["keygen"]},"description":"Must be `keygen`"},{"name":"user","in":"query","required":true,"example":"admin","schema":{"type":"string"}},{"name":"password","in":"query","required":true,"example":"admin","schema":{"type":"string","format":"password"}}],"responses":{"200":{"content":{"application/xml":{"schema":{"type":"object","properties":{"response":{"type":"object","properties":{"status":{"type":"string","example":"success","xml":{"attribute":true}},"result":{"type":"object","properties":{"key":{"type":"string","description":"**The API Key**"}}}}}}},"example":"<response status=\"success\">\n  <result>\n    <key>...your api key...</key>\n  </result>\n</response>\n"}},"description":"Success"}},"description":"This API works for both the `GET` and `POST` methods, and you can add the parameters as a `query` or in the `body` of the request.\n","tags":["key-generation"],"method":"get","path":"/api/?type=keygen","servers":[{"url":"https://192.168.1.1"}],"securitySchemes":{"basic-auth":{"type":"http","scheme":"basic","description":"To make an API request to the firewall or  Panorama, you must provide an API key to authenticate.\n"}},"info":{"version":"10.0","x-logo":{"url":"https://pan.dev/img/pan_dev_black.svg"},"x-dark-logo":{"url":"https://pan.dev/img/pan_dev_white.svg"},"title":"PAN-OS REST API","description":"The REST API for PAN-OS® (PA-VM,single-vsys-mode) enables you to interact remotely with firewalls.\nTo get started with the REST API, see\n the <a href=\"https://docs.paloaltonetworks.com/pan-os/10-0/pan-os-panorama-api/get-started-with-the-pan-os-rest-api/pan-os-rest-api.html\">PAN-OS and Panorama API Guide</a>.\n The following is a simple example of REST API use.\n\n1. To use the REST API, you must first generate the API key required for authenticating API requests. The following\n *cURL* example shows a *GET* request whose response will include the API key.\n\n ```shell\n curl -X GET 'https://YOUR_HOST_URL/api/?type=keygen&user=<username>&password=<password>'\n ```\n\nThe following shows the format of a successful response. The key element contains the API key to specify\nas the value for the HTTP request header *X-PAN-KEY* in subsequent REST API requests.\n\n ```xml\n  <response status = 'success'>\n     <result>\n         <key>YOUR_API_KEY</key>\n     </result>\n  </response>\n```\n\n2. The following *cURL* example shows a REST API request to return a list of predefined tags from the firewall:\n\n```shell\n  curl -X GET https://YOUR_HOST_URL/restapi/v10.0/objects/tags?location=predefined --header 'X-PAN-KEY: YOUR_API_KEY'\n```\n\n  The following is an example of a successful response:\n\n```json\n  {\n    \"@status\": \"success\",\n    \"@code\": \"19\",\n    \"result\": {\n      \"@total-count\": \"2\",\n       \"@count\": \"2\",\n      \"entry\": [\n          {\n            \"@name\": \"Sanctioned\",\n            \"@location\": \"predefined\",\n            \"color\": \"color17\"\n          },\n          {\n            \"@name\": \"empty\",\n            \"@location\": \"predefined\"\n          }\n       ]\n    }\n  }\n```\n"}}
+sidebar_class_name: "get api-method"
+info_path: panos/pan-os-rest-api
+---
+
+import ApiTabs from "@theme/ApiTabs";
+import MimeTabs from "@theme/MimeTabs";
+import ParamsItem from "@theme/ParamsItem";
+import ResponseSamples from "@theme/ResponseSamples";
+import SchemaItem from "@theme/SchemaItem"
+import SchemaTabs from "@theme/SchemaTabs";
+import DiscriminatorTabs from "@theme/DiscriminatorTabs";
+import TabItem from "@theme/TabItem";
+
+## Generate API Key
+
+
+
+This API works for both the `GET` and `POST` methods, and you can add the parameters as a `query` or in the `body` of the request.
+
+
+<details style={{"marginBottom":"1rem"}} data-collapsed={false} open={true}><summary style={{}}><strong>Query Parameters</strong></summary><div><ul><ParamsItem className={"paramsItem"} param={{"name":"type","in":"query","required":true,"schema":{"type":"string","enum":["keygen"]},"description":"Must be `keygen`"}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"user","in":"query","required":true,"example":"admin","schema":{"type":"string"}}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"password","in":"query","required":true,"example":"admin","schema":{"type":"string","format":"password"}}}></ParamsItem></ul></div></details><div><ApiTabs><TabItem label={"200"} value={"200"}><div>
+
+Success
+
+</div><div><MimeTabs groupId={"mime-type"}><TabItem label={"application/xml"} value={"application/xml"}><SchemaTabs groupId={"schema-tabs"}><TabItem label={"Schema"} value={"Schema"}><details style={{}} data-collapsed={false} open={true}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><SchemaItem collapsible={true} className={"schemaItem"}><details style={{}}><summary style={{}}><strong>response</strong><span style={{"opacity":"0.6"}}> object</span></summary><div style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"status"} required={false} schemaDescription={undefined} schemaName={"string"} qualifierMessage={undefined} defaultValue={undefined}></SchemaItem><SchemaItem collapsible={true} className={"schemaItem"}><details style={{}}><summary style={{}}><strong>result</strong><span style={{"opacity":"0.6"}}> object</span></summary><div style={{"marginLeft":"1rem"}}><SchemaItem collapsible={false} name={"key"} required={false} schemaDescription={"**The API Key**"} schemaName={"string"} qualifierMessage={undefined} defaultValue={undefined}></SchemaItem></div></details></SchemaItem></div></details></SchemaItem></ul></details></TabItem><TabItem label={"Example (from schema)"} value={"Example (from schema)"}><ResponseSamples responseExample={"<response>\n  <status>success</status>\n  <result>\n    <key>string</key>\n  </result>\n</response>"} language={"xml"}></ResponseSamples></TabItem><TabItem label={"Example"} value={"Example"}><ResponseSamples responseExample={"<response status=\"success\">\n  <result>\n    <key>...your api key...</key>\n  </result>\n</response>\n"} language={"shell"}></ResponseSamples></TabItem></SchemaTabs></TabItem></MimeTabs></div></TabItem></ApiTabs></div>
+      

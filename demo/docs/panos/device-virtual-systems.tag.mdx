@@ -1,0 +1,30 @@
+---
+id: device-virtual-systems
+title: Virtual Systems
+description: Virtual Systems
+---
+
+
+
+Manages virtual systems. A virtual system (vsys) is an independent (virtual) firewall instance
+that you can separately manage within a physical firewall. Each vsys can be an independent
+firewall with its own security policy, interfaces, and administrators; a vsys enables you
+to segment the administration of all policies, reporting, and visibility functions that
+the firewall provides.
+
+A virtual system configuration doesn't control firewall-level and network-level functions.
+For each vsys, you can specify a collection of physical and logical firewall interfaces (including
+VLANs and virtual wires) and security zones. If you require routing segmenetation for each
+vsys, you must create and assign additional virtual routers and assign interfaces, VLANs,
+and virtual wires as needed.
+
+
+
+
+```mdx-code-block
+import DocCardList from '@theme/DocCardList';
+import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
+
+<DocCardList items={useCurrentSidebarCategory().items}/>
+```
+      

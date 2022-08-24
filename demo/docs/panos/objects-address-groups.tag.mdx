@@ -1,0 +1,28 @@
+---
+id: objects-address-groups
+title: Address Groups
+description: Address Groups
+---
+
+
+
+Manages address groups that simplify the creation of policy rules. If you have IP addresses or address objects
+that require the same security settings, you can combine them into address groups. An address group can be static or dynamic.
+* Dynamic Address Groups: A dynamic address group populates its members dynamically using looks ups for tags and tag-based filters.
+Dynamic address groups are very useful if you have an extensive virtual infrastructure where changes in virtual
+machine location/IP address are frequent. For example, you have a sophisticated failover setup or provision new
+virtual machines frequently and would like to apply policy to traffic from or to the new machine without modifying
+the configuration/rules on the firewall.
+* Static Address Groups: A static address group can include address objects that are static, dynamic address groups, or
+it can be a combination of both address objects and dynamic address groups.
+
+
+
+
+```mdx-code-block
+import DocCardList from '@theme/DocCardList';
+import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
+
+<DocCardList items={useCurrentSidebarCategory().items}/>
+```
+      

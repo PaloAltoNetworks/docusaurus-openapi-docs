@@ -49,6 +49,16 @@ const sidebars = {
     },
     {
       type: "category",
+      label: "PAN-OS REST API",
+      link: {
+        type: "generated-index",
+        title: "PAN-OS API",
+        slug: "/category/panos-api",
+      },
+      items: require("./docs/panos/sidebar.js"),
+    },
+    {
+      type: "category",
       label: "Cloud Object Storage",
       link: {
         type: "generated-index",

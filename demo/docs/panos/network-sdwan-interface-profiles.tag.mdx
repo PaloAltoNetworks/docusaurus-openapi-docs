@@ -1,0 +1,26 @@
+---
+id: network-sdwan-interface-profiles
+title: SDWAN Interface Profiles
+description: SDWAN Interface Profiles
+---
+
+
+
+Manages SD-WAN Interface profiles.  An SD-WAN Interface profile groups physical links by Link Tag and
+controls the speed of links and how frequently the firewall monitors the link. Each profile specifies
+the Tag that you apply to the physical interface and also specifies the type of Link that interface
+is (ADSL/DSL, cable modem, Ethernet, fiber, LTE/3G/4G/5G, MPLS, microwave/radio, satellite, WiFi, or
+other). The Interface profile is also where you specify the maximum upload and download speeds (in Mbps)
+of the ISP’s connection. You can also change whether the firewall monitors the path frequently or not;
+the firewall monitors link types appropriately by default.
+
+
+
+
+```mdx-code-block
+import DocCardList from '@theme/DocCardList';
+import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
+
+<DocCardList items={useCurrentSidebarCategory().items}/>
+```
+      

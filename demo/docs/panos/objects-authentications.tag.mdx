@@ -1,0 +1,35 @@
+---
+id: objects-authentications
+title: Authentication Enforcements
+description: Authentication Enforcements
+---
+
+
+
+Manages authentication enforcement objects that specifies the method and service to use for authenticating end users who access your network resources.
+You assign the object to Authentication policy rules, which invoke the authentication method and service when traffic matches a rule.
+
+The firewall has the following predefined, read-only authentication objects
+* default-browser-challenge—The firewall transparently obtains user authentication credentials.
+  If you select this action, you must enable Kerberos Single Sign-On (SSO) or NT LAN Manager (NTLM) authentication when you configure Captive Portal.
+  If Kerberos SSO authentication fails, the firewall falls back to NTLM authentication.
+  If you did not configure NTLM, or NTLM authentication fails, the firewall falls back to the authentication method specified in the predefined default-web-form object.
+* default-web-form— To authenticate users, the firewall uses the certificate profile or authentication profile you specified
+  when configuring Captive Portal. If you specified an authentication profile, the firewall ignores any Kerberos SSO settings in the
+  profile and presents a Captive Portal page for the user to enter authentication credentials.
+* default-no-captive-portal—The firewall evaluates Security policy without authenticating users.
+
+Before creating a custom authentication enforcement object, you must configure a server profile that specifies how to connect to the
+authentication service (Device > Server Profiles). Then, assign the server profile to an authentication profile that specifies authentication settings such as
+Kerberos single sign-on parameters (Device > Authentication Profile).
+
+
+
+
+```mdx-code-block
+import DocCardList from '@theme/DocCardList';
+import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
+
+<DocCardList items={useCurrentSidebarCategory().items}/>
+```
+      

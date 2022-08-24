@@ -1,0 +1,78 @@
+---
+id: pan-os-rest-api
+sidebar_label: Introduction
+sidebar_position: 0
+hide_title: true
+---
+
+import ApiLogo from "@theme/ApiLogo";
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+<span className={"theme-doc-version-badge badge badge--secondary"}>Version: 10.0</span>
+
+# PAN-OS REST API
+
+<ApiLogo logo={{"url":"https://pan.dev/img/pan_dev_black.svg"}} darkLogo={{"url":"https://pan.dev/img/pan_dev_white.svg"}}></ApiLogo>
+
+The REST API for PAN-OS® (PA-VM,single-vsys-mode) enables you to interact remotely with firewalls.
+To get started with the REST API, see
+ the <a href="https://docs.paloaltonetworks.com/pan-os/10-0/pan-os-panorama-api/get-started-with-the-pan-os-rest-api/pan-os-rest-api.html">PAN-OS and Panorama API Guide</a>.
+ The following is a simple example of REST API use.
+
+1. To use the REST API, you must first generate the API key required for authenticating API requests. The following
+ *cURL* example shows a *GET* request whose response will include the API key.
+
+ ```shell
+ curl -X GET 'https://YOUR_HOST_URL/api/?type=keygen&user=<username>&password=<password>'
+ ```
+
+The following shows the format of a successful response. The key element contains the API key to specify
+as the value for the HTTP request header *X-PAN-KEY* in subsequent REST API requests.
+
+ ```xml
+  <response status = 'success'>
+     <result>
+         <key>YOUR_API_KEY</key>
+     </result>
+  </response>
+```
+
+2. The following *cURL* example shows a REST API request to return a list of predefined tags from the firewall:
+
+```shell
+  curl -X GET https://YOUR_HOST_URL/restapi/v10.0/objects/tags?location=predefined --header 'X-PAN-KEY: YOUR_API_KEY'
+```
+
+  The following is an example of a successful response:
+
+```json
+  {
+    "@status": "success",
+    "@code": "19",
+    "result": {
+      "@total-count": "2",
+       "@count": "2",
+      "entry": [
+          {
+            "@name": "Sanctioned",
+            "@location": "predefined",
+            "color": "color17"
+          },
+          {
+            "@name": "empty",
+            "@location": "predefined"
+          }
+       ]
+    }
+  }
+```
+
+
+<div style={{"marginBottom":"2rem"}}><h2 id={"authentication"} style={{"marginBottom":"1rem"}}>Authentication</h2><Tabs><TabItem label={"Basic Auth"} value={"basic-auth"}>
+
+To make an API request to the firewall or  Panorama, you must provide an API key to authenticate.
+
+
+<div><table><tbody><tr><th>Security Scheme Type:</th><td>http</td></tr><tr><th>HTTP Authorization Scheme:</th><td>basic</td></tr><tr><th>Bearer format:</th><td></td></tr></tbody></table></div></TabItem></Tabs></div>
+      

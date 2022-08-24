@@ -1,0 +1,24 @@
+---
+id: objects-application-filters
+title: Application Filters
+description: Application Filters
+---
+
+
+
+Manages application filters, which are used to create security policies based on application characteristics.
+For example, a filter could match based on Category "business-systems" and Subcategory "office-programs".
+Network access by any application with those two characteristics (such as Google Docs or Microsoft Office 365)
+can then be enabled or disabled using a security policy defined by the filter. Future applications that match
+the filter will also be automatically be managed by the filter-based security policy.
+
+
+
+
+```mdx-code-block
+import DocCardList from '@theme/DocCardList';
+import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
+
+<DocCardList items={useCurrentSidebarCategory().items}/>
+```
+      

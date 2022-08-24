@@ -1,0 +1,29 @@
+---
+id: objects-file-blocking-security-profiles
+title: File Blocking Security Profiles
+description: File Blocking Security Profiles
+---
+
+
+
+Manages File Blocking security profiles used to block users from uploading or downloading specified file types
+or to generate an alert when a user attempts to upload or download specified file types.
+
+You can define your own custom File Blocking profiles, or choose one of the following predefined profiles when
+applying file blocking to a Security policy rule. The predefined profiles allow you to quickly enable best practice
+file blocking settings:
+
+* **basic file blocking**—Blocks files that are commonly included in malware attack campaigns or that have no real use case for upload/download.
+* **strict file blocking**—Blocks the same file types as the other profile, and additionally blocks flash, .tar, multi-level encoding, .cab, .msi,
+encrypted-rar, and encrypted-zip files.
+
+
+
+
+```mdx-code-block
+import DocCardList from '@theme/DocCardList';
+import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
+
+<DocCardList items={useCurrentSidebarCategory().items}/>
+```
+      
