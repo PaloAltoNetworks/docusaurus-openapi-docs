@@ -59,7 +59,8 @@
     "slugify": "^1.6.5",
     "swagger2openapi": "^7.0.8",
     "url-template": "^3.0.0",
-    "webpack": "^5.61.0"
+    "webpack": "^5.61.0",
+    "xml-formatter": "^2.6.1"
   },
   "peerDependencies": {
     "react": "^16.8.4 || ^17.0.0"
