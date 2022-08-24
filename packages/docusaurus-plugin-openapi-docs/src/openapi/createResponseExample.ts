@@ -58,6 +58,8 @@ function sampleResponseFromProp(name: string, prop: any, obj: any): any {
     return obj;
   }
 
+  // TODO: handle discriminators
+
   if (prop.oneOf) {
     obj[name] = sampleResponseFromSchema(prop.oneOf[0]);
   } else if (prop.anyOf) {
@@ -75,7 +77,7 @@ function sampleResponseFromProp(name: string, prop: any, obj: any): any {
 
 export const sampleResponseFromSchema = (schema: SchemaObject = {}): any => {
   try {
-    let { type, example, allOf, properties, items } = schema;
+    let { type, example, allOf, oneOf, anyOf, properties, items } = schema;
 
     if (example !== undefined) {
       return example;
@@ -92,6 +94,16 @@ export const sampleResponseFromSchema = (schema: SchemaObject = {}): any => {
         }
       }
       return sampleResponseFromSchema(mergedSchemas);
+    }
+
+    if (oneOf) {
+      // Just go with first schema
+      return sampleResponseFromSchema(oneOf[0]);
+    }
+
+    if (anyOf) {
+      // Just go with first schema
+      return sampleResponseFromSchema(anyOf[0]);
     }
 
     if (!type) {

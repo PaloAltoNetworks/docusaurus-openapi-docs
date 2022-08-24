@@ -58,6 +58,8 @@ function sampleRequestFromProp(name: string, prop: any, obj: any): any {
     return obj;
   }
 
+  // TODO: handle discriminators
+
   if (prop.oneOf) {
     obj[name] = sampleRequestFromSchema(prop.oneOf[0]);
   } else if (prop.anyOf) {
@@ -75,10 +77,20 @@ function sampleRequestFromProp(name: string, prop: any, obj: any): any {
 
 export const sampleRequestFromSchema = (schema: SchemaObject = {}): any => {
   try {
-    let { type, example, allOf, properties, items } = schema;
+    let { type, example, allOf, properties, items, oneOf, anyOf } = schema;
 
     if (example !== undefined) {
       return example;
+    }
+
+    if (oneOf) {
+      // Just go with first schema
+      return sampleRequestFromSchema(oneOf[0]);
+    }
+
+    if (anyOf) {
+      // Just go with first schema
+      return sampleRequestFromSchema(anyOf[0]);
     }
 
     if (allOf) {
