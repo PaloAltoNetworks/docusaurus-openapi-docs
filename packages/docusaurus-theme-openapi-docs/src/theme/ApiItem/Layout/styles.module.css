@@ -73,6 +73,8 @@
 
 :global(.theme-api-markdown code) {
   max-width: 600px;
+  max-height: 500px;
+  overflow: auto;
 }
 
 @media (min-width: 997px) {
