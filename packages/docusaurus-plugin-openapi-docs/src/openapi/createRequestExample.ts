@@ -51,12 +51,46 @@ const primitives: Primitives = {
   array: {},
 };
 
-export const sampleFromSchema = (schema: SchemaObject = {}): any => {
+function sampleRequestFromProp(name: string, prop: any, obj: any): any {
+  // Handle resolved circular props
+  if (typeof prop === "object" && Object.keys(prop).length === 0) {
+    obj[name] = prop;
+    return obj;
+  }
+
+  // TODO: handle discriminators
+
+  if (prop.oneOf) {
+    obj[name] = sampleRequestFromSchema(prop.oneOf[0]);
+  } else if (prop.anyOf) {
+    obj[name] = sampleRequestFromSchema(prop.anyOf[0]);
+  } else if (prop.allOf) {
+    const { mergedSchemas }: { mergedSchemas: SchemaObject } = mergeAllOf(
+      prop.allOf
+    );
+    sampleRequestFromProp(name, mergedSchemas, obj);
+  } else {
+    obj[name] = sampleRequestFromSchema(prop);
+  }
+  return obj;
+}
+
+export const sampleRequestFromSchema = (schema: SchemaObject = {}): any => {
   try {
-    let { type, example, allOf, properties, items } = schema;
+    let { type, example, allOf, properties, items, oneOf, anyOf } = schema;
 
     if (example !== undefined) {
       return example;
+    }
+
+    if (oneOf) {
+      // Just go with first schema
+      return sampleRequestFromSchema(oneOf[0]);
+    }
+
+    if (anyOf) {
+      // Just go with first schema
+      return sampleRequestFromSchema(anyOf[0]);
     }
 
     if (allOf) {
@@ -69,7 +103,7 @@ export const sampleFromSchema = (schema: SchemaObject = {}): any => {
           }
         }
       }
-      return sampleFromSchema(mergedSchemas);
+      return sampleRequestFromSchema(mergedSchemas);
     }
 
     if (!type) {
@@ -104,21 +138,23 @@ export const sampleFromSchema = (schema: SchemaObject = {}): any => {
         if (prop.deprecated) {
           continue;
         }
-        obj[name] = sampleFromSchema(prop);
+
+        // Resolve schema from prop recursively
+        obj = sampleRequestFromProp(name, prop, obj);
       }
       return obj;
     }
 
     if (type === "array") {
       if (Array.isArray(items?.anyOf)) {
-        return items?.anyOf.map((item) => sampleFromSchema(item));
+        return items?.anyOf.map((item) => sampleRequestFromSchema(item));
       }
 
       if (Array.isArray(items?.oneOf)) {
-        return items?.oneOf.map((item) => sampleFromSchema(item));
+        return items?.oneOf.map((item) => sampleRequestFromSchema(item));
       }
 
-      return [sampleFromSchema(items)];
+      return [sampleRequestFromSchema(items)];
     }
 
     if (schema.enum) {
