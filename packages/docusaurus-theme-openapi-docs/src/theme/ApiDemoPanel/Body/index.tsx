@@ -8,6 +8,7 @@
 import React from "react";
 
 import { RequestBodyObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
+import format from "xml-formatter";
 
 import ContentType from "../ContentType";
 import FormSelect from "../FormSelect";
@@ -197,7 +198,15 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
 
   if (contentType === "application/xml") {
     if (jsonRequestBodyExample) {
-      exampleBodyString = json2xml(jsonRequestBodyExample);
+      try {
+        exampleBodyString = format(json2xml(jsonRequestBodyExample, ""), {
+          indentation: "  ",
+          lineSeparator: "\n",
+          collapseContent: true,
+        });
+      } catch {
+        exampleBodyString = json2xml(jsonRequestBodyExample);
+      }
     }
     language = "xml";
   }
