@@ -107,7 +107,18 @@ function createResponseHeaders(responseHeaders: any) {
   );
 }
 
-export function createResponseExamples(responseExamples: any) {
+export function createResponseExamples(
+  responseExamples: any,
+  mimeType: string
+) {
+  let language = "shell";
+  if (mimeType.endsWith("json")) {
+    language = "json";
+  }
+  if (mimeType.endsWith("xml")) {
+    language = "xml";
+  }
+
   return Object.entries(responseExamples).map(
     ([exampleName, exampleValue]: any) => {
       const camelToSpaceName = exampleName.replace(/([A-Z])/g, " $1");
@@ -121,7 +132,7 @@ export function createResponseExamples(responseExamples: any) {
           children: [
             create("ResponseSamples", {
               responseExample: JSON.stringify(exampleValue.value, null, 2),
-              language: "json",
+              language: language,
             }),
           ],
         });
@@ -132,7 +143,7 @@ export function createResponseExamples(responseExamples: any) {
         children: [
           create("ResponseSamples", {
             responseExample: exampleValue.value,
-            language: "shell",
+            language: language,
           }),
         ],
       });
@@ -140,7 +151,14 @@ export function createResponseExamples(responseExamples: any) {
   );
 }
 
-export function createResponseExample(responseExample: any) {
+export function createResponseExample(responseExample: any, mimeType: string) {
+  let language = "shell";
+  if (mimeType.endsWith("json")) {
+    language = "json";
+  }
+  if (mimeType.endsWith("xml")) {
+    language = "xml";
+  }
   if (typeof responseExample === "object") {
     return create("TabItem", {
       label: `Example`,
@@ -148,7 +166,7 @@ export function createResponseExample(responseExample: any) {
       children: [
         create("ResponseSamples", {
           responseExample: JSON.stringify(responseExample, null, 2),
-          language: "json",
+          language: language,
         }),
       ],
     });
@@ -159,7 +177,7 @@ export function createResponseExample(responseExample: any) {
     children: [
       create("ResponseSamples", {
         responseExample: responseExample,
-        language: "shell",
+        language: language,
       }),
     ],
   });

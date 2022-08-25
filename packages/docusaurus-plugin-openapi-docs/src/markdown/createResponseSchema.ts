@@ -805,8 +805,10 @@ export function createResponseSchema({ title, body, ...rest }: Props) {
                     ],
                   }),
                 firstBody && createExampleFromSchema(firstBody, mimeType),
-                responseExamples && createResponseExamples(responseExamples),
-                responseExample && createResponseExample(responseExample),
+                responseExamples &&
+                  createResponseExamples(responseExamples, mimeType),
+                responseExample &&
+                  createResponseExample(responseExample, mimeType),
               ],
             }),
           ],
