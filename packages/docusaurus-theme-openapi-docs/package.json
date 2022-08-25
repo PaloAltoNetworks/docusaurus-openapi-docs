@@ -59,7 +59,8 @@
     "react-markdown": "^8.0.1",
     "react-redux": "^7.2.0",
     "redux-devtools-extension": "^2.13.8",
-    "webpack": "^5.61.0"
+    "webpack": "^5.61.0",
+    "xml-formatter": "^2.6.1"
   },
   "peerDependencies": {
     "react": "^16.8.4 || ^17.0.0",
