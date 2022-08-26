@@ -22,7 +22,7 @@ const jsonSchemaMergeAllOf = require("json-schema-merge-allof");
 /**
  * Returns a merged representation of allOf array of schemas.
  */
-function mergeAllOf(allOf: SchemaObject[]) {
+export function mergeAllOf(allOf: SchemaObject[]) {
   const mergedSchemas = jsonSchemaMergeAllOf(allOf, {
     resolvers: {
       readOnly: function () {
@@ -32,6 +32,7 @@ function mergeAllOf(allOf: SchemaObject[]) {
         return true;
       },
     },
+    ignoreAdditionalProperties: true,
   });
 
   const required = allOf.reduce((acc, cur) => {
@@ -639,7 +640,6 @@ function createNodes(schema: SchemaObject): any {
 
   if (schema.allOf !== undefined) {
     const { mergedSchemas } = mergeAllOf(schema.allOf);
-
     // allOf seems to always result in properties
     if (mergedSchemas.properties !== undefined) {
       return createProperties(mergedSchemas);

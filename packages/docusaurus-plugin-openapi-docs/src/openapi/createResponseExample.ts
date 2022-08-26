@@ -7,7 +7,7 @@
 
 import chalk from "chalk";
 
-import { mergeAllOf } from "../markdown/createRequestSchema";
+import { mergeAllOf } from "../markdown/createResponseSchema";
 import { SchemaObject } from "./types";
 
 interface OASTypeToTypeMap {

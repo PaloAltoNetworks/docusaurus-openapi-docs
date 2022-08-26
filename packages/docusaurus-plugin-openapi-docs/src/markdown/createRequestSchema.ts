@@ -26,6 +26,7 @@ export function mergeAllOf(allOf: SchemaObject[]) {
       example: function () {
         return true;
       },
+      ignoreAdditionalProperties: true,
     },
   });
 
