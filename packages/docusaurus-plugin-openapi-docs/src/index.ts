@@ -392,7 +392,11 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
         )
         .usage("<id>")
         .arguments("<id>")
-        .action(async (id) => {
+        .action(async (command, instance, args) => {
+          if (!args || command !== "gen-api-docs") {
+            return;
+          }
+          const id = args[0];
           if (id === "all") {
             if (config[id]) {
               console.error(
@@ -412,7 +416,8 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
           } else {
             await generateApiDocs(config[id]);
           }
-        });
+        })
+        .parseAsync();
 
       cli
         .command(`gen-api-docs:version`)
@@ -421,7 +426,11 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
         )
         .usage("<id:version>")
         .arguments("<id:version>")
-        .action(async (id) => {
+        .action(async (command, instance, args) => {
+          if (!args || command !== "gen-api-docs:version") {
+            return;
+          }
+          const id = args[0];
           const [parentId, versionId] = id.split(":");
           const parentConfig = Object.assign({}, config[parentId]);
 
@@ -475,7 +484,8 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
             await generateVersions(mergedVersions, parentConfig.outputDir);
             await generateApiDocs(mergedConfig);
           }
-        });
+        })
+        .parseAsync();
 
       cli
         .command(`clean-api-docs`)
@@ -484,7 +494,11 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
         )
         .usage("<id>")
         .arguments("<id>")
-        .action(async (id) => {
+        .action(async (command, instance, args) => {
+          if (!args || command !== "clean-api-docs") {
+            return;
+          }
+          const id = args[0];
           if (id === "all") {
             if (config[id]) {
               console.error(
@@ -500,7 +514,8 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
           } else {
             await cleanApiDocs(config[id]);
           }
-        });
+        })
+        .parseAsync();
 
       cli
         .command(`clean-api-docs:version`)
@@ -509,7 +524,11 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
         )
         .usage("<id:version>")
         .arguments("<id:version>")
-        .action(async (id) => {
+        .action(async (command, instance, args) => {
+          if (!args || command !== "clean-api-docs:version") {
+            return;
+          }
+          const id = args[0];
           const [parentId, versionId] = id.split(":");
           const { versions } = config[parentId] as any;
 
@@ -540,7 +559,8 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
             };
             await cleanApiDocs(mergedConfig);
           }
-        });
+        })
+        .parseAsync();
     },
   };
 }
