@@ -135,7 +135,35 @@ const config = {
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
+        additionalLanguages: ["ruby", "csharp"],
       },
+      // languageTabs: [
+      //   {
+      //     tabName: "cURL",
+      //     highlight: "bash",
+      //     language: "curl",
+      //     codeLanguage: "bash",
+      //     variant: "curl",
+      //     options: {
+      //       longFormat: false,
+      //     },
+      //   },
+      //   {
+      //     tabName: "Python",
+      //     highlight: "python",
+      //     language: "python",
+      //     codeLanguage: "python",
+      //     variant: "requests",
+      //   },
+      //   {
+      //     tabName: "Ruby",
+      //     highlight: "ruby",
+      //     language: "ruby",
+      //     codeLanguage: "ruby",
+      //     variant: "Net::HTTP",
+      //     options: {},
+      //   },
+      // ],
     }),
 
   plugins: [
