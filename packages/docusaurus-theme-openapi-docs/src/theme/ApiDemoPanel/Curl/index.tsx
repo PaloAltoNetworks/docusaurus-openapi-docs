@@ -8,11 +8,10 @@
 import React, { useState, useEffect } from "react";
 
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import codegen from "@paloaltonetworks/postman-code-generators";
 import sdk from "@paloaltonetworks/postman-collection";
 import CodeBlock from "@theme/CodeBlock";
 import clsx from "clsx";
-// @ts-ignore
-import codegen from "postman-code-generators";
 
 import CodeTabs from "../CodeTabs";
 import { useTypedSelector } from "../hooks";
