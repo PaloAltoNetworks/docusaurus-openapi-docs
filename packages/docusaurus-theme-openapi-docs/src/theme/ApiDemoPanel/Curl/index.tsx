@@ -8,10 +8,11 @@
 import React, { useState, useEffect } from "react";
 
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
-import codegen from "@paloaltonetworks/postman-code-generators";
 import sdk from "@paloaltonetworks/postman-collection";
 import CodeBlock from "@theme/CodeBlock";
 import clsx from "clsx";
+// @ts-ignore
+import codegen from "postman-code-generators";
 
 import CodeTabs from "../CodeTabs";
 import { useTypedSelector } from "../hooks";
@@ -23,10 +24,27 @@ interface Language {
   highlight: string;
   language: string;
   codeLanguage?: string;
-  variant: string;
-  options: { [key: string]: boolean };
+  variant?: string;
+  options?: { [key: string]: boolean };
   source?: string;
 }
+
+let languages = codegen.getLanguageList();
+// eslint-disable-next-line array-callback-return
+languages.map((language: any) => {
+  language.variants.map((variant: { options: any; key: string }) => {
+    codegen.getOptions(
+      language.key,
+      variant.key,
+      function (error: any, options: any) {
+        if (error) {
+          console.error(error);
+        }
+        variant.options = options;
+      }
+    );
+  });
+});
 
 export const languageSet: Language[] = [
   {
@@ -74,6 +92,22 @@ export const languageSet: Language[] = [
       followRedirect: true,
       trimRequestBody: true,
     },
+  },
+  {
+    tabName: "Ruby",
+    highlight: "ruby",
+    language: "ruby",
+    codeLanguage: "ruby",
+    variant: "Net::HTTP",
+    options: {},
+  },
+  {
+    tabName: "C#",
+    highlight: "csharp",
+    language: "csharp",
+    codeLanguage: "csharp",
+    variant: "RestSharp",
+    options: {},
   },
 ];
 
