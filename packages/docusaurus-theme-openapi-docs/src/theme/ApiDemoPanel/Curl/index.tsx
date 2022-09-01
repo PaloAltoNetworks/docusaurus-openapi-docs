@@ -32,6 +32,7 @@ interface Language {
 let languages = codegen.getLanguageList();
 // eslint-disable-next-line array-callback-return
 languages.map((language: any) => {
+  // eslint-disable-next-line array-callback-return
   language.variants.map((variant: { options: any; key: string }) => {
     codegen.getOptions(
       language.key,
