@@ -139,29 +139,24 @@ const config = {
       },
       // languageTabs: [
       //   {
-      //     tabName: "cURL",
-      //     highlight: "bash",
-      //     language: "curl",
-      //     codeLanguage: "bash",
-      //     variant: "curl",
-      //     options: {
-      //       longFormat: false,
-      //     },
-      //   },
-      //   {
-      //     tabName: "Python",
       //     highlight: "python",
       //     language: "python",
-      //     codeLanguage: "python",
-      //     variant: "requests",
+      //     logoClass: "python",
       //   },
       //   {
-      //     tabName: "Ruby",
-      //     highlight: "ruby",
-      //     language: "ruby",
-      //     codeLanguage: "ruby",
-      //     variant: "Net::HTTP",
-      //     options: {},
+      //     highlight: "php",
+      //     language: "php",
+      //     logoClass: "php",
+      //   },
+      //   {
+      //     highlight: "csharp",
+      //     language: "csharp",
+      //     logoClass: "csharp",
+      //   },
+      //   {
+      //     highlight: "bash",
+      //     language: "curl",
+      //     logoClass: "bash",
       //   },
       // ],
     }),
