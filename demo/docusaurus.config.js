@@ -135,7 +135,7 @@ const config = {
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
-        additionalLanguages: ["ruby", "csharp"],
+        additionalLanguages: ["ruby", "csharp", "php"],
       },
       // languageTabs: [
       //   {

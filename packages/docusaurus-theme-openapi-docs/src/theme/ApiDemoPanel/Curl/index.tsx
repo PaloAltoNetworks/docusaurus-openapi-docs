@@ -20,95 +20,86 @@ import buildPostmanRequest from "./../buildPostmanRequest";
 import styles from "./styles.module.css";
 
 interface Language {
-  tabName: string;
-  highlight: string;
+  highlight?: string;
   language: string;
-  codeLanguage?: string;
+  logoClass?: string;
   variant?: string;
   options?: { [key: string]: boolean };
   source?: string;
 }
 
-let languages = codegen.getLanguageList();
-// eslint-disable-next-line array-callback-return
-languages.map((language: any) => {
-  // eslint-disable-next-line array-callback-return
-  language.variants.map((variant: { options: any; key: string }) => {
-    codegen.getOptions(
-      language.key,
-      variant.key,
-      function (error: any, options: any) {
-        if (error) {
-          console.error(error);
-        }
-        variant.options = options;
-      }
-    );
-  });
-});
-
 export const languageSet: Language[] = [
   {
-    tabName: "cURL",
     highlight: "bash",
     language: "curl",
-    codeLanguage: "bash",
-    variant: "curl",
+    logoClass: "bash",
     options: {
       longFormat: false,
       followRedirect: true,
       trimRequestBody: true,
     },
+    variant: "cURL",
   },
   {
-    tabName: "Python",
     highlight: "python",
     language: "python",
-    codeLanguage: "python",
-    variant: "requests",
+    logoClass: "python",
     options: {
       followRedirect: true,
       trimRequestBody: true,
     },
+    variant: "requests",
   },
   {
-    tabName: "Go",
     highlight: "go",
     language: "go",
-    codeLanguage: "go",
-    variant: "native",
+    logoClass: "go",
     options: {
       followRedirect: true,
       trimRequestBody: true,
     },
+    variant: "native",
   },
   {
-    tabName: "Node",
     highlight: "javascript",
     language: "nodejs",
-    codeLanguage: "javascript",
-    variant: "axios",
+    logoClass: "nodejs",
     options: {
       ES6_enabled: true,
       followRedirect: true,
       trimRequestBody: true,
     },
+    variant: "axios",
   },
   {
-    tabName: "Ruby",
     highlight: "ruby",
     language: "ruby",
-    codeLanguage: "ruby",
+    logoClass: "ruby",
+    options: {
+      followRedirect: true,
+      trimRequestBody: true,
+    },
     variant: "Net::HTTP",
-    options: {},
   },
   {
-    tabName: "C#",
     highlight: "csharp",
     language: "csharp",
-    codeLanguage: "csharp",
+    logoClass: "csharp",
+    options: {
+      followRedirect: true,
+      trimRequestBody: true,
+    },
     variant: "RestSharp",
-    options: {},
+  },
+  {
+    highlight: "php",
+    language: "php",
+    logoClass: "php",
+    options: {
+      followRedirect: true,
+      trimRequestBody: true,
+    },
+    variant: "cURL",
   },
 ];
 
@@ -155,7 +146,7 @@ function Curl({ postman, codeSamples }: Props) {
 
   const defaultLang: Language[] = languageSet.filter(
     (lang) =>
-      lang.codeLanguage === localStorage.getItem("docusaurus.tab.code-samples")
+      lang.language === localStorage.getItem("docusaurus.tab.code-samples")
   );
 
   const [language, setLanguage] = useState(defaultLang[0] ?? langs[0]);
@@ -219,10 +210,14 @@ function Curl({ postman, codeSamples }: Props) {
             <CodeTab
               value={lang.language}
               label={""}
-              key={lang.tabName || lang.label}
-              attributes={{ className: `code__tab--${lang.codeLanguage}` }}
+              key={
+                lang.variant
+                  ? `${lang.language}-${lang.variant}`
+                  : lang.language
+              }
+              attributes={{ className: `code__tab--${lang.logoClass}` }}
             >
-              <CodeBlock language={lang.codeLanguage}>{codeText}</CodeBlock>
+              <CodeBlock language={lang.highlight}>{codeText}</CodeBlock>
             </CodeTab>
           );
         })}
