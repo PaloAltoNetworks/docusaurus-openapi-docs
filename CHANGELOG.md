@@ -1,3 +1,13 @@
+## 1.1.10 (Sep 2, 2022)
+
+High level enhancements
+
+- Improve CodeTabs and languageTabs support.
+
+Other enhancements and bug fixes
+
+- [Enhancement] Expand supported CodeTab languages ([#235](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/235))
+
 ## 1.1.9 (Aug 30, 2022)
 
 High level enhancements
