@@ -148,7 +148,12 @@ function Curl({ postman, codeSamples }: Props) {
       lang.language === localStorage.getItem("docusaurus.tab.code-samples")
   );
 
-  const [language, setLanguage] = useState(defaultLang[0] ?? langs[0]);
+  const [language, setLanguage] = useState(() => {
+    if (langs.length === 1) {
+      return langs[0];
+    }
+    return defaultLang[0] ?? langs[0];
+  });
 
   const [codeText, setCodeText] = useState("");
 
@@ -180,6 +185,39 @@ function Curl({ postman, codeSamples }: Props) {
       );
     } else if (language && !!language.source) {
       setCodeText(language.source);
+    } else if (language && !language.options) {
+      const langSource = languageSet.filter(
+        (lang) => lang.language === language.language
+      );
+
+      // Merges user-defined language with default languageSet
+      // This allows users to define only the minimal properties necessary in languageTabs
+      // User-defined properties should override languageSet properties
+      const mergedLanguage = { ...langSource[0], ...language };
+      const postmanRequest = buildPostmanRequest(postman, {
+        queryParams,
+        pathParams,
+        cookieParams,
+        contentType,
+        accept,
+        headerParams,
+        body,
+        server,
+        auth,
+      });
+
+      codegen.convert(
+        mergedLanguage.language,
+        mergedLanguage.variant,
+        postmanRequest,
+        mergedLanguage.options,
+        (error: any, snippet: string) => {
+          if (error) {
+            return;
+          }
+          setCodeText(snippet);
+        }
+      );
     } else {
       setCodeText("");
     }
