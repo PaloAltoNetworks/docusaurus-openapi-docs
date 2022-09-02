@@ -161,18 +161,20 @@
   padding-left: 2px;
 }
 
+/* CodeTabs */
+
 :global(.code__tab--python::after) {
   content: "";
-  width: 32px;
-  height: 32px;
-  background: url(./icons/python-original.svg);
+  width: 28px;
+  height: 28px;
+  background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg");
   margin-block: auto;
 }
 
 :global(.code__tab--python) {
   color: var(--ifm-color-success);
-  padding-left: 2rem;
-  padding-right: 2rem;
+  padding-left: 1.4rem;
+  padding-right: 1.4rem;
 }
 
 :global(.code__tab--python.tabs__item--active) {
@@ -187,16 +189,16 @@
 
 :global(.code__tab--go::after) {
   content: "";
-  width: 32px;
-  height: 32px;
-  background: url(./icons/go-original-wordmark.svg);
+  width: 28px;
+  height: 28px;
+  background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/go/go-original-wordmark.svg");
   margin-block: auto;
 }
 
 :global(.code__tab--go) {
   color: var(--ifm-color-info);
-  padding-left: 2rem;
-  padding-right: 2rem;
+  padding-left: 1.4rem;
+  padding-right: 1.4rem;
 }
 
 :global(.code__tab--go.tabs__item--active) {
@@ -211,16 +213,16 @@
 
 :global(.code__tab--javascript::after) {
   content: "";
-  width: 32px;
-  height: 32px;
-  background: url(./icons/javascript-original.svg);
+  width: 28px;
+  height: 28px;
+  background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg");
   margin-block: auto;
 }
 
 :global(.code__tab--javascript) {
   color: var(--ifm-color-warning);
-  padding-left: 2rem;
-  padding-right: 2rem;
+  padding-left: 1.4rem;
+  padding-right: 1.4rem;
 }
 
 :global(.code__tab--javascript.tabs__item--active) {
@@ -235,16 +237,16 @@
 
 :global(.code__tab--bash::after) {
   content: "";
-  width: 32px;
-  height: 32px;
-  background: url(./icons/linux-original.svg);
+  width: 28px;
+  height: 28px;
+  background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg");
   margin-block: auto;
 }
 
 :global(.code__tab--bash) {
   color: var(--ifm-color-danger);
-  padding-left: 2rem;
-  padding-right: 2rem;
+  padding-left: 1.4rem;
+  padding-right: 1.4rem;
 }
 
 :global(.code__tab--bash.tabs__item--active) {
@@ -253,6 +255,102 @@
 }
 
 :global(.language-bash) {
+  max-height: 500px;
+  overflow: auto;
+}
+
+:global(.code__tab--ruby::after) {
+  content: "";
+  width: 28px;
+  height: 28px;
+  background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/ruby/ruby-plain.svg");
+  margin-block: auto;
+}
+
+:global(.code__tab--ruby) {
+  color: var(--ifm-color-danger);
+  padding-left: 1.4rem;
+  padding-right: 1.4rem;
+}
+
+:global(.code__tab--ruby.tabs__item--active) {
+  border-bottom-color: var(--ifm-color-danger);
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+:global(.language-ruby) {
+  max-height: 500px;
+  overflow: auto;
+}
+
+:global(.code__tab--csharp::after) {
+  content: "";
+  width: 28px;
+  height: 28px;
+  background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/csharp/csharp-original.svg");
+  margin-block: auto;
+}
+
+:global(.code__tab--csharp) {
+  color: var(--ifm-color-gray-500);
+  padding-left: 1.4rem;
+  padding-right: 1.4rem;
+}
+
+:global(.code__tab--csharp.tabs__item--active) {
+  border-bottom-color: var(--ifm-color-gray-500);
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+:global(.language-csharp) {
+  max-height: 500px;
+  overflow: auto;
+}
+
+:global(.code__tab--nodejs::after) {
+  content: "";
+  width: 28px;
+  height: 28px;
+  background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/nodejs/nodejs-original.svg");
+  margin-block: auto;
+}
+
+:global(.code__tab--nodejs) {
+  color: var(--ifm-color-success);
+  padding-left: 1.4rem;
+  padding-right: 1.4rem;
+}
+
+:global(.code__tab--nodejs.tabs__item--active) {
+  border-bottom-color: var(--ifm-color-success);
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+:global(.language-nodejs) {
+  max-height: 500px;
+  overflow: auto;
+}
+
+:global(.code__tab--php::after) {
+  content: "";
+  width: 28px;
+  height: 28px;
+  background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/php/php-original.svg");
+  margin-block: auto;
+}
+
+:global(.code__tab--php) {
+  color: var(--ifm-color-gray-500);
+  padding-left: 1.4rem;
+  padding-right: 1.4rem;
+}
+
+:global(.code__tab--php.tabs__item--active) {
+  border-bottom-color: var(--ifm-color-gray-500);
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+:global(.language-php) {
   max-height: 500px;
   overflow: auto;
 }

@@ -19,61 +19,86 @@ import buildPostmanRequest from "./../buildPostmanRequest";
 import styles from "./styles.module.css";
 
 interface Language {
-  tabName: string;
-  highlight: string;
+  highlight?: string;
   language: string;
-  codeLanguage?: string;
-  variant: string;
-  options: { [key: string]: boolean };
+  logoClass?: string;
+  variant?: string;
+  options?: { [key: string]: boolean };
   source?: string;
 }
 
 export const languageSet: Language[] = [
   {
-    tabName: "cURL",
     highlight: "bash",
     language: "curl",
-    codeLanguage: "bash",
-    variant: "curl",
+    logoClass: "bash",
     options: {
       longFormat: false,
       followRedirect: true,
       trimRequestBody: true,
     },
+    variant: "cURL",
   },
   {
-    tabName: "Python",
     highlight: "python",
     language: "python",
-    codeLanguage: "python",
-    variant: "requests",
+    logoClass: "python",
     options: {
       followRedirect: true,
       trimRequestBody: true,
     },
+    variant: "requests",
   },
   {
-    tabName: "Go",
     highlight: "go",
     language: "go",
-    codeLanguage: "go",
-    variant: "native",
+    logoClass: "go",
     options: {
       followRedirect: true,
       trimRequestBody: true,
     },
+    variant: "native",
   },
   {
-    tabName: "Node",
     highlight: "javascript",
     language: "nodejs",
-    codeLanguage: "javascript",
-    variant: "axios",
+    logoClass: "nodejs",
     options: {
       ES6_enabled: true,
       followRedirect: true,
       trimRequestBody: true,
     },
+    variant: "axios",
+  },
+  {
+    highlight: "ruby",
+    language: "ruby",
+    logoClass: "ruby",
+    options: {
+      followRedirect: true,
+      trimRequestBody: true,
+    },
+    variant: "Net::HTTP",
+  },
+  {
+    highlight: "csharp",
+    language: "csharp",
+    logoClass: "csharp",
+    options: {
+      followRedirect: true,
+      trimRequestBody: true,
+    },
+    variant: "RestSharp",
+  },
+  {
+    highlight: "php",
+    language: "php",
+    logoClass: "php",
+    options: {
+      followRedirect: true,
+      trimRequestBody: true,
+    },
+    variant: "cURL",
   },
 ];
 
@@ -120,10 +145,15 @@ function Curl({ postman, codeSamples }: Props) {
 
   const defaultLang: Language[] = languageSet.filter(
     (lang) =>
-      lang.codeLanguage === localStorage.getItem("docusaurus.tab.code-samples")
+      lang.language === localStorage.getItem("docusaurus.tab.code-samples")
   );
 
-  const [language, setLanguage] = useState(defaultLang[0] ?? langs[0]);
+  const [language, setLanguage] = useState(() => {
+    if (langs.length === 1) {
+      return langs[0];
+    }
+    return defaultLang[0] ?? langs[0];
+  });
 
   const [codeText, setCodeText] = useState("");
 
@@ -155,6 +185,39 @@ function Curl({ postman, codeSamples }: Props) {
       );
     } else if (language && !!language.source) {
       setCodeText(language.source);
+    } else if (language && !language.options) {
+      const langSource = languageSet.filter(
+        (lang) => lang.language === language.language
+      );
+
+      // Merges user-defined language with default languageSet
+      // This allows users to define only the minimal properties necessary in languageTabs
+      // User-defined properties should override languageSet properties
+      const mergedLanguage = { ...langSource[0], ...language };
+      const postmanRequest = buildPostmanRequest(postman, {
+        queryParams,
+        pathParams,
+        cookieParams,
+        contentType,
+        accept,
+        headerParams,
+        body,
+        server,
+        auth,
+      });
+
+      codegen.convert(
+        mergedLanguage.language,
+        mergedLanguage.variant,
+        postmanRequest,
+        mergedLanguage.options,
+        (error: any, snippet: string) => {
+          if (error) {
+            return;
+          }
+          setCodeText(snippet);
+        }
+      );
     } else {
       setCodeText("");
     }
@@ -184,10 +247,14 @@ function Curl({ postman, codeSamples }: Props) {
             <CodeTab
               value={lang.language}
               label={""}
-              key={lang.tabName || lang.label}
-              attributes={{ className: `code__tab--${lang.codeLanguage}` }}
+              key={
+                lang.variant
+                  ? `${lang.language}-${lang.variant}`
+                  : lang.language
+              }
+              attributes={{ className: `code__tab--${lang.logoClass}` }}
             >
-              <CodeBlock language={lang.codeLanguage}>{codeText}</CodeBlock>
+              <CodeBlock language={lang.highlight}>{codeText}</CodeBlock>
             </CodeTab>
           );
         })}
