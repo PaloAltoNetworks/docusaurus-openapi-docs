@@ -393,7 +393,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
         .usage("<id>")
         .arguments("<id>")
         .action(async (command, instance, args) => {
-          if (!args || command !== "gen-api-docs") {
+          if (command !== "gen-api-docs") {
             return;
           }
           const id = args[0];
@@ -427,7 +427,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
         .usage("<id:version>")
         .arguments("<id:version>")
         .action(async (command, instance, args) => {
-          if (!args || command !== "gen-api-docs:version") {
+          if (command !== "gen-api-docs:version") {
             return;
           }
           const id = args[0];
@@ -495,7 +495,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
         .usage("<id>")
         .arguments("<id>")
         .action(async (command, instance, args) => {
-          if (!args || command !== "clean-api-docs") {
+          if (command !== "clean-api-docs") {
             return;
           }
           const id = args[0];
@@ -525,7 +525,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
         .usage("<id:version>")
         .arguments("<id:version>")
         .action(async (command, instance, args) => {
-          if (!args || command !== "clean-api-docs:version") {
+          if (command !== "clean-api-docs:version") {
             return;
           }
           const id = args[0];
