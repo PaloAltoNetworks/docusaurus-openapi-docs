@@ -160,9 +160,7 @@ info_path: {{{infoPath}}}
 {{{markdown}}}
       `;
 
-      const infoMdTemplate = template
-        ? fs.readFileSync(template).toString()
-        : `---
+      const infoMdTemplate = `---
 id: {{{id}}}
 sidebar_label: {{{title}}}
 hide_title: true
@@ -178,9 +176,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
 \`\`\`
       `;
 
-      const tagMdTemplate = template
-        ? fs.readFileSync(template).toString()
-        : `---
+      const tagMdTemplate = `---
 id: {{{id}}}
 title: {{{description}}}
 description: {{{description}}}
