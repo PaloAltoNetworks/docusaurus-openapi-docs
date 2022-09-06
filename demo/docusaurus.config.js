@@ -25,7 +25,7 @@ const config = {
           routeBasePath: "/",
           sidebarPath: require.resolve("./sidebars.js"),
           editUrl:
-            "https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/demo",
+            "https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/tree/main/demo",
           docLayoutComponent: "@theme/DocPage",
           docItemComponent: "@theme/ApiItem", // Derived from docusaurus-theme-openapi
         },
