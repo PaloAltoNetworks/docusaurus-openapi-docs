@@ -164,6 +164,7 @@ info_path: {{{infoPath}}}
 id: {{{id}}}
 sidebar_label: {{{title}}}
 hide_title: true
+custom_edit_url: null
 ---
 
 {{{markdown}}}
@@ -180,6 +181,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
 id: {{{id}}}
 title: {{{description}}}
 description: {{{description}}}
+custom_edit_url: null
 ---
 
 {{{markdown}}}
