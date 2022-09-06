@@ -209,6 +209,7 @@ const config = {
               groupPathsBy: "tag",
               categoryLinkSource: "tag",
             },
+            template: "api.mustache", // Customize API MDX with mustache template
           },
           cos: {
             specPath: "examples/openapi-cos.json",
