@@ -108,9 +108,7 @@ export default function pluginOpenAPIDocs(
           docPath
         );
 
-        const sidebarSliceTemplate = template
-          ? fs.readFileSync(template).toString()
-          : `module.exports = {{{slice}}};`;
+        const sidebarSliceTemplate = `module.exports = {{{slice}}};`;
 
         const view = render(sidebarSliceTemplate, {
           slice: JSON.stringify(sidebarSlice),
