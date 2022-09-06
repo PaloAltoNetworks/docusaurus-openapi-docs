@@ -88,6 +88,7 @@ Here is an example of properly configuring your `docusaurus.config.js` file for 
 ],
 
   plugins: [
+    [
       'docusaurus-plugin-openapi-docs',
       {
         id: "apiDocs",
