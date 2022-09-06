@@ -23,35 +23,37 @@ export function isURL(str: string): boolean {
   return /^(https?:)\/\//m.test(str);
 }
 
-export function getDocsData(
-  dataArray: any[],
-  filter: string
+export function getDocsPluginConfig(
+  presetsPlugins: any[],
+  pluginId: string
 ): Object | undefined {
   // eslint-disable-next-line array-callback-return
-  const filteredData = dataArray.filter((data) => {
-    if (data[0] === filter) {
+  const filteredConfig = presetsPlugins.filter((data) => {
+    if (data[0] === pluginId) {
       return data[1];
     }
 
     // Search plugin-content-docs instances
     if (data[0] === "@docusaurus/plugin-content-docs") {
-      const pluginId = data[1].id ? data[1].id : "default";
-      if (pluginId === filter) {
+      const configPluginId = data[1].id ? data[1].id : "default";
+      if (configPluginId === pluginId) {
         return data[1];
       }
     }
   })[0];
-  if (filteredData) {
+  if (filteredConfig) {
     // Search presets, e.g. "classic"
-    if (filteredData[0] === filter) {
-      return filteredData[1].docs;
+    if (filteredConfig[0] === pluginId) {
+      return filteredConfig[1].docs;
     }
 
     // Search plugin-content-docs instances
-    if (filteredData[0] === "@docusaurus/plugin-content-docs") {
-      const pluginId = filteredData[1].id ? filteredData[1].id : "default";
-      if (pluginId === filter) {
-        return filteredData[1];
+    if (filteredConfig[0] === "@docusaurus/plugin-content-docs") {
+      const configPluginId = filteredConfig[1].id
+        ? filteredConfig[1].id
+        : "default";
+      if (configPluginId === pluginId) {
+        return filteredConfig[1];
       }
     }
   }
@@ -73,7 +75,7 @@ export default function pluginOpenAPIDocs(
   const presets: any = siteConfig.presets;
   const plugins: any = siteConfig.plugins;
   const presetsPlugins = presets.concat(plugins);
-  const docData: any = getDocsData(presetsPlugins, docsPluginId);
+  const docData: any = getDocsPluginConfig(presetsPlugins, docsPluginId);
   const docRouteBasePath = docData ? docData.routeBasePath : undefined;
   const docPath = docData ? (docData.path ? docData.path : "docs") : undefined;
 
