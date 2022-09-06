@@ -58,6 +58,10 @@ export function getDocsData(
   return;
 }
 
+function getPluginConfig(plugins: any[], pluginId: string): any {
+  return plugins.filter((data) => data[1].id === pluginId)[0][1];
+}
+
 export default function pluginOpenAPIDocs(
   context: LoadContext,
   options: PluginOptions
@@ -388,25 +392,36 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
         )
         .usage("<id>")
         .arguments("<id>")
-        .action(async (id) => {
+        .option("-p, --plugin-id <plugin>", "OpenAPI docs plugin ID")
+        .action(async (id, instance) => {
+          const options = instance.opts();
+          const pluginId = options.pluginId;
+          let targetConfig: any;
+          if (pluginId) {
+            const pluginConfig = getPluginConfig(plugins, pluginId);
+            targetConfig = pluginConfig.config ?? {};
+          } else {
+            targetConfig = config;
+          }
+
           if (id === "all") {
-            if (config[id]) {
+            if (targetConfig[id]) {
               console.error(
                 chalk.red(
                   "Can't use id 'all' for OpenAPI docs configuration key."
                 )
               );
             } else {
-              Object.keys(config).forEach(async function (key) {
-                await generateApiDocs(config[key]);
+              Object.keys(targetConfig).forEach(async function (key) {
+                await generateApiDocs(targetConfig[key]);
               });
             }
-          } else if (!config[id]) {
+          } else if (!targetConfig[id]) {
             console.error(
               chalk.red(`ID '${id}' does not exist in OpenAPI docs config.`)
             );
           } else {
-            await generateApiDocs(config[id]);
+            await generateApiDocs(targetConfig[id]);
           }
         });
 
@@ -417,9 +432,19 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
         )
         .usage("<id:version>")
         .arguments("<id:version>")
-        .action(async (id) => {
+        .option("-p, --plugin-id <plugin>", "OpenAPI docs plugin ID")
+        .action(async (id, instance) => {
+          const options = instance.opts();
+          const pluginId = options.pluginId;
+          let targetConfig: any;
+          if (pluginId) {
+            const pluginConfig = getPluginConfig(plugins, pluginId);
+            targetConfig = pluginConfig.config ?? {};
+          } else {
+            targetConfig = config;
+          }
           const [parentId, versionId] = id.split(":");
-          const parentConfig = Object.assign({}, config[parentId]);
+          const parentConfig = Object.assign({}, targetConfig[parentId]);
 
           const version = parentConfig.version as string;
           const label = parentConfig.label as string;
@@ -428,7 +453,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
           let parentVersion = {} as any;
           parentVersion[version] = { label: label, baseUrl: baseUrl };
 
-          const { versions } = config[parentId] as any;
+          const { versions } = targetConfig[parentId] as any;
           const mergedVersions = Object.assign(parentVersion, versions);
 
           // Prepare for merge
@@ -480,21 +505,31 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
         )
         .usage("<id>")
         .arguments("<id>")
-        .action(async (id) => {
+        .option("-p, --plugin-id <plugin>", "OpenAPI docs plugin ID")
+        .action(async (id, instance) => {
+          const options = instance.opts();
+          const pluginId = options.pluginId;
+          let targetConfig: any;
+          if (pluginId) {
+            const pluginConfig = getPluginConfig(plugins, pluginId);
+            targetConfig = pluginConfig.config ?? {};
+          } else {
+            targetConfig = config;
+          }
           if (id === "all") {
-            if (config[id]) {
+            if (targetConfig[id]) {
               console.error(
                 chalk.red(
                   "Can't use id 'all' for OpenAPI docs configuration key."
                 )
               );
             } else {
-              Object.keys(config).forEach(async function (key) {
-                await cleanApiDocs(config[key]);
+              Object.keys(targetConfig).forEach(async function (key) {
+                await cleanApiDocs(targetConfig[key]);
               });
             }
           } else {
-            await cleanApiDocs(config[id]);
+            await cleanApiDocs(targetConfig[id]);
           }
         });
 
@@ -505,11 +540,21 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
         )
         .usage("<id:version>")
         .arguments("<id:version>")
-        .action(async (id) => {
+        .option("-p, --plugin-id <plugin>", "OpenAPI docs plugin ID")
+        .action(async (id, instance) => {
+          const options = instance.opts();
+          const pluginId = options.pluginId;
+          let targetConfig: any;
+          if (pluginId) {
+            const pluginConfig = getPluginConfig(plugins, pluginId);
+            targetConfig = pluginConfig.config ?? {};
+          } else {
+            targetConfig = config;
+          }
           const [parentId, versionId] = id.split(":");
-          const { versions } = config[parentId] as any;
+          const { versions } = targetConfig[parentId] as any;
 
-          const parentConfig = Object.assign({}, config[parentId]);
+          const parentConfig = Object.assign({}, targetConfig[parentId]);
           delete parentConfig.versions;
 
           if (versionId === "all") {
