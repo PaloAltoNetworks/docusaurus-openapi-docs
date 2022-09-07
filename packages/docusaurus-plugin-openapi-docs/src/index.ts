@@ -421,6 +421,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
                   "OpenAPI docs plugin ID must be specified when more than one plugin instance exists."
                 )
               );
+              return;
             }
             targetConfig = config;
           }
@@ -476,6 +477,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
                   "OpenAPI docs plugin ID must be specified when more than one plugin instance exists."
                 )
               );
+              return;
             }
             targetConfig = config;
           }
@@ -564,6 +566,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
                   "OpenAPI docs plugin ID must be specified when more than one plugin instance exists."
                 )
               );
+              return;
             }
             targetConfig = config;
           }
@@ -614,6 +617,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
                   "OpenAPI docs plugin ID must be specified when more than one plugin instance exists."
                 )
               );
+              return;
             }
             targetConfig = config;
           }
