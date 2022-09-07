@@ -64,6 +64,10 @@ function getPluginConfig(plugins: any[], pluginId: string): any {
   return plugins.filter((data) => data[1].id === pluginId)[0][1];
 }
 
+function getPluginInstances(plugins: any[]): any {
+  return plugins.filter((data) => data[0] === "docusaurus-plugin-openapi-docs");
+}
+
 export default function pluginOpenAPIDocs(
   context: LoadContext,
   options: PluginOptions
@@ -394,15 +398,23 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
         )
         .usage("<id>")
         .arguments("<id>")
-        .option("-p, --plugin-id <plugin>", "OpenAPI docs plugin ID")
+        .option("-p, --plugin-id <plugin>", "OpenAPI docs plugin ID.")
         .action(async (id, instance) => {
           const options = instance.opts();
           const pluginId = options.pluginId;
+          const pluginInstances = getPluginInstances(plugins);
           let targetConfig: any;
           if (pluginId) {
             const pluginConfig = getPluginConfig(plugins, pluginId);
             targetConfig = pluginConfig.config ?? {};
           } else {
+            if (pluginInstances.length > 1) {
+              console.error(
+                chalk.red(
+                  "OpenAPI plugin ID must be specified when more than one plugin instance exists."
+                )
+              );
+            }
             targetConfig = config;
           }
 
@@ -434,15 +446,23 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
         )
         .usage("<id:version>")
         .arguments("<id:version>")
-        .option("-p, --plugin-id <plugin>", "OpenAPI docs plugin ID")
+        .option("-p, --plugin-id <plugin>", "OpenAPI docs plugin ID.")
         .action(async (id, instance) => {
           const options = instance.opts();
           const pluginId = options.pluginId;
+          const pluginInstances = getPluginInstances(plugins);
           let targetConfig: any;
           if (pluginId) {
             const pluginConfig = getPluginConfig(plugins, pluginId);
             targetConfig = pluginConfig.config ?? {};
           } else {
+            if (pluginInstances.length > 1) {
+              console.error(
+                chalk.red(
+                  "OpenAPI plugin ID must be specified when more than one plugin instance exists."
+                )
+              );
+            }
             targetConfig = config;
           }
           const [parentId, versionId] = id.split(":");
@@ -507,15 +527,23 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
         )
         .usage("<id>")
         .arguments("<id>")
-        .option("-p, --plugin-id <plugin>", "OpenAPI docs plugin ID")
+        .option("-p, --plugin-id <plugin>", "OpenAPI docs plugin ID.")
         .action(async (id, instance) => {
           const options = instance.opts();
           const pluginId = options.pluginId;
+          const pluginInstances = getPluginInstances(plugins);
           let targetConfig: any;
           if (pluginId) {
             const pluginConfig = getPluginConfig(plugins, pluginId);
             targetConfig = pluginConfig.config ?? {};
           } else {
+            if (pluginInstances.length > 1) {
+              console.error(
+                chalk.red(
+                  "OpenAPI plugin ID must be specified when more than one plugin instance exists."
+                )
+              );
+            }
             targetConfig = config;
           }
           if (id === "all") {
@@ -542,15 +570,23 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
         )
         .usage("<id:version>")
         .arguments("<id:version>")
-        .option("-p, --plugin-id <plugin>", "OpenAPI docs plugin ID")
+        .option("-p, --plugin-id <plugin>", "OpenAPI docs plugin ID.")
         .action(async (id, instance) => {
           const options = instance.opts();
           const pluginId = options.pluginId;
+          const pluginInstances = getPluginInstances(plugins);
           let targetConfig: any;
           if (pluginId) {
             const pluginConfig = getPluginConfig(plugins, pluginId);
             targetConfig = pluginConfig.config ?? {};
           } else {
+            if (pluginInstances.length > 1) {
+              console.error(
+                chalk.red(
+                  "OpenAPI plugin ID must be specified when more than one plugin instance exists."
+                )
+              );
+            }
             targetConfig = config;
           }
           const [parentId, versionId] = id.split(":");
