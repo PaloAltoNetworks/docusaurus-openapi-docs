@@ -118,7 +118,6 @@ export function createResponseExamples(
   if (mimeType.endsWith("xml")) {
     language = "xml";
   }
-
   return Object.entries(responseExamples).map(
     ([exampleName, exampleValue]: any) => {
       const camelToSpaceName = exampleName.replace(/([A-Z])/g, " $1");

@@ -25,7 +25,7 @@ const config = {
           routeBasePath: "/",
           sidebarPath: require.resolve("./sidebars.js"),
           editUrl:
-            "https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/demo",
+            "https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/tree/main/demo",
           docLayoutComponent: "@theme/DocPage",
           docItemComponent: "@theme/ApiItem", // Derived from docusaurus-theme-openapi
         },
@@ -135,7 +135,45 @@ const config = {
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
+        additionalLanguages: ["ruby", "csharp", "php"],
       },
+      languageTabs: [
+        {
+          highlight: "bash",
+          language: "curl",
+          logoClass: "bash",
+        },
+        {
+          highlight: "python",
+          language: "python",
+          logoClass: "python",
+        },
+        {
+          highlight: "go",
+          language: "go",
+          logoClass: "go",
+        },
+        {
+          highlight: "javascript",
+          language: "nodejs",
+          logoClass: "nodejs",
+        },
+        // {
+        //   highlight: "ruby",
+        //   language: "ruby",
+        //   logoClass: "ruby",
+        // },
+        {
+          highlight: "csharp",
+          language: "csharp",
+          logoClass: "csharp",
+        },
+        // {
+        //   highlight: "php",
+        //   language: "php",
+        //   logoClass: "php",
+        // },
+      ],
     }),
 
   plugins: [
@@ -171,6 +209,7 @@ const config = {
               groupPathsBy: "tag",
               categoryLinkSource: "tag",
             },
+            template: "api.mustache", // Customize API MDX with mustache template
           },
           panos: {
             specPath: "examples/panos-rest-api.yaml",

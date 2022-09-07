@@ -1,3 +1,26 @@
+## 1.1.10 (Sep 2, 2022)
+
+High level enhancements
+
+- Improve CodeTabs and languageTabs support.
+
+Other enhancements and bug fixes
+
+- [Enhancement] Expand supported CodeTab languages ([#235](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/235))
+
+## 1.1.9 (Aug 30, 2022)
+
+High level enhancements
+
+- Introduced PWA support to demo/doc site.
+- Improvements to how request/response schemas used to create examples.
+
+Other enhancements and bug fixes
+
+- [Bug] Ignore additional props in mergeAllOf ([#228](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/228))
+- [Bug] Various fixes to how request and response schemas are handled ([#224](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/224))
+- [Experimental] Introduce PWA support ([#216](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/216))
+
 ## 1.1.8 (Aug 17, 2022)
 
 High level enhancements

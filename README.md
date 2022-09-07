@@ -60,34 +60,35 @@ Here is an example of properly configuring your `docusaurus.config.js` file for 
 
 {
   presets: [
-  [
-    "classic",
-    /** @type {import('@docusaurus/preset-classic').Options} */
-    ({
-      docs: {
-        sidebarPath: require.resolve("./sidebars.js"),
-        // Please change this to your repo.
-        // Remove this to remove the "edit this page" links.
-        editUrl:
-          "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
-        docLayoutComponent: "@theme/DocPage",
-        docItemComponent: "@theme/ApiItem" // Derived from docusaurus-theme-openapi-docs
-      },
-      blog: {
-        showReadingTime: true,
-        // Please change this to your repo.
-        // Remove this to remove the "edit this page" links.
-        editUrl:
-          "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/"
-      },
-      theme: {
-        customCss: require.resolve("./src/css/custom.css")
-      }
-    })
-  ]
-],
+    [
+      "classic",
+      /** @type {import('@docusaurus/preset-classic').Options} */
+      ({
+        docs: {
+          sidebarPath: require.resolve("./sidebars.js"),
+          // Please change this to your repo.
+          // Remove this to remove the "edit this page" links.
+          editUrl:
+            "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
+          docLayoutComponent: "@theme/DocPage",
+          docItemComponent: "@theme/ApiItem" // Derived from docusaurus-theme-openapi-docs
+        },
+        blog: {
+          showReadingTime: true,
+          // Please change this to your repo.
+          // Remove this to remove the "edit this page" links.
+          editUrl:
+            "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/"
+        },
+        theme: {
+          customCss: require.resolve("./src/css/custom.css")
+        }
+      })
+    ]
+  ],
 
   plugins: [
+    [
       'docusaurus-plugin-openapi-docs',
       {
         id: "apiDocs",
@@ -108,7 +109,7 @@ Here is an example of properly configuring your `docusaurus.config.js` file for 
       },
     ]
   ],
-  themes: ["docusaurus-theme-openapi-docs"] // Allows use of @theme/ApiItem and other components
+  themes: ["docusaurus-theme-openapi-docs"], // Allows use of @theme/ApiItem and other components
 }
 ```
 
