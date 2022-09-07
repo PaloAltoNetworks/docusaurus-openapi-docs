@@ -230,24 +230,6 @@ const config = {
       },
     ],
     [
-      "docusaurus-plugin-openapi-docs",
-      {
-        id: "openapi2",
-        docsPluginId: "classic",
-        config: {
-          petstore: {
-            specPath: "examples/petstore.yaml",
-            outputDir: "docs/petstore",
-            sidebarOptions: {
-              groupPathsBy: "tag",
-              categoryLinkSource: "tag",
-            },
-            template: "api.mustache", // Customize API MDX with mustache template
-          },
-        },
-      },
-    ],
-    [
       "@docusaurus/plugin-pwa",
       {
         debug: true,
