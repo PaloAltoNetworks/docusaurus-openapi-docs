@@ -405,13 +405,20 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
           const pluginInstances = getPluginInstances(plugins);
           let targetConfig: any;
           if (pluginId) {
-            const pluginConfig = getPluginConfig(plugins, pluginId);
-            targetConfig = pluginConfig.config ?? {};
+            try {
+              const pluginConfig = getPluginConfig(plugins, pluginId);
+              targetConfig = pluginConfig.config ?? {};
+            } catch {
+              console.error(
+                chalk.red(`OpenAPI docs plugin ID '${pluginId}' not found.`)
+              );
+              return;
+            }
           } else {
             if (pluginInstances.length > 1) {
               console.error(
                 chalk.red(
-                  "OpenAPI plugin ID must be specified when more than one plugin instance exists."
+                  "OpenAPI docs plugin ID must be specified when more than one plugin instance exists."
                 )
               );
             }
@@ -453,13 +460,20 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
           const pluginInstances = getPluginInstances(plugins);
           let targetConfig: any;
           if (pluginId) {
-            const pluginConfig = getPluginConfig(plugins, pluginId);
-            targetConfig = pluginConfig.config ?? {};
+            try {
+              const pluginConfig = getPluginConfig(plugins, pluginId);
+              targetConfig = pluginConfig.config ?? {};
+            } catch {
+              console.error(
+                chalk.red(`OpenAPI docs plugin ID '${pluginId}' not found.`)
+              );
+              return;
+            }
           } else {
             if (pluginInstances.length > 1) {
               console.error(
                 chalk.red(
-                  "OpenAPI plugin ID must be specified when more than one plugin instance exists."
+                  "OpenAPI docs plugin ID must be specified when more than one plugin instance exists."
                 )
               );
             }
@@ -534,13 +548,20 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
           const pluginInstances = getPluginInstances(plugins);
           let targetConfig: any;
           if (pluginId) {
-            const pluginConfig = getPluginConfig(plugins, pluginId);
-            targetConfig = pluginConfig.config ?? {};
+            try {
+              const pluginConfig = getPluginConfig(plugins, pluginId);
+              targetConfig = pluginConfig.config ?? {};
+            } catch {
+              console.error(
+                chalk.red(`OpenAPI docs plugin ID '${pluginId}' not found.`)
+              );
+              return;
+            }
           } else {
             if (pluginInstances.length > 1) {
               console.error(
                 chalk.red(
-                  "OpenAPI plugin ID must be specified when more than one plugin instance exists."
+                  "OpenAPI docs plugin ID must be specified when more than one plugin instance exists."
                 )
               );
             }
@@ -577,13 +598,20 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
           const pluginInstances = getPluginInstances(plugins);
           let targetConfig: any;
           if (pluginId) {
-            const pluginConfig = getPluginConfig(plugins, pluginId);
-            targetConfig = pluginConfig.config ?? {};
+            try {
+              const pluginConfig = getPluginConfig(plugins, pluginId);
+              targetConfig = pluginConfig.config ?? {};
+            } catch {
+              console.error(
+                chalk.red(`OpenAPI docs plugin ID '${pluginId}' not found.`)
+              );
+              return;
+            }
           } else {
             if (pluginInstances.length > 1) {
               console.error(
                 chalk.red(
-                  "OpenAPI plugin ID must be specified when more than one plugin instance exists."
+                  "OpenAPI docs plugin ID must be specified when more than one plugin instance exists."
                 )
               );
             }
