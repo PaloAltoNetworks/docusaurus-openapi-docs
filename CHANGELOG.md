@@ -1,3 +1,25 @@
+## 1.1.11 (Sep 8, 2022)
+
+High level enhancements
+
+- Added tooltip support to request option input fields.
+- Added multi plugin instance support to CLI.
+
+Other enhancements and bug fixes
+
+- [Enhancement] Split placeholder by newline and add title for tooltip ([#252](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/252))
+- [Bug] Delete writeOnly props instead of readOnly and ignore example if present ([#251](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/251))
+- Upgrade lerna to 5.5.0 ([#250](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/250))
+- Apply flex properties to schema tabs container ([#248](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/248))
+- Add gtag
+- Fix logic that determines if an object property is required ([#247](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/247))
+- Bump terser from 5.14.1 to 5.15.0 ([#240](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/240))
+- Bump terser from 5.12.1 to 5.15.0 in /demo ([#241](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/241))
+- [Experimental] Adds multi-instance support to plugin CLI ([#244](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/244))
+- Add combine dependabot workflow ([#242](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/242))
+- Fix missing array opening bracket. ([#238](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/238))
+- [Bug] Fix support for markdown template ([#239](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/239))
+
 ## 1.1.10 (Sep 2, 2022)
 
 High level enhancements
