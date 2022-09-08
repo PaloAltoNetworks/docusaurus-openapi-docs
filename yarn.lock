@@ -1947,7 +1947,7 @@
     "@docusaurus/utils-validation" "2.0.1"
     tslib "^2.4.0"
 
-"@docusaurus/plugin-pwa@^2.0.1":
+"@docusaurus/plugin-pwa@2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@docusaurus/plugin-pwa/-/plugin-pwa-2.0.1.tgz#e49f2a846f0beca58cb09e7a114393c43cd438b8"
   integrity sha512-zN+dCx2V1yIK8+U3cey/IA44ynfmZQm/tdVhXy6EsXbkaEW8ZZu0AIpARFxJ2lmR2sPkG1ohkXIoOOCMOld1Xw==
