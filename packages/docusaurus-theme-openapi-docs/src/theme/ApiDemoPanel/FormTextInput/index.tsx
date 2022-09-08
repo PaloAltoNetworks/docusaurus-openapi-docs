@@ -7,7 +7,10 @@
 
 import React from "react";
 
+import tippy from "tippy.js";
+
 import styles from "./styles.module.css";
+import "tippy.js/dist/tippy.css";
 
 interface Props {
   value?: string;
@@ -17,11 +20,13 @@ interface Props {
 }
 
 function FormTextInput({ value, placeholder, password, onChange }: Props) {
+  placeholder = placeholder?.split("\n")[0];
   return (
     <input
       className={styles.input}
       type={password ? "password" : "text"}
       placeholder={placeholder}
+      title={placeholder}
       value={value}
       onChange={onChange}
       autoComplete="off"
