@@ -7,10 +7,7 @@
 
 import React from "react";
 
-import tippy from "tippy.js";
-
 import styles from "./styles.module.css";
-import "tippy.js/dist/tippy.css";
 
 interface Props {
   value?: string;
