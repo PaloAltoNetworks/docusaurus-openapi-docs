@@ -77,18 +77,20 @@ function sampleResponseFromProp(name: string, prop: any, obj: any): any {
 
 export const sampleResponseFromSchema = (schema: SchemaObject = {}): any => {
   try {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let { type, example, allOf, oneOf, anyOf, properties, items } = schema;
 
-    if (example !== undefined) {
-      return example;
-    }
+    // TODO: determine if we should always ignore the example when creating from schema
+    // if (example !== undefined) {
+    //   return example;
+    // }
 
     if (allOf) {
       const { mergedSchemas }: { mergedSchemas: SchemaObject } =
         mergeAllOf(allOf);
       if (mergedSchemas.properties) {
         for (const [key, value] of Object.entries(mergedSchemas.properties)) {
-          if (value.readOnly && value.readOnly === true) {
+          if (value.writeOnly && value.writeOnly === true) {
             delete mergedSchemas.properties[key];
           }
         }
@@ -121,7 +123,7 @@ export const sampleResponseFromSchema = (schema: SchemaObject = {}): any => {
       for (let [name, prop] of Object.entries(properties ?? {})) {
         if (prop.properties) {
           for (const [key, value] of Object.entries(prop.properties)) {
-            if (value.readOnly && value.readOnly === true) {
+            if (value.writeOnly && value.writeOnly === true) {
               delete prop.properties[key];
             }
           }
@@ -129,7 +131,7 @@ export const sampleResponseFromSchema = (schema: SchemaObject = {}): any => {
 
         if (prop.items && prop.items.properties) {
           for (const [key, value] of Object.entries(prop.items.properties)) {
-            if (value.readOnly && value.readOnly === true) {
+            if (value.writeOnly && value.writeOnly === true) {
               delete prop.items.properties[key];
             }
           }
