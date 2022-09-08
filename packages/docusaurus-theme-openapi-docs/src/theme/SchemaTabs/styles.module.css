@@ -59,7 +59,10 @@
 }
 
 .schemaTabsContainer {
+  display: flex;
+  align-items: center;
   max-width: 600px;
+  overflow: hidden;
 }
 
 /* Tab Arrows */
