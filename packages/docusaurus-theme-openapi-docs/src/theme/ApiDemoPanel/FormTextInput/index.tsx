@@ -17,11 +17,13 @@ interface Props {
 }
 
 function FormTextInput({ value, placeholder, password, onChange }: Props) {
+  placeholder = placeholder?.split("\n")[0];
   return (
     <input
       className={styles.input}
       type={password ? "password" : "text"}
       placeholder={placeholder}
+      title={placeholder}
       value={value}
       onChange={onChange}
       autoComplete="off"
