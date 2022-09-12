@@ -7,6 +7,8 @@
 
 import React from "react";
 
+import CodeBlock from "@theme/CodeBlock";
+
 import { useTypedDispatch, useTypedSelector } from "../hooks";
 import FloatingButton from "./../FloatingButton";
 import { clearResponse } from "./slice";
@@ -50,15 +52,7 @@ function Response() {
 
   return (
     <FloatingButton onClick={() => dispatch(clearResponse())} label="Clear">
-      <pre
-        style={{
-          background: "var(--openapi-card-background-color)",
-          borderRadius: "var(--openapi-card-border-radius)",
-          paddingRight: "60px",
-        }}
-      >
-        <code>{prettyResponse || "No Response"}</code>
-      </pre>
+      <CodeBlock language={`json`}>{prettyResponse || "No Response"}</CodeBlock>
     </FloatingButton>
   );
 }
