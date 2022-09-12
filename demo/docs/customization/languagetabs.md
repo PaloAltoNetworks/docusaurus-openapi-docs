@@ -26,7 +26,7 @@ The enabled languages are defined for your site in a `languageTabs` array in the
 | `language`        | `string`  | `null`               | The programming language to use when generating the example.                                                           |
 | `logoClass`       | `string`  | `null`               | The CSS class to be added to render the appropriate logo.                                                              |
 | `variant`         | `string`  | `null`               | The language variant to use when generating the example, see below for a tip on where you can find the variants.       |
-| `options`         | `object`  | `null`               | _Optional:_ Set of options for language customisation. See below for common options, exact options depend on language. |
+| `options`         | `object`  | `null`               | _Optional:_ Set of options for language customization. See below for common options, exact options depend on language. |
 | `followRedirect`  | `string`  | `null`               | _Optional:_ Follow redirects when handling requests.                                                                   |
 | `trimRequestBody` | `string`  | `null`               | _Optional:_ Trim request body fields.                                                                                  |
 | `indentCount`     | `integer` | _language dependent_ | _Optional:_ Alter the number of indentations used when generating the examples.                                        |

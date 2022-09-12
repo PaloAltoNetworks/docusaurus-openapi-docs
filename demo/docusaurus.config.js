@@ -162,11 +162,11 @@ const config = {
           language: "nodejs",
           logoClass: "nodejs",
         },
-        //{
-        //  highlight: "ruby",
-        //  language: "ruby",
-        //  logoClass: "ruby",
-        //},
+        // {
+        //   highlight: "ruby",
+        //   language: "ruby",
+        //   logoClass: "ruby",
+        // },
         {
           highlight: "csharp",
           language: "csharp",
@@ -177,11 +177,6 @@ const config = {
         //   language: "php",
         //   logoClass: "php",
         // },
-        {
-          highlight: "powershell",
-          language: "powershell",
-          logoClass: "powershell",
-        },
       ],
     }),
 
