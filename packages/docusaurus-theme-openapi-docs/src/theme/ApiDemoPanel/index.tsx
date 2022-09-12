@@ -18,6 +18,7 @@ import Accept from "./Accept";
 import { createAuth } from "./Authorization/slice";
 import Body from "./Body";
 import Curl from "./Curl";
+import Execute from "./Execute";
 import MethodEndpoint from "./MethodEndpoint";
 import ParamOptions from "./ParamOptions";
 import { createPersistanceMiddleware } from "./persistanceMiddleware";
@@ -109,6 +110,8 @@ function ApiDemoPanel({
           postman={postman}
           codeSamples={(item as any)["x-code-samples"] ?? []}
         />
+        <Execute postman={postman} proxy={options?.proxy} />
+
         <Response />
       </div>
     </Provider>
