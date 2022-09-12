@@ -1,5 +1,7 @@
 openapi: 3.0.0
 servers:
+  - url: http://127.0.0.1:4010
+    description: API Playground
   - url: https://petstore.swagger.io/v2
     description: Default server
   - url: https://petstore.swagger.io/sandbox
@@ -343,9 +345,7 @@ paths:
         "400":
           description: Invalid status value
       security:
-        - petstore_auth:
-            - "write:pets"
-            - "read:pets"
+        - api_key: []
   /pet/findByTags:
     get:
       tags:
