@@ -1,3 +1,16 @@
+## 1.1.12 (Sep 12, 2022)
+
+High level enhancements
+
+- Relax docusaurus dependencies.
+
+Other enhancements and bug fixes
+
+- [Enhancement] Relax docusaurus dependencies and upgrade demo to v2.1.0 ([#258](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/258))
+- Add documentation for languageTabs and request method labels. ([#256](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/256))
+- Add Docusaurus version to demo footer. ([#255](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/255))
+- Update docs
+
 ## 1.1.11 (Sep 8, 2022)
 
 High level enhancements
