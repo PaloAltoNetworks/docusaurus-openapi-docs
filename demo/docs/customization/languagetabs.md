@@ -73,10 +73,5 @@ languageTabs: [
     //   language: "php",
     //   logoClass: "php",
     // },
-    {
-        highlight: "powershell",
-        language: "powershell",
-        logoClass: "powershell",
-    },
 ],
 ```
