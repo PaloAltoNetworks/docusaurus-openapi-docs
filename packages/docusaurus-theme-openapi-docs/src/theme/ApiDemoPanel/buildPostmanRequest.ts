@@ -261,6 +261,25 @@ function buildPostmanRequest(
       continue;
     }
 
+    if (a.type === "oauth2") {
+      let token;
+      if (auth.data[a.key]) {
+        token = auth.data[a.key].token;
+      }
+      if (token === undefined) {
+        otherHeaders.push({
+          key: "Authorization",
+          value: "Bearer <TOKEN>",
+        });
+        continue;
+      }
+      otherHeaders.push({
+        key: "Authorization",
+        value: `Bearer ${token}`,
+      });
+      continue;
+    }
+
     // Basic Auth
     if (a.type === "http" && a.scheme === "basic") {
       const { username, password } = auth.data[a.key];
@@ -276,8 +295,8 @@ function buildPostmanRequest(
 
     // API Key
     if (a.type === "apiKey" && a.in === "header") {
-      const { apikey } = auth.data[a.key];
-      if (apikey === undefined) {
+      const { apiKey } = auth.data[a.key];
+      if (apiKey === undefined) {
         otherHeaders.push({
           key: a.name,
           value: "<API_KEY_VALUE>",
@@ -286,7 +305,7 @@ function buildPostmanRequest(
       }
       otherHeaders.push({
         key: a.name,
-        value: apikey,
+        value: apiKey,
       });
       continue;
     }

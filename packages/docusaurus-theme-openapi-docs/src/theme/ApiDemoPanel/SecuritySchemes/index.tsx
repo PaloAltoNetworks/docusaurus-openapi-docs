@@ -19,21 +19,16 @@ function SecuritySchemes(props: any) {
   if (selected === undefined) return null;
 
   const selectedAuth = options[selected];
-
   return (
     <div style={{ marginBottom: "var(--ifm-table-cell-padding)" }}>
       {selectedAuth.map((auth) => {
         const isApiKey = auth.type === "apiKey";
         const isBearer = auth.type === "http" && auth.key === "Bearer";
-        const isClientCredentials =
-          auth.type === "oauth2" && auth.key === "ClientCredentials";
+        const isOauth2 = auth.type === "oauth2";
 
         if (isApiKey || isBearer) {
           return (
-            <React.Fragment key={selected}>
-              <b>
-                Authorization: <Link to={infoAuthPath}>{auth.key}</Link>
-              </b>
+            <React.Fragment key={auth.name}>
               <pre
                 style={{
                   display: "flex",
@@ -42,18 +37,19 @@ function SecuritySchemes(props: any) {
                   borderRadius: "var(--openapi-card-border-radius)",
                 }}
               >
+                <span>
+                  type: <Link to={infoAuthPath}>{auth.type}</Link>
+                </span>
                 <span>name: {auth.name}</span>
                 <span>in: {auth.in}</span>
-                <span>type: {auth.type}</span>
               </pre>
             </React.Fragment>
           );
         }
 
-        if (isClientCredentials) {
+        if (isOauth2) {
           return (
             <React.Fragment key={selected}>
-              <b>Authorization: {auth.key}</b>
               <pre
                 style={{
                   display: "flex",
@@ -62,13 +58,21 @@ function SecuritySchemes(props: any) {
                   borderRadius: "var(--openapi-card-border-radius)",
                 }}
               >
-                <span>type: {auth.type}</span>
+                <span>
+                  type: <Link to={infoAuthPath}>{auth.type}</Link>
+                </span>
+                {Object.keys(auth.flows).map((flow) => {
+                  return <span key={flow}>flow: {flow}</span>;
+                })}
+                <span>
+                  scopes: <code>{auth.scopes.toString()}</code>
+                </span>
               </pre>
             </React.Fragment>
           );
         }
 
-        return null;
+        return undefined;
       })}
     </div>
   );

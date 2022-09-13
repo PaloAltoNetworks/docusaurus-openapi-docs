@@ -11,6 +11,10 @@ export function getAuthDataKeys(security: { [key: string]: any }) {
     return ["token"];
   }
 
+  if (security.type === "oauth2") {
+    return ["token"];
+  }
+
   // Basic Auth
   if (security.type === "http" && security.scheme === "basic") {
     return ["username", "password"];
