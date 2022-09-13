@@ -194,7 +194,7 @@ function createItems(
         infoId: infoId ?? "",
         unversionedId: baseId,
         title: title,
-        description: description ?? "",
+        description: operationObject.description ?? "",
         frontMatter: {},
         api: {
           ...defaults,
