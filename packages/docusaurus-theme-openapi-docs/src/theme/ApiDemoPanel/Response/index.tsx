@@ -45,14 +45,16 @@ function Response() {
   try {
     prettyResponse = JSON.stringify(JSON.parse(response), null, 2);
   } catch {
-    if (response.startsWith("<?xml ")) {
+    if (response.startsWith("<")) {
       prettyResponse = formatXml(response);
     }
   }
 
   return (
     <FloatingButton onClick={() => dispatch(clearResponse())} label="Clear">
-      <CodeBlock language={`json`}>{prettyResponse || "No Response"}</CodeBlock>
+      <CodeBlock language={response.startsWith("<") ? `xml` : `json`}>
+        {prettyResponse || "No Response"}
+      </CodeBlock>
     </FloatingButton>
   );
 }
