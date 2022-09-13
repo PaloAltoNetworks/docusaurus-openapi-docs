@@ -15,6 +15,7 @@ import { Provider } from "react-redux";
 
 import { ThemeConfig } from "../../types";
 import Accept from "./Accept";
+import Authorization from "./Authorization";
 import { createAuth } from "./Authorization/slice";
 import Body from "./Body";
 import Curl from "./Curl";
@@ -98,6 +99,7 @@ function ApiDemoPanel({
         <MethodEndpoint method={method} path={path} />
         <SecuritySchemes infoPath={infoPath} />
         <div className={styles.optionsPanel}>
+          <Authorization />
           <ParamOptions />
           <Body
             jsonRequestBodyExample={item.jsonRequestBodyExample}
