@@ -10,7 +10,7 @@ import React from "react";
 import styles from "./styles.module.css";
 
 interface Props {
-  label: string;
+  label?: string;
   type?: string;
   children?: React.ReactNode;
 }
