@@ -97,24 +97,30 @@ function ApiDemoPanel({
     <Provider store={store2}>
       <div className={styles.apiDemoPanelContainer}>
         <MethodEndpoint method={method} path={path} />
-        <SecuritySchemes infoPath={infoPath} />
-        <div className={styles.optionsPanel}>
-          <Authorization />
-          <ParamOptions />
-          <Body
-            jsonRequestBodyExample={item.jsonRequestBodyExample}
-            requestBodyMetadata={item.requestBody}
-          />
-          <Accept />
-        </div>
         <Server />
+        <SecuritySchemes infoPath={infoPath} />
+        <details className={`details__demo-panel`} open={true}>
+          <summary>
+            <div className={`details__request-summary`}>
+              <h4>Request</h4>
+              <Execute postman={postman} proxy={options?.proxy} />
+            </div>
+          </summary>
+          <div className={styles.optionsPanel}>
+            <Authorization />
+            <ParamOptions />
+            <Body
+              jsonRequestBodyExample={item.jsonRequestBodyExample}
+              requestBodyMetadata={item.requestBody}
+            />
+            <Accept />
+          </div>
+        </details>
+        <Response />
         <Curl
           postman={postman}
           codeSamples={(item as any)["x-code-samples"] ?? []}
         />
-        <Execute postman={postman} proxy={options?.proxy} />
-
-        <Response />
       </div>
     </Provider>
   );
