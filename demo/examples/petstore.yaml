@@ -1,11 +1,11 @@
 openapi: 3.0.0
 servers:
-  - url: http://127.0.0.1:4010
-    description: API Playground
   - url: https://petstore.swagger.io/v2
     description: Default server
   - url: https://petstore.swagger.io/sandbox
     description: Sandbox server
+  - url: http://127.0.0.1:4010
+    description: Prism Mock API (local)
 info:
   description: |
     This is a sample server Petstore server.
