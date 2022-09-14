@@ -51,11 +51,22 @@ function Response() {
   }
 
   return (
-    <FloatingButton onClick={() => dispatch(clearResponse())} label="Clear">
+    <details className={`details__demo-panel`} open={true}>
+      <summary>
+        <div className={`details__response-summary`}>
+          <h4>Response</h4>
+          <button
+            className="button button--sm button--secondary"
+            onClick={() => dispatch(clearResponse())}
+          >
+            Clear
+          </button>
+        </div>
+      </summary>
       <CodeBlock language={response.startsWith("<") ? `xml` : `json`}>
         {prettyResponse || "No Response"}
       </CodeBlock>
-    </FloatingButton>
+    </details>
   );
 }
 
