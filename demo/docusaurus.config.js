@@ -216,14 +216,6 @@ const config = {
             },
             template: "api.mustache", // Customize API MDX with mustache template
           },
-          iot: {
-            specPath: "examples/iot/iot.yaml",
-            outputDir: "docs/iot",
-            sidebarOptions: {
-              groupPathsBy: "tag",
-              categoryLinkSource: "tag",
-            },
-          },
           cos: {
             specPath: "examples/openapi-cos.json",
             outputDir: "docs/cos",

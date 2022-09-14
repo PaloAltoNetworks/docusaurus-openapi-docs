@@ -62,16 +62,6 @@ const sidebars = {
     },
     {
       type: "category",
-      label: "example",
-      link: {
-        type: "generated-index",
-        title: "Cloud Object Storage API",
-        slug: "/category/example-api",
-      },
-      items: require("./docs/iot/sidebar.js"),
-    },
-    {
-      type: "category",
       label: "Cloud Object Storage",
       link: {
         type: "generated-index",
