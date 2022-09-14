@@ -11,21 +11,7 @@ import FormItem from "../FormItem";
 import FormSelect from "../FormSelect";
 import FormTextInput from "../FormTextInput";
 import { useTypedDispatch, useTypedSelector } from "../hooks";
-import styles from "../styles.module.css";
-import { AuthState, Scheme, setAuthData, setSelectedAuth } from "./slice";
-
-function validateData(selectedAuth: Scheme[], data: AuthState["data"]) {
-  for (const scheme of selectedAuth) {
-    if (data[scheme.key] === undefined) {
-      return false;
-    }
-    const hasMissingKeys = Object.values(data[scheme.key]).includes(undefined);
-    if (hasMissingKeys) {
-      return false;
-    }
-  }
-  return true;
-}
+import { setAuthData, setSelectedAuth } from "./slice";
 
 function Authorization() {
   const data = useTypedSelector((state) => state.auth.data);
