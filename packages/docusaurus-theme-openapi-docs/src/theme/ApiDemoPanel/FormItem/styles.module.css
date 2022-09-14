@@ -5,3 +5,8 @@
 .formItem:first-child {
   margin-top: 0;
 }
+
+.required {
+  font-size: var(--ifm-code-font-size);
+  color: var(--openapi-required);
+}

@@ -12,14 +12,23 @@ import styles from "./styles.module.css";
 interface Props {
   label?: string;
   type?: string;
+  required?: boolean | undefined;
   children?: React.ReactNode;
 }
 
-function FormItem({ label, type, children }: Props) {
+function FormItem({ label, type, required, children }: Props) {
   return (
     <div className={styles.formItem}>
       <code>{label}</code>
       {type && <span style={{ opacity: 0.6 }}> — {type}</span>}
+      {required && (
+        <span>
+          {" "}
+          <small>
+            <strong className={styles.required}> required</strong>
+          </small>
+        </span>
+      )}
       <div>{children}</div>
     </div>
   );
