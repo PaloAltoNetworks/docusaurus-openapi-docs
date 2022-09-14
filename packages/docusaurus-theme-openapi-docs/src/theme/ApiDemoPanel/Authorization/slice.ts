@@ -57,7 +57,7 @@ export function createAuth({
   };
   options?: ThemeConfig["api"];
 }): AuthState {
-  const storage = createStorage(opts?.authPersistance);
+  const storage = createStorage("sessionStorage");
 
   let data: AuthState["data"] = {};
   let options: AuthState["options"] = {};
