@@ -1,0 +1,746 @@
+examples:
+  BadRequestResponseExample:
+    value:
+      {
+        code: 400,
+        msg: Bad Request. This occurs when an HTTP request contains an invalid query string.,
+      }
+
+  UnauthorizedResponseExample:
+    value:
+      {
+        code: 403,
+        msg: Forbidden access. Either the provided API key is invalid or it does not have the required RBAC permissions to run this API.,
+      }
+
+  RateLimitResponseExample:
+    value:
+      {
+        code: 429,
+        msg: Too many requests. The number of requests for device details for a single device exceeded the rate limit of 180 queries per minute per tenant.,
+      }
+
+  ServerErrorResponseExample:
+    value:
+      {
+        code: 500,
+        msg: Internal server error. A unified status for API communication type errors.,
+      }
+
+  DeviceDetailResponseExample:
+    value:
+      {
+        deviceid: 34:02:86:44:65:36,
+        hostname: InfusionPump-20,
+        category: Infusion System,
+        profile: Sigma Spectrum Infusion System,
+        profile_type: IoT,
+        profile_vertical: Medical,
+        ip_address: 192.168.10.121,
+        mac_address: 34:02:86:44:65:36,
+        risk_score: 0,
+        risk_level: low,
+        last_activity: 2018-05-31T18:39:37.404Z,
+        confidence_score: "90",
+        subnet: 192.168.10.121/28,
+        number_of_critical_alerts: 0,
+        number_of_warning_alerts: 0,
+        number_of_caution_alerts: 0,
+        number_of_info_alerts: 0,
+        allTags:
+          [
+            {
+              "tagType": "zzzNoTagTypeABC",
+              "tagValue": "special_blocked",
+              "tagId": "60f221a219e22f10003a965e",
+            },
+          ],
+      }
+
+  DeviceDetailPerIPResponseExample:
+    value:
+      {
+        deviceid: 34:02:86:44:65:36,
+        hostname: InfusionPump-20,
+        category: Infusion System,
+        profile: Sigma Spectrum Infusion System,
+        profile_type: IoT,
+        profile_vertical: Medical,
+        ip_address: 192.168.10.121,
+        mac_address: 34:02:86:44:65:36,
+        risk_score: 0,
+        risk_level: low,
+        last_activity: 2018-05-31T18:39:37.404Z,
+        confidence_score: "90",
+        subnet: 192.168.10.121/28,
+        number_of_critical_alerts: 0,
+        number_of_warning_alerts: 0,
+        number_of_caution_alerts: 0,
+        number_of_info_alerts: 0,
+        allTags:
+          [
+            {
+              tagType: "zzzNoTagTypeABC",
+              tagValue: "special_blocked",
+              tagId: "60f221a219e22f10003a965e",
+            },
+          ],
+        tagIdList:
+          [
+            "6030135777a1d6fb488e26ad",
+            "60301332ff1679e9481b62a6",
+            "602ca12179bc780a2333895d",
+          ],
+      }
+
+  DeviceInventoryResponseExample:
+    value:
+      {
+        total: 1,
+        devices:
+          [
+            {
+              deviceid: 34:02:86:44:65:36,
+              hostname: InfusionPump-20,
+              category: Infusion System,
+              profile: Sigma Spectrum Infusion System,
+              profile_type: IoT,
+              profile_vertical: Medical,
+              ip_address: 192.168.10.121,
+              mac_address: 34:02:86:44:65:36,
+              risk_score: 0,
+              risk_level: low,
+              last_activity: 2018-05-31T18:39:37.404Z,
+              confidence_score: "90",
+              allTags:
+                [
+                  {
+                    "tagType": "zzzNoTagTypeABC",
+                    "tagValue": "special_blocked",
+                    "tagId": "60f221a219e22f10003a965e",
+                  },
+                ],
+              trafficRestriced: true,
+            },
+          ],
+      }
+
+  IoTProfileMappingResponseExmaple:
+    value:
+      {
+        count: 6,
+        mapping:
+          [
+            {
+              profile: "American Dynamics IP Camera",
+              category: "Camera",
+              vertical: "Office",
+            },
+            {
+              profile: "Hitachi Maxell Device",
+              category: "Electronics IoT",
+              vertical: "Generic IoT",
+            },
+            {
+              profile: "Mitsumi Electric Device",
+              category: "Electronics IoT",
+              vertical: "Generic IoT",
+            },
+            {
+              profile: "Sony Device",
+              category: "Electronics IoT",
+              vertical: "Generic IoT",
+            },
+            {
+              profile: "JK microsystems Device",
+              category: "Industrial Controller",
+              vertical: "Industrial",
+            },
+            {
+              profile: "Siemens PLC",
+              category: "Industrial Controller",
+              vertical: "Industrial",
+            },
+          ],
+      }
+
+  IoTTagListResponseExample:
+    value:
+      {
+        totalTags: 2,
+        tags:
+          [
+            {
+              "_id": { "tagId": "60f221a219e22f10003a965e" },
+              "tagType": "zzzNoTagTypeABC",
+              "tagValue": "special_blocked",
+              "tagId": "60f221a219e22f10003a965e",
+              "type": "custom",
+            },
+            {
+              "_id": { "tagId": "60dad9446e89f01000b8950f" },
+              "tagType": "Risk3",
+              "tagValue": "RiskHighFirst",
+              "tagId": "60dad9446e89f01000b8950f",
+              "type": "custom",
+            },
+          ],
+      }
+
+  SecurityAlertResponseExample:
+    value:
+      {
+        total: 1,
+        items:
+          [
+            {
+              resolved': "no",
+              date': "2020-05-12T01:23:10.630Z",
+              deviceid': "18:65:90:cd:88:0d",
+              name': "zingcloud alert bg job integration test at 1589246590630",
+              severity': "high",
+              severityNumber': 4,
+              type': "policy_alert",
+              description': "The baseline policy defines a criteria to match normal connections between devices in two different networks or device groups. It is a positive detection if connections outside of this definition are observed.",
+              tenantid': "acmecorp",
+              zb_ticketid: "alert-hNMleG1nW",
+              id: "5eb9fa8127b736d82bf7840a",
+              profile: "Macintosh-MacPro",
+              category: "Personal Computer",
+              hostname: "cntl-201-2",
+              internal_hostname: "cntl-201-2",
+              siteid: "0",
+              serviceLevel': "",
+              reason_history: [],
+              msg':
+                {
+                  severity: "high",
+                  description: "The baseline policy defines criteria to match normal connections between devices in two different networks or device groups. It is a positive detection if connections outside of this definition are observed.",
+                  name: "zingcloud alert bg job integration test at 1589246590630",
+                  id: "hNMleG1nW",
+                  ruleid: "5a26f169c8272f0b00c5ef1a",
+                  zb_ticketid: "alert-hNMleG1nW",
+                  hostname: "unknown",
+                },
+            },
+          ],
+        "deviceTags":
+          {
+            "00:0e:dd:51:aa:f2":
+              {
+                "deviceid": "00:0e:dd:51:aa:f2",
+                "tagIdList":
+                  [
+                    "6030135777a1d6fb488e26ad",
+                    "60301332ff1679e9481b62a6",
+                    "602ca12179bc780a2333895d",
+                    "603012a37ebd56bc48921703",
+                    "603012c976a6c0da487530b3",
+                    "PurdueLevel5",
+                    "PurdueLevel4",
+                  ],
+                "allTags":
+                  [
+                    {
+                      "tagType": "TestFilter",
+                      "tagValue": "withTagInLocalFilter5",
+                      "tagId": "6030135777a1d6fb488e26ad",
+                    },
+                    {
+                      "tagType": "TestFilter",
+                      "tagValue": "withTagInLocalFilter4",
+                      "tagId": "60301332ff1679e9481b62a6",
+                    },
+                  ],
+              },
+          },
+      }
+
+  ResolveSecurityAlertResponseExample:
+    value: { api: "/pub/v4.0/alert/update", ver: "v4.0" }
+
+  VulnerabilityListResponseExample:
+    value:
+      {
+        "ver": "v4.0",
+        "api": "/vulnerability/list",
+        "items":
+          [
+            {
+              "name": "Polycom_64167f372d45",
+              "ip": "10.1.1.84",
+              "deviceid": "64:16:7f:37:2d:45",
+              "profile": "Polycom IP Phone",
+              "profile_vertical": "Office",
+              "display_profile_category": "IP Phone",
+              "vendor": "Polycom",
+              "model": "VVX601",
+              "os": "Embedded",
+              "osCombined": "Embedded",
+              "siteid": "0",
+              "asset_tag": null,
+              "sn": null,
+              "date": "2020-05-12T01:28:26.986Z",
+              "risk_score": 20,
+              "risk_level": "Low",
+              "ticketState": "new",
+              "zb_ticketid": "vuln-52f40a58",
+              "ticketAssignees": ["analyst1@acmecorp.com"],
+              "reason_history":
+                [
+                  {
+                    "action": "sent to asset management: aims",
+                    "reason": "Check system",
+                    "reason_type": null,
+                    "user_email": "admin@acmecorp.com",
+                    "timestamp": "2019-10-18T22:00:20.255Z",
+                    "aims_workorder_number": 152027,
+                  },
+                ],
+              "remediate_workorder": "152027",
+              "remediate_checkbox": "0,1,2",
+              "remediate_instruction": null,
+              "detected_date": "2019-10-15T20:18:42.135Z",
+              "vulnerability_name": "CVE-2019-12948",
+              "allTags":
+                [
+                  {
+                    "tagType": "TestFilter",
+                    "tagValue": "withTagInLocalFilter5",
+                    "tagId": "6030135777a1d6fb488e26ad",
+                  },
+                  {
+                    "tagType": "TestFilter",
+                    "tagValue": "withTagInLocalFilter4",
+                    "tagId": "60301332ff1679e9481b62a6",
+                  },
+                ],
+            },
+          ],
+      }
+
+  ResolveVulnerabilityInstanceResponseExample:
+    value:
+      {
+        "api": "/pub/v4.0/vulnerability/update",
+        "ver": "v4.0",
+        "updatedVulnerInstanceList":
+          [
+            "newLevel": "Low",
+            "newScore": 18,
+            "newAnomalyMap":
+              {
+                "application": 0.125,
+                "payload": 0.125,
+                "internal": 0.125,
+                "external": 0.125,
+                "protocol": 0.125,
+              },
+          ],
+      }
+
+  CiscoWLCBulkUpdateDevicesResponseExample:
+    value:
+      {
+        api: "device/bulkUpdate",
+        ver: "v4.0",
+        code: 1,
+        message: "OK",
+        updatedDeviceNum: 5,
+      }
+
+  ArubaWLCBulkUpdateDevicesResponseExample:
+    value:
+      {
+        api: "device/bulkUpdate",
+        ver: "v4.0",
+        code: 1,
+        message: "OK",
+        updatedDeviceNum: 5,
+      }
+
+  CustomAttributeBulkUpdateDevicesResponseExample:
+    value:
+      {
+        api: "device/bulkUpdate",
+        ver: "v4.0",
+        code: 1,
+        message: "OK",
+        updatedAttributesNum: 4,
+        errorCases: {},
+      }
+
+  SNMPBulkUpdateDevicesResponseExample:
+    value:
+      {
+        api: "device/bulkUpdate",
+        ver: "v4.0",
+        code: 1,
+        message: "OK",
+        updatedDeviceNum: 5,
+      }
+
+  CellularBulkUpdateDevicesResponseExample:
+    value:
+      {
+        api: "device/bulkUpdate",
+        ver: "v4.0",
+        code: 1,
+        message: "OK",
+        updatedDeviceNum: 5,
+      }
+  SccmBulkUpdateDevicesResponseExample:
+    value:
+      {
+        api: "device/bulkUpdate",
+        ver: "v4.0",
+        code: 1,
+        message: "OK",
+        updatedDeviceNum: 5,
+      }
+
+  CrowdstrikeBulkUpdateDevicesResponseExample:
+    value:
+      {
+        api: "device/bulkUpdate",
+        ver: "v4.0",
+        code: 1,
+        message: "OK",
+        updatedDeviceNum: 5,
+      }
+
+  IPAMSubnetBulkUpdateResponseExample:
+    value:
+      {
+        api: "network/subnetBulkUpdate",
+        ver: "v4.0",
+        code: 1,
+        message: "OK",
+        updatedSubnetNum: 4,
+      }
+
+  CiscoWLCDeviceBulkUpdatePayloadExample:
+    value:
+      {
+        devicelist:
+          [
+            {
+              "apIPAddress": "10.6.72.226",
+              "apMacAddress": "6c:20:56:e6:87:0e",
+              "apModel": "AIR-CAP3602I-A-K9",
+              "apName": "DOLORES",
+              "bluetoothDeviceType": "BLE Beacon",
+              "bluetoothType": "BLE",
+              "channel": "unknown",
+              "connectedDuration": "01d:23h:08m:49s",
+              "connectionState": "Yes",
+              "frequency": "2.4GHz",
+              "isBluetooth": true,
+              "location": "default location",
+              "macAddress": "04:a3:16:71:0a:f6",
+              "rssi": "-60dBm",
+            },
+            {
+              "SSID": "DOLORES",
+              "apIPAddress": "10.6.72.226",
+              "apMacAddress": "6c:20:56:e6:87:0e",
+              "apModel": "AIR-CAP3602I-A-K9",
+              "apName": "DOLORES",
+              "apRadioSlotId": "0",
+              "authMethod": "WPA2 PSK",
+              "authentication": "Yes",
+              "connectedDuration": "26000",
+              "connectionState": "Associated",
+              "country": "US",
+              "encryptionCipher": "CCMP-128 (AES)",
+              "ipAddress": "2.2.2.1",
+              "location": "california",
+              "macAddress": "55:66:aa:bb:77:cc",
+              "radio": "802.11n(2.4 GHz)",
+              "rssi": "-30 dBm",
+              "snr": "51 dB",
+              "status": "Associated",
+              "wlanId": "1",
+            },
+          ],
+      }
+
+  ArubaWLCDeviceBulkUpdatePayloadExample:
+    value:
+      {
+        devicelist:
+          [
+            {
+              "apIPAddress": "10.6.72.235",
+              "apMacAddress": "24:62:ce:cd:71:84",
+              "apModel": "505",
+              "apName": "24:62:ce:cd:71:84",
+              "bluetoothDeviceType": "AP's local beacon:iBeacon:Beacon management capable",
+              "bluetoothType": "BLE",
+              "connectedDuration": "00:02:10",
+              "connectionState": "Yes",
+              "macAddress": "28:de:65:16:5b:f4",
+              "location": "abc",
+              "isBluetooth": true,
+              "hwType": "sample hwtype",
+              "fwVersion": "sample fwVersion",
+            },
+            {
+              "macAddress": "34:f3:9a:69:6f:e5",
+              "connectedDuration": "51233",
+              "wlanId": "1",
+              "apModel": "303",
+              "location": "PANW",
+              "country": "USA",
+              "SSID": "DOLORES",
+              "apName": "d0:d3:e0:c3:57:ec",
+              "apIPAddress": "10.6.72.240",
+              "rssi": "38",
+              "snr": "57",
+              "authMethod": "WPA2 PSK",
+              "encryptionCipher": "CCMP-128 (AES)",
+              "radio": "802.11a",
+            },
+          ],
+      }
+
+  SNMPDeviceBulkUpdatePayloadExample:
+    value:
+      {
+        devicelist:
+          [
+            {
+              "deviceid": "00:0c:29:8f:20:9a",
+              "connect_evtContent.ip": "10.6.72.216",
+              "display_switchName": "zbmvsw9300-01.8.8.8.8",
+              "display_switchIP": "10.6.72.104",
+            },
+            { "deviceid": "6c:6c:d3:aa:d0:81", "display_phyPort": "Gi1/0/2" },
+          ],
+      }
+
+  CustomAttributeBulkUpdatePayloadExample:
+    value:
+      {
+        devicelist:
+          [
+            {
+              deviceid: "b8:27:eb:50:2b:0f",
+              tagType: "Department",
+              tagValue: "IoT Security",
+            },
+            {
+              deviceid: "b8:27:eb:50:2b:0f",
+              tagType: "Purdue Level",
+              tagValue: "Level 3",
+            },
+          ],
+      }
+
+  CellularDeviceBulkUpdatePayloadExample:
+    value:
+      {
+        devicelist:
+          [
+            {
+              "ipAddress": "10.6.72.216",
+              "ipv6Address": "FE80:CD00:0000:0CDE:1257:0000:211E:729C",
+              "imei": "000000000000000",
+              "iccid": "891004234814455936F",
+              "imsi": "313460000000001",
+              "apn": "006-007-001-000",
+              "msisdn": "919825098250",
+              "sessionStart": "ISODate('2022-01-05T14:48:00.000Z')",
+              "sessionEnd": "ISODate('2022-01-10T14:48:00.000Z')",
+            },
+          ],
+      }
+  SccmDeviceBulkUpdatePayloadExample:
+    value:
+      {
+        devicelist:
+          [
+            {
+              "serialNumber": "1R2RZY2",
+              "vendor": "Apple Inc.",
+              "model": "MacBook Pro",
+              "diskEncryptionStatus": "Encrypted",
+              "windowsInstalledPatches": "11.1",
+              "windowsInstalledSoftware": "Microsoft 365",
+              "windowsGUID": "6B29FC40-CA47-1067-B31D-00DD010662DA",
+              "sccmSite": "Site A",
+              "sccmDomain": "sccm.com",
+            },
+          ],
+      }
+
+  CrowdstrikeDeviceBulkUpdatePayloadExample:
+    value:
+      {
+        devicelist:
+          [
+            {
+              "deviceid": "00:0c:29:8f:20:9a",
+              "is_isolated": "yes",
+              "operational_status": "Not Available",
+              "group_name": "Group 1",
+              "os_type": "Windows",
+              "os_version": "11.1",
+              "os_build": "Beta Build",
+              "hostname": "cntl-201-2",
+              "serial_number": "6B29FC40-CA47-1067-B31D-00DD010662DA",
+              "vendor": "Microsoft",
+            },
+          ],
+      }
+
+  IPAMSubnetBulkUpdatePayloadExample:
+    value:
+      {
+        "overwrite": true,
+        subnetlist:
+          [
+            {
+              "site": "test_site",
+              "vlan": "121",
+              "prefix": "10.6.72.0/24",
+              "parent": "",
+              "type": "subnet",
+              "description": "c1",
+            },
+            {
+              "site": "Headquarters_bld2",
+              "vlan": "109",
+              "prefix": "10.2.2.0/24",
+              "parent": "10.2.0.0/16",
+              "type": "subnet",
+            },
+            {
+              "site": "Headquarters_bld1",
+              "vlan": "100",
+              "prefix": "10.2.3.0/24",
+              "parent": "10.2.0.0/16",
+              "type": "subnet",
+            },
+            {
+              "site": "Headquarters_bld3_flr1",
+              "vlan": "107",
+              "prefix": "10.2.1.64/26",
+              "parent": "10.2.1.0/24",
+              "type": "subnet",
+            },
+            {
+              "vlan": "",
+              "prefix": "10.2.1.0/26",
+              "parent": "10.2.1.0/24",
+              "type": "subnet",
+            },
+            {
+              "site": "Headquarters",
+              "prefix": "10.2.0.0/16",
+              "parent": "",
+              "type": "block",
+              "description": "dc",
+            },
+            {
+              "site": "Headquarters_bld3",
+              "prefix": "10.2.1.0/24",
+              "parent": "10.2.0.0/16",
+              "type": "block",
+            },
+          ],
+      }
+
+  GeneralBulkUpdateDevicePayloadExample:
+    value:
+      {
+        devicelist:
+          [
+            {
+              deviceid: "00:00:2a:01:00:24",
+              config_source: "dnac",
+              ip: "10.14.1.123",
+              location: "HQ/Floor 17",
+              ap_ip: "10.6.72.226",
+              ap_name: "DOLORES",
+              SSID: "vmwareguest",
+              switch_ip: "10.10.20.82",
+              switch_name: "leaf2.test.com",
+              switch_if_name: "GigabitEthernet1/0/4",
+              vlan: 823,
+              vlan_name: "Cameras",
+              protocol_name: "dns,ssl,ping",
+              WireWireless: "WIRED",
+            },
+          ],
+      }
+
+  PolicyRecommendationResponse:
+    value:
+      {
+        ver: "v4.0",
+        api: "/policy/recommendation",
+        total: 10,
+        policies:
+          [
+            {
+              "id": "0ca5fe320d6d631c40259be8861d764a",
+              "geo": "intranet",
+              "action": "allow",
+              "lastActivityTime": "2021-09-21T21:53:42.754Z",
+              "sourceProfiles": ["APC(Schneider Electric) Smart PowerSupply"],
+              "sourceIpList": [],
+              "sourceZones": [],
+              "apps": ["dhcp"],
+              "destinationZones": [],
+              "destinationProfiles": ["Windows"],
+              "destinationFqdnList": [],
+              "destinationIpList": ["162.12.232.81", "162.12.232.80"],
+              "destinationUrlCategories": [],
+              "services": ["udp/67", "tcp/67", "service-http", "service-https"],
+              "tags": ["IoTSecurityRecommended", "test-tag"],
+              "securityProfiles":
+                [
+                  { "type": "virus", "name": "default" },
+                  { "type": "vulnerability", "name": "default" },
+                  { "type": "spyware", "name": "default" },
+                  { "type": "url-filtering", "name": "default" },
+                  { "type": "file-blocking", "name": "basic file blocking" },
+                  { "type": "wildfire-analysis", "name": "default" },
+                ],
+            },
+            {
+              "id": "1ca5fe320d6d631c40259be8861d764a",
+              "geo": "internet",
+              "action": "allow",
+              "lastActivityTime": "2021-08-27T01:14:18.818Z",
+              "sourceProfiles": ["Polycom IP Phone"],
+              "sourceIpList": [],
+              "sourceZones": [],
+              "apps": ["rtp-base"],
+              "destinationZones": [],
+              "destinationProfiles": [],
+              "destinationFqdnList": ["162.12.232.81"],
+              "destinationIpList": [],
+              "destinationUrlCategories": [],
+              "services":
+                [
+                  "udp/47390",
+                  "udp/32576",
+                  "udp/35204",
+                  "service-http",
+                  "service-https",
+                ],
+              "tags": ["IoTSecurityRecommended"],
+              "securityProfiles":
+                [
+                  { "type": "virus", "name": "default" },
+                  { "type": "vulnerability", "name": "default" },
+                  { "type": "spyware", "name": "default" },
+                  { "type": "url-filtering", "name": "default" },
+                  { "type": "file-blocking", "name": "basic file blocking" },
+                  { "type": "wildfire-analysis", "name": "default" },
+                ],
+            },
+          ],
+      }

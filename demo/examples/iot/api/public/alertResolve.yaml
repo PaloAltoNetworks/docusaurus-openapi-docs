@@ -1,0 +1,73 @@
+parameters:
+  - description: The alert ID being resolved. To retrieve a list of security alerts, including their IDs, use [Get Security Alerts](iot-public-api#operation/alert-list)
+    in: query
+    name: id
+    required: true
+    schema:
+      type: string
+  - description: The customer ID to which the API call is directed
+    in: query
+    name: customerid
+    required: true
+    schema:
+      type: string
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - reason
+          - reason_type
+          - resolved
+        properties:
+          reason:
+            type: string
+            description: The reason for resolving the alert. The following string cannot contain any special characters.
+          reason_type:
+            type: string
+            description: "The reason for resolving the alert. It must be one of the following four text strings (excluding numbers): 1. No Action Needed 2. Issue Mitigated 3. Normal behavior for this device 4. Normal behavior for all devices in the same IoT profile"
+          resolved:
+            type: string
+            description: Declaration that the alert is resolved. The following string must be “yes”.
+      examples:
+        payloadExample:
+          summary: An example of payload of resolving a security alert
+          value:
+            reason: The alert poses no threat
+            resolved: yes
+            reason_type: ["No Action Needed"]
+
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          $ref: "../../components/schemas.yaml#/schemas/ResolveSecurityAlertResponse"
+        examples:
+          resolveSecurityAlertResponseExample:
+            $ref: "../../components/examples.yaml#/examples/ResolveSecurityAlertResponseExample"
+  "4XX":
+    description: Client Error Response
+    content:
+      application/json:
+        schema:
+          $ref: "../../components/schemas.yaml#/schemas/ErrorResponse"
+        examples:
+          Bad Request:
+            $ref: "../../components/examples.yaml#/examples/BadRequestResponseExample"
+          Forbidden access:
+            $ref: "../../components/examples.yaml#/examples/UnauthorizedResponseExample"
+          Too many requests:
+            $ref: "../../components/examples.yaml#/examples/RateLimitResponseExample"
+  "5XX":
+    description: Server Error Response
+    content:
+      application/json:
+        schema:
+          $ref: "../../components/schemas.yaml#/schemas/ErrorResponse"
+        examples:
+          resolveSecurityAlertResponseExample:
+            $ref: "../../components/examples.yaml#/examples/ServerErrorResponseExample"

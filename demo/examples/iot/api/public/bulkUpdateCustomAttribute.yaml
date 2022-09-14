@@ -1,0 +1,56 @@
+parameters:
+  - description: The customer ID to which the API call is directed
+    in: query
+    name: customerid
+    required: true
+    schema:
+      type: string
+  - description: "The source of the device information: Custom Attribute"
+    in: query
+    name: updateSource
+    required: true
+    schema:
+      type: string
+      enum:
+        - "customAttribute"
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: "../../components/schemas.yaml#/schemas/CustomAttributeBulkUpdateDevicePayloadSchema"
+      examples:
+        payloadExample:
+          $ref: "../../components/examples.yaml#/examples/CustomAttributeBulkUpdatePayloadExample"
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          $ref: "../../components/schemas.yaml#/schemas/CustomAttributeBulkUpdateDeviceResponseSchema"
+        examples:
+          resolveSecurityAlertResponseExample:
+            $ref: "../../components/examples.yaml#/examples/CustomAttributeBulkUpdateDevicesResponseExample"
+  "4XX":
+    description: Client Error Response
+    content:
+      application/json:
+        schema:
+          $ref: "../../components/schemas.yaml#/schemas/ErrorResponse"
+        examples:
+          Bad Request:
+            $ref: "../../components/examples.yaml#/examples/BadRequestResponseExample"
+          Forbidden access:
+            $ref: "../../components/examples.yaml#/examples/UnauthorizedResponseExample"
+          Too many requests:
+            $ref: "../../components/examples.yaml#/examples/RateLimitResponseExample"
+  "5XX":
+    description: Server Error Response
+    content:
+      application/json:
+        schema:
+          $ref: "../../components/schemas.yaml#/schemas/ErrorResponse"
+        examples:
+          resolveSecurityAlertResponseExample:
+            $ref: "../../components/examples.yaml#/examples/ServerErrorResponseExample"

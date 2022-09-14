@@ -1,0 +1,61 @@
+parameters:
+  - name: customerid
+    description: The customer ID to which the API call is directed
+    in: query
+    required: true
+    schema:
+      type: string
+  - name: profile
+    description: "A profile filters policy rule recommendations by one or more source profile names. The following value is a string with profile names separated by commas; for example: <b>profile=Palo Alto Networks Device,iPhone,Polycom IP Phone</b>. All profiles must be IoT profiles. Without a profile filter, the request returns all active policy rule recommendations."
+    in: query
+    required: false
+    schema:
+      type: string
+    example: Palo Alto Networks Device,iPhone,Polycom IP Phone
+  - name: pagelength
+    description: "The number of items in one response; that is, in one page. The default page length for policy rule recommendations is 1000 and the maximum is 1000. Setting a shorter length improves response times."
+    in: query
+    schema:
+      type: integer
+      default: 10000
+    example: 200
+  - name: offset
+    description: "In addition to the pagelength parameter, offset gets items on subsequent pages. For example, if the page length of your first request is 100, you get the first 100 policy rule recommendations. To get the next 100, add offset=100 to your second request. This skips the first 100 recommendations and gets the next 100 starting from 101."
+    in: query
+    schema:
+      type: integer
+      default: 0
+    example: 100
+
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          $ref: "../../components/schemas.yaml#/schemas/PolicyRecommendationResponse"
+        examples:
+          PolicyRecommendationResponse:
+            $ref: "../../components/examples.yaml#/examples/PolicyRecommendationResponse"
+  "4XX":
+    description: Client Error Response
+    content:
+      application/json:
+        schema:
+          $ref: "../../components/schemas.yaml#/schemas/ErrorResponse"
+        examples:
+          Bad Request:
+            $ref: "../../components/examples.yaml#/examples/BadRequestResponseExample"
+          Forbidden access:
+            $ref: "../../components/examples.yaml#/examples/UnauthorizedResponseExample"
+          Too many requests:
+            $ref: "../../components/examples.yaml#/examples/RateLimitResponseExample"
+  "5XX":
+    description: Server Error Response
+    content:
+      application/json:
+        schema:
+          $ref: "../../components/schemas.yaml#/schemas/ErrorResponse"
+        examples:
+          PolicyRecommendationResponse:
+            $ref: "../../components/examples.yaml#/examples/ServerErrorResponseExample"

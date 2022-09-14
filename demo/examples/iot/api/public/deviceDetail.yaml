@@ -1,0 +1,45 @@
+parameters:
+  - description: The customer ID to which the API call is directed
+    in: query
+    name: customerid
+    required: true
+    schema:
+      type: string
+  - description: The MAC address of a device for which you want to get details. For a static IP device, the device ID is its static IP address.
+    in: query
+    name: deviceid
+    required: true
+    schema:
+      type: string
+responses:
+  "200":
+    description: Successful Response (We only show some important fields here.)
+    content:
+      application/json:
+        schema:
+          $ref: "../../components/schemas.yaml#/schemas/IoTDeviceDetailResponse"
+        examples:
+          deviceDetailResponseExample:
+            $ref: "../../components/examples.yaml#/examples/DeviceDetailResponseExample"
+  "4XX":
+    description: Client Error Response
+    content:
+      application/json:
+        schema:
+          $ref: "../../components/schemas.yaml#/schemas/ErrorResponse"
+        examples:
+          Bad Request:
+            $ref: "../../components/examples.yaml#/examples/BadRequestResponseExample"
+          Forbidden access:
+            $ref: "../../components/examples.yaml#/examples/UnauthorizedResponseExample"
+          Too many requests:
+            $ref: "../../components/examples.yaml#/examples/RateLimitResponseExample"
+  "5XX":
+    description: Server Error Response
+    content:
+      application/json:
+        schema:
+          $ref: "../../components/schemas.yaml#/schemas/ErrorResponse"
+        examples:
+          deviceDetailResponseExample:
+            $ref: "../../components/examples.yaml#/examples/ServerErrorResponseExample"

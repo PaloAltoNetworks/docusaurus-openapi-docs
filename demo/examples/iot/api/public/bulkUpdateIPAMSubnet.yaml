@@ -1,0 +1,52 @@
+parameters:
+  - description: The customer ID specifies the API call
+    in: query
+    name: customerid
+    required: true
+    schema:
+      type: string
+  - description: Source of integration
+    in: query
+    name: updateSource
+    required: true
+    schema:
+      type: string
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: "../../components/schemas.yaml#/schemas/BulkUpdateIPAMSubnetResponseSchema"
+      examples:
+        payloadExample:
+          $ref: "../../components/examples.yaml#/examples/IPAMSubnetBulkUpdatePayloadExample"
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          $ref: "../../components/schemas.yaml#/schemas/BulkUpdateIPAMSubnetResponseSchema"
+        examples:
+          resolveSecurityAlertResponseExample:
+            $ref: "../../components/examples.yaml#/examples/IPAMSubnetBulkUpdateResponseExample"
+  "4XX":
+    description: Client Error Response
+    content:
+      application/json:
+        schema:
+          $ref: "../../components/schemas.yaml#/schemas/ErrorResponse"
+        examples:
+          Bad Request:
+            $ref: "../../components/examples.yaml#/examples/BadRequestResponseExample"
+          Unauthrorized Request:
+            $ref: "../../components/examples.yaml#/examples/UnauthorizedResponseExample"
+  "5XX":
+    description: Server Error Response
+    content:
+      application/json:
+        schema:
+          $ref: "../../components/schemas.yaml#/schemas/ErrorResponse"
+        examples:
+          resolveSecurityAlertResponseExample:
+            $ref: "../../components/examples.yaml#/examples/ServerErrorResponseExample"
