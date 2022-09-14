@@ -14,15 +14,11 @@ import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 import { Provider } from "react-redux";
 
 import { ThemeConfig } from "../../types";
-import Accept from "./Accept";
-import Authorization from "./Authorization";
 import { createAuth } from "./Authorization/slice";
-import Body from "./Body";
 import Curl from "./Curl";
-import Execute from "./Execute";
 import MethodEndpoint from "./MethodEndpoint";
-import ParamOptions from "./ParamOptions";
 import { createPersistanceMiddleware } from "./persistanceMiddleware";
+import Request from "./Request";
 import Response from "./Response";
 import SecuritySchemes from "./SecuritySchemes";
 import Server from "./Server";
@@ -99,23 +95,7 @@ function ApiDemoPanel({
         <MethodEndpoint method={method} path={path} />
         <Server />
         <SecuritySchemes infoPath={infoPath} />
-        <details className={`details__demo-panel`} open={true}>
-          <summary>
-            <div className={`details__request-summary`}>
-              <h4>Request</h4>
-              <Execute postman={postman} proxy={options?.proxy} />
-            </div>
-          </summary>
-          <div className={styles.optionsPanel}>
-            <Authorization />
-            <ParamOptions />
-            <Body
-              jsonRequestBodyExample={item.jsonRequestBodyExample}
-              requestBodyMetadata={item.requestBody}
-            />
-            <Accept />
-          </div>
-        </details>
+        <Request item={item} />
         <Response />
         <Curl
           postman={postman}
