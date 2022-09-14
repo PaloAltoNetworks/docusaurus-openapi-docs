@@ -20,7 +20,10 @@ function SecuritySchemes(props: any) {
 
   const selectedAuth = options[selected];
   return (
-    <div style={{ marginBottom: "var(--ifm-table-cell-padding)" }}>
+    <details className={`details__demo-panel`} open={false}>
+      <summary>
+        <h4>Authorization</h4>
+      </summary>
       {selectedAuth.map((auth) => {
         const isApiKey = auth.type === "apiKey";
         const isBearer = auth.type === "http" && auth.key === "Bearer";
@@ -34,13 +37,12 @@ function SecuritySchemes(props: any) {
                   display: "flex",
                   flexDirection: "column",
                   background: "var(--openapi-card-background-color)",
-                  borderRadius: "var(--openapi-card-border-radius)",
                 }}
               >
+                <span>type: {auth.type}</span>
                 <span>
-                  type: <Link to={infoAuthPath}>{auth.type}</Link>
+                  name: <Link to={infoAuthPath}>{auth.name}</Link>
                 </span>
-                <span>name: {auth.name}</span>
                 <span>in: {auth.in}</span>
               </pre>
             </React.Fragment>
@@ -55,7 +57,6 @@ function SecuritySchemes(props: any) {
                   display: "flex",
                   flexDirection: "column",
                   background: "var(--openapi-card-background-color)",
-                  borderRadius: "var(--openapi-card-border-radius)",
                 }}
               >
                 <span>
@@ -74,7 +75,7 @@ function SecuritySchemes(props: any) {
 
         return undefined;
       })}
-    </div>
+    </details>
   );
 }
 
