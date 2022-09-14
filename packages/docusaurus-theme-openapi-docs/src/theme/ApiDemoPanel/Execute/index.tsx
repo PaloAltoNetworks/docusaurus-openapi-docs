@@ -66,8 +66,7 @@ function Execute({ postman, proxy }: Props) {
 
   return (
     <button
-      className="button button--block button--primary"
-      style={{ height: "48px", marginBottom: "var(--ifm-spacing-vertical)" }}
+      className="button button--sm button--secondary"
       disabled={!isValidRequest}
       onClick={async () => {
         dispatch(setResponse("loading..."));
@@ -79,7 +78,7 @@ function Execute({ postman, proxy }: Props) {
         }
       }}
     >
-      SEND
+      Send API Request
     </button>
   );
 }
