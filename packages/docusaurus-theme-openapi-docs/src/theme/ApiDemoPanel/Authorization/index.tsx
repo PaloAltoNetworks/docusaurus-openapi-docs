@@ -58,7 +58,7 @@ function Authorization() {
       {selectedAuth.map((a) => {
         if (a.type === "http" && a.scheme === "bearer") {
           return (
-            <FormItem label="Bearer Token" key={selected + "-bearer"}>
+            <FormItem label="Bearer Token" key={a.key + "-bearer"}>
               <FormTextInput
                 placeholder="Bearer Token"
                 value={data[a.key].token ?? ""}
@@ -79,7 +79,7 @@ function Authorization() {
 
         if (a.type === "oauth2") {
           return (
-            <FormItem label="Bearer Token" key={selected + "-oauth2"}>
+            <FormItem label="Bearer Token" key={a.key + "-oauth2"}>
               <FormTextInput
                 placeholder="Bearer Token"
                 value={data[a.key].token ?? ""}
@@ -100,7 +100,7 @@ function Authorization() {
 
         if (a.type === "http" && a.scheme === "basic") {
           return (
-            <React.Fragment key={selected + "-basic"}>
+            <React.Fragment key={a.key + "-basic"}>
               <FormItem label="Username">
                 <FormTextInput
                   placeholder="Username"
@@ -140,7 +140,7 @@ function Authorization() {
 
         if (a.type === "apiKey") {
           return (
-            <FormItem label={`${a.key}`} key={selected + "-apikey"}>
+            <FormItem label={`${a.key}`} key={a.key + "-apikey"}>
               <FormTextInput
                 placeholder={`${a.key}`}
                 value={data[a.key].apiKey ?? ""}

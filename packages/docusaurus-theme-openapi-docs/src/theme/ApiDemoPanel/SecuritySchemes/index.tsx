@@ -28,7 +28,7 @@ function SecuritySchemes(props: any) {
 
         if (isApiKey || isBearer) {
           return (
-            <React.Fragment key={auth.name}>
+            <React.Fragment key={auth.key}>
               <pre
                 style={{
                   display: "flex",
