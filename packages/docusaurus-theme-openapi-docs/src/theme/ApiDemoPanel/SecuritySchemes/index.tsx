@@ -27,10 +27,9 @@ function SecuritySchemes(props: any) {
         const isBearer = auth.type === "http" && auth.key === "Bearer";
         const isClientCredentials =
           auth.type === "oauth2" && auth.key === "ClientCredentials";
-
         if (isApiKey || isBearer) {
           return (
-            <React.Fragment key={selected}>
+            <React.Fragment key={auth.key}>
               <b>
                 Authorization: <Link to={infoAuthPath}>{auth.key}</Link>
               </b>
@@ -52,7 +51,7 @@ function SecuritySchemes(props: any) {
 
         if (isClientCredentials) {
           return (
-            <React.Fragment key={selected}>
+            <React.Fragment key={auth.key}>
               <b>Authorization: {auth.key}</b>
               <pre
                 style={{
