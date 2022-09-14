@@ -49,7 +49,9 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
         <summary>
           <div className={`details__request-summary`}>
             <h4>Request</h4>
-            <Execute postman={postman} proxy={options?.proxy} />
+            {item.servers && (
+              <Execute postman={postman} proxy={options?.proxy} />
+            )}
           </div>
         </summary>
         <div className={styles.optionsPanel}>
