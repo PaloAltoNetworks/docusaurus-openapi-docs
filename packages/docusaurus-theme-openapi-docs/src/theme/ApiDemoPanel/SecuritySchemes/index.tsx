@@ -21,7 +21,7 @@ function SecuritySchemes(props: any) {
   const selectedAuth = options[selected];
   return (
     <details className={`details__demo-panel`} open={false}>
-      <summary>
+      <summary className={`details__request-summary`}>
         <h4>Authorization</h4>
       </summary>
       {selectedAuth.map((auth) => {
