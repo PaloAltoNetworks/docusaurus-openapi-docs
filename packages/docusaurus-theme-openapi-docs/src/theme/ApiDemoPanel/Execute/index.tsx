@@ -64,6 +64,9 @@ function Execute({ postman, proxy }: Props) {
     auth,
   });
 
+  const delay = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+
   return (
     <button
       className="button button--sm button--secondary"
@@ -71,6 +74,7 @@ function Execute({ postman, proxy }: Props) {
       onClick={async () => {
         dispatch(setResponse("loading..."));
         try {
+          await delay(1200);
           const res = await makeRequest(postmanRequest, proxy, body);
           dispatch(setResponse(res));
         } catch (e: any) {
