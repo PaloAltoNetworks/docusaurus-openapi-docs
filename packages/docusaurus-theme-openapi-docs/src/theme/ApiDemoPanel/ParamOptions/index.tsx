@@ -45,7 +45,7 @@ function ParamOption({ param }: ParamProps) {
 
 function ParamOptionWrapper({ param }: ParamProps) {
   return (
-    <FormItem label={param.name} type={param.in}>
+    <FormItem label={param.name} type={param.in} required={param.required}>
       <ParamOption param={param} />
     </FormItem>
   );

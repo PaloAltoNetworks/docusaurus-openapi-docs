@@ -14,13 +14,11 @@ import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 import { Provider } from "react-redux";
 
 import { ThemeConfig } from "../../types";
-import Accept from "./Accept";
 import { createAuth } from "./Authorization/slice";
-import Body from "./Body";
 import Curl from "./Curl";
 import MethodEndpoint from "./MethodEndpoint";
-import ParamOptions from "./ParamOptions";
 import { createPersistanceMiddleware } from "./persistanceMiddleware";
+import Request from "./Request";
 import Response from "./Response";
 import SecuritySchemes from "./SecuritySchemes";
 import Server from "./Server";
@@ -95,21 +93,14 @@ function ApiDemoPanel({
     <Provider store={store2}>
       <div className={styles.apiDemoPanelContainer}>
         <MethodEndpoint method={method} path={path} />
-        <SecuritySchemes infoPath={infoPath} />
-        <div className={styles.optionsPanel}>
-          <ParamOptions />
-          <Body
-            jsonRequestBodyExample={item.jsonRequestBodyExample}
-            requestBodyMetadata={item.requestBody}
-          />
-          <Accept />
-        </div>
         <Server />
+        <SecuritySchemes infoPath={infoPath} />
+        <Request item={item} />
+        <Response />
         <Curl
           postman={postman}
           codeSamples={(item as any)["x-code-samples"] ?? []}
         />
-        <Response />
       </div>
     </Provider>
   );

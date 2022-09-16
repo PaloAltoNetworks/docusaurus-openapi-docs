@@ -70,7 +70,7 @@ function createResponseHeaders(responseHeaders: any) {
           }: any = headerObj;
 
           return create("li", {
-            class: "schemaItem",
+            className: "schemaItem",
             children: [
               createDetailsSummary({
                 children: [

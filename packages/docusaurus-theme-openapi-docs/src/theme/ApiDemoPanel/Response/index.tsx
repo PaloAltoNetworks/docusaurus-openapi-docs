@@ -7,8 +7,9 @@
 
 import React from "react";
 
+import CodeBlock from "@theme/CodeBlock";
+
 import { useTypedDispatch, useTypedSelector } from "../hooks";
-import FloatingButton from "./../FloatingButton";
 import { clearResponse } from "./slice";
 
 // TODO: We probably shouldn't attempt to format XML...
@@ -43,23 +44,28 @@ function Response() {
   try {
     prettyResponse = JSON.stringify(JSON.parse(response), null, 2);
   } catch {
-    if (response.startsWith("<?xml ")) {
+    if (response.startsWith("<")) {
       prettyResponse = formatXml(response);
     }
   }
 
   return (
-    <FloatingButton onClick={() => dispatch(clearResponse())} label="Clear">
-      <pre
-        style={{
-          background: "var(--openapi-card-background-color)",
-          borderRadius: "var(--openapi-card-border-radius)",
-          paddingRight: "60px",
-        }}
-      >
-        <code>{prettyResponse || "No Response"}</code>
-      </pre>
-    </FloatingButton>
+    <details className={`details__demo-panel`} open={true}>
+      <summary>
+        <div className={`details__response-summary`}>
+          <h4>Response</h4>
+          <button
+            className="button button--sm button--secondary"
+            onClick={() => dispatch(clearResponse())}
+          >
+            Clear
+          </button>
+        </div>
+      </summary>
+      <CodeBlock language={response.startsWith("<") ? `xml` : `json`}>
+        {prettyResponse || "No Response"}
+      </CodeBlock>
+    </details>
   );
 }
 

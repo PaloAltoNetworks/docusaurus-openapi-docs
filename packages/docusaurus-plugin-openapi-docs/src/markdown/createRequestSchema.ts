@@ -46,7 +46,7 @@ export function mergeAllOf(allOf: SchemaObject[]) {
  */
 function createAnyOneOf(schema: SchemaObject): any {
   const type = schema.oneOf ? "oneOf" : "anyOf";
-  return create("li", {
+  return create("div", {
     children: [
       create("div", {
         children: [
