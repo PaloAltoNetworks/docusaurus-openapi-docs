@@ -8,6 +8,7 @@
 import React from "react";
 
 import sdk from "@paloaltonetworks/postman-collection";
+import Modal from "react-modal";
 
 import { useTypedDispatch, useTypedSelector } from "../hooks";
 import { Param } from "../ParamOptions/slice";
@@ -67,24 +68,121 @@ function Execute({ postman, proxy }: Props) {
   const delay = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
 
-  return (
-    <button
-      className="button button--sm button--secondary"
-      disabled={!isValidRequest}
-      onClick={async () => {
-        dispatch(setResponse("loading..."));
-        try {
-          await delay(1200);
-          const res = await makeRequest(postmanRequest, proxy, body);
-          dispatch(setResponse(res));
-        } catch (e: any) {
-          dispatch(setResponse(e.message ?? "Error fetching."));
-        }
-      }}
-    >
-      Send API Request
-    </button>
-  );
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
+  function acceptAgreement() {
+    setIsOpen(false);
+    setAgreementAccepted(true);
+    sessionStorage.setItem("agreement-ack", "true");
+  }
+
+  const [modalIsOpen, setIsOpen] = React.useState(false);
+  // Set the following as default value to persist to session and enable modal
+  // sessionStorage.getItem("agreement-ack") === "true"
+  const [agreementAccepted, setAgreementAccepted] = React.useState(true);
+
+  const customStyles = {
+    overlay: {
+      backdropFilter: "blur(10px)",
+      backgroundColor: "transparent",
+    },
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      border: "none",
+      padding: "none",
+      borderRadius: "var(--openapi-card-border-radius)",
+      background: "var(--ifm-card-background-color)",
+      transform: "translate(-50%, -50%)",
+      maxWidth: "550px",
+    },
+  };
+
+  if (agreementAccepted) {
+    return (
+      <button
+        className="button button--sm button--secondary"
+        disabled={!isValidRequest}
+        onClick={async () => {
+          dispatch(setResponse("Fetching..."));
+          try {
+            await delay(1200);
+            const res = await makeRequest(postmanRequest, proxy, body);
+            dispatch(setResponse(res));
+          } catch (e: any) {
+            console.log(e);
+            dispatch(setResponse("Connection failed"));
+          }
+        }}
+      >
+        Send API Request
+      </button>
+    );
+  } else {
+    return (
+      <React.Fragment>
+        <button
+          className="button button--sm button--secondary"
+          onClick={openModal}
+        >
+          Send API Request
+        </button>
+        <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={closeModal}
+          style={customStyles}
+          contentLabel="Terms of Use"
+        >
+          <form>
+            <div className="card">
+              <div className="card__header">
+                <h2>Terms of Use</h2>
+                <hr></hr>
+              </div>
+              <div className="card__body">
+                <p>
+                  By accepting this agreement the end user acknowledges the
+                  risks of performing authenticated and non-authenticated API
+                  requests from the browser.
+                </p>
+                <p>
+                  The end user also accepts the responsibility of safeguarding
+                  API credentials and any potentially sensitive data returned by
+                  the API.
+                </p>
+                <br></br>
+              </div>
+              <div className="card__footer">
+                <div className="button-group button-group--block">
+                  <button
+                    className="button button--sm button--outline button--success"
+                    onClick={acceptAgreement}
+                  >
+                    AGREE
+                  </button>
+                  <button
+                    className="button button--sm button--outline button--danger"
+                    onClick={closeModal}
+                  >
+                    DISAGREE
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </Modal>
+      </React.Fragment>
+    );
+  }
 }
 
 export default Execute;
