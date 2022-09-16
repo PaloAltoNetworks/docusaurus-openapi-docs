@@ -30,12 +30,17 @@ function serializer(replacer: any, cycleReplacer: any) {
     // Resolve discriminator ref pointers
     if (value?.discriminator !== undefined) {
       const parser = new OpenAPIParser(stack[0]);
-      for (let [k, v] of Object.entries(value.discriminator.mapping)) {
-        const discriminator = k as string;
-        if (typeof v === "string" && v.charAt(0) === "#") {
-          const ref = v as string;
-          const resolvedRef = parser.byRef(ref);
-          value.discriminator.mapping[discriminator] = resolvedRef;
+      if (
+        value.discriminator.mapping &&
+        typeof value.discriminator.mapping === "object"
+      ) {
+        for (let [k, v] of Object.entries(value.discriminator.mapping)) {
+          const discriminator = k as string;
+          if (typeof v === "string" && v.charAt(0) === "#") {
+            const ref = v as string;
+            const resolvedRef = parser.byRef(ref);
+            value.discriminator.mapping[discriminator] = resolvedRef;
+          }
         }
       }
     }
