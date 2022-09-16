@@ -191,7 +191,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
       const tagMdTemplate = `---
 id: {{{id}}}
 title: {{{description}}}
-description: {{{description}}}
+description: "{{{description}}}"
 custom_edit_url: null
 ---
 
