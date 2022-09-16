@@ -9,6 +9,19 @@ import sdk from "@paloaltonetworks/postman-collection";
 
 import { Body } from "../Body/slice";
 
+function fetchWithtimeout(
+  url: string,
+  options: RequestInit,
+  timeout = 5000
+): any {
+  return Promise.race([
+    fetch(url, options),
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error("Request timed out")), timeout)
+    ),
+  ]);
+}
+
 async function loadImage(content: Blob): Promise<string | ArrayBuffer | null> {
   return new Promise((accept, reject) => {
     const reader = new FileReader();
@@ -174,9 +187,11 @@ async function makeRequest(
     finalUrl = normalizedProxy + request.url.toString();
   }
 
-  return await fetch(finalUrl, requestOptions).then((response) => {
-    return response.text();
-  });
+  return await fetchWithtimeout(finalUrl, requestOptions).then(
+    (response: any) => {
+      return response.text();
+    }
+  );
 }
 
 export default makeRequest;
