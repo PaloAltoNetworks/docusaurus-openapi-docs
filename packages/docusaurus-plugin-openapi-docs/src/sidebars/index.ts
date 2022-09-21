@@ -66,13 +66,12 @@ function groupByTags(
       .filter((item): item is string => !!item)
   );
 
-  // Only include operation tags that are globally defined
-  const apiTags: string[] = [];
+  // Combine globally defined tags with operation tags
+  let apiTags: string[] = [];
   tags.flat().forEach((tag) => {
-    if (operationTags.includes(tag.name!)) {
-      apiTags.push(tag.name!);
-    }
+    apiTags.push(tag.name!);
   });
+  apiTags = uniq(apiTags.concat(operationTags));
 
   const basePath = docPath
     ? outputDir.split(docPath!)[1].replace(/^\/+/g, "")
