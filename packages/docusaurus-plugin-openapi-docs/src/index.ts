@@ -235,6 +235,12 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
         if (item.type === "api") {
           if (!fs.existsSync(`${outputDir}/${item.id}.api.mdx`)) {
             try {
+              // kebabCase(arg) returns 0-length string when arg is undefined
+              if (item.id.length === 0) {
+                throw Error(
+                  "Operation must have summary or operationId defined"
+                );
+              }
               fs.writeFileSync(`${outputDir}/${item.id}.api.mdx`, view, "utf8");
               console.log(
                 chalk.green(
