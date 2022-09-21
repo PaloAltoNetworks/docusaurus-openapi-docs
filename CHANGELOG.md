@@ -1,3 +1,22 @@
+## 1.2.0 (Sep 21, 2022)
+
+High level enhancements
+
+- Re-introduced ability to send API request from browser.
+
+Other enhancements and bug fixes
+
+- Ensure docPath corresponds to docsPluginId when pluginId is passed ([#277](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/277))
+- Upgrade lerna
+- Allow grouping by operation tag if global tag not defined ([#276](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/276))
+- Throw exception when operationId and summary not defined ([#274](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/274))
+- [Enhancement] Set title in mustache templates ([#273](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/273))
+- Check for mapping object before attempting to resolve discriminators ([#269](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/269))
+- Handle both items and non-items schemas in renderDefaultValue ([#268](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/268))
+- [Enhancement] Re-introduce ability to send API requests from browser ([#264](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/264))
+- [Enhancement] Use operation description as frontmatter description ([#262](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/262))
+- Upgrade postman-code-generators ([#261](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/261))
+
 ## 1.1.12 (Sep 12, 2022)
 
 High level enhancements
