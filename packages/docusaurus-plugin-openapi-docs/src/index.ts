@@ -143,6 +143,7 @@ export default function pluginOpenAPIDocs(
         ? fs.readFileSync(template).toString()
         : `---
 id: {{{id}}}
+title: "{{{title}}}"
 description: "{{{description}}}"
 {{^api}}
 sidebar_label: Introduction
@@ -173,6 +174,8 @@ info_path: {{{infoPath}}}
 
       const infoMdTemplate = `---
 id: {{{id}}}
+title: "{{{title}}}"
+description: "{{{description}}}"
 sidebar_label: {{{title}}}
 hide_title: true
 custom_edit_url: null
@@ -190,7 +193,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
 
       const tagMdTemplate = `---
 id: {{{id}}}
-title: {{{description}}}
+title: "{{{description}}}"
 description: "{{{description}}}"
 custom_edit_url: null
 ---
