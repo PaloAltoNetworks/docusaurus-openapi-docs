@@ -25,7 +25,7 @@ import {
   SidebarOptions,
   TagPageMetadata,
 } from "../types";
-import { sampleFromSchema } from "./createExample";
+import { sampleRequestFromSchema } from "./createRequestExample";
 import { OpenApiObject, TagObject } from "./types";
 import { loadAndResolveSpec } from "./utils/loadAndResolveSpec";
 
@@ -119,7 +119,12 @@ function createItems(
       id: infoId,
       unversionedId: infoId,
       title: openapiData.info.title,
-      description: openapiData.info.description,
+      description: openapiData.info.description
+        ? openapiData.info.description.replace(
+            /((?:^|[^\\])(?:\\{2})*)"/g,
+            "$1'"
+          )
+        : "",
       frontMatter: {},
       securitySchemes: openapiData.components?.securitySchemes,
       info: {
@@ -170,7 +175,7 @@ function createItems(
       let jsonRequestBodyExample;
       const body = operationObject.requestBody?.content?.["application/json"];
       if (body?.schema) {
-        jsonRequestBodyExample = sampleFromSchema(body.schema);
+        jsonRequestBodyExample = sampleRequestFromSchema(body.schema);
       }
 
       // Handle vendor JSON media types
@@ -180,7 +185,7 @@ function createItems(
         if (firstBodyContentKey.endsWith("+json")) {
           const firstBody = bodyContent[firstBodyContentKey];
           if (firstBody?.schema) {
-            jsonRequestBodyExample = sampleFromSchema(firstBody.schema);
+            jsonRequestBodyExample = sampleRequestFromSchema(firstBody.schema);
           }
         }
       }
@@ -194,7 +199,12 @@ function createItems(
         infoId: infoId ?? "",
         unversionedId: baseId,
         title: title,
-        description: description ?? "",
+        description: operationObject.description
+          ? operationObject.description.replace(
+              /((?:^|[^\\])(?:\\{2})*)"/g,
+              "$1'"
+            )
+          : "",
         frontMatter: {},
         api: {
           ...defaults,

@@ -229,11 +229,11 @@ function SchemaTabsComponent(props) {
             (tabItem) => tabItem.props.value === selectedValue
           )[0],
           {
-            className: clsx("margin-vert--md", styles.schemaTabsContainer),
+            className: "margin-vert--md",
           }
         )
       ) : (
-        <div className={clsx("margin-vert--md", styles.schemaTabsContainer)}>
+        <div className="margin-vert--md">
           {children.map((tabItem, i) =>
             cloneElement(tabItem, {
               key: i,

@@ -168,6 +168,7 @@ function MimeTabsComponent(props) {
   };
 
   const dispatch = useTypedDispatch();
+  console.log({ schemaType });
   const isRequestSchema = schemaType.toLowerCase() === "request";
 
   return (

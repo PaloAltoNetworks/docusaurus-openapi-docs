@@ -1,7 +1,7 @@
 {
   "name": "docusaurus-plugin-openapi-docs",
   "description": "OpenAPI plugin for Docusaurus.",
-  "version": "1.1.7",
+  "version": "1.2.0",
   "license": "MIT",
   "keywords": [
     "openapi",
@@ -40,10 +40,10 @@
   },
   "dependencies": {
     "@apidevtools/json-schema-ref-parser": "^9.0.9",
-    "@docusaurus/mdx-loader": "2.0.1",
-    "@docusaurus/plugin-content-docs": "2.0.1",
-    "@docusaurus/utils": "2.0.1",
-    "@docusaurus/utils-validation": "2.0.1",
+    "@docusaurus/mdx-loader": "^2.0.1",
+    "@docusaurus/plugin-content-docs": "^2.0.1",
+    "@docusaurus/utils": "^2.0.1",
+    "@docusaurus/utils-validation": "^2.0.1",
     "@paloaltonetworks/openapi-to-postmanv2": "3.1.0-hotfix.1",
     "@paloaltonetworks/postman-collection": "^4.1.0",
     "@redocly/openapi-core": "^1.0.0-beta.103",
@@ -59,7 +59,8 @@
     "slugify": "^1.6.5",
     "swagger2openapi": "^7.0.8",
     "url-template": "^3.0.0",
-    "webpack": "^5.61.0"
+    "webpack": "^5.61.0",
+    "xml-formatter": "^2.6.1"
   },
   "peerDependencies": {
     "react": "^16.8.4 || ^17.0.0"

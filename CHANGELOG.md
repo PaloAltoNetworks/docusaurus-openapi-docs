@@ -1,3 +1,90 @@
+## 1.2.0 (Sep 21, 2022)
+
+High level enhancements
+
+- Re-introduced ability to send API request from browser.
+
+Other enhancements and bug fixes
+
+- Ensure docPath corresponds to docsPluginId when pluginId is passed ([#277](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/277))
+- Upgrade lerna
+- Allow grouping by operation tag if global tag not defined ([#276](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/276))
+- Throw exception when operationId and summary not defined ([#274](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/274))
+- [Enhancement] Set title in mustache templates ([#273](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/273))
+- Check for mapping object before attempting to resolve discriminators ([#269](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/269))
+- Handle both items and non-items schemas in renderDefaultValue ([#268](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/268))
+- [Enhancement] Re-introduce ability to send API requests from browser ([#264](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/264))
+- [Enhancement] Use operation description as frontmatter description ([#262](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/262))
+- Upgrade postman-code-generators ([#261](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/261))
+
+## 1.1.12 (Sep 12, 2022)
+
+High level enhancements
+
+- Relax docusaurus dependencies.
+
+Other enhancements and bug fixes
+
+- [Enhancement] Relax docusaurus dependencies and upgrade demo to v2.1.0 ([#258](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/258))
+- Add documentation for languageTabs and request method labels. ([#256](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/256))
+- Add Docusaurus version to demo footer. ([#255](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/255))
+- Update docs
+
+## 1.1.11 (Sep 8, 2022)
+
+High level enhancements
+
+- Added tooltip support to request option input fields.
+- Added multi plugin instance support to CLI.
+
+Other enhancements and bug fixes
+
+- [Enhancement] Split placeholder by newline and add title for tooltip ([#252](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/252))
+- [Bug] Delete writeOnly props instead of readOnly and ignore example if present ([#251](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/251))
+- Upgrade lerna to 5.5.0 ([#250](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/250))
+- Apply flex properties to schema tabs container ([#248](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/248))
+- Add gtag
+- Fix logic that determines if an object property is required ([#247](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/247))
+- Bump terser from 5.14.1 to 5.15.0 ([#240](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/240))
+- Bump terser from 5.12.1 to 5.15.0 in /demo ([#241](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/241))
+- [Experimental] Adds multi-instance support to plugin CLI ([#244](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/244))
+- Add combine dependabot workflow ([#242](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/242))
+- Fix missing array opening bracket. ([#238](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/238))
+- [Bug] Fix support for markdown template ([#239](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/239))
+
+## 1.1.10 (Sep 2, 2022)
+
+High level enhancements
+
+- Improve CodeTabs and languageTabs support.
+
+Other enhancements and bug fixes
+
+- [Enhancement] Expand supported CodeTab languages ([#235](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/235))
+
+## 1.1.9 (Aug 30, 2022)
+
+High level enhancements
+
+- Introduced PWA support to demo/doc site.
+- Improvements to how request/response schemas used to create examples.
+
+Other enhancements and bug fixes
+
+- [Bug] Ignore additional props in mergeAllOf ([#228](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/228))
+- [Bug] Various fixes to how request and response schemas are handled ([#224](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/224))
+- [Experimental] Introduce PWA support ([#216](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/216))
+
+## 1.1.8 (Aug 17, 2022)
+
+High level enhancements
+
+- Bug fixes.
+
+Other enhancements and bug fixes
+
+- Fix typo TabTtem -> TabItem ([#212](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/212))
+
 ## 1.1.7 (Aug 15, 2022)
 
 High level enhancements

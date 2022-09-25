@@ -1,0 +1,141 @@
+name: "Combine Dependabot PRs"
+
+on:
+  workflow_dispatch:
+    inputs:
+      branchPrefix:
+        description: "Branch prefix to find combinable PRs based on"
+        required: true
+        default: "dependabot"
+      mustBeGreen:
+        description: "Only combine PRs that are green (status is success)"
+        required: true
+        default: "true"
+      combineBranchName:
+        description: "Name of the branch to combine PRs into"
+        required: true
+        default: "combine-dependabot-prs"
+      ignoreLabel:
+        description: "Exclude PRs with this label"
+        required: true
+        default: "nocombine"
+
+jobs:
+  combine-prs:
+    if: github.repository_owner == 'PaloAltoNetworks'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v3
+        id: fetch-branch-names
+        name: Fetch dependabot branches
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const pulls = await github.paginate('GET /repos/:owner/:repo/pulls', {
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+            branches = [];
+            prs = [];
+            base_branch = null;
+            for (const pull of pulls) {
+              const branch = pull['head']['ref'];
+              console.log('Pull for branch: ' + branch);
+              if (branch.startsWith('${{ github.event.inputs.branchPrefix }}')) {
+                console.log('Branch matched: ' + branch);
+                statusOK = true;
+                if(${{ github.event.inputs.mustBeGreen }}) {
+                  console.log('Checking green status: ' + branch);
+                  const statuses = await github.paginate('GET /repos/{owner}/{repo}/commits/{ref}/status', {
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    ref: branch
+                  });
+                  if(statuses.length > 0) {
+                    const latest_status = statuses[0]['state'];
+                    console.log('Validating status: ' + latest_status);
+                    if(latest_status != 'success') {
+                      console.log('Discarding ' + branch + ' with status ' + latest_status);
+                      statusOK = false;
+                    }
+                  }
+                }
+                console.log('Checking labels: ' + branch);
+                const labels = pull['labels'];
+                for(const label of labels) {
+                  const labelName = label['name'];
+                  console.log('Checking label: ' + labelName);
+                  if(labelName == '${{ github.event.inputs.ignoreLabel }}') {
+                    console.log('Discarding ' + branch + ' with label ' + labelName);
+                    statusOK = false;
+                  }
+                }
+                if (statusOK) {
+                  console.log('Adding branch to array: ' + branch);
+                  branches.push(branch);
+                  prs.push('#' + pull['number'] + ' ' + pull['title']);
+                  base_branch = pull['base']['ref'];
+                }
+              }
+            }
+            if (branches.length == 0) {
+              core.setFailed('No PRs/branches matched criteria');
+              return;
+            }
+            core.setOutput('base-branch', base_branch);
+            core.setOutput('prs-string', prs.join('\n'));
+
+            combined = branches.join(' ')
+            console.log('Combined: ' + combined);
+            return combined
+
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Combine dependabot branches
+        env:
+          BASE_BRANCH: ${{ steps.fetch-branch-names.outputs.base-branch }}
+          BRANCHES_TO_COMBINE: ${{ steps.fetch-branch-names.outputs.result }}
+          COMBINE_BRANCH_NAME: ${{ github.event.inputs.combineBranchName }}
+        run: |
+          echo "$BRANCHES_TO_COMBINE"
+          sourcebranches="${BRANCHES_TO_COMBINE%\"}"
+          sourcebranches="${sourcebranches#\"}"
+
+          basebranch="${BASE_BRANCH%\"}"
+          basebranch="${basebranch#\"}"
+
+          git config pull.rebase false
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+          git branch $COMBINE_BRANCH_NAME $basebranch
+          git checkout $COMBINE_BRANCH_NAME
+          git pull origin $sourcebranches --no-edit
+          git push origin $COMBINE_BRANCH_NAME
+
+      - name: Get token
+        id: get_token
+        uses: machine-learning-apps/actions-app-token@master
+        with:
+          APP_PEM: ${{ secrets.APP_PEM }}
+          APP_ID: ${{ secrets.APP_ID }}
+
+      - uses: actions/github-script@v3
+        name: Create Combined Pull Request
+        env:
+          PRS_STRING: ${{ steps.fetch-branch-names.outputs.prs-string }}
+        with:
+          github-token: ${{ steps.get_token.outputs.app_token }}
+          script: |
+            const prString = process.env.PRS_STRING;
+            const body = 'This PR includes the following security updates:\n' + prString;
+            await github.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '🛡️ Security Updates',
+              head: '${{ github.event.inputs.combineBranchName }}',
+              base: '${{ steps.fetch-branch-names.outputs.base-branch }}',
+              body: body
+            });

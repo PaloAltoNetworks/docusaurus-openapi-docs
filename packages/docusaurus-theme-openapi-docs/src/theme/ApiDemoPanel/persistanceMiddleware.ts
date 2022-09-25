@@ -19,7 +19,7 @@ export function createPersistanceMiddleware(options: ThemeConfig["api"]) {
 
       const state = storeAPI.getState();
 
-      const storage = createStorage(options?.authPersistance);
+      const storage = createStorage("sessionStorage");
 
       if (action.type === setAuthData.type) {
         for (const [key, value] of Object.entries(state.auth.data)) {

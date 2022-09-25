@@ -14,7 +14,7 @@ The options range from completely manual to fully-automated (based on some input
 Guidelines:
 
 - Try to leverage sidebar categories to group similar paths/endpoints together.
-- Use path tags as the pattern to group paths/endpoints by (Note, the OpenAPI docs plugin bases the grouping on the first tag).
+- Use path tags as the pattern to group paths/endpoints by (Note, the OpenAPI docs plugin currently groups by the first tag).
 - Use short, obvious, descriptive tag names.
 - Use tag descriptions to get more helpful category link pages (supports Docusaurus MDX features).
 - Try to front or back-load supporting documentation (i.e. docs that aren't generated from the OpenAPI spec) in the same sidebar as the generate API docs.
@@ -58,4 +58,5 @@ Docusaurus now supports the ability to designate or customize what page gets dis
 The OpenAPI Docs plugin can leverage this feature in a number of ways, including:
 
 - Using the `generated-index` feature to create an index of all paths/endpoints availabke under a tag.
+- Setting the `tag` description of an OpenAPI specification as the content that displays when a category is clicked.
 - Setting the `info` section of an OpenAPI specification as the page that displays when a category is clicked (reserved primarily for micro-specs).

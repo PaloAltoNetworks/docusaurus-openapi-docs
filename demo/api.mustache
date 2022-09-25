@@ -1,0 +1,30 @@
+---
+id: {{{id}}}
+title: {{{title}}}
+description: "{{{description}}}"
+{{^api}}
+sidebar_label: Introduction
+{{/api}}
+{{#api}}
+sidebar_label: {{{title}}}
+{{/api}}
+{{^api}}
+sidebar_position: 0
+{{/api}}
+hide_title: true
+{{#api}}
+hide_table_of_contents: true
+{{/api}}
+{{#json}}
+api: {{{json}}}
+{{/json}}
+{{#api.method}}
+sidebar_class_name: "{{{api.method}}} api-method"
+{{/api.method}}
+{{#infoPath}}
+info_path: {{{infoPath}}}
+{{/infoPath}}
+custom_edit_url: "https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/new?labels=documentation&template=documentation_problem.md&title=[Documentation] Requesting changes to '{{{title}}}' ({{{id}}})"
+---
+
+{{{markdown}}}

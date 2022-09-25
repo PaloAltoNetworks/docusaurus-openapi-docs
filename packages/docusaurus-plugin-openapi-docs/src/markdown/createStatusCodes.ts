@@ -5,6 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import format from "xml-formatter";
+
+import { sampleResponseFromSchema } from "../openapi/createResponseExample";
 import { ApiItem } from "../types";
 import { createDescription } from "./createDescription";
 import { createDetails } from "./createDetails";
@@ -12,6 +15,43 @@ import { createDetailsSummary } from "./createDetailsSummary";
 import { createResponseSchema } from "./createResponseSchema";
 import { create } from "./utils";
 import { guard } from "./utils";
+
+export default function json2xml(o: any, tab: any) {
+  var toXml = function (v: any, name: string, ind: any) {
+      var xml = "";
+      if (v instanceof Array) {
+        for (var i = 0, n = v.length; i < n; i++)
+          xml += ind + toXml(v[i], name, ind + "\t") + "\n";
+      } else if (typeof v == "object") {
+        var hasChild = false;
+        xml += ind + "<" + name;
+        for (var m in v) {
+          if (m.charAt(0) === "@")
+            xml += " " + m.substr(1) + '="' + v[m].toString() + '"';
+          else hasChild = true;
+        }
+        xml += hasChild ? ">" : "/>";
+        if (hasChild) {
+          for (var m2 in v) {
+            if (m2 === "#text") xml += v[m2];
+            else if (m2 === "#cdata") xml += "<![CDATA[" + v[m2] + "]]>";
+            else if (m2.charAt(0) !== "@") xml += toXml(v[m2], m2, ind + "\t");
+          }
+          xml +=
+            (xml.charAt(xml.length - 1) === "\n" ? ind : "") +
+            "</" +
+            name +
+            ">";
+        }
+      } else {
+        xml += ind + "<" + name + ">" + v.toString() + "</" + name + ">";
+      }
+      return xml;
+    },
+    xml = "";
+  for (var m3 in o) xml += toXml(o[m3], m3, "");
+  return tab ? xml.replace(/\t/g, tab) : xml.replace(/\t|\n/g, "");
+}
 
 interface Props {
   responses: ApiItem["responses"];
@@ -30,7 +70,7 @@ function createResponseHeaders(responseHeaders: any) {
           }: any = headerObj;
 
           return create("li", {
-            class: "schemaItem",
+            className: "schemaItem",
             children: [
               createDetailsSummary({
                 children: [
@@ -67,7 +107,17 @@ function createResponseHeaders(responseHeaders: any) {
   );
 }
 
-export function createResponseExamples(responseExamples: any) {
+export function createResponseExamples(
+  responseExamples: any,
+  mimeType: string
+) {
+  let language = "shell";
+  if (mimeType.endsWith("json")) {
+    language = "json";
+  }
+  if (mimeType.endsWith("xml")) {
+    language = "xml";
+  }
   return Object.entries(responseExamples).map(
     ([exampleName, exampleValue]: any) => {
       const camelToSpaceName = exampleName.replace(/([A-Z])/g, " $1");
@@ -81,6 +131,7 @@ export function createResponseExamples(responseExamples: any) {
           children: [
             create("ResponseSamples", {
               responseExample: JSON.stringify(exampleValue.value, null, 2),
+              language: language,
             }),
           ],
         });
@@ -91,6 +142,7 @@ export function createResponseExamples(responseExamples: any) {
         children: [
           create("ResponseSamples", {
             responseExample: exampleValue.value,
+            language: language,
           }),
         ],
       });
@@ -98,7 +150,14 @@ export function createResponseExamples(responseExamples: any) {
   );
 }
 
-export function createResponseExample(responseExample: any) {
+export function createResponseExample(responseExample: any, mimeType: string) {
+  let language = "shell";
+  if (mimeType.endsWith("json")) {
+    language = "json";
+  }
+  if (mimeType.endsWith("xml")) {
+    language = "xml";
+  }
   if (typeof responseExample === "object") {
     return create("TabItem", {
       label: `Example`,
@@ -106,6 +165,7 @@ export function createResponseExample(responseExample: any) {
       children: [
         create("ResponseSamples", {
           responseExample: JSON.stringify(responseExample, null, 2),
+          language: language,
         }),
       ],
     });
@@ -116,9 +176,67 @@ export function createResponseExample(responseExample: any) {
     children: [
       create("ResponseSamples", {
         responseExample: responseExample,
+        language: language,
       }),
     ],
   });
+}
+
+export function createExampleFromSchema(schema: any, mimeType: string) {
+  const responseExample = sampleResponseFromSchema(schema);
+  if (mimeType.endsWith("xml")) {
+    let responseExampleObject;
+    try {
+      responseExampleObject = JSON.parse(JSON.stringify(responseExample));
+    } catch {
+      return undefined;
+    }
+
+    if (typeof responseExampleObject === "object") {
+      let xmlExample;
+      try {
+        xmlExample = format(json2xml(responseExampleObject, ""), {
+          indentation: "  ",
+          lineSeparator: "\n",
+          collapseContent: true,
+        });
+      } catch {
+        const xmlExampleWithRoot = { root: responseExampleObject };
+        try {
+          xmlExample = format(json2xml(xmlExampleWithRoot, ""), {
+            indentation: "  ",
+            lineSeparator: "\n",
+            collapseContent: true,
+          });
+        } catch {
+          xmlExample = json2xml(responseExampleObject, "");
+        }
+      }
+      return create("TabItem", {
+        label: `Example (from schema)`,
+        value: `Example (from schema)`,
+        children: [
+          create("ResponseSamples", {
+            responseExample: xmlExample,
+            language: "xml",
+          }),
+        ],
+      });
+    }
+  }
+  if (typeof responseExample === "object") {
+    return create("TabItem", {
+      label: `Example (from schema)`,
+      value: `Example (from schema)`,
+      children: [
+        create("ResponseSamples", {
+          responseExample: JSON.stringify(responseExample, null, 2),
+          language: "json",
+        }),
+      ],
+    });
+  }
+  return undefined;
 }
 
 export function createStatusCodes({ responses }: Props) {
@@ -147,8 +265,8 @@ export function createStatusCodes({ responses }: Props) {
               }),
               responseHeaders &&
                 createDetails({
-                  "data-collaposed": false,
-                  open: true,
+                  "data-collaposed": true,
+                  open: false,
                   style: { textAlign: "left", marginBottom: "1rem" },
                   children: [
                     createDetailsSummary({

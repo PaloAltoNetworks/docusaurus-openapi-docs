@@ -8,6 +8,7 @@
 import React from "react";
 
 import { RequestBodyObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
+import format from "xml-formatter";
 
 import { useTypedDispatch, useTypedSelector } from "../../ApiItem/hooks";
 import ContentType from "../ContentType";
@@ -55,6 +56,7 @@ function BodyWrap({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
 
 function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
   const contentType = useTypedSelector((state) => state.contentType.value);
+  const required = requestBodyMetadata?.required;
 
   const dispatch = useTypedDispatch();
 
@@ -83,7 +85,7 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
 
   if (schema?.format === "binary") {
     return (
-      <FormItem label="Body">
+      <FormItem label="Body" required={required}>
         <FormFileUpload
           placeholder={schema.description || "Body"}
           onChange={(file) => {
@@ -109,7 +111,7 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
     schema?.type === "object"
   ) {
     return (
-      <FormItem label="Body">
+      <FormItem label="Body" required={required}>
         <div
           style={{
             marginTop: "calc(var(--ifm-pre-padding) / 2)",
@@ -121,7 +123,14 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
           {Object.entries(schema.properties ?? {}).map(([key, val]: any) => {
             if (val.format === "binary") {
               return (
-                <FormItem key={key} label={key}>
+                <FormItem
+                  key={key}
+                  label={key}
+                  required={
+                    Array.isArray(schema.required) &&
+                    schema.required.includes(key)
+                  }
+                >
                   <FormFileUpload
                     placeholder={val.description || key}
                     onChange={(file) => {
@@ -146,7 +155,14 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
 
             if (val.enum) {
               return (
-                <FormItem key={key} label={key}>
+                <FormItem
+                  key={key}
+                  label={key}
+                  required={
+                    Array.isArray(schema.required) &&
+                    schema.required.includes(key)
+                  }
+                >
                   <FormSelect
                     options={["---", ...val.enum]}
                     onChange={(e) => {
@@ -168,7 +184,14 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
             }
             // TODO: support all the other types.
             return (
-              <FormItem key={key} label={key}>
+              <FormItem
+                key={key}
+                label={key}
+                required={
+                  Array.isArray(schema.required) &&
+                  schema.required.includes(key)
+                }
+              >
                 <FormTextInput
                   placeholder={val.description || key}
                   onChange={(e) => {
@@ -197,13 +220,21 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
 
   if (contentType === "application/xml") {
     if (jsonRequestBodyExample) {
-      exampleBodyString = json2xml(jsonRequestBodyExample);
+      try {
+        exampleBodyString = format(json2xml(jsonRequestBodyExample, ""), {
+          indentation: "  ",
+          lineSeparator: "\n",
+          collapseContent: true,
+        });
+      } catch {
+        exampleBodyString = json2xml(jsonRequestBodyExample);
+      }
     }
     language = "xml";
   }
 
   return (
-    <FormItem label="Body">
+    <FormItem label="Body" required={required}>
       <LiveApp action={dispatch} language={language}>
         {exampleBodyString}
       </LiveApp>

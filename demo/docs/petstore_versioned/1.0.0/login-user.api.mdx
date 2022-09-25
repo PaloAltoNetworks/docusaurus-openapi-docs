@@ -1,5 +1,7 @@
 ---
 id: login-user
+title: "Logs user into the system"
+description: ""
 sidebar_label: Logs user into the system
 hide_title: true
 hide_table_of_contents: true
@@ -23,15 +25,15 @@ import TabItem from "@theme/TabItem";
 
 successful operation
 
-</div><details style={{"textAlign":"left","marginBottom":"1rem"}} data-collaposed={false} open={true}><summary style={{}}><strong>Response Headers</strong></summary><ul style={{"marginLeft":"1rem"}}><li class={"schemaItem"}><summary style={{}}><strong>X-Rate-Limit</strong><span style={{"opacity":"0.6"}}> integer</span></summary><div><div style={{"marginTop":".5rem","marginBottom":".5rem"}}>
+</div><details style={{"textAlign":"left","marginBottom":"1rem"}} data-collaposed={true} open={false}><summary style={{}}><strong>Response Headers</strong></summary><ul style={{"marginLeft":"1rem"}}><li className={"schemaItem"}><summary style={{}}><strong>X-Rate-Limit</strong><span style={{"opacity":"0.6"}}> integer</span></summary><div><div style={{"marginTop":".5rem","marginBottom":".5rem"}}>
 
 calls per hour allowed by the user
 
-</div></div></li><li class={"schemaItem"}><summary style={{}}><strong>X-Expires-After</strong><span style={{"opacity":"0.6"}}> string</span></summary><div><div style={{"marginTop":".5rem","marginBottom":".5rem"}}>
+</div></div></li><li className={"schemaItem"}><summary style={{}}><strong>X-Expires-After</strong><span style={{"opacity":"0.6"}}> string</span></summary><div><div style={{"marginTop":".5rem","marginBottom":".5rem"}}>
 
 date in UTC when token expires
 
-</div></div></li></ul></details><div><MimeTabs groupId={"mime-type"}><TabItem label={"application/json"} value={"application/json"}><SchemaTabs groupId={"schema-tabs"}><TabTtem label={"Schema"} value={"Schema"}><details style={{}} data-collapsed={false} open={true}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><li><div><strong>string</strong></div></li></ul></details></TabTtem><TabItem label={"Response"} value={"Response"}><ResponseSamples responseExample={"\"OK\""}></ResponseSamples></TabItem></SchemaTabs></TabItem><TabItem label={"application/xml"} value={"application/xml"}><SchemaTabs groupId={"schema-tabs"}><TabTtem label={"Schema"} value={"Schema"}><details style={{}} data-collapsed={false} open={true}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><li><div><strong>string</strong></div></li></ul></details></TabTtem><TabItem label={"Response"} value={"Response"}><ResponseSamples responseExample={"\"<Message> OK </Message>\""}></ResponseSamples></TabItem></SchemaTabs></TabItem><TabItem label={"text/plain"} value={"text/plain"}><SchemaTabs groupId={"schema-tabs"}><TabItem label={"Response"} value={"Response"}><ResponseSamples responseExample={"\"OK\""}></ResponseSamples></TabItem></SchemaTabs></TabItem></MimeTabs></div></TabItem><TabItem label={"400"} value={"400"}><div>
+</div></div></li></ul></details><div><MimeTabs groupId={"mime-type"}><TabItem label={"application/json"} value={"application/json"}><SchemaTabs groupId={"schema-tabs"}><TabItem label={"Schema"} value={"Schema"}><details style={{}} data-collapsed={false} open={true}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><li><div><strong>string</strong></div></li></ul></details></TabItem><TabItem label={"Response"} value={"Response"}><ResponseSamples responseExample={"OK"} language={"json"}></ResponseSamples></TabItem></SchemaTabs></TabItem><TabItem label={"application/xml"} value={"application/xml"}><SchemaTabs groupId={"schema-tabs"}><TabItem label={"Schema"} value={"Schema"}><details style={{}} data-collapsed={false} open={true}><summary style={{"textAlign":"left"}}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><li><div><strong>string</strong></div></li></ul></details></TabItem><TabItem label={"Response"} value={"Response"}><ResponseSamples responseExample={"<Message> OK </Message>"} language={"xml"}></ResponseSamples></TabItem></SchemaTabs></TabItem><TabItem label={"text/plain"} value={"text/plain"}><SchemaTabs groupId={"schema-tabs"}><TabItem label={"Response"} value={"Response"}><ResponseSamples responseExample={"OK"} language={"shell"}></ResponseSamples></TabItem></SchemaTabs></TabItem></MimeTabs></div></TabItem><TabItem label={"400"} value={"400"}><div>
 
 Invalid username/password supplied
 

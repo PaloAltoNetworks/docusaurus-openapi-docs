@@ -11,11 +11,11 @@ import CodeBlock from "@theme/CodeBlock";
 
 import styles from "./styles.module.css";
 
-function ResponseSamples({ responseExample }) {
+function ResponseSamples({ responseExample, language }) {
   return (
     <div className={styles.responseSamplesContainer}>
       <CodeBlock
-        language="javascript"
+        language={language ? language : "json"}
         className={styles.responseSamplesCodeBlock}
       >
         {responseExample}

@@ -53,7 +53,11 @@ function ParamsItem({
   ));
 
   const renderDefaultValue = guard(
-    schema.items ? schema.items.default : schema.default,
+    schema && schema.items
+      ? schema.items.default
+      : schema
+      ? schema.default
+      : undefined,
     (value) => (
       <div>
         <ReactMarkdown children={`**Default value:** \`${value}\``} />

@@ -23,39 +23,49 @@ export function isURL(str: string): boolean {
   return /^(https?:)\/\//m.test(str);
 }
 
-export function getDocsData(
-  dataArray: any[],
-  filter: string
+export function getDocsPluginConfig(
+  presetsPlugins: any[],
+  pluginId: string
 ): Object | undefined {
   // eslint-disable-next-line array-callback-return
-  const filteredData = dataArray.filter((data) => {
-    if (data[0] === filter) {
+  const filteredConfig = presetsPlugins.filter((data) => {
+    if (data[0] === pluginId) {
       return data[1];
     }
 
     // Search plugin-content-docs instances
     if (data[0] === "@docusaurus/plugin-content-docs") {
-      const pluginId = data[1].id ? data[1].id : "default";
-      if (pluginId === filter) {
+      const configPluginId = data[1].id ? data[1].id : "default";
+      if (configPluginId === pluginId) {
         return data[1];
       }
     }
   })[0];
-  if (filteredData) {
+  if (filteredConfig) {
     // Search presets, e.g. "classic"
-    if (filteredData[0] === filter) {
-      return filteredData[1].docs;
+    if (filteredConfig[0] === pluginId) {
+      return filteredConfig[1].docs;
     }
 
     // Search plugin-content-docs instances
-    if (filteredData[0] === "@docusaurus/plugin-content-docs") {
-      const pluginId = filteredData[1].id ? filteredData[1].id : "default";
-      if (pluginId === filter) {
-        return filteredData[1];
+    if (filteredConfig[0] === "@docusaurus/plugin-content-docs") {
+      const configPluginId = filteredConfig[1].id
+        ? filteredConfig[1].id
+        : "default";
+      if (configPluginId === pluginId) {
+        return filteredConfig[1];
       }
     }
   }
   return;
+}
+
+function getPluginConfig(plugins: any[], pluginId: string): any {
+  return plugins.filter((data) => data[1].id === pluginId)[0][1];
+}
+
+function getPluginInstances(plugins: any[]): any {
+  return plugins.filter((data) => data[0] === "docusaurus-plugin-openapi-docs");
 }
 
 export default function pluginOpenAPIDocs(
@@ -69,12 +79,19 @@ export default function pluginOpenAPIDocs(
   const presets: any = siteConfig.presets;
   const plugins: any = siteConfig.plugins;
   const presetsPlugins = presets.concat(plugins);
-  const docData: any = getDocsData(presetsPlugins, docsPluginId);
-  const docRouteBasePath = docData ? docData.routeBasePath : undefined;
-  const docPath = docData ? (docData.path ? docData.path : "docs") : undefined;
+  let docData: any = getDocsPluginConfig(presetsPlugins, docsPluginId);
+  let docRouteBasePath = docData ? docData.routeBasePath : undefined;
+  let docPath = docData ? (docData.path ? docData.path : "docs") : undefined;
 
-  async function generateApiDocs(options: APIOptions) {
+  async function generateApiDocs(options: APIOptions, pluginId: any) {
     let { specPath, outputDir, template, sidebarOptions } = options;
+
+    // Override docPath if pluginId provided
+    if (pluginId) {
+      docData = getDocsPluginConfig(presetsPlugins, pluginId);
+      docRouteBasePath = docData ? docData.routeBasePath : undefined;
+      docPath = docData ? (docData.path ? docData.path : "docs") : undefined;
+    }
 
     const contentPath = isURL(specPath)
       ? specPath
@@ -108,9 +125,7 @@ export default function pluginOpenAPIDocs(
           docPath
         );
 
-        const sidebarSliceTemplate = template
-          ? fs.readFileSync(template).toString()
-          : `module.exports = {{{slice}}};`;
+        const sidebarSliceTemplate = `module.exports = {{{slice}}};`;
 
         const view = render(sidebarSliceTemplate, {
           slice: JSON.stringify(sidebarSlice),
@@ -135,6 +150,8 @@ export default function pluginOpenAPIDocs(
         ? fs.readFileSync(template).toString()
         : `---
 id: {{{id}}}
+title: "{{{title}}}"
+description: "{{{description}}}"
 {{^api}}
 sidebar_label: Introduction
 {{/api}}
@@ -162,12 +179,13 @@ info_path: {{{infoPath}}}
 {{{markdown}}}
       `;
 
-      const infoMdTemplate = template
-        ? fs.readFileSync(template).toString()
-        : `---
+      const infoMdTemplate = `---
 id: {{{id}}}
+title: "{{{title}}}"
+description: "{{{description}}}"
 sidebar_label: {{{title}}}
 hide_title: true
+custom_edit_url: null
 ---
 
 {{{markdown}}}
@@ -180,12 +198,11 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
 \`\`\`
       `;
 
-      const tagMdTemplate = template
-        ? fs.readFileSync(template).toString()
-        : `---
+      const tagMdTemplate = `---
 id: {{{id}}}
-title: {{{description}}}
-description: {{{description}}}
+title: "{{{description}}}"
+description: "{{{description}}}"
+custom_edit_url: null
 ---
 
 {{{markdown}}}
@@ -225,6 +242,12 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
         if (item.type === "api") {
           if (!fs.existsSync(`${outputDir}/${item.id}.api.mdx`)) {
             try {
+              // kebabCase(arg) returns 0-length string when arg is undefined
+              if (item.id.length === 0) {
+                throw Error(
+                  "Operation must have summary or operationId defined"
+                );
+              }
               fs.writeFileSync(`${outputDir}/${item.id}.api.mdx`, view, "utf8");
               console.log(
                 chalk.green(
@@ -392,25 +415,54 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
         )
         .usage("<id>")
         .arguments("<id>")
-        .action(async (id) => {
+        .option("-p, --plugin-id <plugin>", "OpenAPI docs plugin ID.")
+        .action(async (id, instance) => {
+          const options = instance.opts();
+          const pluginId = options.pluginId;
+          const pluginInstances = getPluginInstances(plugins);
+          let targetConfig: any;
+          let targetDocsPluginId: any;
+          if (pluginId) {
+            try {
+              const pluginConfig = getPluginConfig(plugins, pluginId);
+              targetConfig = pluginConfig.config ?? {};
+              targetDocsPluginId = pluginConfig.docsPluginId;
+            } catch {
+              console.error(
+                chalk.red(`OpenAPI docs plugin ID '${pluginId}' not found.`)
+              );
+              return;
+            }
+          } else {
+            if (pluginInstances.length > 1) {
+              console.error(
+                chalk.red(
+                  "OpenAPI docs plugin ID must be specified when more than one plugin instance exists."
+                )
+              );
+              return;
+            }
+            targetConfig = config;
+          }
+
           if (id === "all") {
-            if (config[id]) {
+            if (targetConfig[id]) {
               console.error(
                 chalk.red(
                   "Can't use id 'all' for OpenAPI docs configuration key."
                 )
               );
             } else {
-              Object.keys(config).forEach(async function (key) {
-                await generateApiDocs(config[key]);
+              Object.keys(targetConfig).forEach(async function (key) {
+                await generateApiDocs(targetConfig[key], targetDocsPluginId);
               });
             }
-          } else if (!config[id]) {
+          } else if (!targetConfig[id]) {
             console.error(
               chalk.red(`ID '${id}' does not exist in OpenAPI docs config.`)
             );
           } else {
-            await generateApiDocs(config[id]);
+            await generateApiDocs(targetConfig[id], targetDocsPluginId);
           }
         });
 
@@ -421,9 +473,37 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
         )
         .usage("<id:version>")
         .arguments("<id:version>")
-        .action(async (id) => {
+        .option("-p, --plugin-id <plugin>", "OpenAPI docs plugin ID.")
+        .action(async (id, instance) => {
+          const options = instance.opts();
+          const pluginId = options.pluginId;
+          const pluginInstances = getPluginInstances(plugins);
+          let targetConfig: any;
+          let targetDocsPluginId: any;
+          if (pluginId) {
+            try {
+              const pluginConfig = getPluginConfig(plugins, pluginId);
+              targetConfig = pluginConfig.config ?? {};
+              targetDocsPluginId = pluginConfig.docsPluginId;
+            } catch {
+              console.error(
+                chalk.red(`OpenAPI docs plugin ID '${pluginId}' not found.`)
+              );
+              return;
+            }
+          } else {
+            if (pluginInstances.length > 1) {
+              console.error(
+                chalk.red(
+                  "OpenAPI docs plugin ID must be specified when more than one plugin instance exists."
+                )
+              );
+              return;
+            }
+            targetConfig = config;
+          }
           const [parentId, versionId] = id.split(":");
-          const parentConfig = Object.assign({}, config[parentId]);
+          const parentConfig = Object.assign({}, targetConfig[parentId]);
 
           const version = parentConfig.version as string;
           const label = parentConfig.label as string;
@@ -432,7 +512,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
           let parentVersion = {} as any;
           parentVersion[version] = { label: label, baseUrl: baseUrl };
 
-          const { versions } = config[parentId] as any;
+          const { versions } = targetConfig[parentId] as any;
           const mergedVersions = Object.assign(parentVersion, versions);
 
           // Prepare for merge
@@ -457,7 +537,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
                   ...parentConfig,
                   ...versionConfig,
                 };
-                await generateApiDocs(mergedConfig);
+                await generateApiDocs(mergedConfig, targetDocsPluginId);
               });
             }
           } else if (!versions[versionId]) {
@@ -473,7 +553,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
               ...versionConfig,
             };
             await generateVersions(mergedVersions, parentConfig.outputDir);
-            await generateApiDocs(mergedConfig);
+            await generateApiDocs(mergedConfig, targetDocsPluginId);
           }
         });
 
@@ -484,21 +564,47 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
         )
         .usage("<id>")
         .arguments("<id>")
-        .action(async (id) => {
+        .option("-p, --plugin-id <plugin>", "OpenAPI docs plugin ID.")
+        .action(async (id, instance) => {
+          const options = instance.opts();
+          const pluginId = options.pluginId;
+          const pluginInstances = getPluginInstances(plugins);
+          let targetConfig: any;
+          if (pluginId) {
+            try {
+              const pluginConfig = getPluginConfig(plugins, pluginId);
+              targetConfig = pluginConfig.config ?? {};
+            } catch {
+              console.error(
+                chalk.red(`OpenAPI docs plugin ID '${pluginId}' not found.`)
+              );
+              return;
+            }
+          } else {
+            if (pluginInstances.length > 1) {
+              console.error(
+                chalk.red(
+                  "OpenAPI docs plugin ID must be specified when more than one plugin instance exists."
+                )
+              );
+              return;
+            }
+            targetConfig = config;
+          }
           if (id === "all") {
-            if (config[id]) {
+            if (targetConfig[id]) {
               console.error(
                 chalk.red(
                   "Can't use id 'all' for OpenAPI docs configuration key."
                 )
               );
             } else {
-              Object.keys(config).forEach(async function (key) {
-                await cleanApiDocs(config[key]);
+              Object.keys(targetConfig).forEach(async function (key) {
+                await cleanApiDocs(targetConfig[key]);
               });
             }
           } else {
-            await cleanApiDocs(config[id]);
+            await cleanApiDocs(targetConfig[id]);
           }
         });
 
@@ -509,11 +615,37 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
         )
         .usage("<id:version>")
         .arguments("<id:version>")
-        .action(async (id) => {
+        .option("-p, --plugin-id <plugin>", "OpenAPI docs plugin ID.")
+        .action(async (id, instance) => {
+          const options = instance.opts();
+          const pluginId = options.pluginId;
+          const pluginInstances = getPluginInstances(plugins);
+          let targetConfig: any;
+          if (pluginId) {
+            try {
+              const pluginConfig = getPluginConfig(plugins, pluginId);
+              targetConfig = pluginConfig.config ?? {};
+            } catch {
+              console.error(
+                chalk.red(`OpenAPI docs plugin ID '${pluginId}' not found.`)
+              );
+              return;
+            }
+          } else {
+            if (pluginInstances.length > 1) {
+              console.error(
+                chalk.red(
+                  "OpenAPI docs plugin ID must be specified when more than one plugin instance exists."
+                )
+              );
+              return;
+            }
+            targetConfig = config;
+          }
           const [parentId, versionId] = id.split(":");
-          const { versions } = config[parentId] as any;
+          const { versions } = targetConfig[parentId] as any;
 
-          const parentConfig = Object.assign({}, config[parentId]);
+          const parentConfig = Object.assign({}, targetConfig[parentId]);
           delete parentConfig.versions;
 
           if (versionId === "all") {
