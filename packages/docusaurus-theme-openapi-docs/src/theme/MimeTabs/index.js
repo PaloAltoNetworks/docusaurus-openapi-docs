@@ -168,8 +168,7 @@ function MimeTabsComponent(props) {
   };
 
   const dispatch = useTypedDispatch();
-  console.log({ schemaType });
-  const isRequestSchema = schemaType.toLowerCase() === "request";
+  const isRequestSchema = schemaType?.toLowerCase() === "request";
 
   return (
     <div className="tabs__container">
@@ -196,7 +195,6 @@ function MimeTabsComponent(props) {
             )}
           >
             {values.map(({ value, label, attributes }) => {
-              console.log({ label });
               return (
                 <li
                   role="tab"
