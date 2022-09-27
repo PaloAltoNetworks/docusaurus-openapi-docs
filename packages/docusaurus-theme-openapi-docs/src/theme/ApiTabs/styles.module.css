@@ -12,14 +12,19 @@
   height: 2.5rem;
   margin-top: 0 !important;
   margin-right: 0.5rem;
-  border: 1px solid var(--openapi-code-dim-dark);
+  border: 1px solid var(--ifm-color-primary);
   border-radius: var(--ifm-global-radius);
+  color: var(--ifm-color-primary);
   font-weight: var(--ifm-font-weight-normal);
-  color: var(--openapi-code-dim-dark);
+}
+
+.tabItem:not(.responseTabActive) {
+  opacity: 0.65;
 }
 
 .tabItem:hover {
-  color: var(--ifm-color-emphasis-500) !important;
+  opacity: 1;
+  background-color: var(--ifm-color-emphasis-100);
 }
 
 .tabItem:last-child {
@@ -74,8 +79,7 @@
 }
 
 .responseTabActive {
-  border: 1px solid var(--ifm-color-primary);
-  color: var(--ifm-color-primary);
+  background-color: var(--ifm-color-emphasis-100);
 }
 
 .responseSchemaContainer {
