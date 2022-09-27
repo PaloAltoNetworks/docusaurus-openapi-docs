@@ -129,6 +129,11 @@ export function createResponseExamples(
           label: `${finalFormattedName}`,
           value: `${finalFormattedName}`,
           children: [
+            guard(exampleValue.summary, (summary) => [
+              create("p", {
+                children: ` ${summary}`,
+              }),
+            ]),
             create("ResponseSamples", {
               responseExample: JSON.stringify(exampleValue.value, null, 2),
               language: language,
@@ -140,6 +145,11 @@ export function createResponseExamples(
         label: `${finalFormattedName}`,
         value: `${finalFormattedName}`,
         children: [
+          guard(exampleValue.summary, (summary) => [
+            create("p", {
+              children: ` ${summary}`,
+            }),
+          ]),
           create("ResponseSamples", {
             responseExample: exampleValue.value,
             language: language,
@@ -163,6 +173,11 @@ export function createResponseExample(responseExample: any, mimeType: string) {
       label: `Example`,
       value: `Example`,
       children: [
+        guard(responseExample.summary, (summary) => [
+          create("p", {
+            children: ` ${summary}`,
+          }),
+        ]),
         create("ResponseSamples", {
           responseExample: JSON.stringify(responseExample, null, 2),
           language: language,
@@ -174,6 +189,11 @@ export function createResponseExample(responseExample: any, mimeType: string) {
     label: `Example`,
     value: `Example`,
     children: [
+      guard(responseExample.summary, (summary) => [
+        create("p", {
+          children: ` ${summary}`,
+        }),
+      ]),
       create("ResponseSamples", {
         responseExample: responseExample,
         language: language,
