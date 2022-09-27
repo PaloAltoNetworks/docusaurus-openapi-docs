@@ -1,3 +1,9 @@
+## 1.2.1 (Sep 27, 2022)
+
+High level enhancements
+
+- Decrease opacity and for non-active schema/response tabs ([#281](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/281))
+
 ## 1.2.0 (Sep 21, 2022)
 
 High level enhancements
