@@ -1,5 +1,5 @@
 {
-  "name": "docusaurus-theme-openapi-docs",
+  "name": "docusaurus-theme-openapi-docs-slashid",
   "description": "OpenAPI theme for Docusaurus.",
   "version": "1.2.2",
   "license": "MIT",
@@ -69,5 +69,6 @@
   },
   "engines": {
     "node": ">=14"
-  }
+  },
+  "gitHead": "40d299e8f55ff9b8a0fddf7db87c50df3bb78c54"
 }
