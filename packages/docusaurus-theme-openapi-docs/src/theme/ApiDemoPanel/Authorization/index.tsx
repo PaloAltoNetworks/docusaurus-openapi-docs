@@ -127,11 +127,23 @@ function Authorization({ item }: { item: NonNullable<ApiItem> }) {
         }
 
         if (a.type === "apiKey") {
+          const [APIKeyVal, setAPIKeyVal] = React.useState("");
+
+          const setDefaultVal = () => {
+            if (item.userAttrs && item.userAttrs["APIKey"]) {
+              setAPIKeyVal(item.userAttrs["APIKey"]);
+            }
+          };
+
+          React.useEffect(() => {
+            setDefaultVal();
+          }, [item.userAttrs]);
+
           return (
             <FormItem label={`${a.key}`} key={a.key + "-apikey"}>
               <FormTextInput
                 placeholder={`${a.key}`}
-                value={data[a.key].apiKey ?? ""}
+                value={data[a.key].apiKey ?? APIKeyVal}
                 onChange={(e) => {
                   const value = e.target.value.trim();
                   dispatch(
