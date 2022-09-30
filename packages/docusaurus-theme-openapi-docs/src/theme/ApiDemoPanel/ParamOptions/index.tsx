@@ -139,23 +139,56 @@ function ArrayItem({
   onChange,
 }: ParamProps & { onChange(value?: string): any }) {
   if (param.schema?.items?.type === "boolean") {
+    const [state, setState] = useState("");
+
+    const setDefaultVal = () => {
+      if (param.defaultVal) {
+        setState(param.defaultVal);
+        onChange(param.defaultVal);
+      }
+    };
+
+    useEffect(() => {
+      setDefaultVal();
+    }, [param.defaultVal]);
+
+    const onChangeLocal = (e: any) => {
+      setState(e.target.value);
+      const val = e.target.value;
+      onChange(val === "---" ? undefined : val);
+    };
     return (
       <FormSelect
         options={["---", "true", "false"]}
-        onChange={(e) => {
-          const val = e.target.value;
-          onChange(val === "---" ? undefined : val);
-        }}
+        value={state}
+        onChange={onChangeLocal}
       />
     );
   }
 
+  const [state, setState] = useState("");
+
+  const setDefaultVal = () => {
+    if (param.defaultVal) {
+      setState(param.defaultVal);
+      onChange(param.defaultVal);
+    }
+  };
+
+  useEffect(() => {
+    setDefaultVal();
+  }, [param.defaultVal]);
+
+  const onChangeLocal = (e: any) => {
+    setState(e.target.value);
+    onChange(e.target.value);
+  };
+
   return (
     <FormTextInput
       placeholder={param.description || param.name}
-      onChange={(e) => {
-        onChange(e.target.value);
-      }}
+      value={state}
+      onChange={onChangeLocal}
     />
   );
 }
@@ -242,19 +275,35 @@ function ParamSelectFormItem({ param }: ParamProps) {
   const dispatch = useTypedDispatch();
 
   const options = param.schema?.enum ?? [];
+  const [state, setState] = useState("");
+
+  const setDefaultVal = () => {
+    if (param.defaultVal) {
+      setState(param.defaultVal);
+      dispatch(setParam({ ...param, value: param.defaultVal }));
+    }
+  };
+
+  useEffect(() => {
+    setDefaultVal();
+  }, [param.defaultVal]);
+
+  const onChange = (e: any) => {
+    setState(e.target.value);
+    const val = e.target.value;
+    dispatch(
+      setParam({
+        ...param,
+        value: val === "---" ? undefined : val,
+      })
+    );
+  };
 
   return (
     <FormSelect
       options={["---", ...(options as string[])]}
-      onChange={(e) => {
-        const val = e.target.value;
-        dispatch(
-          setParam({
-            ...param,
-            value: val === "---" ? undefined : val,
-          })
-        );
-      }}
+      value={state}
+      onChange={onChange}
     />
   );
 }
@@ -262,18 +311,35 @@ function ParamSelectFormItem({ param }: ParamProps) {
 function ParamBooleanFormItem({ param }: ParamProps) {
   const dispatch = useTypedDispatch();
 
+  const [state, setState] = useState("");
+
+  const setDefaultVal = () => {
+    if (param.defaultVal) {
+      setState(param.defaultVal);
+      dispatch(setParam({ ...param, value: param.defaultVal }));
+    }
+  };
+
+  useEffect(() => {
+    setDefaultVal();
+  }, [param.defaultVal]);
+
+  const onChange = (e: any) => {
+    setState(e.target.value);
+    const val = e.target.value;
+    dispatch(
+      setParam({
+        ...param,
+        value: val === "---" ? undefined : val,
+      })
+    );
+  };
+
   return (
     <FormSelect
       options={["---", "true", "false"]}
-      onChange={(e) => {
-        const val = e.target.value;
-        dispatch(
-          setParam({
-            ...param,
-            value: val === "---" ? undefined : val,
-          })
-        );
-      }}
+      value={state}
+      onChange={onChange}
     />
   );
 }
@@ -282,33 +348,66 @@ function ParamMultiSelectFormItem({ param }: ParamProps) {
   const dispatch = useTypedDispatch();
 
   const options = param.schema?.items?.enum ?? [];
+  const [state, setState] = useState("");
+
+  const setDefaultVal = () => {
+    if (param.defaultVal) {
+      setState(param.defaultVal);
+      dispatch(setParam({ ...param, value: param.defaultVal }));
+    }
+  };
+
+  useEffect(() => {
+    setDefaultVal();
+  }, [param.defaultVal]);
+
+  const onChange = (e: any) => {
+    const values = Array.prototype.filter
+      .call(e.target.options, (o) => o.selected)
+      .map((o) => o.value);
+
+    dispatch(
+      setParam({
+        ...param,
+        value: values.length > 0 ? values : undefined,
+      })
+    );
+  };
 
   return (
     <FormMultiSelect
       options={options as string[]}
-      onChange={(e) => {
-        const values = Array.prototype.filter
-          .call(e.target.options, (o) => o.selected)
-          .map((o) => o.value);
-
-        dispatch(
-          setParam({
-            ...param,
-            value: values.length > 0 ? values : undefined,
-          })
-        );
-      }}
+      value={state}
+      onChange={onChange}
     />
   );
 }
 
 function ParamTextFormItem({ param }: ParamProps) {
   const dispatch = useTypedDispatch();
+  const [state, setState] = useState("");
+
+  const setDefaultVal = () => {
+    if (param.defaultVal) {
+      setState(param.defaultVal);
+      dispatch(setParam({ ...param, value: param.defaultVal }));
+    }
+  };
+
+  useEffect(() => {
+    setDefaultVal();
+  }, [param.defaultVal]);
+
+  const onChange = (e: any) => {
+    setState(e.target.value);
+    dispatch(setParam({ ...param, value: e.target.value }));
+  };
 
   return (
     <FormTextInput
       placeholder={param.description || param.name}
-      onChange={(e) => dispatch(setParam({ ...param, value: e.target.value }))}
+      value={state}
+      onChange={onChange}
     />
   );
 }

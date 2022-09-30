@@ -79,5 +79,8 @@
   },
   "engines": {
     "node": ">=14"
+  },
+  "dependencies": {
+    "@slashid/slashid": "^1.6.1"
   }
 }

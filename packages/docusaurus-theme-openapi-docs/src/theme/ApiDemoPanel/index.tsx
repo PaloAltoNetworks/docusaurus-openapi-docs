@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React from "react";
+import React, { useEffect } from "react";
 
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import sdk from "@paloaltonetworks/postman-collection";
@@ -24,6 +24,10 @@ import SecuritySchemes from "./SecuritySchemes";
 import Server from "./Server";
 import { createStoreWithState } from "./store";
 import styles from "./styles.module.css";
+import * as slashid from "@slashid/slashid";
+
+import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
+import { MediaTypeObject } from "docusaurus-plugin-openapi-docs/lib/openapi/types";
 
 function ApiDemoPanel({
   item,
@@ -36,6 +40,26 @@ function ApiDemoPanel({
   const themeConfig = siteConfig.themeConfig as ThemeConfig;
   const options = themeConfig.api;
   const postman = new sdk.Request(item.postman);
+  let user: slashid.User | undefined = undefined;
+  const [userAttrs, setUserAttrs] = React.useState<any>(undefined);
+
+  const collectAttrs = async () => {
+    if (ExecutionEnvironment.canUseDOM) {
+      if (window) {
+        const prevToken = window.localStorage.getItem("MY_USER_TOKEN");
+        if (prevToken) {
+          // There's a token, just re-create the user. TODO: make sure the token is not expired
+          user = new slashid.User(prevToken) as slashid.User;
+          let data = await user.get();
+          setUserAttrs(data);
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    collectAttrs();
+  }, []);
 
   const acceptArray = Array.from(
     new Set(
@@ -57,6 +81,16 @@ function ApiDemoPanel({
     header: [] as ParameterObject[],
     cookie: [] as ParameterObject[],
   };
+
+  item.parameters?.forEach((param) => {
+    const paramName = param.name;
+    console.log("param name: " + paramName);
+    if (userAttrs != undefined && paramName in userAttrs) {
+      console.log("Found " + paramName);
+      console.log(userAttrs);
+      param.defaultVal = userAttrs[paramName];
+    }
+  });
 
   item.parameters?.forEach(
     (param: { in: "path" | "query" | "header" | "cookie" }) => {
