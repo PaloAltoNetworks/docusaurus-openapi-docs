@@ -9,8 +9,8 @@ import React from "react";
 
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import sdk from "@paloaltonetworks/postman-collection";
-import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
-import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
+import { ParameterObject } from "docusaurus-plugin-openapi-docs-slashid/src/openapi/types";
+import { ApiItem } from "docusaurus-plugin-openapi-docs-slashid/src/types";
 
 import { ThemeConfig } from "../../../types";
 import Accept from "../Accept";

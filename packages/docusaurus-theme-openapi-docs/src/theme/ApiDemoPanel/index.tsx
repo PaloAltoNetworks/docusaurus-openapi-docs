@@ -9,8 +9,8 @@ import React, { useEffect } from "react";
 
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import sdk from "@paloaltonetworks/postman-collection";
-import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
-import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
+import { ParameterObject } from "docusaurus-plugin-openapi-docs-slashid/src/openapi/types";
+import { ApiItem } from "docusaurus-plugin-openapi-docs-slashid/src/types";
 import { Provider } from "react-redux";
 
 import { ThemeConfig } from "../../types";
@@ -27,7 +27,6 @@ import styles from "./styles.module.css";
 import * as slashid from "@slashid/slashid";
 
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
-import { MediaTypeObject } from "docusaurus-plugin-openapi-docs/lib/openapi/types";
 
 function ApiDemoPanel({
   item,
