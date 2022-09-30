@@ -82,15 +82,27 @@ function ApiDemoPanel({
     cookie: [] as ParameterObject[],
   };
 
-  item.parameters?.forEach((param) => {
-    const paramName = param.name;
-    console.log("param name: " + paramName);
-    if (userAttrs != undefined && paramName in userAttrs) {
-      console.log("Found " + paramName);
-      console.log(userAttrs);
-      param.defaultVal = userAttrs[paramName];
+  if (userAttrs != undefined) {
+    item.userAttrs = userAttrs;
+  }
+
+  if (item.parameters) {
+    for (let i = 0; i < item.parameters.length; i++) {
+      let param = item.parameters[i];
+      if (param == undefined) continue;
+
+      const paramName = item.parameters[i].name as string;
+
+      if (userAttrs != undefined && paramName in userAttrs) {
+        //TODO: for some reasons sometimes this object is not extensible.. find out why
+        if (Object.isExtensible(param) == false) {
+          param = structuredClone(param);
+        }
+        param.defaultVal = userAttrs[paramName];
+        item.parameters[i] = param;
+      }
     }
-  });
+  }
 
   item.parameters?.forEach(
     (param: { in: "path" | "query" | "header" | "cookie" }) => {

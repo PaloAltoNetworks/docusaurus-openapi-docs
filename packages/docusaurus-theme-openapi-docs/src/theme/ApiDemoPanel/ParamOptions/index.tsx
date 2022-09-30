@@ -142,7 +142,7 @@ function ArrayItem({
     const [state, setState] = useState("");
 
     const setDefaultVal = () => {
-      if (param.defaultVal) {
+      if (param && param.defaultVal) {
         setState(param.defaultVal);
         onChange(param.defaultVal);
       }
@@ -169,7 +169,7 @@ function ArrayItem({
   const [state, setState] = useState("");
 
   const setDefaultVal = () => {
-    if (param.defaultVal) {
+    if (param && param.defaultVal) {
       setState(param.defaultVal);
       onChange(param.defaultVal);
     }
@@ -278,7 +278,7 @@ function ParamSelectFormItem({ param }: ParamProps) {
   const [state, setState] = useState("");
 
   const setDefaultVal = () => {
-    if (param.defaultVal) {
+    if (param && param.defaultVal) {
       setState(param.defaultVal);
       dispatch(setParam({ ...param, value: param.defaultVal }));
     }
@@ -314,7 +314,7 @@ function ParamBooleanFormItem({ param }: ParamProps) {
   const [state, setState] = useState("");
 
   const setDefaultVal = () => {
-    if (param.defaultVal) {
+    if (param && param.defaultVal) {
       setState(param.defaultVal);
       dispatch(setParam({ ...param, value: param.defaultVal }));
     }
@@ -351,7 +351,7 @@ function ParamMultiSelectFormItem({ param }: ParamProps) {
   const [state, setState] = useState("");
 
   const setDefaultVal = () => {
-    if (param.defaultVal) {
+    if (param && param.defaultVal) {
       setState(param.defaultVal);
       dispatch(setParam({ ...param, value: param.defaultVal }));
     }
@@ -388,7 +388,7 @@ function ParamTextFormItem({ param }: ParamProps) {
   const [state, setState] = useState("");
 
   const setDefaultVal = () => {
-    if (param.defaultVal) {
+    if (param && param.defaultVal) {
       setState(param.defaultVal);
       dispatch(setParam({ ...param, value: param.defaultVal }));
     }

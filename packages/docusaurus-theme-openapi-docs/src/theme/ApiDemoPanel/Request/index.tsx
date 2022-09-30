@@ -55,7 +55,7 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
           </div>
         </summary>
         <div className={styles.optionsPanel}>
-          <Authorization />
+          <Authorization item={item} />
           <ParamOptions />
           <Body
             jsonRequestBodyExample={item.jsonRequestBodyExample}

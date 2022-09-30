@@ -13,7 +13,9 @@ import FormTextInput from "../FormTextInput";
 import { useTypedDispatch, useTypedSelector } from "../hooks";
 import { setAuthData, setSelectedAuth } from "./slice";
 
-function Authorization() {
+import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
+
+function Authorization({ item }: { item: NonNullable<ApiItem> }) {
   const data = useTypedSelector((state) => state.auth.data);
   const options = useTypedSelector((state) => state.auth.options);
   const selected = useTypedSelector((state) => state.auth.selected);
