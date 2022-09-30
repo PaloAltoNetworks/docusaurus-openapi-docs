@@ -45,59 +45,58 @@ function Server() {
     }
     return (
       <FloatingButton onClick={() => setIsEditing(true)} label="Edit">
-        <pre
-          style={{
-            background: "var(--openapi-card-background-color)",
-            paddingRight: "60px",
-          }}
-        >
-          <code>{url}</code>
-        </pre>
+        <FormItem label="Base URL">
+          <pre
+            style={{
+              background: "var(--openapi-card-background-color)",
+              paddingLeft: "0px",
+            }}
+          >
+            <code title={url}>{url}</code>
+          </pre>
+        </FormItem>
       </FloatingButton>
     );
   }
 
   return (
     <div className={styles.optionsPanel}>
-      <button
-        className={styles.showMoreButton}
-        onClick={() => setIsEditing(false)}
-        tabIndex={0}
-      >
-        Hide
-      </button>
-      <FormItem label="Base URL">
-        <FormSelect
-          options={options.map((s) => s.url)}
-          onChange={(e) => dispatch(setServer(e.target.value))}
-        />
-        <small>{value?.description}</small>
-      </FormItem>
-      {value?.variables &&
-        Object.keys(value.variables).map((key) => {
-          if (value.variables?.[key].enum !== undefined) {
+      <FloatingButton onClick={() => setIsEditing(false)} label="Hide">
+        <FormItem label="Base URL">
+          <FormSelect
+            options={options.map((s) => s.url)}
+            onChange={(e) => dispatch(setServer(e.target.value))}
+          />
+          <small>{value?.description}</small>
+        </FormItem>
+        {value?.variables &&
+          Object.keys(value.variables).map((key) => {
+            if (value.variables?.[key].enum !== undefined) {
+              return (
+                <FormItem label={key}>
+                  <FormSelect
+                    options={value.variables[key].enum}
+                    onChange={(e) => {
+                      dispatch(
+                        setServerVariable({ key, value: e.target.value })
+                      );
+                    }}
+                  />
+                </FormItem>
+              );
+            }
             return (
               <FormItem label={key}>
-                <FormSelect
-                  options={value.variables[key].enum}
+                <FormTextInput
+                  placeholder={value.variables?.[key].default}
                   onChange={(e) => {
                     dispatch(setServerVariable({ key, value: e.target.value }));
                   }}
                 />
               </FormItem>
             );
-          }
-          return (
-            <FormItem label={key}>
-              <FormTextInput
-                placeholder={value.variables?.[key].default}
-                onChange={(e) => {
-                  dispatch(setServerVariable({ key, value: e.target.value }));
-                }}
-              />
-            </FormItem>
-          );
-        })}
+          })}
+      </FloatingButton>
     </div>
   );
 }
