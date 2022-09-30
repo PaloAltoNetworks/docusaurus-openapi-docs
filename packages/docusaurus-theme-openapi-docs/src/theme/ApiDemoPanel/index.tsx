@@ -21,7 +21,6 @@ import { createPersistanceMiddleware } from "./persistanceMiddleware";
 import Request from "./Request";
 import Response from "./Response";
 import SecuritySchemes from "./SecuritySchemes";
-import Server from "./Server";
 import { createStoreWithState } from "./store";
 import styles from "./styles.module.css";
 
@@ -93,7 +92,6 @@ function ApiDemoPanel({
     <Provider store={store2}>
       <div className={styles.apiDemoPanelContainer}>
         <MethodEndpoint method={method} path={path} />
-        <Server />
         <SecuritySchemes infoPath={infoPath} />
         <Request item={item} />
         <Response />

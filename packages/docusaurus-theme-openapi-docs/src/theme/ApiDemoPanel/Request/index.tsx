@@ -19,6 +19,7 @@ import Body from "../Body";
 import Execute from "../Execute";
 import { useTypedSelector } from "../hooks";
 import ParamOptions from "../ParamOptions";
+import Server from "../Server";
 import styles from "./styles.module.css";
 
 function Request({ item }: { item: NonNullable<ApiItem> }) {
@@ -55,6 +56,7 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
           </div>
         </summary>
         <div className={styles.optionsPanel}>
+          <Server />
           <Authorization />
           <ParamOptions />
           <Body
