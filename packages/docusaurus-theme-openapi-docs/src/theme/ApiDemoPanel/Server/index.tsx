@@ -66,6 +66,7 @@ function Server() {
           <FormSelect
             options={options.map((s) => s.url)}
             onChange={(e) => dispatch(setServer(e.target.value))}
+            value={value?.url}
           />
           <small>{value?.description}</small>
         </FormItem>
