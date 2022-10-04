@@ -1,3 +1,11 @@
+## 1.2.2 (Sep 30, 2022)
+
+High level enhancements
+
+- [Experimental] Move server input to request card ([#286](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/286))
+- Manually bump to v1.2.1
+- [Enhancement] Add support for rendering example `summary` as description ([#285](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/285))
+
 ## 1.2.1 (Sep 27, 2022)
 
 High level enhancements
