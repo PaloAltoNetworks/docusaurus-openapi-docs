@@ -9,6 +9,7 @@ import React from "react";
 
 import sdk from "@paloaltonetworks/postman-collection";
 import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
+
 import Curl from "./Curl";
 import MethodEndpoint from "./MethodEndpoint";
 import Request from "./Request";

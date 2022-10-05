@@ -7,10 +7,10 @@
 
 import React from "react";
 
+import { useTypedDispatch, useTypedSelector } from "../../ApiItem/hooks";
 import FormItem from "../FormItem";
 import FormSelect from "../FormSelect";
 import FormTextInput from "../FormTextInput";
-import { useTypedDispatch, useTypedSelector } from "../../ApiItem/hooks";
 import { setAuthData, setSelectedAuth } from "./slice";
 
 function Authorization() {

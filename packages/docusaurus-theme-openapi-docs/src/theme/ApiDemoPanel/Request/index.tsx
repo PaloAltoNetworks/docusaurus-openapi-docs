@@ -13,11 +13,11 @@ import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/type
 import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 
 import { ThemeConfig } from "../../../types";
+import { useTypedSelector } from "../../ApiItem/hooks";
 import Accept from "../Accept";
 import Authorization from "../Authorization";
 import Body from "../Body";
 import Execute from "../Execute";
-import { useTypedSelector } from "../../ApiItem/hooks";
 import ParamOptions from "../ParamOptions";
 import Server from "../Server";
 import styles from "./styles.module.css";
