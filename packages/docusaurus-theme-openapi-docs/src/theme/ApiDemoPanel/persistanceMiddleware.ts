@@ -40,6 +40,18 @@ export function createPersistanceMiddleware(options: ThemeConfig["api"]) {
         }
       }
 
+      if (action.type === "contentType/setContentType") {
+        storage.setItem("contentType", action.payload);
+      }
+
+      if (action.type === "accept/setAccept") {
+        storage.setItem("accept", action.payload);
+      }
+
+      if (action.type === "server/setServer") {
+        storage.setItem("server", action.payload);
+      }
+
       return result;
     };
   return persistanceMiddleware;

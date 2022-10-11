@@ -85,12 +85,19 @@ if (ExecutionEnvironment.canUseDOM) {
     });
 
     const persistanceMiddleware = createPersistanceMiddleware(options);
+    const acceptValue = window?.sessionStorage.getItem("accept");
+    const contentTypeValue = window?.sessionStorage.getItem("contentType");
+    const serverUrl = { url: window?.sessionStorage.getItem("server") };
 
     const store2 = createStoreWithState(
       {
-        accept: { value: acceptArray[0], options: acceptArray },
-        contentType: { value: contentTypeArray[0], options: contentTypeArray },
-        server: { value: servers[0], options: servers },
+        accept: { value: acceptValue || acceptArray[0], options: acceptArray },
+        contentType: {
+          value: contentTypeValue || contentTypeArray[0],
+          options: contentTypeArray,
+        },
+        // @ts-ignore
+        server: { value: serverUrl || servers[0], options: servers },
         response: { value: undefined },
         body: { type: "empty" },
         params,
