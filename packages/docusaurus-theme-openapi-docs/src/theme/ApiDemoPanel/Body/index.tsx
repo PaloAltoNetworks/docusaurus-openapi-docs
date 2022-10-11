@@ -316,7 +316,11 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
           </TabItem>
           {examplesBodies.map((example: any) => {
             return (
-              <TabItem label={example.label} value={example.label}>
+              <TabItem
+                label={example.label}
+                value={example.label}
+                key={example.label}
+              >
                 {example.summary && <p>{example.summary}</p>}
                 <LiveApp action={dispatch} language={language}>
                   {example.body ?? "unable to render value"}
