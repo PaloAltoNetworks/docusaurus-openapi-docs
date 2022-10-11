@@ -15,6 +15,7 @@ import chalk from "chalk";
 import fs from "fs-extra";
 import cloneDeep from "lodash/cloneDeep";
 import kebabCase from "lodash/kebabCase";
+import unionBy from "lodash/unionBy";
 
 import { isURL } from "../index";
 import {
@@ -192,6 +193,20 @@ function createItems(
 
       // TODO: Don't include summary temporarilly
       const { summary, ...defaults } = operationObject;
+
+      // Merge common parameters with operation parameters
+      // Operation params take precendence over common params
+      if (parameters !== undefined) {
+        if (operationObject.parameters !== undefined) {
+          defaults.parameters = unionBy(
+            operationObject.parameters,
+            parameters,
+            "name"
+          );
+        } else {
+          defaults.parameters = parameters;
+        }
+      }
 
       const apiPage: PartialPage<ApiPageMetadata> = {
         type: "api",
