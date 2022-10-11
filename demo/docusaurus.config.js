@@ -7,7 +7,7 @@ const { DOCUSAURUS_VERSION } = require("@docusaurus/utils");
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "Docusaurus OpenAPI",
+  title: "Docusaurus OpenAPI Docs",
   tagline: "OpenAPI plugin for generating API reference docs in Docusaurus v2",
   url: "https://docusaurus-openapi.tryingpan.dev",
   baseUrl: "/",
