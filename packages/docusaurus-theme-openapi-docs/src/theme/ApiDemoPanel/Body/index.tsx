@@ -292,9 +292,11 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
             </LiveApp>
           </TabItem>
           <TabItem label="Example" value="example">
-            <LiveApp action={dispatch} language={language}>
-              {exampleBody ?? "Unable to render value"}
-            </LiveApp>
+            {exampleBody && (
+              <LiveApp action={dispatch} language={language}>
+                {exampleBody}
+              </LiveApp>
+            )}
           </TabItem>
         </SchemaTabs>
       </FormItem>
@@ -318,9 +320,11 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
                 key={example.label}
               >
                 {example.summary && <p>{example.summary}</p>}
-                <LiveApp action={dispatch} language={language}>
-                  {example.body ?? "Unable to render value"}
-                </LiveApp>
+                {example.body && (
+                  <LiveApp action={dispatch} language={language}>
+                    {example.body}
+                  </LiveApp>
+                )}
               </TabItem>
             );
           })}
