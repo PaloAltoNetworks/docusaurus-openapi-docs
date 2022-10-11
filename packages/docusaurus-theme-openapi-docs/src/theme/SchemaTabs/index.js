@@ -227,7 +227,10 @@ function SchemaTabsComponent(props) {
         cloneElement(
           children.filter(
             (tabItem) => tabItem.props.value === selectedValue
-          )[0],
+          )[0] ?? // TODO: see if there's a better way to handle this
+            children.filter(
+              (tabItem) => tabItem.props.value === defaultValue
+            )[0],
           {
             className: "margin-vert--md",
           }
