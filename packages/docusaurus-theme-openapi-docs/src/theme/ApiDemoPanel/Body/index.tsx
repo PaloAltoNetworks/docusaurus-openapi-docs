@@ -7,9 +7,12 @@
 
 import React from "react";
 
+import TabItem from "@theme/TabItem";
 import { RequestBodyObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import format from "xml-formatter";
 
+// @ts-ignore
+import SchemaTabs from "../../SchemaTabs";
 import ContentType from "../ContentType";
 import FormSelect from "../FormSelect";
 import { useTypedDispatch, useTypedSelector } from "../hooks";
@@ -82,6 +85,8 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
   // - application/x-www-form-urlencoded
 
   const schema = requestBodyMetadata?.content?.[contentType]?.schema;
+  const example = requestBodyMetadata?.content?.[contentType]?.example;
+  const examples = requestBodyMetadata?.content?.[contentType]?.examples;
 
   if (schema?.format === "binary") {
     return (
@@ -209,11 +214,25 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
   }
 
   let language = "plaintext";
-  let exampleBodyString = ""; //"body content";
+  let defaultBody = ""; //"body content";
+  let exampleBody;
+  let examplesBodies = [] as any;
 
   if (contentType === "application/json" || contentType.endsWith("+json")) {
     if (jsonRequestBodyExample) {
-      exampleBodyString = JSON.stringify(jsonRequestBodyExample, null, 2);
+      defaultBody = JSON.stringify(jsonRequestBodyExample, null, 2);
+    }
+    if (example) {
+      exampleBody = JSON.stringify(example, null, 2);
+    }
+    if (examples) {
+      for (const [key, example] of Object.entries(examples)) {
+        examplesBodies.push({
+          label: key,
+          body: JSON.stringify(example.value, null, 2),
+          summary: example.summary,
+        });
+      }
     }
     language = "json";
   }
@@ -221,22 +240,98 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
   if (contentType === "application/xml") {
     if (jsonRequestBodyExample) {
       try {
-        exampleBodyString = format(json2xml(jsonRequestBodyExample, ""), {
+        defaultBody = format(json2xml(jsonRequestBodyExample, ""), {
           indentation: "  ",
           lineSeparator: "\n",
           collapseContent: true,
         });
       } catch {
-        exampleBodyString = json2xml(jsonRequestBodyExample);
+        defaultBody = json2xml(jsonRequestBodyExample);
+      }
+    }
+    if (example) {
+      try {
+        exampleBody = format(json2xml(example, ""), {
+          indentation: "  ",
+          lineSeparator: "\n",
+          collapseContent: true,
+        });
+      } catch {
+        exampleBody = json2xml(example);
+      }
+    }
+    if (examples) {
+      try {
+        for (const [key, example] of Object.entries(examples)) {
+          examplesBodies.push({
+            label: key,
+            body: format(json2xml(example.value, ""), {
+              indentation: "  ",
+              lineSeparator: "\n",
+              collapseContent: true,
+            }),
+            summary: example.summary,
+          });
+        }
+      } catch {
+        for (const [key, example] of Object.entries(examples)) {
+          examplesBodies.push({
+            label: key,
+            body: json2xml(example.value),
+            summary: example.summary,
+          });
+        }
       }
     }
     language = "xml";
   }
 
+  if (exampleBody) {
+    return (
+      <FormItem label="Body" required={required}>
+        <SchemaTabs lazy>
+          <TabItem label="Default" value="default" default>
+            <LiveApp action={dispatch} language={language}>
+              {defaultBody}
+            </LiveApp>
+          </TabItem>
+          <TabItem label="Example" value="example">
+            <LiveApp action={dispatch} language={language}>
+              {exampleBody}
+            </LiveApp>
+          </TabItem>
+        </SchemaTabs>
+      </FormItem>
+    );
+  }
+
+  if (examplesBodies && examplesBodies.length > 0) {
+    return (
+      <FormItem label="Body" required={required}>
+        <SchemaTabs lazy>
+          <TabItem label="Default" value="default" default>
+            <LiveApp action={dispatch} language={language}>
+              {defaultBody}
+            </LiveApp>
+          </TabItem>
+          {examplesBodies.map((example: any) => {
+            return (
+              <TabItem label={example.label} value={example.label}>
+                {example.summary && <p>{example.summary}</p>}
+                <LiveApp action={dispatch} language={language}>
+                  {example.body}
+                </LiveApp>
+              </TabItem>
+            );
+          })}
+        </SchemaTabs>
+      </FormItem>
+    );
+  }
   return (
     <FormItem label="Body" required={required}>
       <LiveApp action={dispatch} language={language}>
-        {exampleBodyString}
+        {defaultBody}
       </LiveApp>
     </FormItem>
   );
