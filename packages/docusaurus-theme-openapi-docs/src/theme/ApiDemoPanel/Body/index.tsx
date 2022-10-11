@@ -237,7 +237,7 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
     language = "json";
   }
 
-  if (contentType === "application/xml") {
+  if (contentType === "application/xml" || contentType.endsWith("+xml")) {
     if (jsonRequestBodyExample) {
       try {
         defaultBody = format(json2xml(jsonRequestBodyExample, ""), {
@@ -261,26 +261,22 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
       }
     }
     if (examples) {
-      try {
-        for (const [key, example] of Object.entries(examples)) {
-          examplesBodies.push({
-            label: key,
-            body: format(json2xml(example.value, ""), {
-              indentation: "  ",
-              lineSeparator: "\n",
-              collapseContent: true,
-            }),
-            summary: example.summary,
+      for (const [key, example] of Object.entries(examples)) {
+        let formattedXmlBody;
+        try {
+          formattedXmlBody = format(example.value, {
+            indentation: "  ",
+            lineSeparator: "\n",
+            collapseContent: true,
           });
+        } catch {
+          formattedXmlBody = example.value;
         }
-      } catch {
-        for (const [key, example] of Object.entries(examples)) {
-          examplesBodies.push({
-            label: key,
-            body: json2xml(example.value),
-            summary: example.summary,
-          });
-        }
+        examplesBodies.push({
+          label: key,
+          body: formattedXmlBody,
+          summary: example.summary,
+        });
       }
     }
     language = "xml";
@@ -297,7 +293,7 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
           </TabItem>
           <TabItem label="Example" value="example">
             <LiveApp action={dispatch} language={language}>
-              {exampleBody}
+              {exampleBody ?? "Unable to render value"}
             </LiveApp>
           </TabItem>
         </SchemaTabs>
@@ -323,7 +319,7 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
               >
                 {example.summary && <p>{example.summary}</p>}
                 <LiveApp action={dispatch} language={language}>
-                  {example.body ?? "unable to render value"}
+                  {example.body ?? "Unable to render value"}
                 </LiveApp>
               </TabItem>
             );
@@ -332,6 +328,7 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
       </FormItem>
     );
   }
+
   return (
     <FormItem label="Body" required={required}>
       <LiveApp action={dispatch} language={language}>
