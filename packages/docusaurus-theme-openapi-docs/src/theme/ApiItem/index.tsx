@@ -96,8 +96,11 @@ if (ExecutionEnvironment.canUseDOM) {
           value: contentTypeValue || contentTypeArray[0],
           options: contentTypeArray,
         },
-        // @ts-ignore
-        server: { value: serverUrl || servers[0], options: servers },
+        server: {
+          // @ts-ignore
+          value: serverUrl.url ? serverUrl : servers[0],
+          options: servers,
+        },
         response: { value: undefined },
         body: { type: "empty" },
         params,
