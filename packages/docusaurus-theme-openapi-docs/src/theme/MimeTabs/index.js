@@ -109,12 +109,22 @@ function MimeTabsComponent(props) {
     }
   }
 
+  const dispatch = useTypedDispatch();
+
   const handleTabChange = (event) => {
+    event.preventDefault();
     const newTab = event.currentTarget;
     const newTabIndex = tabRefs.indexOf(newTab);
     const newTabValue = values[newTabIndex].value;
+    const isRequestSchema = schemaType?.toLowerCase() === "request";
 
     if (newTabValue !== selectedValue) {
+      if (isRequestSchema) {
+        dispatch(setContentType(newTabValue));
+      } else {
+        dispatch(setAccept(newTabValue));
+      }
+
       blockElementScrollPositionUntilNextRender(newTab);
       setSelectedValue(newTabValue);
 
@@ -167,9 +177,6 @@ function MimeTabsComponent(props) {
     tabItemListContainerRef.current.scrollLeft -= 90;
   };
 
-  const dispatch = useTypedDispatch();
-  const isRequestSchema = schemaType?.toLowerCase() === "request";
-
   return (
     <div className="tabs__container">
       <div className={styles.mimeTabsTopSection}>
@@ -204,11 +211,7 @@ function MimeTabsComponent(props) {
                   ref={(tabControl) => tabRefs.push(tabControl)}
                   onKeyDown={handleKeydown}
                   onFocus={handleTabChange}
-                  onClick={() => {
-                    isRequestSchema
-                      ? dispatch(setContentType(label))
-                      : dispatch(setAccept(label));
-                  }}
+                  onClick={(e) => handleTabChange(e)}
                   {...attributes}
                   className={clsx(
                     "tabs__item",
