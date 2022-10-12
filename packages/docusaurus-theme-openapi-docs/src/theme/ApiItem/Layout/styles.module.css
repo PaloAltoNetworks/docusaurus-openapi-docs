@@ -413,3 +413,8 @@
   max-height: 500px;
   overflow: auto;
 }
+
+/* Prism code styles */
+:global(.prism-code.language-json) {
+  white-space: nowrap !important;
+}
