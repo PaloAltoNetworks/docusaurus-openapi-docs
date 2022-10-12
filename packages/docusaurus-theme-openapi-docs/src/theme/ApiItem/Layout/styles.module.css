@@ -416,5 +416,5 @@
 
 /* Prism code styles */
 :global(.prism-code.language-json) {
-  white-space: nowrap !important;
+  white-space: pre !important;
 }
