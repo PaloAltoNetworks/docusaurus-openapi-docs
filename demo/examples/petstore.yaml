@@ -434,6 +434,28 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Order"
+            examples:
+              OrderDelivered:
+                summary: Order delivered
+                value:
+                  quantity: 4
+                  shipDate: 2022-10-12
+                  status: delivered
+                  requestId: 444-4444-444-4444
+              OrderPlaced:
+                summary: Order placed
+                value:
+                  quantity: 10
+                  shipDate: 2022-10-01
+                  status: placed
+                  requestId: 111-222-333-444
+              OrderApproved:
+                summary: Order approved
+                value:
+                  quantity: 1000
+                  shipDate: 2022-09-01
+                  status: approved
+                  requestId: 000-111-222-333
         description: order placed for purchasing the pet
         required: true
   "/store/order/{orderId}":
@@ -1153,6 +1175,19 @@ components:
               - description: My Pet
                 title: Pettie
               - $ref: "#/components/schemas/Pet"
+          example:
+            category:
+              name: Great Dane
+              sub:
+                prop1: Just a test property
+            name: Pepper
+            photoUrls:
+              - https://assets.orvis.com/is/image/orvisprd/great-dane
+            tags:
+              - name: Great Danes
+            status: pending
+            petType:
+              huntingSkill: lazy
         application/xml:
           schema:
             type: "object"
