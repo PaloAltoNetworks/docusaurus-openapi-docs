@@ -721,7 +721,6 @@ export function createResponseSchema({ title, body, ...rest }: Props) {
 
   if (mimeTypes && mimeTypes.length) {
     return create("MimeTabs", {
-      groupId: "mime-type",
       schemaType: "response",
       children: mimeTypes.map((mimeType: any) => {
         const responseExamples = body.content![mimeType].examples;
