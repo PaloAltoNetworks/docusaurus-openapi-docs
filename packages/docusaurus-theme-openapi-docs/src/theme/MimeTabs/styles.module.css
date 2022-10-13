@@ -17,6 +17,7 @@
   font-weight: var(--ifm-font-weight-normal);
   /* color: var(--openapi-code-dim-dark); */
   font-size: 12px;
+  white-space: nowrap;
 }
 
 .tabItem:active {

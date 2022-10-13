@@ -154,12 +154,15 @@
   margin-bottom: 0;
 }
 
-:global(.theme-api-markdown li::before) {
+:global([class^="paramsItem"]::before),
+:global([class^="schemaItem"]::before) {
   position: absolute;
   top: 10px;
   left: 0;
-  width: 0.7rem; /* width of horizontal line */
-  height: 0.5rem; /* vertical position of line */
+  width: 0.7rem;
+  /* width of horizontal line */
+  height: 0.5rem;
+  /* vertical position of line */
   vertical-align: top;
   border-bottom: thin solid var(--ifm-color-gray-500);
   content: "";
@@ -409,4 +412,9 @@
 :global(.language-php) {
   max-height: 500px;
   overflow: auto;
+}
+
+/* Prism code styles */
+:global(.prism-code.language-json) {
+  white-space: pre !important;
 }
