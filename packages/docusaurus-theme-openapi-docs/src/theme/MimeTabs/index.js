@@ -20,7 +20,7 @@ import clsx from "clsx";
 
 import { setAccept } from "../ApiDemoPanel/Accept/slice";
 import { setContentType } from "../ApiDemoPanel/ContentType/slice";
-import { useTypedDispatch } from "../ApiItem/hooks";
+import { useTypedDispatch, useTypedSelector } from "../ApiItem/hooks";
 import styles from "./styles.module.css"; // A very rough duck type, but good enough to guard against mistakes while
 
 const {
@@ -110,13 +110,13 @@ function MimeTabsComponent(props) {
   }
 
   const dispatch = useTypedDispatch();
+  const isRequestSchema = schemaType?.toLowerCase() === "request";
 
   const handleTabChange = (event) => {
     event.preventDefault();
     const newTab = event.currentTarget;
     const newTabIndex = tabRefs.indexOf(newTab);
     const newTabValue = values[newTabIndex].value;
-    const isRequestSchema = schemaType?.toLowerCase() === "request";
 
     if (newTabValue !== selectedValue) {
       if (isRequestSchema) {
@@ -133,6 +133,20 @@ function MimeTabsComponent(props) {
       }
     }
   };
+
+  const contentTypeVal = useTypedSelector((state) => state.contentType.value);
+  const acceptTypeVal = useTypedSelector((state) => state.accept.value);
+
+  useEffect(() => {
+    if (tabRefs.length > 1) {
+      if (isRequestSchema) {
+        setSelectedValue(contentTypeVal);
+      } else {
+        setSelectedValue(acceptTypeVal);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contentTypeVal, acceptTypeVal]);
 
   const handleKeydown = (event) => {
     let focusElement = null;
