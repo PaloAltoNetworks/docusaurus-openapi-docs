@@ -29,7 +29,7 @@ function Server() {
     return null;
   }
 
-  if (options.length === 1 && !value) {
+  if (!value) {
     const defaultOption = options[0];
     dispatch(setServer(JSON.stringify(defaultOption)));
   }
