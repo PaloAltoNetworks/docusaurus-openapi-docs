@@ -104,6 +104,7 @@ function Server() {
                         )
                       );
                     }}
+                    value={value?.variables[key].default}
                   />
                 </FormItem>
               );
@@ -119,6 +120,7 @@ function Server() {
                       )
                     );
                   }}
+                  value={value?.variables?.[key].default}
                 />
               </FormItem>
             );
