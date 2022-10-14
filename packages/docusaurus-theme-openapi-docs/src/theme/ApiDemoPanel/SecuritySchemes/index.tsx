@@ -9,7 +9,7 @@ import React from "react";
 
 import Link from "@docusaurus/Link";
 
-import { useTypedSelector } from "../hooks";
+import { useTypedSelector } from "../../ApiItem/hooks";
 
 function SecuritySchemes(props: any) {
   const options = useTypedSelector((state) => state.auth.options);

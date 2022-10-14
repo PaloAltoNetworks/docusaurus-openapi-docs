@@ -21,15 +21,14 @@ export const slice = createSlice({
   initialState,
   reducers: {
     setServer: (state, action: PayloadAction<string>) => {
-      state.value = state.options.find((s) => s.url === action.payload);
+      state.value = state.options.find(
+        (s) => s.url === JSON.parse(action.payload).url
+      );
     },
-    setServerVariable: (
-      state,
-      action: PayloadAction<{ key: string; value: string }>
-    ) => {
+    setServerVariable: (state, action: PayloadAction<string>) => {
       if (state.value?.variables) {
-        state.value.variables[action.payload.key].default =
-          action.payload.value;
+        const parsedPayload = JSON.parse(action.payload);
+        state.value.variables[parsedPayload.key].default = parsedPayload.value;
       }
     },
   },

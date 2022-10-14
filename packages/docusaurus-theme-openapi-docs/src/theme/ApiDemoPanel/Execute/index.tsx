@@ -10,7 +10,7 @@ import React from "react";
 import sdk from "@paloaltonetworks/postman-collection";
 import Modal from "react-modal";
 
-import { useTypedDispatch, useTypedSelector } from "../hooks";
+import { useTypedDispatch, useTypedSelector } from "../../ApiItem/hooks";
 import { Param } from "../ParamOptions/slice";
 import { setResponse } from "../Response/slice";
 import buildPostmanRequest from "./../buildPostmanRequest";

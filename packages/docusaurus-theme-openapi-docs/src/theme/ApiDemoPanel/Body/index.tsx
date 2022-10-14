@@ -11,11 +11,11 @@ import TabItem from "@theme/TabItem";
 import { RequestBodyObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import format from "xml-formatter";
 
+import { useTypedDispatch, useTypedSelector } from "../../ApiItem/hooks";
 // @ts-ignore
 import SchemaTabs from "../../SchemaTabs";
 import ContentType from "../ContentType";
 import FormSelect from "../FormSelect";
-import { useTypedDispatch, useTypedSelector } from "../hooks";
 import LiveApp from "../LiveEditor";
 import FormFileUpload from "./../FormFileUpload";
 import FormItem from "./../FormItem";

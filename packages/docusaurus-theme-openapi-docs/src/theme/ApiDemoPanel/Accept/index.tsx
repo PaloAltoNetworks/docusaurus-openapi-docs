@@ -7,7 +7,7 @@
 
 import React from "react";
 
-import { useTypedDispatch, useTypedSelector } from "../hooks";
+import { useTypedDispatch, useTypedSelector } from "../../ApiItem/hooks";
 import FormItem from "./../FormItem";
 import FormSelect from "./../FormSelect";
 import { setAccept } from "./slice";

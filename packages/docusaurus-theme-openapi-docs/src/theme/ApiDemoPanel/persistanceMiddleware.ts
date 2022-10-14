@@ -8,9 +8,9 @@
 import { Middleware } from "@reduxjs/toolkit";
 
 import { ThemeConfig } from "../../types";
+import { AppDispatch, RootState } from "../ApiItem/store";
 import { setAuthData, setSelectedAuth } from "./Authorization/slice";
 import { createStorage, hashArray } from "./storage-utils";
-import { AppDispatch, RootState } from "./store";
 
 export function createPersistanceMiddleware(options: ThemeConfig["api"]) {
   const persistanceMiddleware: Middleware<{}, RootState, AppDispatch> =
@@ -38,6 +38,26 @@ export function createPersistanceMiddleware(options: ThemeConfig["api"]) {
             state.auth.selected
           );
         }
+      }
+
+      if (action.type === "contentType/setContentType") {
+        storage.setItem("contentType", action.payload);
+      }
+
+      if (action.type === "accept/setAccept") {
+        storage.setItem("accept", action.payload);
+      }
+
+      if (action.type === "server/setServer") {
+        storage.setItem("server", action.payload);
+      }
+
+      if (action.type === "server/setServerVariable") {
+        const server = storage.getItem("server") ?? "{}";
+        const variables = JSON.parse(action.payload);
+        let serverObject = JSON.parse(server);
+        serverObject.variables[variables.key].default = variables.value;
+        storage.setItem("server", JSON.stringify(serverObject));
       }
 
       return result;

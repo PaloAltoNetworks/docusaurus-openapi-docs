@@ -9,7 +9,7 @@ import React, { useState, useEffect } from "react";
 
 import { nanoid } from "@reduxjs/toolkit";
 
-import { useTypedDispatch, useTypedSelector } from "../hooks";
+import { useTypedDispatch, useTypedSelector } from "../../ApiItem/hooks";
 import FormItem from "./../FormItem";
 import FormMultiSelect from "./../FormMultiSelect";
 import FormSelect from "./../FormSelect";

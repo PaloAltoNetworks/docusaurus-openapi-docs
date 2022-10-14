@@ -18,6 +18,9 @@ import { duplicates } from "@docusaurus/theme-common";
 import useIsBrowser from "@docusaurus/useIsBrowser";
 import clsx from "clsx";
 
+import { setAccept } from "../ApiDemoPanel/Accept/slice";
+import { setContentType } from "../ApiDemoPanel/ContentType/slice";
+import { useTypedDispatch, useTypedSelector } from "../ApiItem/hooks";
 import styles from "./styles.module.css"; // A very rough duck type, but good enough to guard against mistakes while
 
 const {
@@ -39,6 +42,7 @@ function MimeTabsComponent(props) {
     values: valuesProp,
     groupId,
     className,
+    schemaType,
   } = props;
   const children = Children.map(props.children, (child) => {
     if (isValidElement(child) && isTabItem(child)) {
@@ -105,12 +109,22 @@ function MimeTabsComponent(props) {
     }
   }
 
+  const dispatch = useTypedDispatch();
+  const isRequestSchema = schemaType?.toLowerCase() === "request";
+
   const handleTabChange = (event) => {
+    event.preventDefault();
     const newTab = event.currentTarget;
     const newTabIndex = tabRefs.indexOf(newTab);
     const newTabValue = values[newTabIndex].value;
 
     if (newTabValue !== selectedValue) {
+      if (isRequestSchema) {
+        dispatch(setContentType(newTabValue));
+      } else {
+        dispatch(setAccept(newTabValue));
+      }
+
       blockElementScrollPositionUntilNextRender(newTab);
       setSelectedValue(newTabValue);
 
@@ -119,6 +133,20 @@ function MimeTabsComponent(props) {
       }
     }
   };
+
+  const contentTypeVal = useTypedSelector((state) => state.contentType.value);
+  const acceptTypeVal = useTypedSelector((state) => state.accept.value);
+
+  useEffect(() => {
+    if (tabRefs.length > 1) {
+      if (isRequestSchema) {
+        setSelectedValue(contentTypeVal);
+      } else {
+        setSelectedValue(acceptTypeVal);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contentTypeVal, acceptTypeVal]);
 
   const handleKeydown = (event) => {
     let focusElement = null;
@@ -197,7 +225,7 @@ function MimeTabsComponent(props) {
                   ref={(tabControl) => tabRefs.push(tabControl)}
                   onKeyDown={handleKeydown}
                   onFocus={handleTabChange}
-                  onClick={handleTabChange}
+                  onClick={(e) => handleTabChange(e)}
                   {...attributes}
                   className={clsx(
                     "tabs__item",

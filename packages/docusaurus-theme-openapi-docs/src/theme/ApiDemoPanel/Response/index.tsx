@@ -9,7 +9,7 @@ import React from "react";
 
 import CodeBlock from "@theme/CodeBlock";
 
-import { useTypedDispatch, useTypedSelector } from "../hooks";
+import { useTypedDispatch, useTypedSelector } from "../../ApiItem/hooks";
 import { clearResponse } from "./slice";
 
 // TODO: We probably shouldn't attempt to format XML...

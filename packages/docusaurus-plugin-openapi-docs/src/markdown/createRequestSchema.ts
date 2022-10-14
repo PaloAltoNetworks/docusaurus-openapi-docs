@@ -721,7 +721,7 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
 
   if (mimeTypes && mimeTypes.length > 1) {
     return create("MimeTabs", {
-      groupId: "mime-type",
+      schemaType: "request",
       children: mimeTypes.map((mimeType) => {
         const firstBody = body.content![mimeType].schema;
         if (firstBody === undefined) {
