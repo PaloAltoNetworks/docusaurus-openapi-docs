@@ -1,3 +1,17 @@
+## 1.3.0 (Oct 14, 2022)
+
+High level enhancements
+
+- [FR] Sync Content-Type/Accept with Request/Response ([#218](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/218))
+- Generate API docs on build ([#290](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/290))
+- [Enhancement] Add support for request examples ([#293](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/293))
+- Add support for common params ([#292](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/292))
+
+Other enhancements and bug fixes
+
+- Switch from nowrap to pre ([#294](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/294))
+- Update docs ([#288](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/288))
+
 ## 1.2.2 (Sep 30, 2022)
 
 High level enhancements
