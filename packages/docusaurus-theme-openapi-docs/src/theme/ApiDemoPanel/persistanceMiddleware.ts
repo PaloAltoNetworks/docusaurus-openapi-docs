@@ -52,6 +52,14 @@ export function createPersistanceMiddleware(options: ThemeConfig["api"]) {
         storage.setItem("server", action.payload);
       }
 
+      if (action.type === "server/setServerVariable") {
+        const server = storage.getItem("server") ?? "{}";
+        const variables = JSON.parse(action.payload);
+        let serverObject = JSON.parse(server);
+        serverObject.variables[variables.key].default = variables.value;
+        storage.setItem("server", JSON.stringify(serverObject));
+      }
+
       return result;
     };
   return persistanceMiddleware;

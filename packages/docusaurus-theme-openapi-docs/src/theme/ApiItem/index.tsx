@@ -12,6 +12,7 @@ import { HtmlClassNameProvider } from "@docusaurus/theme-common";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import type { Props } from "@theme/DocItem";
 import clsx from "clsx";
+import { ServerObject } from "docusaurus-plugin-openapi-docs/lib/openapi/types";
 import type { ApiItem as ApiItemType } from "docusaurus-plugin-openapi-docs/lib/types";
 import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import { Provider } from "react-redux";
@@ -87,8 +88,8 @@ if (ExecutionEnvironment.canUseDOM) {
     const persistanceMiddleware = createPersistanceMiddleware(options);
     const acceptValue = window?.sessionStorage.getItem("accept");
     const contentTypeValue = window?.sessionStorage.getItem("contentType");
-    const serverUrl = { url: window?.sessionStorage.getItem("server") };
-
+    const server = window?.sessionStorage.getItem("server");
+    const serverObject = (JSON.parse(server!) as ServerObject) ?? {};
     const store2 = createStoreWithState(
       {
         accept: { value: acceptValue || acceptArray[0], options: acceptArray },
@@ -97,8 +98,7 @@ if (ExecutionEnvironment.canUseDOM) {
           options: contentTypeArray,
         },
         server: {
-          // @ts-ignore
-          value: serverUrl.url ? serverUrl : servers[0],
+          value: serverObject.url ? serverObject : undefined,
           options: servers,
         },
         response: { value: undefined },

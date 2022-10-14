@@ -19,7 +19,6 @@ function Server() {
   const [isEditing, setIsEditing] = useState(false);
   const value = useTypedSelector((state) => state.server.value);
   const options = useTypedSelector((state) => state.server.options);
-
   const dispatch = useTypedDispatch();
 
   if (options.length <= 0) {
@@ -28,6 +27,20 @@ function Server() {
 
   if (options.length < 1 && value?.variables === undefined) {
     return null;
+  }
+
+  if (options.length === 1 && !value) {
+    const defaultOption = options[0];
+    dispatch(setServer(JSON.stringify(defaultOption)));
+  }
+
+  // Default to first option when existing server state is mismatched
+  if (value) {
+    const urlExists = options.find((s) => s.url === value.url);
+    if (!urlExists) {
+      const defaultOption = options[0];
+      dispatch(setServer(JSON.stringify(defaultOption)));
+    }
   }
 
   if (!isEditing) {
@@ -58,14 +71,21 @@ function Server() {
       </FloatingButton>
     );
   }
-
   return (
     <div className={styles.optionsPanel}>
       <FloatingButton onClick={() => setIsEditing(false)} label="Hide">
         <FormItem label="Base URL">
           <FormSelect
             options={options.map((s) => s.url)}
-            onChange={(e) => dispatch(setServer(e.target.value))}
+            onChange={(e) => {
+              dispatch(
+                setServer(
+                  JSON.stringify(
+                    options.filter((s) => s.url === e.target.value)[0]
+                  )
+                )
+              );
+            }}
             value={value?.url}
           />
           <small>{value?.description}</small>
@@ -79,7 +99,9 @@ function Server() {
                     options={value.variables[key].enum}
                     onChange={(e) => {
                       dispatch(
-                        setServerVariable({ key, value: e.target.value })
+                        setServerVariable(
+                          JSON.stringify({ key, value: e.target.value })
+                        )
                       );
                     }}
                   />
@@ -91,7 +113,11 @@ function Server() {
                 <FormTextInput
                   placeholder={value.variables?.[key].default}
                   onChange={(e) => {
-                    dispatch(setServerVariable({ key, value: e.target.value }));
+                    dispatch(
+                      setServerVariable(
+                        JSON.stringify({ key, value: e.target.value })
+                      )
+                    );
                   }}
                 />
               </FormItem>
