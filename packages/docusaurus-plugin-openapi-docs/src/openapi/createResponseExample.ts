@@ -77,13 +77,11 @@ function sampleResponseFromProp(name: string, prop: any, obj: any): any {
 
 export const sampleResponseFromSchema = (schema: SchemaObject = {}): any => {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let { type, example, allOf, oneOf, anyOf, properties, items } = schema;
 
-    // TODO: determine if we should always ignore the example when creating from schema
-    // if (example !== undefined) {
-    //   return example;
-    // }
+    if (example !== undefined) {
+      return example;
+    }
 
     if (allOf) {
       const { mergedSchemas }: { mergedSchemas: SchemaObject } =
