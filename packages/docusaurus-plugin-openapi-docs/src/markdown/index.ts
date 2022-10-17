@@ -29,7 +29,7 @@ import { render } from "./utils";
 const lessThan =
   /<(?!(hr|\s?\/hr|br|\s?\/br|span|\s?\/span|strong|\s?\/strong|small|\s?\/small|table|\s?\/table|td|\s?\/td|tr|\s?\/tr|th|\s?\/th|h1|\s?\/h1|h2|\s?\/h2|h3|\s?\/h3|h4|\s?\/h4|h5|\s?\/h5|h6|\s?\/h6|title|\s?\/title|p|\s?\/p|em|\s?\/em|b|\s?\/b|i|\s?\/i|u|\s?\/u|strike|\s?\/strike|a|\s?\/a|li|\s?\/li|ol|\s?\/ol|ul|\s?\/ul|img|\s?\/img|div|\s?\/div|center|\s?\/center))/giu;
 const greaterThan =
-  /(?<!(hr|br|span|strong|small|table|td|tr|th|h1|h2|h3|h4|h5|h6|title|p|em|b|i|u|strike|tag|li|ol|ul|img|div|center))>/giu;
+  /(?<!(hr|br|span|strong|small|table|td|tr|th|h1|h2|h3|h4|h5|h6|title|p|em|b|i|u|strike|tag|li|ol|ul|img|div|center|\/))>/giu;
 
 interface Props {
   title: string;
