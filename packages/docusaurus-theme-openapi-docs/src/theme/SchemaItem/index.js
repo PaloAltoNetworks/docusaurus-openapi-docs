@@ -9,6 +9,7 @@ import React from "react";
 
 import CodeBlock from "@theme/CodeBlock";
 import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
 
 import { createDescription } from "../../markdown/createDescription";
 import { guard } from "../../markdown/utils";
@@ -45,13 +46,17 @@ function SchemaItem({
             );
           },
         }}
+        rehypePlugins={[rehypeRaw]}
       />
     </div>
   ));
 
   const renderQualifierMessage = guard(qualifierMessage, (message) => (
     <div className={styles.schemaQualifierMessage}>
-      <ReactMarkdown children={createDescription(message)} />
+      <ReactMarkdown
+        children={createDescription(message)}
+        rehypePlugins={[rehypeRaw]}
+      />
     </div>
   ));
 

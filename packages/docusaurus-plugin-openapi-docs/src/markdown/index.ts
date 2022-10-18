@@ -5,8 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { escape } from "lodash";
-
 import {
   ContactObject,
   LicenseObject,
@@ -25,7 +23,7 @@ import { createRequestBodyDetails } from "./createRequestBodyDetails";
 import { createStatusCodes } from "./createStatusCodes";
 import { createTermsOfService } from "./createTermsOfService";
 import { createVersionBadge } from "./createVersionBadge";
-import { render } from "./utils";
+import { greaterThan, lessThan, render } from "./utils";
 
 interface Props {
   title: string;
@@ -58,9 +56,9 @@ export function createApiPageMD({
     `import SchemaTabs from "@theme/SchemaTabs";\n`,
     `import DiscriminatorTabs from "@theme/DiscriminatorTabs";\n`,
     `import TabItem from "@theme/TabItem";\n\n`,
-    `## ${escape(title)}\n\n`,
+    `## ${title.replace(lessThan, "&lt;").replace(greaterThan, "&gt;")}\n\n`,
     createDeprecationNotice({ deprecated, description: deprecatedDescription }),
-    createDescription(escape(description)),
+    createDescription(description),
     createParamsDetails({ parameters, type: "path" }),
     createParamsDetails({ parameters, type: "query" }),
     createParamsDetails({ parameters, type: "header" }),
@@ -92,7 +90,7 @@ export function createInfoPageMD({
     `import TabItem from "@theme/TabItem";\n\n`,
 
     createVersionBadge(version),
-    `# ${escape(title)}\n\n`,
+    `# ${title.replace(lessThan, "&lt;").replace(greaterThan, "&gt;")}\n\n`,
     createLogo(logo, darkLogo),
     createDescription(description),
     createAuthentication(securitySchemes as unknown as SecuritySchemeObject),
