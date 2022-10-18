@@ -280,12 +280,6 @@ export async function readOpenapiFiles(
   if (!isURL(openapiPath)) {
     const stat = await fs.lstat(openapiPath);
     if (stat.isDirectory()) {
-      console.warn(
-        chalk.yellow(
-          "WARNING: Loading a directory of OpenAPI definitions is experimental and subject to unannounced breaking changes."
-        )
-      );
-
       // TODO: Add config for inlcude/ignore
       const allFiles = await Globby(["**/*.{json,yaml,yml}"], {
         cwd: openapiPath,
