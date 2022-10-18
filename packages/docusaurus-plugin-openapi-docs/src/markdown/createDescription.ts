@@ -5,9 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import { greaterThan, lessThan } from "./utils";
+
 export function createDescription(description: string | undefined) {
   if (!description) {
     return "";
   }
-  return `\n\n${description}\n\n`;
+  return `\n\n${description
+    .replace(lessThan, "&lt;")
+    .replace(greaterThan, "&gt;")}\n\n`;
 }
