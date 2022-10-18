@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { usePrismTheme } from "@docusaurus/theme-common";
 import useIsBrowser from "@docusaurus/useIsBrowser";
@@ -51,7 +51,11 @@ function App({
 }: any): JSX.Element {
   const prismTheme = usePrismTheme();
   const [code, setCode] = React.useState(children);
-  action(setStringRawBody(code));
+
+  useEffect(() => {
+    action(setStringRawBody(code));
+  }, [action, code]);
+
   return (
     <div className={styles.playgroundContainer}>
       <LiveProvider
