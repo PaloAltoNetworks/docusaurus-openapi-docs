@@ -1,3 +1,15 @@
+## 1.3.1 (Oct 18, 2022)
+
+High level enhancements
+
+- Various bug fixes and polish.
+
+Other enhancements and bug fixes
+
+- Disable warning when loading specs from directory ([#302](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/302))
+- [Bug] Implement selective escape for sanitizing titles and descriptions ([#301](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/301))
+- Return example if present when generating from schema ([#300](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/300))
+
 ## 1.3.0 (Oct 14, 2022)
 
 High level enhancements
