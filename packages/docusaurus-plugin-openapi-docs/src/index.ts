@@ -8,6 +8,7 @@
 import fs from "fs";
 import path from "path";
 
+import plugin from "@docusaurus/mdx-loader/lib/remark/admonitions";
 import type { LoadContext, Plugin } from "@docusaurus/types";
 import { Globby } from "@docusaurus/utils";
 import chalk from "chalk";
@@ -29,7 +30,8 @@ export function getDocsPluginConfig(
 ): Object | undefined {
   // eslint-disable-next-line array-callback-return
   const filteredConfig = presetsPlugins.filter((data) => {
-    if (data[0] === pluginId) {
+    // Search presets
+    if (data[0].endsWith(pluginId)) {
       return data[1];
     }
 
@@ -43,7 +45,7 @@ export function getDocsPluginConfig(
   })[0];
   if (filteredConfig) {
     // Search presets, e.g. "classic"
-    if (filteredConfig[0] === pluginId) {
+    if (filteredConfig[0].endsWith(pluginId)) {
       return filteredConfig[1].docs;
     }
 
