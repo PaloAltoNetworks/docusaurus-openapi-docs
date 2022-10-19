@@ -8,7 +8,6 @@
 import fs from "fs";
 import path from "path";
 
-import plugin from "@docusaurus/mdx-loader/lib/remark/admonitions";
 import type { LoadContext, Plugin } from "@docusaurus/types";
 import { Globby } from "@docusaurus/utils";
 import chalk from "chalk";
