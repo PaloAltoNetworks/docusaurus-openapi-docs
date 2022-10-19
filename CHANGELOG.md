@@ -1,3 +1,14 @@
+## 1.3.2 (Oct 19, 2022)
+
+High level enhancements
+
+- Bug fixes
+
+Other enhancements and bug fixes
+
+- [Bug] Use endsWith to match docsPluginId to preset ([#305](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/305))
+- Wait for component to mount before calling setStringRawBody ([#304](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/304))
+
 ## 1.3.1 (Oct 18, 2022)
 
 High level enhancements
