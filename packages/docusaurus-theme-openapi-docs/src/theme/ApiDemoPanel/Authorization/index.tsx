@@ -7,13 +7,13 @@
 
 import React from "react";
 
+import { ApiItem } from "docusaurus-plugin-openapi-docs-slashid/src/types";
+
 import FormItem from "../FormItem";
 import FormSelect from "../FormSelect";
 import FormTextInput from "../FormTextInput";
 import { useTypedDispatch, useTypedSelector } from "../hooks";
 import { setAuthData, setSelectedAuth } from "./slice";
-
-import { ApiItem } from "docusaurus-plugin-openapi-docs-slashid/src/types";
 
 function Authorization({ item }: { item: NonNullable<ApiItem> }) {
   const data = useTypedSelector((state) => state.auth.data);
@@ -127,23 +127,11 @@ function Authorization({ item }: { item: NonNullable<ApiItem> }) {
         }
 
         if (a.type === "apiKey") {
-          const [APIKeyVal, setAPIKeyVal] = React.useState("");
-
-          const setDefaultVal = () => {
-            if (item.userAttrs && item.userAttrs["APIKey"]) {
-              setAPIKeyVal(item.userAttrs["APIKey"]);
-            }
-          };
-
-          React.useEffect(() => {
-            setDefaultVal();
-          }, [item.userAttrs]);
-
           return (
             <FormItem label={`${a.key}`} key={a.key + "-apikey"}>
               <FormTextInput
                 placeholder={`${a.key}`}
-                value={data[a.key].apiKey ?? APIKeyVal}
+                value={data[a.key].apiKey}
                 onChange={(e) => {
                   const value = e.target.value.trim();
                   dispatch(
