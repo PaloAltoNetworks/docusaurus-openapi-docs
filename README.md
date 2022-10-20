@@ -42,18 +42,18 @@ Key Features:
 Plugin:
 
 ```bash
-yarn add @slashid/docusaurus-plugin-openapi-docs
+yarn add @slashid/docusaurus-plugin-openapi-docs-slashid-slashid
 ```
 
 Theme:
 
 ```bash
-yarn add @slashid/docusaurus-theme-openapi-docs
+yarn add @slashid/docusaurus-plugin-openapi-docs-slashid-slashid
 ```
 
 ## Configuring `docusaurus.config.js` (Plugin and theme usage)
 
-Here is an example of properly configuring your `docusaurus.config.js` file for `@slashid/docusaurus-plugin-openapi-docs` and `@slashid/docusaurus-theme-openapi-docs` usage.
+Here is an example of properly configuring your `docusaurus.config.js` file for `@slashid/docusaurus-plugin-openapi-docs-slashid` and `@slashid/docusaurus-plugin-openapi-docs-slashid` usage.
 
 ```js
 // docusaurus.config.js
@@ -89,7 +89,7 @@ Here is an example of properly configuring your `docusaurus.config.js` file for 
 
   plugins: [
     [
-      '@slashid/docusaurus-plugin-openapi-docs',
+      '@slashid/docusaurus-plugin-openapi-docs-slashid',
       {
         id: "apiDocs",
         docsPluginId: "classic",
@@ -109,11 +109,11 @@ Here is an example of properly configuring your `docusaurus.config.js` file for 
       },
     ]
   ],
-  themes: ["@slashid/docusaurus-theme-openapi-docs"], // Allows use of @theme/ApiItem and other components
+  themes: ["@slashid/docusaurus-plugin-openapi-docs-slashid"], // Allows use of @theme/ApiItem and other components
 }
 ```
 
-> Note: You may optionally configure a dedicated `@docusaurus/plugin-content-docs` instance for use with `@slashid/docusaurus-theme-openapi-docs` by setting `docItemComponent` to `@theme/ApiItem`.
+> Note: You may optionally configure a dedicated `@docusaurus/plugin-content-docs` instance for use with `@slashid/docusaurus-plugin-openapi-docs-slashid` by setting `docItemComponent` to `@theme/ApiItem`.
 
 ## Plugin Configuration Options
 
