@@ -85,7 +85,8 @@ export default function pluginOpenAPIDocs(
   let docPath = docData ? (docData.path ? docData.path : "docs") : undefined;
 
   async function generateApiDocs(options: APIOptions, pluginId: any) {
-    let { specPath, outputDir, template, sidebarOptions } = options;
+    let { specPath, outputDir, template, downloadUrl, sidebarOptions } =
+      options;
 
     // Override docPath if pluginId provided
     if (pluginId) {
@@ -217,6 +218,11 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
       `;
 
       loadedApi.map(async (item) => {
+        if (item.type === "info") {
+          if (downloadUrl && isURL(downloadUrl)) {
+            item.downloadUrl = downloadUrl;
+          }
+        }
         const markdown =
           item.type === "api"
             ? createApiPageMD(item)
