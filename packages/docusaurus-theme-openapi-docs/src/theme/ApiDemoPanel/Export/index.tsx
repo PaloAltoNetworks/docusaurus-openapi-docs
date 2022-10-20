@@ -20,7 +20,7 @@ function Export({ url, proxy }: any) {
       style={{ float: "right" }}
       className="dropdown dropdown--hoverable dropdown--right"
     >
-      <button className="button button--sm button--secondary">Export 💾</button>
+      <button className="button button--sm button--secondary">Export</button>
       <ul className="dropdown__menu">
         <li>
           <a
