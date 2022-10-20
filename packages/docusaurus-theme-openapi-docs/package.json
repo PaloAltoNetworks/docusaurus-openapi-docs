@@ -51,6 +51,7 @@
     "clsx": "^1.1.1",
     "crypto-js": "^4.1.1",
     "docusaurus-plugin-openapi-docs": "^1.3.2",
+    "file-saver": "^2.0.5",
     "immer": "^9.0.7",
     "lodash": "^4.17.20",
     "process": "^0.11.10",
