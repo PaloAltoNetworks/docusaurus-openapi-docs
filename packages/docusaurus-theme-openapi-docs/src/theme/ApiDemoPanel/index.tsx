@@ -27,6 +27,17 @@ import Server from "./Server";
 import { createStoreWithState } from "./store";
 import styles from "./styles.module.css";
 
+interface SlashIDWrapperProps {
+  children: React.ReactNode;
+}
+const SlashIDAttributesWrapper: React.FC<SlashIDWrapperProps> = ({
+  children,
+}) => {
+  useSlashIDAttributes();
+
+  return <>{children}</>;
+};
+
 function ApiDemoPanel({
   item,
   infoPath,
@@ -38,7 +49,6 @@ function ApiDemoPanel({
   const themeConfig = siteConfig.themeConfig as ThemeConfig;
   const options = themeConfig.api;
   const postman = new sdk.Request(item.postman);
-  useSlashIDAttributes();
 
   const acceptArray = Array.from(
     new Set(
@@ -95,15 +105,17 @@ function ApiDemoPanel({
   return (
     <Provider store={store2}>
       <div className={styles.apiDemoPanelContainer}>
-        <MethodEndpoint method={method} path={path} />
-        <Server />
-        <SecuritySchemes infoPath={infoPath} />
-        <Request item={item} />
-        <Response />
-        <Curl
-          postman={postman}
-          codeSamples={(item as any)["x-code-samples"] ?? []}
-        />
+        <SlashIDAttributesWrapper>
+          <MethodEndpoint method={method} path={path} />
+          <Server />
+          <SecuritySchemes infoPath={infoPath} />
+          <Request item={item} />
+          <Response />
+          <Curl
+            postman={postman}
+            codeSamples={(item as any)["x-code-samples"] ?? []}
+          />
+        </SlashIDAttributesWrapper>
       </div>
     </Provider>
   );
