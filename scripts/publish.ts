@@ -51,7 +51,7 @@ function checkoutCode() {
   const BUILD_PATH = "build";
   ensureCleanDir(BUILD_PATH);
 
-  safeExec(`git clone git@github.com:${ORG}/${REPO}.git ${REPO}`, {
+  safeExec(`git clone https://github.com/${ORG}/${REPO}.git ${REPO}`, {
     cwd: BUILD_PATH,
   });
 
