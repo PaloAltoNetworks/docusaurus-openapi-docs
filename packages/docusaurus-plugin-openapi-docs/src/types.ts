@@ -32,6 +32,7 @@ export interface APIOptions {
   specPath: string;
   outputDir: string;
   template?: string;
+  downloadUrl?: string;
   sidebarOptions?: SidebarOptions;
   version?: string;
   label?: string;
@@ -72,6 +73,7 @@ export interface ApiMetadataBase {
   unversionedId: string; // TODO new unversioned id => try to rename to "id"
   infoId?: string;
   infoPath?: string;
+  downloadUrl?: string;
   title: string;
   description: string;
   source: string; // @site aliased source => "@site/docs/folder/subFolder/subSubFolder/myDoc.md"
