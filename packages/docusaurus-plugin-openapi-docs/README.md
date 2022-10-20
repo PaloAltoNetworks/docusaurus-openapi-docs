@@ -18,7 +18,7 @@ OpenAPI plugin for generating API reference docs in Docusaurus v2.
 
 ## Overview
 
-The `docusaurus-plugin-openapi-docs` package extends the Docusaurus CLI with commands for generating MDX using the OpenAPI specification as the source. The resulting MDX is fully compatible with [plugin-content-docs](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-docs) and can be used to render beautiful reference API docs by setting `docItemComponent` to `@theme/ApiItem`, a custom component included in the `docusaurus-theme-openapi-docs` theme.
+The `@slashid/docusaurus-plugin-openapi-docs` package extends the Docusaurus CLI with commands for generating MDX using the OpenAPI specification as the source. The resulting MDX is fully compatible with [plugin-content-docs](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-docs) and can be used to render beautiful reference API docs by setting `docItemComponent` to `@theme/ApiItem`, a custom component included in the `docusaurus-theme-openapi-docs` theme.
 
 Key Features:
 
@@ -32,18 +32,18 @@ Key Features:
 Plugin:
 
 ```bash
-yarn add docusaurus-plugin-openapi-docs
+yarn add @slashid/docusaurus-plugin-openapi-docs
 ```
 
 Theme:
 
 ```bash
-yarn add docusaurus-theme-openapi-docs
+yarn add @slashid/docusaurus-theme-openapi-docs
 ```
 
 ## Configuring `docusaurus.config.js` (Plugin and theme usage)
 
-Here is an example of properly configuring your `docusaurus.config.js` file for `docusaurus-plugin-openapi-docs` and `docusaurus-theme-openapi-docs` usage.
+Here is an example of properly configuring your `docusaurus.config.js` file for `@slashid/docusaurus-plugin-openapi-docs` and `@slashid/docusaurus-theme-openapi-docs` usage.
 
 ```js
 // docusaurus.config.js
@@ -78,7 +78,7 @@ Here is an example of properly configuring your `docusaurus.config.js` file for 
 ],
 
   plugins: [
-      'docusaurus-plugin-openapi-docs',
+      '@slashid/docusaurus-plugin-openapi-docs',
       {
         id: "apiDocs",
         docsPluginId: "classic",
@@ -98,11 +98,11 @@ Here is an example of properly configuring your `docusaurus.config.js` file for 
       },
     ]
   ],
-  themes: ["docusaurus-theme-openapi-docs"] // Allows use of @theme/ApiItem and other components
+  themes: ["@slashid/docusaurus-theme-openapi-docs"] // Allows use of @theme/ApiItem and other components
 }
 ```
 
-> Note: You may optionally configure a dedicated `@docusaurus/plugin-content-docs` instance for use with `docusaurus-theme-openapi-docs` by setting `docItemComponent` to `@theme/ApiItem`.
+> Note: You may optionally configure a dedicated `@docusaurus/plugin-content-docs` instance for use with `@slashid/docusaurus-theme-openapi-docs` by setting `docItemComponent` to `@theme/ApiItem`.
 
 ## Plugin Configuration Options
 
