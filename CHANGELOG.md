@@ -1,3 +1,17 @@
+## 1.2.1 (Oct 20, 2022)
+
+High level enhancements
+
+- Fixed the state management issues related to reading user attributes
+
+Other enhancements and bug fixes
+
+- Fix the org name for publishing and changelog
+- Add a readme for the theme
+- Update README
+- Prepare for the public release under slashId org
+- Implement a hook for persisting org id and api key values
+
 ## 1.2.1 (Sep 27, 2022)
 
 High level enhancements
