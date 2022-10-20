@@ -405,7 +405,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
   }
 
   return {
-    name: `docusaurus-plugin-openapi-docs`,
+    name: `@slashid/docusaurus-plugin-openapi-docs-slashid`,
 
     extendCli(cli): void {
       cli
