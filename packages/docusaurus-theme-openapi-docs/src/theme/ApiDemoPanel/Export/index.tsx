@@ -7,7 +7,6 @@
 
 import React from "react";
 
-// @ts-ignore
 import fileSaver from "file-saver";
 
 const saveFile = (url: string) => {
