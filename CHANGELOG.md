@@ -1,3 +1,9 @@
+## 1.2.4 (Oct 20, 2022)
+
+Other enhancements and bug fixes
+
+- Update README with correct installation instructions
+
 ## 1.2.1 (Oct 20, 2022)
 
 High level enhancements
