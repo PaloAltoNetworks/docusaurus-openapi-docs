@@ -15,7 +15,7 @@ import { createDryRun } from "./utils/dry-run";
 import { getOutput } from "./utils/get-output";
 import { printBanner } from "./utils/print-utils";
 
-const ORG = "SlashID";
+const ORG = "slashid";
 const REPO = "docusaurus-openapi-docs";
 let REPO_ROOT = undefined;
 
