@@ -1,7 +1,7 @@
 {
   "name": "@slashid/docusaurus-theme-openapi-docs-slashid",
   "description": "OpenAPI theme for Docusaurus.",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "license": "MIT",
   "keywords": [
     "openapi",

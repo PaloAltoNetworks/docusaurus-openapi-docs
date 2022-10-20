@@ -11,9 +11,9 @@ OpenAPI plugin for generating API reference docs in Docusaurus v2.
 <img src="https://img.shields.io/badge/dynamic/json?style=for-the-badge&logo=meta&color=blueviolet&label=Docusaurus&query=dependencies%5B%22%40docusaurus%2Fcore%22%5D&url=https%3A%2F%2Fraw.githubusercontent.com%2FPaloAltoNetworks%2Fdocusaurus-openapi-docs%2Fmain%2Fdemo%2Fpackage.json" />
 <br/><br/>
 
-[![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/blob/HEAD/LICENSE) [![npm latest package](https://img.shields.io/npm/v/docusaurus-plugin-openapi-docs/latest.svg)](https://www.npmjs.com/package/docusaurus-plugin-openapi-docs) [![npm downloads](https://img.shields.io/npm/dm/docusaurus-plugin-openapi-docs.svg)](https://www.npmjs.com/package/docusaurus-plugin-openapi-docs) [![npm canary package](https://img.shields.io/npm/v/docusaurus-plugin-openapi-docs/canary.svg)](https://www.npmjs.com/package/docusaurus-plugin-openapi-docs)
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/slashid/docusaurus-openapi-docs/blob/HEAD/LICENSE) [![npm latest package](https://img.shields.io/npm/v/slashid/docusaurus-plugin-openapi-docs-slashid/latest.svg)](https://www.npmjs.com/package/@slashid/docusaurus-plugin-openapi-docs-slashid) [![npm downloads](https://img.shields.io/npm/dm/@slashid/docusaurus-plugin-openapi-docs.svg)](https://www.npmjs.com/package/@slashid/docusaurus-plugin-openapi-docs)
 <br/>
-[![build](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/actions/workflows/validate.yaml/badge.svg)](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/actions/workflows/validate.yaml) [![prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier) [![Cypress.io](https://img.shields.io/badge/tested%20with-Cypress-04C38E.svg)](https://www.cypress.io/) [![jest](https://jestjs.io/img/jest-badge.svg)](https://github.com/facebook/jest) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/blob/HEAD/CONTRIBUTING.md#pull-requests)
+[![prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier) [![Cypress.io](https://img.shields.io/badge/tested%20with-Cypress-04C38E.svg)](https://www.cypress.io/) [![jest](https://jestjs.io/img/jest-badge.svg)](https://github.com/facebook/jest) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/slashid/docusaurus-openapi-docs-slashid/blob/HEAD/CONTRIBUTING.md#pull-requests)
 <br />
 
 </div>
@@ -48,12 +48,12 @@ yarn add @slashid/docusaurus-plugin-openapi-docs-slashid-slashid
 Theme:
 
 ```bash
-yarn add @slashid/docusaurus-plugin-openapi-docs-slashid-slashid
+yarn add @slashid/docusaurus-theme-openapi-docs-slashid-slashid
 ```
 
 ## Configuring `docusaurus.config.js` (Plugin and theme usage)
 
-Here is an example of properly configuring your `docusaurus.config.js` file for `@slashid/docusaurus-plugin-openapi-docs-slashid` and `@slashid/docusaurus-plugin-openapi-docs-slashid` usage.
+Here is an example of properly configuring your `docusaurus.config.js` file for `@slashid/docusaurus-plugin-openapi-docs-slashid` and `@slashid/docusaurus-theme-openapi-docs-slashid` usage.
 
 ```js
 // docusaurus.config.js
@@ -109,11 +109,11 @@ Here is an example of properly configuring your `docusaurus.config.js` file for 
       },
     ]
   ],
-  themes: ["@slashid/docusaurus-plugin-openapi-docs-slashid"], // Allows use of @theme/ApiItem and other components
+  themes: ["@slashid/docusaurus-theme-openapi-docs-slashid"], // Allows use of @theme/ApiItem and other components
 }
 ```
 
-> Note: You may optionally configure a dedicated `@docusaurus/plugin-content-docs` instance for use with `@slashid/docusaurus-plugin-openapi-docs-slashid` by setting `docItemComponent` to `@theme/ApiItem`.
+> Note: You may optionally configure a dedicated `@docusaurus/plugin-content-docs` instance for use with `@slashid/docusaurus-theme-openapi-docs-slashid` by setting `docItemComponent` to `@theme/ApiItem`.
 
 ## Plugin Configuration Options
 
