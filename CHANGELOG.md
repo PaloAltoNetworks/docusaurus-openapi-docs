@@ -1,3 +1,12 @@
+## 1.2.6 (Oct 20, 2022)
+
+High level enhancements
+
+Other enhancements and bug fixes
+
+- Fix readme mistakes
+- Update theme names
+
 ## 1.2.5 (Oct 20, 2022)
 
 Other enhancements and bug fixes
