@@ -11,7 +11,11 @@ import React from "react";
 import fileSaver from "file-saver";
 
 const saveFile = (url: string) => {
-  fileSaver.saveAs(url, url.endsWith("json") ? "openapi.json" : "openapi.yaml");
+  let fileName;
+  if (url.endsWith("json") || url.endsWith("yaml") || url.endsWith("yml")) {
+    fileName = url.substring(url.lastIndexOf("/") + 1);
+  }
+  fileSaver.saveAs(url, fileName ? fileName : "openapi.txt");
 };
 
 function Export({ url, proxy }: any) {
