@@ -7,6 +7,7 @@
 
 import React, { useEffect } from "react";
 
+import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import sdk from "@paloaltonetworks/postman-collection";
 import { ParameterObject } from "docusaurus-plugin-openapi-docs-slashid/src/openapi/types";
@@ -16,6 +17,7 @@ import { Provider } from "react-redux";
 import { ThemeConfig } from "../../types";
 import { createAuth } from "./Authorization/slice";
 import Curl from "./Curl";
+import { useSlashIDAttributes } from "./hooks";
 import MethodEndpoint from "./MethodEndpoint";
 import { createPersistanceMiddleware } from "./persistanceMiddleware";
 import Request from "./Request";
@@ -24,9 +26,6 @@ import SecuritySchemes from "./SecuritySchemes";
 import Server from "./Server";
 import { createStoreWithState } from "./store";
 import styles from "./styles.module.css";
-import * as slashid from "@slashid/slashid";
-
-import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 
 function ApiDemoPanel({
   item,
@@ -39,26 +38,7 @@ function ApiDemoPanel({
   const themeConfig = siteConfig.themeConfig as ThemeConfig;
   const options = themeConfig.api;
   const postman = new sdk.Request(item.postman);
-  let user: slashid.User | undefined = undefined;
-  const [userAttrs, setUserAttrs] = React.useState<any>(undefined);
-
-  const collectAttrs = async () => {
-    if (ExecutionEnvironment.canUseDOM) {
-      if (window) {
-        const prevToken = window.localStorage.getItem("MY_USER_TOKEN");
-        if (prevToken) {
-          // There's a token, just re-create the user. TODO: make sure the token is not expired
-          user = new slashid.User(prevToken) as slashid.User;
-          let data = await user.get();
-          setUserAttrs(data);
-        }
-      }
-    }
-  };
-
-  useEffect(() => {
-    collectAttrs();
-  }, []);
+  useSlashIDAttributes();
 
   const acceptArray = Array.from(
     new Set(
@@ -80,28 +60,6 @@ function ApiDemoPanel({
     header: [] as ParameterObject[],
     cookie: [] as ParameterObject[],
   };
-
-  if (userAttrs != undefined) {
-    item.userAttrs = userAttrs;
-  }
-
-  if (item.parameters) {
-    for (let i = 0; i < item.parameters.length; i++) {
-      let param = item.parameters[i];
-      if (param == undefined) continue;
-
-      const paramName = item.parameters[i].name as string;
-
-      if (userAttrs != undefined && paramName in userAttrs) {
-        //TODO: for some reasons sometimes this object is not extensible.. find out why
-        if (Object.isExtensible(param) == false) {
-          param = structuredClone(param);
-        }
-        param.defaultVal = userAttrs[paramName];
-        item.parameters[i] = param;
-      }
-    }
-  }
 
   item.parameters?.forEach(
     (param: { in: "path" | "query" | "header" | "cookie" }) => {
