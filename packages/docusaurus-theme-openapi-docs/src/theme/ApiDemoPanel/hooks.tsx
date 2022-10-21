@@ -64,7 +64,7 @@ function getStoredParam({
 export type PersistentParamName = string;
 
 /**
- * This hooks will try to fetch user attributes if a user is logged in.
+ * This hook will try to fetch user attributes if a user is logged in.
  * Then it will set the initial values of parameters specified in the config as customFields.persistentParamNames.
  */
 export const useSlashIDAttributes = ({
