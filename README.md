@@ -54,11 +54,16 @@ yarn add @slashid/docusaurus-theme-openapi-docs-slashid-slashid
 ## Configuring `docusaurus.config.js` (Plugin and theme usage)
 
 Here is an example of properly configuring your `docusaurus.config.js` file for `@slashid/docusaurus-plugin-openapi-docs-slashid` and `@slashid/docusaurus-theme-openapi-docs-slashid` usage.
+Please note the usage of `customFields` to set up a list of param names that will be read from user attributes.
 
 ```js
 // docusaurus.config.js
 
 {
+  customFields: {
+    persistentParamNames: ['slashid-test']
+  },
+
   presets: [
     [
       "classic",

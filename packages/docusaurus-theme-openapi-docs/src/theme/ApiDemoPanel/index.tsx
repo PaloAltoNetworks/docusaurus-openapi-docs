@@ -7,7 +7,6 @@
 
 import React, { useEffect } from "react";
 
-import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import sdk from "@paloaltonetworks/postman-collection";
 import { ParameterObject } from "docusaurus-plugin-openapi-docs-slashid/src/openapi/types";
@@ -30,10 +29,22 @@ import styles from "./styles.module.css";
 interface SlashIDWrapperProps {
   children: React.ReactNode;
 }
+
+/**
+ * Reads the customFields from the docusarus config to get the list of attributes
+ * used as the initial values for the specified param names.
+ */
 const SlashIDAttributesWrapper: React.FC<SlashIDWrapperProps> = ({
   children,
 }) => {
-  useSlashIDAttributes();
+  const { siteConfig } = useDocusaurusContext();
+  const paramNames = React.useMemo(() => {
+    return {
+      persistentParamNames:
+        (siteConfig?.customFields?.persistentParamNames as string[]) ?? [],
+    };
+  }, [siteConfig?.customFields?.persistentParamNames]);
+  useSlashIDAttributes(paramNames);
 
   return <>{children}</>;
 };
