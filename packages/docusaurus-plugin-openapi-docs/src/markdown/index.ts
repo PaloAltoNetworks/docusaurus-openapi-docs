@@ -16,6 +16,7 @@ import { createAuthentication } from "./createAuthentication";
 import { createContactInfo } from "./createContactInfo";
 import { createDeprecationNotice } from "./createDeprecationNotice";
 import { createDescription } from "./createDescription";
+import { createDownload } from "./createDownload";
 import { createLicense } from "./createLicense";
 import { createLogo } from "./createLogo";
 import { createParamsDetails } from "./createParamsDetails";
@@ -83,13 +84,16 @@ export function createInfoPageMD({
     darkLogo,
   },
   securitySchemes,
+  downloadUrl,
 }: InfoPageMetadata) {
   return render([
     `import ApiLogo from "@theme/ApiLogo";\n`,
     `import Tabs from "@theme/Tabs";\n`,
-    `import TabItem from "@theme/TabItem";\n\n`,
+    `import TabItem from "@theme/TabItem";\n`,
+    `import Export from "@theme/ApiDemoPanel/Export";\n\n`,
 
     createVersionBadge(version),
+    createDownload(downloadUrl),
     `# ${title.replace(lessThan, "&lt;").replace(greaterThan, "&gt;")}\n\n`,
     createLogo(logo, darkLogo),
     createDescription(description),

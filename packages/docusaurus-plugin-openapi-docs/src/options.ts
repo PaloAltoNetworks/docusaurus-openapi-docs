@@ -25,6 +25,7 @@ export const OptionsSchema = Joi.object({
         specPath: Joi.string().required(),
         outputDir: Joi.string().required(),
         template: Joi.string(),
+        downloadUrl: Joi.string(),
         sidebarOptions: sidebarOptions,
         version: Joi.string().when("versions", {
           is: Joi.exist(),
