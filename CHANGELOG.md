@@ -1,3 +1,9 @@
+## 1.2.7 (Oct 21, 2022)
+
+High level enhancements
+
+- Added the configuration option to whitelist persistent params
+
 ## 1.2.6 (Oct 20, 2022)
 
 High level enhancements
