@@ -31,7 +31,7 @@ let ApiDemoPanel = (_: { item: any; infoPath: any }) => (
   <div style={{ marginTop: "3.5em" }} />
 );
 
-let DocItem = (props: Props) => {
+let ApiItem = (props: Props) => {
   return <div style={{ marginTop: "3.5em" }} />;
 };
 
@@ -42,7 +42,7 @@ interface ApiFrontMatter extends DocFrontMatter {
 if (ExecutionEnvironment.canUseDOM) {
   ApiDemoPanel = require("@theme/ApiDemoPanel").default;
 
-  DocItem = function DocItem(props: Props): JSX.Element {
+  ApiItem = function DocItem(props: Props): JSX.Element {
     const docHtmlClassName = `docs-doc-id-${props.content.metadata.unversionedId}`;
     const MDXComponent = props.content;
     const { frontMatter } = MDXComponent;
@@ -139,4 +139,4 @@ if (ExecutionEnvironment.canUseDOM) {
   };
 }
 
-export default DocItem;
+export default ApiItem;
