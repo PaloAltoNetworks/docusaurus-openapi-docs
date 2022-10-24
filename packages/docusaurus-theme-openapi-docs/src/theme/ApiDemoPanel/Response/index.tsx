@@ -10,7 +10,7 @@ import React from "react";
 import CodeBlock from "@theme/CodeBlock";
 
 import { useTypedDispatch, useTypedSelector } from "../../ApiItem/hooks";
-import { clearResponse } from "./slice";
+import { clearResponse, clearStatus } from "./slice";
 
 // TODO: We probably shouldn't attempt to format XML...
 function formatXml(xml: string) {
@@ -34,6 +34,7 @@ function formatXml(xml: string) {
 
 function Response() {
   const response = useTypedSelector((state) => state.response.value);
+  const status = useTypedSelector((state) => state.response.status);
   const dispatch = useTypedDispatch();
 
   if (response === undefined) {
@@ -56,13 +57,20 @@ function Response() {
           <h4>Response</h4>
           <button
             className="button button--sm button--secondary"
-            onClick={() => dispatch(clearResponse())}
+            onClick={() => {
+              dispatch(clearResponse());
+              dispatch(clearStatus());
+            }}
           >
             Clear
           </button>
         </div>
       </summary>
-      <CodeBlock language={response.startsWith("<") ? `xml` : `json`}>
+      <CodeBlock
+        title={status ? `Status Code: ${status}` : undefined}
+        language={response.startsWith("<") ? `xml` : `json`}
+        className="response-code-block"
+      >
         {prettyResponse || "No Response"}
       </CodeBlock>
     </details>

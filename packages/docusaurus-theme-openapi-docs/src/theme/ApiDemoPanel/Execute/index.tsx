@@ -12,7 +12,7 @@ import Modal from "react-modal";
 
 import { useTypedDispatch, useTypedSelector } from "../../ApiItem/hooks";
 import { Param } from "../ParamOptions/slice";
-import { setResponse } from "../Response/slice";
+import { setResponse, setStatus } from "../Response/slice";
 import buildPostmanRequest from "./../buildPostmanRequest";
 import makeRequest from "./makeRequest";
 
@@ -117,10 +117,12 @@ function Execute({ postman, proxy }: Props) {
           try {
             await delay(1200);
             const res = await makeRequest(postmanRequest, proxy, body);
-            dispatch(setResponse(res));
+            dispatch(setResponse(await res.text()));
+            dispatch(setStatus(res.status));
           } catch (e: any) {
             console.log(e);
             dispatch(setResponse("Connection failed"));
+            dispatch(setStatus("500"));
           }
         }}
       >

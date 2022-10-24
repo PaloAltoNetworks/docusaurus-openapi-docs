@@ -189,7 +189,7 @@ async function makeRequest(
 
   return await fetchWithtimeout(finalUrl, requestOptions).then(
     (response: any) => {
-      return response.text();
+      return response;
     }
   );
 }
