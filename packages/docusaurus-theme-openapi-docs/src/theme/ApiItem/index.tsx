@@ -126,18 +126,34 @@ export default function ApiItem(props: Props): JSX.Element {
     );
   };
 
+  if (api) {
+    return (
+      <DocProvider content={props.content}>
+        <HtmlClassNameProvider className={docHtmlClassName}>
+          <DocItemMetadata />
+          <DocItemLayout>
+            {
+              <BrowserOnly fallback={<div />}>
+                {() => {
+                  return <DocContent />;
+                }}
+              </BrowserOnly>
+            }
+          </DocItemLayout>
+        </HtmlClassNameProvider>
+      </DocProvider>
+    );
+  }
   return (
     <DocProvider content={props.content}>
       <HtmlClassNameProvider className={docHtmlClassName}>
         <DocItemMetadata />
         <DocItemLayout>
-          {
-            <BrowserOnly fallback={<div />}>
-              {() => {
-                return <DocContent />;
-              }}
-            </BrowserOnly>
-          }
+          <div className="row">
+            <div className={clsx("col col--12")}>
+              <MDXComponent />
+            </div>
+          </div>
         </DocItemLayout>
       </HtmlClassNameProvider>
     </DocProvider>
