@@ -67,7 +67,7 @@
 }
 
 :global(.theme-api-markdown details > div > div) {
-  padding-top: unset !important;
+  /* padding-top: unset !important; */
   border-top: unset !important;
 }
 
@@ -417,4 +417,9 @@
 /* Prism code styles */
 :global(.prism-code.language-json) {
   white-space: pre !important;
+}
+
+:global(.response-code-block [class^="codeBlockTitle"]) {
+  font-size: 11px;
+  font-family: var(--ifm-font-family-monospace);
 }
