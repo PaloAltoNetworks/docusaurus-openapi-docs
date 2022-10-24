@@ -7,6 +7,7 @@
 
 import React from "react";
 
+import BrowserOnly from "@docusaurus/BrowserOnly";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import { HtmlClassNameProvider } from "@docusaurus/theme-common";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
@@ -31,27 +32,25 @@ let ApiDemoPanel = (_: { item: any; infoPath: any }) => (
   <div style={{ marginTop: "3.5em" }} />
 );
 
-let ApiItem = (props: Props): any => {
-  return <div />;
-};
-
 interface ApiFrontMatter extends DocFrontMatter {
   readonly api?: ApiItemType;
 }
 
-if (ExecutionEnvironment.canUseDOM) {
-  ApiDemoPanel = require("@theme/ApiDemoPanel").default;
+export default function ApiItem(props: Props): JSX.Element {
+  const docHtmlClassName = `docs-doc-id-${props.content.metadata.unversionedId}`;
+  const MDXComponent = props.content;
+  const { frontMatter } = MDXComponent;
+  const { info_path: infoPath } = frontMatter as DocFrontMatter;
+  const { api } = frontMatter as ApiFrontMatter;
+  const { siteConfig } = useDocusaurusContext();
+  const themeConfig = siteConfig.themeConfig as ThemeConfig;
+  const options = themeConfig.api;
 
-  ApiItem = (props: Props): JSX.Element => {
-    const docHtmlClassName = `docs-doc-id-${props.content.metadata.unversionedId}`;
-    const MDXComponent = props.content;
-    const { frontMatter } = MDXComponent;
-    const { info_path: infoPath } = frontMatter as DocFrontMatter;
-    const { api } = frontMatter as ApiFrontMatter;
-    const { siteConfig } = useDocusaurusContext();
-    const themeConfig = siteConfig.themeConfig as ThemeConfig;
-    const options = themeConfig.api;
+  if (ExecutionEnvironment.canUseDOM) {
+    ApiDemoPanel = require("@theme/ApiDemoPanel").default;
+  }
 
+  const DocContent = () => {
     const acceptArray = Array.from(
       new Set(
         Object.values(api?.responses ?? {})
@@ -92,7 +91,10 @@ if (ExecutionEnvironment.canUseDOM) {
     const serverObject = (JSON.parse(server!) as ServerObject) ?? {};
     const store2 = createStoreWithState(
       {
-        accept: { value: acceptValue || acceptArray[0], options: acceptArray },
+        accept: {
+          value: acceptValue || acceptArray[0],
+          options: acceptArray,
+        },
         contentType: {
           value: contentTypeValue || contentTypeArray[0],
           options: contentTypeArray,
@@ -108,9 +110,8 @@ if (ExecutionEnvironment.canUseDOM) {
       },
       [persistanceMiddleware]
     );
-
-    const DocContent = () => {
-      return (
+    return (
+      <Provider store={store2}>
         <div className="row">
           <div className={clsx("col", api ? "col--7" : "col--12")}>
             <MDXComponent />
@@ -121,22 +122,22 @@ if (ExecutionEnvironment.canUseDOM) {
             </div>
           )}
         </div>
-      );
-    };
-
-    return (
-      <Provider store={store2}>
-        <DocProvider content={props.content}>
-          <HtmlClassNameProvider className={docHtmlClassName}>
-            <DocItemMetadata />
-            <DocItemLayout>
-              <DocContent />
-            </DocItemLayout>
-          </HtmlClassNameProvider>
-        </DocProvider>
       </Provider>
     );
   };
-}
 
-export default ApiItem;
+  return (
+    <DocProvider content={props.content}>
+      <HtmlClassNameProvider className={docHtmlClassName}>
+        <DocItemMetadata />
+        <DocItemLayout>
+          <BrowserOnly fallback={<div>Loading...</div>}>
+            {() => {
+              return <DocContent />;
+            }}
+          </BrowserOnly>
+        </DocItemLayout>
+      </HtmlClassNameProvider>
+    </DocProvider>
+  );
+}
