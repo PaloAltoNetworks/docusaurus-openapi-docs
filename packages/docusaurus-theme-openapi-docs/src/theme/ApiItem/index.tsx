@@ -32,6 +32,10 @@ let ApiDemoPanel = (_: { item: any; infoPath: any }) => (
   <div style={{ marginTop: "3.5em" }} />
 );
 
+if (ExecutionEnvironment.canUseDOM) {
+  ApiDemoPanel = require("@theme/ApiDemoPanel").default;
+}
+
 interface ApiFrontMatter extends DocFrontMatter {
   readonly api?: ApiItemType;
 }
@@ -45,10 +49,6 @@ export default function ApiItem(props: Props): JSX.Element {
   const { siteConfig } = useDocusaurusContext();
   const themeConfig = siteConfig.themeConfig as ThemeConfig;
   const options = themeConfig.api;
-
-  if (ExecutionEnvironment.canUseDOM) {
-    ApiDemoPanel = require("@theme/ApiDemoPanel").default;
-  }
 
   const DocContent = () => {
     const acceptArray = Array.from(
@@ -131,11 +131,13 @@ export default function ApiItem(props: Props): JSX.Element {
       <HtmlClassNameProvider className={docHtmlClassName}>
         <DocItemMetadata />
         <DocItemLayout>
-          <BrowserOnly fallback={<div>Loading...</div>}>
-            {() => {
-              return <DocContent />;
-            }}
-          </BrowserOnly>
+          {
+            <BrowserOnly fallback={<div />}>
+              {() => {
+                return <DocContent />;
+              }}
+            </BrowserOnly>
+          }
         </DocItemLayout>
       </HtmlClassNameProvider>
     </DocProvider>
