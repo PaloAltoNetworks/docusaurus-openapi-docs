@@ -36,6 +36,13 @@ function Response() {
   const response = useTypedSelector((state) => state.response.value);
   const status = useTypedSelector((state) => state.response.status);
   const dispatch = useTypedDispatch();
+  const responseStatusClass =
+    status &&
+    (parseInt(status) >= 400
+      ? "response-summary__status-code--danger"
+      : parseInt(status) >= 200 && parseInt(status) < 300
+      ? "response-summary__status-code--success"
+      : "response-summary__status-code--info");
 
   if (response === undefined) {
     return null;
@@ -54,7 +61,16 @@ function Response() {
     <details className={`details__demo-panel`} open={true}>
       <summary>
         <div className={`details__response-summary`}>
-          <h4>Response</h4>
+          <h4>
+            Response
+            <br />
+            {status && (
+              <span className="response-summary__status-code">
+                Status Code:{" "}
+                <span className={responseStatusClass}>{`${status}`}</span>
+              </span>
+            )}
+          </h4>
           <button
             className="button button--sm button--secondary"
             onClick={() => {
@@ -67,7 +83,6 @@ function Response() {
         </div>
       </summary>
       <CodeBlock
-        title={status ? `Status Code: ${status}` : undefined}
         language={response.startsWith("<") ? `xml` : `json`}
         className="response-code-block"
       >

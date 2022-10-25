@@ -419,7 +419,19 @@
   white-space: pre !important;
 }
 
-:global(.response-code-block [class^="codeBlockTitle"]) {
-  font-size: 11px;
+:global(.response-summary__status-code) {
+  font-size: 12px;
   font-family: var(--ifm-font-family-monospace);
+}
+
+:global(.response-summary__status-code--danger) {
+  color: var(--ifm-color-danger);
+}
+
+:global(.response-summary__status-code--success) {
+  color: var(--ifm-color-success);
+}
+
+:global(.response-summary__status-code--info) {
+  color: var(--ifm-color-info);
 }
