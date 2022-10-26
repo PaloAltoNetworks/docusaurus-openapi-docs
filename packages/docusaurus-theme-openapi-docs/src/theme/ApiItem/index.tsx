@@ -7,6 +7,7 @@
 
 import React from "react";
 
+import BrowserOnly from "@docusaurus/BrowserOnly";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import { HtmlClassNameProvider } from "@docusaurus/theme-common";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
@@ -31,27 +32,25 @@ let ApiDemoPanel = (_: { item: any; infoPath: any }) => (
   <div style={{ marginTop: "3.5em" }} />
 );
 
-let DocItem = (props: Props) => {
-  return <div style={{ marginTop: "3.5em" }} />;
-};
+if (ExecutionEnvironment.canUseDOM) {
+  ApiDemoPanel = require("@theme/ApiDemoPanel").default;
+}
 
 interface ApiFrontMatter extends DocFrontMatter {
   readonly api?: ApiItemType;
 }
 
-if (ExecutionEnvironment.canUseDOM) {
-  ApiDemoPanel = require("@theme/ApiDemoPanel").default;
+export default function ApiItem(props: Props): JSX.Element {
+  const docHtmlClassName = `docs-doc-id-${props.content.metadata.unversionedId}`;
+  const MDXComponent = props.content;
+  const { frontMatter } = MDXComponent;
+  const { info_path: infoPath } = frontMatter as DocFrontMatter;
+  const { api } = frontMatter as ApiFrontMatter;
+  const { siteConfig } = useDocusaurusContext();
+  const themeConfig = siteConfig.themeConfig as ThemeConfig;
+  const options = themeConfig.api;
 
-  DocItem = function DocItem(props: Props): JSX.Element {
-    const docHtmlClassName = `docs-doc-id-${props.content.metadata.unversionedId}`;
-    const MDXComponent = props.content;
-    const { frontMatter } = MDXComponent;
-    const { info_path: infoPath } = frontMatter as DocFrontMatter;
-    const { api } = frontMatter as ApiFrontMatter;
-    const { siteConfig } = useDocusaurusContext();
-    const themeConfig = siteConfig.themeConfig as ThemeConfig;
-    const options = themeConfig.api;
-
+  const ApiDocContent = () => {
     const acceptArray = Array.from(
       new Set(
         Object.values(api?.responses ?? {})
@@ -59,18 +58,15 @@ if (ExecutionEnvironment.canUseDOM) {
           .flat()
       )
     );
-
     const content = api?.requestBody?.content ?? {};
     const contentTypeArray = Object.keys(content);
     const servers = api?.servers ?? [];
-
     const params = {
       path: [] as ParameterObject[],
       query: [] as ParameterObject[],
       header: [] as ParameterObject[],
       cookie: [] as ParameterObject[],
     };
-
     api?.parameters?.forEach(
       (param: { in: "path" | "query" | "header" | "cookie" }) => {
         const paramType = param.in;
@@ -78,21 +74,23 @@ if (ExecutionEnvironment.canUseDOM) {
         paramsArray.push(param as ParameterObject);
       }
     );
-
     const auth = createAuth({
       security: api?.security,
       securitySchemes: api?.securitySchemes,
       options,
     });
-
-    const persistanceMiddleware = createPersistanceMiddleware(options);
     const acceptValue = window?.sessionStorage.getItem("accept");
     const contentTypeValue = window?.sessionStorage.getItem("contentType");
     const server = window?.sessionStorage.getItem("server");
     const serverObject = (JSON.parse(server!) as ServerObject) ?? {};
+
+    const persistanceMiddleware = createPersistanceMiddleware(options);
     const store2 = createStoreWithState(
       {
-        accept: { value: acceptValue || acceptArray[0], options: acceptArray },
+        accept: {
+          value: acceptValue || acceptArray[0],
+          options: acceptArray,
+        },
         contentType: {
           value: contentTypeValue || contentTypeArray[0],
           options: contentTypeArray,
@@ -109,8 +107,8 @@ if (ExecutionEnvironment.canUseDOM) {
       [persistanceMiddleware]
     );
 
-    const DocContent = () => {
-      return (
+    return (
+      <Provider store={store2}>
         <div className="row">
           <div className={clsx("col", api ? "col--7" : "col--12")}>
             <MDXComponent />
@@ -121,22 +119,42 @@ if (ExecutionEnvironment.canUseDOM) {
             </div>
           )}
         </div>
-      );
-    };
-
-    return (
-      <Provider store={store2}>
-        <DocProvider content={props.content}>
-          <HtmlClassNameProvider className={docHtmlClassName}>
-            <DocItemMetadata />
-            <DocItemLayout>
-              <DocContent />
-            </DocItemLayout>
-          </HtmlClassNameProvider>
-        </DocProvider>
       </Provider>
     );
   };
-}
 
-export default DocItem;
+  if (api) {
+    // TODO: determine if there's a way to SSR and hydrate ApiItem/ApiDemoPanel
+    return (
+      <DocProvider content={props.content}>
+        <HtmlClassNameProvider className={docHtmlClassName}>
+          <DocItemMetadata />
+          <DocItemLayout>
+            {
+              <BrowserOnly fallback={<div />}>
+                {() => {
+                  return <ApiDocContent />;
+                }}
+              </BrowserOnly>
+            }
+          </DocItemLayout>
+        </HtmlClassNameProvider>
+      </DocProvider>
+    );
+  }
+  // Non-API docs
+  return (
+    <DocProvider content={props.content}>
+      <HtmlClassNameProvider className={docHtmlClassName}>
+        <DocItemMetadata />
+        <DocItemLayout>
+          <div className="row">
+            <div className={clsx("col col--12")}>
+              <MDXComponent />
+            </div>
+          </div>
+        </DocItemLayout>
+      </HtmlClassNameProvider>
+    </DocProvider>
+  );
+}
