@@ -50,7 +50,7 @@ export default function ApiItem(props: Props): JSX.Element {
   const themeConfig = siteConfig.themeConfig as ThemeConfig;
   const options = themeConfig.api;
 
-  const DocContent = () => {
+  const ApiDocContent = () => {
     const acceptArray = Array.from(
       new Set(
         Object.values(api?.responses ?? {})
@@ -58,18 +58,15 @@ export default function ApiItem(props: Props): JSX.Element {
           .flat()
       )
     );
-
     const content = api?.requestBody?.content ?? {};
     const contentTypeArray = Object.keys(content);
     const servers = api?.servers ?? [];
-
     const params = {
       path: [] as ParameterObject[],
       query: [] as ParameterObject[],
       header: [] as ParameterObject[],
       cookie: [] as ParameterObject[],
     };
-
     api?.parameters?.forEach(
       (param: { in: "path" | "query" | "header" | "cookie" }) => {
         const paramType = param.in;
@@ -77,18 +74,17 @@ export default function ApiItem(props: Props): JSX.Element {
         paramsArray.push(param as ParameterObject);
       }
     );
-
     const auth = createAuth({
       security: api?.security,
       securitySchemes: api?.securitySchemes,
       options,
     });
-
-    const persistanceMiddleware = createPersistanceMiddleware(options);
     const acceptValue = window?.sessionStorage.getItem("accept");
     const contentTypeValue = window?.sessionStorage.getItem("contentType");
     const server = window?.sessionStorage.getItem("server");
     const serverObject = (JSON.parse(server!) as ServerObject) ?? {};
+
+    const persistanceMiddleware = createPersistanceMiddleware(options);
     const store2 = createStoreWithState(
       {
         accept: {
@@ -110,6 +106,7 @@ export default function ApiItem(props: Props): JSX.Element {
       },
       [persistanceMiddleware]
     );
+
     return (
       <Provider store={store2}>
         <div className="row">
@@ -127,6 +124,7 @@ export default function ApiItem(props: Props): JSX.Element {
   };
 
   if (api) {
+    // TODO: determine if there's a way to SSR and hydrate ApiItem/ApiDemoPanel
     return (
       <DocProvider content={props.content}>
         <HtmlClassNameProvider className={docHtmlClassName}>
@@ -135,7 +133,7 @@ export default function ApiItem(props: Props): JSX.Element {
             {
               <BrowserOnly fallback={<div />}>
                 {() => {
-                  return <DocContent />;
+                  return <ApiDocContent />;
                 }}
               </BrowserOnly>
             }
@@ -144,6 +142,7 @@ export default function ApiItem(props: Props): JSX.Element {
       </DocProvider>
     );
   }
+  // Non-API docs
   return (
     <DocProvider content={props.content}>
       <HtmlClassNameProvider className={docHtmlClassName}>
