@@ -1,3 +1,16 @@
+## 1.4.0 (Oct 26, 2022)
+
+High level enhancements
+
+- Support for downloading OpenAPI specification file
+
+Other enhancements and bug fixes
+
+- [Bug] Wrap API docs in BrowserOnly ([#310](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/310))
+- Extend regex to ignore <= and >= ([#309](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/309))
+- [Enhancement] Introduce support for downloading OpenAPI spec ([#307](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/307))
+- Update package.json
+
 ## 1.3.2 (Oct 19, 2022)
 
 High level enhancements
