@@ -116,7 +116,6 @@ export default function ApiItem(props: Props): JSX.Element {
   }
 
   if (api) {
-    // TODO: determine if there's a way to SSR and hydrate ApiItem/ApiDemoPanel
     return (
       <DocProvider content={props.content}>
         <HtmlClassNameProvider className={docHtmlClassName}>
