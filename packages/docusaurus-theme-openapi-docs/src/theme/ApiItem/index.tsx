@@ -7,12 +7,11 @@
 
 import React from "react";
 
-import BrowserOnly from "@docusaurus/BrowserOnly";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import { HtmlClassNameProvider } from "@docusaurus/theme-common";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import useIsBrowser from "@docusaurus/useIsBrowser";
 import type { Props } from "@theme/DocItem";
-import clsx from "clsx";
 import { ServerObject } from "docusaurus-plugin-openapi-docs/lib/openapi/types";
 import type { ApiItem as ApiItemType } from "docusaurus-plugin-openapi-docs/lib/types";
 import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
@@ -24,13 +23,11 @@ import { createAuth } from "../ApiDemoPanel/Authorization/slice";
 import { createPersistanceMiddleware } from "../ApiDemoPanel/persistanceMiddleware";
 import DocItemLayout from "./Layout";
 import DocItemMetadata from "./Metadata";
-import { createStoreWithState } from "./store";
+import { createStoreWithoutState, createStoreWithState } from "./store";
 
 const { DocProvider } = require("@docusaurus/theme-common/internal");
 
-let ApiDemoPanel = (_: { item: any; infoPath: any }) => (
-  <div style={{ marginTop: "3.5em" }} />
-);
+let ApiDemoPanel = (_: { item: any; infoPath: any }) => <div />;
 
 if (ExecutionEnvironment.canUseDOM) {
   ApiDemoPanel = require("@theme/ApiDemoPanel").default;
@@ -49,8 +46,19 @@ export default function ApiItem(props: Props): JSX.Element {
   const { siteConfig } = useDocusaurusContext();
   const themeConfig = siteConfig.themeConfig as ThemeConfig;
   const options = themeConfig.api;
+  const isBrowser = useIsBrowser();
 
-  const ApiDocContent = () => {
+  // Define store2
+  let store2: any = {};
+  const persistanceMiddleware = createPersistanceMiddleware(options);
+
+  // Init store for SSR
+  if (!isBrowser) {
+    store2 = createStoreWithoutState({}, [persistanceMiddleware]);
+  }
+
+  // Init store for CSR to hydrate components
+  if (isBrowser) {
     const acceptArray = Array.from(
       new Set(
         Object.values(api?.responses ?? {})
@@ -84,8 +92,7 @@ export default function ApiItem(props: Props): JSX.Element {
     const server = window?.sessionStorage.getItem("server");
     const serverObject = (JSON.parse(server!) as ServerObject) ?? {};
 
-    const persistanceMiddleware = createPersistanceMiddleware(options);
-    const store2 = createStoreWithState(
+    store2 = createStoreWithState(
       {
         accept: {
           value: acceptValue || acceptArray[0],
@@ -106,22 +113,7 @@ export default function ApiItem(props: Props): JSX.Element {
       },
       [persistanceMiddleware]
     );
-
-    return (
-      <Provider store={store2}>
-        <div className="row">
-          <div className={clsx("col", api ? "col--7" : "col--12")}>
-            <MDXComponent />
-          </div>
-          {api && (
-            <div className="col col--5">
-              <ApiDemoPanel item={api} infoPath={infoPath} />
-            </div>
-          )}
-        </div>
-      </Provider>
-    );
-  };
+  }
 
   if (api) {
     // TODO: determine if there's a way to SSR and hydrate ApiItem/ApiDemoPanel
@@ -130,13 +122,16 @@ export default function ApiItem(props: Props): JSX.Element {
         <HtmlClassNameProvider className={docHtmlClassName}>
           <DocItemMetadata />
           <DocItemLayout>
-            {
-              <BrowserOnly fallback={<div />}>
-                {() => {
-                  return <ApiDocContent />;
-                }}
-              </BrowserOnly>
-            }
+            <Provider store={store2}>
+              <div className="row">
+                <div className="col col--7">
+                  <MDXComponent />
+                </div>
+                <div className="col col--5">
+                  <ApiDemoPanel item={api} infoPath={infoPath} />
+                </div>
+              </div>
+            </Provider>
           </DocItemLayout>
         </HtmlClassNameProvider>
       </DocProvider>
@@ -149,7 +144,7 @@ export default function ApiItem(props: Props): JSX.Element {
         <DocItemMetadata />
         <DocItemLayout>
           <div className="row">
-            <div className={clsx("col col--12")}>
+            <div className="col col--12">
               <MDXComponent />
             </div>
           </div>
