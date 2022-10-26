@@ -127,7 +127,7 @@ export default function ApiItem(props: Props): JSX.Element {
                   <MDXComponent />
                 </div>
                 <div className="col col--5">
-                  <ApiDemoPanel item={api} infoPath={infoPath} />
+                  {isBrowser && <ApiDemoPanel item={api} infoPath={infoPath} />}
                 </div>
               </div>
             </Provider>
@@ -136,6 +136,7 @@ export default function ApiItem(props: Props): JSX.Element {
       </DocProvider>
     );
   }
+
   // Non-API docs
   return (
     <DocProvider content={props.content}>
