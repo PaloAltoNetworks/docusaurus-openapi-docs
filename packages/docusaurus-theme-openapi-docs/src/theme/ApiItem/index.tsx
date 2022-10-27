@@ -88,6 +88,7 @@ export default function ApiItem(props: Props): JSX.Element {
       securitySchemes: api?.securitySchemes,
       options,
     });
+    // TODO: determine way to rehydrate without flashing
     // const acceptValue = window?.sessionStorage.getItem("accept");
     // const contentTypeValue = window?.sessionStorage.getItem("contentType");
     const server = window?.sessionStorage.getItem("server");
