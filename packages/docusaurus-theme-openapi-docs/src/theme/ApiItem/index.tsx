@@ -7,6 +7,7 @@
 
 import React from "react";
 
+import BrowserOnly from "@docusaurus/BrowserOnly";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import { HtmlClassNameProvider } from "@docusaurus/theme-common";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
@@ -87,19 +88,19 @@ export default function ApiItem(props: Props): JSX.Element {
       securitySchemes: api?.securitySchemes,
       options,
     });
-    const acceptValue = window?.sessionStorage.getItem("accept");
-    const contentTypeValue = window?.sessionStorage.getItem("contentType");
+    // const acceptValue = window?.sessionStorage.getItem("accept");
+    // const contentTypeValue = window?.sessionStorage.getItem("contentType");
     const server = window?.sessionStorage.getItem("server");
     const serverObject = (JSON.parse(server!) as ServerObject) ?? {};
 
     store2 = createStoreWithState(
       {
         accept: {
-          value: acceptValue || acceptArray[0],
+          value: acceptArray[0],
           options: acceptArray,
         },
         contentType: {
-          value: contentTypeValue || contentTypeArray[0],
+          value: contentTypeArray[0],
           options: contentTypeArray,
         },
         server: {
@@ -127,7 +128,11 @@ export default function ApiItem(props: Props): JSX.Element {
                   <MDXComponent />
                 </div>
                 <div className="col col--5">
-                  {isBrowser && <ApiDemoPanel item={api} infoPath={infoPath} />}
+                  <BrowserOnly fallback={<div>Loading...</div>}>
+                    {() => {
+                      return <ApiDemoPanel item={api} infoPath={infoPath} />;
+                    }}
+                  </BrowserOnly>
                 </div>
               </div>
             </Provider>
