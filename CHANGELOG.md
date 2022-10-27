@@ -1,3 +1,13 @@
+## 1.4.1 (Oct 27, 2022)
+
+High level enhancements
+
+- SEO Improvements
+
+Other enhancements and bug fixes
+
+- [Bug] Support SSR for ApiItem ([#314](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/314))
+
 ## 1.4.0 (Oct 26, 2022)
 
 High level enhancements
