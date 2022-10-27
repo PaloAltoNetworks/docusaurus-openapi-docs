@@ -746,7 +746,8 @@ export function createResponseSchema({ title, body, ...rest }: Props) {
           value: `${mimeType}`,
           children: [
             create("SchemaTabs", {
-              groupId: "schema-tabs",
+              // TODO: determine if we should persist this
+              // groupId: "schema-tabs",
               children: [
                 firstBody &&
                   create("TabItem", {
