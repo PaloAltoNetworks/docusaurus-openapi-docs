@@ -1,7 +1,7 @@
 {
   "name": "docusaurus-theme-openapi-docs",
   "description": "OpenAPI theme for Docusaurus.",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "license": "MIT",
   "keywords": [
     "openapi",
@@ -51,7 +51,7 @@
     "buffer": "^6.0.3",
     "clsx": "^1.1.1",
     "crypto-js": "^4.1.1",
-    "docusaurus-plugin-openapi-docs": "^1.4.0",
+    "docusaurus-plugin-openapi-docs": "^1.4.1",
     "file-saver": "^2.0.5",
     "immer": "^9.0.7",
     "lodash": "^4.17.20",
