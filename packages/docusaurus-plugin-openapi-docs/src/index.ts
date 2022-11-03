@@ -30,18 +30,24 @@ export function getDocsPluginConfig(
   // eslint-disable-next-line array-callback-return
   const filteredConfig = presetsPlugins.filter((data) => {
     // Search presets
-    if (data[0].endsWith(pluginId)) {
-      return data[1];
-    }
-
-    // Search plugin-content-docs instances
-    if (data[0] === "@docusaurus/plugin-content-docs") {
-      const configPluginId = data[1].id ? data[1].id : "default";
-      if (configPluginId === pluginId) {
+    if (Array.isArray(data)) {
+      if (typeof data[0] === "string" && data[0].endsWith(pluginId)) {
         return data[1];
+      }
+
+      // Search plugin-content-docs instances
+      if (
+        typeof data[0] === "string" &&
+        data[0] === "@docusaurus/plugin-content-docs"
+      ) {
+        const configPluginId = data[1].id ? data[1].id : "default";
+        if (configPluginId === pluginId) {
+          return data[1];
+        }
       }
     }
   })[0];
+
   if (filteredConfig) {
     // Search presets, e.g. "classic"
     if (filteredConfig[0].endsWith(pluginId)) {
