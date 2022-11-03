@@ -110,7 +110,7 @@ function groupByTags(
     .map((tag) => {
       // Map info object to tag
       const taggedInfoObject = intros.find((i) =>
-        i.tags ? i.tags.includes(tag) : undefined
+        i.tags ? i.tags.find((t: any) => t.name === tag) : undefined
       );
       const tagObject = tags.flat().find(
         (t) =>
