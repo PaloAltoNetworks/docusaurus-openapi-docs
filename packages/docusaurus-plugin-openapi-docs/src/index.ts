@@ -159,7 +159,7 @@ export default function pluginOpenAPIDocs(
         : `---
 id: {{{id}}}
 title: "{{{title}}}"
-description: "{{{description}}}"
+description: "{{{frontMatter.description}}}"
 {{^api}}
 sidebar_label: Introduction
 {{/api}}
@@ -190,7 +190,7 @@ info_path: {{{infoPath}}}
       const infoMdTemplate = `---
 id: {{{id}}}
 title: "{{{title}}}"
-description: "{{{description}}}"
+description: "{{{frontMatter.description}}}"
 sidebar_label: {{{title}}}
 hide_title: true
 custom_edit_url: null
@@ -208,8 +208,8 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
 
       const tagMdTemplate = `---
 id: {{{id}}}
-title: "{{{description}}}"
-description: "{{{description}}}"
+title: "{{{frontMatter.description}}}"
+description: "{{{frontMatter.description}}}"
 custom_edit_url: null
 ---
 
