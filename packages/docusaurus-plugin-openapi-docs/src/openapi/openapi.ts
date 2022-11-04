@@ -98,13 +98,20 @@ function createItems(
           openapiData.tags ?? []
         );
         const tagId = kebabCase(tag.name);
+        const splitDescription = description.match(/[^\r\n]+/g);
         const tagPage: PartialPage<TagPageMetadata> = {
           type: "tag",
           id: tagId,
           unversionedId: tagId,
           title: description ?? "",
           description: description ?? "",
-          frontMatter: {},
+          frontMatter: {
+            description: splitDescription
+              ? splitDescription[0]
+                  .replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
+                  .replace(/\s+$/, "")
+              : "",
+          },
           tag: {
             ...tag,
           },
@@ -115,6 +122,11 @@ function createItems(
 
   if (openapiData.info.description) {
     // Only create an info page if we have a description.
+    const infoDescription = openapiData.info?.description;
+    let splitDescription: any;
+    if (infoDescription) {
+      splitDescription = infoDescription.match(/[^\r\n]+/g);
+    }
     const infoPage: PartialPage<InfoPageMetadata> = {
       type: "info",
       id: infoId,
@@ -126,7 +138,13 @@ function createItems(
             "$1'"
           )
         : "",
-      frontMatter: {},
+      frontMatter: {
+        description: splitDescription
+          ? splitDescription[0]
+              .replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
+              .replace(/\s+$/, "")
+          : "",
+      },
       securitySchemes: openapiData.components?.securitySchemes,
       info: {
         ...openapiData.info,
@@ -208,6 +226,12 @@ function createItems(
         }
       }
 
+      const opDescription = operationObject.description;
+      let splitDescription: any;
+      if (opDescription) {
+        splitDescription = opDescription.match(/[^\r\n]+/g);
+      }
+
       const apiPage: PartialPage<ApiPageMetadata> = {
         type: "api",
         id: baseId,
@@ -220,7 +244,13 @@ function createItems(
               "$1'"
             )
           : "",
-        frontMatter: {},
+        frontMatter: {
+          description: splitDescription
+            ? splitDescription[0]
+                .replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
+                .replace(/\s+$/, "")
+            : "",
+        },
         api: {
           ...defaults,
           tags: operationObject.tags,
