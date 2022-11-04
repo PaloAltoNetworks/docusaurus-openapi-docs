@@ -1,3 +1,17 @@
+## 1.4.2 (Nov 4, 2022)
+
+High level enhancements
+
+- Bug fixes and polish
+
+Other enhancements and bug fixes
+
+- [Bug] Improve support for multiline descriptions in frontmatter ([#325](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/325))
+- Use ResizeObserver to conditionally render SchemaTabs arrows ([#322](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/322))
+- Check if plugin is array before accessing first index ([#321](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/321))
+- Use find instead of include to match tags ([#320](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/320))
+- [Cleanup]: Remove "lorem ipsum" instances and boilerplate docs ([#318](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/318))
+
 ## 1.4.1 (Oct 27, 2022)
 
 High level enhancements
