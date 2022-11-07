@@ -179,6 +179,11 @@ const config = {
         //   logoClass: "php",
         // },
       ],
+      algolia: {
+        apiKey: "441074cace987cbf4640c039ebed303c",
+        appId: "J0EABTYI1A",
+        indexName: "docusaurus-openapi",
+      },
     }),
 
   plugins: [
@@ -265,7 +270,6 @@ const config = {
       },
     ],
   ],
-
   themes: ["docusaurus-theme-openapi-docs"],
   stylesheets: [
     {
