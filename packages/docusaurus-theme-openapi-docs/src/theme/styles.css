@@ -1,0 +1,425 @@
+/* ============================================================================
+ * Copyright (c) Palo Alto Networks
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ * ========================================================================== */
+
+:root {
+  --openapi-required: var(--ifm-color-danger);
+  --openapi-code-blue: var(--ifm-color-info);
+  --openapi-code-red: var(--ifm-color-danger);
+  --openapi-code-orange: var(--ifm-color-warning);
+  --openapi-code-green: var(--ifm-color-success);
+}
+
+[data-theme="dark"] {
+  --openapi-card-background-color: var(--ifm-color-gray-900) !important;
+}
+
+.docs-wrapper {
+  height: 100%;
+}
+
+.docItemContainer header + *,
+.docItemContainer article > *:first-child {
+  margin-top: 0;
+}
+
+@media (min-width: 997px) {
+  .docItemCol {
+    max-width: 75% !important;
+  }
+
+  /* Prevent hydration FOUC, as the mobile TOC needs to be server-rendered */
+  .tocMobile {
+    display: none;
+  }
+}
+
+/* Begin OpenAPI theme styles */
+[data-theme="dark"] {
+  --openapi-card-background-color: var(--ifm-color-gray-900) !important;
+}
+
+.apiItemContainer article > *:first-child,
+.apiItemContainer header + * {
+  margin-top: 0;
+}
+
+.theme-api-markdown div[class^="collapsibleContent"] {
+  margin-top: 0 !important;
+  padding-left: 2px;
+}
+
+/* Main details */
+
+.theme-api-markdown details {
+  margin: unset;
+  max-width: 600px;
+  background-color: transparent;
+  color: var(--ifm-font-color-base);
+  padding: unset;
+  border: unset !important;
+  box-shadow: unset !important;
+  --docusaurus-details-decoration-color: var(--ifm-font-color-base);
+}
+
+.theme-api-markdown details ul {
+  padding-left: 0;
+  font-size: 14px;
+}
+
+.theme-api-markdown details li {
+  list-style: none;
+  padding-bottom: 5px;
+  padding-top: 5px;
+}
+
+.theme-api-markdown details > div > div {
+  padding-top: unset !important;
+  border-top: unset !important;
+}
+
+.theme-api-markdown details p {
+  margin-bottom: 0;
+}
+
+/* Demo panel details */
+
+.theme-api-markdown .details__demo-panel {
+  margin-bottom: 1rem;
+  background: var(--openapi-card-background-color);
+  border-radius: var(--openapi-card-border-radius);
+}
+
+.theme-api-markdown .details__demo-panel > summary {
+  padding-left: 1rem;
+  padding-top: 1rem;
+  cursor: pointer;
+}
+
+.theme-api-markdown .details__demo-panel > div > div > pre {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.theme-api-markdown .details__demo-panel > summary::marker {
+  display: none;
+  content: "";
+}
+
+.theme-api-markdown .details__demo-panel > summary::-webkit-details-marker {
+  display: none;
+  content: "";
+}
+
+.theme-api-markdown .details__demo-panel > pre {
+  margin-bottom: 0;
+  padding-top: 0;
+}
+
+/* Demo panel request */
+
+.theme-api-markdown .details__request-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.theme-api-markdown .details__request-summary > button {
+  margin-bottom: 1rem;
+  margin-right: 1rem;
+}
+
+/* Demo panel response */
+
+.theme-api-markdown .details__response-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.theme-api-markdown .details__response-summary > button {
+  margin-bottom: 1rem;
+  margin-right: 1rem;
+}
+
+/* Code block */
+
+.theme-api-markdown code {
+  max-width: 600px;
+  max-height: 500px;
+  overflow: auto;
+}
+
+/* Version button */
+
+.version-button div {
+  display: block;
+}
+
+.version-button div > button > span::after {
+  border-color: currentcolor transparent;
+  border-style: solid;
+  border-width: 0.4em 0.4em 0;
+  content: "";
+  margin-left: 0.3em;
+  position: relative;
+  transform: translateY(-50%);
+  display: inline-block;
+  font-size: 0.8rem;
+  top: 1px;
+}
+
+/* Params, Schema and Discriminator Items */
+
+[class^="paramsItem"]::before,
+[class^="schemaItem"]::before {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  width: 0.7rem;
+  /* width of horizontal line */
+  height: 0.5rem;
+  /* vertical position of line */
+  vertical-align: top;
+  border-bottom: thin solid var(--ifm-color-gray-500);
+  content: "";
+  display: inline-block;
+}
+
+.schemaItem {
+  list-style: none;
+  position: relative;
+  margin: 0 !important;
+  padding: 5px 0 5px 1rem;
+  border-left: thin solid var(--ifm-color-gray-500) !important;
+}
+
+.discriminatorItem {
+  list-style: none;
+  position: relative;
+  margin: 0 !important;
+  padding: 5px 0 5px 0 !important;
+  border-left: thin solid var(--ifm-color-gray-500) !important;
+}
+
+.discriminatorTabsContainer {
+  padding-left: 0 !important;
+}
+
+.schemaItem:hover {
+  background-color: var(--ifm-menu-color-background-active);
+}
+
+.schemaItem:focus {
+  background-color: var(--ifm-menu-color-background-active);
+}
+
+.paramsItem:hover {
+  background-color: var(--ifm-menu-color-background-active);
+}
+
+.paramsItem:focus {
+  background-color: var(--ifm-menu-color-background-active);
+}
+
+/* CodeTabs */
+
+.code__tab--python::after {
+  content: "";
+  width: 28px;
+  height: 28px;
+  background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg");
+  margin-block: auto;
+}
+
+.code__tab--python {
+  color: var(--ifm-color-success);
+  padding-left: 1.4rem;
+  padding-right: 1.4rem;
+}
+
+.code__tab--python.tabs__item--active {
+  border-bottom-color: var(--ifm-color-success);
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+.language-python {
+  max-height: 500px;
+  overflow: auto;
+}
+
+.code__tab--go::after {
+  content: "";
+  width: 28px;
+  height: 28px;
+  background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/go/go-original-wordmark.svg");
+  margin-block: auto;
+}
+
+.code__tab--go {
+  color: var(--ifm-color-info);
+  padding-left: 1.4rem;
+  padding-right: 1.4rem;
+}
+
+.code__tab--go.tabs__item--active {
+  border-bottom-color: var(--ifm-color-info);
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+.language-go {
+  max-height: 500px;
+  overflow: auto;
+}
+
+.code__tab--javascript::after {
+  content: "";
+  width: 28px;
+  height: 28px;
+  background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg");
+  margin-block: auto;
+}
+
+.code__tab--javascript {
+  color: var(--ifm-color-warning);
+  padding-left: 1.4rem;
+  padding-right: 1.4rem;
+}
+
+.code__tab--javascript.tabs__item--active {
+  border-bottom-color: var(--ifm-color-warning);
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+.language-javascript {
+  max-height: 500px;
+  overflow: auto;
+}
+
+.code__tab--bash::after {
+  content: "";
+  width: 28px;
+  height: 28px;
+  background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg");
+  margin-block: auto;
+}
+
+.code__tab--bash {
+  color: var(--ifm-color-danger);
+  padding-left: 1.4rem;
+  padding-right: 1.4rem;
+}
+
+.code__tab--bash.tabs__item--active {
+  border-bottom-color: var(--ifm-color-danger);
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+.language-bash {
+  max-height: 500px;
+  overflow: auto;
+}
+
+.code__tab--ruby::after {
+  content: "";
+  width: 28px;
+  height: 28px;
+  background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/ruby/ruby-plain.svg");
+  margin-block: auto;
+}
+
+.code__tab--ruby {
+  color: var(--ifm-color-danger);
+  padding-left: 1.4rem;
+  padding-right: 1.4rem;
+}
+
+.code__tab--ruby.tabs__item--active {
+  border-bottom-color: var(--ifm-color-danger);
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+.language-ruby {
+  max-height: 500px;
+  overflow: auto;
+}
+
+.code__tab--csharp::after {
+  content: "";
+  width: 28px;
+  height: 28px;
+  background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/csharp/csharp-original.svg");
+  margin-block: auto;
+}
+
+.code__tab--csharp {
+  color: var(--ifm-color-gray-500);
+  padding-left: 1.4rem;
+  padding-right: 1.4rem;
+}
+
+.code__tab--csharp.tabs__item--active {
+  border-bottom-color: var(--ifm-color-gray-500);
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+.language-csharp {
+  max-height: 500px;
+  overflow: auto;
+}
+
+.code__tab--nodejs::after {
+  content: "";
+  width: 28px;
+  height: 28px;
+  background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/nodejs/nodejs-original.svg");
+  margin-block: auto;
+}
+
+.code__tab--nodejs {
+  color: var(--ifm-color-success);
+  padding-left: 1.4rem;
+  padding-right: 1.4rem;
+}
+
+.code__tab--nodejs.tabs__item--active {
+  border-bottom-color: var(--ifm-color-success);
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+.language-nodejs {
+  max-height: 500px;
+  overflow: auto;
+}
+
+.code__tab--php::after {
+  content: "";
+  width: 28px;
+  height: 28px;
+  background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/php/php-original.svg");
+  margin-block: auto;
+}
+
+.code__tab--php {
+  color: var(--ifm-color-gray-500);
+  padding-left: 1.4rem;
+  padding-right: 1.4rem;
+}
+
+.code__tab--php.tabs__item--active {
+  border-bottom-color: var(--ifm-color-gray-500);
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+.language-php {
+  max-height: 500px;
+  overflow: auto;
+}
+
+/* Prism code styles */
+.prism-code.language-json {
+  white-space: pre !important;
+}
