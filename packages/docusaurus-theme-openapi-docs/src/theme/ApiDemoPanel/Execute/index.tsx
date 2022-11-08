@@ -112,6 +112,7 @@ function Execute({ postman, proxy }: Props) {
       <button
         className="button button--sm button--secondary"
         disabled={!isValidRequest}
+        style={!isValidRequest ? { pointerEvents: "all" } : {}}
         onClick={async () => {
           dispatch(setResponse("Fetching..."));
           try {
