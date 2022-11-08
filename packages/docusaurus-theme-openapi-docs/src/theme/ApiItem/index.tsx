@@ -13,9 +13,11 @@ import { HtmlClassNameProvider } from "@docusaurus/theme-common";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import useIsBrowser from "@docusaurus/useIsBrowser";
 import type { Props } from "@theme/DocItem";
-import { ServerObject } from "docusaurus-plugin-openapi-docs/lib/openapi/types";
-import type { ApiItem as ApiItemType } from "docusaurus-plugin-openapi-docs/lib/types";
+import DocItemMetadata from "@theme/DocItem/Metadata";
+import clsx from "clsx";
+import { ServerObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
+import type { ApiItem as ApiItemType } from "docusaurus-plugin-openapi-docs/src/types";
 import { Provider } from "react-redux";
 
 import { DocFrontMatter } from "../../types";
@@ -23,7 +25,6 @@ import { ThemeConfig } from "../../types";
 import { createAuth } from "../ApiDemoPanel/Authorization/slice";
 import { createPersistanceMiddleware } from "../ApiDemoPanel/persistanceMiddleware";
 import DocItemLayout from "./Layout";
-import DocItemMetadata from "./Metadata";
 import { createStoreWithoutState, createStoreWithState } from "./store";
 
 const { DocProvider } = require("@docusaurus/theme-common/internal");
@@ -124,7 +125,7 @@ export default function ApiItem(props: Props): JSX.Element {
           <DocItemMetadata />
           <DocItemLayout>
             <Provider store={store2}>
-              <div className="row">
+              <div className={clsx("row", "theme-api-markdown")}>
                 <div className="col col--7">
                   <MDXComponent />
                 </div>
