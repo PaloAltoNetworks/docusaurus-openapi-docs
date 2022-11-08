@@ -1,3 +1,14 @@
+## 1.2.9 (Nov 8, 2022)
+
+High level enhancements
+
+- Login is now optional
+
+Other enhancements and bug fixes
+
+- Fix a typo in the docs
+- Added the configuration option to whitelist persistent params
+
 ## 1.2.8 (Oct 21, 2022)
 
 High level enhancements
