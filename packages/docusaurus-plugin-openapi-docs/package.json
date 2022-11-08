@@ -28,8 +28,8 @@
     "watch": "tsc --watch"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "2.0.1",
-    "@docusaurus/types": "2.0.1",
+    "@docusaurus/module-type-aliases": "^2.0.1",
+    "@docusaurus/types": "^2.0.1",
     "@types/fs-extra": "^9.0.13",
     "@types/js-yaml": "^4.0.5",
     "@types/json-pointer": "^1.0.31",
