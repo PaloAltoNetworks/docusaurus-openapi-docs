@@ -7,7 +7,7 @@
 
 import path from "path";
 
-import { Globby, GlobExcludeDefault } from "@docusaurus/utils";
+import { Globby, GlobExcludeDefault, posixPath } from "@docusaurus/utils";
 import Converter from "@paloaltonetworks/openapi-to-postmanv2";
 import sdk from "@paloaltonetworks/postman-collection";
 import Collection from "@paloaltonetworks/postman-collection";
@@ -320,7 +320,7 @@ export async function readOpenapiFiles(
       return Promise.all(
         sources.map(async (source) => {
           // TODO: make a function for this
-          const fullPath = path.join(openapiPath, source);
+          const fullPath = posixPath(path.join(openapiPath, source));
           const data = (await loadAndResolveSpec(
             fullPath
           )) as unknown as OpenApiObject;

@@ -9,7 +9,7 @@ import fs from "fs";
 import path from "path";
 
 import type { LoadContext, Plugin } from "@docusaurus/types";
-import { Globby } from "@docusaurus/utils";
+import { Globby, posixPath } from "@docusaurus/utils";
 import chalk from "chalk";
 import { render } from "mustache";
 
@@ -338,7 +338,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
 
   async function cleanApiDocs(options: APIOptions) {
     const { outputDir } = options;
-    const apiDir = path.join(siteDir, outputDir);
+    const apiDir = posixPath(path.join(siteDir, outputDir));
     const apiMdxFiles = await Globby(["*.api.mdx", "*.info.mdx", "*.tag.mdx"], {
       cwd: path.resolve(apiDir),
       deep: 1,

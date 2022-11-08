@@ -25,6 +25,8 @@ import type {
   ApiMetadata,
 } from "../types";
 
+import { posixPath } from "@docusaurus/utils";
+
 function isApiItem(item: ApiMetadata): item is ApiMetadata {
   return item.type === "api";
 }
@@ -148,8 +150,15 @@ function groupByTags(
           type: "generated-index" as "generated-index",
           title: tag,
           slug: label
-            ? path.join("/category", basePath, kebabCase(label), kebabCase(tag))
-            : path.join("/category", basePath, kebabCase(tag)),
+            ? posixPath(
+                path.join(
+                  "/category",
+                  basePath,
+                  kebabCase(label),
+                  kebabCase(tag)
+                )
+              )
+            : posixPath(path.join("/category", basePath, kebabCase(tag))),
         } as SidebarItemCategoryLinkConfig;
       }
 
