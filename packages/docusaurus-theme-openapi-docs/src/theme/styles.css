@@ -11,6 +11,9 @@
   --openapi-code-red: var(--ifm-color-danger);
   --openapi-code-orange: var(--ifm-color-warning);
   --openapi-code-green: var(--ifm-color-success);
+  --openapi-card-background-color: var(--ifm-color-gray-100);
+  --openapi-card-border-radius: var(--ifm-pre-border-radius);
+  --openapi-input-border: var(--ifm-color-primary);
 }
 
 [data-theme="dark"] {

@@ -15,7 +15,6 @@ import MethodEndpoint from "./MethodEndpoint";
 import Request from "./Request";
 import Response from "./Response";
 import SecuritySchemes from "./SecuritySchemes";
-import styles from "./styles.module.css";
 
 function ApiDemoPanel({
   item,
@@ -28,7 +27,7 @@ function ApiDemoPanel({
   const { path, method } = item;
 
   return (
-    <div className={styles.apiDemoPanelContainer}>
+    <div>
       <MethodEndpoint method={method} path={path} />
       <SecuritySchemes infoPath={infoPath} />
       <Request item={item} />
