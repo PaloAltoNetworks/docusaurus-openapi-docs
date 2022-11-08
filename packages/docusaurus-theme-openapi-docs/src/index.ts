@@ -14,6 +14,11 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
   return {
     name: "docusaurus-theme-openapi",
 
+    getClientModules() {
+      const modules = [require.resolve("./theme/styles.css")];
+      return modules;
+    },
+
     getThemePath() {
       return path.join(__dirname, "..", "lib-next", "theme");
     },
