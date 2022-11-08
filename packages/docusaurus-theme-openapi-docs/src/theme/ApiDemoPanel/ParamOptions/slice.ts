@@ -7,6 +7,7 @@
 
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ParameterObject } from "docusaurus-plugin-openapi-docs-slashid/src/openapi/types";
+import { values } from "lodash";
 
 export type Param = ParameterObject & { value?: string[] | string };
 
@@ -29,9 +30,15 @@ export const slice = createSlice({
       const index = paramGroup.findIndex((p) => p.name === newParam.name);
       paramGroup[index] = newParam;
     },
+    resetParams: (state) => {
+      ["path", "query", "header", "cookie"].forEach((group) => {
+        // @ts-ignore
+        state[group].forEach((p) => (p.value = undefined));
+      });
+    },
   },
 });
 
-export const { setParam } = slice.actions;
+export const { setParam, resetParams } = slice.actions;
 
 export default slice.reducer;

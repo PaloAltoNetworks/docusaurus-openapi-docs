@@ -12,7 +12,7 @@ import { User } from "@slashid/slashid";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 import { setAuthData } from "./Authorization/slice";
-import { Param, setParam, State } from "./ParamOptions/slice";
+import { Param, resetParams, setParam, State } from "./ParamOptions/slice";
 import type { RootState, AppDispatch } from "./store";
 
 export const useTypedDispatch = () => useDispatch<AppDispatch>();
@@ -61,6 +61,11 @@ function getStoredParam({
   return param;
 }
 
+const initialAttributes = {
+  "SlashID-OrgID": undefined,
+  APIKey: undefined,
+};
+
 export type PersistentParamName = string;
 
 /**
@@ -75,10 +80,8 @@ export const useSlashIDAttributes = ({
   const isBrowser = useIsBrowser();
   const params = useTypedSelector((state) => state.params);
   const data = useTypedSelector((state) => state.auth.data);
-  const [attributes, setAttributes] = React.useState<SlashIDAttributes>({
-    "SlashID-OrgID": undefined,
-    APIKey: undefined,
-  });
+  const [attributes, setAttributes] =
+    React.useState<SlashIDAttributes>(initialAttributes);
   const dispatch = useTypedDispatch();
 
   React.useEffect(() => {
@@ -86,7 +89,6 @@ export const useSlashIDAttributes = ({
       const collectAttrs = async () => {
         const prevToken = window.localStorage.getItem("MY_USER_TOKEN");
         if (prevToken) {
-          // There's a token, just re-create the user. TODO: make sure the token is not expired
           const user = new User(prevToken);
           try {
             let data = await user.get();
@@ -97,9 +99,32 @@ export const useSlashIDAttributes = ({
         }
       };
 
+      const handleLogout = () => {
+        [...persistentParamNames, "ApiKey", "SlashID-OrgID"].forEach((name) => {
+          window.sessionStorage.removeItem(name);
+        });
+
+        setAttributes(initialAttributes);
+        dispatch(resetParams());
+        dispatch(
+          setAuthData({
+            scheme: "ApiKeyAuth",
+            key: "apiKey",
+            value: "",
+          })
+        );
+      };
+
       collectAttrs();
+      window.addEventListener("slashId:logout", handleLogout);
+
+      return () => {
+        window.removeEventListener("slashId:logout", handleLogout);
+      };
     }
-  }, [isBrowser, setAttributes]);
+
+    return () => undefined;
+  }, [dispatch, isBrowser, persistentParamNames, setAttributes]);
 
   React.useEffect(() => {
     if (isBrowser) {
