@@ -13,6 +13,7 @@ import {
   SidebarItemCategoryLinkConfig,
   SidebarItemDoc,
 } from "@docusaurus/plugin-content-docs/src/sidebars/types";
+import { posixPath } from "@docusaurus/utils";
 import clsx from "clsx";
 import { kebabCase } from "lodash";
 import uniq from "lodash/uniq";
@@ -24,8 +25,6 @@ import type {
   ApiPageMetadata,
   ApiMetadata,
 } from "../types";
-
-import { posixPath } from "@docusaurus/utils";
 
 function isApiItem(item: ApiMetadata): item is ApiMetadata {
   return item.type === "api";

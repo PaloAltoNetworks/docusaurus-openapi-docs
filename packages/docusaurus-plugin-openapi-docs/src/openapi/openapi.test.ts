@@ -8,6 +8,7 @@
 import path from "path";
 
 import { posixPath } from "@docusaurus/utils";
+
 import { readOpenapiFiles } from ".";
 
 // npx jest packages/docusaurus-plugin-openapi/src/openapi/openapi.test.ts --watch
