@@ -7,6 +7,8 @@
 
 import path from "path";
 
+import { posixPath } from "@docusaurus/utils";
+
 import { readOpenapiFiles } from ".";
 
 // npx jest packages/docusaurus-plugin-openapi/src/openapi/openapi.test.ts --watch
@@ -15,7 +17,7 @@ describe("openapi", () => {
   describe("readOpenapiFiles", () => {
     it("readOpenapiFiles", async () => {
       const results = await readOpenapiFiles(
-        path.join(__dirname, "__fixtures__/examples"),
+        posixPath(path.join(__dirname, "__fixtures__/examples")),
         { specPath: "./", outputDir: "./" }
       );
       const categoryMeta = results.find((x) =>

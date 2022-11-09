@@ -13,6 +13,7 @@ import {
   SidebarItemCategoryLinkConfig,
   SidebarItemDoc,
 } from "@docusaurus/plugin-content-docs/src/sidebars/types";
+import { posixPath } from "@docusaurus/utils";
 import clsx from "clsx";
 import { kebabCase } from "lodash";
 import uniq from "lodash/uniq";
@@ -148,8 +149,15 @@ function groupByTags(
           type: "generated-index" as "generated-index",
           title: tag,
           slug: label
-            ? path.join("/category", basePath, kebabCase(label), kebabCase(tag))
-            : path.join("/category", basePath, kebabCase(tag)),
+            ? posixPath(
+                path.join(
+                  "/category",
+                  basePath,
+                  kebabCase(label),
+                  kebabCase(tag)
+                )
+              )
+            : posixPath(path.join("/category", basePath, kebabCase(tag))),
         } as SidebarItemCategoryLinkConfig;
       }
 
