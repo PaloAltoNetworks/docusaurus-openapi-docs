@@ -6,3 +6,8 @@
  * ========================================================================== */
 
 /// <reference types="@docusaurus/theme-classic" />
+
+declare module "@docusaurus/theme-common/internal" {
+  function useDoc(): any;
+  export const { useDoc };
+}
