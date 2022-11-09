@@ -5,14 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-:root {
-  --openapi-required: var(--ifm-color-danger);
-  --openapi-code-blue: var(--ifm-color-info);
-  --openapi-code-red: var(--ifm-color-danger);
-  --openapi-code-orange: var(--ifm-color-warning);
-  --openapi-code-green: var(--ifm-color-success);
-}
-
 .docItemContainer header + *,
 .docItemContainer article > *:first-child {
   margin-top: 0;
@@ -21,21 +13,5 @@
 @media (min-width: 997px) {
   .docItemCol {
     max-width: 75% !important;
-  }
-}
-
-.apiItemContainer article > *:first-child,
-.apiItemContainer header + * {
-  margin-top: 0;
-}
-
-@media (min-width: 997px) {
-  .docItemCol {
-    max-width: 75% !important;
-  }
-
-  /* Prevent hydration FOUC, as the mobile TOC needs to be server-rendered */
-  .tocMobile {
-    display: none;
   }
 }
