@@ -1,3 +1,15 @@
+## 1.4.3 (Nov 9, 2022)
+
+High level enhancements
+
+- Added support for Algolia DocSearch
+
+Other enhancements and bug fixes
+
+- Update posixPath to wrap path.join to fix backslash issue when buildi… ([#332](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/332))
+- Add pointer events styling to Execute button for invalid requests ([#331](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/331))
+- Add algolia config ([#328](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/328))
+
 ## 1.4.2 (Nov 4, 2022)
 
 High level enhancements
