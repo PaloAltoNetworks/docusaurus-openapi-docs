@@ -31,6 +31,9 @@ export function mergeAllOf(allOf: SchemaObject[]) {
       example: function () {
         return true;
       },
+      "x-examples": function () {
+        return true;
+      },
     },
     ignoreAdditionalProperties: true,
   });
