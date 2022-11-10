@@ -131,7 +131,9 @@ function createItems(
       type: "info",
       id: infoId,
       unversionedId: infoId,
-      title: openapiData.info.title,
+      title: openapiData.info.title
+        ? openapiData.info.title.replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
+        : "",
       description: openapiData.info.description
         ? openapiData.info.description.replace(
             /((?:^|[^\\])(?:\\{2})*)"/g,
@@ -237,7 +239,7 @@ function createItems(
         id: baseId,
         infoId: infoId ?? "",
         unversionedId: baseId,
-        title: title,
+        title: title ? title.replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'") : "",
         description: operationObject.description
           ? operationObject.description.replace(
               /((?:^|[^\\])(?:\\{2})*)"/g,
