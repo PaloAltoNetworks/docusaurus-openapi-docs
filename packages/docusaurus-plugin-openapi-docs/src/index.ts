@@ -164,7 +164,7 @@ description: "{{{frontMatter.description}}}"
 sidebar_label: Introduction
 {{/api}}
 {{#api}}
-sidebar_label: {{{title}}}
+sidebar_label: "{{{title}}}"
 {{/api}}
 {{^api}}
 sidebar_position: 0
@@ -191,7 +191,7 @@ info_path: {{{infoPath}}}
 id: {{{id}}}
 title: "{{{title}}}"
 description: "{{{frontMatter.description}}}"
-sidebar_label: {{{title}}}
+sidebar_label: "{{{title}}}"
 hide_title: true
 custom_edit_url: null
 ---
