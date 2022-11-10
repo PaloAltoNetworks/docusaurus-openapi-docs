@@ -277,6 +277,16 @@ const config = {
       type: "text/css",
     },
   ],
+  webpack: {
+    jsLoader: (isServer) => ({
+      loader: require.resolve("esbuild-loader"),
+      options: {
+        loader: "tsx",
+        format: isServer ? "cjs" : undefined,
+        target: isServer ? "node12" : "es2017",
+      },
+    }),
+  },
 };
 
 module.exports = config;
