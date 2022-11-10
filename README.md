@@ -1,4 +1,4 @@
-<h1 align="center">Docusaurus OpenAPI Doc Generator</h1>
+<h1 align="center">Docusaurus OpenAPI Doc Generator!</h1>
 
 <div align="center">
 <img width="200" src="https://user-images.githubusercontent.com/9343811/165975569-1bc29814-884c-4931-83df-860043b625b7.svg" />
