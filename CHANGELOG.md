@@ -1,3 +1,16 @@
+## 1.4.4 (Nov 11, 2022)
+
+High level enhancements
+
+- Introduce Docusaurus v2.2.0 support
+
+Other enhancements and bug fixes
+
+- Include global tags and tag docs only if referenced by operation ([#340](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/340))
+- [Bug] Handle double quotes in sidebar_label frontmatter ([#338](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/338))
+- Fix error when allOf two refs ([#335](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/335))
+- [Bug] Introduce Docusaurus v2.2.0 support ([#336](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/336))
+
 ## 1.4.3 (Nov 9, 2022)
 
 High level enhancements
