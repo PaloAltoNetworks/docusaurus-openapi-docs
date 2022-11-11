@@ -68,9 +68,13 @@ function groupByTags(
   );
 
   // Combine globally defined tags with operation tags
+  // Only include global tag if referenced in operation tags
   let apiTags: string[] = [];
   tags.flat().forEach((tag) => {
-    apiTags.push(tag.name!);
+    // Should we also check x-displayName?
+    if (operationTags.includes(tag.name!)) {
+      apiTags.push(tag.name!);
+    }
   });
   apiTags = uniq(apiTags.concat(operationTags));
 

@@ -16,6 +16,7 @@ import fs from "fs-extra";
 import cloneDeep from "lodash/cloneDeep";
 import kebabCase from "lodash/kebabCase";
 import unionBy from "lodash/unionBy";
+import uniq from "lodash/uniq";
 
 import { isURL } from "../index";
 import {
@@ -84,41 +85,6 @@ function createItems(
   // TODO: Find a better way to handle this
   let items: PartialPage<ApiMetadata>[] = [];
   const infoId = kebabCase(openapiData.info.title);
-
-  if (sidebarOptions?.categoryLinkSource === "tag") {
-    // Only create an tag pages if categoryLinkSource set to tag.
-    const tags: TagObject[] = openapiData.tags ?? [];
-    // eslint-disable-next-line array-callback-return
-    tags
-      .filter((tag) => !tag.description?.includes("SchemaDefinition"))
-      // eslint-disable-next-line array-callback-return
-      .map((tag) => {
-        const description = getTagDisplayName(
-          tag.name!,
-          openapiData.tags ?? []
-        );
-        const tagId = kebabCase(tag.name);
-        const splitDescription = description.match(/[^\r\n]+/g);
-        const tagPage: PartialPage<TagPageMetadata> = {
-          type: "tag",
-          id: tagId,
-          unversionedId: tagId,
-          title: description ?? "",
-          description: description ?? "",
-          frontMatter: {
-            description: splitDescription
-              ? splitDescription[0]
-                  .replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
-                  .replace(/\s+$/, "")
-              : "",
-          },
-          tag: {
-            ...tag,
-          },
-        };
-        items.push(tagPage);
-      });
-  }
 
   if (openapiData.info.description) {
     // Only create an info page if we have a description.
@@ -268,6 +234,52 @@ function createItems(
 
       items.push(apiPage);
     }
+  }
+
+  if (sidebarOptions?.categoryLinkSource === "tag") {
+    // Get global tags
+    const tags: TagObject[] = openapiData.tags ?? [];
+
+    // Get operation tags
+    const apiItems = items.filter((item) => {
+      return item.type === "api";
+    }) as ApiPageMetadata[];
+    const operationTags = uniq(
+      apiItems
+        .flatMap((item) => item.api.tags)
+        .filter((item): item is string => !!item)
+    );
+
+    // eslint-disable-next-line array-callback-return
+    tags
+      .filter((tag) => operationTags.includes(tag.name!)) // include only tags referenced by operation
+      // eslint-disable-next-line array-callback-return
+      .map((tag) => {
+        const description = getTagDisplayName(
+          tag.name!,
+          openapiData.tags ?? []
+        );
+        const tagId = kebabCase(tag.name);
+        const splitDescription = description.match(/[^\r\n]+/g);
+        const tagPage: PartialPage<TagPageMetadata> = {
+          type: "tag",
+          id: tagId,
+          unversionedId: tagId,
+          title: description ?? "",
+          description: description ?? "",
+          frontMatter: {
+            description: splitDescription
+              ? splitDescription[0]
+                  .replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
+                  .replace(/\s+$/, "")
+              : "",
+          },
+          tag: {
+            ...tag,
+          },
+        };
+        items.push(tagPage);
+      });
   }
 
   return items as ApiMetadata[];
