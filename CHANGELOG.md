@@ -1,3 +1,14 @@
+## 1.4.5 (Nov 15, 2022)
+
+High level enhancements
+
+- Bug fixes and polish
+- Re-introduce missing `--openapi-input-background` variable to `styles.css`
+
+Other enhancements and bug fixes
+
+- [Bug] Add condition for handling arrays of discriminators ([#344](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/344))
+
 ## 1.4.4 (Nov 11, 2022)
 
 High level enhancements
