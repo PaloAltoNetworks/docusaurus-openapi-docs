@@ -14,6 +14,7 @@
   --openapi-card-background-color: var(--ifm-color-gray-100);
   --openapi-card-border-radius: var(--ifm-pre-border-radius);
   --openapi-input-border: var(--ifm-color-primary);
+  --openapi-input-background: var(--openapi-card-background-color);
 }
 
 [data-theme="dark"] {
