@@ -104,16 +104,16 @@ function createAnyOneOf(schema: SchemaObject): any {
 
 function createProperties(schema: SchemaObject) {
   const discriminator = schema.discriminator;
-  return Object.entries(schema.properties!).map(([key, val]) =>
-    createEdges({
+  return Object.entries(schema.properties!).map(([key, val]) => {
+    return createEdges({
       name: key,
       schema: val,
       required: Array.isArray(schema.required)
         ? schema.required.includes(key)
         : false,
       discriminator,
-    })
-  );
+    });
+  });
 }
 
 function createAdditionalProperties(schema: SchemaObject) {
@@ -610,6 +610,10 @@ function createEdges({
 
   // array of objects
   if (schema.items?.properties !== undefined) {
+    return createDetailsNode(name, schemaName, schema, required);
+  }
+
+  if (schema.items?.anyOf !== undefined || schema.items?.oneOf !== undefined) {
     return createDetailsNode(name, schemaName, schema, required);
   }
 
