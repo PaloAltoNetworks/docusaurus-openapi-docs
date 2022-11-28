@@ -10,11 +10,11 @@ import React, { useState, useEffect } from "react";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import codegen from "@paloaltonetworks/postman-code-generators";
 import sdk from "@paloaltonetworks/postman-collection";
+import CodeTabs from "@theme/ApiDemoPanel/CodeTabs";
 import CodeBlock from "@theme/CodeBlock";
 import clsx from "clsx";
 
 import { useTypedSelector } from "../../ApiItem/hooks";
-import CodeTabs from "@theme/ApiDemoPanel/CodeTabs";
 import buildPostmanRequest from "./../buildPostmanRequest";
 import styles from "./styles.module.css";
 

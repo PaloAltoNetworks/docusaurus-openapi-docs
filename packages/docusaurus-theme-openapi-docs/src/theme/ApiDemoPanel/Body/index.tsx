@@ -7,19 +7,19 @@
 
 import React from "react";
 
+import json2xml from "@theme/ApiDemoPanel/Body/json2xml";
+import ContentType from "@theme/ApiDemoPanel/ContentType";
+import FormFileUpload from "@theme/ApiDemoPanel/FormFileUpload";
+import FormItem from "@theme/ApiDemoPanel/FormItem";
+import FormSelect from "@theme/ApiDemoPanel/FormSelect";
+import FormTextInput from "@theme/ApiDemoPanel/FormTextInput";
+import LiveApp from "@theme/ApiDemoPanel/LiveEditor";
+import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
 import { RequestBodyObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import format from "xml-formatter";
 
 import { useTypedDispatch, useTypedSelector } from "../../ApiItem/hooks";
-import SchemaTabs from "@theme/SchemaTabs";
-import ContentType from "@theme/ApiDemoPanel/ContentType";
-import FormSelect from "@theme/ApiDemoPanel/FormSelect";
-import LiveApp from "@theme/ApiDemoPanel/LiveEditor";
-import FormFileUpload from "@theme/ApiDemoPanel/FormFileUpload";
-import FormItem from "@theme/ApiDemoPanel/FormItem";
-import FormTextInput from "@theme/ApiDemoPanel/FormTextInput";
-import json2xml from "@theme/ApiDemoPanel/Body/json2xml";
 import {
   clearFormBodyKey,
   clearRawBody,

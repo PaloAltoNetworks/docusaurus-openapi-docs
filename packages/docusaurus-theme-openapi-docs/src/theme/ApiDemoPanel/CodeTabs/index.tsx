@@ -14,12 +14,12 @@ import React, {
 
 import { duplicates } from "@docusaurus/theme-common";
 import useIsBrowser from "@docusaurus/useIsBrowser";
+import { languageSet } from "@theme/ApiDemoPanel/Curl";
+import { Language } from "@theme/ApiDemoPanel/Curl";
 import type { Props as TabItemProps } from "@theme/TabItem";
 import clsx from "clsx";
 
-import { languageSet } from "@theme/ApiDemoPanel/Curl";
 import styles from "./styles.module.css";
-import { Language } from "@theme/ApiDemoPanel/Curl";
 
 const {
   useScrollPositionBlocker,

@@ -65,6 +65,7 @@ declare module "@theme/ApiDemoPanel/Authorization" {
 
 declare module "@theme/ApiDemoPanel/Body" {
   import { Props as BodyProps } from "@theme/ApiDemoPanel/Body";
+
   export default function Body(props: BodyProps): JSX.Element;
 }
 
@@ -74,6 +75,7 @@ declare module "@theme/ApiDemoPanel/Body/json2xml" {
 
 declare module "@theme/ApiDemoPanel/CodeTabs" {
   import { Props as CodeTabsProps } from "@theme/ApiDemoPanel/CodeTabs";
+
   export default function CodeTabs(props: CodeTabsProps): JSX.Element;
 }
 
@@ -83,12 +85,14 @@ declare module "@theme/ApiDemoPanel/ContentType" {
 
 declare module "@theme/ApiDemoPanel/Curl" {
   import { Props as CurlProps } from "@theme/ApiDemoPanel/Curl";
+
   export { languageSet, Language } from "@theme/ApiDemoPanel/Curl";
   export default function Curl(props: CurlProps): JSX.Element;
 }
 
 declare module "@theme/ApiDemoPanel/FloatingButton" {
   import { Props as FloatingButtonProps } from "@theme/ApiDemoPanel/FloatingButton";
+
   export default function FloatingButton(
     props: FloatingButtonProps
   ): JSX.Element;
@@ -96,21 +100,25 @@ declare module "@theme/ApiDemoPanel/FloatingButton" {
 
 declare module "@theme/ApiDemoPanel/FormItem" {
   import { Props as FormItemProps } from "@theme/ApiDemoPanel/FormItem";
+
   export default function FormItem(props: FormItemProps): JSX.Element;
 }
 
 declare module "@theme/ApiDemoPanel/FormSelect" {
   import { Props as FormSelectProps } from "@theme/ApiDemoPanel/FormSelect";
+
   export default function FormSelect(props: FormSelectProps): JSX.Element;
 }
 
 declare module "@theme/ApiDemoPanel/FormTextInput" {
   import { Props as FormTextInputProps } from "@theme/ApiDemoPanel/FormTextInput";
+
   export default function FormTextInput(props: FormTextInputProps): JSX.Element;
 }
 
 declare module "@theme/ApiDemoPanel/FormFileUpload" {
   import { Props as FormFileUploadProps } from "@theme/ApiDemoPanel/FormFileUpload";
+
   export default function FormFileUpload(
     props: FormFileUploadProps
   ): JSX.Element;
@@ -118,6 +126,7 @@ declare module "@theme/ApiDemoPanel/FormFileUpload" {
 
 declare module "@theme/ApiDemoPanel/FormMultiSelect" {
   import { Props as FormMultiSelectProps } from "@theme/ApiDemoPanel/FormMultiSelect";
+
   export default function FormMultiSelect(
     props: FormMultiSelectProps
   ): JSX.Element;
@@ -125,6 +134,7 @@ declare module "@theme/ApiDemoPanel/FormMultiSelect" {
 
 declare module "@theme/ApiDemoPanel/Execute" {
   import { Props as ExecuteProps } from "@theme/ApiDemoPanel/Execute";
+
   export default function Execute(props: ExecuteProps): JSX.Element;
 }
 
@@ -134,6 +144,7 @@ declare module "@theme/ApiDemoPanel/LiveEditor" {
 
 declare module "@theme/ApiDemoPanel/MethodEndpoint" {
   import { Props as MethodEndpointProps } from "@theme/ApiDemoPanel/MethodEndpoint";
+
   export default function MethodEndpoint(
     props: MethodEndpointProps
   ): JSX.Element;
@@ -141,11 +152,13 @@ declare module "@theme/ApiDemoPanel/MethodEndpoint" {
 
 declare module "@theme/ApiDemoPanel/ParamOptions" {
   import { ParamProps } from "@theme/ApiDemoPanel/ParamOptions";
+
   export default function ParamOptions(props: ParamProps): JSX.Element;
 }
 
 declare module "@theme/ApiDemoPanel/Request" {
   import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
+
   export interface RequestProps {
     item: NonNullable<ApiItem>;
   }

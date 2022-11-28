@@ -9,17 +9,17 @@ import React from "react";
 
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import sdk from "@paloaltonetworks/postman-collection";
-import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
-import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
-
-import { ThemeConfig } from "../../../types";
-import { useTypedSelector } from "@theme/ApiItem/hooks";
 import Accept from "@theme/ApiDemoPanel/Accept";
 import Authorization from "@theme/ApiDemoPanel/Authorization";
 import Body from "@theme/ApiDemoPanel/Body";
 import Execute from "@theme/ApiDemoPanel/Execute";
 import ParamOptions from "@theme/ApiDemoPanel/ParamOptions";
 import Server from "@theme/ApiDemoPanel/Server";
+import { useTypedSelector } from "@theme/ApiItem/hooks";
+import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
+import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
+
+import { ThemeConfig } from "../../../types";
 import styles from "./styles.module.css";
 
 function Request({ item }: { item: NonNullable<ApiItem> }) {
