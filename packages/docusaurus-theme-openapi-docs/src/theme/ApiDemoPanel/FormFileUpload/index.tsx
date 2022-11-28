@@ -61,7 +61,7 @@ function RenderPreview({ file }: RenderPreviewProps) {
   }
 }
 
-interface Props {
+export interface Props {
   placeholder: string;
   onChange?(file?: File): any;
 }

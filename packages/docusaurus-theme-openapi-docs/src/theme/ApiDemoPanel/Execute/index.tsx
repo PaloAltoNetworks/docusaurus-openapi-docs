@@ -32,7 +32,7 @@ function validateRequest(params: {
   return true;
 }
 
-interface Props {
+export interface Props {
   postman: sdk.Request;
   proxy?: string;
 }

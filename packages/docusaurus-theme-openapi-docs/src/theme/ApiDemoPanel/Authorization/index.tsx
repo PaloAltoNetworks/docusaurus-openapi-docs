@@ -8,9 +8,9 @@
 import React from "react";
 
 import { useTypedDispatch, useTypedSelector } from "../../ApiItem/hooks";
-import FormItem from "../FormItem";
-import FormSelect from "../FormSelect";
-import FormTextInput from "../FormTextInput";
+import FormItem from "@theme/ApiDemoPanel/FormItem";
+import FormSelect from "@theme/ApiDemoPanel/FormSelect";
+import FormTextInput from "@theme/ApiDemoPanel/FormTextInput";
 import { setAuthData, setSelectedAuth } from "./slice";
 
 function Authorization() {
@@ -35,7 +35,7 @@ function Authorization() {
           <FormSelect
             options={optionKeys}
             value={selected}
-            onChange={(e) => {
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               dispatch(setSelectedAuth(e.target.value));
             }}
           />
@@ -48,7 +48,7 @@ function Authorization() {
               <FormTextInput
                 placeholder="Bearer Token"
                 value={data[a.key].token ?? ""}
-                onChange={(e) => {
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   const value = e.target.value.trim();
                   dispatch(
                     setAuthData({
@@ -69,7 +69,7 @@ function Authorization() {
               <FormTextInput
                 placeholder="Bearer Token"
                 value={data[a.key].token ?? ""}
-                onChange={(e) => {
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   const value = e.target.value.trim();
                   dispatch(
                     setAuthData({
@@ -91,7 +91,7 @@ function Authorization() {
                 <FormTextInput
                   placeholder="Username"
                   value={data[a.key].username ?? ""}
-                  onChange={(e) => {
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     const value = e.target.value.trim();
                     dispatch(
                       setAuthData({
@@ -108,7 +108,7 @@ function Authorization() {
                   placeholder="Password"
                   password
                   value={data[a.key].password ?? ""}
-                  onChange={(e) => {
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     const value = e.target.value.trim();
                     dispatch(
                       setAuthData({
@@ -130,7 +130,7 @@ function Authorization() {
               <FormTextInput
                 placeholder={`${a.key}`}
                 value={data[a.key].apiKey ?? ""}
-                onChange={(e) => {
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   const value = e.target.value.trim();
                   dispatch(
                     setAuthData({

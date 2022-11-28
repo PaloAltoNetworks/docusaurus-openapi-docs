@@ -9,7 +9,7 @@ import React from "react";
 
 import styles from "./styles.module.css";
 
-interface Props {
+export interface Props {
   label?: string;
   type?: string;
   required?: boolean | undefined;

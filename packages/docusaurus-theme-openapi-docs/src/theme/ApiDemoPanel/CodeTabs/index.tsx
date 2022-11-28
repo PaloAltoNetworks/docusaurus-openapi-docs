@@ -17,8 +17,9 @@ import useIsBrowser from "@docusaurus/useIsBrowser";
 import type { Props as TabItemProps } from "@theme/TabItem";
 import clsx from "clsx";
 
-import { languageSet } from "../Curl";
+import { languageSet } from "@theme/ApiDemoPanel/Curl";
 import styles from "./styles.module.css";
+import { Language } from "@theme/ApiDemoPanel/Curl";
 
 const {
   useScrollPositionBlocker,
@@ -133,7 +134,7 @@ function TabsComponent(props: Props): JSX.Element {
       setSelectedValue(newTabValue);
       if (action) {
         const newLanguage = languageSet.filter(
-          (lang) => lang.language === newTabValue
+          (lang: Language) => lang.language === newTabValue
         );
         action(newLanguage[0]);
       }

@@ -13,17 +13,17 @@ import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/type
 import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 
 import { ThemeConfig } from "../../../types";
-import { useTypedSelector } from "../../ApiItem/hooks";
-import Accept from "../Accept";
-import Authorization from "../Authorization";
-import Body from "../Body";
-import Execute from "../Execute";
-import ParamOptions from "../ParamOptions";
-import Server from "../Server";
+import { useTypedSelector } from "@theme/ApiItem/hooks";
+import Accept from "@theme/ApiDemoPanel/Accept";
+import Authorization from "@theme/ApiDemoPanel/Authorization";
+import Body from "@theme/ApiDemoPanel/Body";
+import Execute from "@theme/ApiDemoPanel/Execute";
+import ParamOptions from "@theme/ApiDemoPanel/ParamOptions";
+import Server from "@theme/ApiDemoPanel/Server";
 import styles from "./styles.module.css";
 
 function Request({ item }: { item: NonNullable<ApiItem> }) {
-  const response = useTypedSelector((state) => state.response.value);
+  const response = useTypedSelector((state: any) => state.response.value);
   const { siteConfig } = useDocusaurusContext();
   const themeConfig = siteConfig.themeConfig as ThemeConfig;
   const options = themeConfig.api;

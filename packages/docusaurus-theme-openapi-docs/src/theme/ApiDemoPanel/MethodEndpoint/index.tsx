@@ -30,7 +30,7 @@ function colorForMethod(method: string) {
   }
 }
 
-interface Props {
+export interface Props {
   method: string;
   path: string;
 }

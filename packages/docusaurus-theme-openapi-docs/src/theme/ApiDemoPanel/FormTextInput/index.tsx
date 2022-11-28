@@ -9,7 +9,7 @@ import React from "react";
 
 import styles from "./styles.module.css";
 
-interface Props {
+export interface Props {
   value?: string;
   placeholder?: string;
   password?: boolean;

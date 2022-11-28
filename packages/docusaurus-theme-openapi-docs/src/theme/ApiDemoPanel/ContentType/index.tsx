@@ -8,8 +8,8 @@
 import React from "react";
 
 import { useTypedDispatch, useTypedSelector } from "../../ApiItem/hooks";
-import FormItem from "./../FormItem";
-import FormSelect from "./../FormSelect";
+import FormItem from "@theme/ApiDemoPanel/FormItem";
+import FormSelect from "@theme/ApiDemoPanel/FormSelect";
 import { setContentType } from "./slice";
 
 function ContentType() {
@@ -26,7 +26,9 @@ function ContentType() {
       <FormSelect
         value={value}
         options={options}
-        onChange={(e) => dispatch(setContentType(e.target.value))}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          dispatch(setContentType(e.target.value))
+        }
       />
     </FormItem>
   );

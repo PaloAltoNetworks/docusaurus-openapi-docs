@@ -8,8 +8,8 @@
 import React from "react";
 
 import { useTypedDispatch, useTypedSelector } from "../../ApiItem/hooks";
-import FormItem from "./../FormItem";
-import FormSelect from "./../FormSelect";
+import FormItem from "@theme/ApiDemoPanel/FormItem";
+import FormSelect from "@theme/ApiDemoPanel/FormSelect";
 import { setAccept } from "./slice";
 
 function Accept() {
@@ -26,7 +26,7 @@ function Accept() {
       <FormSelect
         value={value}
         options={options}
-        onChange={(e) => dispatch(setAccept(e.target.value))}
+        onChange={(e: any) => dispatch(setAccept(e.target.value))}
       />
     </FormItem>
   );

@@ -8,10 +8,10 @@
 import React, { useState } from "react";
 
 import { useTypedDispatch, useTypedSelector } from "../../ApiItem/hooks";
-import FloatingButton from "../FloatingButton";
-import FormItem from "./../FormItem";
-import FormSelect from "./../FormSelect";
-import FormTextInput from "./../FormTextInput";
+import FloatingButton from "@theme/ApiDemoPanel/FloatingButton";
+import FormItem from "@theme/ApiDemoPanel/FormItem";
+import FormSelect from "@theme/ApiDemoPanel/FormSelect";
+import FormTextInput from "@theme/ApiDemoPanel/FormTextInput";
 import { setServer, setServerVariable } from "./slice";
 import styles from "./styles.module.css";
 
@@ -77,7 +77,7 @@ function Server() {
         <FormItem label="Base URL">
           <FormSelect
             options={options.map((s) => s.url)}
-            onChange={(e) => {
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               dispatch(
                 setServer(
                   JSON.stringify(
@@ -97,7 +97,7 @@ function Server() {
                 <FormItem label={key}>
                   <FormSelect
                     options={value.variables[key].enum}
-                    onChange={(e) => {
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       dispatch(
                         setServerVariable(
                           JSON.stringify({ key, value: e.target.value })
@@ -113,7 +113,7 @@ function Server() {
               <FormItem label={key}>
                 <FormTextInput
                   placeholder={value.variables?.[key].default}
-                  onChange={(e) => {
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     dispatch(
                       setServerVariable(
                         JSON.stringify({ key, value: e.target.value })

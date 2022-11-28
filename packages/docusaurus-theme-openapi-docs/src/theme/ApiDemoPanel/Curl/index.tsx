@@ -14,11 +14,11 @@ import CodeBlock from "@theme/CodeBlock";
 import clsx from "clsx";
 
 import { useTypedSelector } from "../../ApiItem/hooks";
-import CodeTabs from "../CodeTabs";
+import CodeTabs from "@theme/ApiDemoPanel/CodeTabs";
 import buildPostmanRequest from "./../buildPostmanRequest";
 import styles from "./styles.module.css";
 
-interface Language {
+export interface Language {
   highlight?: string;
   language: string;
   logoClass?: string;
@@ -102,7 +102,7 @@ export const languageSet: Language[] = [
   },
 ];
 
-interface Props {
+export interface Props {
   postman: sdk.Request;
   codeSamples: any; // TODO: Type this...
 }

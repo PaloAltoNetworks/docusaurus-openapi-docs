@@ -9,7 +9,7 @@ import React from "react";
 
 import styles from "./styles.module.css";
 
-interface Props {
+export interface Props {
   label?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   children?: React.ReactNode;
