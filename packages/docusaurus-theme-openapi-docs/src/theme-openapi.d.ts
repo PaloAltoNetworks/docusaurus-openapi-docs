@@ -113,6 +113,7 @@ declare module "@theme/ApiDemoPanel/ContentType" {
 }
 
 declare module "@theme/ApiDemoPanel/ContentType/slice" {
+  export { setContentType };
   export default contentType as Reducer<State, AnyAction>;
 }
 
