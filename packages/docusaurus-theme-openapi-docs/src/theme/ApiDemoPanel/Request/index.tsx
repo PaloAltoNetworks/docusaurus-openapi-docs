@@ -7,6 +7,7 @@
 
 import React from "react";
 
+import { ThemeConfig } from "@docusaurus/types";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import sdk from "@paloaltonetworks/postman-collection";
 import Accept from "@theme/ApiDemoPanel/Accept";
@@ -19,14 +20,13 @@ import { useTypedSelector } from "@theme/ApiItem/hooks";
 import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 
-import { ThemeConfig } from "../../../types";
 import styles from "./styles.module.css";
 
 function Request({ item }: { item: NonNullable<ApiItem> }) {
   const response = useTypedSelector((state: any) => state.response.value);
   const { siteConfig } = useDocusaurusContext();
   const themeConfig = siteConfig.themeConfig as ThemeConfig;
-  const options = themeConfig.api;
+  const options = themeConfig.api as ApiItem;
   const postman = new sdk.Request(item.postman);
 
   const params = {

@@ -7,9 +7,9 @@
 
 import React, { useState } from "react";
 
+import FloatingButton from "@theme/ApiDemoPanel/FloatingButton";
 import MagicDropzone from "react-magic-dropzone";
 
-import FloatingButton from "../FloatingButton";
 import styles from "./styles.module.css";
 
 type PreviewFile = { preview: string } & File;

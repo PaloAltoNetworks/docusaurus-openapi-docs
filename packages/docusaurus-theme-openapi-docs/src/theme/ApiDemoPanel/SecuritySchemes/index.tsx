@@ -8,12 +8,11 @@
 import React from "react";
 
 import Link from "@docusaurus/Link";
-
-import { useTypedSelector } from "../../ApiItem/hooks";
+import { useTypedSelector } from "@theme/ApiItem/hooks";
 
 function SecuritySchemes(props: any) {
-  const options = useTypedSelector((state) => state.auth.options);
-  const selected = useTypedSelector((state) => state.auth.selected);
+  const options = useTypedSelector((state: any) => state.auth.options);
+  const selected = useTypedSelector((state: any) => state.auth.selected);
   const infoAuthPath = `/${props.infoPath}#authentication`;
 
   if (selected === undefined) return null;
@@ -24,7 +23,7 @@ function SecuritySchemes(props: any) {
       <summary className={`details__request-summary`}>
         <h4>Authorization</h4>
       </summary>
-      {selectedAuth.map((auth) => {
+      {selectedAuth.map((auth: any) => {
         const isApiKey = auth.type === "apiKey";
         const isBearer = auth.type === "http" && auth.key === "Bearer";
         const isOauth2 = auth.type === "oauth2";

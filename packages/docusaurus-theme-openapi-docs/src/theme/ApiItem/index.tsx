@@ -12,19 +12,22 @@ import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import { HtmlClassNameProvider } from "@docusaurus/theme-common";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import useIsBrowser from "@docusaurus/useIsBrowser";
+import { createAuth } from "@theme/ApiDemoPanel/Authorization/slice";
+import { createPersistanceMiddleware } from "@theme/ApiDemoPanel/persistanceMiddleware";
+import DocItemLayout from "@theme/ApiItem/Layout";
 import type { Props } from "@theme/DocItem";
 import DocItemMetadata from "@theme/DocItem/Metadata";
 import clsx from "clsx";
 import { ServerObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import type { ApiItem as ApiItemType } from "docusaurus-plugin-openapi-docs/src/types";
+/* eslint-disable import/no-extraneous-dependencies*/
+import type {
+  DocFrontMatter,
+  ThemeConfig,
+} from "docusaurus-theme-openapi-docs/src/types";
 import { Provider } from "react-redux";
 
-import { DocFrontMatter } from "../../types";
-import { ThemeConfig } from "../../types";
-import { createAuth } from "../ApiDemoPanel/Authorization/slice";
-import { createPersistanceMiddleware } from "../ApiDemoPanel/persistanceMiddleware";
-import DocItemLayout from "./Layout";
 import { createStoreWithoutState, createStoreWithState } from "./store";
 
 const { DocProvider } = require("@docusaurus/theme-common/internal");

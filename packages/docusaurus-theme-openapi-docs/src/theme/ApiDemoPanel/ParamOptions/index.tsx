@@ -12,8 +12,8 @@ import FormItem from "@theme/ApiDemoPanel/FormItem";
 import FormMultiSelect from "@theme/ApiDemoPanel/FormMultiSelect";
 import FormSelect from "@theme/ApiDemoPanel/FormSelect";
 import FormTextInput from "@theme/ApiDemoPanel/FormTextInput";
+import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 
-import { useTypedDispatch, useTypedSelector } from "../../ApiItem/hooks";
 import { Param, setParam } from "./slice";
 import styles from "./styles.module.css";
 
@@ -54,10 +54,10 @@ function ParamOptionWrapper({ param }: ParamProps) {
 function ParamOptions() {
   const [showOptional, setShowOptional] = useState(false);
 
-  const pathParams = useTypedSelector((state) => state.params.path);
-  const queryParams = useTypedSelector((state) => state.params.query);
-  const cookieParams = useTypedSelector((state) => state.params.cookie);
-  const headerParams = useTypedSelector((state) => state.params.header);
+  const pathParams = useTypedSelector((state: any) => state.params.path);
+  const queryParams = useTypedSelector((state: any) => state.params.query);
+  const cookieParams = useTypedSelector((state: any) => state.params.cookie);
+  const headerParams = useTypedSelector((state: any) => state.params.header);
 
   const allParams = [
     ...pathParams,

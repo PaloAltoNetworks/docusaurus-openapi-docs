@@ -14,12 +14,12 @@ import FormItem from "@theme/ApiDemoPanel/FormItem";
 import FormSelect from "@theme/ApiDemoPanel/FormSelect";
 import FormTextInput from "@theme/ApiDemoPanel/FormTextInput";
 import LiveApp from "@theme/ApiDemoPanel/LiveEditor";
+import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
 import { RequestBodyObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import format from "xml-formatter";
 
-import { useTypedDispatch, useTypedSelector } from "../../ApiItem/hooks";
 import {
   clearFormBodyKey,
   clearRawBody,
@@ -34,7 +34,7 @@ export interface Props {
 }
 
 function BodyWrap({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
-  const contentType = useTypedSelector((state) => state.contentType.value);
+  const contentType = useTypedSelector((state: any) => state.contentType.value);
 
   // NOTE: We used to check if body was required, but opted to always show the request body
   // to reduce confusion, see: https://github.com/cloud-annotations/docusaurus-openapi/issues/145
@@ -56,7 +56,7 @@ function BodyWrap({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
 }
 
 function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
-  const contentType = useTypedSelector((state) => state.contentType.value);
+  const contentType = useTypedSelector((state: any) => state.contentType.value);
   const required = requestBodyMetadata?.required;
 
   const dispatch = useTypedDispatch();

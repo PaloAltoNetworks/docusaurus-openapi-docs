@@ -51,6 +51,14 @@ declare module "@theme/ApiItem/hooks" {
   export { useTypedDispatch, useTypedSelector };
 }
 
+declare module "@theme/ApiItem/Layout" {
+  export default function Layout(props: any): JSX.Element;
+}
+
+declare module "@theme/ApiItem/store" {
+  export { AppDispatch, RootState };
+}
+
 declare module "@theme/SchemaTabs" {
   export default function SchemaTabs(props: any): JSX.Element;
 }
@@ -63,6 +71,11 @@ declare module "@theme/ApiDemoPanel/Authorization" {
   export default function Authorization(): JSX.Element;
 }
 
+declare module "@theme/ApiDemoPanel/Authorization/slice" {
+  export { AuthState, Scheme, setAuthData, setSelectedAuth, createAuth };
+  export default function Authorization(): JSX.Element;
+}
+
 declare module "@theme/ApiDemoPanel/Body" {
   import { Props as BodyProps } from "@theme/ApiDemoPanel/Body";
 
@@ -71,6 +84,17 @@ declare module "@theme/ApiDemoPanel/Body" {
 
 declare module "@theme/ApiDemoPanel/Body/json2xml" {
   export default function json2xml(any, any?): any;
+}
+
+declare module "@theme/ApiDemoPanel/Body/slice" {
+  import { Body, Content } from "@theme/ApiDemoPanel/Body/slice";
+
+  export { Body, Content };
+  export function setStringRawBody(any, any?): any;
+}
+
+declare module "@theme/ApiDemoPanel/buildPostmanRequest" {
+  export default function buildPostmanRequest(any, any?): any;
 }
 
 declare module "@theme/ApiDemoPanel/CodeTabs" {
@@ -156,6 +180,14 @@ declare module "@theme/ApiDemoPanel/ParamOptions" {
   export default function ParamOptions(props: ParamProps): JSX.Element;
 }
 
+declare module "@theme/ApiDemoPanel/ParamOptions/slice" {
+  export type { Param };
+}
+
+declare module "@theme/ApiDemoPanel/persistanceMiddleware" {
+  export { createPersistanceMiddleware };
+}
+
 declare module "@theme/ApiDemoPanel/Request" {
   import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 
@@ -169,10 +201,18 @@ declare module "@theme/ApiDemoPanel/Response" {
   export default function Response(): JSX.Element;
 }
 
+declare module "@theme/ApiDemoPanel/Response/slice" {
+  export { setResponse };
+}
+
 declare module "@theme/ApiDemoPanel/SecuritySchemes" {
   export default function SecuritySchemes(props: any): JSX.Element;
 }
 
 declare module "@theme/ApiDemoPanel/Server" {
   export default function Server(): JSX.Element;
+}
+
+declare module "@theme/ApiDemoPanel/storage-utils" {
+  export { createStorage, hashArray };
 }

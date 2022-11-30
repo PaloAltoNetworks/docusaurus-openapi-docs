@@ -10,14 +10,14 @@ import React from "react";
 import FormItem from "@theme/ApiDemoPanel/FormItem";
 import FormSelect from "@theme/ApiDemoPanel/FormSelect";
 import FormTextInput from "@theme/ApiDemoPanel/FormTextInput";
+import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 
-import { useTypedDispatch, useTypedSelector } from "../../ApiItem/hooks";
 import { setAuthData, setSelectedAuth } from "./slice";
 
 function Authorization() {
-  const data = useTypedSelector((state) => state.auth.data);
-  const options = useTypedSelector((state) => state.auth.options);
-  const selected = useTypedSelector((state) => state.auth.selected);
+  const data = useTypedSelector((state: any) => state.auth.data);
+  const options = useTypedSelector((state: any) => state.auth.options);
+  const selected = useTypedSelector((state: any) => state.auth.selected);
 
   const dispatch = useTypedDispatch();
 
@@ -42,7 +42,7 @@ function Authorization() {
           />
         </FormItem>
       )}
-      {selectedAuth.map((a) => {
+      {selectedAuth.map((a: any) => {
         if (a.type === "http" && a.scheme === "bearer") {
           return (
             <FormItem label="Bearer Token" key={a.key + "-bearer"}>

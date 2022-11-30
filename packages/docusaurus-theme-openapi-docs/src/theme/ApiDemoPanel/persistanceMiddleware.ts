@@ -6,10 +6,14 @@
  * ========================================================================== */
 
 import { Middleware } from "@reduxjs/toolkit";
+import {
+  setAuthData,
+  setSelectedAuth,
+} from "@theme/ApiDemoPanel/Authorization/slice";
+import { AppDispatch, RootState } from "@theme/ApiItem/store";
+/* eslint-disable import/no-extraneous-dependencies*/
+import { ThemeConfig } from "docusaurus-theme-openapi-docs/src/types";
 
-import { ThemeConfig } from "../../types";
-import { AppDispatch, RootState } from "../ApiItem/store";
-import { setAuthData, setSelectedAuth } from "./Authorization/slice";
 import { createStorage, hashArray } from "./storage-utils";
 
 export function createPersistanceMiddleware(options: ThemeConfig["api"]) {
@@ -23,7 +27,7 @@ export function createPersistanceMiddleware(options: ThemeConfig["api"]) {
 
       if (action.type === setAuthData.type) {
         for (const [key, value] of Object.entries(state.auth.data)) {
-          if (Object.values(value).filter(Boolean).length > 0) {
+          if (Object.values(value as any).filter(Boolean).length > 0) {
             storage.setItem(key, JSON.stringify(value));
           } else {
             storage.removeItem(key);

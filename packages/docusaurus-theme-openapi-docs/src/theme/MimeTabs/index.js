@@ -16,19 +16,16 @@ import React, {
 
 import { duplicates } from "@docusaurus/theme-common";
 import useIsBrowser from "@docusaurus/useIsBrowser";
+import { setAccept, setContentType } from "@theme/ApiDemoPanel/Accept/slice";
+import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import clsx from "clsx";
 
-import { setAccept } from "../ApiDemoPanel/Accept/slice";
-import { setContentType } from "../ApiDemoPanel/ContentType/slice";
-import { useTypedDispatch, useTypedSelector } from "../ApiItem/hooks";
-import styles from "./styles.module.css"; // A very rough duck type, but good enough to guard against mistakes while
+import styles from "./styles.module.css";
 
 const {
   useScrollPositionBlocker,
   useTabGroupChoice,
 } = require("@docusaurus/theme-common/internal");
-
-// allowing customization
 
 function isTabItem(comp) {
   return typeof comp.props.value !== "undefined";

@@ -10,12 +10,12 @@ import React, { useState, useEffect } from "react";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import codegen from "@paloaltonetworks/postman-code-generators";
 import sdk from "@paloaltonetworks/postman-collection";
+import buildPostmanRequest from "@theme/ApiDemoPanel/buildPostmanRequest";
 import CodeTabs from "@theme/ApiDemoPanel/CodeTabs";
+import { useTypedSelector } from "@theme/ApiItem/hooks";
 import CodeBlock from "@theme/CodeBlock";
 import clsx from "clsx";
 
-import { useTypedSelector } from "../../ApiItem/hooks";
-import buildPostmanRequest from "./../buildPostmanRequest";
 import styles from "./styles.module.css";
 
 export interface Language {
@@ -124,17 +124,17 @@ function Curl({ postman, codeSamples }: Props) {
 
   const { siteConfig } = useDocusaurusContext();
 
-  const contentType = useTypedSelector((state) => state.contentType.value);
-  const accept = useTypedSelector((state) => state.accept.value);
-  const server = useTypedSelector((state) => state.server.value);
-  const body = useTypedSelector((state) => state.body);
+  const contentType = useTypedSelector((state: any) => state.contentType.value);
+  const accept = useTypedSelector((state: any) => state.accept.value);
+  const server = useTypedSelector((state: any) => state.server.value);
+  const body = useTypedSelector((state: any) => state.body);
 
-  const pathParams = useTypedSelector((state) => state.params.path);
-  const queryParams = useTypedSelector((state) => state.params.query);
-  const cookieParams = useTypedSelector((state) => state.params.cookie);
-  const headerParams = useTypedSelector((state) => state.params.header);
+  const pathParams = useTypedSelector((state: any) => state.params.path);
+  const queryParams = useTypedSelector((state: any) => state.params.query);
+  const cookieParams = useTypedSelector((state: any) => state.params.cookie);
+  const headerParams = useTypedSelector((state: any) => state.params.header);
 
-  const auth = useTypedSelector((state) => state.auth);
+  const auth = useTypedSelector((state: any) => state.auth);
 
   // TODO
   const langs = [

@@ -9,13 +9,13 @@ import React from "react";
 
 import FormItem from "@theme/ApiDemoPanel/FormItem";
 import FormSelect from "@theme/ApiDemoPanel/FormSelect";
+import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 
-import { useTypedDispatch, useTypedSelector } from "../../ApiItem/hooks";
 import { setContentType } from "./slice";
 
 function ContentType() {
-  const value = useTypedSelector((state) => state.contentType.value);
-  const options = useTypedSelector((state) => state.contentType.options);
+  const value = useTypedSelector((state: any) => state.contentType.value);
+  const options = useTypedSelector((state: any) => state.contentType.options);
   const dispatch = useTypedDispatch();
 
   if (options.length <= 1) {

@@ -9,9 +9,9 @@ import React, { useEffect, useState } from "react";
 
 import { usePrismTheme } from "@docusaurus/theme-common";
 import useIsBrowser from "@docusaurus/useIsBrowser";
+import { setStringRawBody } from "@theme/ApiDemoPanel/Body/slice";
 import { LiveProvider, LiveEditor, withLive } from "react-live";
 
-import { setStringRawBody } from "../Body/slice";
 import styles from "./styles.module.css";
 
 function Live({ onEdit }: any) {
