@@ -16,7 +16,8 @@ import React, {
 
 import { duplicates } from "@docusaurus/theme-common";
 import useIsBrowser from "@docusaurus/useIsBrowser";
-import { setAccept, setContentType } from "@theme/ApiDemoPanel/Accept/slice";
+import { setAccept } from "@theme/ApiDemoPanel/Accept/slice";
+import { setContentType } from "@theme/ApiDemoPanel/ContentType/slice";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import clsx from "clsx";
 
