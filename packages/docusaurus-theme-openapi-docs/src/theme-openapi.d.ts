@@ -67,13 +67,17 @@ declare module "@theme/ApiDemoPanel/Accept" {
   export default function Accept(): JSX.Element;
 }
 
+declare module "@theme/ApiDemoPanel/Accept/slice" {
+  export default accept as Reducer<State, AnyAction>;
+}
+
 declare module "@theme/ApiDemoPanel/Authorization" {
   export default function Authorization(): JSX.Element;
 }
 
 declare module "@theme/ApiDemoPanel/Authorization/slice" {
   export { AuthState, Scheme, setAuthData, setSelectedAuth, createAuth };
-  export default function Authorization(): JSX.Element;
+  export default auth as Reducer<State, AnyAction>;
 }
 
 declare module "@theme/ApiDemoPanel/Body" {
@@ -87,10 +91,11 @@ declare module "@theme/ApiDemoPanel/Body/json2xml" {
 }
 
 declare module "@theme/ApiDemoPanel/Body/slice" {
-  import { Body, Content } from "@theme/ApiDemoPanel/Body/slice";
+  import { Body, Content, State } from "@theme/ApiDemoPanel/Body/slice";
 
-  export { Body, Content };
+  export { Body, Content, State };
   export function setStringRawBody(any, any?): any;
+  export default body as Reducer<State, AnyAction>;
 }
 
 declare module "@theme/ApiDemoPanel/buildPostmanRequest" {
@@ -105,6 +110,10 @@ declare module "@theme/ApiDemoPanel/CodeTabs" {
 
 declare module "@theme/ApiDemoPanel/ContentType" {
   export default function ContentType(): JSX.Element;
+}
+
+declare module "@theme/ApiDemoPanel/ContentType/slice" {
+  export default contentType as Reducer<State, AnyAction>;
 }
 
 declare module "@theme/ApiDemoPanel/Curl" {
@@ -182,6 +191,7 @@ declare module "@theme/ApiDemoPanel/ParamOptions" {
 
 declare module "@theme/ApiDemoPanel/ParamOptions/slice" {
   export type { Param };
+  export default params as Reducer<State, AnyAction>;
 }
 
 declare module "@theme/ApiDemoPanel/persistanceMiddleware" {
@@ -203,6 +213,7 @@ declare module "@theme/ApiDemoPanel/Response" {
 
 declare module "@theme/ApiDemoPanel/Response/slice" {
   export { setResponse };
+  export default response as Reducer<State, AnyAction>;
 }
 
 declare module "@theme/ApiDemoPanel/SecuritySchemes" {
@@ -211,6 +222,10 @@ declare module "@theme/ApiDemoPanel/SecuritySchemes" {
 
 declare module "@theme/ApiDemoPanel/Server" {
   export default function Server(): JSX.Element;
+}
+
+declare module "@theme/ApiDemoPanel/Server/slice" {
+  export default server as Reducer<State, AnyAction>;
 }
 
 declare module "@theme/ApiDemoPanel/storage-utils" {
