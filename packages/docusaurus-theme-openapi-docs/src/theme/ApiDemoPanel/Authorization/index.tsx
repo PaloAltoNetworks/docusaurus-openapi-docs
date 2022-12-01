@@ -50,7 +50,7 @@ function Authorization() {
                 placeholder="Bearer Token"
                 value={data[a.key].token ?? ""}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  const value = e.target.value;
+                  const value = e.target.value.replace(/\s/g, "%20");
                   dispatch(
                     setAuthData({
                       scheme: a.key,
@@ -71,7 +71,7 @@ function Authorization() {
                 placeholder="Bearer Token"
                 value={data[a.key].token ?? ""}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  const value = e.target.value;
+                  const value = e.target.value.replace(/\s/g, "%20");
                   dispatch(
                     setAuthData({
                       scheme: a.key,
@@ -93,7 +93,7 @@ function Authorization() {
                   placeholder="Username"
                   value={data[a.key].username ?? ""}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    const value = e.target.value;
+                    const value = e.target.value.replace(/\s/g, "%20");
                     dispatch(
                       setAuthData({
                         scheme: a.key,
@@ -110,7 +110,7 @@ function Authorization() {
                   password
                   value={data[a.key].password ?? ""}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    const value = e.target.value;
+                    const value = e.target.value.replace(/\s/g, "%20");
                     dispatch(
                       setAuthData({
                         scheme: a.key,
@@ -132,7 +132,7 @@ function Authorization() {
                 placeholder={`${a.key}`}
                 value={data[a.key].apiKey ?? ""}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  const value = e.target.value;
+                  const value = e.target.value.replace(/\s/g, "%20");
                   dispatch(
                     setAuthData({
                       scheme: a.key,
