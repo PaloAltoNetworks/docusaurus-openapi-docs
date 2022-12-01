@@ -6,7 +6,6 @@
  * ========================================================================== */
 
 import sdk from "@paloaltonetworks/postman-collection";
-
 import { Body } from "@theme/ApiDemoPanel/Body/slice";
 
 function fetchWithtimeout(
