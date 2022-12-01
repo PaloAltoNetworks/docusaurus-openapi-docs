@@ -6,7 +6,6 @@
  * ========================================================================== */
 
 import chalk from "chalk";
-import { values } from "lodash";
 
 import { mergeAllOf } from "../markdown/createRequestSchema";
 import { SchemaObject } from "./types";
