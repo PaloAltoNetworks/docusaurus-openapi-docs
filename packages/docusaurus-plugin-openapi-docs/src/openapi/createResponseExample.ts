@@ -135,6 +135,10 @@ export const sampleResponseFromSchema = (schema: SchemaObject = {}): any => {
           }
         }
 
+        if (prop.writeOnly && prop.writeOnly === true) {
+          continue;
+        }
+
         if (prop.deprecated) {
           continue;
         }

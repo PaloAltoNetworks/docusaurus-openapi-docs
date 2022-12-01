@@ -135,6 +135,10 @@ export const sampleRequestFromSchema = (schema: SchemaObject = {}): any => {
           }
         }
 
+        if (prop.readOnly && prop.readOnly === true) {
+          continue;
+        }
+
         if (prop.deprecated) {
           continue;
         }
