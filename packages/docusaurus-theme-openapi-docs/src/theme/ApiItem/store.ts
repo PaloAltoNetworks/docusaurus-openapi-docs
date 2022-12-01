@@ -6,14 +6,13 @@
  * ========================================================================== */
 
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-
-import accept from "../ApiDemoPanel/Accept/slice";
-import auth from "../ApiDemoPanel/Authorization/slice";
-import body from "../ApiDemoPanel/Body/slice";
-import contentType from "../ApiDemoPanel/ContentType/slice";
-import params from "../ApiDemoPanel/ParamOptions/slice";
-import response from "../ApiDemoPanel/Response/slice";
-import server from "../ApiDemoPanel/Server/slice";
+import accept from "@theme/ApiDemoPanel/Accept/slice";
+import auth from "@theme/ApiDemoPanel/Authorization/slice";
+import body from "@theme/ApiDemoPanel/Body/slice";
+import contentType from "@theme/ApiDemoPanel/ContentType/slice";
+import params from "@theme/ApiDemoPanel/ParamOptions/slice";
+import response from "@theme/ApiDemoPanel/Response/slice";
+import server from "@theme/ApiDemoPanel/Server/slice";
 
 const rootReducer = combineReducers({
   accept,

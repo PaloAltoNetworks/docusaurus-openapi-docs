@@ -8,13 +8,12 @@
 import React from "react";
 
 import sdk from "@paloaltonetworks/postman-collection";
+import Curl from "@theme/ApiDemoPanel/Curl";
+import MethodEndpoint from "@theme/ApiDemoPanel/MethodEndpoint";
+import Request from "@theme/ApiDemoPanel/Request";
+import Response from "@theme/ApiDemoPanel/Response";
+import SecuritySchemes from "@theme/ApiDemoPanel/SecuritySchemes";
 import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
-
-import Curl from "./Curl";
-import MethodEndpoint from "./MethodEndpoint";
-import Request from "./Request";
-import Response from "./Response";
-import SecuritySchemes from "./SecuritySchemes";
 
 function ApiDemoPanel({
   item,

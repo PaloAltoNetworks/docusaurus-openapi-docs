@@ -7,21 +7,19 @@
 
 import React from "react";
 
+import json2xml from "@theme/ApiDemoPanel/Body/json2xml";
+import ContentType from "@theme/ApiDemoPanel/ContentType";
+import FormFileUpload from "@theme/ApiDemoPanel/FormFileUpload";
+import FormItem from "@theme/ApiDemoPanel/FormItem";
+import FormSelect from "@theme/ApiDemoPanel/FormSelect";
+import FormTextInput from "@theme/ApiDemoPanel/FormTextInput";
+import LiveApp from "@theme/ApiDemoPanel/LiveEditor";
+import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
+import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
 import { RequestBodyObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import format from "xml-formatter";
 
-import { useTypedDispatch, useTypedSelector } from "../../ApiItem/hooks";
-// @ts-ignore
-import SchemaTabs from "../../SchemaTabs";
-import ContentType from "../ContentType";
-import FormSelect from "../FormSelect";
-import LiveApp from "../LiveEditor";
-import FormFileUpload from "./../FormFileUpload";
-import FormItem from "./../FormItem";
-import FormTextInput from "./../FormTextInput";
-// @ts-ignore
-import json2xml from "./json2xml";
 import {
   clearFormBodyKey,
   clearRawBody,
@@ -30,13 +28,13 @@ import {
   setStringFormBody,
 } from "./slice";
 
-interface Props {
+export interface Props {
   jsonRequestBodyExample: string;
   requestBodyMetadata?: RequestBodyObject;
 }
 
 function BodyWrap({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
-  const contentType = useTypedSelector((state) => state.contentType.value);
+  const contentType = useTypedSelector((state: any) => state.contentType.value);
 
   // NOTE: We used to check if body was required, but opted to always show the request body
   // to reduce confusion, see: https://github.com/cloud-annotations/docusaurus-openapi/issues/145
@@ -58,7 +56,7 @@ function BodyWrap({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
 }
 
 function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
-  const contentType = useTypedSelector((state) => state.contentType.value);
+  const contentType = useTypedSelector((state: any) => state.contentType.value);
   const required = requestBodyMetadata?.required;
 
   const dispatch = useTypedDispatch();
@@ -93,7 +91,7 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
       <FormItem label="Body" required={required}>
         <FormFileUpload
           placeholder={schema.description || "Body"}
-          onChange={(file) => {
+          onChange={(file: any) => {
             if (file === undefined) {
               dispatch(clearRawBody());
               return;
@@ -138,7 +136,7 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
                 >
                   <FormFileUpload
                     placeholder={val.description || key}
-                    onChange={(file) => {
+                    onChange={(file: any) => {
                       if (file === undefined) {
                         dispatch(clearFormBodyKey(key));
                         return;
@@ -170,7 +168,7 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
                 >
                   <FormSelect
                     options={["---", ...val.enum]}
-                    onChange={(e) => {
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       const val = e.target.value;
                       if (val === "---") {
                         dispatch(clearFormBodyKey(key));
@@ -199,7 +197,7 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
               >
                 <FormTextInput
                   placeholder={val.description || key}
-                  onChange={(e) => {
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     dispatch(
                       setStringFormBody({ key: key, value: e.target.value })
                     );

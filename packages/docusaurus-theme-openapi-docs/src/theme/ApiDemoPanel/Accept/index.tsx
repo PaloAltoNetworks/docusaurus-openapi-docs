@@ -7,14 +7,15 @@
 
 import React from "react";
 
-import { useTypedDispatch, useTypedSelector } from "../../ApiItem/hooks";
-import FormItem from "./../FormItem";
-import FormSelect from "./../FormSelect";
+import FormItem from "@theme/ApiDemoPanel/FormItem";
+import FormSelect from "@theme/ApiDemoPanel/FormSelect";
+import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
+
 import { setAccept } from "./slice";
 
 function Accept() {
-  const value = useTypedSelector((state) => state.accept.value);
-  const options = useTypedSelector((state) => state.accept.options);
+  const value = useTypedSelector((state: any) => state.accept.value);
+  const options = useTypedSelector((state: any) => state.accept.options);
   const dispatch = useTypedDispatch();
 
   if (options.length <= 1) {
@@ -26,7 +27,7 @@ function Accept() {
       <FormSelect
         value={value}
         options={options}
-        onChange={(e) => dispatch(setAccept(e.target.value))}
+        onChange={(e: any) => dispatch(setAccept(e.target.value))}
       />
     </FormItem>
   );
