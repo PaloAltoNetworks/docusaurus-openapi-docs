@@ -6,6 +6,7 @@
  * ========================================================================== */
 
 import chalk from "chalk";
+import { values } from "lodash";
 
 import { mergeAllOf } from "../markdown/createRequestSchema";
 import { SchemaObject } from "./types";
@@ -133,6 +134,10 @@ export const sampleRequestFromSchema = (schema: SchemaObject = {}): any => {
               delete prop.items.properties[key];
             }
           }
+        }
+
+        if (prop.readOnly && prop.readOnly === true) {
+          continue;
         }
 
         if (prop.deprecated) {
