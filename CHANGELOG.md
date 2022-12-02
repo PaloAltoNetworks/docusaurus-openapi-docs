@@ -1,3 +1,18 @@
+## 1.4.6 (Dec 2, 2022)
+
+High level enhancements
+
+- Added support for swizzling `ApiItem` and `ApiDemoPanel` components!
+
+Other enhancements and bug fixes
+
+- Remove createProperties from items anyOneOf condition and add new condition for handling items.properties ([#356](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/356))
+- [Enhancement] Allow whitespace in key/token/password input ([#354](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/354))
+- [Bug] Respect readOnly/writeOnly when creating example from schema ([#353](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/353))
+- [Bug] Import Body from @theme in makeRequest ([#352](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/352))
+- [Experimental] Improve support for swizzling theme components ([#351](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/351))
+- Bump loader-utils from 2.0.3 to 2.0.4 ([#346](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/346))
+
 ## 1.4.5 (Nov 15, 2022)
 
 High level enhancements
