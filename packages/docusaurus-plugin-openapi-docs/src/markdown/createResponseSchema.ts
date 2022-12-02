@@ -263,10 +263,14 @@ function createItems(schema: SchemaObject) {
       mergedSchemas.anyOf !== undefined
     ) {
       return create("div", {
-        children: [
-          createAnyOneOf(mergedSchemas),
-          createProperties(mergedSchemas),
-        ],
+        children: [createAnyOneOf(mergedSchemas)],
+      });
+    }
+
+    // Handles properties
+    if (mergedSchemas.properties !== undefined) {
+      return create("div", {
+        children: [createProperties(mergedSchemas)],
       });
     }
   }
