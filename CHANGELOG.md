@@ -1,3 +1,13 @@
+## 1.4.7 (Dec 2, 2022)
+
+High level enhancements
+
+- Emergency patch to address regression bug introdudced by #351
+
+Other enhancements and bug fixes
+
+- Import markdown utils from lib ([#358](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/358))
+
 ## 1.4.6 (Dec 2, 2022)
 
 High level enhancements
