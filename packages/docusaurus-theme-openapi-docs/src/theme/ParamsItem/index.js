@@ -9,14 +9,14 @@ import React from "react";
 
 import CodeBlock from "@theme/CodeBlock";
 /* eslint-disable import/no-extraneous-dependencies*/
-import { createDescription } from "docusaurus-theme-openapi-docs/src/markdown/createDescription";
+import { createDescription } from "docusaurus-theme-openapi-docs/lib/markdown/createDescription";
 /* eslint-disable import/no-extraneous-dependencies*/
 import {
   getQualifierMessage,
   getSchemaName,
-} from "docusaurus-theme-openapi-docs/src/markdown/schema";
+} from "docusaurus-theme-openapi-docs/lib/markdown/schema";
 /* eslint-disable import/no-extraneous-dependencies*/
-import { guard } from "docusaurus-theme-openapi-docs/src/markdown/utils";
+import { guard } from "docusaurus-theme-openapi-docs/lib/markdown/utils";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
