@@ -309,7 +309,15 @@ function ParamTextFormItem({ param }: ParamProps) {
     <FormTextInput
       placeholder={param.description || param.name}
       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-        dispatch(setParam({ ...param, value: e.target.value }))
+        dispatch(
+          setParam({
+            ...param,
+            value:
+              param.in === "path" || param.in === "query"
+                ? e.target.value.replace(/\s/g, "%20")
+                : e.target.value,
+          })
+        )
       }
     />
   );
