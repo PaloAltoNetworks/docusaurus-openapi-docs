@@ -182,6 +182,7 @@ sidebar_class_name: "{{{api.method}}} api-method"
 {{#infoPath}}
 info_path: {{{infoPath}}}
 {{/infoPath}}
+custom_edit_url: null
 ---
 
 {{{markdown}}}
