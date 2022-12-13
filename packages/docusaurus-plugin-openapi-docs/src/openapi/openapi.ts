@@ -80,6 +80,7 @@ type PartialPage<T> = Omit<T, "permalink" | "source" | "sourceDirName">;
 
 function createItems(
   openapiData: OpenApiObject,
+  options: APIOptions,
   sidebarOptions: SidebarOptions
 ): ApiMetadata[] {
   // TODO: Find a better way to handle this
@@ -218,6 +219,7 @@ function createItems(
                 .replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
                 .replace(/\s+$/, "")
             : "",
+          ...(options?.proxy && { proxy: options.proxy }),
         },
         api: {
           ...defaults,
@@ -318,8 +320,7 @@ interface OpenApiFiles {
 }
 
 export async function readOpenapiFiles(
-  openapiPath: string,
-  options: APIOptions
+  openapiPath: string
 ): Promise<OpenApiFiles[]> {
   if (!isURL(openapiPath)) {
     const stat = await fs.lstat(openapiPath);
@@ -361,11 +362,16 @@ export async function readOpenapiFiles(
 
 export async function processOpenapiFiles(
   files: OpenApiFiles[],
+  options: APIOptions,
   sidebarOptions: SidebarOptions
 ): Promise<[ApiMetadata[], TagObject[][]]> {
   const promises = files.map(async (file) => {
     if (file.data !== undefined) {
-      const processedFile = await processOpenapiFile(file.data, sidebarOptions);
+      const processedFile = await processOpenapiFile(
+        file.data,
+        options,
+        sidebarOptions
+      );
       const itemsObjectsArray = processedFile[0].map((item) => ({
         ...item,
       }));
@@ -402,10 +408,11 @@ export async function processOpenapiFiles(
 
 export async function processOpenapiFile(
   openapiData: OpenApiObject,
+  options: APIOptions,
   sidebarOptions: SidebarOptions
 ): Promise<[ApiMetadata[], TagObject[]]> {
   const postmanCollection = await createPostmanCollection(openapiData);
-  const items = createItems(openapiData, sidebarOptions);
+  const items = createItems(openapiData, options, sidebarOptions);
 
   bindCollectionToApiItems(items, postmanCollection);
 

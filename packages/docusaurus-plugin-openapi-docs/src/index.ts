@@ -106,9 +106,10 @@ export default function pluginOpenAPIDocs(
       : path.resolve(siteDir, specPath);
 
     try {
-      const openapiFiles = await readOpenapiFiles(contentPath, options);
+      const openapiFiles = await readOpenapiFiles(contentPath);
       const [loadedApi, tags] = await processOpenapiFiles(
         openapiFiles,
+        options,
         sidebarOptions!
       );
       if (!fs.existsSync(outputDir)) {
