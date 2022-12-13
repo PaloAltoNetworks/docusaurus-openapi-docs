@@ -7,8 +7,6 @@
 
 import React from "react";
 
-import { ThemeConfig } from "@docusaurus/types";
-import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import sdk from "@paloaltonetworks/postman-collection";
 import Accept from "@theme/ApiDemoPanel/Accept";
 import Authorization from "@theme/ApiDemoPanel/Authorization";
@@ -21,13 +19,13 @@ import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/type
 import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 
 import styles from "./styles.module.css";
+import { useDoc } from "@docusaurus/theme-common/internal";
 
 function Request({ item }: { item: NonNullable<ApiItem> }) {
   const response = useTypedSelector((state: any) => state.response.value);
-  const { siteConfig } = useDocusaurusContext();
-  const themeConfig = siteConfig.themeConfig as ThemeConfig;
-  const options = themeConfig.api as ApiItem;
   const postman = new sdk.Request(item.postman);
+  const metadata = useDoc();
+  const { proxy } = metadata.frontMatter;
 
   const params = {
     path: [] as ParameterObject[],
@@ -50,9 +48,7 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
         <summary>
           <div className={`details__request-summary`}>
             <h4>Request</h4>
-            {item.servers && (
-              <Execute postman={postman} proxy={options?.proxy} />
-            )}
+            {item.servers && <Execute postman={postman} proxy={proxy} />}
           </div>
         </summary>
         <div className={styles.optionsPanel}>
