@@ -83,7 +83,8 @@ function createItems(
 ): ApiMetadata[] {
   // TODO: Find a better way to handle this
   let items: PartialPage<ApiMetadata>[] = [];
-  const infoId = kebabCase(openapiData.info.title);
+  const infoIdSpaces = openapiData.info.title.replace(" ", "-").toLowerCase();
+  const infoId = kebabCase(infoIdSpaces);
 
   if (sidebarOptions?.categoryLinkSource === "tag") {
     // Only create an tag pages if categoryLinkSource set to tag.
