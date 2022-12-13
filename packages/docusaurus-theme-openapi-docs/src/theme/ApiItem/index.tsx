@@ -64,13 +64,15 @@ export default function ApiItem(props: Props): JSX.Element {
 
   // Init store for CSR to hydrate components
   if (isBrowser) {
-    const acceptArray = Array.from(
-      new Set(
-        Object.values(api?.responses ?? {})
-          .map((response: any) => Object.keys(response.content ?? {}))
-          .flat()
-      )
-    );
+    // Create list of only 2XX response content types to create request samples from
+    let acceptArray: any = [];
+    for (const [i, content] of Object.entries(api?.responses ?? [])) {
+      if (i[0] == "2") {
+        acceptArray.push(Object.keys(content.content ?? {}));
+      }
+    }
+    acceptArray = acceptArray.flat();
+
     const content = api?.requestBody?.content ?? {};
     const contentTypeArray = Object.keys(content);
     const servers = api?.servers ?? [];
