@@ -23,6 +23,7 @@ export const OptionsSchema = Joi.object({
       /^/,
       Joi.object({
         specPath: Joi.string().required(),
+        proxy: Joi.string(),
         outputDir: Joi.string().required(),
         template: Joi.string(),
         downloadUrl: Joi.string(),

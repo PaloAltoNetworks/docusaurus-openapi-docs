@@ -40,6 +40,7 @@ export interface APIOptions {
   versions?: {
     [key: string]: APIVersionOptions;
   };
+  proxy?: string;
 }
 
 export interface SidebarOptions {
