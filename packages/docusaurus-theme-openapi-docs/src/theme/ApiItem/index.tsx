@@ -67,7 +67,7 @@ export default function ApiItem(props: Props): JSX.Element {
     // Create list of only 2XX response content types to create request samples from
     let acceptArray: any = [];
     for (const [i, content] of Object.entries(api?.responses ?? [])) {
-      if (i[0] == "2") {
+      if (i[0] === "2") {
         acceptArray.push(Object.keys(content.content ?? {}));
       }
     }
