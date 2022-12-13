@@ -7,6 +7,7 @@
 
 import React from "react";
 
+import { useDoc } from "@docusaurus/theme-common/internal";
 import sdk from "@paloaltonetworks/postman-collection";
 import Accept from "@theme/ApiDemoPanel/Accept";
 import Authorization from "@theme/ApiDemoPanel/Authorization";
@@ -19,7 +20,6 @@ import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/type
 import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 
 import styles from "./styles.module.css";
-import { useDoc } from "@docusaurus/theme-common/internal";
 
 function Request({ item }: { item: NonNullable<ApiItem> }) {
   const response = useTypedSelector((state: any) => state.response.value);
