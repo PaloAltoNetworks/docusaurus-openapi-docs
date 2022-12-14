@@ -100,6 +100,11 @@ const sidebars = {
         },
       ],
     },
+    {
+      type: "category",
+      label: "Test",
+      items: require("./docs/test/sidebar.js"),
+    },
   ],
 
   "petstore-2.0.0": [
