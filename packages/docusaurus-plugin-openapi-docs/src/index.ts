@@ -106,9 +106,10 @@ export default function pluginOpenAPIDocs(
       : path.resolve(siteDir, specPath);
 
     try {
-      const openapiFiles = await readOpenapiFiles(contentPath, options);
+      const openapiFiles = await readOpenapiFiles(contentPath);
       const [loadedApi, tags] = await processOpenapiFiles(
         openapiFiles,
+        options,
         sidebarOptions!
       );
       if (!fs.existsSync(outputDir)) {
@@ -183,6 +184,9 @@ sidebar_class_name: "{{{api.method}}} api-method"
 info_path: {{{infoPath}}}
 {{/infoPath}}
 custom_edit_url: null
+{{#frontMatter.proxy}}
+proxy: {{{frontMatter.proxy}}}
+{{/frontMatter.proxy}}
 ---
 
 {{{markdown}}}

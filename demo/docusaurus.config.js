@@ -214,6 +214,7 @@ const config = {
           },
           petstore: {
             specPath: "examples/petstore.yaml",
+            proxy: "https://cors.pan.dev",
             outputDir: "docs/petstore",
             sidebarOptions: {
               groupPathsBy: "tag",
