@@ -53,6 +53,9 @@ export default function ApiItem(props: Props): JSX.Element {
   const options = themeConfig.api;
   const isBrowser = useIsBrowser();
 
+  // Regex for 2XX status
+  const statusRegex = new RegExp("(20[0-9]|2[1-9][0-9])");
+
   // Define store2
   let store2: any = {};
   const persistanceMiddleware = createPersistanceMiddleware(options);
@@ -66,8 +69,8 @@ export default function ApiItem(props: Props): JSX.Element {
   if (isBrowser) {
     // Create list of only 2XX response content types to create request samples from
     let acceptArray: any = [];
-    for (const [i, content] of Object.entries(api?.responses ?? [])) {
-      if (i[0] === "2") {
+    for (const [code, content] of Object.entries(api?.responses ?? [])) {
+      if (statusRegex.test(code)) {
         acceptArray.push(Object.keys(content.content ?? {}));
       }
     }
