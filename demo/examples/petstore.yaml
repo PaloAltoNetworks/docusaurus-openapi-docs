@@ -1008,6 +1008,7 @@ components:
           format: int32
           minimum: 1
           default: 1
+          deprecated: true
         shipDate:
           description: Estimated ship date
           type: string
@@ -1058,6 +1059,7 @@ components:
           description: The name given to a pet
           type: string
           example: Guru
+          deprecated: true
         photoUrls:
           description: The list of URL to a cute photos featuring pet
           type: array
