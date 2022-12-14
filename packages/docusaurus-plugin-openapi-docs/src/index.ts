@@ -184,6 +184,9 @@ sidebar_class_name: "{{{api.method}}} api-method"
 info_path: {{{infoPath}}}
 {{/infoPath}}
 custom_edit_url: null
+{{#frontMatter.proxy}}
+proxy: {{{frontMatter.proxy}}}
+{{/frontMatter.proxy}}
 ---
 
 {{{markdown}}}
