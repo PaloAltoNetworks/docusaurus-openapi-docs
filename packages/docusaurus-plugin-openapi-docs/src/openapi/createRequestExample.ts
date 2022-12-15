@@ -98,7 +98,7 @@ export const sampleRequestFromSchema = (schema: SchemaObject = {}): any => {
         mergeAllOf(allOf);
       if (mergedSchemas.properties) {
         for (const [key, value] of Object.entries(mergedSchemas.properties)) {
-          if (value.readOnly && value.readOnly === true) {
+          if ((value.readOnly && value.readOnly === true) || value.deprecated) {
             delete mergedSchemas.properties[key];
           }
         }
@@ -121,7 +121,10 @@ export const sampleRequestFromSchema = (schema: SchemaObject = {}): any => {
       for (let [name, prop] of Object.entries(properties ?? {})) {
         if (prop.properties) {
           for (const [key, value] of Object.entries(prop.properties)) {
-            if (value.readOnly && value.readOnly === true) {
+            if (
+              (value.readOnly && value.readOnly === true) ||
+              value.deprecated
+            ) {
               delete prop.properties[key];
             }
           }
@@ -129,7 +132,10 @@ export const sampleRequestFromSchema = (schema: SchemaObject = {}): any => {
 
         if (prop.items && prop.items.properties) {
           for (const [key, value] of Object.entries(prop.items.properties)) {
-            if (value.readOnly && value.readOnly === true) {
+            if (
+              (value.readOnly && value.readOnly === true) ||
+              value.deprecated
+            ) {
               delete prop.items.properties[key];
             }
           }
@@ -168,7 +174,7 @@ export const sampleRequestFromSchema = (schema: SchemaObject = {}): any => {
       return normalizeArray(schema.enum)[0];
     }
 
-    if (schema.readOnly && schema.readOnly === true) {
+    if ((schema.readOnly && schema.readOnly === true) || schema.deprecated) {
       return undefined;
     }
 

@@ -7,6 +7,7 @@
 
 :root {
   --openapi-required: var(--ifm-color-danger);
+  --openapi-deprecated: var(--ifm-color-warning);
   --openapi-code-blue: var(--ifm-color-info);
   --openapi-code-red: var(--ifm-color-danger);
   --openapi-code-orange: var(--ifm-color-warning);

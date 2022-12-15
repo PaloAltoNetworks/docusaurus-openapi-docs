@@ -22,3 +22,12 @@
   font-size: var(--ifm-code-font-size);
   color: var(--openapi-required);
 }
+
+.deprecated {
+  font-size: var(--ifm-code-font-size);
+  color: var(--openapi-deprecated);
+}
+
+.strikethrough {
+  text-decoration: line-through;
+}
