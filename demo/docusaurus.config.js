@@ -239,14 +239,6 @@ const config = {
             specPath: "examples/food/yogurtstore/openapi.yaml",
             outputDir: "docs/food/yogurtstore",
           },
-          test: {
-            specPath: "examples/test.yaml",
-            outputDir: "docs/test",
-            sidebarOptions: {
-              groupPathsBy: "tag",
-              categoryLinkSource: "tag",
-            },
-          },
         },
       },
     ],
