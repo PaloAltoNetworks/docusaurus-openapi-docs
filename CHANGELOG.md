@@ -1,3 +1,19 @@
+## 1.5.0 (Dec 16, 2022)
+
+High level enhancements
+
+- Introduced proxy support
+- Added support for rendering deprecated schema items/properties
+
+Other enhancements and bug fixes
+
+- Only create list of 2xx content types for request samples ([#365](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/365))
+- [Enhancement] Add deprecated support to schema items ([#367](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/367))
+- [Enhancement] Add proxy support ([#366](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/366))
+- kebab case fix for info pages ([#363](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/363))
+- Hide edit URL by default ([#364](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/364))
+- Update index.ts ([#361](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/361))
+
 ## 1.4.7 (Dec 2, 2022)
 
 High level enhancements
