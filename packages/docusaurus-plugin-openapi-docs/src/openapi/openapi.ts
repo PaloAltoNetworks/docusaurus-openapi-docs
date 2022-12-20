@@ -220,6 +220,10 @@ function createItems(
                 .replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
                 .replace(/\s+$/, "")
             : "",
+          title: title ? title.replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'") : "",
+          sidebar_label: title
+            ? title.replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
+            : "",
           ...(options?.proxy && { proxy: options.proxy }),
         },
         api: {
@@ -235,6 +239,129 @@ function createItems(
         },
       };
 
+      items.push(apiPage);
+    }
+  }
+
+  // Gather x-webhooks endpoints
+  for (let [path, pathObject] of Object.entries(
+    openapiData["x-webhooks"] ?? {}
+  )) {
+    path = "webhook";
+    const { $ref, description, parameters, servers, summary, ...rest } =
+      pathObject;
+    for (let [method, operationObject] of Object.entries({ ...rest })) {
+      method = "event";
+      const title =
+        operationObject.summary ??
+        operationObject.operationId ??
+        "Missing summary";
+      if (operationObject.description === undefined) {
+        operationObject.description =
+          operationObject.summary ?? operationObject.operationId ?? "";
+      }
+
+      const baseId = operationObject.operationId
+        ? kebabCase(operationObject.operationId)
+        : kebabCase(operationObject.summary);
+
+      const servers =
+        operationObject.servers ?? pathObject.servers ?? openapiData.servers;
+
+      const security = operationObject.security ?? openapiData.security;
+
+      // Add security schemes so we know how to handle security.
+      const securitySchemes = openapiData.components?.securitySchemes;
+
+      // Make sure schemes are lowercase. See: https://github.com/cloud-annotations/docusaurus-plugin-openapi/issues/79
+      if (securitySchemes) {
+        for (let securityScheme of Object.values(securitySchemes)) {
+          if (securityScheme.type === "http") {
+            securityScheme.scheme = securityScheme.scheme.toLowerCase();
+          }
+        }
+      }
+
+      let jsonRequestBodyExample;
+      const body = operationObject.requestBody?.content?.["application/json"];
+      if (body?.schema) {
+        jsonRequestBodyExample = sampleRequestFromSchema(body.schema);
+      }
+
+      // Handle vendor JSON media types
+      const bodyContent = operationObject.requestBody?.content;
+      if (bodyContent) {
+        const firstBodyContentKey = Object.keys(bodyContent)[0];
+        if (firstBodyContentKey.endsWith("+json")) {
+          const firstBody = bodyContent[firstBodyContentKey];
+          if (firstBody?.schema) {
+            jsonRequestBodyExample = sampleRequestFromSchema(firstBody.schema);
+          }
+        }
+      }
+
+      // TODO: Don't include summary temporarilly
+      const { summary, ...defaults } = operationObject;
+
+      // Merge common parameters with operation parameters
+      // Operation params take precendence over common params
+      if (parameters !== undefined) {
+        if (operationObject.parameters !== undefined) {
+          defaults.parameters = unionBy(
+            operationObject.parameters,
+            parameters,
+            "name"
+          );
+        } else {
+          defaults.parameters = parameters;
+        }
+      }
+
+      const opDescription = operationObject.description;
+      let splitDescription: any;
+      if (opDescription) {
+        splitDescription = opDescription.match(/[^\r\n]+/g);
+      }
+
+      const apiPage: PartialPage<ApiPageMetadata> = {
+        type: "api",
+        id: baseId,
+        infoId: infoId ?? "",
+        unversionedId: baseId,
+        title: title
+          ? title.replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'") +
+            ` <span class="badge badge--secondary webhook-badge">webhook</span>`
+          : "",
+        description: operationObject.description
+          ? operationObject.description.replace(
+              /((?:^|[^\\])(?:\\{2})*)"/g,
+              "$1'"
+            )
+          : "",
+        frontMatter: {
+          description: splitDescription
+            ? splitDescription[0]
+                .replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
+                .replace(/\s+$/, "")
+            : "",
+          title: title ? title.replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'") : "",
+          sidebar_label: title
+            ? title.replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
+            : "",
+          ...(options?.proxy && { proxy: options.proxy }),
+        },
+        api: {
+          ...defaults,
+          tags: operationObject.tags,
+          method,
+          path,
+          servers,
+          security,
+          securitySchemes,
+          jsonRequestBodyExample,
+          info: openapiData.info,
+        },
+      };
       items.push(apiPage);
     }
   }
