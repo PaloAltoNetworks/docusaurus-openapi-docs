@@ -220,10 +220,6 @@ function createItems(
                 .replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
                 .replace(/\s+$/, "")
             : "",
-          title: title ? title.replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'") : "",
-          sidebar_label: title
-            ? title.replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
-            : "",
           ...(options?.proxy && { proxy: options.proxy }),
         },
         api: {
@@ -328,10 +324,7 @@ function createItems(
         id: baseId,
         infoId: infoId ?? "",
         unversionedId: baseId,
-        title: title
-          ? title.replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'") +
-            ` <span class="badge badge--secondary webhook-badge">webhook</span>`
-          : "",
+        title: title ? title.replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'") : "",
         description: operationObject.description
           ? operationObject.description.replace(
               /((?:^|[^\\])(?:\\{2})*)"/g,
@@ -343,10 +336,6 @@ function createItems(
             ? splitDescription[0]
                 .replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
                 .replace(/\s+$/, "")
-            : "",
-          title: title ? title.replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'") : "",
-          sidebar_label: title
-            ? title.replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
             : "",
           ...(options?.proxy && { proxy: options.proxy }),
         },
