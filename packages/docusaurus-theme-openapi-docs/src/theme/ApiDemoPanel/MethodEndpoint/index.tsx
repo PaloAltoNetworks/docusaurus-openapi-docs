@@ -25,6 +25,8 @@ function colorForMethod(method: string) {
       return "warning";
     case "head":
       return "secondary";
+    case "event":
+      return "secondary";
     default:
       return undefined;
   }
