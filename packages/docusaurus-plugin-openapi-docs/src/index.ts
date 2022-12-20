@@ -159,13 +159,13 @@ export default function pluginOpenAPIDocs(
         ? fs.readFileSync(template).toString()
         : `---
 id: {{{id}}}
-title: "{{{title}}}"
+title: "{{{frontMatter.title}}}"
 description: "{{{frontMatter.description}}}"
 {{^api}}
 sidebar_label: Introduction
 {{/api}}
 {{#api}}
-sidebar_label: "{{{title}}}"
+sidebar_label: "{{{frontMatter.title}}}"
 {{/api}}
 {{^api}}
 sidebar_position: 0
