@@ -29,8 +29,8 @@ export function mergeAllOf(allOf: SchemaObject[]) {
       "x-examples": function () {
         return true;
       },
-      ignoreAdditionalProperties: true,
     },
+    ignoreAdditionalProperties: true,
   });
 
   const required = allOf.reduce((acc, cur) => {
