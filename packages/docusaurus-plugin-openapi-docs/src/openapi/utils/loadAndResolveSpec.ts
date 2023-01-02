@@ -66,7 +66,13 @@ export function convertSwagger2OpenAPI(spec: object) {
   return new Promise((resolve, reject) =>
     convertObj(
       spec,
-      { patch: true, warnOnly: true, text: "{}", anchors: true },
+      {
+        patch: true,
+        warnOnly: true,
+        text: "{}",
+        anchors: true,
+        resolveInternal: true,
+      },
       (err: any, res: any) => {
         // TODO: log any warnings
         if (err) {
