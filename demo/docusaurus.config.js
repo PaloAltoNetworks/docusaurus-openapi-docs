@@ -239,6 +239,11 @@ const config = {
             specPath: "examples/food/yogurtstore/openapi.yaml",
             outputDir: "docs/food/yogurtstore",
           },
+          compute: {
+            specPath: "examples/compute",
+            outputDir: "docs/compute",
+            sidebarOptions: { groupPathsBy: "tag", categoryLinkSource: "info" },
+          },
         },
       },
     ],
