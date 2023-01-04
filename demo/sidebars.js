@@ -62,16 +62,6 @@ const sidebars = {
     },
     {
       type: "category",
-      label: "Compute API",
-      link: {
-        type: "generated-index",
-        title: "Compute API",
-        slug: "/category/compute-api",
-      },
-      items: require("./docs/compute/sidebar.js"),
-    },
-    {
-      type: "category",
       label: "Cloud Object Storage",
       link: {
         type: "generated-index",
