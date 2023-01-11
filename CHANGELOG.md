@@ -1,3 +1,17 @@
+## 1.5.1 (Jan 10, 2023)
+
+High level enhancements
+
+- Added support for x-webhooks extension
+- Improvements to how Swagger 2.0 is upconverted to OpenAPI 3.0
+
+Other enhancements and bug fixes
+
+- [Bug] Refactor selective sanitization of > and < symbols in generated markdown descriptions ([#377](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/377))
+- fix jsonSchemaMergeAllOf options in createRequestSchema ([#374](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/374))
+- Add resolveInternal to swagger2openapi options ([#375](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/375))
+- [Enhancement] Introduce support for webhooks extension ([#370](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/370))
+
 ## 1.5.0 (Dec 16, 2022)
 
 High level enhancements
