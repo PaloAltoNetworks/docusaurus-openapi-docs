@@ -213,7 +213,7 @@ declare module "@theme/ApiDemoPanel/Response" {
 }
 
 declare module "@theme/ApiDemoPanel/Response/slice" {
-  export { setResponse };
+  export { setResponse, setStatus, clearStatus };
   export default response as Reducer<State, AnyAction>;
 }
 

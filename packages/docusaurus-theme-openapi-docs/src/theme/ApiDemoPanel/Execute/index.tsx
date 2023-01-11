@@ -10,7 +10,11 @@ import React from "react";
 import sdk from "@paloaltonetworks/postman-collection";
 import buildPostmanRequest from "@theme/ApiDemoPanel/buildPostmanRequest";
 import { Param } from "@theme/ApiDemoPanel/ParamOptions/slice";
-import { setResponse } from "@theme/ApiDemoPanel/Response/slice";
+import {
+  setResponse,
+  setStatus,
+  clearStatus,
+} from "@theme/ApiDemoPanel/Response/slice";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import Modal from "react-modal";
 import makeRequest from "./makeRequest";
