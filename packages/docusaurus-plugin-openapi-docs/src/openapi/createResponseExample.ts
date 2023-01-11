@@ -88,7 +88,10 @@ export const sampleResponseFromSchema = (schema: SchemaObject = {}): any => {
         mergeAllOf(allOf);
       if (mergedSchemas.properties) {
         for (const [key, value] of Object.entries(mergedSchemas.properties)) {
-          if (value.writeOnly && value.writeOnly === true) {
+          if (
+            (value.writeOnly && value.writeOnly === true) ||
+            value.deprecated
+          ) {
             delete mergedSchemas.properties[key];
           }
         }
@@ -121,7 +124,10 @@ export const sampleResponseFromSchema = (schema: SchemaObject = {}): any => {
       for (let [name, prop] of Object.entries(properties ?? {})) {
         if (prop.properties) {
           for (const [key, value] of Object.entries(prop.properties)) {
-            if (value.writeOnly && value.writeOnly === true) {
+            if (
+              (value.writeOnly && value.writeOnly === true) ||
+              value.deprecated
+            ) {
               delete prop.properties[key];
             }
           }
@@ -129,10 +135,17 @@ export const sampleResponseFromSchema = (schema: SchemaObject = {}): any => {
 
         if (prop.items && prop.items.properties) {
           for (const [key, value] of Object.entries(prop.items.properties)) {
-            if (value.writeOnly && value.writeOnly === true) {
+            if (
+              (value.writeOnly && value.writeOnly === true) ||
+              value.deprecated
+            ) {
               delete prop.items.properties[key];
             }
           }
+        }
+
+        if (prop.writeOnly && prop.writeOnly === true) {
+          continue;
         }
 
         if (prop.deprecated) {
@@ -164,7 +177,7 @@ export const sampleResponseFromSchema = (schema: SchemaObject = {}): any => {
       return normalizeArray(schema.enum)[0];
     }
 
-    if (schema.writeOnly && schema.writeOnly === true) {
+    if ((schema.writeOnly && schema.writeOnly === true) || schema.deprecated) {
       return undefined;
     }
 

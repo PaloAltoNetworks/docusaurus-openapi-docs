@@ -94,6 +94,11 @@ a:any-link:hover {
   background-color: var(--ifm-color-secondary-darkest);
 }
 
+.event > .menu__link::before {
+  content: "event";
+  background-color: var(--ifm-color-secondary-darkest);
+}
+
 /* GitHub Header Link */
 .header-github-link:hover {
   opacity: 0.6;

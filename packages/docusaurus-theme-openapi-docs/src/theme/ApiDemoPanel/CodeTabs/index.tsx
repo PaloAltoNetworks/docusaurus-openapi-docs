@@ -14,10 +14,11 @@ import React, {
 
 import { duplicates } from "@docusaurus/theme-common";
 import useIsBrowser from "@docusaurus/useIsBrowser";
+import { languageSet } from "@theme/ApiDemoPanel/Curl";
+import { Language } from "@theme/ApiDemoPanel/Curl";
 import type { Props as TabItemProps } from "@theme/TabItem";
 import clsx from "clsx";
 
-import { languageSet } from "../Curl";
 import styles from "./styles.module.css";
 
 const {
@@ -133,7 +134,7 @@ function TabsComponent(props: Props): JSX.Element {
       setSelectedValue(newTabValue);
       if (action) {
         const newLanguage = languageSet.filter(
-          (lang) => lang.language === newTabValue
+          (lang: Language) => lang.language === newTabValue
         );
         action(newLanguage[0]);
       }

@@ -6,14 +6,13 @@
  * ========================================================================== */
 
 import sdk from "@paloaltonetworks/postman-collection";
+import { AuthState, Scheme } from "@theme/ApiDemoPanel/Authorization/slice";
+import { Body, Content } from "@theme/ApiDemoPanel/Body/slice";
 import {
   ParameterObject,
   ServerObject,
 } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import cloneDeep from "lodash/cloneDeep";
-
-import { AuthState, Scheme } from "./Authorization/slice";
-import { Body, Content } from "./Body/slice";
 
 type Param = {
   value?: string | string[];

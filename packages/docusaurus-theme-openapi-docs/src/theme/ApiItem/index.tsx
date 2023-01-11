@@ -11,26 +11,28 @@ import BrowserOnly from "@docusaurus/BrowserOnly";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import { HtmlClassNameProvider } from "@docusaurus/theme-common";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import useIsBrowser from "@docusaurus/useIsBrowser";
+import { createAuth } from "@theme/ApiDemoPanel/Authorization/slice";
+import { createPersistanceMiddleware } from "@theme/ApiDemoPanel/persistanceMiddleware";
+import DocItemLayout from "@theme/ApiItem/Layout";
 import type { Props } from "@theme/DocItem";
+import DocItemMetadata from "@theme/DocItem/Metadata";
 import clsx from "clsx";
-import { ServerObject } from "docusaurus-plugin-openapi-docs/lib/openapi/types";
-import type { ApiItem as ApiItemType } from "docusaurus-plugin-openapi-docs/lib/types";
+import { ServerObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
+import type { ApiItem as ApiItemType } from "docusaurus-plugin-openapi-docs/src/types";
+/* eslint-disable import/no-extraneous-dependencies*/
+import type {
+  DocFrontMatter,
+  ThemeConfig,
+} from "docusaurus-theme-openapi-docs/src/types";
 import { Provider } from "react-redux";
 
-import { DocFrontMatter } from "../../types";
-import { ThemeConfig } from "../../types";
-import { createAuth } from "../ApiDemoPanel/Authorization/slice";
-import { createPersistanceMiddleware } from "../ApiDemoPanel/persistanceMiddleware";
-import DocItemLayout from "./Layout";
-import DocItemMetadata from "./Metadata";
-import { createStoreWithState } from "./store";
+import { createStoreWithoutState, createStoreWithState } from "./store";
 
 const { DocProvider } = require("@docusaurus/theme-common/internal");
 
-let ApiDemoPanel = (_: { item: any; infoPath: any }) => (
-  <div style={{ marginTop: "3.5em" }} />
-);
+let ApiDemoPanel = (_: { item: any; infoPath: any }) => <div />;
 
 if (ExecutionEnvironment.canUseDOM) {
   ApiDemoPanel = require("@theme/ApiDemoPanel").default;
@@ -49,27 +51,39 @@ export default function ApiItem(props: Props): JSX.Element {
   const { siteConfig } = useDocusaurusContext();
   const themeConfig = siteConfig.themeConfig as ThemeConfig;
   const options = themeConfig.api;
+  const isBrowser = useIsBrowser();
 
-  const DocContent = () => {
-    const acceptArray = Array.from(
-      new Set(
-        Object.values(api?.responses ?? {})
-          .map((response: any) => Object.keys(response.content ?? {}))
-          .flat()
-      )
-    );
+  // Regex for 2XX status
+  const statusRegex = new RegExp("(20[0-9]|2[1-9][0-9])");
 
+  // Define store2
+  let store2: any = {};
+  const persistanceMiddleware = createPersistanceMiddleware(options);
+
+  // Init store for SSR
+  if (!isBrowser) {
+    store2 = createStoreWithoutState({}, [persistanceMiddleware]);
+  }
+
+  // Init store for CSR to hydrate components
+  if (isBrowser) {
+    // Create list of only 2XX response content types to create request samples from
+    let acceptArray: any = [];
+    for (const [code, content] of Object.entries(api?.responses ?? [])) {
+      if (statusRegex.test(code)) {
+        acceptArray.push(Object.keys(content.content ?? {}));
+      }
+    }
+    acceptArray = acceptArray.flat();
     const content = api?.requestBody?.content ?? {};
     const contentTypeArray = Object.keys(content);
     const servers = api?.servers ?? [];
-
     const params = {
       path: [] as ParameterObject[],
       query: [] as ParameterObject[],
       header: [] as ParameterObject[],
       cookie: [] as ParameterObject[],
     };
-
     api?.parameters?.forEach(
       (param: { in: "path" | "query" | "header" | "cookie" }) => {
         const paramType = param.in;
@@ -77,26 +91,25 @@ export default function ApiItem(props: Props): JSX.Element {
         paramsArray.push(param as ParameterObject);
       }
     );
-
     const auth = createAuth({
       security: api?.security,
       securitySchemes: api?.securitySchemes,
       options,
     });
-
-    const persistanceMiddleware = createPersistanceMiddleware(options);
-    const acceptValue = window?.sessionStorage.getItem("accept");
-    const contentTypeValue = window?.sessionStorage.getItem("contentType");
+    // TODO: determine way to rehydrate without flashing
+    // const acceptValue = window?.sessionStorage.getItem("accept");
+    // const contentTypeValue = window?.sessionStorage.getItem("contentType");
     const server = window?.sessionStorage.getItem("server");
     const serverObject = (JSON.parse(server!) as ServerObject) ?? {};
-    const store2 = createStoreWithState(
+
+    store2 = createStoreWithState(
       {
         accept: {
-          value: acceptValue || acceptArray[0],
+          value: acceptArray[0],
           options: acceptArray,
         },
         contentType: {
-          value: contentTypeValue || contentTypeArray[0],
+          value: contentTypeArray[0],
           options: contentTypeArray,
         },
         server: {
@@ -110,21 +123,7 @@ export default function ApiItem(props: Props): JSX.Element {
       },
       [persistanceMiddleware]
     );
-    return (
-      <Provider store={store2}>
-        <div className="row">
-          <div className={clsx("col", api ? "col--7" : "col--12")}>
-            <MDXComponent />
-          </div>
-          {api && (
-            <div className="col col--5">
-              <ApiDemoPanel item={api} infoPath={infoPath} />
-            </div>
-          )}
-        </div>
-      </Provider>
-    );
-  };
+  }
 
   if (api) {
     return (
@@ -132,25 +131,34 @@ export default function ApiItem(props: Props): JSX.Element {
         <HtmlClassNameProvider className={docHtmlClassName}>
           <DocItemMetadata />
           <DocItemLayout>
-            {
-              <BrowserOnly fallback={<div />}>
-                {() => {
-                  return <DocContent />;
-                }}
-              </BrowserOnly>
-            }
+            <Provider store={store2}>
+              <div className={clsx("row", "theme-api-markdown")}>
+                <div className="col col--7">
+                  <MDXComponent />
+                </div>
+                <div className="col col--5">
+                  <BrowserOnly fallback={<div>Loading...</div>}>
+                    {() => {
+                      return <ApiDemoPanel item={api} infoPath={infoPath} />;
+                    }}
+                  </BrowserOnly>
+                </div>
+              </div>
+            </Provider>
           </DocItemLayout>
         </HtmlClassNameProvider>
       </DocProvider>
     );
   }
+
+  // Non-API docs
   return (
     <DocProvider content={props.content}>
       <HtmlClassNameProvider className={docHtmlClassName}>
         <DocItemMetadata />
         <DocItemLayout>
           <div className="row">
-            <div className={clsx("col col--12")}>
+            <div className="col col--12">
               <MDXComponent />
             </div>
           </div>

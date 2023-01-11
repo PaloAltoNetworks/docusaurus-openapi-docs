@@ -7,27 +7,25 @@
 
 import React from "react";
 
-import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import { useDoc } from "@docusaurus/theme-common/internal";
 import sdk from "@paloaltonetworks/postman-collection";
+import Accept from "@theme/ApiDemoPanel/Accept";
+import Authorization from "@theme/ApiDemoPanel/Authorization";
+import Body from "@theme/ApiDemoPanel/Body";
+import Execute from "@theme/ApiDemoPanel/Execute";
+import ParamOptions from "@theme/ApiDemoPanel/ParamOptions";
+import Server from "@theme/ApiDemoPanel/Server";
+import { useTypedSelector } from "@theme/ApiItem/hooks";
 import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 
-import { ThemeConfig } from "../../../types";
-import { useTypedSelector } from "../../ApiItem/hooks";
-import Accept from "../Accept";
-import Authorization from "../Authorization";
-import Body from "../Body";
-import Execute from "../Execute";
-import ParamOptions from "../ParamOptions";
-import Server from "../Server";
 import styles from "./styles.module.css";
 
 function Request({ item }: { item: NonNullable<ApiItem> }) {
-  const response = useTypedSelector((state) => state.response.value);
-  const { siteConfig } = useDocusaurusContext();
-  const themeConfig = siteConfig.themeConfig as ThemeConfig;
-  const options = themeConfig.api;
+  const response = useTypedSelector((state: any) => state.response.value);
   const postman = new sdk.Request(item.postman);
+  const metadata = useDoc();
+  const { proxy } = metadata.frontMatter;
 
   const params = {
     path: [] as ParameterObject[],
@@ -50,9 +48,7 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
         <summary>
           <div className={`details__request-summary`}>
             <h4>Request</h4>
-            {item.servers && (
-              <Execute postman={postman} proxy={options?.proxy} />
-            )}
+            {item.servers && <Execute postman={postman} proxy={proxy} />}
           </div>
         </summary>
         <div className={styles.optionsPanel}>

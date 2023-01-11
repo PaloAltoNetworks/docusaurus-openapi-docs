@@ -179,6 +179,11 @@ const config = {
         //   logoClass: "php",
         // },
       ],
+      algolia: {
+        apiKey: "441074cace987cbf4640c039ebed303c",
+        appId: "J0EABTYI1A",
+        indexName: "docusaurus-openapi",
+      },
     }),
 
   plugins: [
@@ -209,6 +214,7 @@ const config = {
           },
           petstore: {
             specPath: "examples/petstore.yaml",
+            proxy: "https://cors.pan.dev",
             outputDir: "docs/petstore",
             sidebarOptions: {
               groupPathsBy: "tag",
@@ -265,7 +271,6 @@ const config = {
       },
     ],
   ],
-
   themes: ["docusaurus-theme-openapi-docs"],
   stylesheets: [
     {

@@ -7,14 +7,15 @@
 
 import React from "react";
 
-import { useTypedDispatch, useTypedSelector } from "../../ApiItem/hooks";
-import FormItem from "./../FormItem";
-import FormSelect from "./../FormSelect";
+import FormItem from "@theme/ApiDemoPanel/FormItem";
+import FormSelect from "@theme/ApiDemoPanel/FormSelect";
+import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
+
 import { setContentType } from "./slice";
 
 function ContentType() {
-  const value = useTypedSelector((state) => state.contentType.value);
-  const options = useTypedSelector((state) => state.contentType.options);
+  const value = useTypedSelector((state: any) => state.contentType.value);
+  const options = useTypedSelector((state: any) => state.contentType.options);
   const dispatch = useTypedDispatch();
 
   if (options.length <= 1) {
@@ -26,7 +27,9 @@ function ContentType() {
       <FormSelect
         value={value}
         options={options}
-        onChange={(e) => dispatch(setContentType(e.target.value))}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          dispatch(setContentType(e.target.value))
+        }
       />
     </FormItem>
   );

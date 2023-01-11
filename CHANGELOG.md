@@ -1,3 +1,131 @@
+## 1.5.1 (Jan 10, 2023)
+
+High level enhancements
+
+- Added support for x-webhooks extension
+- Improvements to how Swagger 2.0 is upconverted to OpenAPI 3.0
+
+Other enhancements and bug fixes
+
+- [Bug] Refactor selective sanitization of > and < symbols in generated markdown descriptions ([#377](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/377))
+- fix jsonSchemaMergeAllOf options in createRequestSchema ([#374](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/374))
+- Add resolveInternal to swagger2openapi options ([#375](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/375))
+- [Enhancement] Introduce support for webhooks extension ([#370](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/370))
+
+## 1.5.0 (Dec 16, 2022)
+
+High level enhancements
+
+- Introduced proxy support
+- Added support for rendering deprecated schema items/properties
+
+Other enhancements and bug fixes
+
+- Only create list of 2xx content types for request samples ([#365](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/365))
+- [Enhancement] Add deprecated support to schema items ([#367](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/367))
+- [Enhancement] Add proxy support ([#366](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/366))
+- kebab case fix for info pages ([#363](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/363))
+- Hide edit URL by default ([#364](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/364))
+- Update index.ts ([#361](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/361))
+
+## 1.4.7 (Dec 2, 2022)
+
+High level enhancements
+
+- Emergency patch to address regression bug introdudced by #351
+
+Other enhancements and bug fixes
+
+- Import markdown utils from lib ([#358](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/358))
+
+## 1.4.6 (Dec 2, 2022)
+
+High level enhancements
+
+- Added support for swizzling `ApiItem` and `ApiDemoPanel` components!
+
+Other enhancements and bug fixes
+
+- Remove createProperties from items anyOneOf condition and add new condition for handling items.properties ([#356](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/356))
+- [Enhancement] Allow whitespace in key/token/password input ([#354](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/354))
+- [Bug] Respect readOnly/writeOnly when creating example from schema ([#353](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/353))
+- [Bug] Import Body from @theme in makeRequest ([#352](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/352))
+- [Experimental] Improve support for swizzling theme components ([#351](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/351))
+- Bump loader-utils from 2.0.3 to 2.0.4 ([#346](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/346))
+
+## 1.4.5 (Nov 15, 2022)
+
+High level enhancements
+
+- Bug fixes and polish
+- Re-introduce missing `--openapi-input-background` variable to `styles.css`
+
+Other enhancements and bug fixes
+
+- [Bug] Add condition for handling arrays of discriminators ([#344](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/344))
+
+## 1.4.4 (Nov 11, 2022)
+
+High level enhancements
+
+- Introduce Docusaurus v2.2.0 support
+
+Other enhancements and bug fixes
+
+- Include global tags and tag docs only if referenced by operation ([#340](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/340))
+- [Bug] Handle double quotes in sidebar_label frontmatter ([#338](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/338))
+- Fix error when allOf two refs ([#335](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/335))
+- [Bug] Introduce Docusaurus v2.2.0 support ([#336](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/336))
+
+## 1.4.3 (Nov 9, 2022)
+
+High level enhancements
+
+- Added support for Algolia DocSearch
+
+Other enhancements and bug fixes
+
+- Update posixPath to wrap path.join to fix backslash issue when buildi… ([#332](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/332))
+- Add pointer events styling to Execute button for invalid requests ([#331](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/331))
+- Add algolia config ([#328](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/328))
+
+## 1.4.2 (Nov 4, 2022)
+
+High level enhancements
+
+- Bug fixes and polish
+
+Other enhancements and bug fixes
+
+- [Bug] Improve support for multiline descriptions in frontmatter ([#325](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/325))
+- Use ResizeObserver to conditionally render SchemaTabs arrows ([#322](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/322))
+- Check if plugin is array before accessing first index ([#321](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/321))
+- Use find instead of include to match tags ([#320](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/320))
+- [Cleanup]: Remove "lorem ipsum" instances and boilerplate docs ([#318](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/318))
+
+## 1.4.1 (Oct 27, 2022)
+
+High level enhancements
+
+- SEO Improvements
+
+Other enhancements and bug fixes
+
+- [Bug] Support SSR for ApiItem ([#314](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/314))
+
+## 1.4.0 (Oct 26, 2022)
+
+High level enhancements
+
+- Support for downloading OpenAPI specification file
+
+Other enhancements and bug fixes
+
+- [Bug] Wrap API docs in BrowserOnly ([#310](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/310))
+- Extend regex to ignore <= and >= ([#309](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/309))
+- [Enhancement] Introduce support for downloading OpenAPI spec ([#307](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/307))
+- Update package.json
+
 ## 1.3.2 (Oct 19, 2022)
 
 High level enhancements

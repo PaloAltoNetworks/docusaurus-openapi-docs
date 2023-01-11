@@ -8,12 +8,11 @@
 import React from "react";
 
 import sdk from "@paloaltonetworks/postman-collection";
+import buildPostmanRequest from "@theme/ApiDemoPanel/buildPostmanRequest";
+import { Param } from "@theme/ApiDemoPanel/ParamOptions/slice";
+import { setResponse } from "@theme/ApiDemoPanel/Response/slice";
+import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import Modal from "react-modal";
-
-import { useTypedDispatch, useTypedSelector } from "../../ApiItem/hooks";
-import { Param } from "../ParamOptions/slice";
-import { clearStatus, setResponse, setStatus } from "../Response/slice";
-import buildPostmanRequest from "./../buildPostmanRequest";
 import makeRequest from "./makeRequest";
 
 function validateRequest(params: {
@@ -32,22 +31,22 @@ function validateRequest(params: {
   return true;
 }
 
-interface Props {
+export interface Props {
   postman: sdk.Request;
   proxy?: string;
 }
 
 function Execute({ postman, proxy }: Props) {
-  const pathParams = useTypedSelector((state) => state.params.path);
-  const queryParams = useTypedSelector((state) => state.params.query);
-  const cookieParams = useTypedSelector((state) => state.params.cookie);
-  const headerParams = useTypedSelector((state) => state.params.header);
-  const contentType = useTypedSelector((state) => state.contentType.value);
-  const body = useTypedSelector((state) => state.body);
-  const accept = useTypedSelector((state) => state.accept.value);
-  const server = useTypedSelector((state) => state.server.value);
-  const params = useTypedSelector((state) => state.params);
-  const auth = useTypedSelector((state) => state.auth);
+  const pathParams = useTypedSelector((state: any) => state.params.path);
+  const queryParams = useTypedSelector((state: any) => state.params.query);
+  const cookieParams = useTypedSelector((state: any) => state.params.cookie);
+  const headerParams = useTypedSelector((state: any) => state.params.header);
+  const contentType = useTypedSelector((state: any) => state.contentType.value);
+  const body = useTypedSelector((state: any) => state.body);
+  const accept = useTypedSelector((state: any) => state.accept.value);
+  const server = useTypedSelector((state: any) => state.server.value);
+  const params = useTypedSelector((state: any) => state.params);
+  const auth = useTypedSelector((state: any) => state.auth);
 
   const isValidRequest = validateRequest(params);
 
@@ -112,6 +111,7 @@ function Execute({ postman, proxy }: Props) {
       <button
         className="button button--sm button--secondary"
         disabled={!isValidRequest}
+        style={!isValidRequest ? { pointerEvents: "all" } : {}}
         onClick={async () => {
           dispatch(setResponse("Fetching..."));
           try {

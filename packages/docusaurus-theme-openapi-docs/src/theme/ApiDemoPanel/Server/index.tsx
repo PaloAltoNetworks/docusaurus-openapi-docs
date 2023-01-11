@@ -7,18 +7,19 @@
 
 import React, { useState } from "react";
 
-import { useTypedDispatch, useTypedSelector } from "../../ApiItem/hooks";
-import FloatingButton from "../FloatingButton";
-import FormItem from "./../FormItem";
-import FormSelect from "./../FormSelect";
-import FormTextInput from "./../FormTextInput";
+import FloatingButton from "@theme/ApiDemoPanel/FloatingButton";
+import FormItem from "@theme/ApiDemoPanel/FormItem";
+import FormSelect from "@theme/ApiDemoPanel/FormSelect";
+import FormTextInput from "@theme/ApiDemoPanel/FormTextInput";
+import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
+
 import { setServer, setServerVariable } from "./slice";
 import styles from "./styles.module.css";
 
 function Server() {
   const [isEditing, setIsEditing] = useState(false);
-  const value = useTypedSelector((state) => state.server.value);
-  const options = useTypedSelector((state) => state.server.options);
+  const value = useTypedSelector((state: any) => state.server.value);
+  const options = useTypedSelector((state: any) => state.server.options);
   const dispatch = useTypedDispatch();
 
   if (options.length <= 0) {
@@ -36,7 +37,7 @@ function Server() {
 
   // Default to first option when existing server state is mismatched
   if (value) {
-    const urlExists = options.find((s) => s.url === value.url);
+    const urlExists = options.find((s: any) => s.url === value.url);
     if (!urlExists) {
       const defaultOption = options[0];
       dispatch(setServer(JSON.stringify(defaultOption)));
@@ -76,12 +77,12 @@ function Server() {
       <FloatingButton onClick={() => setIsEditing(false)} label="Hide">
         <FormItem label="Base URL">
           <FormSelect
-            options={options.map((s) => s.url)}
-            onChange={(e) => {
+            options={options.map((s: any) => s.url)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               dispatch(
                 setServer(
                   JSON.stringify(
-                    options.filter((s) => s.url === e.target.value)[0]
+                    options.filter((s: any) => s.url === e.target.value)[0]
                   )
                 )
               );
@@ -97,7 +98,7 @@ function Server() {
                 <FormItem label={key}>
                   <FormSelect
                     options={value.variables[key].enum}
-                    onChange={(e) => {
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       dispatch(
                         setServerVariable(
                           JSON.stringify({ key, value: e.target.value })
@@ -113,7 +114,7 @@ function Server() {
               <FormItem label={key}>
                 <FormTextInput
                   placeholder={value.variables?.[key].default}
-                  onChange={(e) => {
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     dispatch(
                       setServerVariable(
                         JSON.stringify({ key, value: e.target.value })

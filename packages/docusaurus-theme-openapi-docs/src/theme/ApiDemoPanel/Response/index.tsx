@@ -7,9 +7,8 @@
 
 import React from "react";
 
+import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import CodeBlock from "@theme/CodeBlock";
-
-import { useTypedDispatch, useTypedSelector } from "../../ApiItem/hooks";
 import { clearResponse, clearStatus } from "./slice";
 
 // TODO: We probably shouldn't attempt to format XML...
@@ -33,8 +32,8 @@ function formatXml(xml: string) {
 }
 
 function Response() {
-  const response = useTypedSelector((state) => state.response.value);
-  const status = useTypedSelector((state) => state.response.status);
+  const status = useTypedSelector((state: any) => state.response.status);
+  const response = useTypedSelector((state: any) => state.response.value);
   const dispatch = useTypedDispatch();
   const responseStatusClass =
     status &&

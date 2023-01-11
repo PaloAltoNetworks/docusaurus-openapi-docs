@@ -40,6 +40,7 @@ export interface APIOptions {
   versions?: {
     [key: string]: APIVersionOptions;
   };
+  proxy?: string;
 }
 
 export interface SidebarOptions {
@@ -99,6 +100,7 @@ export interface ApiItem extends OperationObject {
     [key: string]: SecuritySchemeObject;
   };
   postman?: Request;
+  proxy?: string;
   info: InfoObject;
 }
 

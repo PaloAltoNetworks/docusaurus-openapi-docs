@@ -101,7 +101,6 @@ const sidebars = {
       ],
     },
   ],
-
   "petstore-2.0.0": [
     {
       type: "html",

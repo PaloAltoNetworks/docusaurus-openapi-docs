@@ -8,11 +8,13 @@
 import React from "react";
 
 import CodeBlock from "@theme/CodeBlock";
+/* eslint-disable import/no-extraneous-dependencies*/
+import { createDescription } from "docusaurus-theme-openapi-docs/lib/markdown/createDescription";
+/* eslint-disable import/no-extraneous-dependencies*/
+import { guard } from "docusaurus-theme-openapi-docs/lib/markdown/utils";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
-import { createDescription } from "../../markdown/createDescription";
-import { guard } from "../../markdown/utils";
 import styles from "./styles.module.css";
 
 function SchemaItem({
@@ -21,6 +23,7 @@ function SchemaItem({
   name,
   qualifierMessage,
   required,
+  deprecated,
   schemaDescription,
   schemaName,
   defaultValue,
@@ -29,6 +32,10 @@ function SchemaItem({
     Array.isArray(required) ? required.includes(name) : required,
     () => <strong className={styles.required}> required</strong>
   );
+
+  const renderDeprecated = guard(deprecated, () => (
+    <strong className={styles.deprecated}> deprecated</strong>
+  ));
 
   const renderSchemaDescription = guard(schemaDescription, (description) => (
     <div>
@@ -71,9 +78,10 @@ function SchemaItem({
 
   const schemaContent = (
     <div>
-      <strong>{name}</strong>
+      <strong className={deprecated && styles.strikethrough}>{name}</strong>
       <span className={styles.schemaName}> {schemaName}</span>
-      {renderRequired}
+      {!deprecated && renderRequired}
+      {renderDeprecated}
       {renderQualifierMessage}
       {renderDefaultValue}
       {renderSchemaDescription}

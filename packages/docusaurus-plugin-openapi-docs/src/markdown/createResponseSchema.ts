@@ -31,6 +31,9 @@ export function mergeAllOf(allOf: SchemaObject[]) {
       example: function () {
         return true;
       },
+      "x-examples": function () {
+        return true;
+      },
     },
     ignoreAdditionalProperties: true,
   });
@@ -106,16 +109,16 @@ function createAnyOneOf(schema: SchemaObject): any {
 
 function createProperties(schema: SchemaObject) {
   const discriminator = schema.discriminator;
-  return Object.entries(schema.properties!).map(([key, val]) =>
-    createEdges({
+  return Object.entries(schema.properties!).map(([key, val]) => {
+    return createEdges({
       name: key,
       schema: val,
       required: Array.isArray(schema.required)
         ? schema.required.includes(key)
         : false,
       discriminator,
-    })
-  );
+    });
+  });
 }
 
 function createAdditionalProperties(schema: SchemaObject) {
@@ -260,10 +263,14 @@ function createItems(schema: SchemaObject) {
       mergedSchemas.anyOf !== undefined
     ) {
       return create("div", {
-        children: [
-          createAnyOneOf(mergedSchemas),
-          createProperties(mergedSchemas),
-        ],
+        children: [createAnyOneOf(mergedSchemas)],
+      });
+    }
+
+    // Handles properties
+    if (mergedSchemas.properties !== undefined) {
+      return create("div", {
+        children: [createProperties(mergedSchemas)],
       });
     }
   }
@@ -590,6 +597,7 @@ function createEdges({
       collapsible: false,
       name,
       required: false,
+      deprecated: mergedSchemas.deprecated,
       schemaDescription: mergedSchemas.description,
       schemaName: schemaName,
       qualifierMessage: getQualifierMessage(schema),
@@ -610,6 +618,10 @@ function createEdges({
     return createDetailsNode(name, schemaName, schema, required);
   }
 
+  if (schema.items?.anyOf !== undefined || schema.items?.oneOf !== undefined) {
+    return createDetailsNode(name, schemaName, schema, required);
+  }
+
   if (schema.writeOnly && schema.writeOnly === true) {
     return undefined;
   }
@@ -619,6 +631,7 @@ function createEdges({
     collapsible: false,
     name,
     required: false,
+    deprecated: schema.deprecated,
     schemaDescription: schema.description,
     schemaName: schemaName,
     qualifierMessage: getQualifierMessage(schema),
@@ -746,7 +759,8 @@ export function createResponseSchema({ title, body, ...rest }: Props) {
           value: `${mimeType}`,
           children: [
             create("SchemaTabs", {
-              groupId: "schema-tabs",
+              // TODO: determine if we should persist this
+              // groupId: "schema-tabs",
               children: [
                 firstBody &&
                   create("TabItem", {

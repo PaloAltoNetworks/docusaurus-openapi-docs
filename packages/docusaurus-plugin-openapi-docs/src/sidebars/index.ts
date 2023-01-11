@@ -13,6 +13,7 @@ import {
   SidebarItemCategoryLinkConfig,
   SidebarItemDoc,
 } from "@docusaurus/plugin-content-docs/src/sidebars/types";
+import { posixPath } from "@docusaurus/utils";
 import clsx from "clsx";
 import { kebabCase } from "lodash";
 import uniq from "lodash/uniq";
@@ -67,9 +68,13 @@ function groupByTags(
   );
 
   // Combine globally defined tags with operation tags
+  // Only include global tag if referenced in operation tags
   let apiTags: string[] = [];
   tags.flat().forEach((tag) => {
-    apiTags.push(tag.name!);
+    // Should we also check x-displayName?
+    if (operationTags.includes(tag.name!)) {
+      apiTags.push(tag.name!);
+    }
   });
   apiTags = uniq(apiTags.concat(operationTags));
 
@@ -110,7 +115,7 @@ function groupByTags(
     .map((tag) => {
       // Map info object to tag
       const taggedInfoObject = intros.find((i) =>
-        i.tags ? i.tags.includes(tag) : undefined
+        i.tags ? i.tags.find((t: any) => t.name === tag) : undefined
       );
       const tagObject = tags.flat().find(
         (t) =>
@@ -148,8 +153,15 @@ function groupByTags(
           type: "generated-index" as "generated-index",
           title: tag,
           slug: label
-            ? path.join("/category", basePath, kebabCase(label), kebabCase(tag))
-            : path.join("/category", basePath, kebabCase(tag)),
+            ? posixPath(
+                path.join(
+                  "/category",
+                  basePath,
+                  kebabCase(label),
+                  kebabCase(tag)
+                )
+              )
+            : posixPath(path.join("/category", basePath, kebabCase(tag))),
         } as SidebarItemCategoryLinkConfig;
       }
 

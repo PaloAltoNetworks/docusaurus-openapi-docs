@@ -21,6 +21,7 @@ export interface OpenApiObject {
   tags?: TagObject[];
   externalDocs?: ExternalDocumentationObject;
   swagger?: string;
+  "x-webhooks"?: PathsObject;
 }
 
 export interface OpenApiObjectWithRef {

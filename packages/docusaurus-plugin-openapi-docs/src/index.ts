@@ -9,7 +9,7 @@ import fs from "fs";
 import path from "path";
 
 import type { LoadContext, Plugin } from "@docusaurus/types";
-import { Globby } from "@docusaurus/utils";
+import { Globby, posixPath } from "@docusaurus/utils";
 import chalk from "chalk";
 import { render } from "mustache";
 
@@ -30,18 +30,24 @@ export function getDocsPluginConfig(
   // eslint-disable-next-line array-callback-return
   const filteredConfig = presetsPlugins.filter((data) => {
     // Search presets
-    if (data[0].endsWith(pluginId)) {
-      return data[1];
-    }
-
-    // Search plugin-content-docs instances
-    if (data[0] === "@docusaurus/plugin-content-docs") {
-      const configPluginId = data[1].id ? data[1].id : "default";
-      if (configPluginId === pluginId) {
+    if (Array.isArray(data)) {
+      if (typeof data[0] === "string" && data[0].endsWith(pluginId)) {
         return data[1];
+      }
+
+      // Search plugin-content-docs instances
+      if (
+        typeof data[0] === "string" &&
+        data[0] === "@docusaurus/plugin-content-docs"
+      ) {
+        const configPluginId = data[1].id ? data[1].id : "default";
+        if (configPluginId === pluginId) {
+          return data[1];
+        }
       }
     }
   })[0];
+
   if (filteredConfig) {
     // Search presets, e.g. "classic"
     if (filteredConfig[0].endsWith(pluginId)) {
@@ -100,9 +106,10 @@ export default function pluginOpenAPIDocs(
       : path.resolve(siteDir, specPath);
 
     try {
-      const openapiFiles = await readOpenapiFiles(contentPath, options);
+      const openapiFiles = await readOpenapiFiles(contentPath);
       const [loadedApi, tags] = await processOpenapiFiles(
         openapiFiles,
+        options,
         sidebarOptions!
       );
       if (!fs.existsSync(outputDir)) {
@@ -153,12 +160,12 @@ export default function pluginOpenAPIDocs(
         : `---
 id: {{{id}}}
 title: "{{{title}}}"
-description: "{{{description}}}"
+description: "{{{frontMatter.description}}}"
 {{^api}}
 sidebar_label: Introduction
 {{/api}}
 {{#api}}
-sidebar_label: {{{title}}}
+sidebar_label: "{{{title}}}"
 {{/api}}
 {{^api}}
 sidebar_position: 0
@@ -176,6 +183,10 @@ sidebar_class_name: "{{{api.method}}} api-method"
 {{#infoPath}}
 info_path: {{{infoPath}}}
 {{/infoPath}}
+custom_edit_url: null
+{{#frontMatter.proxy}}
+proxy: {{{frontMatter.proxy}}}
+{{/frontMatter.proxy}}
 ---
 
 {{{markdown}}}
@@ -184,8 +195,8 @@ info_path: {{{infoPath}}}
       const infoMdTemplate = `---
 id: {{{id}}}
 title: "{{{title}}}"
-description: "{{{description}}}"
-sidebar_label: {{{title}}}
+description: "{{{frontMatter.description}}}"
+sidebar_label: "{{{title}}}"
 hide_title: true
 custom_edit_url: null
 ---
@@ -202,8 +213,8 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
 
       const tagMdTemplate = `---
 id: {{{id}}}
-title: "{{{description}}}"
-description: "{{{description}}}"
+title: "{{{frontMatter.description}}}"
+description: "{{{frontMatter.description}}}"
 custom_edit_url: null
 ---
 
@@ -332,7 +343,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
 
   async function cleanApiDocs(options: APIOptions) {
     const { outputDir } = options;
-    const apiDir = path.join(siteDir, outputDir);
+    const apiDir = posixPath(path.join(siteDir, outputDir));
     const apiMdxFiles = await Globby(["*.api.mdx", "*.info.mdx", "*.tag.mdx"], {
       cwd: path.resolve(apiDir),
       deep: 1,

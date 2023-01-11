@@ -7,16 +7,17 @@
 
 import React from "react";
 
-import { useTypedDispatch, useTypedSelector } from "../../ApiItem/hooks";
-import FormItem from "../FormItem";
-import FormSelect from "../FormSelect";
-import FormTextInput from "../FormTextInput";
+import FormItem from "@theme/ApiDemoPanel/FormItem";
+import FormSelect from "@theme/ApiDemoPanel/FormSelect";
+import FormTextInput from "@theme/ApiDemoPanel/FormTextInput";
+import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
+
 import { setAuthData, setSelectedAuth } from "./slice";
 
 function Authorization() {
-  const data = useTypedSelector((state) => state.auth.data);
-  const options = useTypedSelector((state) => state.auth.options);
-  const selected = useTypedSelector((state) => state.auth.selected);
+  const data = useTypedSelector((state: any) => state.auth.data);
+  const options = useTypedSelector((state: any) => state.auth.options);
+  const selected = useTypedSelector((state: any) => state.auth.selected);
 
   const dispatch = useTypedDispatch();
 
@@ -35,21 +36,21 @@ function Authorization() {
           <FormSelect
             options={optionKeys}
             value={selected}
-            onChange={(e) => {
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               dispatch(setSelectedAuth(e.target.value));
             }}
           />
         </FormItem>
       )}
-      {selectedAuth.map((a) => {
+      {selectedAuth.map((a: any) => {
         if (a.type === "http" && a.scheme === "bearer") {
           return (
             <FormItem label="Bearer Token" key={a.key + "-bearer"}>
               <FormTextInput
                 placeholder="Bearer Token"
                 value={data[a.key].token ?? ""}
-                onChange={(e) => {
-                  const value = e.target.value.trim();
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  const value = e.target.value;
                   dispatch(
                     setAuthData({
                       scheme: a.key,
@@ -69,8 +70,8 @@ function Authorization() {
               <FormTextInput
                 placeholder="Bearer Token"
                 value={data[a.key].token ?? ""}
-                onChange={(e) => {
-                  const value = e.target.value.trim();
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  const value = e.target.value;
                   dispatch(
                     setAuthData({
                       scheme: a.key,
@@ -91,8 +92,8 @@ function Authorization() {
                 <FormTextInput
                   placeholder="Username"
                   value={data[a.key].username ?? ""}
-                  onChange={(e) => {
-                    const value = e.target.value.trim();
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    const value = e.target.value;
                     dispatch(
                       setAuthData({
                         scheme: a.key,
@@ -108,8 +109,8 @@ function Authorization() {
                   placeholder="Password"
                   password
                   value={data[a.key].password ?? ""}
-                  onChange={(e) => {
-                    const value = e.target.value.trim();
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    const value = e.target.value;
                     dispatch(
                       setAuthData({
                         scheme: a.key,
@@ -130,8 +131,8 @@ function Authorization() {
               <FormTextInput
                 placeholder={`${a.key}`}
                 value={data[a.key].apiKey ?? ""}
-                onChange={(e) => {
-                  const value = e.target.value.trim();
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  const value = e.target.value;
                   dispatch(
                     setAuthData({
                       scheme: a.key,

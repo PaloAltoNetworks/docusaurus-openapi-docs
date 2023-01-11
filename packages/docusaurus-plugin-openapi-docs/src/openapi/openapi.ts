@@ -7,7 +7,7 @@
 
 import path from "path";
 
-import { Globby, GlobExcludeDefault } from "@docusaurus/utils";
+import { Globby, GlobExcludeDefault, posixPath } from "@docusaurus/utils";
 import Converter from "@paloaltonetworks/openapi-to-postmanv2";
 import sdk from "@paloaltonetworks/postman-collection";
 import Collection from "@paloaltonetworks/postman-collection";
@@ -16,6 +16,7 @@ import fs from "fs-extra";
 import cloneDeep from "lodash/cloneDeep";
 import kebabCase from "lodash/kebabCase";
 import unionBy from "lodash/unionBy";
+import uniq from "lodash/uniq";
 
 import { isURL } from "../index";
 import {
@@ -79,54 +80,41 @@ type PartialPage<T> = Omit<T, "permalink" | "source" | "sourceDirName">;
 
 function createItems(
   openapiData: OpenApiObject,
+  options: APIOptions,
   sidebarOptions: SidebarOptions
 ): ApiMetadata[] {
   // TODO: Find a better way to handle this
   let items: PartialPage<ApiMetadata>[] = [];
-  const infoId = kebabCase(openapiData.info.title);
-
-  if (sidebarOptions?.categoryLinkSource === "tag") {
-    // Only create an tag pages if categoryLinkSource set to tag.
-    const tags: TagObject[] = openapiData.tags ?? [];
-    // eslint-disable-next-line array-callback-return
-    tags
-      .filter((tag) => !tag.description?.includes("SchemaDefinition"))
-      // eslint-disable-next-line array-callback-return
-      .map((tag) => {
-        const description = getTagDisplayName(
-          tag.name!,
-          openapiData.tags ?? []
-        );
-        const tagId = kebabCase(tag.name);
-        const tagPage: PartialPage<TagPageMetadata> = {
-          type: "tag",
-          id: tagId,
-          unversionedId: tagId,
-          title: description ?? "",
-          description: description ?? "",
-          frontMatter: {},
-          tag: {
-            ...tag,
-          },
-        };
-        items.push(tagPage);
-      });
-  }
+  const infoIdSpaces = openapiData.info.title.replace(" ", "-").toLowerCase();
+  const infoId = kebabCase(infoIdSpaces);
 
   if (openapiData.info.description) {
     // Only create an info page if we have a description.
+    const infoDescription = openapiData.info?.description;
+    let splitDescription: any;
+    if (infoDescription) {
+      splitDescription = infoDescription.match(/[^\r\n]+/g);
+    }
     const infoPage: PartialPage<InfoPageMetadata> = {
       type: "info",
       id: infoId,
       unversionedId: infoId,
-      title: openapiData.info.title,
+      title: openapiData.info.title
+        ? openapiData.info.title.replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
+        : "",
       description: openapiData.info.description
         ? openapiData.info.description.replace(
             /((?:^|[^\\])(?:\\{2})*)"/g,
             "$1'"
           )
         : "",
-      frontMatter: {},
+      frontMatter: {
+        description: splitDescription
+          ? splitDescription[0]
+              .replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
+              .replace(/\s+$/, "")
+          : "",
+      },
       securitySchemes: openapiData.components?.securitySchemes,
       info: {
         ...openapiData.info,
@@ -208,19 +196,32 @@ function createItems(
         }
       }
 
+      const opDescription = operationObject.description;
+      let splitDescription: any;
+      if (opDescription) {
+        splitDescription = opDescription.match(/[^\r\n]+/g);
+      }
+
       const apiPage: PartialPage<ApiPageMetadata> = {
         type: "api",
         id: baseId,
         infoId: infoId ?? "",
         unversionedId: baseId,
-        title: title,
+        title: title ? title.replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'") : "",
         description: operationObject.description
           ? operationObject.description.replace(
               /((?:^|[^\\])(?:\\{2})*)"/g,
               "$1'"
             )
           : "",
-        frontMatter: {},
+        frontMatter: {
+          description: splitDescription
+            ? splitDescription[0]
+                .replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
+                .replace(/\s+$/, "")
+            : "",
+          ...(options?.proxy && { proxy: options.proxy }),
+        },
         api: {
           ...defaults,
           tags: operationObject.tags,
@@ -236,6 +237,168 @@ function createItems(
 
       items.push(apiPage);
     }
+  }
+
+  // Gather x-webhooks endpoints
+  for (let [path, pathObject] of Object.entries(
+    openapiData["x-webhooks"] ?? {}
+  )) {
+    path = "webhook";
+    const { $ref, description, parameters, servers, summary, ...rest } =
+      pathObject;
+    for (let [method, operationObject] of Object.entries({ ...rest })) {
+      method = "event";
+      const title =
+        operationObject.summary ??
+        operationObject.operationId ??
+        "Missing summary";
+      if (operationObject.description === undefined) {
+        operationObject.description =
+          operationObject.summary ?? operationObject.operationId ?? "";
+      }
+
+      const baseId = operationObject.operationId
+        ? kebabCase(operationObject.operationId)
+        : kebabCase(operationObject.summary);
+
+      const servers =
+        operationObject.servers ?? pathObject.servers ?? openapiData.servers;
+
+      const security = operationObject.security ?? openapiData.security;
+
+      // Add security schemes so we know how to handle security.
+      const securitySchemes = openapiData.components?.securitySchemes;
+
+      // Make sure schemes are lowercase. See: https://github.com/cloud-annotations/docusaurus-plugin-openapi/issues/79
+      if (securitySchemes) {
+        for (let securityScheme of Object.values(securitySchemes)) {
+          if (securityScheme.type === "http") {
+            securityScheme.scheme = securityScheme.scheme.toLowerCase();
+          }
+        }
+      }
+
+      let jsonRequestBodyExample;
+      const body = operationObject.requestBody?.content?.["application/json"];
+      if (body?.schema) {
+        jsonRequestBodyExample = sampleRequestFromSchema(body.schema);
+      }
+
+      // Handle vendor JSON media types
+      const bodyContent = operationObject.requestBody?.content;
+      if (bodyContent) {
+        const firstBodyContentKey = Object.keys(bodyContent)[0];
+        if (firstBodyContentKey.endsWith("+json")) {
+          const firstBody = bodyContent[firstBodyContentKey];
+          if (firstBody?.schema) {
+            jsonRequestBodyExample = sampleRequestFromSchema(firstBody.schema);
+          }
+        }
+      }
+
+      // TODO: Don't include summary temporarilly
+      const { summary, ...defaults } = operationObject;
+
+      // Merge common parameters with operation parameters
+      // Operation params take precendence over common params
+      if (parameters !== undefined) {
+        if (operationObject.parameters !== undefined) {
+          defaults.parameters = unionBy(
+            operationObject.parameters,
+            parameters,
+            "name"
+          );
+        } else {
+          defaults.parameters = parameters;
+        }
+      }
+
+      const opDescription = operationObject.description;
+      let splitDescription: any;
+      if (opDescription) {
+        splitDescription = opDescription.match(/[^\r\n]+/g);
+      }
+
+      const apiPage: PartialPage<ApiPageMetadata> = {
+        type: "api",
+        id: baseId,
+        infoId: infoId ?? "",
+        unversionedId: baseId,
+        title: title ? title.replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'") : "",
+        description: operationObject.description
+          ? operationObject.description.replace(
+              /((?:^|[^\\])(?:\\{2})*)"/g,
+              "$1'"
+            )
+          : "",
+        frontMatter: {
+          description: splitDescription
+            ? splitDescription[0]
+                .replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
+                .replace(/\s+$/, "")
+            : "",
+          ...(options?.proxy && { proxy: options.proxy }),
+        },
+        api: {
+          ...defaults,
+          tags: operationObject.tags,
+          method,
+          path,
+          servers,
+          security,
+          securitySchemes,
+          jsonRequestBodyExample,
+          info: openapiData.info,
+        },
+      };
+      items.push(apiPage);
+    }
+  }
+
+  if (sidebarOptions?.categoryLinkSource === "tag") {
+    // Get global tags
+    const tags: TagObject[] = openapiData.tags ?? [];
+
+    // Get operation tags
+    const apiItems = items.filter((item) => {
+      return item.type === "api";
+    }) as ApiPageMetadata[];
+    const operationTags = uniq(
+      apiItems
+        .flatMap((item) => item.api.tags)
+        .filter((item): item is string => !!item)
+    );
+
+    // eslint-disable-next-line array-callback-return
+    tags
+      .filter((tag) => operationTags.includes(tag.name!)) // include only tags referenced by operation
+      // eslint-disable-next-line array-callback-return
+      .map((tag) => {
+        const description = getTagDisplayName(
+          tag.name!,
+          openapiData.tags ?? []
+        );
+        const tagId = kebabCase(tag.name);
+        const splitDescription = description.match(/[^\r\n]+/g);
+        const tagPage: PartialPage<TagPageMetadata> = {
+          type: "tag",
+          id: tagId,
+          unversionedId: tagId,
+          title: description ?? "",
+          description: description ?? "",
+          frontMatter: {
+            description: splitDescription
+              ? splitDescription[0]
+                  .replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
+                  .replace(/\s+$/, "")
+              : "",
+          },
+          tag: {
+            ...tag,
+          },
+        };
+        items.push(tagPage);
+      });
   }
 
   return items as ApiMetadata[];
@@ -274,8 +437,7 @@ interface OpenApiFiles {
 }
 
 export async function readOpenapiFiles(
-  openapiPath: string,
-  options: APIOptions
+  openapiPath: string
 ): Promise<OpenApiFiles[]> {
   if (!isURL(openapiPath)) {
     const stat = await fs.lstat(openapiPath);
@@ -290,7 +452,7 @@ export async function readOpenapiFiles(
       return Promise.all(
         sources.map(async (source) => {
           // TODO: make a function for this
-          const fullPath = path.join(openapiPath, source);
+          const fullPath = posixPath(path.join(openapiPath, source));
           const data = (await loadAndResolveSpec(
             fullPath
           )) as unknown as OpenApiObject;
@@ -317,11 +479,16 @@ export async function readOpenapiFiles(
 
 export async function processOpenapiFiles(
   files: OpenApiFiles[],
+  options: APIOptions,
   sidebarOptions: SidebarOptions
 ): Promise<[ApiMetadata[], TagObject[][]]> {
   const promises = files.map(async (file) => {
     if (file.data !== undefined) {
-      const processedFile = await processOpenapiFile(file.data, sidebarOptions);
+      const processedFile = await processOpenapiFile(
+        file.data,
+        options,
+        sidebarOptions
+      );
       const itemsObjectsArray = processedFile[0].map((item) => ({
         ...item,
       }));
@@ -358,10 +525,11 @@ export async function processOpenapiFiles(
 
 export async function processOpenapiFile(
   openapiData: OpenApiObject,
+  options: APIOptions,
   sidebarOptions: SidebarOptions
 ): Promise<[ApiMetadata[], TagObject[]]> {
   const postmanCollection = await createPostmanCollection(openapiData);
-  const items = createItems(openapiData, sidebarOptions);
+  const items = createItems(openapiData, options, sidebarOptions);
 
   bindCollectionToApiItems(items, postmanCollection);
 

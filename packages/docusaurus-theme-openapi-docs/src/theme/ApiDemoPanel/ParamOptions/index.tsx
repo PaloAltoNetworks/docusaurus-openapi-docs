@@ -8,16 +8,16 @@
 import React, { useState, useEffect } from "react";
 
 import { nanoid } from "@reduxjs/toolkit";
+import FormItem from "@theme/ApiDemoPanel/FormItem";
+import FormMultiSelect from "@theme/ApiDemoPanel/FormMultiSelect";
+import FormSelect from "@theme/ApiDemoPanel/FormSelect";
+import FormTextInput from "@theme/ApiDemoPanel/FormTextInput";
+import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 
-import { useTypedDispatch, useTypedSelector } from "../../ApiItem/hooks";
-import FormItem from "./../FormItem";
-import FormMultiSelect from "./../FormMultiSelect";
-import FormSelect from "./../FormSelect";
-import FormTextInput from "./../FormTextInput";
 import { Param, setParam } from "./slice";
 import styles from "./styles.module.css";
 
-interface ParamProps {
+export interface ParamProps {
   param: Param;
 }
 
@@ -54,10 +54,10 @@ function ParamOptionWrapper({ param }: ParamProps) {
 function ParamOptions() {
   const [showOptional, setShowOptional] = useState(false);
 
-  const pathParams = useTypedSelector((state) => state.params.path);
-  const queryParams = useTypedSelector((state) => state.params.query);
-  const cookieParams = useTypedSelector((state) => state.params.cookie);
-  const headerParams = useTypedSelector((state) => state.params.header);
+  const pathParams = useTypedSelector((state: any) => state.params.path);
+  const queryParams = useTypedSelector((state: any) => state.params.query);
+  const cookieParams = useTypedSelector((state: any) => state.params.cookie);
+  const headerParams = useTypedSelector((state: any) => state.params.header);
 
   const allParams = [
     ...pathParams,
@@ -142,7 +142,7 @@ function ArrayItem({
     return (
       <FormSelect
         options={["---", "true", "false"]}
-        onChange={(e) => {
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           const val = e.target.value;
           onChange(val === "---" ? undefined : val);
         }}
@@ -153,7 +153,7 @@ function ArrayItem({
   return (
     <FormTextInput
       placeholder={param.description || param.name}
-      onChange={(e) => {
+      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
         onChange(e.target.value);
       }}
     />
@@ -246,7 +246,7 @@ function ParamSelectFormItem({ param }: ParamProps) {
   return (
     <FormSelect
       options={["---", ...(options as string[])]}
-      onChange={(e) => {
+      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
         const val = e.target.value;
         dispatch(
           setParam({
@@ -265,7 +265,7 @@ function ParamBooleanFormItem({ param }: ParamProps) {
   return (
     <FormSelect
       options={["---", "true", "false"]}
-      onChange={(e) => {
+      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
         const val = e.target.value;
         dispatch(
           setParam({
@@ -286,7 +286,7 @@ function ParamMultiSelectFormItem({ param }: ParamProps) {
   return (
     <FormMultiSelect
       options={options as string[]}
-      onChange={(e) => {
+      onChange={(e: any) => {
         const values = Array.prototype.filter
           .call(e.target.options, (o) => o.selected)
           .map((o) => o.value);
@@ -308,7 +308,17 @@ function ParamTextFormItem({ param }: ParamProps) {
   return (
     <FormTextInput
       placeholder={param.description || param.name}
-      onChange={(e) => dispatch(setParam({ ...param, value: e.target.value }))}
+      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+        dispatch(
+          setParam({
+            ...param,
+            value:
+              param.in === "path" || param.in === "query"
+                ? e.target.value.replace(/\s/g, "%20")
+                : e.target.value,
+          })
+        )
+      }
     />
   );
 }
