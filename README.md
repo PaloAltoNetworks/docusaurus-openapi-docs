@@ -305,4 +305,6 @@ For more insight into why we decided to completely fork see [#47](https://github
 
 ## Support
 
-Please read [SUPPORT.md](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/blob/main/SUPPORT.md) for details on how to get support for this project.
+See [SUPPORT.md](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/blob/main/SUPPORT.md) for our support agreement and guidelines.
+
+If you believe you found a bug or have an idea you'd like to suggest you may [report an issue](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/new/choose) or [start a discussion](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/discussions/new/choose).
