@@ -92,13 +92,13 @@
 
 /* Demo panel details */
 
-.theme-api-markdown .details__demo-panel {
+.openapi-demo__panel {
   margin-bottom: 1rem;
   background: var(--openapi-card-background-color);
   border-radius: var(--openapi-card-border-radius);
 }
 
-.theme-api-markdown .details__demo-panel > summary {
+.openapi-demo__panel__summary {
   padding-left: 1rem;
   padding-top: 1rem;
   cursor: pointer;
@@ -109,17 +109,17 @@
   border-top-right-radius: 0;
 }
 
-.theme-api-markdown .details__demo-panel > summary::marker {
+.openapi-demo__panel__summary::marker {
   display: none;
   content: "";
 }
 
-.theme-api-markdown .details__demo-panel > summary::-webkit-details-marker {
+.openapi-demo__panel__summary:-webkit-details-marker {
   display: none;
   content: "";
 }
 
-.theme-api-markdown .details__demo-panel > pre {
+.openapi-demo__authorization-properties {
   margin-bottom: 0;
   padding-top: 0;
 }

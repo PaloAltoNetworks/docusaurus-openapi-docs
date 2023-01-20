@@ -6,10 +6,8 @@
  * ========================================================================== */
 
 import React from "react";
-
-const methodStyle = {
-  borderRadius: "var(--ifm-global-radius)",
-};
+import clsx from "clsx";
+import styles from "./styles.module.css";
 
 function colorForMethod(method: string) {
   switch (method.toLowerCase()) {
@@ -39,20 +37,28 @@ export interface Props {
 
 function MethodEndpoint({ method, path }: Props) {
   return (
-    <pre
-      style={{
-        background: "var(--openapi-card-background-color)",
-        borderRadius: "var(--openapi-card-border-radius)",
-      }}
+    <div
+      className={clsx(
+        "openapi-demo__panel",
+        "openapi-demo__panel__method-endpoint",
+        styles.panel
+      )}
     >
       <span
-        style={methodStyle}
-        className={"badge badge--" + colorForMethod(method)}
+        className={clsx(
+          "badge",
+          "badge--" + colorForMethod(method),
+          "openapi-demo__method-badge",
+          "openapi-demo__method-badge--" + method,
+          styles.method
+        )}
       >
         {method.toUpperCase()}
       </span>{" "}
-      <span>{path.replace(/{([a-z0-9-_]+)}/gi, ":$1")}</span>
-    </pre>
+      <span className={clsx("openapi-demo__endpoint-path")}>
+        {path.replace(/{([a-z0-9-_]+)}/gi, ":$1")}
+      </span>
+    </div>
   );
 }
 

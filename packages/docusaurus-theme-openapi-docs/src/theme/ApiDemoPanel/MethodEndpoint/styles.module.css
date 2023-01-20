@@ -1,0 +1,15 @@
+.panel {
+  background-color: var(--openapi-card-background-color);
+  border-radius: var(--openapi-card-border-radius);
+  color: var(--ifm-pre-color);
+  margin: 0 0 var(--ifm-spacing-vertical);
+  overflow: auto;
+  padding: var(--ifm-pre-padding);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: var(--ifm-code-font-size);
+}
+
+.method {
+  border-radius: var(--ifm-global-radius);
+  font-size: 75%;
+}

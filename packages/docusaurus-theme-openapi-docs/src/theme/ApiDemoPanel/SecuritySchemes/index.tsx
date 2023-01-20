@@ -18,63 +18,74 @@ function SecuritySchemes(props: any) {
   if (selected === undefined) return null;
 
   const selectedAuth = options[selected];
+  const authPropertiesClass = "openapi-demo__authorization-properties";
+  const authPropertiesLinkClass =
+    "openapi-demo__authorization-properties__link";
   return (
-    <details className={`details__demo-panel`} open={false}>
-      <summary className={`details__request-summary`}>
-        <h4>Authorization</h4>
-      </summary>
-      {selectedAuth.map((auth: any) => {
-        const isApiKey = auth.type === "apiKey";
-        const isBearer = auth.type === "http" && auth.key === "Bearer";
-        const isOauth2 = auth.type === "oauth2";
+    <div className="openapi-demo__panel">
+      <details className={`openapi-demo__panel__detail`} open={false}>
+        <summary className={`openapi-demo__panel__summary`}>
+          <h4>Authorization</h4>
+        </summary>
+        {selectedAuth.map((auth: any) => {
+          const isApiKey = auth.type === "apiKey";
+          const isBearer = auth.type === "http" && auth.key === "Bearer";
+          const isOauth2 = auth.type === "oauth2";
 
-        if (isApiKey || isBearer) {
-          return (
-            <React.Fragment key={auth.key}>
-              <pre
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  background: "var(--openapi-card-background-color)",
-                }}
-              >
-                <span>type: {auth.type}</span>
-                <span>
-                  name: <Link to={infoAuthPath}>{auth.name}</Link>
-                </span>
-                <span>in: {auth.in}</span>
-              </pre>
-            </React.Fragment>
-          );
-        }
+          if (isApiKey || isBearer) {
+            return (
+              <React.Fragment key={auth.key}>
+                <pre
+                  className={authPropertiesClass}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <span>type: {auth.type}</span>
+                  <span>
+                    name:{" "}
+                    <Link className={authPropertiesLinkClass} to={infoAuthPath}>
+                      {auth.name}
+                    </Link>
+                  </span>
+                  <span>in: {auth.in}</span>
+                </pre>
+              </React.Fragment>
+            );
+          }
 
-        if (isOauth2) {
-          return (
-            <React.Fragment key={selected}>
-              <pre
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  background: "var(--openapi-card-background-color)",
-                }}
-              >
-                <span>
-                  type: <Link to={infoAuthPath}>{auth.type}</Link>
-                </span>
-                {Object.keys(auth.flows).map((flow) => {
-                  return <span key={flow}>flow: {flow}</span>;
-                })}
-                <span>
-                  scopes: <code>{auth.scopes.toString()}</code>
-                </span>
-              </pre>
-            </React.Fragment>
-          );
-        }
+          if (isOauth2) {
+            return (
+              <React.Fragment key={selected}>
+                <pre
+                  className={authPropertiesClass}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <span>
+                    type:{" "}
+                    <Link className={authPropertiesLinkClass} to={infoAuthPath}>
+                      {auth.type}
+                    </Link>
+                  </span>
+                  {Object.keys(auth.flows).map((flow) => {
+                    return <span key={flow}>flow: {flow}</span>;
+                  })}
+                  <span>
+                    scopes: <code>{auth.scopes.toString()}</code>
+                  </span>
+                </pre>
+              </React.Fragment>
+            );
+          }
 
-        return undefined;
-      })}
-    </details>
+          return undefined;
+        })}
+      </details>
+    </div>
   );
 }
 

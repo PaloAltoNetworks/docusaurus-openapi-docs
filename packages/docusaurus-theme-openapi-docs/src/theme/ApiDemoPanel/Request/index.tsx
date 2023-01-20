@@ -43,9 +43,9 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
   );
 
   return (
-    <div>
-      <details className={`details__demo-panel`} open={response ? false : true}>
-        <summary>
+    <div className="openapi-demo__panel">
+      <details open={response ? false : true}>
+        <summary className="openapi-demo__panel__summary">
           <div className={`details__request-summary`}>
             <h4>Request</h4>
             {item.servers && <Execute postman={postman} proxy={proxy} />}
