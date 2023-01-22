@@ -16,6 +16,7 @@ import Execute from "@theme/ApiDemoPanel/Execute";
 import ParamOptions from "@theme/ApiDemoPanel/ParamOptions";
 import Server from "@theme/ApiDemoPanel/Server";
 import { useTypedSelector } from "@theme/ApiItem/hooks";
+import clsx from "clsx";
 import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 
@@ -43,7 +44,9 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
   );
 
   return (
-    <div className="openapi-demo__panel">
+    <div
+      className={clsx("openapi-demo__panel", "openapi-demo__panel--request")}
+    >
       <details open={response ? false : true}>
         <summary className="openapi-demo__panel__summary">
           <div className={`details__request-summary`}>

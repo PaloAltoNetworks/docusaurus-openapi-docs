@@ -42,7 +42,7 @@ function MethodEndpoint({ method, path }: Props) {
     <div
       className={clsx(
         "openapi-demo__panel",
-        "openapi-demo__panel__method-endpoint",
+        "openapi-demo__panel--method-endpoint",
         styles.panel
       )}
     >

@@ -9,6 +9,9 @@ import React from "react";
 
 import Link from "@docusaurus/Link";
 import { useTypedSelector } from "@theme/ApiItem/hooks";
+import clsx from "clsx";
+
+import styles from "./styles.module.css";
 
 function SecuritySchemes(props: any) {
   const options = useTypedSelector((state: any) => state.auth.options);
@@ -18,11 +21,19 @@ function SecuritySchemes(props: any) {
   if (selected === undefined) return null;
 
   const selectedAuth = options[selected];
-  const authPropertiesClass = "openapi-demo__authorization-properties";
+  const authPropertiesClasses = clsx(
+    "openapi-demo__authorization-properties",
+    styles.authProperties
+  );
   const authPropertiesLinkClass =
     "openapi-demo__authorization-properties__link";
   return (
-    <div className="openapi-demo__panel">
+    <div
+      className={clsx(
+        "openapi-demo__panel",
+        "openapi-demo__panel--authorization"
+      )}
+    >
       <details className={`openapi-demo__panel__detail`} open={false}>
         <summary className={`openapi-demo__panel__summary`}>
           <h4>Authorization</h4>
@@ -35,13 +46,7 @@ function SecuritySchemes(props: any) {
           if (isApiKey || isBearer) {
             return (
               <React.Fragment key={auth.key}>
-                <pre
-                  className={authPropertiesClass}
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                >
+                <pre className={authPropertiesClasses}>
                   <span>type: {auth.type}</span>
                   <span>
                     name:{" "}
@@ -58,13 +63,7 @@ function SecuritySchemes(props: any) {
           if (isOauth2) {
             return (
               <React.Fragment key={selected}>
-                <pre
-                  className={authPropertiesClass}
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                >
+                <pre className={authPropertiesClasses}>
                   <span>
                     type:{" "}
                     <Link className={authPropertiesLinkClass} to={infoAuthPath}>
