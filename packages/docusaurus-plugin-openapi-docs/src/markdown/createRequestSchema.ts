@@ -597,12 +597,8 @@ function createEdges({
       collapsible: false,
       name,
       required: Array.isArray(required) ? required.includes(name) : required,
-      // nullable: mergedSchemas.nullable,
-      // deprecated: mergedSchemas.deprecated,
-      // schemaDescription: mergedSchemas.description,
       schemaName: schemaName,
       qualifierMessage: getQualifierMessage(schema),
-      // defaultValue: mergedSchemas.default,
       schema: mergedSchemas,
     });
   }
@@ -633,12 +629,8 @@ function createEdges({
     collapsible: false,
     name,
     required: Array.isArray(required) ? required.includes(name) : required,
-    // nullable: schema.nullable,
-    // deprecated: schema.deprecated,
-    // schemaDescription: schema.description,
     schemaName: schemaName,
     qualifierMessage: getQualifierMessage(schema),
-    // defaultValue: schema.default,
     schema: schema,
   });
 }
