@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import $RefParser from "@apidevtools/json-schema-ref-parser";
+import $RefParser from "@paloaltonetworks/json-schema-ref-parser";
 import { bundle, Config } from "@redocly/openapi-core";
 import type { Source, Document } from "@redocly/openapi-core";
 import { ResolvedConfig } from "@redocly/openapi-core/lib/config";

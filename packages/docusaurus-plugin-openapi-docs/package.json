@@ -39,7 +39,7 @@
     "utility-types": "^3.10.0"
   },
   "dependencies": {
-    "@apidevtools/json-schema-ref-parser": "^9.0.9",
+    "@paloaltonetworks/json-schema-ref-parser": "0.0.0-dev-hotfix1",
     "@docusaurus/mdx-loader": "^2.0.1",
     "@docusaurus/plugin-content-docs": "^2.0.1",
     "@docusaurus/utils": "^2.0.1",
