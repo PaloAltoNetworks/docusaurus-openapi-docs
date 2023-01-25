@@ -23,10 +23,7 @@ function SchemaItem({
   name,
   qualifierMessage,
   required,
-  // deprecated, //
-  // schemaDescription, //
   schemaName,
-  // defaultValue, //
   schema,
 }) {
   let deprecated;

@@ -419,6 +419,15 @@ function createDetailsNode(
                 style: { opacity: "0.6" },
                 children: ` ${schemaName}`,
               }),
+              guard(schema.nullable && schema.nullable === true, () => [
+                create("strong", {
+                  style: {
+                    fontSize: "var(--ifm-code-font-size)",
+                    color: "var(--openapi-nullable)",
+                  },
+                  children: " nullable",
+                }),
+              ]),
               guard(schema.required && schema.required === true, () => [
                 create("strong", {
                   style: {
