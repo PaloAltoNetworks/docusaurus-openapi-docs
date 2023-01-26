@@ -28,6 +28,11 @@
   color: var(--openapi-deprecated);
 }
 
+.nullable {
+  font-size: var(--ifm-code-font-size);
+  color: var(--openapi-nullable);
+}
+
 .strikethrough {
   text-decoration: line-through;
 }

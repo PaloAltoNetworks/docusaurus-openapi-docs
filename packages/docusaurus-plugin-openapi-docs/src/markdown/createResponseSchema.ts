@@ -419,6 +419,15 @@ function createDetailsNode(
                 style: { opacity: "0.6" },
                 children: ` ${schemaName}`,
               }),
+              guard(schema.nullable && schema.nullable === true, () => [
+                create("strong", {
+                  style: {
+                    fontSize: "var(--ifm-code-font-size)",
+                    color: "var(--openapi-nullable)",
+                  },
+                  children: " nullable",
+                }),
+              ]),
               guard(schema.required && schema.required === true, () => [
                 create("strong", {
                   style: {
@@ -597,11 +606,9 @@ function createEdges({
       collapsible: false,
       name,
       required: false,
-      deprecated: mergedSchemas.deprecated,
-      schemaDescription: mergedSchemas.description,
       schemaName: schemaName,
       qualifierMessage: getQualifierMessage(schema),
-      defaultValue: mergedSchemas.default,
+      schema: mergedSchemas,
     });
   }
 
@@ -631,11 +638,9 @@ function createEdges({
     collapsible: false,
     name,
     required: false,
-    deprecated: schema.deprecated,
-    schemaDescription: schema.description,
     schemaName: schemaName,
     qualifierMessage: getQualifierMessage(schema),
-    defaultValue: schema.default,
+    schema: schema,
   });
 }
 

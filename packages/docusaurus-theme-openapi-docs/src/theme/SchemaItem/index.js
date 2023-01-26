@@ -23,11 +23,19 @@ function SchemaItem({
   name,
   qualifierMessage,
   required,
-  deprecated,
-  schemaDescription,
   schemaName,
-  defaultValue,
+  schema,
 }) {
+  let deprecated;
+  let schemaDescription;
+  let defaultValue;
+  let nullable;
+  if (schema) {
+    deprecated = schema.deprecated;
+    schemaDescription = schema.description;
+    defaultValue = schema.default;
+    nullable = schema.nullable;
+  }
   const renderRequired = guard(
     Array.isArray(required) ? required.includes(name) : required,
     () => <strong className={styles.required}> required</strong>
@@ -35,6 +43,10 @@ function SchemaItem({
 
   const renderDeprecated = guard(deprecated, () => (
     <strong className={styles.deprecated}> deprecated</strong>
+  ));
+
+  const renderNullable = guard(nullable, () => (
+    <strong className={styles.nullable}> nullable</strong>
   ));
 
   const renderSchemaDescription = guard(schemaDescription, (description) => (
@@ -80,6 +92,7 @@ function SchemaItem({
     <div>
       <strong className={deprecated && styles.strikethrough}>{name}</strong>
       <span className={styles.schemaName}> {schemaName}</span>
+      {renderNullable}
       {!deprecated && renderRequired}
       {renderDeprecated}
       {renderQualifierMessage}
