@@ -78,8 +78,12 @@
 
 .theme-api-markdown details li {
   list-style: none;
-  padding-bottom: 5px;
   padding-top: 5px;
+}
+
+.theme-api-markdown .tabs__item {
+  padding-bottom: unset;
+  padding-top: unset;
 }
 
 .theme-api-markdown details > div > div {
