@@ -144,11 +144,11 @@ function createAdditionalProperties(schema: SchemaObject) {
   // }
 
   if (
-    schema.additionalProperties?.type === "string" ||
-    schema.additionalProperties?.type === "object" ||
-    schema.additionalProperties?.type === "boolean" ||
-    schema.additionalProperties?.type === "integer" ||
-    schema.additionalProperties?.type === "number"
+    (schema.additionalProperties?.type as string) === "string" ||
+    (schema.additionalProperties?.type as string) === "object" ||
+    (schema.additionalProperties?.type as string) === "boolean" ||
+    (schema.additionalProperties?.type as string) === "integer" ||
+    (schema.additionalProperties?.type as string) === "number"
   ) {
     const type = schema.additionalProperties?.type;
     const additionalProperties =
