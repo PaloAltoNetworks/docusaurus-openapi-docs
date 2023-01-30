@@ -239,6 +239,14 @@ const config = {
             specPath: "examples/food/yogurtstore/openapi.yaml",
             outputDir: "docs/food/yogurtstore",
           },
+          config: {
+            specPath:
+              "https://raw.githubusercontent.com/PaloAltoNetworks/pan.dev/master/openapi-specs/access/prisma-access-config/AddressGroups.yaml",
+            outputDir: "docs/config",
+            sidebarOptions: {
+              groupPathsBy: "tag",
+            },
+          },
         },
       },
     ],
