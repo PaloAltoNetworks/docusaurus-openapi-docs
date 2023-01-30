@@ -241,11 +241,11 @@ function SchemaTabsComponent(props) {
               (tabItem) => tabItem.props.value === defaultValue
             )[0],
           {
-            className: "margin-vert--md",
+            className: styles.marginVertical,
           }
         )
       ) : (
-        <div className="margin-vert--md">
+        <div className={styles.marginVertical}>
           {children.map((tabItem, i) =>
             cloneElement(tabItem, {
               key: i,
