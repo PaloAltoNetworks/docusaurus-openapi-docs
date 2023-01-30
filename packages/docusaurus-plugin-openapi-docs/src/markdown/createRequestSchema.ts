@@ -650,10 +650,6 @@ function createNodes(schema: SchemaObject): any {
   //   return createDiscriminator(schema);
   // }
 
-  // if ((schema.oneOf || schema.anyOf) && schema.properties) {
-  //   return [createAnyOneOf(schema), createProperties(schema)];
-  // }
-
   if (schema.oneOf !== undefined || schema.anyOf !== undefined) {
     nodes.push(createAnyOneOf(schema));
   }
