@@ -49,54 +49,49 @@ export function mergeAllOf(allOf: SchemaObject[]) {
  */
 function createAnyOneOf(schema: SchemaObject): any {
   const type = schema.oneOf ? "oneOf" : "anyOf";
-  return create("div", {
+  return create("li", {
     children: [
-      create("div", {
-        children: [
-          create("span", {
-            className: "badge badge--info",
-            children: type,
-          }),
-          create("SchemaTabs", {
-            children: schema[type]!.map((anyOneSchema, index) => {
-              const label = anyOneSchema.title
-                ? anyOneSchema.title
-                : `MOD${index + 1}`;
-              const anyOneChildren = [];
+      create("span", {
+        className: "badge badge--info",
+        children: type,
+      }),
+      create("SchemaTabs", {
+        children: schema[type]!.map((anyOneSchema, index) => {
+          const label = anyOneSchema.title
+            ? anyOneSchema.title
+            : `MOD${index + 1}`;
+          const anyOneChildren = [];
 
-              if (anyOneSchema.properties !== undefined) {
-                anyOneChildren.push(createProperties(anyOneSchema));
-              }
+          if (anyOneSchema.properties !== undefined) {
+            anyOneChildren.push(createProperties(anyOneSchema));
+          }
 
-              if (anyOneSchema.allOf !== undefined) {
-                anyOneChildren.push(createNodes(anyOneSchema));
-              }
+          if (anyOneSchema.allOf !== undefined) {
+            anyOneChildren.push(createNodes(anyOneSchema));
+          }
 
-              if (anyOneSchema.items !== undefined) {
-                anyOneChildren.push(createItems(anyOneSchema));
-              }
+          if (anyOneSchema.items !== undefined) {
+            anyOneChildren.push(createItems(anyOneSchema));
+          }
 
-              if (
-                anyOneSchema.type === "string" ||
-                anyOneSchema.type === "number" ||
-                anyOneSchema.type === "integer" ||
-                anyOneSchema.type === "boolean"
-              ) {
-                anyOneChildren.push(createNodes(anyOneSchema));
-              }
+          if (
+            anyOneSchema.type === "string" ||
+            anyOneSchema.type === "number" ||
+            anyOneSchema.type === "integer" ||
+            anyOneSchema.type === "boolean"
+          ) {
+            anyOneChildren.push(createNodes(anyOneSchema));
+          }
+          if (anyOneChildren.length) {
+            return create("TabItem", {
+              label: label,
+              value: `${index}-item-properties`,
+              children: anyOneChildren.filter(Boolean).flat(),
+            });
+          }
 
-              if (anyOneChildren.length) {
-                return create("TabItem", {
-                  label: label,
-                  value: `${index}-item-properties`,
-                  children: anyOneChildren,
-                });
-              }
-
-              return undefined;
-            }),
-          }),
-        ],
+          return undefined;
+        }),
       }),
     ],
   });
@@ -105,14 +100,16 @@ function createAnyOneOf(schema: SchemaObject): any {
 function createProperties(schema: SchemaObject) {
   const discriminator = schema.discriminator;
   return Object.entries(schema.properties!).map(([key, val]) => {
-    return createEdges({
-      name: key,
-      schema: val,
-      required: Array.isArray(schema.required)
-        ? schema.required.includes(key)
-        : false,
-      discriminator,
-    });
+    if (val.readOnly !== true) {
+      return createEdges({
+        name: key,
+        schema: val,
+        required: Array.isArray(schema.required)
+          ? schema.required.includes(key)
+          : false,
+        discriminator,
+      });
+    }
   });
 }
 
@@ -648,12 +645,17 @@ function createEdges({
  * Creates a hierarchical level of a schema tree. Nodes produce edges that can branch into sub-nodes with edges, recursively.
  */
 function createNodes(schema: SchemaObject): any {
+  const nodes = [];
   // if (schema.discriminator !== undefined) {
   //   return createDiscriminator(schema);
   // }
 
+  // if ((schema.oneOf || schema.anyOf) && schema.properties) {
+  //   return [createAnyOneOf(schema), createProperties(schema)];
+  // }
+
   if (schema.oneOf !== undefined || schema.anyOf !== undefined) {
-    return createAnyOneOf(schema);
+    nodes.push(createAnyOneOf(schema));
   }
 
   if (schema.allOf !== undefined) {
@@ -661,21 +663,25 @@ function createNodes(schema: SchemaObject): any {
 
     // allOf seems to always result in properties
     if (mergedSchemas.properties !== undefined) {
-      return createProperties(mergedSchemas);
+      nodes.push(createProperties(mergedSchemas));
     }
   }
 
   if (schema.properties !== undefined) {
-    return createProperties(schema);
+    nodes.push(createProperties(schema));
   }
 
   if (schema.additionalProperties !== undefined) {
-    return createAdditionalProperties(schema);
+    nodes.push(createAdditionalProperties(schema));
   }
 
   // TODO: figure out how to handle array of objects
   if (schema.items !== undefined) {
-    return createItems(schema);
+    nodes.push(createItems(schema));
+  }
+
+  if (nodes.length && nodes.length > 0) {
+    return nodes.filter(Boolean).flat();
   }
 
   // primitive
