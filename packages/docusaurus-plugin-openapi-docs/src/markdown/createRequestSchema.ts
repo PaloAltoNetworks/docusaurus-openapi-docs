@@ -100,16 +100,14 @@ function createAnyOneOf(schema: SchemaObject): any {
 function createProperties(schema: SchemaObject) {
   const discriminator = schema.discriminator;
   return Object.entries(schema.properties!).map(([key, val]) => {
-    if (val.readOnly !== true) {
-      return createEdges({
-        name: key,
-        schema: val,
-        required: Array.isArray(schema.required)
-          ? schema.required.includes(key)
-          : false,
-        discriminator,
-      });
-    }
+    return createEdges({
+      name: key,
+      schema: val,
+      required: Array.isArray(schema.required)
+        ? schema.required.includes(key)
+        : false,
+      discriminator,
+    });
   });
 }
 
