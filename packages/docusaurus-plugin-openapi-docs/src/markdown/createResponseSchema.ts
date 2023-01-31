@@ -220,15 +220,78 @@ function createAdditionalProperties(schema: SchemaObject) {
 // TODO: figure out how to handle array of objects
 function createItems(schema: SchemaObject) {
   if (schema.items?.properties !== undefined) {
-    return createProperties(schema.items);
+    return [
+      create("li", {
+        children: create("div", {
+          style: {
+            fontSize: "var(--ifm-code-font-size)",
+            marginLeft: "-.5rem",
+            paddingBottom: ".5rem",
+          },
+          children: ["Array ["],
+        }),
+      }),
+      createProperties(schema.items),
+      create("li", {
+        children: create("div", {
+          style: {
+            fontSize: "var(--ifm-code-font-size)",
+            marginLeft: "-.5rem",
+          },
+          children: ["]"],
+        }),
+      }),
+    ].flat();
   }
 
   if (schema.items?.additionalProperties !== undefined) {
-    return createAdditionalProperties(schema.items);
+    return [
+      create("li", {
+        children: create("div", {
+          style: {
+            fontSize: "var(--ifm-code-font-size)",
+            marginLeft: "-.5rem",
+            paddingBottom: ".5rem",
+          },
+          children: ["Array ["],
+        }),
+      }),
+      createAdditionalProperties(schema.items),
+      create("li", {
+        children: create("div", {
+          style: {
+            fontSize: "var(--ifm-code-font-size)",
+            marginLeft: "-.5rem",
+          },
+          children: ["]"],
+        }),
+      }),
+    ].flat();
   }
 
   if (schema.items?.oneOf !== undefined || schema.items?.anyOf !== undefined) {
-    return createAnyOneOf(schema.items!);
+    return [
+      create("li", {
+        children: create("div", {
+          style: {
+            fontSize: "var(--ifm-code-font-size)",
+            marginLeft: "-.5rem",
+            paddingBottom: ".5rem",
+          },
+          children: ["Array ["],
+        }),
+      }),
+      createAnyOneOf(schema.items!),
+      create("li", {
+        children: create("div", {
+          style: {
+            fontSize: "var(--ifm-code-font-size)",
+            marginLeft: "-.5rem",
+          },
+          children: ["]"],
+        }),
+      }),
+    ].flat();
   }
 
   if (schema.items?.allOf !== undefined) {
@@ -245,12 +308,29 @@ function createItems(schema: SchemaObject) {
         mergedSchemas.anyOf !== undefined) &&
       mergedSchemas.properties
     ) {
-      return create("div", {
-        children: [
-          createAnyOneOf(mergedSchemas),
-          createProperties(mergedSchemas),
-        ],
-      });
+      return [
+        create("li", {
+          children: create("div", {
+            style: {
+              fontSize: "var(--ifm-code-font-size)",
+              marginLeft: "-.5rem",
+              paddingBottom: ".5rem",
+            },
+            children: ["Array ["],
+          }),
+        }),
+        createAnyOneOf(mergedSchemas),
+        createProperties(mergedSchemas),
+        create("li", {
+          children: create("div", {
+            style: {
+              fontSize: "var(--ifm-code-font-size)",
+              marginLeft: "-.5rem",
+            },
+            children: ["]"],
+          }),
+        }),
+      ].flat();
     }
 
     // Handles only anyOf/oneOf
@@ -258,16 +338,54 @@ function createItems(schema: SchemaObject) {
       mergedSchemas.oneOf !== undefined ||
       mergedSchemas.anyOf !== undefined
     ) {
-      return create("div", {
-        children: [createAnyOneOf(mergedSchemas)],
-      });
+      return [
+        create("li", {
+          children: create("div", {
+            style: {
+              fontSize: "var(--ifm-code-font-size)",
+              marginLeft: "-.5rem",
+              paddingBottom: ".5rem",
+            },
+            children: ["Array ["],
+          }),
+        }),
+        createAnyOneOf(mergedSchemas),
+        create("li", {
+          children: create("div", {
+            style: {
+              fontSize: "var(--ifm-code-font-size)",
+              marginLeft: "-.5rem",
+            },
+            children: ["]"],
+          }),
+        }),
+      ].flat();
     }
 
     // Handles properties
     if (mergedSchemas.properties !== undefined) {
-      return create("div", {
-        children: [createProperties(mergedSchemas)],
-      });
+      return [
+        create("li", {
+          children: create("div", {
+            style: {
+              fontSize: "var(--ifm-code-font-size)",
+              marginLeft: "-.5rem",
+              paddingBottom: ".5rem",
+            },
+            children: ["Array ["],
+          }),
+        }),
+        createProperties(mergedSchemas),
+        create("li", {
+          children: create("div", {
+            style: {
+              fontSize: "var(--ifm-code-font-size)",
+              marginLeft: "-.5rem",
+            },
+            children: ["]"],
+          }),
+        }),
+      ].flat();
     }
   }
 
@@ -277,19 +395,61 @@ function createItems(schema: SchemaObject) {
     schema.items?.type === "integer" ||
     schema.items?.type === "boolean"
   ) {
-    return createNodes(schema.items);
+    return [
+      create("li", {
+        children: create("div", {
+          style: {
+            fontSize: "var(--ifm-code-font-size)",
+            marginLeft: "-.5rem",
+            paddingBottom: ".5rem",
+          },
+          children: ["Array ["],
+        }),
+      }),
+      createNodes(schema.items),
+      create("li", {
+        children: create("div", {
+          style: {
+            fontSize: "var(--ifm-code-font-size)",
+            marginLeft: "-.5rem",
+          },
+          children: ["]"],
+        }),
+      }),
+    ].flat();
   }
 
   // TODO: clean this up or eliminate it?
-  return Object.entries(schema.items!).map(([key, val]) =>
-    createEdges({
-      name: key,
-      schema: val,
-      required: Array.isArray(schema.required)
-        ? schema.required.includes(key)
-        : false,
-    })
-  );
+  return [
+    create("li", {
+      children: create("div", {
+        style: {
+          fontSize: "var(--ifm-code-font-size)",
+          marginLeft: "-.5rem",
+          paddingBottom: ".5rem",
+        },
+        children: ["Array ["],
+      }),
+    }),
+    Object.entries(schema.items!).map(([key, val]) =>
+      createEdges({
+        name: key,
+        schema: val,
+        required: Array.isArray(schema.required)
+          ? schema.required.includes(key)
+          : false,
+      })
+    ),
+    create("li", {
+      children: create("div", {
+        style: {
+          fontSize: "var(--ifm-code-font-size)",
+          marginLeft: "-.5rem",
+        },
+        children: ["]"],
+      }),
+    }),
+  ].flat();
 }
 
 /**
@@ -656,9 +816,12 @@ function createNodes(schema: SchemaObject): any {
   if (schema.allOf !== undefined) {
     const { mergedSchemas } = mergeAllOf(schema.allOf);
 
-    // allOf seems to always result in properties
     if (mergedSchemas.properties !== undefined) {
       nodes.push(createProperties(mergedSchemas));
+    }
+
+    if (mergedSchemas.items !== undefined) {
+      nodes.push(createItems(mergedSchemas));
     }
   }
 
