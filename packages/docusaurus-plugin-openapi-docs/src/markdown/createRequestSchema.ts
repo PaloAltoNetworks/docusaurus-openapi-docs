@@ -954,12 +954,6 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
                   style: { textAlign: "left" },
                   children: [
                     create("strong", { children: `${title}` }),
-                    guard(firstBody.type === "array", (format) =>
-                      create("span", {
-                        style: { opacity: "0.6" },
-                        children: ` array`,
-                      })
-                    ),
                     guard(body.required && body.required === true, () => [
                       create("strong", {
                         style: {
