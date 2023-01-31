@@ -393,7 +393,8 @@ function createItems(schema: SchemaObject) {
     schema.items?.type === "string" ||
     schema.items?.type === "number" ||
     schema.items?.type === "integer" ||
-    schema.items?.type === "boolean"
+    schema.items?.type === "boolean" ||
+    schema.items?.type === "object"
   ) {
     return [
       create("li", {
