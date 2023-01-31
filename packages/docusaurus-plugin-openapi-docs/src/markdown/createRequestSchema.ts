@@ -83,6 +83,36 @@ function createAnyOneOf(schema: SchemaObject): any {
             anyOneChildren.push(createNodes(anyOneSchema));
           }
           if (anyOneChildren.length) {
+            if (schema.type === "array") {
+              return create("TabItem", {
+                label: label,
+                value: `${index}-item-properties`,
+                children: [
+                  create("li", {
+                    children: create("div", {
+                      style: {
+                        fontSize: "var(--ifm-code-font-size)",
+                        marginLeft: "-.5rem",
+                        paddingBottom: ".5rem",
+                      },
+                      children: ["Array ["],
+                    }),
+                  }),
+                  anyOneChildren,
+                  create("li", {
+                    children: create("div", {
+                      style: {
+                        fontSize: "var(--ifm-code-font-size)",
+                        marginLeft: "-.5rem",
+                      },
+                      children: ["]"],
+                    }),
+                  }),
+                ]
+                  .filter(Boolean)
+                  .flat(),
+              });
+            }
             return create("TabItem", {
               label: label,
               value: `${index}-item-properties`,
