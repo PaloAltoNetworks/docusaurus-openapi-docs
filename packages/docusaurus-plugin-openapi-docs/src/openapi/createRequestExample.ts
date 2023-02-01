@@ -6,10 +6,10 @@
  * ========================================================================== */
 
 import chalk from "chalk";
+import merge from "lodash/merge";
 
 import { mergeAllOf } from "../markdown/createRequestSchema";
 import { SchemaObject } from "./types";
-import merge from "lodash/merge";
 
 interface OASTypeToTypeMap {
   string: string;
