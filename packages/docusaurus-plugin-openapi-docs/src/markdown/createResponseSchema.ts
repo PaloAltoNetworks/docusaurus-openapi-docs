@@ -98,6 +98,7 @@ function createAnyOneOf(schema: SchemaObject): any {
                     children: create("div", {
                       style: {
                         fontSize: "var(--ifm-code-font-size)",
+                        opacity: "0.6",
                         marginLeft: "-.5rem",
                         paddingBottom: ".5rem",
                       },
@@ -109,6 +110,7 @@ function createAnyOneOf(schema: SchemaObject): any {
                     children: create("div", {
                       style: {
                         fontSize: "var(--ifm-code-font-size)",
+                        opacity: "0.6",
                         marginLeft: "-.5rem",
                       },
                       children: ["]"],
@@ -255,6 +257,7 @@ function createItems(schema: SchemaObject) {
         children: create("div", {
           style: {
             fontSize: "var(--ifm-code-font-size)",
+            opacity: "0.6",
             marginLeft: "-.5rem",
             paddingBottom: ".5rem",
           },
@@ -266,6 +269,7 @@ function createItems(schema: SchemaObject) {
         children: create("div", {
           style: {
             fontSize: "var(--ifm-code-font-size)",
+            opacity: "0.6",
             marginLeft: "-.5rem",
           },
           children: ["]"],
@@ -305,6 +309,7 @@ function createItems(schema: SchemaObject) {
         children: create("div", {
           style: {
             fontSize: "var(--ifm-code-font-size)",
+            opacity: "0.6",
             marginLeft: "-.5rem",
             paddingBottom: ".5rem",
           },
@@ -316,6 +321,7 @@ function createItems(schema: SchemaObject) {
         children: create("div", {
           style: {
             fontSize: "var(--ifm-code-font-size)",
+            opacity: "0.6",
             marginLeft: "-.5rem",
           },
           children: ["]"],
@@ -343,6 +349,7 @@ function createItems(schema: SchemaObject) {
           children: create("div", {
             style: {
               fontSize: "var(--ifm-code-font-size)",
+              opacity: "0.6",
               marginLeft: "-.5rem",
               paddingBottom: ".5rem",
             },
@@ -355,6 +362,7 @@ function createItems(schema: SchemaObject) {
           children: create("div", {
             style: {
               fontSize: "var(--ifm-code-font-size)",
+              opacity: "0.6",
               marginLeft: "-.5rem",
             },
             children: ["]"],
@@ -373,6 +381,7 @@ function createItems(schema: SchemaObject) {
           children: create("div", {
             style: {
               fontSize: "var(--ifm-code-font-size)",
+              opacity: "0.6",
               marginLeft: "-.5rem",
               paddingBottom: ".5rem",
             },
@@ -384,6 +393,7 @@ function createItems(schema: SchemaObject) {
           children: create("div", {
             style: {
               fontSize: "var(--ifm-code-font-size)",
+              opacity: "0.6",
               marginLeft: "-.5rem",
             },
             children: ["]"],
@@ -399,6 +409,7 @@ function createItems(schema: SchemaObject) {
           children: create("div", {
             style: {
               fontSize: "var(--ifm-code-font-size)",
+              opacity: "0.6",
               marginLeft: "-.5rem",
               paddingBottom: ".5rem",
             },
@@ -410,6 +421,7 @@ function createItems(schema: SchemaObject) {
           children: create("div", {
             style: {
               fontSize: "var(--ifm-code-font-size)",
+              opacity: "0.6",
               marginLeft: "-.5rem",
             },
             children: ["]"],
@@ -431,6 +443,7 @@ function createItems(schema: SchemaObject) {
         children: create("div", {
           style: {
             fontSize: "var(--ifm-code-font-size)",
+            opacity: "0.6",
             marginLeft: "-.5rem",
             paddingBottom: ".5rem",
           },
@@ -442,6 +455,7 @@ function createItems(schema: SchemaObject) {
         children: create("div", {
           style: {
             fontSize: "var(--ifm-code-font-size)",
+            opacity: "0.6",
             marginLeft: "-.5rem",
           },
           children: ["]"],
@@ -456,6 +470,7 @@ function createItems(schema: SchemaObject) {
       children: create("div", {
         style: {
           fontSize: "var(--ifm-code-font-size)",
+          opacity: "0.6",
           marginLeft: "-.5rem",
           paddingBottom: ".5rem",
         },
@@ -475,6 +490,7 @@ function createItems(schema: SchemaObject) {
       children: create("div", {
         style: {
           fontSize: "var(--ifm-code-font-size)",
+          opacity: "0.6",
           marginLeft: "-.5rem",
         },
         children: ["]"],
