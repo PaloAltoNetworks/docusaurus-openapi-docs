@@ -9,6 +9,7 @@ import chalk from "chalk";
 
 import { mergeAllOf } from "../markdown/createResponseSchema";
 import { SchemaObject } from "./types";
+import merge from "lodash/merge";
 
 interface OASTypeToTypeMap {
   string: string;
@@ -77,7 +78,9 @@ function sampleResponseFromProp(name: string, prop: any, obj: any): any {
 
 export const sampleResponseFromSchema = (schema: SchemaObject = {}): any => {
   try {
-    let { type, example, allOf, oneOf, anyOf, properties, items } = schema;
+    // deep copy schema before processing
+    let schemaCopy = JSON.parse(JSON.stringify(schema));
+    let { type, example, allOf, properties, items, oneOf, anyOf } = schemaCopy;
 
     if (example !== undefined) {
       return example;
@@ -96,15 +99,30 @@ export const sampleResponseFromSchema = (schema: SchemaObject = {}): any => {
           }
         }
       }
+      if (properties) {
+        const combinedSchemas = merge(schemaCopy, mergedSchemas);
+        delete combinedSchemas.allOf;
+        return sampleResponseFromSchema(combinedSchemas);
+      }
       return sampleResponseFromSchema(mergedSchemas);
     }
 
     if (oneOf) {
+      if (properties) {
+        const combinedSchemas = merge(schemaCopy, oneOf[0]);
+        delete combinedSchemas.oneOf;
+        return sampleResponseFromSchema(combinedSchemas);
+      }
       // Just go with first schema
       return sampleResponseFromSchema(oneOf[0]);
     }
 
     if (anyOf) {
+      if (properties) {
+        const combinedSchemas = merge(schemaCopy, anyOf[0]);
+        delete combinedSchemas.anyOf;
+        return sampleResponseFromSchema(combinedSchemas);
+      }
       // Just go with first schema
       return sampleResponseFromSchema(anyOf[0]);
     }
@@ -121,9 +139,9 @@ export const sampleResponseFromSchema = (schema: SchemaObject = {}): any => {
 
     if (type === "object") {
       let obj: any = {};
-      for (let [name, prop] of Object.entries(properties ?? {})) {
+      for (let [name, prop] of Object.entries(properties ?? {}) as any) {
         if (prop.properties) {
-          for (const [key, value] of Object.entries(prop.properties)) {
+          for (const [key, value] of Object.entries(prop.properties) as any) {
             if (
               (value.writeOnly && value.writeOnly === true) ||
               value.deprecated
@@ -134,7 +152,9 @@ export const sampleResponseFromSchema = (schema: SchemaObject = {}): any => {
         }
 
         if (prop.items && prop.items.properties) {
-          for (const [key, value] of Object.entries(prop.items.properties)) {
+          for (const [key, value] of Object.entries(
+            prop.items.properties
+          ) as any) {
             if (
               (value.writeOnly && value.writeOnly === true) ||
               value.deprecated
@@ -160,28 +180,31 @@ export const sampleResponseFromSchema = (schema: SchemaObject = {}): any => {
 
     if (type === "array") {
       if (Array.isArray(items?.anyOf)) {
-        return items?.anyOf.map((item) => sampleResponseFromSchema(item));
+        return items?.anyOf.map((item: any) => sampleResponseFromSchema(item));
       }
 
       if (Array.isArray(items?.oneOf)) {
-        return items?.oneOf.map((item) => sampleResponseFromSchema(item));
+        return items?.oneOf.map((item: any) => sampleResponseFromSchema(item));
       }
 
       return [sampleResponseFromSchema(items)];
     }
 
-    if (schema.enum) {
-      if (schema.default) {
-        return schema.default;
+    if (schemaCopy.enum) {
+      if (schemaCopy.default) {
+        return schemaCopy.default;
       }
-      return normalizeArray(schema.enum)[0];
+      return normalizeArray(schemaCopy.enum)[0];
     }
 
-    if ((schema.writeOnly && schema.writeOnly === true) || schema.deprecated) {
+    if (
+      (schemaCopy.writeOnly && schemaCopy.writeOnly === true) ||
+      schemaCopy.deprecated
+    ) {
       return undefined;
     }
 
-    return primitive(schema);
+    return primitive(schemaCopy);
   } catch (err) {
     console.error(
       chalk.yellow("WARNING: failed to create example from schema object:", err)
