@@ -11,6 +11,10 @@ import { createDetails } from "./createDetails";
 import { createDetailsSummary } from "./createDetailsSummary";
 import { getQualifierMessage, getSchemaName } from "./schema";
 import { create, guard } from "./utils";
+import {
+  createClosingArrayBracket,
+  createOpeningArrayBracket,
+} from "./createArrayBracket";
 
 const jsonSchemaMergeAllOf = require("json-schema-merge-allof");
 
@@ -88,28 +92,9 @@ function createAnyOneOf(schema: SchemaObject): any {
                 label: label,
                 value: `${index}-item-properties`,
                 children: [
-                  create("li", {
-                    children: create("div", {
-                      style: {
-                        fontSize: "var(--ifm-code-font-size)",
-                        opacity: "0.6",
-                        marginLeft: "-.5rem",
-                        paddingBottom: ".5rem",
-                      },
-                      children: ["Array ["],
-                    }),
-                  }),
+                  createOpeningArrayBracket(),
                   anyOneChildren,
-                  create("li", {
-                    children: create("div", {
-                      style: {
-                        fontSize: "var(--ifm-code-font-size)",
-                        opacity: "0.6",
-                        marginLeft: "-.5rem",
-                      },
-                      children: ["]"],
-                    }),
-                  }),
+                  createClosingArrayBracket(),
                 ]
                   .filter(Boolean)
                   .flat(),
@@ -247,82 +232,25 @@ function createAdditionalProperties(schema: SchemaObject) {
 function createItems(schema: SchemaObject) {
   if (schema.items?.properties !== undefined) {
     return [
-      create("li", {
-        children: create("div", {
-          style: {
-            fontSize: "var(--ifm-code-font-size)",
-            opacity: "0.6",
-            marginLeft: "-.5rem",
-            paddingBottom: ".5rem",
-          },
-          children: ["Array ["],
-        }),
-      }),
+      createOpeningArrayBracket(),
       createProperties(schema.items),
-      create("li", {
-        children: create("div", {
-          style: {
-            fontSize: "var(--ifm-code-font-size)",
-            opacity: "0.6",
-            marginLeft: "-.5rem",
-          },
-          children: ["]"],
-        }),
-      }),
+      createClosingArrayBracket(),
     ].flat();
   }
 
   if (schema.items?.additionalProperties !== undefined) {
     return [
-      create("li", {
-        children: create("div", {
-          style: {
-            fontSize: "var(--ifm-code-font-size)",
-            opacity: "0.6",
-            marginLeft: "-.5rem",
-            paddingBottom: ".5rem",
-          },
-          children: ["Array ["],
-        }),
-      }),
+      createOpeningArrayBracket(),
       createAdditionalProperties(schema.items),
-      create("li", {
-        children: create("div", {
-          style: {
-            fontSize: "var(--ifm-code-font-size)",
-            opacity: "0.6",
-            marginLeft: "-.5rem",
-          },
-          children: ["]"],
-        }),
-      }),
+      createClosingArrayBracket(),
     ].flat();
   }
 
   if (schema.items?.oneOf !== undefined || schema.items?.anyOf !== undefined) {
     return [
-      create("li", {
-        children: create("div", {
-          style: {
-            fontSize: "var(--ifm-code-font-size)",
-            opacity: "0.6",
-            marginLeft: "-.5rem",
-            paddingBottom: ".5rem",
-          },
-          children: ["Array ["],
-        }),
-      }),
+      createOpeningArrayBracket(),
       createAnyOneOf(schema.items!),
-      create("li", {
-        children: create("div", {
-          style: {
-            fontSize: "var(--ifm-code-font-size)",
-            opacity: "0.6",
-            marginLeft: "-.5rem",
-          },
-          children: ["]"],
-        }),
-      }),
+      createClosingArrayBracket(),
     ].flat();
   }
 
@@ -341,29 +269,10 @@ function createItems(schema: SchemaObject) {
       mergedSchemas.properties
     ) {
       return [
-        create("li", {
-          children: create("div", {
-            style: {
-              fontSize: "var(--ifm-code-font-size)",
-              opacity: "0.6",
-              marginLeft: "-.5rem",
-              paddingBottom: ".5rem",
-            },
-            children: ["Array ["],
-          }),
-        }),
+        createOpeningArrayBracket(),
         createAnyOneOf(mergedSchemas),
         createProperties(mergedSchemas),
-        create("li", {
-          children: create("div", {
-            style: {
-              fontSize: "var(--ifm-code-font-size)",
-              opacity: "0.6",
-              marginLeft: "-.5rem",
-            },
-            children: ["]"],
-          }),
-        }),
+        createClosingArrayBracket(),
       ].flat();
     }
 
@@ -373,56 +282,18 @@ function createItems(schema: SchemaObject) {
       mergedSchemas.anyOf !== undefined
     ) {
       return [
-        create("li", {
-          children: create("div", {
-            style: {
-              fontSize: "var(--ifm-code-font-size)",
-              opacity: "0.6",
-              marginLeft: "-.5rem",
-              paddingBottom: ".5rem",
-            },
-            children: ["Array ["],
-          }),
-        }),
+        createOpeningArrayBracket(),
         createAnyOneOf(mergedSchemas),
-        create("li", {
-          children: create("div", {
-            style: {
-              fontSize: "var(--ifm-code-font-size)",
-              opacity: "0.6",
-              marginLeft: "-.5rem",
-            },
-            children: ["]"],
-          }),
-        }),
+        createClosingArrayBracket(),
       ].flat();
     }
 
     // Handles properties
     if (mergedSchemas.properties !== undefined) {
       return [
-        create("li", {
-          children: create("div", {
-            style: {
-              fontSize: "var(--ifm-code-font-size)",
-              opacity: "0.6",
-              marginLeft: "-.5rem",
-              paddingBottom: ".5rem",
-            },
-            children: ["Array ["],
-          }),
-        }),
+        createOpeningArrayBracket(),
         createProperties(mergedSchemas),
-        create("li", {
-          children: create("div", {
-            style: {
-              fontSize: "var(--ifm-code-font-size)",
-              opacity: "0.6",
-              marginLeft: "-.5rem",
-            },
-            children: ["]"],
-          }),
-        }),
+        createClosingArrayBracket(),
       ].flat();
     }
   }
@@ -435,44 +306,15 @@ function createItems(schema: SchemaObject) {
     schema.items?.type === "object"
   ) {
     return [
-      create("li", {
-        children: create("div", {
-          style: {
-            fontSize: "var(--ifm-code-font-size)",
-            opacity: "0.6",
-            marginLeft: "-.5rem",
-            paddingBottom: ".5rem",
-          },
-          children: ["Array ["],
-        }),
-      }),
+      createOpeningArrayBracket(),
       createNodes(schema.items),
-      create("li", {
-        children: create("div", {
-          style: {
-            fontSize: "var(--ifm-code-font-size)",
-            opacity: "0.6",
-            marginLeft: "-.5rem",
-          },
-          children: ["]"],
-        }),
-      }),
+      createClosingArrayBracket(),
     ].flat();
   }
 
   // TODO: clean this up or eliminate it?
   return [
-    create("li", {
-      children: create("div", {
-        style: {
-          fontSize: "var(--ifm-code-font-size)",
-          opacity: "0.6",
-          marginLeft: "-.5rem",
-          paddingBottom: ".5rem",
-        },
-        children: ["Array ["],
-      }),
-    }),
+    createOpeningArrayBracket(),
     Object.entries(schema.items!).map(([key, val]) =>
       createEdges({
         name: key,
@@ -482,16 +324,7 @@ function createItems(schema: SchemaObject) {
           : false,
       })
     ),
-    create("li", {
-      children: create("div", {
-        style: {
-          fontSize: "var(--ifm-code-font-size)",
-          opacity: "0.6",
-          marginLeft: "-.5rem",
-        },
-        children: ["]"],
-      }),
-    }),
+    createClosingArrayBracket(),
   ].flat();
 }
 
