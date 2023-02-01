@@ -6,15 +6,15 @@
  * ========================================================================== */
 
 import { MediaTypeObject, SchemaObject } from "../openapi/types";
+import {
+  createClosingArrayBracket,
+  createOpeningArrayBracket,
+} from "./createArrayBracket";
 import { createDescription } from "./createDescription";
 import { createDetails } from "./createDetails";
 import { createDetailsSummary } from "./createDetailsSummary";
 import { getQualifierMessage, getSchemaName } from "./schema";
 import { create, guard } from "./utils";
-import {
-  createClosingArrayBracket,
-  createOpeningArrayBracket,
-} from "./createArrayBracket";
 
 const jsonSchemaMergeAllOf = require("json-schema-merge-allof");
 
