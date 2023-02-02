@@ -1060,12 +1060,10 @@ components:
           description: The name given to a pet
           type: string
           example: Guru
-          nullable: true
         photoUrls:
           description: The list of URL to a cute photos featuring pet
           type: array
           maxItems: 20
-          nullable: true
           xml:
             name: photoUrl
             wrapped: true
@@ -1079,7 +1077,6 @@ components:
           description: Tags attached to the pet
           type: array
           minItems: 1
-          nullable: true
           xml:
             name: tag
             wrapped: true
@@ -1104,7 +1101,6 @@ components:
     Tag:
       title: tag
       type: object
-      nullable: true
       properties:
         id:
           description: Tag ID

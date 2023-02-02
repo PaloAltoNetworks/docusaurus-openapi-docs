@@ -72,16 +72,6 @@ const sidebars = {
     },
     {
       type: "category",
-      label: "Address Groups",
-      link: {
-        type: "generated-index",
-        title: "Address Groups",
-        slug: "/category/config-api",
-      },
-      items: require("./docs/config/sidebar.js"),
-    },
-    {
-      type: "category",
       label: "Burgers",
       link: {
         type: "generated-index",
