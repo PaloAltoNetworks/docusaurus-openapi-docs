@@ -1,3 +1,21 @@
+## 1.5.2 (Feb 2, 2023)
+
+High level enhancements
+
+- Improved support for rendering items/arrays
+- Fixed issue that prevented some schemas from fully-rendering ([#397](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/397))
+- Added support for `nullable`
+
+Other enhancements and bug fixes
+
+- Cleanup API doc demos ([#400](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/400))
+- [Bug] Support multiple same-level node types and improve items/array support ([#397](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/397))
+- Bump ua-parser-js from 0.7.32 to 0.7.33 ([#395](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/395))
+- Add support for nullable ([#393](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/393))
+- Bump cookiejar from 2.1.3 to 2.1.4 ([#390](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/390))
+- Update intro/README ([#384](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/384))
+- Update a link in the credits ([#382](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/382))
+
 ## 1.5.1 (Jan 10, 2023)
 
 High level enhancements
