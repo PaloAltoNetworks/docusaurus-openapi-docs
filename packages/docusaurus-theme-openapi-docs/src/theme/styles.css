@@ -78,8 +78,12 @@
 
 .theme-api-markdown details li {
   list-style: none;
-  padding-bottom: 5px;
   padding-top: 5px;
+}
+
+.theme-api-markdown .tabs__item {
+  padding-bottom: unset;
+  padding-top: unset;
 }
 
 .theme-api-markdown details > div > div {
@@ -245,6 +249,8 @@
   color: var(--ifm-color-success);
   padding-left: 1.4rem;
   padding-right: 1.4rem;
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
 }
 
 .code__tab--python.tabs__item--active {
@@ -269,6 +275,8 @@
   color: var(--ifm-color-info);
   padding-left: 1.4rem;
   padding-right: 1.4rem;
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
 }
 
 .code__tab--go.tabs__item--active {
@@ -293,6 +301,8 @@
   color: var(--ifm-color-warning);
   padding-left: 1.4rem;
   padding-right: 1.4rem;
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
 }
 
 .code__tab--javascript.tabs__item--active {
@@ -317,6 +327,8 @@
   color: var(--ifm-color-danger);
   padding-left: 1.4rem;
   padding-right: 1.4rem;
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
 }
 
 .code__tab--bash.tabs__item--active {
@@ -341,6 +353,8 @@
   color: var(--ifm-color-danger);
   padding-left: 1.4rem;
   padding-right: 1.4rem;
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
 }
 
 .code__tab--ruby.tabs__item--active {
@@ -365,6 +379,8 @@
   color: var(--ifm-color-gray-500);
   padding-left: 1.4rem;
   padding-right: 1.4rem;
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
 }
 
 .code__tab--csharp.tabs__item--active {
@@ -389,6 +405,8 @@
   color: var(--ifm-color-success);
   padding-left: 1.4rem;
   padding-right: 1.4rem;
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
 }
 
 .code__tab--nodejs.tabs__item--active {
@@ -413,6 +431,8 @@
   color: var(--ifm-color-gray-500);
   padding-left: 1.4rem;
   padding-right: 1.4rem;
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
 }
 
 .code__tab--php.tabs__item--active {

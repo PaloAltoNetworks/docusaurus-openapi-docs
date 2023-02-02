@@ -103,3 +103,8 @@
     width: 100%;
   }
 }
+
+.marginVertical {
+  margin-top: 1rem !important;
+  margin-bottom: unset !important;
+}

@@ -6,6 +6,10 @@
  * ========================================================================== */
 
 import { MediaTypeObject, SchemaObject } from "../openapi/types";
+import {
+  createClosingArrayBracket,
+  createOpeningArrayBracket,
+} from "./createArrayBracket";
 import { createDescription } from "./createDescription";
 import { createDetails } from "./createDetails";
 import { createDetailsSummary } from "./createDetailsSummary";
@@ -54,54 +58,63 @@ export function mergeAllOf(allOf: SchemaObject[]) {
  */
 function createAnyOneOf(schema: SchemaObject): any {
   const type = schema.oneOf ? "oneOf" : "anyOf";
-  return create("div", {
+  return create("li", {
     children: [
-      create("div", {
-        children: [
-          create("span", {
-            className: "badge badge--info",
-            children: type,
-          }),
-          create("SchemaTabs", {
-            children: schema[type]!.map((anyOneSchema, index) => {
-              const label = anyOneSchema.title
-                ? anyOneSchema.title
-                : `MOD${index + 1}`;
-              const anyOneChildren = [];
+      create("span", {
+        className: "badge badge--info",
+        children: type,
+      }),
+      create("SchemaTabs", {
+        children: schema[type]!.map((anyOneSchema, index) => {
+          const label = anyOneSchema.title
+            ? anyOneSchema.title
+            : `MOD${index + 1}`;
+          const anyOneChildren = [];
 
-              if (anyOneSchema.properties !== undefined) {
-                anyOneChildren.push(createProperties(anyOneSchema));
-              }
+          if (anyOneSchema.properties !== undefined) {
+            anyOneChildren.push(createProperties(anyOneSchema));
+          }
 
-              if (anyOneSchema.allOf !== undefined) {
-                anyOneChildren.push(createNodes(anyOneSchema));
-              }
+          if (anyOneSchema.allOf !== undefined) {
+            anyOneChildren.push(createNodes(anyOneSchema));
+          }
 
-              if (anyOneSchema.items !== undefined) {
-                anyOneChildren.push(createItems(anyOneSchema));
-              }
+          if (anyOneSchema.items !== undefined) {
+            anyOneChildren.push(createItems(anyOneSchema));
+          }
 
-              if (
-                anyOneSchema.type === "string" ||
-                anyOneSchema.type === "number" ||
-                anyOneSchema.type === "integer" ||
-                anyOneSchema.type === "boolean"
-              ) {
-                anyOneChildren.push(createNodes(anyOneSchema));
-              }
+          if (
+            anyOneSchema.type === "string" ||
+            anyOneSchema.type === "number" ||
+            anyOneSchema.type === "integer" ||
+            anyOneSchema.type === "boolean"
+          ) {
+            anyOneChildren.push(createNodes(anyOneSchema));
+          }
 
-              if (anyOneChildren.length) {
-                return create("TabItem", {
-                  label: label,
-                  value: `${index}-item-properties`,
-                  children: anyOneChildren,
-                });
-              }
+          if (anyOneChildren.length) {
+            if (schema.type === "array") {
+              return create("TabItem", {
+                label: label,
+                value: `${index}-item-properties`,
+                children: [
+                  createOpeningArrayBracket(),
+                  anyOneChildren,
+                  createClosingArrayBracket(),
+                ]
+                  .filter(Boolean)
+                  .flat(),
+              });
+            }
+            return create("TabItem", {
+              label: label,
+              value: `${index}-item-properties`,
+              children: anyOneChildren,
+            });
+          }
 
-              return undefined;
-            }),
-          }),
-        ],
+          return undefined;
+        }),
       }),
     ],
   });
@@ -152,11 +165,11 @@ function createAdditionalProperties(schema: SchemaObject) {
   // }
 
   if (
-    schema.additionalProperties?.type === "string" ||
-    schema.additionalProperties?.type === "object" ||
-    schema.additionalProperties?.type === "boolean" ||
-    schema.additionalProperties?.type === "integer" ||
-    schema.additionalProperties?.type === "number"
+    (schema.additionalProperties?.type as string) === "string" ||
+    (schema.additionalProperties?.type as string) === "object" ||
+    (schema.additionalProperties?.type as string) === "boolean" ||
+    (schema.additionalProperties?.type as string) === "integer" ||
+    (schema.additionalProperties?.type as string) === "number"
   ) {
     const type = schema.additionalProperties?.type;
     const additionalProperties =
@@ -224,15 +237,27 @@ function createAdditionalProperties(schema: SchemaObject) {
 // TODO: figure out how to handle array of objects
 function createItems(schema: SchemaObject) {
   if (schema.items?.properties !== undefined) {
-    return createProperties(schema.items);
+    return [
+      createOpeningArrayBracket(),
+      createProperties(schema.items),
+      createClosingArrayBracket(),
+    ].flat();
   }
 
   if (schema.items?.additionalProperties !== undefined) {
-    return createAdditionalProperties(schema.items);
+    return [
+      createOpeningArrayBracket(),
+      createAdditionalProperties(schema.items),
+      createClosingArrayBracket(),
+    ].flat();
   }
 
   if (schema.items?.oneOf !== undefined || schema.items?.anyOf !== undefined) {
-    return createAnyOneOf(schema.items!);
+    return [
+      createOpeningArrayBracket(),
+      createAnyOneOf(schema.items!),
+      createClosingArrayBracket(),
+    ].flat();
   }
 
   if (schema.items?.allOf !== undefined) {
@@ -249,12 +274,12 @@ function createItems(schema: SchemaObject) {
         mergedSchemas.anyOf !== undefined) &&
       mergedSchemas.properties
     ) {
-      return create("div", {
-        children: [
-          createAnyOneOf(mergedSchemas),
-          createProperties(mergedSchemas),
-        ],
-      });
+      return [
+        createOpeningArrayBracket(),
+        createAnyOneOf(mergedSchemas),
+        createProperties(mergedSchemas),
+        createClosingArrayBracket(),
+      ].flat();
     }
 
     // Handles only anyOf/oneOf
@@ -262,16 +287,20 @@ function createItems(schema: SchemaObject) {
       mergedSchemas.oneOf !== undefined ||
       mergedSchemas.anyOf !== undefined
     ) {
-      return create("div", {
-        children: [createAnyOneOf(mergedSchemas)],
-      });
+      return [
+        createOpeningArrayBracket(),
+        createAnyOneOf(mergedSchemas),
+        createClosingArrayBracket(),
+      ].flat();
     }
 
     // Handles properties
     if (mergedSchemas.properties !== undefined) {
-      return create("div", {
-        children: [createProperties(mergedSchemas)],
-      });
+      return [
+        createOpeningArrayBracket(),
+        createProperties(mergedSchemas),
+        createClosingArrayBracket(),
+      ].flat();
     }
   }
 
@@ -279,21 +308,30 @@ function createItems(schema: SchemaObject) {
     schema.items?.type === "string" ||
     schema.items?.type === "number" ||
     schema.items?.type === "integer" ||
-    schema.items?.type === "boolean"
+    schema.items?.type === "boolean" ||
+    schema.items?.type === "object"
   ) {
-    return createNodes(schema.items);
+    return [
+      createOpeningArrayBracket(),
+      createNodes(schema.items),
+      createClosingArrayBracket(),
+    ].flat();
   }
 
   // TODO: clean this up or eliminate it?
-  return Object.entries(schema.items!).map(([key, val]) =>
-    createEdges({
-      name: key,
-      schema: val,
-      required: Array.isArray(schema.required)
-        ? schema.required.includes(key)
-        : false,
-    })
-  );
+  return [
+    createOpeningArrayBracket(),
+    Object.entries(schema.items!).map(([key, val]) =>
+      createEdges({
+        name: key,
+        schema: val,
+        required: Array.isArray(schema.required)
+          ? schema.required.includes(key)
+          : false,
+      })
+    ),
+    createClosingArrayBracket(),
+  ].flat();
 }
 
 /**
@@ -648,34 +686,42 @@ function createEdges({
  * Creates a hierarchical level of a schema tree. Nodes produce edges that can branch into sub-nodes with edges, recursively.
  */
 function createNodes(schema: SchemaObject): any {
+  const nodes = [];
   // if (schema.discriminator !== undefined) {
   //   return createDiscriminator(schema);
   // }
 
   if (schema.oneOf !== undefined || schema.anyOf !== undefined) {
-    return createAnyOneOf(schema);
+    nodes.push(createAnyOneOf(schema));
   }
 
   if (schema.allOf !== undefined) {
     const { mergedSchemas } = mergeAllOf(schema.allOf);
-    // allOf seems to always result in properties
+
     if (mergedSchemas.properties !== undefined) {
-      return createProperties(mergedSchemas);
+      nodes.push(createProperties(mergedSchemas));
+    }
+
+    if (mergedSchemas.items !== undefined) {
+      nodes.push(createItems(mergedSchemas));
     }
   }
 
   if (schema.properties !== undefined) {
-    return createProperties(schema);
+    nodes.push(createProperties(schema));
   }
 
-  // Could be set to false to just check if evals to true
-  if (schema.additionalProperties) {
-    return createAdditionalProperties(schema);
+  if (schema.additionalProperties !== undefined) {
+    nodes.push(createAdditionalProperties(schema));
   }
 
   // TODO: figure out how to handle array of objects
   if (schema.items !== undefined) {
-    return createItems(schema);
+    nodes.push(createItems(schema));
+  }
+
+  if (nodes.length && nodes.length > 0) {
+    return nodes.filter(Boolean).flat();
   }
 
   // primitive
@@ -781,12 +827,6 @@ export function createResponseSchema({ title, body, ...rest }: Props) {
                             style: { textAlign: "left" },
                             children: [
                               create("strong", { children: `${title}` }),
-                              guard(firstBody!.type === "array", (format) =>
-                                create("span", {
-                                  style: { opacity: "0.6" },
-                                  children: ` array`,
-                                })
-                              ),
                               guard(
                                 body.required && body.required === true,
                                 () => [

@@ -120,14 +120,10 @@ export function createResponseExamples(
   }
   return Object.entries(responseExamples).map(
     ([exampleName, exampleValue]: any) => {
-      const camelToSpaceName = exampleName.replace(/([A-Z])/g, " $1");
-      let finalFormattedName =
-        camelToSpaceName.charAt(0).toUpperCase() + camelToSpaceName.slice(1);
-
       if (typeof exampleValue.value === "object") {
         return create("TabItem", {
-          label: `${finalFormattedName}`,
-          value: `${finalFormattedName}`,
+          label: `${exampleName}`,
+          value: `${exampleName}`,
           children: [
             guard(exampleValue.summary, (summary) => [
               create("p", {
@@ -142,8 +138,8 @@ export function createResponseExamples(
         });
       }
       return create("TabItem", {
-        label: `${finalFormattedName}`,
-        value: `${finalFormattedName}`,
+        label: `${exampleName}`,
+        value: `${exampleName}`,
         children: [
           guard(exampleValue.summary, (summary) => [
             create("p", {
