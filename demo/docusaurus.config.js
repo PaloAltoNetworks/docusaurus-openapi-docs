@@ -184,6 +184,11 @@ const config = {
         appId: "J0EABTYI1A",
         indexName: "docusaurus-openapi",
       },
+      announcementBar: {
+        id: "announcementBar_1",
+        content:
+          "⚠️ The OpenAPI docs plugin is currently not compatible with Docusaurus v2.3.0. We are working on a fix. ⚠️",
+      },
     }),
 
   plugins: [
