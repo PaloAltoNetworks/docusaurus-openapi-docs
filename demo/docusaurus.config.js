@@ -140,7 +140,7 @@ const config = {
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
-        additionalLanguages: ["ruby", "csharp", "php"],
+        additionalLanguages: ["ruby", "csharp", "php", "java"],
       },
       languageTabs: [
         {
@@ -178,6 +178,12 @@ const config = {
         //   language: "php",
         //   logoClass: "php",
         // },
+        {
+          highlight: "java",
+          language: "java",
+          logoClass: "java",
+          variant: "Unirest",
+        },
       ],
       algolia: {
         apiKey: "441074cace987cbf4640c039ebed303c",

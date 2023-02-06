@@ -100,6 +100,16 @@ export const languageSet: Language[] = [
     },
     variant: "cURL",
   },
+  {
+    highlight: "java",
+    language: "java",
+    logoClass: "java",
+    options: {
+      followRedirect: true,
+      trimRequestBody: true,
+    },
+    variant: "OkHttp",
+  },
 ];
 
 export interface Props {

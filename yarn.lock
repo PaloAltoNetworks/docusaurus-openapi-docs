@@ -3101,10 +3101,10 @@
     path-browserify "1.0.1"
     yaml "1.10.2"
 
-"@paloaltonetworks/postman-code-generators@^1.1.12":
-  version "1.1.12"
-  resolved "https://registry.yarnpkg.com/@paloaltonetworks/postman-code-generators/-/postman-code-generators-1.1.12.tgz#04d7f2e4d22acfad3c3f3f115c24a31d80b8a20a"
-  integrity sha512-IsDqZxzTDVhpezPQV+pqzkq8MTKpcMRlgCiM1rTFqc13+swp3e87eaFUDk4ketbYWOBcN+WhaY2DslikUWtY6A==
+"@paloaltonetworks/postman-code-generators@^1.1.13":
+  version "1.1.13"
+  resolved "https://registry.yarnpkg.com/@paloaltonetworks/postman-code-generators/-/postman-code-generators-1.1.13.tgz#49dc9baf4d98415fb5395c1aad0bd5362a43c845"
+  integrity sha512-7OA5k0ngMg/2ODqA6QjqUsauScnCKVvQuTdJbN02fqK/8jDEirEIWstPet5gF663WinuGvIr6sLIveR55w91LQ==
   dependencies:
     "@paloaltonetworks/postman-collection" "^4.1.0"
     async "^3.2.4"
