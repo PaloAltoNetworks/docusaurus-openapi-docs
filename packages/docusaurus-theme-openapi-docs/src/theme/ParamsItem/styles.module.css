@@ -14,10 +14,6 @@
   background-color: var(--ifm-menu-color-background-active);
 }
 
-.paramsItemExamplesContainer {
-  padding-bottom: 1rem;
-}
-
 .schemaName {
   opacity: 0.6;
 }
