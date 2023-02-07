@@ -8,7 +8,7 @@ description: Configuring language tabs for the API Demo Panel.
 
 ## Overview
 
-The Docusaurus OpenAPI docs plugin comes with support for 7 languages which you can render as tabs on an API method page. Currently supported languages are:
+The Docusaurus OpenAPI docs plugin comes with support for 8 languages which you can render as tabs on an API method page. Currently supported languages are:
 
 1. `bash`/`cURL`
 1. `python`/`requests`
@@ -17,6 +17,7 @@ The Docusaurus OpenAPI docs plugin comes with support for 7 languages which you 
 1. `ruby`/`Net::HTTP`
 1. `c#`/`RestSharp`
 1. `php`/`cURL`
+1. `java`/`OkHttp`
 
 The enabled languages are defined for your site in a `languageTabs` array in the `themeConfig` object in your config file. If you do not define this configuration item all of the languages above are enabled. The config schema for each language is as follows:
 
@@ -37,41 +38,46 @@ The enabled languages are defined for your site in a `languageTabs` array in the
 The demo site disables the `ruby` and `php` languages using the following `languageTabs` config object.
 
 ```js
-languageTabs: [
-    {
-        highlight: "bash",
-        language: "curl",
-        logoClass: "bash",
-    },
-    {
-        highlight: "python",
-        language: "python",
-        logoClass: "python",
-    },
-    {
-        highlight: "go",
-        language: "go",
-        logoClass: "go",
-    },
-    {
-        highlight: "javascript",
-        language: "nodejs",
-        logoClass: "nodejs",
-    },
-    //{
-    //  highlight: "ruby",
-    //  language: "ruby",
-    //  logoClass: "ruby",
-    //},
-    {
-        highlight: "csharp",
-        language: "csharp",
-        logoClass: "csharp",
-    },
-    // {
-    //   highlight: "php",
-    //   language: "php",
-    //   logoClass: "php",
-    // },
-],
+      languageTabs: [
+        {
+          highlight: "bash",
+          language: "curl",
+          logoClass: "bash",
+        },
+        {
+          highlight: "python",
+          language: "python",
+          logoClass: "python",
+        },
+        {
+          highlight: "go",
+          language: "go",
+          logoClass: "go",
+        },
+        {
+          highlight: "javascript",
+          language: "nodejs",
+          logoClass: "nodejs",
+        },
+        // {
+        //   highlight: "ruby",
+        //   language: "ruby",
+        //   logoClass: "ruby",
+        // },
+        {
+          highlight: "csharp",
+          language: "csharp",
+          logoClass: "csharp",
+        },
+        // {
+        //   highlight: "php",
+        //   language: "php",
+        //   logoClass: "php",
+        // },
+        {
+          highlight: "java",
+          language: "java",
+          logoClass: "java",
+        },
+      ],
 ```
