@@ -8,6 +8,8 @@
 import React from "react";
 
 import CodeBlock from "@theme/CodeBlock";
+import SchemaTabs from "@theme/SchemaTabs";
+import TabItem from "@theme/TabItem";
 /* eslint-disable import/no-extraneous-dependencies*/
 import { createDescription } from "docusaurus-theme-openapi-docs/lib/markdown/createDescription";
 /* eslint-disable import/no-extraneous-dependencies*/
@@ -17,8 +19,6 @@ import {
 } from "docusaurus-theme-openapi-docs/lib/markdown/schema";
 /* eslint-disable import/no-extraneous-dependencies*/
 import { guard } from "docusaurus-theme-openapi-docs/lib/markdown/utils";
-import SchemaTabs from "@theme/SchemaTabs";
-import TabItem from "@theme/TabItem";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
@@ -112,7 +112,6 @@ function ParamsItem({
     );
   });
 
-  console.log(example, examples);
   return (
     <li className={styles.paramsItem}>
       <strong>{name}</strong>
