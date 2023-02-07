@@ -88,27 +88,26 @@ function ParamsItem({
   const renderExamples = guard(examples, (examples) => {
     const exampleEntries = Object.entries(examples);
     return (
-      <SchemaTabs>
-        {exampleEntries.map(([exampleName, exampleProperties]) => (
-          <TabItem
-            className={styles.paramsItemExamplesContainer}
-            value={exampleName}
-            label={exampleName}
-          >
-            {exampleProperties.summary && <p>{exampleProperties.summary}</p>}
-            {exampleProperties.description && (
+      <>
+        <strong>Examples:</strong>
+        <SchemaTabs>
+          {exampleEntries.map(([exampleName, exampleProperties]) => (
+            <TabItem value={exampleName} label={exampleName}>
+              {exampleProperties.summary && <p>{exampleProperties.summary}</p>}
+              {exampleProperties.description && (
+                <p>
+                  <strong>Description: </strong>
+                  <span>{exampleProperties.description}</span>
+                </p>
+              )}
               <p>
-                <strong>Description: </strong>
-                <span>{exampleProperties.description}</span>
+                <strong>Example: </strong>
+                <code>{exampleProperties.value}</code>
               </p>
-            )}
-            <p>
-              <strong>Example: </strong>
-              <code>{exampleProperties.value}</code>
-            </p>
-          </TabItem>
-        ))}
-      </SchemaTabs>
+            </TabItem>
+          ))}
+        </SchemaTabs>
+      </>
     );
   });
 
