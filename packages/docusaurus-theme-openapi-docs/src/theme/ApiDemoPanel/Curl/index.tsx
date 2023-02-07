@@ -15,9 +15,9 @@ import CodeTabs from "@theme/ApiDemoPanel/CodeTabs";
 import { useTypedSelector } from "@theme/ApiItem/hooks";
 import CodeBlock from "@theme/CodeBlock";
 import clsx from "clsx";
+import merge from "lodash/merge";
 
 import styles from "./styles.module.css";
-import merge from "lodash/merge";
 
 export interface Language {
   highlight?: string;
@@ -164,7 +164,6 @@ function Curl({ postman, codeSamples }: Props) {
 
   // Merge user-defined langs into languageSet
   const mergedLangs = merge(filteredLanguageSet, langs);
-  console.log(mergedLangs);
 
   // Read defaultLang from localStorage
   const defaultLang: Language[] = mergedLangs.filter(
@@ -259,6 +258,7 @@ function Curl({ postman, codeSamples }: Props) {
     queryParams,
     server,
     auth,
+    mergedLangs,
   ]);
 
   if (language === undefined) {
