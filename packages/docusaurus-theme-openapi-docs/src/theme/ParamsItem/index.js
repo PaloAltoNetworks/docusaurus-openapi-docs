@@ -8,6 +8,8 @@
 import React from "react";
 
 import CodeBlock from "@theme/CodeBlock";
+import SchemaTabs from "@theme/SchemaTabs";
+import TabItem from "@theme/TabItem";
 /* eslint-disable import/no-extraneous-dependencies*/
 import { createDescription } from "docusaurus-theme-openapi-docs/lib/markdown/createDescription";
 /* eslint-disable import/no-extraneous-dependencies*/
@@ -77,16 +79,34 @@ function ParamsItem({
   );
 
   const renderExample = guard(example, (example) => (
-    <div>{`Example: ${example}`}</div>
+    <>
+      <strong>Example: </strong>
+      {example}
+    </>
   ));
 
   const renderExamples = guard(examples, (examples) => {
     const exampleEntries = Object.entries(examples);
     return (
       <>
-        {exampleEntries.map(([k, v]) => (
-          <div>{`Example (${k}): ${v.value}`}</div>
-        ))}
+        <strong>Examples:</strong>
+        <SchemaTabs>
+          {exampleEntries.map(([exampleName, exampleProperties]) => (
+            <TabItem value={exampleName} label={exampleName}>
+              {exampleProperties.summary && <p>{exampleProperties.summary}</p>}
+              {exampleProperties.description && (
+                <p>
+                  <strong>Description: </strong>
+                  <span>{exampleProperties.description}</span>
+                </p>
+              )}
+              <p>
+                <strong>Example: </strong>
+                <code>{exampleProperties.value}</code>
+              </p>
+            </TabItem>
+          ))}
+        </SchemaTabs>
       </>
     );
   });
