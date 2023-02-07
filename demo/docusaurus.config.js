@@ -152,6 +152,7 @@ const config = {
           highlight: "python",
           language: "python",
           logoClass: "python",
+          variant: "http.client",
         },
         {
           highlight: "go",
@@ -162,26 +163,29 @@ const config = {
           highlight: "javascript",
           language: "nodejs",
           logoClass: "nodejs",
+          variant: "axios",
         },
-        {
-          highlight: "ruby",
-          language: "ruby",
-          logoClass: "ruby",
-        },
+        // {
+        //   highlight: "ruby",
+        //   language: "ruby",
+        //   logoClass: "ruby",
+        // },
         {
           highlight: "csharp",
           language: "csharp",
           logoClass: "csharp",
+          variant: "httpclient",
         },
-        {
-          highlight: "php",
-          language: "php",
-          logoClass: "php",
-        },
+        // {
+        //   highlight: "php",
+        //   language: "php",
+        //   logoClass: "php",
+        // },
         {
           highlight: "java",
           language: "java",
           logoClass: "java",
+          variant: "unirest",
         },
       ],
       algolia: {
