@@ -445,7 +445,33 @@
   overflow: auto;
 }
 
+.code__tab--java::after {
+  content: "";
+  width: 28px;
+  height: 28px;
+  background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg");
+  margin-block: auto;
+}
+
+.code__tab--java {
+  color: var(--ifm-color-warning);
+  padding-left: 1.4rem;
+  padding-right: 1.4rem;
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
+}
+
+.code__tab--java.tabs__item--active {
+  border-bottom-color: var(--ifm-color-warning);
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+.language-java {
+  max-height: 500px;
+  overflow: auto;
+}
+
 /* Prism code styles */
-.prism-code.language-json {
+.prism-code.language-java {
   white-space: pre !important;
 }

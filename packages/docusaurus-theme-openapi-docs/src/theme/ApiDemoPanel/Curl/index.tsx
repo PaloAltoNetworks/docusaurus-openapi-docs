@@ -15,6 +15,7 @@ import CodeTabs from "@theme/ApiDemoPanel/CodeTabs";
 import { useTypedSelector } from "@theme/ApiItem/hooks";
 import CodeBlock from "@theme/CodeBlock";
 import clsx from "clsx";
+import merge from "lodash/merge";
 
 import styles from "./styles.module.css";
 
@@ -100,6 +101,16 @@ export const languageSet: Language[] = [
     },
     variant: "cURL",
   },
+  {
+    highlight: "java",
+    language: "java",
+    logoClass: "java",
+    options: {
+      followRedirect: true,
+      trimRequestBody: true,
+    },
+    variant: "OkHttp",
+  },
 ];
 
 export interface Props {
@@ -136,23 +147,37 @@ function Curl({ postman, codeSamples }: Props) {
 
   const auth = useTypedSelector((state: any) => state.auth);
 
-  // TODO
+  // User-defined languages array
+  // Can override languageSet, change order of langs, override options and variants
   const langs = [
     ...((siteConfig?.themeConfig?.languageTabs as Language[] | undefined) ??
       languageSet),
     ...codeSamples,
   ];
 
-  const defaultLang: Language[] = languageSet.filter(
+  // Filter languageSet by user-defined langs
+  const filteredLanguageSet = languageSet.filter((ls) => {
+    return langs.some((lang) => {
+      return lang.language === ls.language;
+    });
+  });
+
+  // Merge user-defined langs into languageSet
+  const mergedLangs = merge(filteredLanguageSet, langs);
+
+  // Read defaultLang from localStorage
+  const defaultLang: Language[] = mergedLangs.filter(
     (lang) =>
       lang.language === localStorage.getItem("docusaurus.tab.code-samples")
   );
 
   const [language, setLanguage] = useState(() => {
-    if (langs.length === 1) {
-      return langs[0];
+    // Return first index if only 1 user-defined language exists
+    if (mergedLangs.length === 1) {
+      return mergedLangs[0];
     }
-    return defaultLang[0] ?? langs[0];
+    // Fall back to language in localStorage or first user-defined language
+    return defaultLang[0] ?? mergedLangs[0];
   });
 
   const [codeText, setCodeText] = useState("");
@@ -186,7 +211,7 @@ function Curl({ postman, codeSamples }: Props) {
     } else if (language && !!language.source) {
       setCodeText(language.source);
     } else if (language && !language.options) {
-      const langSource = languageSet.filter(
+      const langSource = mergedLangs.filter(
         (lang) => lang.language === language.language
       );
 
@@ -233,6 +258,7 @@ function Curl({ postman, codeSamples }: Props) {
     queryParams,
     server,
     auth,
+    mergedLangs,
   ]);
 
   if (language === undefined) {
@@ -242,7 +268,7 @@ function Curl({ postman, codeSamples }: Props) {
   return (
     <>
       <CodeTabs groupId="code-samples" action={setLanguage}>
-        {langs.map((lang) => {
+        {mergedLangs.map((lang) => {
           return (
             <CodeTab
               value={lang.language}

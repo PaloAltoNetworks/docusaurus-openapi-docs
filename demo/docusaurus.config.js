@@ -140,7 +140,7 @@ const config = {
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
-        additionalLanguages: ["ruby", "csharp", "php"],
+        additionalLanguages: ["ruby", "csharp", "php", "java"],
       },
       languageTabs: [
         {
@@ -152,6 +152,7 @@ const config = {
           highlight: "python",
           language: "python",
           logoClass: "python",
+          variant: "http.client",
         },
         {
           highlight: "go",
@@ -162,6 +163,7 @@ const config = {
           highlight: "javascript",
           language: "nodejs",
           logoClass: "nodejs",
+          variant: "axios",
         },
         // {
         //   highlight: "ruby",
@@ -172,12 +174,19 @@ const config = {
           highlight: "csharp",
           language: "csharp",
           logoClass: "csharp",
+          variant: "httpclient",
         },
         // {
         //   highlight: "php",
         //   language: "php",
         //   logoClass: "php",
         // },
+        {
+          highlight: "java",
+          language: "java",
+          logoClass: "java",
+          variant: "unirest",
+        },
       ],
       algolia: {
         apiKey: "441074cace987cbf4640c039ebed303c",
