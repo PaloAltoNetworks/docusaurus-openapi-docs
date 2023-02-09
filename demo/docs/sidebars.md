@@ -57,6 +57,6 @@ Docusaurus now supports the ability to designate or customize what page gets dis
 
 The OpenAPI Docs plugin can leverage this feature in a number of ways, including:
 
-- Using the `generated-index` feature to create an index of all paths/endpoints availabke under a tag.
+- Using the `generated-index` feature to create an index of all paths/endpoints available under a tag.
 - Setting the `tag` description of an OpenAPI specification as the content that displays when a category is clicked.
 - Setting the `info` section of an OpenAPI specification as the page that displays when a category is clicked (reserved primarily for micro-specs).
