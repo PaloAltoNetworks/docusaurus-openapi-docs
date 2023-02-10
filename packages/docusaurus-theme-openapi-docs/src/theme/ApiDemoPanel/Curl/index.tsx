@@ -280,7 +280,9 @@ function Curl({ postman, codeSamples }: Props) {
               }
               attributes={{ className: `code__tab--${lang.logoClass}` }}
             >
-              <CodeBlock language={lang.highlight}>{codeText}</CodeBlock>
+              <CodeBlock language={lang.highlight} className={styles.codeBlock}>
+                {codeText}
+              </CodeBlock>
             </CodeTab>
           );
         })}

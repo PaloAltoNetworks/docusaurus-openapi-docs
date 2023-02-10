@@ -82,3 +82,8 @@
   background: var(--ifm-menu-color-background-active);
   color: var(--ifm-menu-color-active);
 }
+
+.codeBlock code {
+  max-width: revert;
+  max-height: revert;
+}
