@@ -55,6 +55,7 @@
     "file-saver": "^2.0.5",
     "immer": "^9.0.7",
     "lodash": "^4.17.20",
+    "node-polyfill-webpack-plugin": "^2.0.1",
     "process": "^0.11.10",
     "react-live": "^3.1.1",
     "react-magic-dropzone": "^1.0.1",
