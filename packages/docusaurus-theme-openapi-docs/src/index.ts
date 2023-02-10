@@ -8,7 +8,7 @@
 import path from "path";
 
 import type { Plugin } from "@docusaurus/types";
-import { ProvidePlugin } from "webpack";
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 
 export default function docusaurusThemeOpenAPI(): Plugin<void> {
   return {
@@ -29,18 +29,7 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
 
     configureWebpack() {
       return {
-        plugins: [
-          new ProvidePlugin({
-            Buffer: [require.resolve("buffer/"), "Buffer"],
-            process: require.resolve("process/browser"),
-          }),
-        ],
-        resolve: {
-          fallback: {
-            buffer: require.resolve("buffer/"),
-            process: require.resolve("process/browser"),
-          },
-        },
+        plugins: [new NodePolyfillPlugin()],
       };
     },
   };
