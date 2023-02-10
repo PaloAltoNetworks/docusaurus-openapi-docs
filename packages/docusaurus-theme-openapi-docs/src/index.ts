@@ -8,6 +8,7 @@
 import path from "path";
 
 import type { Plugin } from "@docusaurus/types";
+
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 
 export default function docusaurusThemeOpenAPI(): Plugin<void> {
