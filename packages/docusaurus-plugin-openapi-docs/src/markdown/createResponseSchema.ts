@@ -466,15 +466,20 @@ function createDetailsNode(
                   children: " nullable",
                 }),
               ]),
-              guard(schema.required && schema.required === true, () => [
-                create("strong", {
-                  style: {
-                    fontSize: "var(--ifm-code-font-size)",
-                    color: "var(--openapi-required)",
-                  },
-                  children: " required",
-                }),
-              ]),
+              guard(
+                Array.isArray(required)
+                  ? required.includes(name)
+                  : required === true,
+                () => [
+                  create("strong", {
+                    style: {
+                      fontSize: "var(--ifm-code-font-size)",
+                      color: "var(--openapi-required)",
+                    },
+                    children: " required",
+                  }),
+                ]
+              ),
             ],
           }),
           create("div", {
