@@ -13,13 +13,25 @@ export default function ApiLogo(props: any): JSX.Element {
   const { colorMode } = useColorMode();
   const { logo, darkLogo } = props;
 
-  return logo ? (
-    <img
-      alt={colorMode === "dark" && darkLogo ? darkLogo.altText : logo.altText}
-      src={colorMode === "dark" && darkLogo ? darkLogo.url : logo.url}
-      width="250px"
-    />
-  ) : (
-    <div />
-  );
+  if (colorMode === "dark") {
+    if (darkLogo) {
+      return (
+        <img
+          alt={darkLogo.altText ?? logo.altText}
+          src={darkLogo.url}
+          width="250px"
+        />
+      );
+    }
+    if (logo) {
+      return <img alt={logo.altText} src={logo.url} width="250px" />;
+    }
+    return <div />;
+  }
+
+  if (colorMode === "light" && logo) {
+    return <img alt={logo.altText} src={logo.url} width="250px" />;
+  }
+
+  return <div />;
 }
