@@ -50,6 +50,9 @@ info:
   x-logo:
     url: "https://redocly.github.io/redoc/petstore-logo.png"
     altText: Petstore logo
+  x-dark-logo:
+    url: "https://docs.defined.net/img/logo-dark.svg"
+    altText: "Testing dark logo"
   license:
     name: Apache 2.0
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
