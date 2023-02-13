@@ -83,6 +83,8 @@ export interface ApiMetadataBase {
   permalink: string;
   sidebarPosition?: number;
   frontMatter: Record<string, unknown>;
+  method?: string;
+  path?: string;
 }
 
 export interface ApiPageMetadata extends ApiMetadataBase {
