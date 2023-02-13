@@ -11,7 +11,7 @@ import { useColorMode } from "@docusaurus/theme-common";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import ThemedImage from "@theme/ThemedImage";
 
-export default function ApiLogo(props: any): JSX.Element {
+export default function ApiLogo(props: any): JSX.Element | undefined {
   const { colorMode } = useColorMode();
   const { logo, darkLogo } = props;
   const altText = () => {
@@ -20,15 +20,33 @@ export default function ApiLogo(props: any): JSX.Element {
     }
     return logo?.altText;
   };
+  const lightLogoUrl = useBaseUrl(logo?.url);
+  const darkLogoUrl = useBaseUrl(darkLogo?.url);
 
-  return (
-    <ThemedImage
-      alt={altText()}
-      sources={{
-        light: useBaseUrl(logo?.url),
-        dark: useBaseUrl(darkLogo?.url),
-      }}
-      className="openapi__logo"
-    />
-  );
+  if (logo && darkLogo) {
+    return (
+      <ThemedImage
+        alt={altText()}
+        sources={{
+          light: lightLogoUrl,
+          dark: darkLogoUrl,
+        }}
+        className="openapi__logo"
+      />
+    );
+  }
+  if (logo || darkLogo) {
+    return (
+      <ThemedImage
+        alt={altText()}
+        sources={{
+          light: lightLogoUrl ?? darkLogoUrl,
+          dark: lightLogoUrl ?? darkLogoUrl,
+        }}
+        className="openapi__logo"
+      />
+    );
+  }
+
+  return undefined;
 }
