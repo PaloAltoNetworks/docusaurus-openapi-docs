@@ -475,3 +475,7 @@
 .prism-code.language-java {
   white-space: pre !important;
 }
+
+.openapi__logo {
+  width: 250px;
+}
