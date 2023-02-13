@@ -7,16 +7,23 @@
 
 import React from "react";
 
+import { useColorMode } from "@docusaurus/theme-common";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import ThemedImage from "@theme/ThemedImage";
 
 export default function ApiLogo(props: any): JSX.Element {
-  // const { colorMode } = useColorMode();
+  const { colorMode } = useColorMode();
   const { logo, darkLogo } = props;
+  const altText = () => {
+    if (colorMode === "dark") {
+      return darkLogo?.altText ?? logo?.altText;
+    }
+    return logo?.altText;
+  };
 
   return (
     <ThemedImage
-      alt={""}
+      alt={altText()}
       sources={{
         light: useBaseUrl(logo?.url),
         dark: useBaseUrl(darkLogo?.url),
