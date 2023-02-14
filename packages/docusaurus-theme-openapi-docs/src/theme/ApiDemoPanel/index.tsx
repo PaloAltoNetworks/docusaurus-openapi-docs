@@ -22,7 +22,6 @@ function ApiDemoPanel({
   infoPath: string;
 }) {
   const postman = new sdk.Request(item.postman);
-  const { path, method } = item;
 
   return (
     <div>
