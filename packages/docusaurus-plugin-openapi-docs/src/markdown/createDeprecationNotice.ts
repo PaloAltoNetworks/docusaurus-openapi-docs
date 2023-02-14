@@ -8,7 +8,7 @@
 import { guard, Props, render } from "./utils";
 
 function createAdmonition({ children }: Props) {
-  return `:::caution deprecated\n\n${render(children)}\n\n:::\n\n`;
+  return `:::caution deprecated\n\n${render(children)}\n\n:::`;
 }
 
 interface DeprecationNoticeProps {
