@@ -17,6 +17,7 @@ import { createContactInfo } from "./createContactInfo";
 import { createDeprecationNotice } from "./createDeprecationNotice";
 import { createDescription } from "./createDescription";
 import { createDownload } from "./createDownload";
+import { createHeading } from "./createHeading";
 import { createLicense } from "./createLicense";
 import { createLogo } from "./createLogo";
 import { createParamsDetails } from "./createParamsDetails";
@@ -57,7 +58,7 @@ export function createApiPageMD({
     `import SchemaTabs from "@theme/SchemaTabs";\n`,
     `import DiscriminatorTabs from "@theme/DiscriminatorTabs";\n`,
     `import TabItem from "@theme/TabItem";\n\n`,
-    `## ${title.replace(lessThan, "&lt;").replace(greaterThan, "&gt;")}\n\n`,
+    createHeading(title.replace(lessThan, "&lt;").replace(greaterThan, "&gt;")),
     createDeprecationNotice({ deprecated, description: deprecatedDescription }),
     createDescription(description),
     createParamsDetails({ parameters, type: "path" }),

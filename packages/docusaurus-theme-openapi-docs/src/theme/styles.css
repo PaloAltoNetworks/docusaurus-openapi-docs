@@ -476,6 +476,12 @@
   white-space: pre !important;
 }
 
+/* Begin BEM-style CSS styles */
+
 .openapi__logo {
   width: 250px;
+}
+
+.openapi__heading {
+  font-size: 30.4px;
 }
