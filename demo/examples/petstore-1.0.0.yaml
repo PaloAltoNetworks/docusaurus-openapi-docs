@@ -48,6 +48,9 @@ info:
   x-logo:
     url: "https://redocly.github.io/redoc/petstore-logo.png"
     altText: Petstore logo
+  x-dark-logo:
+    url: "/img/petstore-logo-dark.png"
+    altText: "Petstore dark logo"
   license:
     name: Apache 2.0
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
