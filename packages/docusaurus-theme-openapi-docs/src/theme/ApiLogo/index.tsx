@@ -8,18 +8,45 @@
 import React from "react";
 
 import { useColorMode } from "@docusaurus/theme-common";
+import useBaseUrl from "@docusaurus/useBaseUrl";
+import ThemedImage from "@theme/ThemedImage";
 
-export default function ApiLogo(props: any): JSX.Element {
+export default function ApiLogo(props: any): JSX.Element | undefined {
   const { colorMode } = useColorMode();
   const { logo, darkLogo } = props;
+  const altText = () => {
+    if (colorMode === "dark") {
+      return darkLogo?.altText ?? logo?.altText;
+    }
+    return logo?.altText;
+  };
+  const lightLogoUrl = useBaseUrl(logo?.url);
+  const darkLogoUrl = useBaseUrl(darkLogo?.url);
 
-  return logo ? (
-    <img
-      alt={colorMode === "dark" && darkLogo ? darkLogo.altText : logo.altText}
-      src={colorMode === "dark" && darkLogo ? darkLogo.url : logo.url}
-      width="250px"
-    />
-  ) : (
-    <div />
-  );
+  if (logo && darkLogo) {
+    return (
+      <ThemedImage
+        alt={altText()}
+        sources={{
+          light: lightLogoUrl,
+          dark: darkLogoUrl,
+        }}
+        className="openapi__logo"
+      />
+    );
+  }
+  if (logo || darkLogo) {
+    return (
+      <ThemedImage
+        alt={altText()}
+        sources={{
+          light: lightLogoUrl ?? darkLogoUrl,
+          dark: lightLogoUrl ?? darkLogoUrl,
+        }}
+        className="openapi__logo"
+      />
+    );
+  }
+
+  return undefined;
 }
