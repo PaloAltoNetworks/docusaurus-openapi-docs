@@ -37,3 +37,13 @@ export function render(children: Children): string {
   }
   return children ?? "";
 }
+
+export function toString(value: any): string | undefined {
+  if (value == null) {
+    return undefined;
+  }
+  if (Array.isArray(value)) {
+    return `[${value.join(", ")}]`;
+  }
+  return value + "";
+}
