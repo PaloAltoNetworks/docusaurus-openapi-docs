@@ -42,6 +42,7 @@ function groupByTags(
   docPath: string
 ): ProcessedSidebar {
   let { outputDir, label } = options;
+
   // Remove trailing slash before proceeding
   outputDir = outputDir.replace(/\/$/, "");
 
