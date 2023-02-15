@@ -94,6 +94,9 @@ export default function pluginOpenAPIDocs(
     let { specPath, outputDir, template, downloadUrl, sidebarOptions } =
       options;
 
+    // Remove trailing slash before proceeding
+    outputDir = outputDir.replace(/\/$/, "");
+
     // Override docPath if pluginId provided
     if (pluginId) {
       docData = getDocsPluginConfig(presetsPlugins, pluginId);
