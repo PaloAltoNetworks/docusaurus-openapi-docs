@@ -41,7 +41,10 @@ function groupByTags(
   tags: TagObject[][],
   docPath: string
 ): ProcessedSidebar {
-  const { outputDir, label } = options;
+  let { outputDir, label } = options;
+  // Remove trailing slash before proceeding
+  outputDir = outputDir.replace(/\/$/, "");
+
   const {
     sidebarCollapsed,
     sidebarCollapsible,
@@ -214,6 +217,7 @@ export default function generateSidebarSlice(
   docPath: string
 ) {
   let sidebarSlice: ProcessedSidebar = [];
+
   if (sidebarOptions.groupPathsBy === "tag") {
     sidebarSlice = groupByTags(
       api as ApiPageMetadata[],
