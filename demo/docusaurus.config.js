@@ -190,9 +190,11 @@ const config = {
         indexName: "docusaurus-openapi",
       },
       announcementBar: {
-        id: "announcementBar_1",
-        content:
-          "⚠️ The OpenAPI docs plugin is currently not compatible with Docusaurus v2.3.0. We are working on a fix. ⚠️",
+        id: "v2_announcement",
+        content: "Preview for upcoming v2.0.0 release. Stay tuned!",
+        backgroundColor: "#fafbfc",
+        textColor: "#091E42",
+        isCloseable: true,
       },
     }),
 
