@@ -95,7 +95,7 @@ export function createInfoPageMD({
 
     createVersionBadge(version),
     createDownload(downloadUrl),
-    `# ${title.replace(lessThan, "&lt;").replace(greaterThan, "&gt;")}\n\n`,
+    createHeading(title.replace(lessThan, "&lt;").replace(greaterThan, "&gt;")),
     createLogo(logo, darkLogo),
     createDescription(description),
     createAuthentication(securitySchemes as unknown as SecuritySchemeObject),
