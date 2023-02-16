@@ -1,4 +1,4 @@
-.schemaItem {
+.openapi-schema__list-item {
   list-style: none;
   position: relative;
   margin: 0 !important;
@@ -6,33 +6,33 @@
   border-left: thin solid var(--ifm-color-gray-500) !important;
 }
 
-.schemaItem:hover {
+.openapi-schema__list-item:hover {
   background-color: var(--ifm-menu-color-background-active);
 }
 
-.schemaItem:focus {
+.openapi-schema__list-item:focus {
   background-color: var(--ifm-menu-color-background-active);
 }
 
-.schemaName {
+.openapi-schema__name {
   opacity: 0.6;
 }
 
-.required {
+.openapi-schema__required {
   font-size: var(--ifm-code-font-size);
   color: var(--openapi-required);
 }
 
-.deprecated {
+.openapi-schema__deprecated {
   font-size: var(--ifm-code-font-size);
   color: var(--openapi-deprecated);
 }
 
-.nullable {
+.openapi-schema__nullable {
   font-size: var(--ifm-code-font-size);
   color: var(--openapi-nullable);
 }
 
-.strikethrough {
+.openapi-schema__strikethrough {
   text-decoration: line-through;
 }

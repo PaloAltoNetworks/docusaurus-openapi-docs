@@ -4,7 +4,8 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
-@use "./ParamsItem/styles";
+@use "./ParamsItem/ParamsItem";
+@use "./SchemaItem/SchemaItem";
 
 :root {
   --openapi-required: var(--ifm-color-danger);
@@ -190,7 +191,7 @@
   display: inline-block;
 }
 
-.schemaItem {
+.openapi-schema__list-item {
   list-style: none;
   position: relative;
   margin: 0 !important;
@@ -210,11 +211,11 @@
   padding-left: 0 !important;
 }
 
-.schemaItem:hover {
+.openapi-schema__list-item:hover {
   background-color: var(--ifm-menu-color-background-active);
 }
 
-.schemaItem:focus {
+.openapi-schema__list-item:focus {
   background-color: var(--ifm-menu-color-background-active);
 }
 
