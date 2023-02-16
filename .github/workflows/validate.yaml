@@ -2,9 +2,9 @@ name: Validate
 
 on:
   push:
-    branches: [main]
+    branches: [main, v2.0.0]
   pull_request:
-    branches: [main]
+    branches: [main, v2.0.0]
 
 env:
   FORCE_COLOR: true
