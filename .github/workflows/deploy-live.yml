@@ -32,7 +32,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: build
-          path: demo/build.zip
+          path: build.zip
 
   deploy:
     name: Deploy
