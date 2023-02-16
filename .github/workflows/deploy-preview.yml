@@ -2,7 +2,7 @@ name: "Deploy Preview"
 
 on:
   pull_request_target:
-    branches: [main]
+    branches: [main, v2.0.0]
 
 jobs:
   analyze:
