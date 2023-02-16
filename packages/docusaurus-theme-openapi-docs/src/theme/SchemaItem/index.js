@@ -11,7 +11,10 @@ import CodeBlock from "@theme/CodeBlock";
 /* eslint-disable import/no-extraneous-dependencies*/
 import { createDescription } from "docusaurus-theme-openapi-docs/lib/markdown/createDescription";
 /* eslint-disable import/no-extraneous-dependencies*/
-import { guard } from "docusaurus-theme-openapi-docs/lib/markdown/utils";
+import {
+  guard,
+  toString,
+} from "docusaurus-theme-openapi-docs/lib/markdown/utils";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
@@ -36,6 +39,7 @@ function SchemaItem({
     defaultValue = schema.default;
     nullable = schema.nullable;
   }
+
   const renderRequired = guard(
     Array.isArray(required) ? required.includes(name) : required,
     () => <strong className={styles.required}> required</strong>
@@ -79,14 +83,11 @@ function SchemaItem({
     </div>
   ));
 
-  const renderDefaultValue = guard(
-    typeof defaultValue === "boolean" ? defaultValue.toString() : defaultValue,
-    (value) => (
-      <div className={styles.schemaQualifierMessage}>
-        <ReactMarkdown children={`**Default value:** \`${value}\``} />
-      </div>
-    )
-  );
+  const renderDefaultValue = guard(toString(defaultValue), (value) => (
+    <div className={styles.schemaQualifierMessage}>
+      <ReactMarkdown children={`**Default value:** \`${value}\``} />
+    </div>
+  ));
 
   const schemaContent = (
     <div>
