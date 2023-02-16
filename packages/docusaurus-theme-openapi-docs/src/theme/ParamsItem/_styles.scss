@@ -1,4 +1,4 @@
-.paramsItem {
+.openapi-params__list-item {
   margin: 0 0 0 1rem !important;
   position: relative;
   padding-left: 1rem;
@@ -6,19 +6,19 @@
   margin-top: unset !important;
 }
 
-.paramsItem:hover {
+.openapi-params__list-item:hover {
   background-color: var(--ifm-menu-color-background-active);
 }
 
-.paramsItem:focus {
+.openapi-params__list-item:focus {
   background-color: var(--ifm-menu-color-background-active);
 }
 
-.schemaName {
+.openapi-schema__type {
   opacity: 0.6;
 }
 
-.paramsRequired {
+.openapi-schema__required {
   font-size: var(--ifm-code-font-size);
   color: var(--openapi-required);
 }

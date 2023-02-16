@@ -25,8 +25,6 @@ import {
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
-import styles from "./styles.module.css";
-
 function ParamsItem({
   param: { description, example, examples, name, required, schema },
 }) {
@@ -35,11 +33,11 @@ function ParamsItem({
   }
 
   const renderSchemaName = guard(schema, (schema) => (
-    <span className={styles.schemaName}> {getSchemaName(schema)}</span>
+    <span className="openapi-schema__type"> {getSchemaName(schema)}</span>
   ));
 
   const renderSchemaRequired = guard(required, () => (
-    <strong className={styles.paramsRequired}> required</strong>
+    <strong className="openapi-schema__required"> required</strong>
   ));
 
   const renderSchema = guard(getQualifierMessage(schema), (message) => (
@@ -119,7 +117,7 @@ function ParamsItem({
   });
 
   return (
-    <li className={styles.paramsItem}>
+    <li className="openapi-params__list-item">
       <strong>{name}</strong>
       {renderSchemaName}
       {renderSchemaRequired}
