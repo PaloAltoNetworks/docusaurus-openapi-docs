@@ -4,6 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
+@use "./ParamsItem/styles";
 
 :root {
   --openapi-required: var(--ifm-color-danger);
@@ -27,11 +28,6 @@
   height: 100%;
 }
 
-.docItemContainer header + *,
-.docItemContainer article > *:first-child {
-  margin-top: 0;
-}
-
 @media (min-width: 997px) {
   .docItemCol {
     max-width: 75% !important;
@@ -46,11 +42,6 @@
 /* Begin OpenAPI theme styles */
 [data-theme="dark"] {
   --openapi-card-background-color: var(--ifm-color-gray-900) !important;
-}
-
-.apiItemContainer article > *:first-child,
-.apiItemContainer header + * {
-  margin-top: 0;
 }
 
 .theme-api-markdown div[class^="collapsibleContent"] {
@@ -227,11 +218,11 @@
   background-color: var(--ifm-menu-color-background-active);
 }
 
-.paramsItem:hover {
+.openapi__params-item:hover {
   background-color: var(--ifm-menu-color-background-active);
 }
 
-.paramsItem:focus {
+.openapi__params-item:focus {
   background-color: var(--ifm-menu-color-background-active);
 }
 

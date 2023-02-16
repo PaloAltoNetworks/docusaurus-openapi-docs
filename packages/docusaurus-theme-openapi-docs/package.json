@@ -52,6 +52,7 @@
     "clsx": "^1.1.1",
     "crypto-js": "^4.1.1",
     "docusaurus-plugin-openapi-docs": "^1.6.1",
+    "docusaurus-plugin-sass": "^0.2.3",
     "file-saver": "^2.0.5",
     "immer": "^9.0.7",
     "lodash": "^4.17.20",
@@ -64,6 +65,7 @@
     "react-redux": "^7.2.0",
     "redux-devtools-extension": "^2.13.8",
     "rehype-raw": "^6.1.1",
+    "sass": "^1.58.1",
     "webpack": "^5.61.0",
     "xml-formatter": "^2.6.1"
   },
