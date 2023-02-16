@@ -176,29 +176,6 @@
 
 /* Params, Schema and Discriminator Items */
 
-[class^="paramsItem"]::before,
-[class^="schemaItem"]::before {
-  position: absolute;
-  top: 10px;
-  left: 0;
-  width: 0.7rem;
-  /* width of horizontal line */
-  height: 0.5rem;
-  /* vertical position of line */
-  vertical-align: top;
-  border-bottom: thin solid var(--ifm-color-gray-500);
-  content: "";
-  display: inline-block;
-}
-
-.openapi-schema__list-item {
-  list-style: none;
-  position: relative;
-  margin: 0 !important;
-  padding: 5px 0 5px 1rem;
-  border-left: thin solid var(--ifm-color-gray-500) !important;
-}
-
 .discriminatorItem {
   list-style: none;
   position: relative;
@@ -209,22 +186,6 @@
 
 .discriminatorTabsContainer {
   padding-left: 0 !important;
-}
-
-.openapi-schema__list-item:hover {
-  background-color: var(--ifm-menu-color-background-active);
-}
-
-.openapi-schema__list-item:focus {
-  background-color: var(--ifm-menu-color-background-active);
-}
-
-.openapi__params-item:hover {
-  background-color: var(--ifm-menu-color-background-active);
-}
-
-.openapi__params-item:focus {
-  background-color: var(--ifm-menu-color-background-active);
 }
 
 /* CodeTabs */
