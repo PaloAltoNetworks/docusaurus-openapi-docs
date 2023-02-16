@@ -18,7 +18,10 @@ import {
   getSchemaName,
 } from "docusaurus-theme-openapi-docs/lib/markdown/schema";
 /* eslint-disable import/no-extraneous-dependencies*/
-import { guard } from "docusaurus-theme-openapi-docs/lib/markdown/utils";
+import {
+  guard,
+  toString,
+} from "docusaurus-theme-openapi-docs/lib/markdown/utils";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
@@ -78,11 +81,11 @@ function ParamsItem({
     )
   );
 
-  const renderExample = guard(example, (example) => (
-    <>
+  const renderExample = guard(toString(example), (example) => (
+    <div>
       <strong>Example: </strong>
       {example}
-    </>
+    </div>
   ));
 
   const renderExamples = guard(examples, (examples) => {
