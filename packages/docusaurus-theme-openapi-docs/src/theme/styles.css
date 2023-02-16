@@ -483,5 +483,5 @@
 }
 
 .openapi__heading {
-  font-size: 30.4px;
+  font-size: var(--ifm-h1-font-size);
 }
