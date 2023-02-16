@@ -227,7 +227,8 @@ const config = {
             },
           },
           petstore: {
-            specPath: "examples/petstore.yaml",
+            specPath:
+              "https://gist.githubusercontent.com/paulo-raca/c8524702c07d42fb541550608834eee3/raw/16eee62950a01f5657c461638a338f231cedd749/openapi.json",
             proxy: "https://cors.pan.dev",
             outputDir: "docs/petstore",
             sidebarOptions: {
