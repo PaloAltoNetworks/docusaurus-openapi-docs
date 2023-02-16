@@ -27,12 +27,12 @@ jobs:
         run: yarn build-packages
 
       - name: Build site
-        run: yarn build-demo
+        run: yarn build-demo && zip -r build.zip demo/build
 
       - uses: actions/upload-artifact@v3
         with:
           name: build
-          path: build.zip
+          path: demo/build.zip
 
   deploy:
     name: Deploy
