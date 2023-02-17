@@ -481,9 +481,9 @@
 }
 /* Method Endpoint Styles */
 .openapi__method-endpoint {
-  padding: 0.75rem;
+  width: fit-content;
+  padding: 0.65rem;
   border: 1px solid var(--ifm-color-emphasis-500);
-  background-color: transparent;
 }
 
 html[data-theme="dark"] .openapi__method-endpoint {
