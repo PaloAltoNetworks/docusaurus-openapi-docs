@@ -479,3 +479,13 @@
 .openapi__logo {
   width: 250px;
 }
+/* Method Endpoint Styles */
+.openapi__method-endpoint {
+  padding: 0.75rem;
+  border: 1px solid var(--ifm-color-emphasis-500);
+  background-color: transparent;
+}
+
+html[data-theme="dark"] .openapi__method-endpoint {
+  border-color: var(--ifm-pre-background);
+}

@@ -7,10 +7,6 @@
 
 import React from "react";
 
-const methodStyle = {
-  borderRadius: "var(--ifm-global-radius)",
-};
-
 function colorForMethod(method: string) {
   switch (method.toLowerCase()) {
     case "get":
@@ -39,16 +35,8 @@ export interface Props {
 
 function MethodEndpoint({ method, path }: Props) {
   return (
-    <pre
-      style={{
-        background: "var(--openapi-card-background-color)",
-        borderRadius: "var(--openapi-card-border-radius)",
-      }}
-    >
-      <span
-        style={methodStyle}
-        className={"badge badge--" + colorForMethod(method)}
-      >
+    <pre className="openapi__method-endpoint">
+      <span className={"badge badge--" + colorForMethod(method)}>
         {method.toUpperCase()}
       </span>{" "}
       <span>{path.replace(/{([a-z0-9-_]+)}/gi, ":$1")}</span>
