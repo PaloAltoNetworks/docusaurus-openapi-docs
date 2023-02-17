@@ -1,8 +1,6 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require("prism-react-renderer/themes/github");
-const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 const { DOCUSAURUS_VERSION } = require("@docusaurus/utils");
 
 /** @type {import('@docusaurus/types').Config} */
@@ -138,8 +136,6 @@ const config = {
         copyright: `Copyright © ${new Date().getFullYear()} Palo Alto Networks, Inc. Built with Docusaurus ${DOCUSAURUS_VERSION}.`,
       },
       prism: {
-        theme: lightCodeTheme,
-        darkTheme: darkCodeTheme,
         additionalLanguages: ["ruby", "csharp", "php", "java"],
       },
       languageTabs: [
@@ -294,4 +290,14 @@ const config = {
   ],
 };
 
-module.exports = config;
+async function createConfig() {
+  const lightTheme = (await import("./src/utils/prismLight.mjs")).default;
+  const darkTheme = (await import("./src/utils/prismDark.mjs")).default;
+  // @ts-expect-error: we know it exists, right
+  config.themeConfig.prism.theme = lightTheme;
+  // @ts-expect-error: we know it exists, right
+  config.themeConfig.prism.darkTheme = darkTheme;
+  return config;
+}
+
+module.exports = createConfig;
