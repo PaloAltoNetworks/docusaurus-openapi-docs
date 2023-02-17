@@ -7,8 +7,9 @@
 
 import React from "react";
 
-import { useTypedSelector } from "../../ApiItem/hooks";
 import BrowserOnly from "@docusaurus/BrowserOnly";
+
+import { useTypedSelector } from "../../ApiItem/hooks";
 
 function colorForMethod(method: string) {
   switch (method.toLowerCase()) {
