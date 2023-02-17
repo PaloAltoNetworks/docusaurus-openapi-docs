@@ -17,6 +17,10 @@ function SecuritySchemes(props: any) {
 
   if (selected === undefined) return null;
 
+  if (options[selected]?.[0]?.type === undefined) {
+    return null;
+  }
+
   const selectedAuth = options[selected];
   return (
     <details className={`details__demo-panel`} open={false}>
@@ -24,11 +28,90 @@ function SecuritySchemes(props: any) {
         <h4>Authorization</h4>
       </summary>
       {selectedAuth.map((auth: any) => {
+        const isHttp = auth.type === "http";
         const isApiKey = auth.type === "apiKey";
-        const isBearer = auth.type === "http" && auth.key === "Bearer";
         const isOauth2 = auth.type === "oauth2";
+        const isOpenId = auth.type === "openIdConnect";
 
-        if (isApiKey || isBearer) {
+        if (isHttp) {
+          if (auth.scheme === "bearer") {
+            const { name, key, type, scopes, ...rest } = auth;
+            return (
+              <React.Fragment key={auth.key}>
+                <pre
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    background: "var(--openapi-card-background-color)",
+                  }}
+                >
+                  <span>
+                    <strong>name:</strong>{" "}
+                    <Link to={infoAuthPath}>{name ?? key}</Link>
+                  </span>
+                  <span>
+                    <strong>type: </strong>
+                    {type}
+                  </span>
+                  {scopes && (
+                    <span>
+                      <strong>scopes: </strong>
+                      <code>
+                        {auth.scopes.length > 0 ? auth.scopes.toString() : "[]"}
+                      </code>
+                    </span>
+                  )}
+                  {Object.keys(rest).map((k, i) => {
+                    return (
+                      <span key={k}>
+                        <strong>{k}: </strong>
+                        {rest[k]}
+                      </span>
+                    );
+                  })}
+                </pre>
+              </React.Fragment>
+            );
+          }
+          if (auth.scheme === "basic") {
+            const { name, key, type, scopes, ...rest } = auth;
+            return (
+              <React.Fragment key={auth.key}>
+                <pre
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    background: "var(--openapi-card-background-color)",
+                  }}
+                >
+                  <span>
+                    <strong>name:</strong>{" "}
+                    <Link to={infoAuthPath}>{name ?? key}</Link>
+                  </span>
+                  <span>
+                    <strong>type: </strong>
+                    {type}
+                  </span>
+                  {scopes && (
+                    <span>
+                      <strong>scopes: </strong>
+                      <code>
+                        {auth.scopes.length > 0 ? auth.scopes.toString() : "[]"}
+                      </code>
+                    </span>
+                  )}
+                  {Object.keys(rest).map((k, i) => {
+                    return (
+                      <span key={k}>
+                        <strong>{k}: </strong>
+                        {rest[k]}
+                      </span>
+                    );
+                  })}
+                </pre>
+              </React.Fragment>
+            );
+          }
           return (
             <React.Fragment key={auth.key}>
               <pre
@@ -38,17 +121,65 @@ function SecuritySchemes(props: any) {
                   background: "var(--openapi-card-background-color)",
                 }}
               >
-                <span>type: {auth.type}</span>
                 <span>
-                  name: <Link to={infoAuthPath}>{auth.name}</Link>
+                  <strong>name:</strong>{" "}
+                  <Link to={infoAuthPath}>{auth.name ?? auth.key}</Link>
                 </span>
-                <span>in: {auth.in}</span>
+                <span>
+                  <strong>type: </strong>
+                  {auth.type}
+                </span>
+                <span>
+                  <strong>in: </strong>
+                  {auth.in}
+                </span>
+              </pre>
+            </React.Fragment>
+          );
+        }
+
+        if (isApiKey) {
+          const { name, key, type, scopes, ...rest } = auth;
+          return (
+            <React.Fragment key={auth.key}>
+              <pre
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  background: "var(--openapi-card-background-color)",
+                }}
+              >
+                <span>
+                  <strong>name:</strong>{" "}
+                  <Link to={infoAuthPath}>{name ?? key}</Link>
+                </span>
+                <span>
+                  <strong>type: </strong>
+                  {type}
+                </span>
+                {scopes && (
+                  <span>
+                    <strong>scopes: </strong>
+                    <code>
+                      {auth.scopes.length > 0 ? auth.scopes.toString() : "[]"}
+                    </code>
+                  </span>
+                )}
+                {Object.keys(rest).map((k, i) => {
+                  return (
+                    <span key={k}>
+                      <strong>{k}: </strong>
+                      {rest[k]}
+                    </span>
+                  );
+                })}
               </pre>
             </React.Fragment>
           );
         }
 
         if (isOauth2) {
+          const { name, key, type, scopes, flows, ...rest } = auth;
           return (
             <React.Fragment key={selected}>
               <pre
@@ -59,14 +190,77 @@ function SecuritySchemes(props: any) {
                 }}
               >
                 <span>
-                  type: <Link to={infoAuthPath}>{auth.type}</Link>
+                  <strong>name:</strong>{" "}
+                  <Link to={infoAuthPath}>{name ?? key}</Link>
                 </span>
-                {Object.keys(auth.flows).map((flow) => {
-                  return <span key={flow}>flow: {flow}</span>;
-                })}
                 <span>
-                  scopes: <code>{auth.scopes.toString()}</code>
+                  <strong>type: </strong>
+                  {type}
                 </span>
+                {scopes && (
+                  <span>
+                    <strong>scopes: </strong>
+                    <code>
+                      {auth.scopes.length > 0 ? auth.scopes.toString() : "[]"}
+                    </code>
+                  </span>
+                )}
+                {Object.keys(rest).map((k, i) => {
+                  return (
+                    <span key={k}>
+                      <strong>{k}: </strong>
+                      {rest[k]}
+                    </span>
+                  );
+                })}
+                {flows && (
+                  <span>
+                    <code>
+                      <strong>flows: </strong>
+                      {JSON.stringify(flows, null, 2)}
+                    </code>
+                  </span>
+                )}
+              </pre>
+            </React.Fragment>
+          );
+        }
+
+        if (isOpenId) {
+          const { name, key, scopes, type, ...rest } = auth;
+          return (
+            <React.Fragment key={auth.key}>
+              <pre
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  background: "var(--openapi-card-background-color)",
+                }}
+              >
+                <span>
+                  <strong>name:</strong>{" "}
+                  <Link to={infoAuthPath}>{name ?? key}</Link>
+                </span>
+                <span>
+                  <strong>type: </strong>
+                  {type}
+                </span>
+                {scopes && (
+                  <span>
+                    <strong>scopes: </strong>
+                    <code>
+                      {auth.scopes.length > 0 ? auth.scopes.toString() : "[]"}
+                    </code>
+                  </span>
+                )}
+                {Object.keys(rest).map((k, i) => {
+                  return (
+                    <span key={k}>
+                      <strong>{k}: </strong>
+                      {rest[k]}
+                    </span>
+                  );
+                })}
               </pre>
             </React.Fragment>
           );
