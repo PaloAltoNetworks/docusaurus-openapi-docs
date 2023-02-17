@@ -120,6 +120,13 @@ paths:
         - petstore_auth:
             - "write:pets"
             - "read:pets"
+        - api_key: []
+        - ApiKeyAuth: []
+        - BasicAuth: []
+        - BearerAuth: []
+        - OAuth2: []
+        - OpenID: []
+
       x-codeSamples:
         - lang: "C#"
           source: |
@@ -1223,13 +1230,29 @@ components:
       type: apiKey
       name: api_key
       in: header
-  examples:
-    Order:
-      value:
-        quantity: 1
-        shipDate: "2018-10-19T16:46:45Z"
-        status: placed
-        complete: false
+    BasicAuth:
+      type: http
+      scheme: basic
+    BearerAuth:
+      type: http
+      scheme: bearer
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    OpenID:
+      type: openIdConnect
+      openIdConnectUrl: https://example.com/.well-known/openid-configuration
+    OAuth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://example.com/oauth/authorize
+          tokenUrl: https://example.com/oauth/token
+          scopes:
+            read: Grants read access
+            write: Grants write access
+            admin: Grants access to admin operations
 x-webhooks:
   newPet:
     post:
