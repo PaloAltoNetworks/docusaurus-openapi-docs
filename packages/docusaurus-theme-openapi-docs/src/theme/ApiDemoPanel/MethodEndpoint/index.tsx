@@ -8,6 +8,7 @@
 import React from "react";
 
 import { useTypedSelector } from "../../ApiItem/hooks";
+import BrowserOnly from "@docusaurus/BrowserOnly";
 
 function colorForMethod(method: string) {
   switch (method.toLowerCase()) {
@@ -39,15 +40,19 @@ function MethodEndpoint({ method, path }: Props) {
   const serverValue = useTypedSelector((state: any) => state.server.value);
 
   return (
-    <pre className="openapi__method-endpoint">
-      <span className={"badge badge--" + colorForMethod(method)}>
-        {method.toUpperCase()}
-      </span>{" "}
-      <span>{`${serverValue && serverValue.url}${path.replace(
-        /{([a-z0-9-_]+)}/gi,
-        ":$1"
-      )}`}</span>
-    </pre>
+    <BrowserOnly>
+      {() => (
+        <pre className="openapi__method-endpoint">
+          <span className={"badge badge--" + colorForMethod(method)}>
+            {method.toUpperCase()}
+          </span>{" "}
+          <span>{`${serverValue && serverValue.url}${path.replace(
+            /{([a-z0-9-_]+)}/gi,
+            ":$1"
+          )}`}</span>
+        </pre>
+      )}
+    </BrowserOnly>
   );
 }
 
