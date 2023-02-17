@@ -481,6 +481,7 @@
 }
 /* Method Endpoint Styles */
 .openapi__method-endpoint {
+  max-width: 100%;
   width: fit-content;
   padding: 0.65rem;
   border: 1px solid var(--ifm-color-emphasis-500);
