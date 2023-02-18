@@ -38,7 +38,23 @@ export interface Props {
 }
 
 function MethodEndpoint({ method, path }: Props) {
-  const serverValue = useTypedSelector((state: any) => state.server.value);
+  let serverValue = useTypedSelector((state: any) => state.server.value);
+  let serverUrlWithVariables = "";
+
+  if (serverValue && serverValue.variables) {
+    serverUrlWithVariables = serverValue.url.replace(/\/$/, "");
+
+    Object.keys(serverValue.variables).forEach((variable) => {
+      serverUrlWithVariables = serverUrlWithVariables.replace(
+        `{${variable}}`,
+        serverValue.variables?.[variable].default ?? ""
+      );
+    });
+  }
+
+  const serverUrl =
+    (serverUrlWithVariables.length && serverUrlWithVariables) ||
+    (serverValue && serverValue.url);
 
   return (
     <BrowserOnly>
@@ -47,7 +63,7 @@ function MethodEndpoint({ method, path }: Props) {
           <span className={"badge badge--" + colorForMethod(method)}>
             {method.toUpperCase()}
           </span>{" "}
-          <span>{`${serverValue && serverValue.url}${path.replace(
+          <span>{`${serverUrl}${path.replace(
             /{([a-z0-9-_]+)}/gi,
             ":$1"
           )}`}</span>
