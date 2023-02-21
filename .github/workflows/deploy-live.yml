@@ -12,19 +12,13 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      - uses: actions/cache@v2
-        id: yarn-cache
+      - name: Setup node
+        uses: actions/setup-node@v3
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+          node-version: "18"
+          cache: "yarn"
 
       - name: Install dependencies
         run: yarn --prefer-offline
@@ -33,12 +27,12 @@ jobs:
         run: yarn build-packages
 
       - name: Build site
-        run: yarn build-demo
+        run: yarn build-demo && zip -r build.zip demo/build
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
-          name: build-dir
-          path: demo/build/
+          name: build
+          path: build.zip
 
   deploy:
     name: Deploy
@@ -47,12 +41,20 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - uses: actions/download-artifact@v2
+      - name: Setup node
+        uses: actions/setup-node@v3
         with:
-          name: build-dir
-          path: demo/build/
+          node-version: "18"
+          cache: "yarn"
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: build
+
+      - name: Unzip build artifact
+        run: unzip build.zip
 
       - name: Deploy to Firebase
         id: deploy_live

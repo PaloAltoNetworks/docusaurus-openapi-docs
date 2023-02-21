@@ -24,7 +24,7 @@ export function guard<T>(
   value: T | undefined | string,
   cb: (value: T) => Children
 ): string {
-  if (value) {
+  if (value !== undefined) {
     const children = cb(value as T);
     return render(children);
   }
@@ -36,4 +36,21 @@ export function render(children: Children): string {
     return children.filter((c) => c !== undefined).join("");
   }
   return children ?? "";
+}
+
+export function toString(value: any): string | undefined {
+  // Return as-is if already string
+  if (typeof value === "string") {
+    return value;
+  }
+  // Return undefined if null or undefined
+  if (value == null) {
+    return undefined;
+  }
+  // Return formatted array if Array
+  if (Array.isArray(value)) {
+    return `[${value.join(", ")}]`;
+  }
+  // Coerce to string in all other cases,
+  return value + "";
 }

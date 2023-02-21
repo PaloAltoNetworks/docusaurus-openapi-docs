@@ -7,9 +7,9 @@
 
 import React from "react";
 
-const methodStyle = {
-  borderRadius: "var(--ifm-global-radius)",
-};
+import BrowserOnly from "@docusaurus/BrowserOnly";
+
+import { useTypedSelector } from "../../ApiItem/hooks";
 
 function colorForMethod(method: string) {
   switch (method.toLowerCase()) {
@@ -38,20 +38,43 @@ export interface Props {
 }
 
 function MethodEndpoint({ method, path }: Props) {
+  let serverValue = useTypedSelector((state: any) => state.server.value);
+  let serverUrlWithVariables = "";
+
+  const renderServerUrl = () => {
+    if (serverValue && serverValue.variables) {
+      serverUrlWithVariables = serverValue.url.replace(/\/$/, "");
+
+      Object.keys(serverValue.variables).forEach((variable) => {
+        serverUrlWithVariables = serverUrlWithVariables.replace(
+          `{${variable}}`,
+          serverValue.variables?.[variable].default ?? ""
+        );
+      });
+    }
+
+    return (
+      <BrowserOnly>
+        {() => {
+          if (serverUrlWithVariables.length) {
+            return serverUrlWithVariables;
+          } else if (serverValue && serverValue.url) {
+            return serverValue.url;
+          }
+        }}
+      </BrowserOnly>
+    );
+  };
+
   return (
-    <pre
-      style={{
-        background: "var(--openapi-card-background-color)",
-        borderRadius: "var(--openapi-card-border-radius)",
-      }}
-    >
-      <span
-        style={methodStyle}
-        className={"badge badge--" + colorForMethod(method)}
-      >
+    <pre className="openapi__method-endpoint">
+      <span className={"badge badge--" + colorForMethod(method)}>
         {method.toUpperCase()}
       </span>{" "}
-      <span>{path.replace(/{([a-z0-9-_]+)}/gi, ":$1")}</span>
+      <span>
+        {renderServerUrl()}
+        {`${path.replace(/{([a-z0-9-_]+)}/gi, ":$1")}`}
+      </span>
     </pre>
   );
 }

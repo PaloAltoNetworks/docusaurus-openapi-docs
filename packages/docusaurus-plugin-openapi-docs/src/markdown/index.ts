@@ -20,6 +20,7 @@ import { createDownload } from "./createDownload";
 import { createHeading } from "./createHeading";
 import { createLicense } from "./createLicense";
 import { createLogo } from "./createLogo";
+import { createMethodEndpoint } from "./createMethodEndpoint";
 import { createParamsDetails } from "./createParamsDetails";
 import { createRequestBodyDetails } from "./createRequestBodyDetails";
 import { createStatusCodes } from "./createStatusCodes";
@@ -44,6 +45,8 @@ export function createApiPageMD({
     deprecated,
     "x-deprecated-description": deprecatedDescription,
     description,
+    method,
+    path,
     parameters,
     requestBody,
     responses,
@@ -51,14 +54,16 @@ export function createApiPageMD({
 }: ApiPageMetadata) {
   return render([
     `import ApiTabs from "@theme/ApiTabs";\n`,
+    `import DiscriminatorTabs from "@theme/DiscriminatorTabs";\n`,
+    `import MethodEndpoint from "@theme/ApiDemoPanel/MethodEndpoint";\n`,
     `import MimeTabs from "@theme/MimeTabs";\n`,
     `import ParamsItem from "@theme/ParamsItem";\n`,
     `import ResponseSamples from "@theme/ResponseSamples";\n`,
     `import SchemaItem from "@theme/SchemaItem";\n`,
     `import SchemaTabs from "@theme/SchemaTabs";\n`,
-    `import DiscriminatorTabs from "@theme/DiscriminatorTabs";\n`,
     `import TabItem from "@theme/TabItem";\n\n`,
     createHeading(title.replace(lessThan, "&lt;").replace(greaterThan, "&gt;")),
+    createMethodEndpoint(method, path),
     createDeprecationNotice({ deprecated, description: deprecatedDescription }),
     createDescription(description),
     createParamsDetails({ parameters, type: "path" }),
