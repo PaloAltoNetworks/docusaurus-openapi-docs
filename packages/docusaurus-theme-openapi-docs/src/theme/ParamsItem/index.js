@@ -30,6 +30,10 @@ import styles from "./styles.module.css";
 function ParamsItem({
   param: { description, example, examples, name, required, schema },
 }) {
+  if (!schema || !schema?.type) {
+    schema = { type: "any" };
+  }
+
   const renderSchemaName = guard(schema, (schema) => (
     <span className={styles.schemaName}> {getSchemaName(schema)}</span>
   ));
