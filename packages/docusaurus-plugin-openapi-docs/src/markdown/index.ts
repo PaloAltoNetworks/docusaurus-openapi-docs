@@ -88,7 +88,7 @@ export function createInfoPageMD({
 }: InfoPageMetadata) {
   return render([
     `import ApiLogo from "@theme/ApiLogo";\n`,
-    `import Tabs from "@theme/Tabs";\n`,
+    `import SchemaTabs from "@theme/SchemaTabs";\n`,
     `import TabItem from "@theme/TabItem";\n`,
     `import Export from "@theme/ApiDemoPanel/Export";\n\n`,
 
