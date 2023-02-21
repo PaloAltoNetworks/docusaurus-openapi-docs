@@ -53,7 +53,7 @@ function SecuritySchemes(props: any) {
                     <strong>type: </strong>
                     {type}
                   </span>
-                  {scopes && (
+                  {scopes && scopes.length > 0 && (
                     <span>
                       <strong>scopes: </strong>
                       <code>
@@ -92,7 +92,7 @@ function SecuritySchemes(props: any) {
                     <strong>type: </strong>
                     {type}
                   </span>
-                  {scopes && (
+                  {scopes && scopes.length > 0 && (
                     <span>
                       <strong>scopes: </strong>
                       <code>
@@ -157,7 +157,7 @@ function SecuritySchemes(props: any) {
                   <strong>type: </strong>
                   {type}
                 </span>
-                {scopes && (
+                {scopes && scopes.length > 0 && (
                   <span>
                     <strong>scopes: </strong>
                     <code>
@@ -197,7 +197,7 @@ function SecuritySchemes(props: any) {
                   <strong>type: </strong>
                   {type}
                 </span>
-                {scopes && (
+                {scopes && scopes.length > 0 && (
                   <span>
                     <strong>scopes: </strong>
                     <code>
@@ -245,7 +245,7 @@ function SecuritySchemes(props: any) {
                   <strong>type: </strong>
                   {type}
                 </span>
-                {scopes && (
+                {scopes && scopes.length > 0 && (
                   <span>
                     <strong>scopes: </strong>
                     <code>
