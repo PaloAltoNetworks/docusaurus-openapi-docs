@@ -476,9 +476,16 @@
   white-space: pre !important;
 }
 
+/* Begin BEM-style CSS styles */
+
 .openapi__logo {
   width: 250px;
 }
+
+.openapi__heading {
+  font-size: var(--ifm-h1-font-size);
+}
+
 /* Method Endpoint Styles */
 .openapi__method-endpoint {
   max-width: 100%;

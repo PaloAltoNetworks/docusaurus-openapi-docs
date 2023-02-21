@@ -225,8 +225,7 @@ const config = {
             },
           },
           petstore: {
-            specPath:
-              "https://raw.githubusercontent.com/benlei/docusaurus-openapi-docs-failed-to-gen/master/examples/petstore.yaml",
+            specPath: "examples/petstore.yaml",
             proxy: "https://cors.pan.dev",
             outputDir: "docs/petstore",
             sidebarOptions: {

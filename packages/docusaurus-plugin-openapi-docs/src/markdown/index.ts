@@ -17,6 +17,7 @@ import { createContactInfo } from "./createContactInfo";
 import { createDeprecationNotice } from "./createDeprecationNotice";
 import { createDescription } from "./createDescription";
 import { createDownload } from "./createDownload";
+import { createHeading } from "./createHeading";
 import { createLicense } from "./createLicense";
 import { createLogo } from "./createLogo";
 import { createMethodEndpoint } from "./createMethodEndpoint";
@@ -61,7 +62,7 @@ export function createApiPageMD({
     `import SchemaItem from "@theme/SchemaItem";\n`,
     `import SchemaTabs from "@theme/SchemaTabs";\n`,
     `import TabItem from "@theme/TabItem";\n\n`,
-    `## ${title.replace(lessThan, "&lt;").replace(greaterThan, "&gt;")}\n\n`,
+    createHeading(title.replace(lessThan, "&lt;").replace(greaterThan, "&gt;")),
     createMethodEndpoint(method, path),
     createDeprecationNotice({ deprecated, description: deprecatedDescription }),
     createDescription(description),
@@ -99,7 +100,7 @@ export function createInfoPageMD({
 
     createVersionBadge(version),
     createDownload(downloadUrl),
-    `# ${title.replace(lessThan, "&lt;").replace(greaterThan, "&gt;")}\n\n`,
+    createHeading(title.replace(lessThan, "&lt;").replace(greaterThan, "&gt;")),
     createLogo(logo, darkLogo),
     createDescription(description),
     createAuthentication(securitySchemes as unknown as SecuritySchemeObject),
