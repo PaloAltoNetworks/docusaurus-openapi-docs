@@ -10,7 +10,6 @@ import React from "react";
 import BrowserOnly from "@docusaurus/BrowserOnly";
 
 import { useTypedSelector } from "../../ApiItem/hooks";
-import server from "@theme/ApiDemoPanel/Server/slice";
 
 function colorForMethod(method: string) {
   switch (method.toLowerCase()) {
@@ -39,10 +38,10 @@ export interface Props {
 }
 
 function MethodEndpoint({ method, path }: Props) {
-  const renderServerUrl = () => {
-    let serverValue = useTypedSelector((state: any) => state.server.value);
-    let serverUrlWithVariables = "";
+  let serverValue = useTypedSelector((state: any) => state.server.value);
+  let serverUrlWithVariables = "";
 
+  const renderServerUrl = () => {
     if (serverValue && serverValue.variables) {
       serverUrlWithVariables = serverValue.url.replace(/\/$/, "");
 
