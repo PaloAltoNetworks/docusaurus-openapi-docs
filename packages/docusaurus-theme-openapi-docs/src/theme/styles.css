@@ -479,3 +479,7 @@
 .openapi__logo {
   width: 250px;
 }
+
+div:has(> ul.openapi-tabs__security-schemes) {
+  max-width: 100%;
+}

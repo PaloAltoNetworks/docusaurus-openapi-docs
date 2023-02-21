@@ -173,6 +173,7 @@ export function createAuthentication(securitySchemes: SecuritySchemeObject) {
         style: { marginBottom: "1rem" },
       }),
       create("SchemaTabs", {
+        className: "openapi-tabs__security-schemes",
         children: Object.entries(securitySchemes).map(
           ([schemeKey, schemeObj]) =>
             create("TabItem", {
