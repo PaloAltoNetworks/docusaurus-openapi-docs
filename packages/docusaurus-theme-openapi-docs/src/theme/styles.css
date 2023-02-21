@@ -490,3 +490,7 @@
 html[data-theme="dark"] .openapi__method-endpoint {
   border-color: var(--ifm-pre-background);
 }
+
+div:has(> ul.openapi-tabs__security-schemes) {
+  max-width: 100%;
+}

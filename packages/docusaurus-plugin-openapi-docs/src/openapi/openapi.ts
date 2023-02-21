@@ -88,7 +88,7 @@ function createItems(
   const infoIdSpaces = openapiData.info.title.replace(" ", "-").toLowerCase();
   const infoId = kebabCase(infoIdSpaces);
 
-  if (openapiData.info.description) {
+  if (openapiData.info.description || openapiData.info.title) {
     // Only create an info page if we have a description.
     const infoDescription = openapiData.info?.description;
     let splitDescription: any;
