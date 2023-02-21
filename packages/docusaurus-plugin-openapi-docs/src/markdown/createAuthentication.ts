@@ -13,7 +13,8 @@ export function createAuthentication(securitySchemes: SecuritySchemeObject) {
   if (!securitySchemes || !Object.keys(securitySchemes).length) return "";
 
   const createAuthenticationTable = (securityScheme: any) => {
-    const { bearerFormat, flows, name, scheme, type } = securityScheme;
+    const { bearerFormat, flows, name, scheme, type, openIdConnectUrl } =
+      securityScheme;
 
     const createSecuritySchemeTypeRow = () =>
       create("tr", {
@@ -30,7 +31,7 @@ export function createAuthentication(securitySchemes: SecuritySchemeObject) {
 
         return create("tr", {
           children: [
-            create("th", { children: `${flowType} OAuth Flow:` }),
+            create("th", { children: `OAuth Flow (${flowType}):` }),
             create("td", {
               children: [
                 guard(tokenUrl, () =>
@@ -91,12 +92,14 @@ export function createAuthentication(securitySchemes: SecuritySchemeObject) {
                       create("td", { children: scheme }),
                     ],
                   }),
-                  create("tr", {
-                    children: [
-                      create("th", { children: "Bearer format:" }),
-                      create("td", { children: bearerFormat }),
-                    ],
-                  }),
+                  guard(bearerFormat, () =>
+                    create("tr", {
+                      children: [
+                        create("th", { children: "Bearer format:" }),
+                        create("td", { children: bearerFormat }),
+                      ],
+                    })
+                  ),
                 ],
               }),
             }),
@@ -115,23 +118,51 @@ export function createAuthentication(securitySchemes: SecuritySchemeObject) {
             }),
           ],
         });
+      case "openIdConnect":
+        return create("div", {
+          children: [
+            create("table", {
+              children: create("tbody", {
+                children: [
+                  createSecuritySchemeTypeRow(),
+                  guard(openIdConnectUrl, () =>
+                    create("tr", {
+                      children: [
+                        create("th", { children: "OpenID Connect URL:" }),
+                        create("td", { children: openIdConnectUrl }),
+                      ],
+                    })
+                  ),
+                ],
+              }),
+            }),
+          ],
+        });
       default:
         return "";
     }
   };
 
-  const formatTabLabel = (str: string) => {
-    const formattedLabel = str
+  const formatTabLabel = (key: string, type: string, scheme: string) => {
+    const formattedLabel = key
       .replace(/(_|-)/g, " ")
       .trim()
       .replace(/\w\S*/g, (str) => str.charAt(0).toUpperCase() + str.substr(1))
       .replace(/([a-z])([A-Z])/g, "$1 $2")
       .replace(/([A-Z])([A-Z][a-z])/g, "$1 $2");
+    const isOAuth = type === "oauth2";
+    const isApiKey = type === "apiKey";
+    const isHttpBasic = type === "http" && scheme === "basic";
+    const isHttpBearer = type === "http" && scheme === "bearer";
+    const isOpenId = type === "openIdConnect";
 
-    const isOAuth = formattedLabel.toLowerCase().includes("oauth2");
-    const isApiKey = formattedLabel.toLowerCase().includes("api");
+    if (isOAuth) return `OAuth 2.0: ${key}`;
+    if (isApiKey) return `API Key: ${key}`;
+    if (isHttpBasic) return "HTTP: Basic Auth";
+    if (isHttpBearer) return "HTTP: Bearer Auth";
+    if (isOpenId) return `OpenID Connect: ${key}`;
 
-    return isOAuth ? "OAuth 2.0" : isApiKey ? "API Key" : formattedLabel;
+    return formattedLabel;
   };
 
   return create("div", {
@@ -141,12 +172,16 @@ export function createAuthentication(securitySchemes: SecuritySchemeObject) {
         id: "authentication",
         style: { marginBottom: "1rem" },
       }),
-      create("Tabs", {
+      create("SchemaTabs", {
         children: Object.entries(securitySchemes).map(
-          ([schemeType, schemeObj]) =>
+          ([schemeKey, schemeObj]) =>
             create("TabItem", {
-              label: formatTabLabel(schemeType),
-              value: `${schemeType}`,
+              label: formatTabLabel(
+                schemeKey,
+                schemeObj.type,
+                schemeObj.scheme
+              ),
+              value: `${schemeKey}`,
               children: [
                 createDescription(schemeObj.description),
                 createAuthenticationTable(schemeObj),
