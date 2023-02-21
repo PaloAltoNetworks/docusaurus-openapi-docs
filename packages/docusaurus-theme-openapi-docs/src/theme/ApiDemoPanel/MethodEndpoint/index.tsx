@@ -10,6 +10,7 @@ import React from "react";
 import BrowserOnly from "@docusaurus/BrowserOnly";
 
 import { useTypedSelector } from "../../ApiItem/hooks";
+import server from "@theme/ApiDemoPanel/Server/slice";
 
 function colorForMethod(method: string) {
   switch (method.toLowerCase()) {
@@ -38,38 +39,44 @@ export interface Props {
 }
 
 function MethodEndpoint({ method, path }: Props) {
-  let serverValue = useTypedSelector((state: any) => state.server.value);
-  let serverUrlWithVariables = "";
+  const renderServerUrl = () => {
+    let serverValue = useTypedSelector((state: any) => state.server.value);
+    let serverUrlWithVariables = "";
 
-  if (serverValue && serverValue.variables) {
-    serverUrlWithVariables = serverValue.url.replace(/\/$/, "");
+    if (serverValue && serverValue.variables) {
+      serverUrlWithVariables = serverValue.url.replace(/\/$/, "");
 
-    Object.keys(serverValue.variables).forEach((variable) => {
-      serverUrlWithVariables = serverUrlWithVariables.replace(
-        `{${variable}}`,
-        serverValue.variables?.[variable].default ?? ""
-      );
-    });
-  }
+      Object.keys(serverValue.variables).forEach((variable) => {
+        serverUrlWithVariables = serverUrlWithVariables.replace(
+          `{${variable}}`,
+          serverValue.variables?.[variable].default ?? ""
+        );
+      });
+    }
 
-  const serverUrl =
-    (serverUrlWithVariables.length && serverUrlWithVariables) ||
-    (serverValue && serverValue.url);
+    return (
+      <BrowserOnly>
+        {() => {
+          if (serverUrlWithVariables.length) {
+            return serverUrlWithVariables;
+          } else if (serverValue && serverValue.url) {
+            return serverValue.url;
+          }
+        }}
+      </BrowserOnly>
+    );
+  };
 
   return (
-    <BrowserOnly>
-      {() => (
-        <pre className="openapi__method-endpoint">
-          <span className={"badge badge--" + colorForMethod(method)}>
-            {method.toUpperCase()}
-          </span>{" "}
-          <span>{`${serverUrl}${path.replace(
-            /{([a-z0-9-_]+)}/gi,
-            ":$1"
-          )}`}</span>
-        </pre>
-      )}
-    </BrowserOnly>
+    <pre className="openapi__method-endpoint">
+      <span className={"badge badge--" + colorForMethod(method)}>
+        {method.toUpperCase()}
+      </span>{" "}
+      <span>
+        {renderServerUrl()}
+        {`${path.replace(/{([a-z0-9-_]+)}/gi, ":$1")}`}
+      </span>
+    </pre>
   );
 }
 
