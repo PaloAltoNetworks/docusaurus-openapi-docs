@@ -6,6 +6,7 @@
  * ========================================================================== */
 @use "./ParamsItem/ParamsItem";
 @use "./SchemaItem/SchemaItem";
+@use "./ApiTabs/ApiTabs";
 
 :root {
   --openapi-required: var(--ifm-color-danger);

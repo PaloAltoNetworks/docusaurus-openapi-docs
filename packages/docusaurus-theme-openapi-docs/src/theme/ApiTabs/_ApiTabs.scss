@@ -4,12 +4,11 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
-
-.tabList {
+.openapi-tabs__container {
   margin-bottom: var(--ifm-leading);
 }
 
-.tabItem {
+.openapi-tabs__response-code-item {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,29 +19,51 @@
   border-radius: var(--ifm-global-radius);
   color: var(--ifm-color-primary);
   font-weight: var(--ifm-font-weight-normal);
+
+  &.success {
+    .openapi-tabs__response-dot {
+      background-color: var(--ifm-color-success);
+    }
+  }
+
+  &.danger {
+    .openapi-tabs__response-dot {
+      background-color: var(--ifm-color-danger);
+    }
+  }
+
+  &.info {
+    .openapi-tabs__response-dot {
+      background-color: var(--ifm-color-info);
+    }
+  }
+
+  &.active {
+    background-color: var(--ifm-color-emphasis-100);
+  }
 }
 
-.tabItem:not(.active) {
+.openapi-tabs__response-code-item:not(.active) {
   opacity: 0.65;
 }
 
-.tabItem:hover {
+.openapi-tabs__response-code-item:hover {
   opacity: 1;
 }
 
-.tabItem:last-child {
+.openapi-tabs__response-code-item:last-child {
   margin-right: 0 !important;
 }
 
 /* Open API Response Code Tabs */
-.responseTabsTopSection {
+.openapi-tabs__response-header-section {
   margin-top: 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.responseTabsContainer {
+.openapi-tabs__response-container {
   display: flex;
   align-items: center;
   max-width: 390px;
@@ -50,47 +71,31 @@
   overflow: hidden;
 }
 
-.responseTabsListContainer {
+.openapi-tabs__response-list-container {
   padding: 0 0.25rem;
   overflow-y: hidden;
   overflow-x: scroll;
   scroll-behavior: smooth;
 }
 
-.responseTabsListContainer::-webkit-scrollbar {
+.openapi-tabs__response-list-container::-webkit-scrollbar {
   display: none;
 }
 
 /* Response Code Tabs - Colored Dots */
-.responseTabDot {
+.openapi-tabs__response-dot {
   width: 12.5px;
   height: 12.5px;
   margin-right: 5px;
   border-radius: 50%;
 }
 
-.responseStatusSuccess > .responseTabDot {
-  background-color: var(--ifm-color-success);
-}
-
-.responseStatusDanger > .responseTabDot {
-  background-color: var(--ifm-color-danger);
-}
-
-.responseStatusInfo > .responseTabDot {
-  background-color: var(--ifm-color-info);
-}
-
-.active {
-  background-color: var(--ifm-color-emphasis-100);
-}
-
-.responseSchemaContainer {
+.openapi-tabs__response-schema-container {
   max-width: 600px;
 }
 
 /* Tab Arrows */
-.tabArrow {
+.openapi-tabs__arrow {
   content: "";
   height: 1.25rem;
   width: 1.25rem;
@@ -98,25 +103,27 @@
   min-width: 1.25rem;
   background: var(--ifm-menu-link-sublist-icon) 50% / 2rem 2rem;
   filter: var(--ifm-menu-link-sublist-icon-filter);
-}
 
-.tabArrow:hover {
-  cursor: pointer;
-}
-.tabArrowLeft {
-  transform: rotate(270deg);
-}
-.tabArrowRight {
-  transform: rotate(90deg);
+  &:hover {
+    cursor: pointer;
+  }
+
+  &.left {
+    transform: rotate(270deg);
+  }
+
+  &.right {
+    transform: rotate(90deg);
+  }
 }
 
 @media screen and (max-width: 500px) {
-  .responseTabsTopSection {
+  .openapi-tabs__response-header-section {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .responseTabsContainer {
+  .openapi-tabs__response-container {
     width: 100%;
     margin-top: var(--ifm-spacing-vertical);
     padding: 0;
