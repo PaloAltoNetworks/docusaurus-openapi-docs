@@ -136,7 +136,7 @@ function TabList({ className, block, selectedValue, selectValue, tabValues }) {
         </ul>
         {showTabArrows && (
           <button
-            className="openpi-tabs__arrows right"
+            className="openapi-tabs__arrows right"
             onClick={handleRightClick}
           />
         )}
