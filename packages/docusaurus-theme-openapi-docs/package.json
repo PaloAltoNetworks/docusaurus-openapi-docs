@@ -31,8 +31,8 @@
     "format:lib-next": "prettier --config ../../.prettierrc.json --write \"lib-next/**/*.{js,ts,jsx,tsc}\""
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "^2.0.1",
-    "@docusaurus/types": "^2.0.1",
+    "@docusaurus/module-type-aliases": ">=2.0.1 <2.3.0",
+    "@docusaurus/types": ">=2.0.1 <2.3.0",
     "@types/concurrently": "^6.3.0",
     "@types/crypto-js": "^4.1.0",
     "@types/file-saver": "^2.0.5",
@@ -43,7 +43,7 @@
     "concurrently": "^5.2.0"
   },
   "dependencies": {
-    "@docusaurus/theme-common": "^2.0.1",
+    "@docusaurus/theme-common": ">=2.0.1 <2.3.0",
     "@mdx-js/react": "^1.6.21",
     "@paloaltonetworks/postman-code-generators": "^1.1.15",
     "@paloaltonetworks/postman-collection": "^4.1.0",
