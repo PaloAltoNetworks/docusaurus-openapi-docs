@@ -122,7 +122,6 @@ function createAnyOneOf(schema: SchemaObject): any {
 
 function createProperties(schema: SchemaObject) {
   const discriminator = schema.discriminator;
-  const nullable = schema.nullable;
   return Object.entries(schema.properties!).map(([key, val]) => {
     return createEdges({
       name: key,
