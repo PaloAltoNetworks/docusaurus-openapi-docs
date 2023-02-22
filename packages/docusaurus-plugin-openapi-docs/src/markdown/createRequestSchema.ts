@@ -436,7 +436,8 @@ function createDetailsNode(
   name: string,
   schemaName: string,
   schema: SchemaObject,
-  required: string[] | boolean
+  required: string[] | boolean,
+  nullable: boolean | unknown
 ): any {
   return create("SchemaItem", {
     collapsible: true,
@@ -451,15 +452,19 @@ function createDetailsNode(
                 style: { opacity: "0.6" },
                 children: ` ${schemaName}`,
               }),
-              guard(schema.nullable && schema.nullable === true, () => [
-                create("strong", {
-                  style: {
-                    fontSize: "var(--ifm-code-font-size)",
-                    color: "var(--openapi-nullable)",
-                  },
-                  children: " nullable",
-                }),
-              ]),
+              guard(
+                (schema.nullable && schema.nullable === true) ||
+                  (nullable && nullable === true),
+                () => [
+                  create("strong", {
+                    style: {
+                      fontSize: "var(--ifm-code-font-size)",
+                      color: "var(--openapi-nullable)",
+                    },
+                    children: " nullable",
+                  }),
+                ]
+              ),
               guard(
                 Array.isArray(required)
                   ? required.includes(name)
@@ -604,7 +609,13 @@ function createEdges({
   }
 
   if (schema.oneOf !== undefined || schema.anyOf !== undefined) {
-    return createDetailsNode(name, schemaName, schema, required);
+    return createDetailsNode(
+      name,
+      schemaName,
+      schema,
+      required,
+      schema.nullable
+    );
   }
 
   if (schema.allOf !== undefined) {
@@ -619,20 +630,44 @@ function createEdges({
       mergedSchemas.oneOf !== undefined ||
       mergedSchemas.anyOf !== undefined
     ) {
-      return createDetailsNode(name, mergedSchemaName, mergedSchemas, required);
+      return createDetailsNode(
+        name,
+        mergedSchemaName,
+        mergedSchemas,
+        required,
+        schema.nullable
+      );
     }
 
     if (mergedSchemas.properties !== undefined) {
-      return createDetailsNode(name, mergedSchemaName, mergedSchemas, required);
+      return createDetailsNode(
+        name,
+        mergedSchemaName,
+        mergedSchemas,
+        required,
+        schema.nullable
+      );
     }
 
     if (mergedSchemas.additionalProperties !== undefined) {
-      return createDetailsNode(name, mergedSchemaName, mergedSchemas, required);
+      return createDetailsNode(
+        name,
+        mergedSchemaName,
+        mergedSchemas,
+        required,
+        schema.nullable
+      );
     }
 
     // array of objects
     if (mergedSchemas.items?.properties !== undefined) {
-      return createDetailsNode(name, mergedSchemaName, mergedSchemas, required);
+      return createDetailsNode(
+        name,
+        mergedSchemaName,
+        mergedSchemas,
+        required,
+        schema.nullable
+      );
     }
 
     if (mergedSchemas.readOnly && mergedSchemas.readOnly === true) {
@@ -650,20 +685,44 @@ function createEdges({
   }
 
   if (schema.properties !== undefined) {
-    return createDetailsNode(name, schemaName, schema, required);
+    return createDetailsNode(
+      name,
+      schemaName,
+      schema,
+      required,
+      schema.nullable
+    );
   }
 
   if (schema.additionalProperties !== undefined) {
-    return createDetailsNode(name, schemaName, schema, required);
+    return createDetailsNode(
+      name,
+      schemaName,
+      schema,
+      required,
+      schema.nullable
+    );
   }
 
   // array of objects
   if (schema.items?.properties !== undefined) {
-    return createDetailsNode(name, schemaName, schema, required);
+    return createDetailsNode(
+      name,
+      schemaName,
+      schema,
+      required,
+      schema.nullable
+    );
   }
 
   if (schema.items?.anyOf !== undefined || schema.items?.oneOf !== undefined) {
-    return createDetailsNode(name, schemaName, schema, required);
+    return createDetailsNode(
+      name,
+      schemaName,
+      schema,
+      required,
+      schema.nullable
+    );
   }
 
   if (schema.readOnly && schema.readOnly === true) {
@@ -751,7 +810,7 @@ function createNodes(schema: SchemaObject): any {
 
   // Unknown node/schema type should return undefined
   // So far, haven't seen this hit in testing
-  return undefined;
+  return "any";
 }
 
 interface Props {
@@ -840,7 +899,8 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
   }
 
   const randomFirstKey = Object.keys(body.content)[0];
-  const firstBody = body.content[randomFirstKey].schema;
+  const firstBody: any =
+    body.content[randomFirstKey].schema ?? body.content![randomFirstKey];
 
   if (firstBody === undefined) {
     return undefined;
