@@ -223,16 +223,17 @@ const config = {
             },
           },
           petstore: {
-            specPath: "examples/code",
+            specPath: "examples/petstore.yaml",
             proxy: "https://cors.pan.dev",
             outputDir: "docs/petstore",
             sidebarOptions: {
               groupPathsBy: "tag",
-              categoryLinkSource: "info",
+              categoryLinkSource: "tag",
             },
-            // template: "api.mustache", // Customize API MDX with mustache template
+            template: "api.mustache", // Customize API MDX with mustache template
             downloadUrl:
               "https://raw.githubusercontent.com/PaloAltoNetworks/docusaurus-openapi-docs/main/demo/examples/petstore.yaml",
+            hideSendButton: true,
           },
           cos: {
             specPath: "examples/openapi-cos.json",
