@@ -1,0 +1,458 @@
+{
+  "components": {
+    "examples": {},
+    "headers": {},
+    "parameters": {},
+    "requestBodies": {},
+    "responses": {},
+    "securitySchemes": {
+      "CustomAuthorizer": {
+        "in": "header",
+        "name": "authorization",
+        "type": "apiKey",
+        "x-amazon-apigateway-authorizer": {
+          "authorizerResultTtlInSeconds": 0,
+          "authorizerUri": "arn:aws:apigateway:{Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:{Region}:{AccountId}:function:bc-authorization-authorizer-{UniqueTag}{Alias}/invocations",
+          "identitySource": "method.request.header.authorization",
+          "type": "request"
+        },
+        "x-amazon-apigateway-authtype": "custom"
+      }
+    },
+    "schemas": {
+      "CodeCategories": {
+        "additionalProperties": false,
+        "properties": {
+          "IAC": { "$ref": "#/components/schemas/CodeCategory" },
+          "IMAGES": { "$ref": "#/components/schemas/CodeCategory" },
+          "OPEN_SOURCE": { "$ref": "#/components/schemas/CodeCategory" },
+          "SECRETS": { "$ref": "#/components/schemas/CodeCategory" },
+          "SUPPLY_CHAIN": { "$ref": "#/components/schemas/CodeCategory" }
+        },
+        "required": ["OPEN_SOURCE", "IMAGES", "IAC", "SECRETS", "SUPPLY_CHAIN"],
+        "type": "object"
+      },
+      "CodeCategory": {
+        "additionalProperties": false,
+        "properties": {
+          "commentsBotThreshold": {
+            "$ref": "#/components/schemas/RuleThreshold"
+          },
+          "hardFailThreshold": { "$ref": "#/components/schemas/RuleThreshold" },
+          "softFailThreshold": { "$ref": "#/components/schemas/RuleThreshold" }
+        },
+        "required": [
+          "hardFailThreshold",
+          "softFailThreshold",
+          "commentsBotThreshold"
+        ],
+        "type": "object"
+      },
+      "CodeReviewData": {
+        "additionalProperties": false,
+        "properties": {
+          "PR": { "$ref": "#/components/schemas/PR" },
+          "commitId": { "type": "string" },
+          "creationDate": { "format": "date-time", "type": "string" },
+          "defaultBranch": { "type": "string" },
+          "gitUser": { "type": "string" },
+          "id": { "type": "string" },
+          "lastScanDate": { "format": "date-time", "type": "string" },
+          "organization": { "type": "string" },
+          "repository": { "type": "string" },
+          "results": { "$ref": "#/components/schemas/ScanResult" },
+          "runId": { "format": "double", "type": "number" },
+          "scanStatus": { "$ref": "#/components/schemas/ScanStatus" },
+          "sourceType": { "$ref": "#/components/schemas/SourceType" },
+          "status": { "$ref": "#/components/schemas/RunStatus" }
+        },
+        "required": [
+          "id",
+          "organization",
+          "repository",
+          "sourceType",
+          "gitUser",
+          "status",
+          "scanStatus",
+          "results",
+          "lastScanDate",
+          "creationDate"
+        ],
+        "type": "object"
+      },
+      "CodeReviewResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "items": { "$ref": "#/components/schemas/CodeReviewData" },
+            "type": "array"
+          },
+          "hasNext": { "type": "boolean" }
+        },
+        "required": ["hasNext", "data"],
+        "type": "object"
+      },
+      "PR": {
+        "additionalProperties": false,
+        "properties": {
+          "enforcementRule": { "$ref": "#/components/schemas/CodeCategories" },
+          "fromBranch": { "type": "string" },
+          "intoBranch": { "type": "string" },
+          "lastScanDate": { "format": "date-time", "type": "string" },
+          "prNumber": { "type": "string" },
+          "title": { "type": "string" }
+        },
+        "required": ["title", "prNumber"],
+        "type": "object"
+      },
+      "ProjectsData": {
+        "additionalProperties": false,
+        "properties": {
+          "currentWeekCommits": { "format": "double", "type": "number" },
+          "failedPrs": { "format": "double", "type": "number" },
+          "gitUsers": { "format": "double", "type": "number" },
+          "latestPR": { "$ref": "#/components/schemas/PR" },
+          "organization": { "type": "string" },
+          "pendingFixPrs": { "format": "double", "type": "number" },
+          "prevWeekCommits": { "format": "double", "type": "number" },
+          "repository": { "type": "string" },
+          "runId": { "format": "double", "type": "number" },
+          "sourceType": { "$ref": "#/components/schemas/SourceType" },
+          "totalPrs": { "format": "double", "type": "number" }
+        },
+        "required": [
+          "organization",
+          "repository",
+          "sourceType",
+          "prevWeekCommits",
+          "currentWeekCommits",
+          "runId",
+          "gitUsers",
+          "failedPrs",
+          "totalPrs",
+          "pendingFixPrs",
+          "latestPR"
+        ],
+        "type": "object"
+      },
+      "ProjectsResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "items": { "$ref": "#/components/schemas/ProjectsData" },
+            "type": "array"
+          },
+          "hasNext": { "type": "boolean" }
+        },
+        "required": ["hasNext", "data"],
+        "type": "object"
+      },
+      "RuleThreshold": {
+        "enum": ["OFF", "INFO", "LOW", "MEDIUM", "HIGH", "CRITICAL"],
+        "type": "string"
+      },
+      "RunStatus": {
+        "enum": ["COMPLETED", "IN_PROGRESS", "FAILED", "ARCHIVED"],
+        "type": "string"
+      },
+      "ScanResult": {
+        "additionalProperties": false,
+        "properties": {
+          "CRITICAL": { "format": "double", "type": "number" },
+          "HIGH": { "format": "double", "type": "number" },
+          "LOW": { "format": "double", "type": "number" },
+          "MEDIUM": { "format": "double", "type": "number" }
+        },
+        "required": ["CRITICAL", "HIGH", "MEDIUM", "LOW"],
+        "type": "object"
+      },
+      "ScanStatus": {
+        "enum": ["HARD_FAIL", "SOFT_FAIL", "PASS", "UNKNOWN"],
+        "type": "string"
+      },
+      "SortCodeReviews": {
+        "enum": ["resourcesCount", "user", "failedResources", "scanTime"],
+        "type": "string"
+      },
+      "SortDirection": { "enum": ["ASC", "DESC"], "type": "string" },
+      "SortProjects": {
+        "enum": [
+          "weeklyCommits",
+          "usersCount",
+          "failedPrs",
+          "pendingFixPrs",
+          "scanTime",
+          "repository",
+          "organization"
+        ],
+        "type": "string"
+      },
+      "SourceType": {
+        "enum": [
+          "Github",
+          "Bitbucket",
+          "Gitlab",
+          "AzureRepos",
+          "cli",
+          "AWS",
+          "Azure",
+          "GCP",
+          "Docker",
+          "githubEnterprise",
+          "gitlabEnterprise",
+          "bitbucketEnterprise",
+          "terraformCloud",
+          "githubActions",
+          "circleci",
+          "codebuild",
+          "jenkins",
+          "tfcRunTasks",
+          "admissionController",
+          "terraformEnterprise"
+        ],
+        "type": "string"
+      }
+    }
+  },
+  "info": {
+    "contact": {},
+    "description": "The Development Pipeline endpoints are listed below.",
+    "title": "Prisma Cloud Development Pipeline API Overview",
+    "version": "Latest"
+  },
+  "openapi": "3.0.0",
+  "paths": {
+    "/code/api/v1/development-pipeline/code-review/runs/data": {
+      "get": {
+        "description": "Prisma Cloud Code Security’s Code Reviews table enables you to view the latest code reviews across\nyour integrated VCS and CI/CD repository snapshots.\nWith Code Reviews, you can analyze how many issues were found in each scan,\nbroken down by severity threshold levels, the scan status and\nthe Enforcement settings for different code categories at the time of the scan.\n\nThe response includes the following data for each VCS or CI/CD code review:\n* Repository: the Git repository to which the scanned item belongs\n* Organization: the Git organization to which the scanned item belongs and its VCS type\n* defaultBranch: The default branch of the repository\n* commitId: Git commit hash for VCS tool code review\n* runId: Prisma Cloud Code Security’s run ID, set for CI/CD tool code review\n* gitUser: the Git user who has triggered the scan:\n  - For VCS, this is the commit creator.\n  - For CI/CD, if detected, this is the user who triggered the scan.\n* scanStatus: Failed or Passed, based on Enforcement settings:\n   HARD_FAIL - scan has failed and will break build or block PR\n   SOFT_FAIL - issues at a certain severity threshold were found, but the scan will not break build or block PR\n   PASS - no issues for Hard Fail or Soft Fail were found\n   UNKNOWN - scan was unsuccessful\n* SourceType: the VCS the Git repository is hosted on\n* Results:  Severity breakdown of the detected issues\n* lastScanDate: last scan’s time and date\n* creationDate: scan’s start time and date\n* status - the run status COMPLETED/IN_PROGRESS/FAILED/ARCHIVED\n* PR: {\n    title: PR name\n    prNumber: PR ID\n    lastScanDate: scan date\n    fromBranch: source branch\n    intoBranch: target branch\n    enforcementRule: {\n       IAC: Soft Fail and Hard Fail settings\n       IMAGES: Soft Fail and Hard Fail settings\n       OPEN_SOURCE: Soft Fail and Hard Fail settings\n       SECRETS: Soft Fail and Hard Fail settings\n       SUPPLY_CHAIN: Soft Fail and Hard Fail settings\n    }\n}",
+        "operationId": "getCodeReviewData",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "sortBy",
+            "required": false,
+            "schema": {
+              "enum": ["resourcesCount", "user", "failedResources", "scanTime"],
+              "type": "string"
+            }
+          },
+          {
+            "description": "- string, optional",
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "description": "- number, optional; default value = 1000",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": { "format": "double", "type": "number" }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": { "format": "double", "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "data": [
+                        {
+                          "PR": {
+                            "enforcementRule": {
+                              "IAC": {
+                                "commentsBotThreshold": "HIGH",
+                                "hardFailThreshold": "CRITICAL",
+                                "softFailThreshold": "CRITICAL"
+                              },
+                              "IMAGES": {
+                                "commentsBotThreshold": "HIGH",
+                                "hardFailThreshold": "CRITICAL",
+                                "softFailThreshold": "CRITICAL"
+                              },
+                              "OPEN_SOURCE": {
+                                "commentsBotThreshold": "HIGH",
+                                "hardFailThreshold": "CRITICAL",
+                                "softFailThreshold": "CRITICAL"
+                              },
+                              "SECRETS": {
+                                "commentsBotThreshold": "HIGH",
+                                "hardFailThreshold": "CRITICAL",
+                                "softFailThreshold": "CRITICAL"
+                              },
+                              "SUPPLY_CHAIN": {
+                                "commentsBotThreshold": "LOW",
+                                "hardFailThreshold": "LOW",
+                                "softFailThreshold": "LOW"
+                              }
+                            },
+                            "fromBranch": "feature/mod-aws-node",
+                            "intoBranch": "main",
+                            "prNumber": "5",
+                            "title": "My PR"
+                          },
+                          "commitId": "123456",
+                          "creationDate": "2022-09-18T15:37:25.725Z",
+                          "defaultBranch": "main",
+                          "gitUser": "Michal",
+                          "id": "1",
+                          "lastScanDate": "2022-09-18T15:37:25.725Z",
+                          "repository": "terragoat",
+                          "results": {
+                            "CRITICAL": 10,
+                            "HIGH": 20,
+                            "LOW": 1,
+                            "MEDIUM": 5
+                          },
+                          "runId": 5,
+                          "scanStatus": "HARD_FAIL",
+                          "sourceType": "Github",
+                          "status": "COMPLETED"
+                        }
+                      ],
+                      "hasNext": true
+                    }
+                  }
+                },
+                "schema": { "$ref": "#/components/schemas/CodeReviewResponse" }
+              }
+            },
+            "description": "Get code review data runs for customer"
+          },
+          "422": { "description": "Request arguments validation error" }
+        },
+        "security": [{ "CustomAuthorizer": [] }],
+        "summary": "Get Code review runs data",
+        "tags": ["Development Pipeline"],
+        "x-codeSamples": [
+          {
+            "lang": "Python + Requests",
+            "source": "import requests\n\nurl = \"https://api.prismacloud.io/code/api/v1/development-pipeline/code-review/runs/data\"\n\nquerystring = {\"sortBy\":\"SOME_STRING_VALUE\",\"search\":\"SOME_STRING_VALUE\",\"limit\":\"SOME_NUMBER_VALUE\",\"page\":\"SOME_NUMBER_VALUE\"}\n\nheaders = {\"authorization\": \"REPLACE_KEY_VALUE\"}\n\nresponse = requests.request(\"GET\", url, headers=headers, params=querystring)\n\nprint(response.text)"
+          },
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request GET \\\n  --url 'https://api.prismacloud.io/code/api/v1/development-pipeline/code-review/runs/data?sortBy=SOME_STRING_VALUE&search=SOME_STRING_VALUE&limit=SOME_NUMBER_VALUE&page=SOME_NUMBER_VALUE' \\\n  --header 'authorization: REPLACE_KEY_VALUE'"
+          }
+        ]
+      }
+    },
+    "/code/api/v1/development-pipeline/projects/prs/data": {
+      "get": {
+        "description": "Prisma Cloud Code Security’s Projects table enables you to view your integrated VCS repository snapshots.\nWith Projects, you can analyze your repository usage rate according to various parameters,\nsuch as weekly commits and Git users who have merged their commits into the default branch in a set period of time.\nThis data can help you understand which of your repositories are used most,\nand which have the highest risk of deploying a misconfigured or vulnerable code.\n\nThe response includes the following data for each VCS repository:\n* Repository: the Git repository to which the scanned item belongs\n* Organization: the Git organization to which the repository belongs and its VCS type\n* SourceType: Which VCS the Git repository is hosted on\n* currentWeekCommits: the total number of commits from the latest week that were merged into the default branch. If no records are available from the past week, the currentWeekCommits value will be -1.\n* prevWeekCommits:  the total number of commits from previous week that were merged into the default branch. If no records are available from the past week, the prevWeekCommits value will be -1.\n* gitUsers: how many Git users have merged their commits into the default branch over the past 90 days. If no records are available from the past week, the gitUsers value will be 1.\n* failedPrs: the number of failed open PRs out of all open PRs based on Prisma Cloud Code Security's findings and Enforcement settings. For more information, see Enforcement. If no records are available from the past week, the failedPrs value will be 1.\n* totalPrs: the number of open PRs evaluated by Prisma Cloud Code Security’s VCS app. If no records are available from the past week, the totalPrs value will be 1.\n* pendingFixPrs: the number of open PRs created by Prisma Cloud Code Security/Prisma Cloud after being submitted by users within the platform. These are yet to be merged into the default branch. If no records are available from the past week, the pendingFixPrs value will be 1.\n* latestPR: {\n      title: PR name\n      number: PR id\n      lastScanDate: time and date of the latest PR scan\n  }",
+        "operationId": "getProjectsData",
+        "parameters": [
+          {
+            "description": "- (the index of the results page)\nType: number\nDefault value: 0",
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": { "format": "double", "type": "number" }
+          },
+          {
+            "description": "- (The column name by which to sort the results)\nType: ['weeklyCommits' | 'usersCount' | 'failedPrs' | 'pendingFixPrs' | 'scanTime'| 'repository' | 'organization']\nDefault value - null (the results will be sorted by ‘usersCount’ by default)",
+            "in": "query",
+            "name": "sortBy",
+            "required": false,
+            "schema": {
+              "enum": [
+                "weeklyCommits",
+                "usersCount",
+                "failedPrs",
+                "pendingFixPrs",
+                "scanTime",
+                "repository",
+                "organization"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortDir",
+            "required": false,
+            "schema": { "enum": ["ASC", "DESC"], "type": "string" }
+          },
+          {
+            "description": "- (search for code reviews of specific repositories)\nType: string\nDefault value - null",
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "description": "- (results number to get)\nType: number\nDefault value: 1000",
+            "in": "query",
+            "name": "pageSize",
+            "required": false,
+            "schema": { "format": "double", "type": "number" }
+          },
+          {
+            "description": "- (get the number of the total results or not)\nType: boolean\nDefault value: false",
+            "in": "query",
+            "name": "withTotal",
+            "required": false,
+            "schema": { "type": "boolean" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "data": [
+                        {
+                          "currentWeekCommits": 0,
+                          "failedPrs": 0,
+                          "gitUsers": 1,
+                          "latestPR": {
+                            "lastScanDate": "2022-09-18T15:37:25.727Z",
+                            "prNumber": "200",
+                            "title": "AI-1132 add user similar service"
+                          },
+                          "prevWeekCommits": 0,
+                          "repository": "terragoat",
+                          "runId": 627107,
+                          "sourceType": "Github",
+                          "totalPrs": 2
+                        }
+                      ],
+                      "hasNext": true
+                    }
+                  }
+                },
+                "schema": { "$ref": "#/components/schemas/ProjectsResponse" }
+              }
+            },
+            "description": "Get projects PRs data for customer"
+          },
+          "422": { "description": "Request arguments validation error" }
+        },
+        "security": [{ "CustomAuthorizer": [] }],
+        "summary": "Get integrated VCS repositories metadata",
+        "tags": ["Development Pipeline"],
+        "x-codeSamples": [
+          {
+            "lang": "Python + Requests",
+            "source": "import requests\n\nurl = \"https://api.prismacloud.io/code/api/v1/development-pipeline/projects/prs/data\"\n\nquerystring = {\"page\":\"SOME_NUMBER_VALUE\",\"sortBy\":\"SOME_STRING_VALUE\",\"sortDir\":\"SOME_STRING_VALUE\",\"search\":\"SOME_STRING_VALUE\",\"pageSize\":\"SOME_NUMBER_VALUE\",\"withTotal\":\"SOME_BOOLEAN_VALUE\"}\n\nheaders = {\"authorization\": \"REPLACE_KEY_VALUE\"}\n\nresponse = requests.request(\"GET\", url, headers=headers, params=querystring)\n\nprint(response.text)"
+          },
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request GET \\\n  --url 'https://api.prismacloud.io/code/api/v1/development-pipeline/projects/prs/data?page=SOME_NUMBER_VALUE&sortBy=SOME_STRING_VALUE&sortDir=SOME_STRING_VALUE&search=SOME_STRING_VALUE&pageSize=SOME_NUMBER_VALUE&withTotal=SOME_BOOLEAN_VALUE' \\\n  --header 'authorization: REPLACE_KEY_VALUE'"
+          }
+        ]
+      }
+    }
+  },
+  "servers": [{ "url": "https://api.prismacloud.io" }],
+  "tags": [{ "name": "Development Pipeline" }]
+}

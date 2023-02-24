@@ -1,0 +1,452 @@
+{
+  "components": {
+    "examples": {},
+    "headers": {},
+    "parameters": {},
+    "requestBodies": {},
+    "responses": {},
+    "securitySchemes": {
+      "CustomAuthorizer": {
+        "in": "header",
+        "name": "authorization",
+        "type": "apiKey",
+        "x-amazon-apigateway-authorizer": {
+          "authorizerResultTtlInSeconds": 0,
+          "authorizerUri": "arn:aws:apigateway:{Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:{Region}:{AccountId}:function:bc-authorization-authorizer-{UniqueTag}{Alias}/invocations",
+          "identitySource": "method.request.header.authorization",
+          "type": "request"
+        },
+        "x-amazon-apigateway-authtype": "custom"
+      }
+    },
+    "schemas": {
+      "Match": {
+        "additionalProperties": {
+          "properties": { "tags": { "$ref": "#/components/schemas/TagMatch" } },
+          "required": ["tags"],
+          "type": "object"
+        },
+        "properties": {},
+        "type": "object"
+      },
+      "RuleDefinition": {
+        "additionalProperties": false,
+        "properties": {
+          "tag_groups": {
+            "items": { "$ref": "#/components/schemas/TagGroup" },
+            "type": "array"
+          }
+        },
+        "required": ["tag_groups"],
+        "type": "object"
+      },
+      "TagDefinition": {
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "value": {
+            "properties": {
+              "default": { "type": "string" },
+              "matches": {
+                "items": { "$ref": "#/components/schemas/Match" },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "required": ["name", "value"],
+        "type": "object"
+      },
+      "TagGroup": {
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "tags": {
+            "items": { "$ref": "#/components/schemas/TagDefinition" },
+            "type": "array"
+          }
+        },
+        "required": ["name", "tags"],
+        "type": "object"
+      },
+      "TagMatch": {
+        "additionalProperties": { "type": "string" },
+        "properties": {},
+        "type": "object"
+      },
+      "TagRuleAffectedResources": {
+        "additionalProperties": false,
+        "properties": {
+          "repository": { "$ref": "#/components/schemas/TagRulesRepository" },
+          "ruleDefinition": { "$ref": "#/components/schemas/RuleDefinition" }
+        },
+        "type": "object"
+      },
+      "TagRuleCreationBody": {
+        "additionalProperties": false,
+        "properties": {
+          "description": { "type": "string" },
+          "isEnabled": { "type": "boolean" },
+          "name": { "type": "string" },
+          "repositories": { "items": { "type": "string" }, "type": "array" },
+          "ruleDefinition": { "$ref": "#/components/schemas/RuleDefinition" },
+          "tagRuleOOTBId": { "type": "string" }
+        },
+        "required": ["name", "repositories", "ruleDefinition"],
+        "type": "object"
+      },
+      "TagRuleCreationResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "msg": { "type": "string" },
+          "upserted": { "type": "boolean" }
+        },
+        "required": ["upserted"],
+        "type": "object"
+      },
+      "TagRuleUpdateBody": {
+        "additionalProperties": false,
+        "properties": {
+          "description": { "type": "string" },
+          "isEnabled": { "type": "boolean" },
+          "name": { "type": "string" },
+          "repositories": { "items": { "type": "string" }, "type": "array" },
+          "ruleDefinition": { "$ref": "#/components/schemas/RuleDefinition" },
+          "tagRuleOOTBId": { "type": "string" }
+        },
+        "type": "object"
+      },
+      "TagRulesRepository": {
+        "additionalProperties": false,
+        "properties": {
+          "defaultBranch": { "type": "string" },
+          "id": { "type": "string" },
+          "owner": { "type": "string" },
+          "repo": { "type": "string" },
+          "type": { "type": "string" },
+          "value": { "type": "string" }
+        },
+        "required": ["id", "owner", "repo", "type", "defaultBranch"],
+        "type": "object"
+      },
+      "TagRulesResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "canDoActions": { "type": "boolean" },
+          "createdBy": { "type": "string" },
+          "creationDate": { "type": "string" },
+          "definition": { "$ref": "#/components/schemas/RuleDefinition" },
+          "description": { "type": "string" },
+          "id": { "type": "string" },
+          "isEnabled": { "type": "boolean" },
+          "name": { "type": "string" },
+          "repositories": { "items": { "type": "string" }, "type": "array" },
+          "tagRuleOOTBId": { "type": "string" }
+        },
+        "required": [
+          "id",
+          "name",
+          "definition",
+          "createdBy",
+          "creationDate",
+          "isEnabled",
+          "repositories"
+        ],
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "contact": {},
+    "description": "The Tag Rules endpoints are listed below.\n",
+    "title": "Prisma Cloud Tag Rules API Overview",
+    "version": "Latest"
+  },
+  "openapi": "3.0.0",
+  "paths": {
+    "/code/api/v1/tag-rules": {
+      "get": {
+        "description": "Prisma Cloud Code Security supports tagging management for IaC templates, based on the company’s open-source tool Yor (https://yor.io/).\nWith tag rules, you can manage your tagging strategies easily across providers and repositories,\neven before they go live.\nSuch capability allows users to enable out-of-the-box (OOTB) Prisma Cloud Code Security tag rules,\nsuch as the traceability tag (“yor_trace”) used for code-to-cloud resource tracing and drift detection.\nFurthermore, Prisma Cloud Code Security enables custom tag rule creation and management (edit, clone, enable, disable and delete).\n\n\n\nThis API is used to fetch an array of all your existing tag rules.\nThe response includes the following details (for each tag rule):\n* Rule ID\n* Rule Name\n* Description\n* Rule status (enabled/disabled)\n* Repositories - a list of repositories the rule applies to",
+        "operationId": "getTags",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": { "$ref": "#/components/schemas/TagRulesResponse" },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Get tags"
+          }
+        },
+        "security": [{ "CustomAuthorizer": [] }],
+        "summary": "Get All Tags",
+        "tags": ["Tag Rules"],
+        "x-codeSamples": [
+          {
+            "lang": "Python + Requests",
+            "source": "import requests\n\nurl = \"https://api.prismacloud.io/code/api/v1/tag-rules\"\n\nheaders = {\"authorization\": \"REPLACE_KEY_VALUE\"}\n\nresponse = requests.request(\"GET\", url, headers=headers)\n\nprint(response.text)"
+          },
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request GET \\\n  --url https://api.prismacloud.io/code/api/v1/tag-rules \\\n  --header 'authorization: REPLACE_KEY_VALUE'"
+          }
+        ]
+      },
+      "post": {
+        "description": "Prisma Cloud Code Security supports tagging management for IaC templates, based on the company’s open-source tool Yor (https://yor.io/).\nWith tag rules, you can manage your tagging strategies easily across providers and repositories,\neven before they go live.\nSuch capability allows users to enable out-of-the-box (OOTB) Prisma Cloud Code Security tag rules,\nsuch as the traceability tag (“yor_trace”) used for code-to-cloud resource tracing and drift detection.\nFurthermore, Prisma Cloud Code Security enables custom tag rule creation and management (edit, clone, enable, disable and delete).\n\n\n\nThis API is used to save a new custom tag rule definition based on input of:\n* Repositories\n* Rule definition\n* Key name\n* Rule status (enabled/disabled)\n* Description (a sentence explaining the rule)\n\nThe response includes:\n* Repositories where the rule is applied\n* Rule Definition\n* Rule status (enabled/disabled)\n* Rule ID\n* Rule name\n* Description",
+        "operationId": "saveTag",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/TagRuleCreationBody" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TagRulesResponse" }
+              }
+            },
+            "description": "Tag saved"
+          },
+          "422": { "description": "Request arguments validation error" }
+        },
+        "security": [{ "CustomAuthorizer": [] }],
+        "summary": "Create Custom Tag Rule",
+        "tags": ["Tag Rules"],
+        "x-codeSamples": [
+          {
+            "lang": "Python + Requests",
+            "source": "import requests\n\nurl = \"https://api.prismacloud.io/code/api/v1/tag-rules\"\n\npayload = {\n    \"description\": \"string\",\n    \"isEnabled\": True,\n    \"name\": \"string\",\n    \"repositories\": [\"string\"],\n    \"ruleDefinition\": {\"tag_groups\": [\n            {\n                \"name\": \"string\",\n                \"tags\": [\n                    {\n                        \"name\": \"string\",\n                        \"value\": {\n                            \"default\": \"string\",\n                            \"matches\": [\n                                {\n                                    \"property1\": {\"tags\": {\n                                            \"property1\": \"string\",\n                                            \"property2\": \"string\"\n                                        }},\n                                    \"property2\": {\"tags\": {\n                                            \"property1\": \"string\",\n                                            \"property2\": \"string\"\n                                        }}\n                                }\n                            ]\n                        }\n                    }\n                ]\n            }\n        ]},\n    \"tagRuleOOTBId\": \"string\"\n}\nheaders = {\n    \"content-type\": \"application/json\",\n    \"authorization\": \"REPLACE_KEY_VALUE\"\n}\n\nresponse = requests.request(\"POST\", url, json=payload, headers=headers)\n\nprint(response.text)"
+          },
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request POST \\\n  --url https://api.prismacloud.io/code/api/v1/tag-rules \\\n  --header 'authorization: REPLACE_KEY_VALUE' \\\n  --header 'content-type: application/json' \\\n  --data '{\"description\":\"string\",\"isEnabled\":true,\"name\":\"string\",\"repositories\":[\"string\"],\"ruleDefinition\":{\"tag_groups\":[{\"name\":\"string\",\"tags\":[{\"name\":\"string\",\"value\":{\"default\":\"string\",\"matches\":[{\"property1\":{\"tags\":{\"property1\":\"string\",\"property2\":\"string\"}},\"property2\":{\"tags\":{\"property1\":\"string\",\"property2\":\"string\"}}}]}}]}]},\"tagRuleOOTBId\":\"string\"}'"
+          }
+        ]
+      }
+    },
+    "/code/api/v1/tag-rules/{tagRuleId}": {
+      "get": {
+        "description": "Prisma Cloud Code Security supports tagging management for IaC templates, based on the company’s open-source tool Yor (https://yor.io/).\nWith tag rules, you can manage your tagging strategies easily across providers and repositories,\neven before they go live.\nSuch capability allows users to enable out-of-the-box (OOTB) Prisma Cloud Code Security tag rules,\nsuch as the traceability tag (“yor_trace”) used for code-to-cloud resource tracing and drift detection.\nFurthermore, Prisma Cloud Code Security enables custom tag rule creation and management (edit, clone, enable, disable and delete).\n\n\n\nThis API is used to get the definition of a tag rule based on a rule ID input.\nThe response includes:\n* Rule Name\n* Description\n* Rule status (enabled/disabled)\n* Repositories - a list of repositories the rule applies to",
+        "operationId": "getTag",
+        "parameters": [
+          {
+            "description": "- The tag rule ID to get",
+            "in": "path",
+            "name": "tagRuleId",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TagRulesResponse" }
+              }
+            },
+            "description": "Get tag"
+          },
+          "422": { "description": "Request arguments validation error" }
+        },
+        "security": [{ "CustomAuthorizer": [] }],
+        "summary": "Get Tag Rule by ID",
+        "tags": ["Tag Rules"],
+        "x-codeSamples": [
+          {
+            "lang": "Python + Requests",
+            "source": "import requests\n\nurl = \"https://api.prismacloud.io/code/api/v1/tag-rules/{tagRuleId}\"\n\nheaders = {\"authorization\": \"REPLACE_KEY_VALUE\"}\n\nresponse = requests.request(\"GET\", url, headers=headers)\n\nprint(response.text)"
+          },
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request GET \\\n  --url https://api.prismacloud.io/code/api/v1/tag-rules/{tagRuleId} \\\n  --header 'authorization: REPLACE_KEY_VALUE'"
+          }
+        ]
+      },
+      "put": {
+        "description": "Prisma Cloud Code Security supports tagging management for IaC templates, based on the company’s open-source tool Yor (https://yor.io/).\nWith tag rules, you can manage your tagging strategies easily across providers and repositories,\neven before they go live.\nSuch capability allows users to enable out-of-the-box (OOTB) Prisma Cloud Code Security tag rules,\nsuch as the traceability tag (“yor_trace”) used for code-to-cloud resource tracing and drift detection.\nFurthermore, Prisma Cloud Code Security enables custom tag rule creation and management (edit, clone, enable, disable and delete).\n\n\n\nThis API is used to update a custom or OOTB tag rule definition based on input of:\n* Repositories\n* Rule definition\n* Key name\n* Rule status (enabled/disabled)\n* Description\n\nThe response includes:\n* Repositories where the rule is applied\n* Rule Definition\n* Rule status (enabled/disabled)\n* Rule ID\n* Rule name\n* Description",
+        "operationId": "updateTag",
+        "parameters": [
+          {
+            "description": "- The tag rule id to update",
+            "in": "path",
+            "name": "tagRuleId",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/TagRuleUpdateBody" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TagRuleCreationResponse"
+                }
+              }
+            },
+            "description": "Tag updated"
+          },
+          "422": { "description": "Request arguments validation error" }
+        },
+        "security": [{ "CustomAuthorizer": [] }],
+        "summary": "Update Tag Rule",
+        "tags": ["Tag Rules"],
+        "x-codeSamples": [
+          {
+            "lang": "Python + Requests",
+            "source": "import requests\n\nurl = \"https://api.prismacloud.io/code/api/v1/tag-rules/{tagRuleId}\"\n\npayload = {\n    \"description\": \"string\",\n    \"isEnabled\": True,\n    \"name\": \"string\",\n    \"repositories\": [\"string\"],\n    \"ruleDefinition\": {\"tag_groups\": [\n            {\n                \"name\": \"string\",\n                \"tags\": [\n                    {\n                        \"name\": \"string\",\n                        \"value\": {\n                            \"default\": \"string\",\n                            \"matches\": [\n                                {\n                                    \"property1\": {\"tags\": {\n                                            \"property1\": \"string\",\n                                            \"property2\": \"string\"\n                                        }},\n                                    \"property2\": {\"tags\": {\n                                            \"property1\": \"string\",\n                                            \"property2\": \"string\"\n                                        }}\n                                }\n                            ]\n                        }\n                    }\n                ]\n            }\n        ]},\n    \"tagRuleOOTBId\": \"string\"\n}\nheaders = {\n    \"content-type\": \"application/json\",\n    \"authorization\": \"REPLACE_KEY_VALUE\"\n}\n\nresponse = requests.request(\"PUT\", url, json=payload, headers=headers)\n\nprint(response.text)"
+          },
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request PUT \\\n  --url https://api.prismacloud.io/code/api/v1/tag-rules/{tagRuleId} \\\n  --header 'authorization: REPLACE_KEY_VALUE' \\\n  --header 'content-type: application/json' \\\n  --data '{\"description\":\"string\",\"isEnabled\":true,\"name\":\"string\",\"repositories\":[\"string\"],\"ruleDefinition\":{\"tag_groups\":[{\"name\":\"string\",\"tags\":[{\"name\":\"string\",\"value\":{\"default\":\"string\",\"matches\":[{\"property1\":{\"tags\":{\"property1\":\"string\",\"property2\":\"string\"}},\"property2\":{\"tags\":{\"property1\":\"string\",\"property2\":\"string\"}}}]}}]}]},\"tagRuleOOTBId\":\"string\"}'"
+          }
+        ]
+      },
+      "delete": {
+        "description": "Prisma Cloud Code Security supports tagging management for IaC templates, based on the company’s open-source tool Yor (https://yor.io/).\nWith tag rules, you can manage your tagging strategies easily across providers and repositories,\neven before they go live.\nSuch capability allows users to enable out-of-the-box (OOTB) Prisma Cloud Code Security tag rules,\nsuch as the traceability tag (“yor_trace”) used for code-to-cloud resource tracing and drift detection.\nFurthermore, Prisma Cloud Code Security enables custom tag rule creation and management (edit, clone, enable, disable and delete).\n\n\n\nThis API is used to delete a custom tag rule definition based on a tag rule ID input.\nIn case of user that tries to delete a rule which applied to unpermitted repositories -\nIt will raise an error which returns the following string:  “Cannot delete tag rule -\nuser do not have access for all the repositories”\nIf you get this error message, ask for access to the relevant repositories from your admin.\n\nNote: this function deletes a specific tag rule.\nThe deleted rule will not be applied to new resources, but existing tags generated previously by this rule are not deleted.",
+        "operationId": "deleteTag",
+        "parameters": [
+          {
+            "description": "- The tag rule ID to delete",
+            "in": "path",
+            "name": "tagRuleId",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": { "anyOf": [{}, { "type": "string" }] }
+              }
+            },
+            "description": "Tag updated"
+          },
+          "422": { "description": "Request arguments validation error" }
+        },
+        "security": [{ "CustomAuthorizer": [] }],
+        "summary": "Delete Tag Rule",
+        "tags": ["Tag Rules"],
+        "x-codeSamples": [
+          {
+            "lang": "Python + Requests",
+            "source": "import requests\n\nurl = \"https://api.prismacloud.io/code/api/v1/tag-rules/{tagRuleId}\"\n\nheaders = {\"authorization\": \"REPLACE_KEY_VALUE\"}\n\nresponse = requests.request(\"DELETE\", url, headers=headers)\n\nprint(response.text)"
+          },
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request DELETE \\\n  --url https://api.prismacloud.io/code/api/v1/tag-rules/{tagRuleId} \\\n  --header 'authorization: REPLACE_KEY_VALUE'"
+          }
+        ]
+      }
+    },
+    "/code/api/v1/tag-rules/affected-resources": {
+      "post": {
+        "description": "Prisma Cloud Code Security supports tagging management for IaC templates, based on the company’s open-source tool Yor (https://yor.io/).\nWith tag rules, you can manage your tagging strategies easily across providers and repositories,\neven before they go live.\nSuch capability allows users to enable out-of-the-box (OOTB) Prisma Cloud Code Security tag rules,\nsuch as the traceability tag (“yor_trace”) used for code-to-cloud resource tracing and drift detection.\nFurthermore, Prisma Cloud Code Security enables custom tag rule creation and management (edit, clone, enable, disable and delete).\n\n\n\nThis API is used to get a count of the affected resources before creating a tag rule.\nBased on the returned number, you may want to make your rule less or more specific.\nThe input is:\n* The repositories that need to be tested\n* Tag rule definition\nThe response returns the total number of affected resources based on given inputs.",
+        "operationId": "getAffectedResources",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TagRuleAffectedResources"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "affectedResourcesNum": {
+                      "format": "double",
+                      "type": "number"
+                    }
+                  },
+                  "required": ["affectedResourcesNum"],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Got affected resources"
+          },
+          "422": { "description": "Request arguments validation error" }
+        },
+        "security": [{ "CustomAuthorizer": [] }],
+        "summary": "Get List of Resources Affected by Tag Rule",
+        "tags": ["Tag Rules"],
+        "x-codeSamples": [
+          {
+            "lang": "Python + Requests",
+            "source": "import requests\n\nurl = \"https://api.prismacloud.io/code/api/v1/tag-rules/affected-resources\"\n\npayload = {\n    \"repository\": {\n        \"defaultBranch\": \"string\",\n        \"id\": \"string\",\n        \"owner\": \"string\",\n        \"repo\": \"string\",\n        \"type\": \"string\",\n        \"value\": \"string\"\n    },\n    \"ruleDefinition\": {\"tag_groups\": [\n            {\n                \"name\": \"string\",\n                \"tags\": [\n                    {\n                        \"name\": \"string\",\n                        \"value\": {\n                            \"default\": \"string\",\n                            \"matches\": [\n                                {\n                                    \"property1\": {\"tags\": {\n                                            \"property1\": \"string\",\n                                            \"property2\": \"string\"\n                                        }},\n                                    \"property2\": {\"tags\": {\n                                            \"property1\": \"string\",\n                                            \"property2\": \"string\"\n                                        }}\n                                }\n                            ]\n                        }\n                    }\n                ]\n            }\n        ]}\n}\nheaders = {\n    \"content-type\": \"application/json\",\n    \"authorization\": \"REPLACE_KEY_VALUE\"\n}\n\nresponse = requests.request(\"POST\", url, json=payload, headers=headers)\n\nprint(response.text)"
+          },
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request POST \\\n  --url https://api.prismacloud.io/code/api/v1/tag-rules/affected-resources \\\n  --header 'authorization: REPLACE_KEY_VALUE' \\\n  --header 'content-type: application/json' \\\n  --data '{\"repository\":{\"defaultBranch\":\"string\",\"id\":\"string\",\"owner\":\"string\",\"repo\":\"string\",\"type\":\"string\",\"value\":\"string\"},\"ruleDefinition\":{\"tag_groups\":[{\"name\":\"string\",\"tags\":[{\"name\":\"string\",\"value\":{\"default\":\"string\",\"matches\":[{\"property1\":{\"tags\":{\"property1\":\"string\",\"property2\":\"string\"}},\"property2\":{\"tags\":{\"property1\":\"string\",\"property2\":\"string\"}}}]}}]}]}}'"
+          }
+        ]
+      }
+    },
+    "/code/api/v1/tag-rules/ootb/{tagRuleOOTBId}": {
+      "get": {
+        "description": "Gets tag rule by ootb id",
+        "operationId": "getTagOOTBRules",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tagRuleOOTBId",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TagRulesResponse" }
+              }
+            },
+            "description": "Get tag OOTB Rules"
+          },
+          "422": { "description": "Request arguments validation error" }
+        },
+        "security": [{ "CustomAuthorizer": [] }],
+        "summary": "Returns The tag rule by OOTB ID",
+        "tags": ["Tag Rules"],
+        "x-codeSamples": [
+          {
+            "lang": "Python + Requests",
+            "source": "import requests\n\nurl = \"https://api.prismacloud.io/code/api/v1/tag-rules/ootb/{tagRuleOOTBId}\"\n\nheaders = {\"authorization\": \"REPLACE_KEY_VALUE\"}\n\nresponse = requests.request(\"GET\", url, headers=headers)\n\nprint(response.text)"
+          },
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request GET \\\n  --url https://api.prismacloud.io/code/api/v1/tag-rules/ootb/{tagRuleOOTBId} \\\n  --header 'authorization: REPLACE_KEY_VALUE'"
+          }
+        ]
+      }
+    }
+  },
+  "servers": [{ "url": "https://api.prismacloud.io" }],
+  "tags": [{ "name": "Tag Rules" }]
+}

@@ -1,0 +1,235 @@
+{
+  "components": {
+    "examples": {},
+    "headers": {},
+    "parameters": {},
+    "requestBodies": {},
+    "responses": {},
+    "securitySchemes": {
+      "CustomAuthorizer": {
+        "in": "header",
+        "name": "authorization",
+        "type": "apiKey",
+        "x-amazon-apigateway-authorizer": {
+          "authorizerResultTtlInSeconds": 0,
+          "authorizerUri": "arn:aws:apigateway:{Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:{Region}:{AccountId}:function:bc-authorization-authorizer-{UniqueTag}{Alias}/invocations",
+          "identitySource": "method.request.header.authorization",
+          "type": "request"
+        },
+        "x-amazon-apigateway-authtype": "custom"
+      }
+    },
+    "schemas": {
+      "CreateFixRequestResources": {
+        "additionalProperties": false,
+        "properties": {
+          "fixPath": { "type": "string" },
+          "frameworkType": { "type": "string" },
+          "fullId": { "type": "string" },
+          "metadataChecksMetadataPath": { "type": "string" },
+          "metadataLines": { "type": "string" },
+          "owner": { "type": "string" },
+          "repoName": { "type": "string" },
+          "resourceId": { "type": "string" },
+          "s3FilePath": { "type": "string" },
+          "s3FixFilePath": { "type": "string" },
+          "violationId": { "type": "string" }
+        },
+        "required": [
+          "metadataChecksMetadataPath",
+          "metadataLines",
+          "violationId",
+          "resourceId",
+          "frameworkType",
+          "s3FilePath",
+          "owner",
+          "repoName",
+          "fullId"
+        ],
+        "type": "object"
+      },
+      "RemediationBuildTime": {
+        "additionalProperties": false,
+        "properties": { "data": { "type": "string" } },
+        "required": ["data"],
+        "type": "object"
+      },
+      "RemediationCreateFixRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "owner": { "type": "string" },
+          "pr": {
+            "description": "A list with all the relevant data to create a PR.",
+            "type": "string"
+          },
+          "repoName": {
+            "description": "The repository owner.",
+            "type": "string"
+          },
+          "resources": {
+            "description": "The branch name with the violations to create a PR with the remediations.",
+            "items": {
+              "$ref": "#/components/schemas/CreateFixRequestResources"
+            },
+            "type": "array"
+          },
+          "sourceBranchName": {
+            "description": "The repository name.",
+            "type": "string"
+          }
+        },
+        "required": ["owner", "repoName", "sourceBranchName", "resources"],
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "contact": {},
+    "description": "The Remediations endpoints are listed below.\n",
+    "title": "Prisma Cloud Remediations API Overview",
+    "version": "Latest"
+  },
+  "openapi": "3.0.0",
+  "paths": {
+    "/code/api/v1/remediations/buildtime": {
+      "post": {
+        "description": "Create a new PR or commit and push to existing PR",
+        "operationId": "postRemediationsBuildTime",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemediationCreateFixRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Example 1": { "value": { "data": "aws_resource_efs{..}" } }
+                },
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/RemediationBuildTime"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Post Remediation Code"
+          },
+          "403": { "description": "Unauthorized to get the code" },
+          "422": { "description": "Request arguments validation error" },
+          "500": { "description": "Failed to commit and push to pull request" }
+        },
+        "security": [{ "CustomAuthorizer": [] }],
+        "summary": "Remediation for build time",
+        "tags": ["Remediations"],
+        "x-codeSamples": [
+          {
+            "lang": "Python + Requests",
+            "source": "import requests\n\nurl = \"https://api.prismacloud.io/code/api/v1/remediations/buildtime\"\n\npayload = {\n    \"owner\": \"string\",\n    \"pr\": \"string\",\n    \"repoName\": \"string\",\n    \"resources\": [\n        {\n            \"fixPath\": \"string\",\n            \"frameworkType\": \"string\",\n            \"fullId\": \"string\",\n            \"metadataChecksMetadataPath\": \"string\",\n            \"metadataLines\": \"string\",\n            \"owner\": \"string\",\n            \"repoName\": \"string\",\n            \"resourceId\": \"string\",\n            \"s3FilePath\": \"string\",\n            \"s3FixFilePath\": \"string\",\n            \"violationId\": \"string\"\n        }\n    ],\n    \"sourceBranchName\": \"string\"\n}\nheaders = {\n    \"content-type\": \"application/json\",\n    \"authorization\": \"REPLACE_KEY_VALUE\"\n}\n\nresponse = requests.request(\"POST\", url, json=payload, headers=headers)\n\nprint(response.text)"
+          },
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request POST \\\n  --url https://api.prismacloud.io/code/api/v1/remediations/buildtime \\\n  --header 'authorization: REPLACE_KEY_VALUE' \\\n  --header 'content-type: application/json' \\\n  --data '{\"owner\":\"string\",\"pr\":\"string\",\"repoName\":\"string\",\"resources\":[{\"fixPath\":\"string\",\"frameworkType\":\"string\",\"fullId\":\"string\",\"metadataChecksMetadataPath\":\"string\",\"metadataLines\":\"string\",\"owner\":\"string\",\"repoName\":\"string\",\"resourceId\":\"string\",\"s3FilePath\":\"string\",\"s3FixFilePath\":\"string\",\"violationId\":\"string\"}],\"sourceBranchName\":\"string\"}'"
+          }
+        ]
+      }
+    },
+    "/code/api/v1/remediations/buildtime/{fixId}": {
+      "get": {
+        "description": "Get the remediation fix code for fix ID",
+        "operationId": "getRemediationFixCode",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "fixId",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Example 1": { "value": { "data": "aws_resource_efs{..}" } }
+                },
+                "schema": { "type": "string" }
+              }
+            },
+            "description": "Get Remediation Fix Code"
+          },
+          "403": { "description": "Unauthorized to get the code" },
+          "404": { "description": "Fix remediation not found for this ID" },
+          "422": { "description": "Request arguments validation error" },
+          "500": { "description": "Failed to get remediation fix" }
+        },
+        "security": [{ "CustomAuthorizer": [] }],
+        "summary": "Get Remediation fix code",
+        "tags": ["Remediations"],
+        "x-codeSamples": [
+          {
+            "lang": "Python + Requests",
+            "source": "import requests\n\nurl = \"https://api.prismacloud.io/code/api/v1/remediations/buildtime/{fixId}\"\n\nheaders = {\"authorization\": \"REPLACE_KEY_VALUE\"}\n\nresponse = requests.request(\"GET\", url, headers=headers)\n\nprint(response.text)"
+          },
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request GET \\\n  --url https://api.prismacloud.io/code/api/v1/remediations/buildtime/{fixId} \\\n  --header 'authorization: REPLACE_KEY_VALUE'"
+          }
+        ]
+      }
+    },
+    "/code/api/v1/remediations/buildtime/baseFile/{filename}": {
+      "get": {
+        "description": "Get the base file code for the remediation",
+        "operationId": "getRemediationBaseFile",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "filename",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Example 1": { "value": { "data": "aws_resource_efs{..}" } }
+                },
+                "schema": { "type": "string" }
+              }
+            },
+            "description": "Get Remediation Base File"
+          },
+          "403": { "description": "Unauthorized to get the code" },
+          "404": { "description": "Base file not found for this ID" },
+          "422": { "description": "Request arguments validation error" }
+        },
+        "security": [{ "CustomAuthorizer": [] }],
+        "summary": "Get file for remediation",
+        "tags": ["Remediations"],
+        "x-codeSamples": [
+          {
+            "lang": "Python + Requests",
+            "source": "import requests\n\nurl = \"https://api.prismacloud.io/code/api/v1/remediations/buildtime/baseFile/{filename}\"\n\nheaders = {\"authorization\": \"REPLACE_KEY_VALUE\"}\n\nresponse = requests.request(\"GET\", url, headers=headers)\n\nprint(response.text)"
+          },
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request GET \\\n  --url https://api.prismacloud.io/code/api/v1/remediations/buildtime/baseFile/{filename} \\\n  --header 'authorization: REPLACE_KEY_VALUE'"
+          }
+        ]
+      }
+    }
+  },
+  "servers": [{ "url": "https://api.prismacloud.io" }],
+  "tags": [{ "name": "Remediations" }]
+}

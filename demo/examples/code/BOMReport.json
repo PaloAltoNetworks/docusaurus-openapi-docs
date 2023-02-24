@@ -1,0 +1,130 @@
+{
+  "components": {
+    "examples": {},
+    "headers": {},
+    "parameters": {},
+    "requestBodies": {},
+    "responses": {},
+    "securitySchemes": {
+      "CustomAuthorizer": {
+        "in": "header",
+        "name": "authorization",
+        "type": "apiKey",
+        "x-amazon-apigateway-authorizer": {
+          "authorizerResultTtlInSeconds": 0,
+          "authorizerUri": "arn:aws:apigateway:{Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:{Region}:{AccountId}:function:bc-authorization-authorizer-{UniqueTag}{Alias}/invocations",
+          "identitySource": "method.request.header.authorization",
+          "type": "request"
+        },
+        "x-amazon-apigateway-authtype": "custom"
+      }
+    },
+    "schemas": {
+      "BOMMaterials": {
+        "enum": ["oss", "iac", "images", "all"],
+        "type": "string"
+      },
+      "BOMReportFormat": { "enum": ["csv", "cyclonedx"], "type": "string" },
+      "GeneratedBOMReport": {
+        "additionalProperties": false,
+        "properties": {
+          "format": { "$ref": "#/components/schemas/BOMReportFormat" },
+          "reportLink": { "type": "string" }
+        },
+        "required": ["reportLink", "format"],
+        "type": "object"
+      },
+      "GeneratedBOMReportResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "bomResponse": {
+            "items": { "$ref": "#/components/schemas/GeneratedBOMReport" },
+            "type": "array"
+          }
+        },
+        "required": ["bomResponse"],
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "contact": {},
+    "description": "The BOMReport endpoints are listed below.\n",
+    "title": "Prisma Cloud BOMReport API Overview",
+    "version": "Latest"
+  },
+  "openapi": "3.0.0",
+  "paths": {
+    "/code/api/v1/bom/getBOMReport/{repoId}": {
+      "get": {
+        "description": "Get a BOM Report",
+        "operationId": "getBOMReport",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "repoId",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "in": "query",
+            "name": "format",
+            "required": true,
+            "schema": { "enum": ["csv", "cyclonedx"], "type": "string" }
+          },
+          {
+            "in": "query",
+            "name": "material",
+            "required": true,
+            "schema": {
+              "enum": ["oss", "iac", "images", "all"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "bomResponse": [
+                        {
+                          "format": "csv",
+                          "reportLink": "Presigned BOM Report Link"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/GeneratedBOMReportResponse"
+                }
+              }
+            },
+            "description": "Get BOM Report"
+          },
+          "401": { "description": "Unauthorized to get the BOM report" },
+          "422": { "description": "Request arguments validation error" },
+          "500": { "description": "Failed to get BOM Report" }
+        },
+        "security": [{ "CustomAuthorizer": [] }],
+        "summary": "Get BOM Report",
+        "tags": ["BOMReport"],
+        "x-codeSamples": [
+          {
+            "lang": "Python + Requests",
+            "source": "import requests\n\nurl = \"https://api.prismacloud.io/code/api/v1/bom/getBOMReport/{repoId}\"\n\nquerystring = {\"format\":\"SOME_STRING_VALUE\",\"material\":\"SOME_STRING_VALUE\"}\n\nheaders = {\"authorization\": \"REPLACE_KEY_VALUE\"}\n\nresponse = requests.request(\"GET\", url, headers=headers, params=querystring)\n\nprint(response.text)"
+          },
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request GET \\\n  --url 'https://api.prismacloud.io/code/api/v1/bom/getBOMReport/{repoId}?format=SOME_STRING_VALUE&material=SOME_STRING_VALUE' \\\n  --header 'authorization: REPLACE_KEY_VALUE'"
+          }
+        ]
+      }
+    }
+  },
+  "servers": [{ "url": "https://api.prismacloud.io" }],
+  "tags": [{ "name": "BOMReport" }]
+}

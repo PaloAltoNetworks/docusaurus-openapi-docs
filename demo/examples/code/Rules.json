@@ -1,0 +1,386 @@
+{
+  "components": {
+    "examples": {},
+    "headers": {},
+    "parameters": {},
+    "requestBodies": {},
+    "responses": {},
+    "securitySchemes": {
+      "CustomAuthorizer": {
+        "in": "header",
+        "name": "authorization",
+        "type": "apiKey",
+        "x-amazon-apigateway-authorizer": {
+          "authorizerResultTtlInSeconds": 0,
+          "authorizerUri": "arn:aws:apigateway:{Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:{Region}:{AccountId}:function:bc-authorization-authorizer-{UniqueTag}{Alias}/invocations",
+          "identitySource": "method.request.header.authorization",
+          "type": "request"
+        },
+        "x-amazon-apigateway-authtype": "custom"
+      }
+    },
+    "schemas": {
+      "AddRuleBody": {
+        "additionalProperties": false,
+        "properties": {
+          "codeCategories": { "$ref": "#/components/schemas/CodeCategories" },
+          "name": { "type": "string" },
+          "repositories": {
+            "items": { "$ref": "#/components/schemas/RepoData" },
+            "type": "array"
+          }
+        },
+        "required": ["name", "repositories", "codeCategories"],
+        "type": "object"
+      },
+      "CodeCategories": {
+        "additionalProperties": false,
+        "properties": {
+          "IAC": { "$ref": "#/components/schemas/CodeCategory" },
+          "IMAGES": { "$ref": "#/components/schemas/CodeCategory" },
+          "OPEN_SOURCE": { "$ref": "#/components/schemas/CodeCategory" },
+          "SECRETS": { "$ref": "#/components/schemas/CodeCategory" },
+          "SUPPLY_CHAIN": { "$ref": "#/components/schemas/CodeCategory" }
+        },
+        "required": ["OPEN_SOURCE", "IMAGES", "IAC", "SECRETS", "SUPPLY_CHAIN"],
+        "type": "object"
+      },
+      "CodeCategory": {
+        "additionalProperties": false,
+        "properties": {
+          "commentsBotThreshold": {
+            "$ref": "#/components/schemas/RuleThreshold"
+          },
+          "hardFailThreshold": { "$ref": "#/components/schemas/RuleThreshold" },
+          "softFailThreshold": { "$ref": "#/components/schemas/RuleThreshold" }
+        },
+        "required": [
+          "hardFailThreshold",
+          "softFailThreshold",
+          "commentsBotThreshold"
+        ],
+        "type": "object"
+      },
+      "EditRuleBody": {
+        "additionalProperties": false,
+        "properties": {
+          "codeCategories": { "$ref": "#/components/schemas/CodeCategories" },
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "repositories": {
+            "items": { "$ref": "#/components/schemas/RepoData" },
+            "type": "array"
+          }
+        },
+        "required": ["name", "repositories", "codeCategories", "id"],
+        "type": "object"
+      },
+      "EnforcementRule": {
+        "additionalProperties": false,
+        "properties": {
+          "codeCategories": { "$ref": "#/components/schemas/CodeCategories" },
+          "createdBy": { "type": "string" },
+          "creationDate": { "type": "string" },
+          "editable": { "type": "boolean" },
+          "id": { "type": "string" },
+          "mainRule": { "type": "boolean" },
+          "name": { "type": "string" },
+          "repositories": {
+            "items": { "$ref": "#/components/schemas/RepoData" },
+            "type": "array"
+          }
+        },
+        "required": [
+          "name",
+          "repositories",
+          "codeCategories",
+          "id",
+          "mainRule",
+          "creationDate",
+          "createdBy",
+          "editable"
+        ],
+        "type": "object"
+      },
+      "GetSchemeForAccountResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "accountId": { "type": "string" },
+          "codeCategories": { "$ref": "#/components/schemas/CodeCategories" }
+        },
+        "required": ["accountId", "codeCategories"],
+        "type": "object"
+      },
+      "GetSchemeForCustomerResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "accountsNotInMainRule": {
+            "items": { "$ref": "#/components/schemas/RepoData" },
+            "type": "array"
+          },
+          "rules": {
+            "items": { "$ref": "#/components/schemas/EnforcementRule" },
+            "type": "array"
+          }
+        },
+        "required": ["rules", "accountsNotInMainRule"],
+        "type": "object"
+      },
+      "RepoData": {
+        "additionalProperties": false,
+        "properties": {
+          "accountId": { "type": "string" },
+          "accountName": { "type": "string" }
+        },
+        "required": ["accountId", "accountName"],
+        "type": "object"
+      },
+      "RuleThreshold": {
+        "enum": ["OFF", "INFO", "LOW", "MEDIUM", "HIGH", "CRITICAL"],
+        "type": "string"
+      }
+    }
+  },
+  "info": {
+    "contact": {},
+    "description": "The Rules endpoints are listed below.\n",
+    "title": "Prisma Cloud Rules API Overview",
+    "version": "Latest"
+  },
+  "openapi": "3.0.0",
+  "paths": {
+    "/code/api/v1/enforcement-rules/account/{accountId}": {
+      "get": {
+        "description": "Gets scheme for a specific account.",
+        "operationId": "getSchemeForAccount",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "accountId",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetSchemeForAccountResponse"
+                }
+              }
+            },
+            "description": "Get enforcement rules for account"
+          },
+          "422": { "description": "Request arguments validation error" }
+        },
+        "security": [{ "CustomAuthorizer": [] }],
+        "summary": "Get scheme for a specific account",
+        "tags": ["Rules"],
+        "x-codeSamples": [
+          {
+            "lang": "Python + Requests",
+            "source": "import requests\n\nurl = \"https://api.prismacloud.io/code/api/v1/enforcement-rules/account/{accountId}\"\n\nheaders = {\"authorization\": \"REPLACE_KEY_VALUE\"}\n\nresponse = requests.request(\"GET\", url, headers=headers)\n\nprint(response.text)"
+          },
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request GET \\\n  --url https://api.prismacloud.io/code/api/v1/enforcement-rules/account/{accountId} \\\n  --header 'authorization: REPLACE_KEY_VALUE'"
+          }
+        ]
+      }
+    },
+    "/code/api/v1/enforcement-rules": {
+      "get": {
+        "description": "This API is used to fetch an array of all your existing Enforcement rules.\nThe response includes details of the rule and the behavior threshold configured to each Code category Prisma Cloud Code Security scans (IaC, Secrets, Images, Open source)",
+        "operationId": "getSchemeForCustomer",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetSchemeForCustomerResponse"
+                }
+              }
+            },
+            "description": "Get list of enforcement rules for a specific customer"
+          }
+        },
+        "security": [{ "CustomAuthorizer": [] }],
+        "summary": "Get all enforcement rules",
+        "tags": ["Rules"],
+        "x-codeSamples": [
+          {
+            "lang": "Python + Requests",
+            "source": "import requests\n\nurl = \"https://api.prismacloud.io/code/api/v1/enforcement-rules\"\n\nheaders = {\"authorization\": \"REPLACE_KEY_VALUE\"}\n\nresponse = requests.request(\"GET\", url, headers=headers)\n\nprint(response.text)"
+          },
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request GET \\\n  --url https://api.prismacloud.io/code/api/v1/enforcement-rules \\\n  --header 'authorization: REPLACE_KEY_VALUE'"
+          }
+        ]
+      },
+      "post": {
+        "description": "This API is used in order to add exception rule for a specific set of repositories",
+        "operationId": "addRule",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AddRuleBody" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": { "schema": { "type": "string" } }
+            },
+            "description": "Add rule"
+          },
+          "422": { "description": "Request arguments validation error" }
+        },
+        "security": [{ "CustomAuthorizer": [] }],
+        "summary": "Create a new exception for Enforcement rule",
+        "tags": ["Rules"],
+        "x-codeSamples": [
+          {
+            "lang": "Python + Requests",
+            "source": "import requests\n\nurl = \"https://api.prismacloud.io/code/api/v1/enforcement-rules\"\n\npayload = {\n    \"codeCategories\": {\n        \"IAC\": {\n            \"commentsBotThreshold\": \"OFF\",\n            \"hardFailThreshold\": \"OFF\",\n            \"softFailThreshold\": \"OFF\"\n        },\n        \"IMAGES\": {\n            \"commentsBotThreshold\": \"OFF\",\n            \"hardFailThreshold\": \"OFF\",\n            \"softFailThreshold\": \"OFF\"\n        },\n        \"OPEN_SOURCE\": {\n            \"commentsBotThreshold\": \"OFF\",\n            \"hardFailThreshold\": \"OFF\",\n            \"softFailThreshold\": \"OFF\"\n        },\n        \"SECRETS\": {\n            \"commentsBotThreshold\": \"OFF\",\n            \"hardFailThreshold\": \"OFF\",\n            \"softFailThreshold\": \"OFF\"\n        },\n        \"SUPPLY_CHAIN\": {\n            \"commentsBotThreshold\": \"OFF\",\n            \"hardFailThreshold\": \"OFF\",\n            \"softFailThreshold\": \"OFF\"\n        }\n    },\n    \"name\": \"string\",\n    \"repositories\": [\n        {\n            \"accountId\": \"string\",\n            \"accountName\": \"string\"\n        }\n    ]\n}\nheaders = {\n    \"content-type\": \"application/json\",\n    \"authorization\": \"REPLACE_KEY_VALUE\"\n}\n\nresponse = requests.request(\"POST\", url, json=payload, headers=headers)\n\nprint(response.text)"
+          },
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request POST \\\n  --url https://api.prismacloud.io/code/api/v1/enforcement-rules \\\n  --header 'authorization: REPLACE_KEY_VALUE' \\\n  --header 'content-type: application/json' \\\n  --data '{\"codeCategories\":{\"IAC\":{\"commentsBotThreshold\":\"OFF\",\"hardFailThreshold\":\"OFF\",\"softFailThreshold\":\"OFF\"},\"IMAGES\":{\"commentsBotThreshold\":\"OFF\",\"hardFailThreshold\":\"OFF\",\"softFailThreshold\":\"OFF\"},\"OPEN_SOURCE\":{\"commentsBotThreshold\":\"OFF\",\"hardFailThreshold\":\"OFF\",\"softFailThreshold\":\"OFF\"},\"SECRETS\":{\"commentsBotThreshold\":\"OFF\",\"hardFailThreshold\":\"OFF\",\"softFailThreshold\":\"OFF\"},\"SUPPLY_CHAIN\":{\"commentsBotThreshold\":\"OFF\",\"hardFailThreshold\":\"OFF\",\"softFailThreshold\":\"OFF\"}},\"name\":\"string\",\"repositories\":[{\"accountId\":\"string\",\"accountName\":\"string\"}]}'"
+          }
+        ]
+      },
+      "put": {
+        "description": "This API is used in order to Edit existing rules, main one, or exception.\nThe main rule threshold behavior can be updated, but users cant apply it on specific repositories, change its name, change status to exception or delete it.",
+        "operationId": "editRule",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/EditRuleBody" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": { "schema": { "type": "string" } }
+            },
+            "description": "Edit rule"
+          },
+          "422": { "description": "Request arguments validation error" }
+        },
+        "security": [{ "CustomAuthorizer": [] }],
+        "summary": "Update Enforcement rule",
+        "tags": ["Rules"],
+        "x-codeSamples": [
+          {
+            "lang": "Python + Requests",
+            "source": "import requests\n\nurl = \"https://api.prismacloud.io/code/api/v1/enforcement-rules\"\n\npayload = {\n    \"codeCategories\": {\n        \"IAC\": {\n            \"commentsBotThreshold\": \"OFF\",\n            \"hardFailThreshold\": \"OFF\",\n            \"softFailThreshold\": \"OFF\"\n        },\n        \"IMAGES\": {\n            \"commentsBotThreshold\": \"OFF\",\n            \"hardFailThreshold\": \"OFF\",\n            \"softFailThreshold\": \"OFF\"\n        },\n        \"OPEN_SOURCE\": {\n            \"commentsBotThreshold\": \"OFF\",\n            \"hardFailThreshold\": \"OFF\",\n            \"softFailThreshold\": \"OFF\"\n        },\n        \"SECRETS\": {\n            \"commentsBotThreshold\": \"OFF\",\n            \"hardFailThreshold\": \"OFF\",\n            \"softFailThreshold\": \"OFF\"\n        },\n        \"SUPPLY_CHAIN\": {\n            \"commentsBotThreshold\": \"OFF\",\n            \"hardFailThreshold\": \"OFF\",\n            \"softFailThreshold\": \"OFF\"\n        }\n    },\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"repositories\": [\n        {\n            \"accountId\": \"string\",\n            \"accountName\": \"string\"\n        }\n    ]\n}\nheaders = {\n    \"content-type\": \"application/json\",\n    \"authorization\": \"REPLACE_KEY_VALUE\"\n}\n\nresponse = requests.request(\"PUT\", url, json=payload, headers=headers)\n\nprint(response.text)"
+          },
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request PUT \\\n  --url https://api.prismacloud.io/code/api/v1/enforcement-rules \\\n  --header 'authorization: REPLACE_KEY_VALUE' \\\n  --header 'content-type: application/json' \\\n  --data '{\"codeCategories\":{\"IAC\":{\"commentsBotThreshold\":\"OFF\",\"hardFailThreshold\":\"OFF\",\"softFailThreshold\":\"OFF\"},\"IMAGES\":{\"commentsBotThreshold\":\"OFF\",\"hardFailThreshold\":\"OFF\",\"softFailThreshold\":\"OFF\"},\"OPEN_SOURCE\":{\"commentsBotThreshold\":\"OFF\",\"hardFailThreshold\":\"OFF\",\"softFailThreshold\":\"OFF\"},\"SECRETS\":{\"commentsBotThreshold\":\"OFF\",\"hardFailThreshold\":\"OFF\",\"softFailThreshold\":\"OFF\"},\"SUPPLY_CHAIN\":{\"commentsBotThreshold\":\"OFF\",\"hardFailThreshold\":\"OFF\",\"softFailThreshold\":\"OFF\"}},\"id\":\"string\",\"name\":\"string\",\"repositories\":[{\"accountId\":\"string\",\"accountName\":\"string\"}]}'"
+          }
+        ]
+      }
+    },
+    "/code/api/v1/enforcement-rules/{ruleId}": {
+      "delete": {
+        "description": "This API is used in order to delete an Exception rule definition, main rules can’t be deleted.\nThe deleted rule will not be applied to new runs, but won't change the results of runs affected previously by this rule.\nIn case of an error, it returns the following string:  “Could not delete rule for customer”\nIf you get this error message, ask for access to the relevant repositories from your admin, or check if the rule is a main rule",
+        "operationId": "deleteRule",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "ruleId",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": { "schema": { "type": "string" } }
+            },
+            "description": "Delete rule"
+          },
+          "422": { "description": "Request arguments validation error" }
+        },
+        "security": [{ "CustomAuthorizer": [] }],
+        "summary": "Delete Exception",
+        "tags": ["Rules"],
+        "x-codeSamples": [
+          {
+            "lang": "Python + Requests",
+            "source": "import requests\n\nurl = \"https://api.prismacloud.io/code/api/v1/enforcement-rules/{ruleId}\"\n\nheaders = {\"authorization\": \"REPLACE_KEY_VALUE\"}\n\nresponse = requests.request(\"DELETE\", url, headers=headers)\n\nprint(response.text)"
+          },
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request DELETE \\\n  --url https://api.prismacloud.io/code/api/v1/enforcement-rules/{ruleId} \\\n  --header 'authorization: REPLACE_KEY_VALUE'"
+          }
+        ]
+      }
+    },
+    "/code/api/v1/enforcement-rules/accounts": {
+      "get": {
+        "description": "This API is used in order to get all buildtime accounts, with their name, id and source",
+        "operationId": "getAccounts",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "pageSize",
+            "required": false,
+            "schema": { "format": "double", "type": "number" }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": { "format": "double", "type": "number" }
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": { "$ref": "#/components/schemas/RepoData" },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Get enforcement rules for account"
+          },
+          "422": { "description": "Request arguments validation error" }
+        },
+        "security": [{ "CustomAuthorizer": [] }],
+        "summary": "Get all repositories",
+        "tags": ["Rules"],
+        "x-codeSamples": [
+          {
+            "lang": "Python + Requests",
+            "source": "import requests\n\nurl = \"https://api.prismacloud.io/code/api/v1/enforcement-rules/accounts\"\n\nquerystring = {\"pageSize\":\"SOME_NUMBER_VALUE\",\"page\":\"SOME_NUMBER_VALUE\",\"search\":\"SOME_STRING_VALUE\"}\n\nheaders = {\"authorization\": \"REPLACE_KEY_VALUE\"}\n\nresponse = requests.request(\"GET\", url, headers=headers, params=querystring)\n\nprint(response.text)"
+          },
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request GET \\\n  --url 'https://api.prismacloud.io/code/api/v1/enforcement-rules/accounts?pageSize=SOME_NUMBER_VALUE&page=SOME_NUMBER_VALUE&search=SOME_STRING_VALUE' \\\n  --header 'authorization: REPLACE_KEY_VALUE'"
+          }
+        ]
+      }
+    }
+  },
+  "servers": [{ "url": "https://api.prismacloud.io" }],
+  "tags": [{ "name": "Rules" }]
+}

@@ -1,0 +1,77 @@
+{
+  "components": {
+    "examples": {},
+    "headers": {},
+    "parameters": {},
+    "requestBodies": {},
+    "responses": {},
+    "securitySchemes": {
+      "CustomAuthorizer": {
+        "in": "header",
+        "name": "authorization",
+        "type": "apiKey",
+        "x-amazon-apigateway-authorizer": {
+          "authorizerResultTtlInSeconds": 0,
+          "authorizerUri": "arn:aws:apigateway:{Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:{Region}:{AccountId}:function:bc-authorization-authorizer-{UniqueTag}{Alias}/invocations",
+          "identitySource": "method.request.header.authorization",
+          "type": "request"
+        },
+        "x-amazon-apigateway-authtype": "custom"
+      }
+    },
+    "schemas": {
+      "CheckovVersionResponse": {
+        "additionalProperties": false,
+        "properties": { "version": { "type": "string" } },
+        "required": ["version"],
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "contact": {},
+    "description": "The CheckovVersion endpoints are listed below.\n",
+    "title": "Prisma Cloud CheckovVersion API Overview",
+    "version": "Latest"
+  },
+  "openapi": "3.0.0",
+  "paths": {
+    "/code/api/v1/checkovVersion": {
+      "get": {
+        "description": "Get the current checkov version being run by Prisma Cloud Code Security",
+        "operationId": "getCheckovVersion",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Example 1": { "value": { "version": "2.1.105" } }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/CheckovVersionResponse"
+                }
+              }
+            },
+            "description": "Current checkov version used by Prisma Cloud Code Security"
+          }
+        },
+        "security": [],
+        "summary": "Get the current checkov version being run by Prisma Cloud Code Security",
+        "tags": ["CheckovVersion"],
+        "x-codeSamples": [
+          {
+            "lang": "Python + Requests",
+            "source": "import requests\n\nurl = \"https://api.prismacloud.io/code/api/v1/checkovVersion\"\n\nresponse = requests.request(\"GET\", url)\n\nprint(response.text)"
+          },
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request GET \\\n  --url https://api.prismacloud.io/code/api/v1/checkovVersion"
+          }
+        ]
+      }
+    }
+  },
+  "servers": [{ "url": "https://api.prismacloud.io" }],
+  "tags": [{ "name": "CheckovVersion" }]
+}

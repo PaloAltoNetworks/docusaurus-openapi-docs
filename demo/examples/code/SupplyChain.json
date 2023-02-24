@@ -1,0 +1,518 @@
+{
+  "components": {
+    "examples": {},
+    "headers": {},
+    "parameters": {},
+    "requestBodies": {},
+    "responses": {},
+    "securitySchemes": {
+      "CustomAuthorizer": {
+        "in": "header",
+        "name": "authorization",
+        "type": "apiKey",
+        "x-amazon-apigateway-authorizer": {
+          "authorizerResultTtlInSeconds": 0,
+          "authorizerUri": "arn:aws:apigateway:{Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:{Region}:{AccountId}:function:bc-authorization-authorizer-{UniqueTag}{Alias}/invocations",
+          "identitySource": "method.request.header.authorization",
+          "type": "request"
+        },
+        "x-amazon-apigateway-authtype": "custom"
+      }
+    },
+    "schemas": {
+      "BaseNode": {
+        "additionalProperties": false,
+        "properties": {
+          "errorCount": { "format": "double", "type": "number" },
+          "nodeId": { "type": "string" },
+          "nodeName": { "type": "string" },
+          "nodeType": { "$ref": "#/components/schemas/NodeType" },
+          "parentId": { "type": "string" }
+        },
+        "required": ["nodeId", "nodeName", "nodeType"],
+        "type": "object"
+      },
+      "BuildtimeLink": {
+        "additionalProperties": false,
+        "properties": {
+          "buildtimeResourceId": { "type": "string" },
+          "buildtimeSourceId": { "type": "string" },
+          "buildtimeSourceType": { "type": "string" },
+          "createdByBuildtime": { "type": "string" },
+          "runtimeResourceId": { "type": "string" },
+          "runtimeSourceId": { "type": "string" }
+        },
+        "required": [
+          "buildtimeResourceId",
+          "buildtimeSourceId",
+          "runtimeResourceId",
+          "runtimeSourceId",
+          "buildtimeSourceType",
+          "createdByBuildtime"
+        ],
+        "type": "object"
+      },
+      "BuildtimeResourceNode": {
+        "additionalProperties": false,
+        "properties": {
+          "cloudProvider": { "$ref": "#/components/schemas/CloudProvider" },
+          "errorCount": { "format": "double", "type": "number" },
+          "frameworkType": { "$ref": "#/components/schemas/FrameworkType" },
+          "nodeId": { "type": "string" },
+          "nodeName": { "type": "string" },
+          "nodeType": { "$ref": "#/components/schemas/NodeType" },
+          "parentId": { "type": "string" },
+          "resourceId": { "type": "string" },
+          "resourceType": { "type": "string" },
+          "sourceId": { "type": "string" }
+        },
+        "required": [
+          "nodeId",
+          "nodeName",
+          "nodeType",
+          "resourceId",
+          "resourceType",
+          "sourceId",
+          "frameworkType",
+          "cloudProvider",
+          "parentId"
+        ],
+        "type": "object"
+      },
+      "CloudProvider": {
+        "enum": [
+          "Kubernetes",
+          "Licenses",
+          "Git",
+          "AWS",
+          "GCP",
+          "Azure",
+          "Docker",
+          "AlibabaCloud",
+          "OCI",
+          "OpenStack",
+          "Packages",
+          "Prisma Cloud Code Security",
+          "Linode",
+          "DigitalOcean",
+          "PANOS"
+        ],
+        "type": "string"
+      },
+      "EdgeDirection": {
+        "enum": ["parent", "sibling", "children"],
+        "type": "string"
+      },
+      "FrameworkType": {
+        "enum": [
+          "Terraform",
+          "CloudFormation",
+          "Kubernetes",
+          "TerraformPlan",
+          "Helm",
+          "Kustomize",
+          "Serverless",
+          "ARM",
+          "Bicep",
+          "Git",
+          "AWS",
+          "GCP",
+          "Azure",
+          "DockerImage",
+          "Docker",
+          "Vulnerabilities",
+          "VCS",
+          "OpenAPI",
+          "GithubAction",
+          "SCA"
+        ],
+        "type": "string"
+      },
+      "GetNodesControllerRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "edgeDirection": { "$ref": "#/components/schemas/EdgeDirection" },
+          "filters": {
+            "properties": {
+              "extensions": { "items": { "type": "string" }, "type": "array" },
+              "fileType": { "items": { "type": "string" }, "type": "array" },
+              "repositoryId": { "type": "string" },
+              "status": {
+                "items": { "$ref": "#/components/schemas/StatusFilter" },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          },
+          "limit": { "format": "double", "type": "number" },
+          "nodeId": { "type": "string" },
+          "nodeType": { "$ref": "#/components/schemas/NodeType" },
+          "offset": { "format": "double", "type": "number" }
+        },
+        "type": "object"
+      },
+      "GetNodesResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "hasNext": { "type": "boolean" },
+          "nodeId": { "type": "string" },
+          "nodes": {
+            "items": { "$ref": "#/components/schemas/Node" },
+            "type": "array"
+          }
+        },
+        "required": ["nodeId", "nodes", "hasNext"],
+        "type": "object"
+      },
+      "IacFileNode": {
+        "additionalProperties": false,
+        "properties": {
+          "errorCount": { "format": "double", "type": "number" },
+          "filePath": { "type": "string" },
+          "fileType": { "type": "string" },
+          "frameworkType": { "$ref": "#/components/schemas/FrameworkType" },
+          "nodeId": { "type": "string" },
+          "nodeName": { "type": "string" },
+          "nodeType": { "$ref": "#/components/schemas/NodeType" },
+          "parentId": { "type": "string" }
+        },
+        "required": [
+          "nodeId",
+          "nodeName",
+          "nodeType",
+          "filePath",
+          "fileType",
+          "frameworkType"
+        ],
+        "type": "object"
+      },
+      "Node": {
+        "anyOf": [
+          { "$ref": "#/components/schemas/BaseNode" },
+          { "$ref": "#/components/schemas/IacFileNode" },
+          { "$ref": "#/components/schemas/BuildtimeResourceNode" },
+          { "$ref": "#/components/schemas/RuntimeResourceNode" },
+          { "$ref": "#/components/schemas/PackageNode" }
+        ]
+      },
+      "NodeType": {
+        "enum": [
+          "org",
+          "repo",
+          "iacFile",
+          "packageFile",
+          "package",
+          "dockerFile",
+          "buildtimeResource",
+          "runtimeResource",
+          "buildtimeJob",
+          "image",
+          "file"
+        ],
+        "type": "string"
+      },
+      "PackageNode": {
+        "additionalProperties": false,
+        "properties": {
+          "errorCount": { "format": "double", "type": "number" },
+          "isRoot": { "type": "boolean" },
+          "nodeId": { "type": "string" },
+          "nodeName": { "type": "string" },
+          "nodeType": { "$ref": "#/components/schemas/NodeType" },
+          "packageLicenses": { "items": { "type": "string" }, "type": "array" },
+          "packageVersion": { "type": "string" },
+          "parentId": { "type": "string" },
+          "parentPackageIds": { "items": { "type": "string" }, "type": "array" }
+        },
+        "required": [
+          "nodeId",
+          "nodeName",
+          "nodeType",
+          "packageVersion",
+          "packageLicenses"
+        ],
+        "type": "object"
+      },
+      "RuntimeResourceNode": {
+        "additionalProperties": false,
+        "properties": {
+          "buildtimeLink": { "$ref": "#/components/schemas/BuildtimeLink" },
+          "buildtimeResourceId": { "type": "string" },
+          "createdByBuildtime": { "type": "string" },
+          "errorCount": { "format": "double", "type": "number" },
+          "nodeId": { "type": "string" },
+          "nodeName": { "type": "string" },
+          "nodeType": { "$ref": "#/components/schemas/NodeType" },
+          "parentId": { "type": "string" },
+          "resourceType": { "type": "string" },
+          "sourceId": { "type": "string" }
+        },
+        "required": [
+          "nodeId",
+          "nodeName",
+          "nodeType",
+          "sourceId",
+          "resourceType",
+          "buildtimeResourceId",
+          "createdByBuildtime",
+          "buildtimeLink"
+        ],
+        "type": "object"
+      },
+      "StatusFilter": {
+        "enum": ["OPEN", "SUPPRESS", "PASS"],
+        "type": "string"
+      },
+      "SupplyChainError": {
+        "additionalProperties": false,
+        "properties": {
+          "details": {
+            "items": {
+              "properties": { "message": { "type": "string" } },
+              "required": ["message"],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "message": { "type": "string" }
+        },
+        "required": ["message", "details"],
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "contact": {},
+    "description": "The Supply Chain endpoints are listed below.\n",
+    "title": "Prisma Cloud Supply Chain API Overview",
+    "version": "Latest"
+  },
+  "openapi": "3.0.0",
+  "paths": {
+    "/code/api/v1/supply-chain/nodes": {
+      "post": {
+        "description": "This API provides an easy access to any node on any level on the Supply Chain tree sorted by the number of errors.\n`errorCount` is available for iacFile, buildtimeResource, runtimeResource, packageFile, and package types.\nThe types hierarchy built as the following:\n```\n| org - (Request Example 1)\n| --- repo (Request Example 2)\n| --- |--- iacFile (Request Example 3)\n| --- |--- |--- buildtimeResource (Request Example 4)\n| --- |--- |--- |--- runtimeResource (Request Example 5)\n| --- |--- packageFile (Request Example 3)\n| --- |--- |--- package (Request Example 6)\n| --- |--- dockerFile (Request Example 3)\n| --- |--- |--- package (Request Example 7)\n```",
+        "operationId": "getSupplyChainNodes",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "Example 1": { "value": {} },
+                "Example 2": {
+                  "value": { "edgeDirection": "children", "nodeType": "org" }
+                },
+                "Example 3": {
+                  "value": {
+                    "edgeDirection": "children",
+                    "nodeId": "b8712a2e-cc6f-43b1-b5t1-95a70087et44",
+                    "nodeType": "repo"
+                  }
+                },
+                "Example 4": {
+                  "value": {
+                    "edgeDirection": "children",
+                    "filters": {
+                      "extensions": [
+                        "tf",
+                        "yml",
+                        "yaml",
+                        "json",
+                        "template",
+                        "py",
+                        "js",
+                        "properties",
+                        "pem",
+                        "php",
+                        "xml",
+                        "ts",
+                        "env",
+                        "Dockerfile",
+                        "java",
+                        "rb",
+                        "sum",
+                        "mod",
+                        "cs",
+                        "txt",
+                        "Gemfile",
+                        "bicep",
+                        "hcl",
+                        "gradle",
+                        "kts",
+                        "lock"
+                      ],
+                      "fileType": [
+                        "tf",
+                        "json",
+                        "yml",
+                        "yaml",
+                        "template",
+                        "hcl",
+                        "Dockerfile",
+                        "package.json",
+                        "package-lock.json",
+                        "bower.json",
+                        "pom.xml",
+                        "build.gradle",
+                        "build.gradle.kts",
+                        "gradle.properties",
+                        "go.sum",
+                        "go.mod",
+                        "requirements.txt"
+                      ],
+                      "status": ["OPEN", "SUPPRESS", "PASS"]
+                    },
+                    "limit": 10,
+                    "nodeId": "703551c5-559a-48db-8e66-34df5979098c",
+                    "nodeType": "iacFile",
+                    "offset": 5
+                  }
+                },
+                "Example 5": {
+                  "value": {
+                    "edgeDirection": "children",
+                    "nodeId": "3tec079a-9584-4bri-ba05-38483cf02de2",
+                    "nodeType": "buildtimeResource"
+                  }
+                },
+                "Example 6": {
+                  "value": {
+                    "edgeDirection": "children",
+                    "nodeId": "59edd081-571a-4f54-a1ca-733946b238c9",
+                    "nodeType": "packageFile"
+                  }
+                },
+                "Example 7": {
+                  "value": {
+                    "edgeDirection": "children",
+                    "nodeId": "82cda168-2ed4-439c-b0ff-d7d4482cbe78",
+                    "nodeType": "dockerFile"
+                  }
+                }
+              },
+              "schema": {
+                "$ref": "#/components/schemas/GetNodesControllerRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "hasNext": true,
+                      "nodeId": "b8712a2e-cc6f-43b1-b5t1-95a70087et44",
+                      "nodes": [
+                        {
+                          "errorCount": 5,
+                          "extensions": ["yaml"],
+                          "filePath": "cfn/s3.yaml",
+                          "fileType": ["yaml"],
+                          "frameworkType": "CloudFormation",
+                          "nodeId": "55dedfed-ab0b-4fbc-9e2f-9a73c99c00a4",
+                          "nodeName": "s3.yaml",
+                          "nodeType": "iacFile",
+                          "parentId": "b8712a2e-cc6f-43b1-b5t1-95a70087et44"
+                        },
+                        {
+                          "errorCount": 4,
+                          "extensions": ["Dockerfile"],
+                          "filePath": "dockerfile/failed_2/Dockerfile",
+                          "fileType": ["Dockerfile"],
+                          "frameworkType": "Docker",
+                          "nodeId": "c27f8aff-6ac6-4c3d-abb8-4b3544488bb6",
+                          "nodeName": "Dockerfile",
+                          "nodeType": "dockerFile",
+                          "parentId": "b8712a2e-cc6f-43b1-b5t1-95a70087et44"
+                        },
+                        {
+                          "errorCount": 3,
+                          "extensions": ["tf"],
+                          "filePath": "terraform/aws/db-app.tf",
+                          "fileType": ["tf"],
+                          "frameworkType": "Terraform",
+                          "nodeId": "b85c65a6-b505-4369-9393-c6fd230e7c21",
+                          "nodeName": "db-app.tf",
+                          "nodeType": "iacFile",
+                          "parentId": "b8712a2e-cc6f-43b1-b5t1-95a70087et44"
+                        }
+                      ]
+                    }
+                  },
+                  "Example 2": {
+                    "value": {
+                      "hasNext": true,
+                      "nodeId": "b85c65a6-b505-4369-9393-c6fd230e7c21",
+                      "nodes": [
+                        {
+                          "cloudProvider": "AWS",
+                          "errorCount": 8,
+                          "frameworkType": "Terraform",
+                          "nodeId": "80579aa1-c45c-4599-b10a-3c8d6f92ce26",
+                          "nodeName": "aws_db_instance.default",
+                          "nodeType": "buildtimeResource",
+                          "parentId": "b85c65a6-b505-4369-9393-c6fd230e7c21",
+                          "resourceId": "/terraform/aws/db-app.tf:aws_db_instance.default",
+                          "resourceType": "aws_db_instance"
+                        },
+                        {
+                          "cloudProvider": "AWS",
+                          "errorCount": 5,
+                          "frameworkType": "Terraform",
+                          "nodeId": "845fee5b-2291-4eee-949a-da784aa04acd",
+                          "nodeName": "aws_instance.db_app",
+                          "nodeType": "buildtimeResource",
+                          "parentId": "b85c65a6-b505-4369-9393-c6fd230e7c21",
+                          "resourceId": "/terraform/aws/db-app.tf:aws_instance.db_app",
+                          "resourceType": "aws_instance"
+                        },
+                        {
+                          "cloudProvider": "AWS",
+                          "errorCount": 3,
+                          "frameworkType": "Terraform",
+                          "nodeId": "26819830-0805-4cab-93ff-f5443e26d50e",
+                          "nodeName": "aws_security_group_rule.ingress",
+                          "nodeType": "buildtimeResource",
+                          "parentId": "b85c65a6-b505-4369-9393-c6fd230e7c21",
+                          "resourceId": "/terraform/aws/db-app.tf:aws_security_group_rule.ingress",
+                          "resourceType": "aws_security_group_rule"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "schema": {
+                  "anyOf": [
+                    { "$ref": "#/components/schemas/GetNodesResponse" },
+                    { "$ref": "#/components/schemas/SupplyChainError" }
+                  ]
+                }
+              }
+            },
+            "description": "Get nodes"
+          },
+          "422": { "description": "Request arguments validation error" }
+        },
+        "security": [{ "CustomAuthorizer": [] }],
+        "summary": "Get nodes",
+        "tags": ["Supply Chain"],
+        "x-codeSamples": [
+          {
+            "lang": "Python + Requests",
+            "source": "import requests\n\nurl = \"https://api.prismacloud.io/code/api/v1/supply-chain/nodes\"\n\npayload = {\n    \"edgeDirection\": \"parent\",\n    \"filters\": {\n        \"extensions\": [\"string\"],\n        \"fileType\": [\"string\"],\n        \"repositoryId\": \"string\",\n        \"status\": [\"OPEN\"]\n    },\n    \"limit\": 0,\n    \"nodeId\": \"string\",\n    \"nodeType\": \"org\",\n    \"offset\": 0\n}\nheaders = {\n    \"content-type\": \"application/json\",\n    \"authorization\": \"REPLACE_KEY_VALUE\"\n}\n\nresponse = requests.request(\"POST\", url, json=payload, headers=headers)\n\nprint(response.text)"
+          },
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request POST \\\n  --url https://api.prismacloud.io/code/api/v1/supply-chain/nodes \\\n  --header 'authorization: REPLACE_KEY_VALUE' \\\n  --header 'content-type: application/json' \\\n  --data '{\"edgeDirection\":\"parent\",\"filters\":{\"extensions\":[\"string\"],\"fileType\":[\"string\"],\"repositoryId\":\"string\",\"status\":[\"OPEN\"]},\"limit\":0,\"nodeId\":\"string\",\"nodeType\":\"org\",\"offset\":0}'"
+          }
+        ]
+      }
+    }
+  },
+  "servers": [{ "url": "https://api.prismacloud.io" }],
+  "tags": [{ "name": "Supply Chain" }]
+}

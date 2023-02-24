@@ -1,0 +1,113 @@
+{
+  "components": {
+    "examples": {},
+    "headers": {},
+    "parameters": {},
+    "requestBodies": {},
+    "responses": {},
+    "securitySchemes": {
+      "CustomAuthorizer": {
+        "in": "header",
+        "name": "authorization",
+        "type": "apiKey",
+        "x-amazon-apigateway-authorizer": {
+          "authorizerResultTtlInSeconds": 0,
+          "authorizerUri": "arn:aws:apigateway:{Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:{Region}:{AccountId}:function:bc-authorization-authorizer-{UniqueTag}{Alias}/invocations",
+          "identitySource": "method.request.header.authorization",
+          "type": "request"
+        },
+        "x-amazon-apigateway-authtype": "custom"
+      }
+    },
+    "schemas": {
+      "RepositoryResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "description": { "type": "string" },
+          "id": { "type": "string" },
+          "isPublic": { "type": "boolean" },
+          "name": { "type": "string" },
+          "owner": { "type": "string" },
+          "source": { "type": "string" },
+          "url": { "type": "string" }
+        },
+        "required": [
+          "id",
+          "source",
+          "name",
+          "description",
+          "url",
+          "isPublic",
+          "owner"
+        ],
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "contact": {},
+    "description": "The Repository endpoints are listed below.\n",
+    "title": "Prisma Cloud Repository API Overview",
+    "version": "Latest"
+  },
+  "openapi": "3.0.0",
+  "paths": {
+    "/code/api/v1/repositories/repository": {
+      "get": {
+        "description": "Retrieve a single repository.\nthe repository item includes: id, repoName, source, owner, isPublic, creationDate",
+        "operationId": "getRepository",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "repositoryId",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "creationDate": "2022-02-21T12:37:56.188Z",
+                      "defaultBranch": "master",
+                      "description": "description",
+                      "id": "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
+                      "isPublic": false,
+                      "owner": "yourname",
+                      "repository": "foo",
+                      "runs": 0,
+                      "source": "Github",
+                      "url": "www.example.com"
+                    }
+                  }
+                },
+                "schema": { "$ref": "#/components/schemas/RepositoryResponse" }
+              }
+            },
+            "description": "repository for customer"
+          },
+          "422": { "description": "Request arguments validation error" },
+          "500": { "description": "Could not fetch repository for customer" }
+        },
+        "security": [{ "CustomAuthorizer": [] }],
+        "summary": "single repository list",
+        "tags": ["Repository"],
+        "x-codeSamples": [
+          {
+            "lang": "Python + Requests",
+            "source": "import requests\n\nurl = \"https://api.prismacloud.io/code/api/v1/repositories/repository\"\n\nquerystring = {\"repositoryId\":\"SOME_STRING_VALUE\"}\n\nheaders = {\"authorization\": \"REPLACE_KEY_VALUE\"}\n\nresponse = requests.request(\"GET\", url, headers=headers, params=querystring)\n\nprint(response.text)"
+          },
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request GET \\\n  --url 'https://api.prismacloud.io/code/api/v1/repositories/repository?repositoryId=SOME_STRING_VALUE' \\\n  --header 'authorization: REPLACE_KEY_VALUE'"
+          }
+        ]
+      }
+    }
+  },
+  "servers": [{ "url": "https://api.prismacloud.io" }],
+  "tags": [{ "name": "Repository" }]
+}

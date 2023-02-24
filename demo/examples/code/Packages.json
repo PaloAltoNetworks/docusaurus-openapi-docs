@@ -1,0 +1,600 @@
+{
+  "components": {
+    "examples": {},
+    "headers": {},
+    "parameters": {},
+    "requestBodies": {},
+    "responses": {},
+    "securitySchemes": {
+      "CustomAuthorizer": {
+        "in": "header",
+        "name": "authorization",
+        "type": "apiKey",
+        "x-amazon-apigateway-authorizer": {
+          "authorizerResultTtlInSeconds": 0,
+          "authorizerUri": "arn:aws:apigateway:{Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:{Region}:{AccountId}:function:bc-authorization-authorizer-{UniqueTag}{Alias}/invocations",
+          "identitySource": "method.request.header.authorization",
+          "type": "request"
+        },
+        "x-amazon-apigateway-authtype": "custom"
+      }
+    },
+    "schemas": {
+      "CVEResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "causePackageId": { "nullable": true, "type": "string" },
+          "cveId": { "type": "string" },
+          "cvss": { "format": "double", "nullable": true, "type": "number" },
+          "description": { "nullable": true, "type": "string" },
+          "fixVersion": { "type": "string" },
+          "link": { "nullable": true, "type": "string" },
+          "packageName": { "type": "string" },
+          "packageVersion": { "type": "string" },
+          "publishedDate": { "type": "string" },
+          "riskFactors": {
+            "additionalProperties": {
+              "anyOf": [{ "type": "boolean" }, { "type": "string" }]
+            },
+            "properties": {},
+            "type": "object"
+          },
+          "severity": { "type": "string" },
+          "uuid": { "type": "string" },
+          "vector": { "nullable": true, "type": "string" }
+        },
+        "required": [
+          "fixVersion",
+          "cvss",
+          "vector",
+          "description",
+          "severity",
+          "packageName",
+          "packageVersion",
+          "link",
+          "riskFactors",
+          "cveId",
+          "publishedDate",
+          "uuid",
+          "causePackageId"
+        ],
+        "type": "object"
+      },
+      "GetCvesByPackageUuidResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "items": { "$ref": "#/components/schemas/CVEResponse" },
+            "type": "array"
+          },
+          "packageUuid": { "type": "string" }
+        },
+        "required": ["data", "packageUuid"],
+        "type": "object"
+      },
+      "GetDirectSubDependenciesByUuidResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "directSubDependenciesPackages": {
+            "items": { "$ref": "#/components/schemas/PackageData" },
+            "type": "array"
+          },
+          "hasNext": { "type": "boolean" },
+          "packageId": { "type": "string" }
+        },
+        "required": ["packageId", "directSubDependenciesPackages", "hasNext"],
+        "type": "object"
+      },
+      "GetPackagesByFileResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "fileMetadataId": { "type": "string" },
+          "hasNext": { "type": "boolean" },
+          "packages": {
+            "items": { "$ref": "#/components/schemas/PackageData" },
+            "type": "array"
+          }
+        },
+        "required": ["fileMetadataId", "packages", "hasNext"],
+        "type": "object"
+      },
+      "Include": {
+        "enum": [
+          "errorCount",
+          "fixableErrorCount",
+          "file",
+          "repository",
+          "images"
+        ],
+        "type": "string"
+      },
+      "LicenseMetadata": {
+        "additionalProperties": false,
+        "properties": {
+          "isOsi": { "type": "boolean" },
+          "isSpdx": { "type": "boolean" },
+          "license": { "type": "string" }
+        },
+        "required": ["license", "isSpdx", "isOsi"],
+        "type": "object"
+      },
+      "PackageData": {
+        "additionalProperties": false,
+        "properties": {
+          "errorCount": { "format": "double", "type": "number" },
+          "fileMetadataId": { "type": "string" },
+          "fileMetadataPath": { "type": "string" },
+          "fixableErrorCount": { "format": "double", "type": "number" },
+          "images": { "items": { "type": "string" }, "type": "array" },
+          "isRoot": { "type": "boolean" },
+          "licensesMetadata": {
+            "items": { "$ref": "#/components/schemas/LicenseMetadata" },
+            "type": "array"
+          },
+          "packageId": { "type": "string" },
+          "packageLanguage": { "type": "string" },
+          "packageLicenses": { "items": { "type": "string" }, "type": "array" },
+          "packageName": { "type": "string" },
+          "packageVersion": { "type": "string" },
+          "repository": {
+            "properties": {
+              "name": { "type": "string" },
+              "owner": { "type": "string" }
+            },
+            "type": "object"
+          },
+          "sourcePackageIds": {
+            "items": {
+              "properties": { "sourcePackageId": { "type": "string" } },
+              "required": ["sourcePackageId"],
+              "type": "object"
+            },
+            "nullable": true,
+            "type": "array"
+          }
+        },
+        "required": [
+          "packageId",
+          "packageName",
+          "packageVersion",
+          "packageLicenses"
+        ],
+        "type": "object"
+      },
+      "PackagesSearchBody": {
+        "additionalProperties": false,
+        "properties": {
+          "filter": {
+            "properties": { "fixableOnly": { "type": "boolean" } },
+            "required": ["fixableOnly"],
+            "type": "object"
+          },
+          "include": {
+            "items": { "$ref": "#/components/schemas/Include" },
+            "type": "array"
+          },
+          "limit": { "format": "double", "type": "number" },
+          "offset": { "format": "double", "type": "number" },
+          "q": { "type": "string" },
+          "repositories": { "items": { "type": "string" }, "type": "array" },
+          "sortBy": {
+            "items": { "$ref": "#/components/schemas/Sort" },
+            "type": "array"
+          },
+          "statuses": {
+            "items": { "$ref": "#/components/schemas/Status" },
+            "type": "array"
+          }
+        },
+        "required": ["repositories", "limit", "offset"],
+        "type": "object"
+      },
+      "PackagesSearchResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "hasNext": { "type": "boolean" },
+          "packages": {
+            "items": { "$ref": "#/components/schemas/PackageData" },
+            "type": "array"
+          }
+        },
+        "required": ["packages", "hasNext"],
+        "type": "object"
+      },
+      "Sort": { "enum": ["errors"], "nullable": false, "type": "string" },
+      "Status": { "enum": ["OPEN", "SUPPRESS", "PASS"], "type": "string" }
+    }
+  },
+  "info": {
+    "contact": {},
+    "description": "The Packages endpoints are listed below.           \n",
+    "title": "Prisma Cloud Packages API Overview",
+    "version": "Latest"
+  },
+  "openapi": "3.0.0",
+  "paths": {
+    "/code/api/v1/vulnerabilities/packages/files/{fileMetadataId}": {
+      "get": {
+        "description": "Gets all the Packages related to a specific file based on pagination\nPagination is required - this endpoint must use the pagination.validate\nThe API accepts a file metadata UUID.\nThere is an option to get the packages sorted by their error count.\nroot-only query parameter is optional - if true, returns only root level packages, in a sense of the file's dependency tree",
+        "operationId": "getPackagesByFile",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "fileMetadataId",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": true,
+            "schema": { "format": "double", "type": "number" }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": true,
+            "schema": { "format": "double", "type": "number" }
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "required": false,
+            "schema": {
+              "enum": ["errors"],
+              "nullable": false,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "root-only",
+            "required": false,
+            "schema": { "type": "boolean" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "fileMetadataId": "b3f4f652-b71a-4b8b-8b7f-f812f80a7b44",
+                      "hasNext": false,
+                      "packages": [
+                        {
+                          "fileMetadataId": "8d79e5a6-399b-42c3-8678-1fc165ca72c5",
+                          "packageId": "b3f4f652-b71a-4b8b-8b7f-jd2k359k5d36",
+                          "packageLicenses": [],
+                          "packageName": "express",
+                          "packageVersion": "4.17.1"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/GetPackagesByFileResponse"
+                }
+              }
+            },
+            "description": "get packages by file"
+          },
+          "422": { "description": "Request arguments validation error" }
+        },
+        "security": [{ "CustomAuthorizer": [] }],
+        "summary": "Get the packages related to a file",
+        "tags": ["Packages"],
+        "x-codeSamples": [
+          {
+            "lang": "Python + Requests",
+            "source": "import requests\n\nurl = \"https://api.prismacloud.io/code/api/v1/vulnerabilities/packages/files/{fileMetadataId}\"\n\nquerystring = {\"limit\":\"SOME_NUMBER_VALUE\",\"offset\":\"SOME_NUMBER_VALUE\",\"sort\":\"SOME_STRING_VALUE\",\"root-only\":\"SOME_BOOLEAN_VALUE\"}\n\nheaders = {\"authorization\": \"REPLACE_KEY_VALUE\"}\n\nresponse = requests.request(\"GET\", url, headers=headers, params=querystring)\n\nprint(response.text)"
+          },
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request GET \\\n  --url 'https://api.prismacloud.io/code/api/v1/vulnerabilities/packages/files/{fileMetadataId}?limit=SOME_NUMBER_VALUE&offset=SOME_NUMBER_VALUE&sort=SOME_STRING_VALUE&root-only=SOME_BOOLEAN_VALUE' \\\n  --header 'authorization: REPLACE_KEY_VALUE'"
+          }
+        ]
+      }
+    },
+    "/code/api/v1/vulnerabilities/packages/{packageUuid}/direct-sub-dependencies": {
+      "get": {
+        "description": "Gets all the direct sub-dependencies packages of a specific package.\nThe API accepts a package UUID.\nThere is an option to get the packages sorted by their error count.",
+        "operationId": "getDirectSubDependenciesByUuid",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "packageUuid",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": true,
+            "schema": { "format": "double", "type": "number" }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": true,
+            "schema": { "format": "double", "type": "number" }
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "required": false,
+            "schema": {
+              "enum": ["errors"],
+              "nullable": false,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "directSubDependenciesPackages": [
+                        {
+                          "fileMetadataId": "8d79e5a6-399b-42c3-8678-1fc165ca72c5",
+                          "packageId": "b3f4f652-b71a-4b8b-8b7f-jd2k359k5d36",
+                          "packageLicenses": [],
+                          "packageName": "express",
+                          "packageVersion": "4.17.1"
+                        }
+                      ],
+                      "hasNext": false,
+                      "packageId": "b3f4f652-b71a-4b8b-8b7f-f812f80a7b43"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/GetDirectSubDependenciesByUuidResponse"
+                }
+              }
+            },
+            "description": "Get direct sub-dependencies packages by source package."
+          },
+          "422": { "description": "Request arguments validation error" }
+        },
+        "security": [{ "CustomAuthorizer": [] }],
+        "summary": "Get the direct sub-dependencies packages by source package.",
+        "tags": ["Packages"],
+        "x-codeSamples": [
+          {
+            "lang": "Python + Requests",
+            "source": "import requests\n\nurl = \"https://api.prismacloud.io/code/api/v1/vulnerabilities/packages/{packageUuid}/direct-sub-dependencies\"\n\nquerystring = {\"limit\":\"SOME_NUMBER_VALUE\",\"offset\":\"SOME_NUMBER_VALUE\",\"sort\":\"SOME_STRING_VALUE\"}\n\nheaders = {\"authorization\": \"REPLACE_KEY_VALUE\"}\n\nresponse = requests.request(\"GET\", url, headers=headers, params=querystring)\n\nprint(response.text)"
+          },
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request GET \\\n  --url 'https://api.prismacloud.io/code/api/v1/vulnerabilities/packages/{packageUuid}/direct-sub-dependencies?limit=SOME_NUMBER_VALUE&offset=SOME_NUMBER_VALUE&sort=SOME_STRING_VALUE' \\\n  --header 'authorization: REPLACE_KEY_VALUE'"
+          }
+        ]
+      }
+    },
+    "/code/api/v1/vulnerabilities/packages/{packageUuid}": {
+      "get": {
+        "description": "Gets Package by its uuid.\nThe API accepts a package UUID.",
+        "operationId": "getPackageByUuid",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "packageUuid",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "description": "options to get more data on the package by comma-separated list as string, for now the only option is errorCount, file, repository",
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "errorCount": 3,
+                      "fileMetadataId": "8d79e5a6-399b-42c3-8678-1fc165ca72c5",
+                      "packageId": "b3f4f652-b71a-4b8b-8b7f-jd2k359k5d36",
+                      "packageLicenses": [],
+                      "packageName": "express",
+                      "packageVersion": "4.17.1"
+                    }
+                  }
+                },
+                "schema": { "$ref": "#/components/schemas/PackageData" }
+              }
+            },
+            "description": "get package by uuid"
+          },
+          "422": { "description": "Request arguments validation error" }
+        },
+        "security": [{ "CustomAuthorizer": [] }],
+        "summary": "Get a package.",
+        "tags": ["Packages"],
+        "x-codeSamples": [
+          {
+            "lang": "Python + Requests",
+            "source": "import requests\n\nurl = \"https://api.prismacloud.io/code/api/v1/vulnerabilities/packages/{packageUuid}\"\n\nquerystring = {\"include\":\"SOME_STRING_VALUE\"}\n\nheaders = {\"authorization\": \"REPLACE_KEY_VALUE\"}\n\nresponse = requests.request(\"GET\", url, headers=headers, params=querystring)\n\nprint(response.text)"
+          },
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request GET \\\n  --url 'https://api.prismacloud.io/code/api/v1/vulnerabilities/packages/{packageUuid}?include=SOME_STRING_VALUE' \\\n  --header 'authorization: REPLACE_KEY_VALUE'"
+          }
+        ]
+      }
+    },
+    "/code/api/v1/vulnerabilities/packages/search": {
+      "post": {
+        "description": "Searching for packages by a given reauestBody.",
+        "operationId": "searchPackages",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/PackagesSearchBody" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Example 1": {
+                    "value": [
+                      {
+                        "errorCount": 2,
+                        "fileMetadataId": "8d79e5a6-399b-42c3-8678-1fc165ca72c5",
+                        "fixableErrorCount": 1,
+                        "packageId": "a11294e7-e2e8-44c4-b48e-20305eb0000d",
+                        "packageLicenses": [],
+                        "packageName": "validator",
+                        "packageVersion": "8.2.0"
+                      },
+                      {
+                        "errorCount": 2,
+                        "fileMetadataId": "8d79e5a6-399b-42c3-8678-1fc165ca72c5",
+                        "fixableErrorCount": 2,
+                        "packageId": "d1b67af0-f168-4370-9d65-084fb6b1fa17",
+                        "packageLicenses": [],
+                        "packageName": "validator",
+                        "packageVersion": "8.2.0"
+                      }
+                    ]
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/PackagesSearchResponse"
+                }
+              }
+            },
+            "description": "search packages"
+          },
+          "422": { "description": "Request arguments validation error" }
+        },
+        "security": [{ "CustomAuthorizer": [] }],
+        "summary": "Searching for packages.",
+        "tags": ["Packages"],
+        "x-codeSamples": [
+          {
+            "lang": "Python + Requests",
+            "source": "import requests\n\nurl = \"https://api.prismacloud.io/code/api/v1/vulnerabilities/packages/search\"\n\npayload = {\n    \"filter\": {\"fixableOnly\": True},\n    \"include\": [\"errorCount\"],\n    \"limit\": 0,\n    \"offset\": 0,\n    \"q\": \"string\",\n    \"repositories\": [\"string\"],\n    \"sortBy\": [\"errors\"],\n    \"statuses\": [\"OPEN\"]\n}\nheaders = {\n    \"content-type\": \"application/json\",\n    \"authorization\": \"REPLACE_KEY_VALUE\"\n}\n\nresponse = requests.request(\"POST\", url, json=payload, headers=headers)\n\nprint(response.text)"
+          },
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request POST \\\n  --url https://api.prismacloud.io/code/api/v1/vulnerabilities/packages/search \\\n  --header 'authorization: REPLACE_KEY_VALUE' \\\n  --header 'content-type: application/json' \\\n  --data '{\"filter\":{\"fixableOnly\":true},\"include\":[\"errorCount\"],\"limit\":0,\"offset\":0,\"q\":\"string\",\"repositories\":[\"string\"],\"sortBy\":[\"errors\"],\"statuses\":[\"OPEN\"]}'"
+          }
+        ]
+      }
+    },
+    "/code/api/v1/vulnerabilities/packages/{packageUuid}/cves": {
+      "get": {
+        "description": "Get cves by package uuid.",
+        "operationId": "getCvesByPackageUuid",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "packageUuid",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "in": "query",
+            "name": "directOnly",
+            "required": false,
+            "schema": { "type": "boolean" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "data": [
+                        {
+                          "causePackageId": null,
+                          "cveId": "CVE-2017-16026",
+                          "cvss": 4,
+                          "description": "Request is an http client. If a request is made using ```multipart```, and the body type .....",
+                          "fixVersion": "",
+                          "link": "https://nvd.nist.gov/vuln/detail/CVE-2017-16026",
+                          "packageName": "request",
+                          "packageVersion": "2.36.0",
+                          "publishedDate": "2018-06-04T19:29:00.000Z",
+                          "riskFactors": {
+                            "DoS": false,
+                            "HasFix": false,
+                            "Severity": "Low"
+                          },
+                          "severity": "LOW",
+                          "uuid": "4714c309-f02e-4288-9e85-2e7f0356ad24",
+                          "vector": "CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N"
+                        },
+                        {
+                          "causePackageId": "2126d52e-484b-45c3-9896-c4c9cddb2dd5",
+                          "cveId": "CVE-2014-7191",
+                          "cvss": 7,
+                          "description": "The qs module before 1.0.0 in Node.js does not call the compact function for array data, which allows remote attackers to cause a denial of service (memory consumption) by using a large index value to create a sparse array.",
+                          "fixVersion": "",
+                          "link": "https://nvd.nist.gov/vuln/detail/CVE-2014-7191",
+                          "packageName": "request",
+                          "packageVersion": "2.36.0",
+                          "publishedDate": "2014-10-19T01:55:00.000Z",
+                          "riskFactors": {
+                            "Complexity": "low",
+                            "DoS": true,
+                            "HasFix": true,
+                            "Severity": "High",
+                            "Vector": "network"
+                          },
+                          "severity": "HIGH",
+                          "uuid": "d88564ba-bf2a-49cf-912c-b91bd0c4442c",
+                          "vector": "AV:N/AC:L/Au:N/C:N/I:N/A:P"
+                        }
+                      ],
+                      "packageUuid": "a3d99fe0-98f3-41f6-8de4-4d9691786833"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/GetCvesByPackageUuidResponse"
+                }
+              }
+            },
+            "description": "cves"
+          },
+          "422": { "description": "Request arguments validation error" }
+        },
+        "security": [{ "CustomAuthorizer": [] }],
+        "summary": "Get cves by package uuid.",
+        "tags": ["Packages"],
+        "x-codeSamples": [
+          {
+            "lang": "Python + Requests",
+            "source": "import requests\n\nurl = \"https://api.prismacloud.io/code/api/v1/vulnerabilities/packages/{packageUuid}/cves\"\n\nquerystring = {\"directOnly\":\"SOME_BOOLEAN_VALUE\"}\n\nheaders = {\"authorization\": \"REPLACE_KEY_VALUE\"}\n\nresponse = requests.request(\"GET\", url, headers=headers, params=querystring)\n\nprint(response.text)"
+          },
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request GET \\\n  --url 'https://api.prismacloud.io/code/api/v1/vulnerabilities/packages/{packageUuid}/cves?directOnly=SOME_BOOLEAN_VALUE' \\\n  --header 'authorization: REPLACE_KEY_VALUE'"
+          }
+        ]
+      }
+    }
+  },
+  "servers": [{ "url": "https://api.prismacloud.io" }],
+  "tags": [{ "name": "Packages" }]
+}

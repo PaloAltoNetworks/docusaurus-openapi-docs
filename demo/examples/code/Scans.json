@@ -1,0 +1,72 @@
+{
+  "components": {
+    "examples": {},
+    "headers": {},
+    "parameters": {},
+    "requestBodies": {},
+    "responses": {},
+    "securitySchemes": {
+      "CustomAuthorizer": {
+        "in": "header",
+        "name": "authorization",
+        "type": "apiKey",
+        "x-amazon-apigateway-authorizer": {
+          "authorizerResultTtlInSeconds": 0,
+          "authorizerUri": "arn:aws:apigateway:{Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:{Region}:{AccountId}:function:bc-authorization-authorizer-{UniqueTag}{Alias}/invocations",
+          "identitySource": "method.request.header.authorization",
+          "type": "request"
+        },
+        "x-amazon-apigateway-authtype": "custom"
+      }
+    },
+    "schemas": {}
+  },
+  "info": {
+    "contact": {},
+    "description": "The Scans endpoints are listed below.\n",
+    "title": "Prisma Cloud Scans API Overview",
+    "version": "Latest"
+  },
+  "openapi": "3.0.0",
+  "paths": {
+    "/code/api/v1/scans/integrations": {
+      "post": {
+        "description": "Trigger asynchronous scan of all resources to refresh the current state at Prisma Cloud Code Security.\nThe scan will update resources configured in cloud providers (AWS/Azure/GCP)\nand IaC resources in the main branch at each version control system (Github/Gitlab/Bitbucket).\nPlease note: A new scan will not  be triggered only if there is another running execution.",
+        "operationId": "scanIntegrations",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "isExecuted": { "type": "boolean" },
+                    "message": { "type": "string" }
+                  },
+                  "required": ["message", "isExecuted"],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Scan started"
+          }
+        },
+        "security": [{ "CustomAuthorizer": [] }],
+        "summary": "Trigger a Scan",
+        "tags": ["Scans"],
+        "x-codeSamples": [
+          {
+            "lang": "Python + Requests",
+            "source": "import requests\n\nurl = \"https://api.prismacloud.io/code/api/v1/scans/integrations\"\n\nheaders = {\"authorization\": \"REPLACE_KEY_VALUE\"}\n\nresponse = requests.request(\"POST\", url, headers=headers)\n\nprint(response.text)"
+          },
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request POST \\\n  --url https://api.prismacloud.io/code/api/v1/scans/integrations \\\n  --header 'authorization: REPLACE_KEY_VALUE'"
+          }
+        ]
+      }
+    }
+  },
+  "servers": [{ "url": "https://api.prismacloud.io" }],
+  "tags": [{ "name": "Scans" }]
+}
