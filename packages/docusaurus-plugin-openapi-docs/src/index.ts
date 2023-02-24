@@ -190,6 +190,9 @@ custom_edit_url: null
 {{#frontMatter.proxy}}
 proxy: {{{frontMatter.proxy}}}
 {{/frontMatter.proxy}}
+{{#frontMatter.hide_send_button}}
+hide_send_button: true
+{{/frontMatter.hide_send_button}}
 ---
 
 {{{markdown}}}

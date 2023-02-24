@@ -27,6 +27,7 @@ export const OptionsSchema = Joi.object({
         outputDir: Joi.string().required(),
         template: Joi.string(),
         downloadUrl: Joi.string(),
+        hideSendButton: Joi.boolean(),
         sidebarOptions: sidebarOptions,
         version: Joi.string().when("versions", {
           is: Joi.exist(),

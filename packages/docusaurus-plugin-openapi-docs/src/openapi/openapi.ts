@@ -221,6 +221,9 @@ function createItems(
                 .replace(/\s+$/, "")
             : "",
           ...(options?.proxy && { proxy: options.proxy }),
+          ...(options?.hideSendButton && {
+            hide_send_button: options.hideSendButton,
+          }),
         },
         api: {
           ...defaults,
@@ -338,6 +341,9 @@ function createItems(
                 .replace(/\s+$/, "")
             : "",
           ...(options?.proxy && { proxy: options.proxy }),
+          ...(options?.hideSendButton && {
+            hide_send_button: options.hideSendButton,
+          }),
         },
         api: {
           ...defaults,
