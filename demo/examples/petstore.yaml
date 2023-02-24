@@ -933,7 +933,6 @@ components:
         message:
           type: string
     Cat:
-      title: cat
       description: A representation of a cat
       allOf:
         - $ref: "#/components/schemas/Pet"
@@ -972,7 +971,6 @@ components:
       xml:
         name: Category
     Dog:
-      title: dog
       description: A representation of a dog
       allOf:
         - $ref: "#/components/schemas/Pet"
@@ -987,7 +985,6 @@ components:
           required:
             - packSize
     HoneyBee:
-      title: bee
       description: A representation of a honey bee
       allOf:
         - $ref: "#/components/schemas/Pet"
@@ -1043,7 +1040,6 @@ components:
       xml:
         name: Order
     Pet:
-      title: pet
       type: object
       required:
         - name
@@ -1110,7 +1106,6 @@ components:
       xml:
         name: Pet
     Tag:
-      title: tag
       type: object
       properties:
         id:
