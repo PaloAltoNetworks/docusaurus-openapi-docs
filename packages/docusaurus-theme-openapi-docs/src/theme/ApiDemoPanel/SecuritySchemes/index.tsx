@@ -65,7 +65,9 @@ function SecuritySchemes(props: any) {
                     return (
                       <span key={k}>
                         <strong>{k}: </strong>
-                        {rest[k]}
+                        {typeof rest[k] === "object"
+                          ? JSON.stringify(rest[k], null, 2)
+                          : String(rest[k])}
                       </span>
                     );
                   })}
@@ -104,7 +106,9 @@ function SecuritySchemes(props: any) {
                     return (
                       <span key={k}>
                         <strong>{k}: </strong>
-                        {rest[k]}
+                        {typeof rest[k] === "object"
+                          ? JSON.stringify(rest[k], null, 2)
+                          : String(rest[k])}
                       </span>
                     );
                   })}
@@ -169,7 +173,9 @@ function SecuritySchemes(props: any) {
                   return (
                     <span key={k}>
                       <strong>{k}: </strong>
-                      {rest[k]}
+                      {typeof rest[k] === "object"
+                        ? JSON.stringify(rest[k], null, 2)
+                        : String(rest[k])}
                     </span>
                   );
                 })}
@@ -209,7 +215,9 @@ function SecuritySchemes(props: any) {
                   return (
                     <span key={k}>
                       <strong>{k}: </strong>
-                      {rest[k]}
+                      {typeof rest[k] === "object"
+                        ? JSON.stringify(rest[k], null, 2)
+                        : String(rest[k])}
                     </span>
                   );
                 })}
@@ -257,7 +265,9 @@ function SecuritySchemes(props: any) {
                   return (
                     <span key={k}>
                       <strong>{k}: </strong>
-                      {rest[k]}
+                      {typeof rest[k] === "object"
+                        ? JSON.stringify(rest[k], null, 2)
+                        : String(rest[k])}
                     </span>
                   );
                 })}
