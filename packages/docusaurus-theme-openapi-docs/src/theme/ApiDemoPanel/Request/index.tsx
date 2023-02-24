@@ -25,7 +25,7 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
   const response = useTypedSelector((state: any) => state.response.value);
   const postman = new sdk.Request(item.postman);
   const metadata = useDoc();
-  const { proxy } = metadata.frontMatter;
+  const { proxy, hide_send_button } = metadata.frontMatter;
 
   const params = {
     path: [] as ParameterObject[],
@@ -48,7 +48,9 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
         <summary>
           <div className={`details__request-summary`}>
             <h4>Request</h4>
-            {item.servers && <Execute postman={postman} proxy={proxy} />}
+            {item.servers && !hide_send_button && (
+              <Execute postman={postman} proxy={proxy} />
+            )}
           </div>
         </summary>
         <div className={styles.optionsPanel}>
