@@ -33,6 +33,7 @@ export interface APIOptions {
   outputDir: string;
   template?: string;
   downloadUrl?: string;
+  hideSendButton?: boolean;
   sidebarOptions?: SidebarOptions;
   version?: string;
   label?: string;
