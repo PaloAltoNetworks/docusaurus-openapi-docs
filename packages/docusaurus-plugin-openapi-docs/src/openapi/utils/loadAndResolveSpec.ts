@@ -128,6 +128,21 @@ export async function loadAndResolveSpec(specUrlOrObject: object | string) {
   const {
     bundle: { parsed },
   } = await bundle(bundleOpts);
+
+  //Pre-processing before resolving JSON refs
+  if (parsed.components) {
+    for (let [component, type] of Object.entries(parsed.components) as any) {
+      if (component === "schemas") {
+        for (let [schemaKey, schemaValue] of Object.entries(type) as any) {
+          const title: string | undefined = schemaValue["title"];
+          if (!title) {
+            schemaValue.title = schemaKey;
+          }
+        }
+      }
+    }
+  }
+
   const resolved = await resolveJsonRefs(parsed);
 
   // Force serialization and replace circular $ref pointers
