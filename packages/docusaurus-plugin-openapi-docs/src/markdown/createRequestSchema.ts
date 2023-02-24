@@ -586,7 +586,7 @@ function createPropertyDiscriminator(
           children: Object.keys(discriminator?.mapping!).map((key, index) => {
             const label = key;
             return create("TabItem", {
-              className: "openapi-tabs__discriminator-item",
+              // className: "openapi-tabs__discriminator-item",
               label: label,
               value: `${index}-item-discriminator`,
               children: [createNodes(discriminator?.mapping[key])],

@@ -4,9 +4,12 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
+//  Schema Styling
 @use "./ParamsItem/ParamsItem";
 @use "./SchemaItem/SchemaItem";
+// Tabs Styling
 @use "./ApiTabs/ApiTabs";
+@use "./DiscriminatorTabs/DiscriminatorTabs";
 
 :root {
   --openapi-required: var(--ifm-color-danger);
