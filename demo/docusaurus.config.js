@@ -223,7 +223,7 @@ const config = {
             },
           },
           petstore: {
-            specPath: "examples/CloudAccounts.json",
+            specPath: "examples/petstore.yaml",
             proxy: "https://cors.pan.dev",
             outputDir: "docs/petstore",
             sidebarOptions: {
