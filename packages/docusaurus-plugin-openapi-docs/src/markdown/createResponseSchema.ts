@@ -163,15 +163,24 @@ function createAdditionalProperties(schema: SchemaObject) {
   //   },
   //   type: 'array'
   // }
-  const type: string | unknown = schema.additionalProperties?.type;
-  if (type === "object" && schema.additionalProperties) {
-    const title = schema.additionalProperties.title;
+  const additionalProperties = schema.additionalProperties;
+  const type: string | unknown = additionalProperties?.type;
+  if (
+    type === "object" &&
+    (additionalProperties?.properties ||
+      additionalProperties?.items ||
+      additionalProperties?.allOf ||
+      additionalProperties?.additionalProperties ||
+      additionalProperties?.oneOf ||
+      additionalProperties?.anyOf)
+  ) {
+    const title = additionalProperties.title;
     const schemaName = title ? `object (${title})` : "object";
     const required = schema.required ?? false;
     return createDetailsNode(
       "property name*",
       schemaName,
-      schema.additionalProperties,
+      additionalProperties,
       required,
       schema.nullable
     );
