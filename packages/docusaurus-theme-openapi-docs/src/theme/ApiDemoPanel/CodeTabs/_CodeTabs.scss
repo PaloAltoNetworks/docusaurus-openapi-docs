@@ -2,8 +2,16 @@
   margin-bottom: var(--ifm-leading);
 }
 
+.openapi-tabs__code-list {
+  display: table-row-group;
+}
+
 .openapi-tabs__code-item {
   margin-top: 0 !important;
+  padding-left: 1.4rem;
+  padding-right: 1.4rem;
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
 }
 
 .openapi-tabs__code-active {
@@ -11,16 +19,8 @@
   border-bottom-right-radius: 0;
 }
 
-.openapi-tabs__code-list {
-  display: table-row-group;
-}
-
 .openapi-tabs__code-item--python {
   color: var(--ifm-color-success);
-  padding-left: 1.4rem;
-  padding-right: 1.4rem;
-  padding-top: 1rem !important;
-  padding-bottom: 1rem !important;
 
   &::after {
     content: "";
@@ -43,10 +43,6 @@
 
 .openapi-tabs__code-item--go {
   color: var(--ifm-color-info);
-  padding-left: 1.4rem;
-  padding-right: 1.4rem;
-  padding-top: 1rem !important;
-  padding-bottom: 1rem !important;
 
   &::after {
     content: "";
@@ -69,10 +65,6 @@
 
 .openapi-tabs__code-item--javascript {
   color: var(--ifm-color-warning);
-  padding-left: 1.4rem;
-  padding-right: 1.4rem;
-  padding-top: 1rem !important;
-  padding-bottom: 1rem !important;
 
   &::after {
     content: "";
@@ -95,10 +87,6 @@
 
 .openapi-tabs__code-item--bash {
   color: var(--ifm-color-danger);
-  padding-left: 1.4rem;
-  padding-right: 1.4rem;
-  padding-top: 1rem !important;
-  padding-bottom: 1rem !important;
 
   &::after {
     content: "";
@@ -121,10 +109,6 @@
 
 .openapi-tabs__code-item--ruby {
   color: var(--ifm-color-danger);
-  padding-left: 1.4rem;
-  padding-right: 1.4rem;
-  padding-top: 1rem !important;
-  padding-bottom: 1rem !important;
 
   &::after {
     content: "";
@@ -147,10 +131,6 @@
 
 .openapi-tabs__code-item--csharp {
   color: var(--ifm-color-gray-500);
-  padding-left: 1.4rem;
-  padding-right: 1.4rem;
-  padding-top: 1rem !important;
-  padding-bottom: 1rem !important;
 
   &::after {
     content: "";
@@ -173,10 +153,6 @@
 
 .openapi-tabs__code-item--nodejs {
   color: var(--ifm-color-success);
-  padding-left: 1.4rem;
-  padding-right: 1.4rem;
-  padding-top: 1rem !important;
-  padding-bottom: 1rem !important;
 
   &::after {
     content: "";
@@ -199,10 +175,6 @@
 
 .openapi-tabs__code-item--php {
   color: var(--ifm-color-gray-500);
-  padding-left: 1.4rem;
-  padding-right: 1.4rem;
-  padding-top: 1rem !important;
-  padding-bottom: 1rem !important;
 
   &::after {
     content: "";
@@ -225,10 +197,6 @@
 
 .openapi-tabs__code-item--java {
   color: var(--ifm-color-warning);
-  padding-left: 1.4rem;
-  padding-right: 1.4rem;
-  padding-top: 1rem !important;
-  padding-bottom: 1rem !important;
 
   &::after {
     content: "";
