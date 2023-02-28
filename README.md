@@ -128,18 +128,19 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 
 `config` can be configured with the following options:
 
-| Name             | Type     | Default | Description                                                                                                                 |
-| ---------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `specPath`       | `string` | `null`  | Designated URL or path to the source of an OpenAPI specification file or directory of multiple OpenAPI specification files. |
-| `ouputDir`       | `string` | `null`  | Desired output path for generated MDX files.                                                                                |
-| `proxy`          | `string` | `null`  | _Optional:_ Proxy URL to prepend to base URL when performing API requests from browser.                                     |
-| `template`       | `string` | `null`  | _Optional:_ Customize MDX content with a desired template.                                                                  |
-| `downloadUrl`    | `string` | `null`  | _Optional:_ Designated URL for downloading OpenAPI specification. (requires `info` section/doc)                             |
-| `sidebarOptions` | `object` | `null`  | _Optional:_ Set of options for sidebar configuration. See below for a list of supported options.                            |
-| `version`        | `string` | `null`  | _Optional:_ Version assigned to single or micro-spec API specified in `specPath`.                                           |
-| `label`          | `string` | `null`  | _Optional:_ Version label used when generating version selector dropdown menu.                                              |
-| `baseUrl`        | `string` | `null`  | _Optional:_ Version base URL used when generating version selector dropdown menu.                                           |
-| `versions`       | `object` | `null`  | _Optional:_ Set of options for versioning configuration. See below for a list of supported options.                         |
+| Name             | Type      | Default | Description                                                                                                                 |
+| ---------------- | --------- | ------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `specPath`       | `string`  | `null`  | Designated URL or path to the source of an OpenAPI specification file or directory of multiple OpenAPI specification files. |
+| `ouputDir`       | `string`  | `null`  | Desired output path for generated MDX files.                                                                                |
+| `proxy`          | `string`  | `null`  | _Optional:_ Proxy URL to prepend to base URL when performing API requests from browser.                                     |
+| `template`       | `string`  | `null`  | _Optional:_ Customize MDX content with a desired template.                                                                  |
+| `downloadUrl`    | `string`  | `null`  | _Optional:_ Designated URL for downloading OpenAPI specification. (requires `info` section/doc)                             |
+| `hideSendButton` | `boolean` | `null`  | _Optional:_ If set to `true`, hides the "Send API Request" button in API demo panel                                         |
+| `sidebarOptions` | `object`  | `null`  | _Optional:_ Set of options for sidebar configuration. See below for a list of supported options.                            |
+| `version`        | `string`  | `null`  | _Optional:_ Version assigned to single or micro-spec API specified in `specPath`.                                           |
+| `label`          | `string`  | `null`  | _Optional:_ Version label used when generating version selector dropdown menu.                                              |
+| `baseUrl`        | `string`  | `null`  | _Optional:_ Version base URL used when generating version selector dropdown menu.                                           |
+| `versions`       | `object`  | `null`  | _Optional:_ Set of options for versioning configuration. See below for a list of supported options.                         |
 
 `sidebarOptions` can be configured with the following options:
 
