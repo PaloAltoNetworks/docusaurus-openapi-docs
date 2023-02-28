@@ -160,7 +160,7 @@ function createAdditionalProperties(schema: SchemaObject) {
   const additionalProperties = schema.additionalProperties;
   const type: string | unknown = additionalProperties?.type;
   if (
-    type === "object" &&
+    (type === "object" || type === "array") &&
     (additionalProperties?.properties ||
       additionalProperties?.items ||
       additionalProperties?.allOf ||
