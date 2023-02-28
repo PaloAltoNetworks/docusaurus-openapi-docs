@@ -683,7 +683,7 @@ function createEdges({
     return create("SchemaItem", {
       collapsible: false,
       name,
-      required: false,
+      required: Array.isArray(required) ? required.includes(name) : required,
       schemaName: schemaName,
       qualifierMessage: getQualifierMessage(schema),
       schema: mergedSchemas,
@@ -739,7 +739,7 @@ function createEdges({
   return create("SchemaItem", {
     collapsible: false,
     name,
-    required: false,
+    required: Array.isArray(required) ? required.includes(name) : required,
     schemaName: schemaName,
     qualifierMessage: getQualifierMessage(schema),
     schema: schema,
