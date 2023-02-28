@@ -9,7 +9,8 @@ import { Joi } from "@docusaurus/utils-validation";
 
 const sidebarOptions = Joi.object({
   groupPathsBy: Joi.string().valid("tag"),
-  categoryLinkSource: Joi.string().valid("tag", "info"),
+  // TODO: Remove "none" in 2.0, make it the default if not specified
+  categoryLinkSource: Joi.string().valid("tag", "info", "none"),
   customProps: Joi.object(),
   sidebarCollapsible: Joi.boolean(),
   sidebarCollapsed: Joi.boolean(),
