@@ -1,3 +1,31 @@
+## 1.6.0 (Feb 24, 2023)
+
+High level enhancements
+
+- Add support for security vendor extensions ([#457](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/457))
+- [Enhancement] Add option to hide send button ([#456](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/456))
+- Lock supported docusaurus versions ([#449](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/449))
+- Handle missing params/header schema ([#446](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/446))
+- Apply docusaurus.io styles to demo ([#443](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/443))
+- [FR] Added support for summary and description for param schema examples ([#406](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/406))
+
+Other enhancements and bug fixes
+
+- Avoid falling back to MOD label when rendering oneOf/anyOf and title not defined ([#455](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/455))
+- Expand support for nullable objects and default to any for empty/unknown schemas ([#452](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/452))
+- Fix security schemes ([#444](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/444))
+- [bug] Use toString() utility to always convert example to string ([#442](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/442))
+- Improve handling of non-string default values ([#436](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/436))
+- Remove trailing slash in outputDir option if present ([#435](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/435))
+- Fix: date-time examples should include time ([#427](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/427))
+- Fix logo/darkLogo and colorMode synching ([#426](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/426))
+- fix: fix logic that determines if an object property is required in response ([#424](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/424))
+- Implement NodePolyfillPlugin in theme webpack config ([#422](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/422))
+- revert `max-width` and `max-height` on code blocks in code tabs ([#417](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/417))
+- Update sidebars.md ([#413](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/413))
+- Clarify support for OpenAPI 3.0 ([#420](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/420))
+- Add support for java and expand language variants ([#404](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/404))
+
 ## 1.5.2 (Feb 2, 2023)
 
 High level enhancements
