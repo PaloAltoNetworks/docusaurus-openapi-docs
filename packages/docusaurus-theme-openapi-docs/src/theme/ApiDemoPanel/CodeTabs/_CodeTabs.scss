@@ -1,0 +1,17 @@
+.openapi-tabs__code-container {
+  margin-bottom: var(--ifm-leading);
+}
+
+.openapi-tabs__code-item {
+  margin-top: 0 !important;
+}
+
+.openapi-tabs__code-list {
+  display: table-row-group;
+}
+
+@media only screen and (min-width: 768px) and (max-width: 996px) {
+  .openapi-tabs__code-list {
+    justify-content: space-around;
+  }
+}

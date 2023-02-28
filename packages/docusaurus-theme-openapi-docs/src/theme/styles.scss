@@ -9,6 +9,7 @@
 @use "./SchemaItem/SchemaItem";
 // Tabs Styling
 @use "./ApiTabs/ApiTabs";
+@use "./ApiDemoPanel/CodeTabs/CodeTabs";
 @use "./DiscriminatorTabs/DiscriminatorTabs";
 
 :root {
