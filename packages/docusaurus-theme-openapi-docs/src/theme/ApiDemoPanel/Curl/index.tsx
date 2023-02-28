@@ -278,7 +278,9 @@ function Curl({ postman, codeSamples }: Props) {
                   ? `${lang.language}-${lang.variant}`
                   : lang.language
               }
-              attributes={{ className: `code__tab--${lang.logoClass}` }}
+              attributes={{
+                className: `openapi-tabs__code-item--${lang.logoClass}`,
+              }}
             >
               <CodeBlock language={lang.highlight} className={styles.codeBlock}>
                 {codeText}

@@ -194,7 +194,7 @@ function TabsComponent(props: Props): JSX.Element {
               "openapi-tabs__code-item",
               attributes?.className as string,
               {
-                "tabs__item--active": selectedValue === value,
+                "openapi-tabs__code-active": selectedValue === value,
               }
             )}
           >

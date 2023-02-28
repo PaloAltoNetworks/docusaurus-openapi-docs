@@ -6,31 +6,34 @@
   margin-top: 0 !important;
 }
 
+.openapi-tabs__code-active {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
 .openapi-tabs__code-list {
   display: table-row-group;
 }
 
-/* CodeTabs */
-
-.code__tab--python::after {
-  content: "";
-  width: 28px;
-  height: 28px;
-  background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg");
-  margin-block: auto;
-}
-
-.code__tab--python {
+.openapi-tabs__code-item--python {
   color: var(--ifm-color-success);
   padding-left: 1.4rem;
   padding-right: 1.4rem;
   padding-top: 1rem !important;
   padding-bottom: 1rem !important;
-}
 
-.code__tab--python.tabs__item--active {
-  border-bottom-color: var(--ifm-color-success);
-  background-color: var(--ifm-color-emphasis-100);
+  &::after {
+    content: "";
+    width: 28px;
+    height: 28px;
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg");
+    margin-block: auto;
+  }
+
+  &.openapi-tabs__code-active {
+    border-bottom-color: var(--ifm-color-success);
+    background-color: var(--ifm-color-emphasis-100);
+  }
 }
 
 .language-python {
@@ -38,25 +41,25 @@
   overflow: auto;
 }
 
-.code__tab--go::after {
-  content: "";
-  width: 28px;
-  height: 28px;
-  background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/go/go-original-wordmark.svg");
-  margin-block: auto;
-}
-
-.code__tab--go {
+.openapi-tabs__code-item--go {
   color: var(--ifm-color-info);
   padding-left: 1.4rem;
   padding-right: 1.4rem;
   padding-top: 1rem !important;
   padding-bottom: 1rem !important;
-}
 
-.code__tab--go.tabs__item--active {
-  border-bottom-color: var(--ifm-color-info);
-  background-color: var(--ifm-color-emphasis-100);
+  &::after {
+    content: "";
+    width: 28px;
+    height: 28px;
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/go/go-original-wordmark.svg");
+    margin-block: auto;
+  }
+
+  &.openapi-tabs__code-active {
+    border-bottom-color: var(--ifm-color-info);
+    background-color: var(--ifm-color-emphasis-100);
+  }
 }
 
 .language-go {
@@ -64,25 +67,25 @@
   overflow: auto;
 }
 
-.code__tab--javascript::after {
-  content: "";
-  width: 28px;
-  height: 28px;
-  background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg");
-  margin-block: auto;
-}
-
-.code__tab--javascript {
+.openapi-tabs__code-item--javascript {
   color: var(--ifm-color-warning);
   padding-left: 1.4rem;
   padding-right: 1.4rem;
   padding-top: 1rem !important;
   padding-bottom: 1rem !important;
-}
 
-.code__tab--javascript.tabs__item--active {
-  border-bottom-color: var(--ifm-color-warning);
-  background-color: var(--ifm-color-emphasis-100);
+  &::after {
+    content: "";
+    width: 28px;
+    height: 28px;
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg");
+    margin-block: auto;
+  }
+
+  &.openapi-tabs__code-active {
+    border-bottom-color: var(--ifm-color-warning);
+    background-color: var(--ifm-color-emphasis-100);
+  }
 }
 
 .language-javascript {
@@ -90,25 +93,25 @@
   overflow: auto;
 }
 
-.code__tab--bash::after {
-  content: "";
-  width: 28px;
-  height: 28px;
-  background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg");
-  margin-block: auto;
-}
-
-.code__tab--bash {
+.openapi-tabs__code-item--bash {
   color: var(--ifm-color-danger);
   padding-left: 1.4rem;
   padding-right: 1.4rem;
   padding-top: 1rem !important;
   padding-bottom: 1rem !important;
-}
 
-.code__tab--bash.tabs__item--active {
-  border-bottom-color: var(--ifm-color-danger);
-  background-color: var(--ifm-color-emphasis-100);
+  &::after {
+    content: "";
+    width: 28px;
+    height: 28px;
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg");
+    margin-block: auto;
+  }
+
+  &.openapi-tabs__code-active {
+    border-bottom-color: var(--ifm-color-danger);
+    background-color: var(--ifm-color-emphasis-100);
+  }
 }
 
 .language-bash {
@@ -116,25 +119,25 @@
   overflow: auto;
 }
 
-.code__tab--ruby::after {
-  content: "";
-  width: 28px;
-  height: 28px;
-  background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/ruby/ruby-plain.svg");
-  margin-block: auto;
-}
-
-.code__tab--ruby {
+.openapi-tabs__code-item--ruby {
   color: var(--ifm-color-danger);
   padding-left: 1.4rem;
   padding-right: 1.4rem;
   padding-top: 1rem !important;
   padding-bottom: 1rem !important;
-}
 
-.code__tab--ruby.tabs__item--active {
-  border-bottom-color: var(--ifm-color-danger);
-  background-color: var(--ifm-color-emphasis-100);
+  &::after {
+    content: "";
+    width: 28px;
+    height: 28px;
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/ruby/ruby-plain.svg");
+    margin-block: auto;
+  }
+
+  &.openapi-tabs__code-active {
+    border-bottom-color: var(--ifm-color-danger);
+    background-color: var(--ifm-color-emphasis-100);
+  }
 }
 
 .language-ruby {
@@ -142,25 +145,25 @@
   overflow: auto;
 }
 
-.code__tab--csharp::after {
-  content: "";
-  width: 28px;
-  height: 28px;
-  background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/csharp/csharp-original.svg");
-  margin-block: auto;
-}
-
-.code__tab--csharp {
+.openapi-tabs__code-item--csharp {
   color: var(--ifm-color-gray-500);
   padding-left: 1.4rem;
   padding-right: 1.4rem;
   padding-top: 1rem !important;
   padding-bottom: 1rem !important;
-}
 
-.code__tab--csharp.tabs__item--active {
-  border-bottom-color: var(--ifm-color-gray-500);
-  background-color: var(--ifm-color-emphasis-100);
+  &::after {
+    content: "";
+    width: 28px;
+    height: 28px;
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/csharp/csharp-original.svg");
+    margin-block: auto;
+  }
+
+  &.openapi-tabs__code-active {
+    border-bottom-color: var(--ifm-color-gray-500);
+    background-color: var(--ifm-color-emphasis-100);
+  }
 }
 
 .language-csharp {
@@ -168,25 +171,25 @@
   overflow: auto;
 }
 
-.code__tab--nodejs::after {
-  content: "";
-  width: 28px;
-  height: 28px;
-  background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/nodejs/nodejs-original.svg");
-  margin-block: auto;
-}
-
-.code__tab--nodejs {
+.openapi-tabs__code-item--nodejs {
   color: var(--ifm-color-success);
   padding-left: 1.4rem;
   padding-right: 1.4rem;
   padding-top: 1rem !important;
   padding-bottom: 1rem !important;
-}
 
-.code__tab--nodejs.tabs__item--active {
-  border-bottom-color: var(--ifm-color-success);
-  background-color: var(--ifm-color-emphasis-100);
+  &::after {
+    content: "";
+    width: 28px;
+    height: 28px;
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/nodejs/nodejs-original.svg");
+    margin-block: auto;
+  }
+
+  &.openapi-tabs__code-active {
+    border-bottom-color: var(--ifm-color-success);
+    background-color: var(--ifm-color-emphasis-100);
+  }
 }
 
 .language-nodejs {
@@ -194,25 +197,25 @@
   overflow: auto;
 }
 
-.code__tab--php::after {
-  content: "";
-  width: 28px;
-  height: 28px;
-  background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/php/php-original.svg");
-  margin-block: auto;
-}
-
-.code__tab--php {
+.openapi-tabs__code-item--php {
   color: var(--ifm-color-gray-500);
   padding-left: 1.4rem;
   padding-right: 1.4rem;
   padding-top: 1rem !important;
   padding-bottom: 1rem !important;
-}
 
-.code__tab--php.tabs__item--active {
-  border-bottom-color: var(--ifm-color-gray-500);
-  background-color: var(--ifm-color-emphasis-100);
+  &::after {
+    content: "";
+    width: 28px;
+    height: 28px;
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/php/php-original.svg");
+    margin-block: auto;
+  }
+
+  &.openapi-tabs__code-active {
+    border-bottom-color: var(--ifm-color-gray-500);
+    background-color: var(--ifm-color-emphasis-100);
+  }
 }
 
 .language-php {
@@ -220,30 +223,25 @@
   overflow: auto;
 }
 
-.code__tab--java::after {
-  content: "";
-  width: 28px;
-  height: 28px;
-  background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg");
-  margin-block: auto;
-}
-
-.code__tab--java {
+.openapi-tabs__code-item--java {
   color: var(--ifm-color-warning);
   padding-left: 1.4rem;
   padding-right: 1.4rem;
   padding-top: 1rem !important;
   padding-bottom: 1rem !important;
-}
 
-.code__tab--java.tabs__item--active {
-  border-bottom-color: var(--ifm-color-warning);
-  background-color: var(--ifm-color-emphasis-100);
-}
+  &::after {
+    content: "";
+    width: 28px;
+    height: 28px;
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg");
+    margin-block: auto;
+  }
 
-.language-java {
-  max-height: 500px;
-  overflow: auto;
+  .openapi-tabs__code-active {
+    border-bottom-color: var(--ifm-color-warning);
+    background-color: var(--ifm-color-emphasis-100);
+  }
 }
 
 @media only screen and (min-width: 768px) and (max-width: 996px) {
