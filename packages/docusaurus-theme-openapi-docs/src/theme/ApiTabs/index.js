@@ -188,12 +188,12 @@ function ApiTabsComponent(props) {
             )}
           >
             {values.map(({ value, label, attributes }) => {
-              const responseTabDotStyle =
+              const responseStatusStyle =
                 parseInt(value) >= 400
-                  ? styles.responseTabDotDanger
+                  ? styles.responseStatusDanger
                   : parseInt(value) >= 200 && parseInt(value) < 300
-                  ? styles.responseTabDotSuccess
-                  : styles.responseTabDotInfo;
+                  ? styles.responseStatusSuccess
+                  : styles.responseStatusInfo;
 
               return (
                 <li
@@ -210,14 +210,13 @@ function ApiTabsComponent(props) {
                     "tabs__item",
                     styles.tabItem,
                     attributes?.className,
+                    responseStatusStyle,
                     {
-                      [styles.responseTabActive]: selectedValue === value,
+                      [styles.active]: selectedValue === value,
                     }
                   )}
                 >
-                  <div
-                    className={clsx(styles.responseTabDot, responseTabDotStyle)}
-                  />
+                  <div className={styles.responseTabDot} />
                   {label ?? value}
                 </li>
               );

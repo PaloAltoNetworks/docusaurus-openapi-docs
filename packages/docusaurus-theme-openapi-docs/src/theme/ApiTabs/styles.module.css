@@ -18,13 +18,36 @@
   font-weight: var(--ifm-font-weight-normal);
 }
 
-.tabItem:not(.responseTabActive) {
+.responseStatusSuccess {
+  border: none;
+  color: var(--ifm-color-success);
+}
+
+.responseStatusSuccess.active {
+  background-color: var(--ifm-color-success);
+  color: white;
+}
+
+.responseStatusDanger {
+  border: none;
+  color: var(--ifm-color-danger);
+}
+
+.responseStatusDanger.active {
+  background-color: var(--ifm-color-danger);
+  color: white;
+}
+
+.responseTabDot {
+  display: none;
+}
+
+.tabItem:not(.active) {
   opacity: 0.65;
 }
 
 .tabItem:hover {
   opacity: 1;
-  background-color: var(--ifm-color-emphasis-100);
 }
 
 .tabItem:last-child {
@@ -66,19 +89,19 @@
   border-radius: 50%;
 }
 
-.responseTabDotSuccess {
+.responseStatusSuccess > .responseTabDot {
   background-color: var(--ifm-color-success);
 }
 
-.responseTabDotDanger {
+.responseStatusDanger > .responseTabDot {
   background-color: var(--ifm-color-danger);
 }
 
-.responseTabDotInfo {
+.responseStatusInfo > .responseTabDot {
   background-color: var(--ifm-color-info);
 }
 
-.responseTabActive {
+.active {
   background-color: var(--ifm-color-emphasis-100);
 }
 
