@@ -107,7 +107,7 @@ function TabsComponent(props) {
     </div>
   );
 }
-export default function MimeTabs(props) {
+export default function CodeTabs(props) {
   const isBrowser = useIsBrowser();
   return (
     <TabsComponent
