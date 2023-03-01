@@ -283,7 +283,7 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
   if (exampleBody) {
     return (
       <FormItem label="Body" required={required}>
-        <SchemaTabs className="openapi-schema-tabs" lazy>
+        <SchemaTabs className="openapi__tabs-schema" lazy>
           {/* @ts-ignore */}
           <TabItem label="Default" value="default" default>
             <LiveApp action={dispatch} language={language}>
@@ -306,7 +306,7 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
   if (examplesBodies && examplesBodies.length > 0) {
     return (
       <FormItem label="Body" required={required}>
-        <SchemaTabs className="openapi-schema-tabs" lazy>
+        <SchemaTabs className="openapi__tabs-schema" lazy>
           {/* @ts-ignore */}
           <TabItem label="Default" value="default" default>
             <LiveApp action={dispatch} language={language}>

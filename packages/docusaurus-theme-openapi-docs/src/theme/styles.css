@@ -502,21 +502,25 @@ div:has(> ul.openapi-tabs__security-schemes) {
   max-width: 100%;
 }
 
-.openapi-mime-tabs {
+.openapi__tabs-mime {
   font-size: 12px;
   font-weight: unset;
   height: 2rem;
 }
 
-.openapi-mime-tabs > li {
+.openapi__tabs-mime > li {
   padding-top: 0.3rem !important;
 }
 
-.openapi-mime-tabs > li:active {
+.openapi__tabs-mime > li:active {
   background-color: var(--ifm-color-emphasis-200);
 }
 
-.openapi-schema-tabs > li {
+.openapi__tabs-schema {
+  margin-top: 1rem;
+}
+
+.openapi__tabs-schema > li {
   align-items: center;
   border: 1px solid var(--ifm-color-primary);
   border-radius: var(--ifm-global-radius);
@@ -526,24 +530,16 @@ div:has(> ul.openapi-tabs__security-schemes) {
   height: 1.8rem;
   justify-content: center;
   margin-right: 0.5rem;
-  margin-top: 0 !important;
 }
 
-.openapi-api-tabs-top {
-  /* align-items: center;
-  display: flex;
-  justify-content: space-between;
-  margin-top: 2rem; */
-}
-
-.openapi-api-tabs {
+.openapi__tabs-api {
   overflow-x: scroll;
   overflow-y: hidden;
   padding: 0 0.25rem;
   scroll-behavior: smooth;
 }
 
-.openapi-api-tabs > li {
+.openapi__tabs-api > li {
   align-items: center;
   border: 1px solid var(--ifm-color-primary);
   border-radius: var(--ifm-global-radius);
@@ -555,12 +551,12 @@ div:has(> ul.openapi-tabs__security-schemes) {
   margin-top: 0 !important;
 }
 
-.openapi-discriminator-tabs {
+.openapi__tabs-discriminator {
   margin-left: 0.75rem;
   margin-top: 1rem;
 }
 
-.openapi-discriminator-tabs > li {
+.openapi__tabs-discriminator > li {
   align-items: center;
   border: 1px solid var(--ifm-color-primary);
   border-radius: var(--ifm-global-radius);
@@ -573,6 +569,6 @@ div:has(> ul.openapi-tabs__security-schemes) {
   margin-top: 0 !important;
 }
 
-div:has(> ul.openapi-discriminator-tabs) {
+div:has(> ul.openapi__tabs-discriminator) {
   margin-left: 0.2rem;
 }

@@ -270,7 +270,7 @@ export function createStatusCodes({ responses }: Props) {
         children: [
           create("strong", { children: "Responses" }),
           create("ApiTabs", {
-            className: "openapi-api-tabs",
+            className: "openapi__tabs-api",
             children: codes.map((code) => {
               const responseHeaders: any = responses[code].headers;
               return create("TabItem", {

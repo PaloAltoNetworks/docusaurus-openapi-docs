@@ -65,7 +65,7 @@ function createAnyOneOf(schema: SchemaObject): any {
         children: type,
       }),
       create("SchemaTabs", {
-        className: "openapi-schema-tabs",
+        className: "openapi__tabs-schema",
         children: schema[type]!.map((anyOneSchema, index) => {
           const label = anyOneSchema.title
             ? anyOneSchema.title
@@ -589,7 +589,7 @@ function createPropertyDiscriminator(
           })
         ),
         create("DiscriminatorTabs", {
-          className: "openapi-discriminator-tabs",
+          className: "openapi__tabs-discriminator",
           children: Object.keys(discriminator?.mapping!).map((key, index) => {
             const label = key;
             return create("TabItem", {
@@ -871,7 +871,7 @@ export function createResponseSchema({ title, body, ...rest }: Props) {
 
   if (mimeTypes && mimeTypes.length) {
     return create("MimeTabs", {
-      className: "openapi-mime-tabs",
+      className: "openapi__tabs-mime",
       schemaType: "response",
       children: mimeTypes.map((mimeType: any) => {
         const responseExamples = body.content![mimeType].examples;
@@ -898,7 +898,7 @@ export function createResponseSchema({ title, body, ...rest }: Props) {
           value: `${mimeType}`,
           children: [
             create("SchemaTabs", {
-              className: "openapi-schema-tabs",
+              className: "openapi__tabs-schema",
               // TODO: determine if we should persist this
               // groupId: "schema-tabs",
               children: [
