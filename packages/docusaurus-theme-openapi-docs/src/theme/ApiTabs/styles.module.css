@@ -18,30 +18,6 @@
   font-weight: var(--ifm-font-weight-normal);
 }
 
-.responseStatusSuccess {
-  border: none;
-  color: var(--ifm-color-success);
-}
-
-.responseStatusSuccess.active {
-  background-color: var(--ifm-color-success);
-  color: white;
-}
-
-.responseStatusDanger {
-  border: none;
-  color: var(--ifm-color-danger);
-}
-
-.responseStatusDanger.active {
-  background-color: var(--ifm-color-danger);
-  color: white;
-}
-
-.responseTabDot {
-  display: none;
-}
-
 .tabItem:not(.active) {
   opacity: 0.65;
 }
