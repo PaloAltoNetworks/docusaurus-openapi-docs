@@ -1,3 +1,18 @@
+## 1.6.1 (Feb 28, 2023)
+
+High level enhancements
+
+- Add support for rendering additionalProperties schemas ([#465](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/465))
+- Add response status class name to response tab item ([#461](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/461))
+- Update usage docs ([#463](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/463))
+- Allow "none" option for categoryLinkSource ([#462](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/462))
+- Add code, thead and tbody to greaterThan regex ([#459](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/459))
+
+Other enhancements and bug fixes
+
+- Eval guard value as double not ([#468](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/468))
+- Remove code tab test styling ([#469](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/469))
+
 ## 1.6.0 (Feb 24, 2023)
 
 High level enhancements
