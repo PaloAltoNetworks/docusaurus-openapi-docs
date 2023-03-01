@@ -163,6 +163,28 @@ function createAdditionalProperties(schema: SchemaObject) {
   //   },
   //   type: 'array'
   // }
+  const additionalProperties = schema.additionalProperties;
+  const type: string | unknown = additionalProperties?.type;
+  if (
+    (type === "object" || type === "array") &&
+    (additionalProperties?.properties ||
+      additionalProperties?.items ||
+      additionalProperties?.allOf ||
+      additionalProperties?.additionalProperties ||
+      additionalProperties?.oneOf ||
+      additionalProperties?.anyOf)
+  ) {
+    const title = additionalProperties.title;
+    const schemaName = title ? `object (${title})` : "object";
+    const required = schema.required ?? false;
+    return createDetailsNode(
+      "property name*",
+      schemaName,
+      additionalProperties,
+      required,
+      schema.nullable
+    );
+  }
 
   if (
     (schema.additionalProperties?.type as string) === "string" ||
@@ -171,7 +193,6 @@ function createAdditionalProperties(schema: SchemaObject) {
     (schema.additionalProperties?.type as string) === "integer" ||
     (schema.additionalProperties?.type as string) === "number"
   ) {
-    const type = schema.additionalProperties?.type;
     const additionalProperties =
       schema.additionalProperties?.additionalProperties;
     if (additionalProperties !== undefined) {
