@@ -77,7 +77,7 @@ function TabList({ className, block, selectedValue, selectValue, tabValues }) {
       <div className={styles.responseTabsContainer}>
         {showTabArrows && (
           <button
-            className={clsx(styles.tabArrow, styles.tabArrowRight)}
+            className={clsx(styles.tabArrow, styles.tabArrowLeft)}
             onClick={handleLeftClick}
           />
         )}
