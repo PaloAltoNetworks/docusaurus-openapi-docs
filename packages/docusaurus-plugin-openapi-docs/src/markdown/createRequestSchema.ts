@@ -582,6 +582,7 @@ function createPropertyDiscriminator(
           })
         ),
         create("DiscriminatorTabs", {
+          className: "openapi-discriminator-tabs",
           children: Object.keys(discriminator?.mapping!).map((key, index) => {
             const label = key;
             return create("TabItem", {
@@ -861,6 +862,7 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
 
   if (mimeTypes && mimeTypes.length > 1) {
     return create("MimeTabs", {
+      className: "openapi-mime-tabs",
       schemaType: "request",
       children: mimeTypes.map((mimeType) => {
         const firstBody = body.content![mimeType].schema;
@@ -934,6 +936,7 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
     }
   }
   return create("MimeTabs", {
+    className: "openapi-mime-tabs",
     children: [
       create("TabItem", {
         label: randomFirstKey,

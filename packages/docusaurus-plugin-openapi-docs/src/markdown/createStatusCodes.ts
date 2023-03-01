@@ -266,45 +266,50 @@ export function createStatusCodes({ responses }: Props) {
 
   return create("div", {
     children: [
-      create("ApiTabs", {
-        // TODO: determine if we should persist status code selection
-        // groupId: "api-tabs",
-        children: codes.map((code) => {
-          const responseHeaders: any = responses[code].headers;
-          return create("TabItem", {
-            label: code,
-            value: code,
-            children: [
-              create("div", {
-                children: createDescription(responses[code].description),
-              }),
-              responseHeaders &&
-                createDetails({
-                  "data-collaposed": true,
-                  open: false,
-                  style: { textAlign: "left", marginBottom: "1rem" },
-                  children: [
-                    createDetailsSummary({
+      create("div", {
+        children: [
+          create("strong", { children: "Responses" }),
+          create("ApiTabs", {
+            className: "openapi-api-tabs",
+            children: codes.map((code) => {
+              const responseHeaders: any = responses[code].headers;
+              return create("TabItem", {
+                label: code,
+                value: code,
+                children: [
+                  create("div", {
+                    children: createDescription(responses[code].description),
+                  }),
+                  responseHeaders &&
+                    createDetails({
+                      "data-collaposed": true,
+                      open: false,
+                      style: { textAlign: "left", marginBottom: "1rem" },
                       children: [
-                        create("strong", {
-                          children: "Response Headers",
+                        createDetailsSummary({
+                          children: [
+                            create("strong", {
+                              children: "Response Headers",
+                            }),
+                          ],
                         }),
+                        createResponseHeaders(responseHeaders),
                       ],
                     }),
-                    createResponseHeaders(responseHeaders),
-                  ],
-                }),
-              create("div", {
-                children: createResponseSchema({
-                  title: "Schema",
-                  body: {
-                    content: responses[code].content,
-                  },
-                }),
-              }),
-            ],
-          });
-        }),
+                  create("hr", {}),
+                  create("div", {
+                    children: createResponseSchema({
+                      title: "Schema",
+                      body: {
+                        content: responses[code].content,
+                      },
+                    }),
+                  }),
+                ],
+              });
+            }),
+          }),
+        ],
       }),
     ],
   });
