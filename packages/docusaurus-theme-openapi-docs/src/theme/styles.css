@@ -532,23 +532,21 @@ div:has(> ul.openapi-tabs__security-schemes) {
   margin-right: 0.5rem;
 }
 
-.openapi__tabs-api {
-  overflow-x: scroll;
-  overflow-y: hidden;
-  padding: 0 0.25rem;
-  scroll-behavior: smooth;
-}
-
-.openapi__tabs-api > li {
+.openapi-tabs__response-code-item {
+  display: flex;
   align-items: center;
+  justify-content: center;
+  height: 2.5rem;
+  margin-top: 0 !important;
+  margin-right: 0.5rem;
   border: 1px solid var(--ifm-color-primary);
   border-radius: var(--ifm-global-radius);
   color: var(--ifm-color-primary);
-  display: flex;
-  height: 2.5rem;
-  justify-content: center;
-  margin-right: 0.5rem;
-  margin-top: 0 !important;
+  font-weight: var(--ifm-font-weight-normal);
+}
+
+.openapi-tabs__response-code-item--active {
+  background-color: var(--ifm-color-emphasis-100);
 }
 
 .openapi__tabs-discriminator {

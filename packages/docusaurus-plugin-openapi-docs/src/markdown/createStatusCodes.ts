@@ -268,7 +268,6 @@ export function createStatusCodes({ responses }: Props) {
     children: [
       create("div", {
         children: [
-          create("strong", { children: "Responses" }),
           create("ApiTabs", {
             className: "openapi__tabs-api",
             children: codes.map((code) => {
@@ -296,7 +295,6 @@ export function createStatusCodes({ responses }: Props) {
                         createResponseHeaders(responseHeaders),
                       ],
                     }),
-                  create("hr", {}),
                   create("div", {
                     children: createResponseSchema({
                       title: "Schema",

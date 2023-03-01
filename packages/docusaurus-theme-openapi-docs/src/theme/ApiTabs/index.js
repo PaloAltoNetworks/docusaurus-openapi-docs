@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React, { cloneElement } from "react";
+import React, { cloneElement, useRef, useState, useEffect } from "react";
 
 import {
   useScrollPositionBlocker,
@@ -20,6 +20,26 @@ function TabList({ className, block, selectedValue, selectValue, tabValues }) {
   const tabRefs = [];
   const { blockElementScrollPositionUntilNextRender } =
     useScrollPositionBlocker();
+
+  const tabItemListContainerRef = useRef(null);
+  const [showTabArrows, setShowTabArrows] = useState(false);
+
+  useEffect(() => {
+    const tabOffsetWidth = tabItemListContainerRef.current.offsetWidth;
+    const tabScrollWidth = tabItemListContainerRef.current.scrollWidth;
+
+    if (tabOffsetWidth < tabScrollWidth) {
+      setShowTabArrows(true);
+    }
+  }, []);
+  const handleRightClick = () => {
+    tabItemListContainerRef.current.scrollLeft += 90;
+  };
+
+  const handleLeftClick = () => {
+    tabItemListContainerRef.current.scrollLeft -= 90;
+  };
+
   const handleTabChange = (event) => {
     const newTab = event.currentTarget;
     const newTabIndex = tabRefs.indexOf(newTab);
@@ -52,36 +72,67 @@ function TabList({ className, block, selectedValue, selectValue, tabValues }) {
     focusElement?.focus();
   };
   return (
-    <ul
-      role="tablist"
-      aria-orientation="horizontal"
-      className={clsx(
-        "tabs",
-        {
-          "tabs--block": block,
-        },
-        className
-      )}
-    >
-      {tabValues.map(({ value, label, attributes }) => (
-        <li
-          // TODO extract TabListItem
-          role="tab"
-          tabIndex={selectedValue === value ? 0 : -1}
-          aria-selected={selectedValue === value}
-          key={value}
-          ref={(tabControl) => tabRefs.push(tabControl)}
-          onKeyDown={handleKeydown}
-          onClick={handleTabChange}
-          {...attributes}
-          className={clsx("tabs__item", styles.tabItem, attributes?.className, {
-            "tabs__item--active": selectedValue === value,
-          })}
+    <div className={styles.responseTabsTopSection}>
+      <strong>Responses</strong>
+      <div className={styles.responseTabsContainer}>
+        {showTabArrows && (
+          <button
+            className={clsx(styles.tabArrow, styles.tabArrowRight)}
+            onClick={handleLeftClick}
+          />
+        )}
+        <ul
+          ref={tabItemListContainerRef}
+          role="tablist"
+          aria-orientation="horizontal"
+          className={clsx(
+            styles.responseTabsListContainer,
+            "tabs",
+            {
+              "tabs--block": block,
+            },
+            className
+          )}
         >
-          {label ?? value}
-        </li>
-      ))}
-    </ul>
+          {tabValues.map(({ value, label, attributes }) => (
+            <li
+              // TODO extract TabListItem
+              role="tab"
+              tabIndex={selectedValue === value ? 0 : -1}
+              aria-selected={selectedValue === value}
+              key={value}
+              ref={(tabControl) => tabRefs.push(tabControl)}
+              onKeyDown={handleKeydown}
+              onClick={handleTabChange}
+              {...attributes}
+              className={clsx(
+                "tabs__item",
+                "openapi-tabs__response-code-item",
+                attributes?.className,
+                parseInt(value) >= 400
+                  ? styles.responseStatusDanger
+                  : parseInt(value) >= 200 && parseInt(value) < 300
+                  ? styles.responseStatusSuccess
+                  : styles.responseStatusInfo,
+                {
+                  ["openapi-tabs__response-code-item--active"]:
+                    selectedValue === value,
+                }
+              )}
+            >
+              <div className={styles.responseTabDot} />
+              {label ?? value}
+            </li>
+          ))}
+        </ul>
+        {showTabArrows && (
+          <button
+            className={clsx(styles.tabArrow, styles.tabArrowRight)}
+            onClick={handleRightClick}
+          />
+        )}
+      </div>
+    </div>
   );
 }
 function TabContent({ lazy, children, selectedValue }) {
@@ -113,6 +164,7 @@ function TabsComponent(props) {
   return (
     <div className={clsx("tabs-container", styles.tabList)}>
       <TabList {...props} {...tabs} />
+      <hr />
       <TabContent {...props} {...tabs} />
     </div>
   );
