@@ -5,30 +5,68 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React, { cloneElement } from "react";
+import React, { cloneElement, useEffect, useState, useRef } from "react";
 
 import {
   useScrollPositionBlocker,
   useTabs,
 } from "@docusaurus/theme-common/internal";
 import useIsBrowser from "@docusaurus/useIsBrowser";
+import { setAccept } from "@theme/ApiDemoPanel/Accept/slice";
+import { setContentType } from "@theme/ApiDemoPanel/ContentType/slice";
+import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import clsx from "clsx";
 
 import styles from "./styles.module.css";
 
-function TabList({ className, block, selectedValue, selectValue, tabValues }) {
+function TabList({
+  className,
+  block,
+  selectedValue: selectedValueProp,
+  selectValue,
+  tabValues,
+  schemaType,
+}) {
   const tabRefs = [];
   const { blockElementScrollPositionUntilNextRender } =
     useScrollPositionBlocker();
+
+  // custom
+  const dispatch = useTypedDispatch();
+  const isRequestSchema = schemaType?.toLowerCase() === "request";
+
+  const [selectedValue, setSelectedValue] = useState(selectedValueProp);
+  const contentTypeVal = useTypedSelector((state) => state.contentType.value);
+  const acceptTypeVal = useTypedSelector((state) => state.accept.value);
+
+  useEffect(() => {
+    if (tabRefs.length > 1) {
+      if (isRequestSchema) {
+        setSelectedValue(contentTypeVal);
+      } else {
+        setSelectedValue(acceptTypeVal);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contentTypeVal, acceptTypeVal]);
+
   const handleTabChange = (event) => {
+    event.preventDefault();
     const newTab = event.currentTarget;
     const newTabIndex = tabRefs.indexOf(newTab);
     const newTabValue = tabValues[newTabIndex].value;
+    // custom
     if (newTabValue !== selectedValue) {
+      if (isRequestSchema) {
+        dispatch(setContentType(newTabValue));
+      } else {
+        dispatch(setAccept(newTabValue));
+      }
       blockElementScrollPositionUntilNextRender(newTab);
       selectValue(newTabValue);
     }
   };
+
   const handleKeydown = (event) => {
     let focusElement = null;
     switch (event.key) {
@@ -51,37 +89,82 @@ function TabList({ className, block, selectedValue, selectValue, tabValues }) {
     }
     focusElement?.focus();
   };
+
+  const tabItemListContainerRef = useRef(null);
+  const [showTabArrows, setShowTabArrows] = useState(false);
+
+  useEffect(() => {
+    const tabOffsetWidth = tabItemListContainerRef.current.offsetWidth;
+    const tabScrollWidth = tabItemListContainerRef.current.scrollWidth;
+
+    if (tabOffsetWidth < tabScrollWidth) {
+      setShowTabArrows(true);
+    }
+  }, []);
+
+  const handleRightClick = () => {
+    tabItemListContainerRef.current.scrollLeft += 90;
+  };
+
+  const handleLeftClick = () => {
+    tabItemListContainerRef.current.scrollLeft -= 90;
+  };
+
   return (
-    <ul
-      role="tablist"
-      aria-orientation="horizontal"
-      className={clsx(
-        "tabs",
-        {
-          "tabs--block": block,
-        },
-        className
-      )}
-    >
-      {tabValues.map(({ value, label, attributes }) => (
-        <li
-          // TODO extract TabListItem
-          role="tab"
-          tabIndex={selectedValue === value ? 0 : -1}
-          aria-selected={selectedValue === value}
-          key={value}
-          ref={(tabControl) => tabRefs.push(tabControl)}
-          onKeyDown={handleKeydown}
-          onClick={handleTabChange}
-          {...attributes}
-          className={clsx("tabs__item", styles.tabItem, attributes?.className, {
-            "tabs__item--active": selectedValue === value,
-          })}
+    <div className={styles.mimeTabsTopSection}>
+      {/* <strong>MIME Type</strong> */}
+      <div className={styles.mimeTabsContainer}>
+        {showTabArrows && (
+          <button
+            className={clsx(styles.tabArrow, styles.tabArrowLeft)}
+            onClick={handleLeftClick}
+          />
+        )}
+        <ul
+          ref={tabItemListContainerRef}
+          role="tablist"
+          aria-orientation="horizontal"
+          className={clsx(
+            styles.mimeTabsListContainer,
+            "tabs",
+            {
+              "tabs--block": block,
+            },
+            className
+          )}
         >
-          {label ?? value}
-        </li>
-      ))}
-    </ul>
+          {tabValues.map(({ value, label, attributes }) => (
+            <li
+              // TODO extract TabListItem
+              role="tab"
+              tabIndex={selectedValue === value ? 0 : -1}
+              aria-selected={selectedValue === value}
+              key={value}
+              ref={(tabControl) => tabRefs.push(tabControl)}
+              onKeyDown={handleKeydown}
+              onClick={handleTabChange}
+              {...attributes}
+              className={clsx(
+                "tabs__item",
+                styles.tabItem,
+                attributes?.className,
+                {
+                  [styles.mimeTabActive]: selectedValue === value,
+                }
+              )}
+            >
+              {label ?? value}
+            </li>
+          ))}
+        </ul>
+        {showTabArrows && (
+          <button
+            className={clsx(styles.tabArrow, styles.tabArrowRight)}
+            onClick={handleRightClick}
+          />
+        )}
+      </div>
+    </div>
   );
 }
 function TabContent({ lazy, children, selectedValue }) {
