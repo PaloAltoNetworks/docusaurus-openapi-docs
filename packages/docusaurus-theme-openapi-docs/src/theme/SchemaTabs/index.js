@@ -13,6 +13,7 @@ import {
 } from "@docusaurus/theme-common/internal";
 import useIsBrowser from "@docusaurus/useIsBrowser";
 import clsx from "clsx";
+import flatten from "lodash/flatten";
 
 import styles from "./styles.module.css";
 
@@ -87,8 +88,10 @@ function TabList({ className, block, selectedValue, selectValue, tabValues }) {
 function TabContent({ lazy, children, selectedValue }) {
   // eslint-disable-next-line no-param-reassign
   children = Array.isArray(children) ? children : [children];
+  const flattenedChildren = flatten(children);
+
   if (lazy) {
-    const selectedTabItem = children.find(
+    const selectedTabItem = flattenedChildren.find(
       (tabItem) => tabItem.props.value === selectedValue
     );
     if (!selectedTabItem) {
