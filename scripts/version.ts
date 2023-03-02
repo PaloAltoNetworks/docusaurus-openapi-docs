@@ -29,7 +29,28 @@ function generateVersion(
     | "prepatch"
     | "prerelease"
     | "graduate"
+    | "betamajor"
+    | "betapatch"
 ) {
+  if (bump === "betamajor") {
+    const v = semver.parse(pkg.version);
+    if (v === null) {
+      console.error("Error: Invalid package version.");
+      process.exit(1);
+    }
+    return `${v.major + 1}.0.0-beta.0`;
+  }
+
+  if (bump === "betapatch") {
+    const v = semver.parse(pkg.version);
+    if (v === null) {
+      console.error("Error: Invalid package version.");
+      process.exit(1);
+    }
+    const patch = (v.prerelease[1] as number) + 1;
+    return `${v.major}.0.0-beta.${patch}`;
+  }
+
   if (bump === "graduate") {
     const v = semver.parse(pkg.version);
     if (v === null) {
@@ -60,6 +81,8 @@ function main() {
     case "prepatch":
     case "prerelease":
     case "graduate":
+    case "betamajor":
+    case "betapatch":
       nextVersion = generateVersion(bump);
       break;
     default:

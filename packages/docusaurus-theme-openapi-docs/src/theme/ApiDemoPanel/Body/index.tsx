@@ -283,12 +283,14 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
   if (exampleBody) {
     return (
       <FormItem label="Body" required={required}>
-        <SchemaTabs lazy>
+        <SchemaTabs className="openapi-tabs__schema" lazy>
+          {/* @ts-ignore */}
           <TabItem label="Default" value="default" default>
             <LiveApp action={dispatch} language={language}>
               {defaultBody}
             </LiveApp>
           </TabItem>
+          {/* @ts-ignore */}
           <TabItem label="Example" value="example">
             {exampleBody && (
               <LiveApp action={dispatch} language={language}>
@@ -304,7 +306,8 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
   if (examplesBodies && examplesBodies.length > 0) {
     return (
       <FormItem label="Body" required={required}>
-        <SchemaTabs lazy>
+        <SchemaTabs className="openapi-tabs__schema" lazy>
+          {/* @ts-ignore */}
           <TabItem label="Default" value="default" default>
             <LiveApp action={dispatch} language={language}>
               {defaultBody}
@@ -312,6 +315,7 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
           </TabItem>
           {examplesBodies.map((example: any) => {
             return (
+              // @ts-ignore
               <TabItem
                 label={example.label}
                 value={example.label}

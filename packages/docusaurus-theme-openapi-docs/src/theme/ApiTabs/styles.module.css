@@ -1,9 +1,13 @@
-/**
- * Copyright (c) Facebook, Inc. and its affiliates.
+/* ============================================================================
+ * Copyright (c) Palo Alto Networks
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
- */
+ * ========================================================================== */
+
+.tabList {
+  margin-bottom: var(--ifm-leading);
+}
 
 .tabItem {
   display: flex;
@@ -16,30 +20,6 @@
   border-radius: var(--ifm-global-radius);
   color: var(--ifm-color-primary);
   font-weight: var(--ifm-font-weight-normal);
-}
-
-.responseStatusSuccess {
-  border: none;
-  color: var(--ifm-color-success);
-}
-
-.responseStatusSuccess.active {
-  background-color: var(--ifm-color-success);
-  color: white;
-}
-
-.responseStatusDanger {
-  border: none;
-  color: var(--ifm-color-danger);
-}
-
-.responseStatusDanger.active {
-  background-color: var(--ifm-color-danger);
-  color: white;
-}
-
-.responseTabDot {
-  display: none;
 }
 
 .tabItem:not(.active) {
