@@ -19,6 +19,7 @@
 // Tabs Styling
 @use "./ApiTabs/ApiTabs";
 @use "./DiscriminatorTabs/DiscriminatorTabs";
+@use "./MimeTabs/MimeTabs";
 
 :root {
   --openapi-required: var(--ifm-color-danger);
