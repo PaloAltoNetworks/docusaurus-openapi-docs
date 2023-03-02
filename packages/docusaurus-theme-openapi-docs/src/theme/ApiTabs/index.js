@@ -115,7 +115,7 @@ function TabList({ className, block, selectedValue, selectValue, tabValues }) {
                   ? styles.responseStatusSuccess
                   : styles.responseStatusInfo,
                 {
-                  ["openapi-tabs__response-code-item--active"]:
+                  "openapi-tabs__response-code-item--active":
                     selectedValue === value,
                 }
               )}
