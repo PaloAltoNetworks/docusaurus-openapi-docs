@@ -67,7 +67,7 @@
   display: none;
 }
 
-.tabItem.discriminatorTabActive {
+.discriminatorTabActive {
   background-color: var(--ifm-color-emphasis-100);
 }
 
