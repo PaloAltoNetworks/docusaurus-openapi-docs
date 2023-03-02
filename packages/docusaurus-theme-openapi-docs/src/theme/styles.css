@@ -519,11 +519,11 @@ div:has(> ul.openapi-tabs__security-schemes) {
 }
 
 .openapi-tabs__schema {
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
 }
 
 .openapi-tabs__schema > li {
-  align-items: center;
+  /* align-items: center;
   border: 1px solid var(--ifm-color-primary);
   border-radius: var(--ifm-global-radius);
   color: var(--ifm-color-primary);
@@ -531,7 +531,7 @@ div:has(> ul.openapi-tabs__security-schemes) {
   font-size: 12px;
   height: 1.8rem;
   justify-content: center;
-  margin-right: 0.5rem;
+  margin-right: 0.5rem; */
 }
 
 .openapi-tabs__response-code-item {
