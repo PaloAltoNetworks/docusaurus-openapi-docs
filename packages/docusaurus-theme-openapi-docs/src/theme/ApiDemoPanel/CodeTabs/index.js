@@ -7,12 +7,12 @@
 
 import React from "react";
 
-import Footer from "@theme-original/Tabs";
+import Tabs from "@theme-original/Tabs";
 
 export default function CodeTabs(props) {
   return (
     <>
-      <Footer {...props} />
+      <Tabs {...props} />
     </>
   );
 }
