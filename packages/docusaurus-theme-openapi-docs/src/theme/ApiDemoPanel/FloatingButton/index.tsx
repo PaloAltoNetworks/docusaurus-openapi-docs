@@ -7,8 +7,6 @@
 
 import React from "react";
 
-import styles from "./styles.module.css";
-
 export interface Props {
   label?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
