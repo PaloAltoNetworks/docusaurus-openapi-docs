@@ -20,6 +20,9 @@
 @use "./ApiTabs/ApiTabs";
 @use "./DiscriminatorTabs/DiscriminatorTabs";
 @use "./MimeTabs/MimeTabs";
+@use "./SchemaTabs/SchemaTabs";
+// Code Samples
+@use "./ResponseSamples/ResponseSamples";
 
 :root {
   --openapi-required: var(--ifm-color-danger);
