@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React, { cloneElement } from "react";
+import React, { cloneElement, useRef, useEffect, useState } from "react";
 
 import {
   useScrollPositionBlocker,
@@ -52,37 +52,90 @@ function TabList({ className, block, selectedValue, selectValue, tabValues }) {
     }
     focusElement?.focus();
   };
+
+  const tabItemListContainerRef = useRef(null);
+  const [showTabArrows, setShowTabArrows] = useState(false);
+
+  useEffect(() => {
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        if (entry.target.offsetWidth < entry.target.scrollWidth) {
+          setShowTabArrows(true);
+        } else {
+          setShowTabArrows(false);
+        }
+      }
+    });
+
+    resizeObserver.observe(tabItemListContainerRef.current);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, []);
+
+  const handleRightClick = () => {
+    tabItemListContainerRef.current.scrollLeft += 90;
+  };
+
+  const handleLeftClick = () => {
+    tabItemListContainerRef.current.scrollLeft -= 90;
+  };
+
   return (
-    <ul
-      role="tablist"
-      aria-orientation="horizontal"
-      className={clsx(
-        "tabs",
-        {
-          "tabs--block": block,
-        },
-        className
-      )}
-    >
-      {tabValues.map(({ value, label, attributes }) => (
-        <li
-          // TODO extract TabListItem
-          role="tab"
-          tabIndex={selectedValue === value ? 0 : -1}
-          aria-selected={selectedValue === value}
-          key={value}
-          ref={(tabControl) => tabRefs.push(tabControl)}
-          onKeyDown={handleKeydown}
-          onClick={handleTabChange}
-          {...attributes}
-          className={clsx("tabs__item", styles.tabItem, attributes?.className, {
-            "tabs__item--active": selectedValue === value,
-          })}
+    <div className={styles.schemaTabsTopSection}>
+      <div className={styles.schemaTabsContainer}>
+        {showTabArrows && (
+          <button
+            className={clsx(styles.tabArrow, styles.tabArrowLeft)}
+            onClick={handleLeftClick}
+          />
+        )}
+        <ul
+          ref={tabItemListContainerRef}
+          role="tablist"
+          aria-orientation="horizontal"
+          className={clsx(
+            styles.schemaTabsListContainer,
+            "tabs",
+            {
+              "tabs--block": block,
+            },
+            className
+          )}
         >
-          {label ?? value}
-        </li>
-      ))}
-    </ul>
+          {tabValues.map(({ value, label, attributes }) => (
+            <li
+              // TODO extract TabListItem
+              role="tab"
+              tabIndex={selectedValue === value ? 0 : -1}
+              aria-selected={selectedValue === value}
+              key={value}
+              ref={(tabControl) => tabRefs.push(tabControl)}
+              onKeyDown={handleKeydown}
+              onClick={handleTabChange}
+              {...attributes}
+              className={clsx(
+                "tabs__item",
+                styles.tabItem,
+                attributes?.className,
+                {
+                  [styles.schemaTabActive]: selectedValue === value,
+                }
+              )}
+            >
+              <span className={styles.schemaTabLabel}>{label ?? value}</span>
+            </li>
+          ))}
+        </ul>
+        {showTabArrows && (
+          <button
+            className={clsx(styles.tabArrow, styles.tabArrowRight)}
+            onClick={handleRightClick}
+          />
+        )}
+      </div>
+    </div>
   );
 }
 function TabContent({ lazy, children, selectedValue }) {
