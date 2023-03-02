@@ -38,7 +38,7 @@ function generateVersion(
       console.error("Error: Invalid package version.");
       process.exit(1);
     }
-    return `${v.major + 1}.0.0-beta.1`;
+    return `${v.major + 1}.0.0-beta.0`;
   }
 
   if (bump === "betapatch") {
