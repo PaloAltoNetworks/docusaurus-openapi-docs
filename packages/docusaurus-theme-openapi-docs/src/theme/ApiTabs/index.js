@@ -21,25 +21,6 @@ function TabList({ className, block, selectedValue, selectValue, tabValues }) {
   const { blockElementScrollPositionUntilNextRender } =
     useScrollPositionBlocker();
 
-  const tabItemListContainerRef = useRef(null);
-  const [showTabArrows, setShowTabArrows] = useState(false);
-
-  useEffect(() => {
-    const tabOffsetWidth = tabItemListContainerRef.current.offsetWidth;
-    const tabScrollWidth = tabItemListContainerRef.current.scrollWidth;
-
-    if (tabOffsetWidth < tabScrollWidth) {
-      setShowTabArrows(true);
-    }
-  }, []);
-  const handleRightClick = () => {
-    tabItemListContainerRef.current.scrollLeft += 90;
-  };
-
-  const handleLeftClick = () => {
-    tabItemListContainerRef.current.scrollLeft -= 90;
-  };
-
   const handleTabChange = (event) => {
     const newTab = event.currentTarget;
     const newTabIndex = tabRefs.indexOf(newTab);
@@ -49,6 +30,7 @@ function TabList({ className, block, selectedValue, selectValue, tabValues }) {
       selectValue(newTabValue);
     }
   };
+
   const handleKeydown = (event) => {
     let focusElement = null;
     switch (event.key) {
@@ -71,6 +53,36 @@ function TabList({ className, block, selectedValue, selectValue, tabValues }) {
     }
     focusElement?.focus();
   };
+
+  const tabItemListContainerRef = useRef(null);
+  const [showTabArrows, setShowTabArrows] = useState(false);
+
+  useEffect(() => {
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        if (entry.target.offsetWidth < entry.target.scrollWidth) {
+          setShowTabArrows(true);
+        } else {
+          setShowTabArrows(false);
+        }
+      }
+    });
+
+    resizeObserver.observe(tabItemListContainerRef.current);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, []);
+
+  const handleRightClick = () => {
+    tabItemListContainerRef.current.scrollLeft += 90;
+  };
+
+  const handleLeftClick = () => {
+    tabItemListContainerRef.current.scrollLeft -= 90;
+  };
+
   return (
     <div className={styles.responseTabsTopSection}>
       <strong>Responses</strong>
