@@ -7,8 +7,6 @@
 
 import React from "react";
 
-import styles from "./styles.module.css";
-
 export interface Props {
   value?: string;
   placeholder?: string;
@@ -20,7 +18,7 @@ function FormTextInput({ value, placeholder, password, onChange }: Props) {
   placeholder = placeholder?.split("\n")[0];
   return (
     <input
-      className={styles.input}
+      className="openapi-demo__input"
       type={password ? "password" : "text"}
       placeholder={placeholder}
       title={placeholder}

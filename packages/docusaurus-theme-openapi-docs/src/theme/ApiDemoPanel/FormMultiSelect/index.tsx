@@ -7,8 +7,6 @@
 
 import React from "react";
 
-import styles from "./styles.module.css";
-
 export interface Props {
   value?: string;
   options: string[];
@@ -34,7 +32,7 @@ function FormMultiSelect({ value, options, onChange }: Props) {
   return (
     <select
       style={{ height: height }}
-      className={styles.selectInput}
+      className="openapi-demo__multi-select-input"
       value={value}
       onChange={onChange}
       size={Math.min(6, options.length + 1)}
