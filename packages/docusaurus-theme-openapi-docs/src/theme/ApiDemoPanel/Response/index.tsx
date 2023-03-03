@@ -14,6 +14,7 @@ import TabItem from "@theme/TabItem";
 import clsx from "clsx";
 
 import { clearResponse, clearCode, clearHeaders } from "./slice";
+import { usePrismTheme } from "@docusaurus/theme-common";
 
 // TODO: We probably shouldn't attempt to format XML...
 function formatXml(xml: string) {
@@ -36,6 +37,7 @@ function formatXml(xml: string) {
 }
 
 function Response() {
+  const prismTheme = usePrismTheme();
   const code = useTypedSelector((state: any) => state.response.code);
   const headers = useTypedSelector((state: any) => state.response.headers);
   const response = useTypedSelector((state: any) => state.response.value);
@@ -79,25 +81,33 @@ function Response() {
         </div>
       </summary>
 
-      <CodeBlock language={response.startsWith("<") ? `xml` : `json`}>
+      <div
+        style={{
+          backgroundColor: prismTheme.plain.backgroundColor,
+          paddingLeft: "1rem",
+          paddingTop: "1rem",
+          paddingBottom: "1rem",
+        }}
+      >
         {prettyResponse && prettyResponse !== "Fetching..." ? (
-          <SchemaTabs
-            className={clsx("openapi-tabs__schema", responseStatusClass)}
-            lazy
-          >
+          <SchemaTabs className={clsx(responseStatusClass)} lazy>
             {/* @ts-ignore */}
             <TabItem label={`${code}`} value="body" default>
-              {prettyResponse || "No Response"}
+              <CodeBlock language={response.startsWith("<") ? `xml` : `json`}>
+                {prettyResponse || "No Response"}
+              </CodeBlock>
             </TabItem>
             {/* @ts-ignore */}
             <TabItem label="Headers" value="headers">
-              {JSON.stringify(headers, undefined, 2)}
+              <CodeBlock language={response.startsWith("<") ? `xml` : `json`}>
+                {JSON.stringify(headers, undefined, 2)}
+              </CodeBlock>
             </TabItem>
           </SchemaTabs>
         ) : (
           prettyResponse || "No Response"
         )}
-      </CodeBlock>
+      </div>
     </details>
   );
 }
