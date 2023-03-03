@@ -86,10 +86,12 @@ function Response() {
           backgroundColor: prismTheme.plain.backgroundColor,
           paddingLeft: "1rem",
           paddingTop: "1rem",
-          ...(prettyResponse === "Fetching..." && { paddingBottom: "1rem" }),
+          ...((prettyResponse === "Fetching..." || !code) && {
+            paddingBottom: "1rem",
+          }),
         }}
       >
-        {prettyResponse && prettyResponse !== "Fetching..." ? (
+        {code && prettyResponse !== "Fetching..." ? (
           <SchemaTabs className={clsx(responseStatusClass)} lazy>
             {/* @ts-ignore */}
             <TabItem label={` ${code}`} value="body" default>
