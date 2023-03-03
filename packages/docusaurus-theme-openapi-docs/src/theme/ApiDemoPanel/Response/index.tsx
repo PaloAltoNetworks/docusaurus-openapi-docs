@@ -9,8 +9,11 @@ import React from "react";
 
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import CodeBlock from "@theme/CodeBlock";
+import SchemaTabs from "@theme/SchemaTabs";
+import TabItem from "@theme/TabItem";
+import clsx from "clsx";
 
-import { clearResponse } from "./slice";
+import { clearResponse, clearCode, clearHeaders } from "./slice";
 
 // TODO: We probably shouldn't attempt to format XML...
 function formatXml(xml: string) {
@@ -33,8 +36,17 @@ function formatXml(xml: string) {
 }
 
 function Response() {
+  const code = useTypedSelector((state: any) => state.response.code);
+  const headers = useTypedSelector((state: any) => state.response.headers);
   const response = useTypedSelector((state: any) => state.response.value);
   const dispatch = useTypedDispatch();
+  const responseStatusClass =
+    code &&
+    (parseInt(code) >= 400
+      ? "response__status--danger"
+      : parseInt(code) >= 200 && parseInt(code) < 300
+      ? "response__status--success"
+      : "response__status--info");
 
   if (response === undefined) {
     return null;
@@ -56,14 +68,35 @@ function Response() {
           <h4>Response</h4>
           <button
             className="button button--sm button--secondary"
-            onClick={() => dispatch(clearResponse())}
+            onClick={() => {
+              dispatch(clearResponse());
+              dispatch(clearCode());
+              dispatch(clearHeaders());
+            }}
           >
             Clear
           </button>
         </div>
       </summary>
+
       <CodeBlock language={response.startsWith("<") ? `xml` : `json`}>
-        {prettyResponse || "No Response"}
+        {prettyResponse && prettyResponse !== "Fetching..." ? (
+          <SchemaTabs
+            className={clsx("openapi-tabs__schema", responseStatusClass)}
+            lazy
+          >
+            {/* @ts-ignore */}
+            <TabItem label={`${code}`} value="body" default>
+              {prettyResponse || "No Response"}
+            </TabItem>
+            {/* @ts-ignore */}
+            <TabItem label="Headers" value="headers">
+              {JSON.stringify(headers, undefined, 2)}
+            </TabItem>
+          </SchemaTabs>
+        ) : (
+          prettyResponse || "No Response"
+        )}
       </CodeBlock>
     </details>
   );

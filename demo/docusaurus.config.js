@@ -235,7 +235,7 @@ const config = {
             template: "api.mustache", // Customize API MDX with mustache template
             downloadUrl:
               "https://raw.githubusercontent.com/PaloAltoNetworks/docusaurus-openapi-docs/main/demo/examples/petstore.yaml",
-            hideSendButton: true,
+            hideSendButton: false,
           },
           cos: {
             specPath: "examples/openapi-cos.json",

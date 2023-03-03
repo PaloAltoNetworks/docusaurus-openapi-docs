@@ -574,3 +574,18 @@ div:has(> ul.openapi-tabs__security-schemes) {
 /* div:has(> ul.openapi-tabs__discriminator) {
   margin-left: -1px !important;
 } */
+
+.response__status--danger > :first-child {
+  color: var(--ifm-color-danger);
+  border: 1px solid var(--ifm-color-danger);
+}
+
+.response__status--success > :first-child {
+  color: var(--ifm-color-success);
+  border: 1px solid var(--ifm-color-success);
+}
+
+.response__status--info > :first-child {
+  color: var(--ifm-color-info);
+  border: 1px solid var(--ifm-color-info);
+}
