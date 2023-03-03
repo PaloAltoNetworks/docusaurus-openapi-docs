@@ -86,20 +86,26 @@ function Response() {
           backgroundColor: prismTheme.plain.backgroundColor,
           paddingLeft: "1rem",
           paddingTop: "1rem",
-          paddingBottom: "1rem",
+          ...(prettyResponse === "Fetching..." && { paddingBottom: "1rem" }),
         }}
       >
         {prettyResponse && prettyResponse !== "Fetching..." ? (
           <SchemaTabs className={clsx(responseStatusClass)} lazy>
             {/* @ts-ignore */}
-            <TabItem label={`${code}`} value="body" default>
-              <CodeBlock language={response.startsWith("<") ? `xml` : `json`}>
+            <TabItem label={` ${code}`} value="body" default>
+              <CodeBlock
+                className="response__status-code"
+                language={response.startsWith("<") ? `xml` : `json`}
+              >
                 {prettyResponse || "No Response"}
               </CodeBlock>
             </TabItem>
             {/* @ts-ignore */}
             <TabItem label="Headers" value="headers">
-              <CodeBlock language={response.startsWith("<") ? `xml` : `json`}>
+              <CodeBlock
+                className="response__status-headers"
+                language={response.startsWith("<") ? `xml` : `json`}
+              >
                 {JSON.stringify(headers, undefined, 2)}
               </CodeBlock>
             </TabItem>

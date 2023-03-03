@@ -575,17 +575,34 @@ div:has(> ul.openapi-tabs__security-schemes) {
   margin-left: -1px !important;
 } */
 
-.response__status--danger > :first-child {
+.response__status--danger > :first-child > span:before {
+  content: "\2B24";
   color: var(--ifm-color-danger);
-  border: 1px solid var(--ifm-color-danger);
+  font-size: 10px;
+  vertical-align: 10%;
+  display: inline-block;
 }
 
-.response__status--success > :first-child {
+.response__status--success > :first-child > span:before {
+  content: "\2B24";
   color: var(--ifm-color-success);
-  border: 1px solid var(--ifm-color-success);
+  font-size: 10px;
+  vertical-align: 10%;
+  display: inline-block;
 }
 
-.response__status--info > :first-child {
+.response__status--info > :first-child > span:before {
+  content: "\2B24";
   color: var(--ifm-color-info);
-  border: 1px solid var(--ifm-color-info);
+  font-size: 10px;
+  vertical-align: 10%;
+  display: inline-block;
+}
+
+.response__status-code {
+  margin-left: -1rem;
+}
+
+.response__status-headers {
+  margin-left: -1rem;
 }
