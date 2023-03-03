@@ -578,24 +578,24 @@ div:has(> ul.openapi-tabs__security-schemes) {
 .response__status--danger > :first-child > span:before {
   content: "\2B24";
   color: var(--ifm-color-danger);
-  font-size: 10px;
-  vertical-align: 10%;
+  font-size: 8px;
+  vertical-align: 15%;
   display: inline-block;
 }
 
 .response__status--success > :first-child > span:before {
   content: "\2B24";
   color: var(--ifm-color-success);
-  font-size: 10px;
-  vertical-align: 10%;
+  font-size: 8px;
+  vertical-align: 15%;
   display: inline-block;
 }
 
 .response__status--info > :first-child > span:before {
   content: "\2B24";
   color: var(--ifm-color-info);
-  font-size: 10px;
-  vertical-align: 10%;
+  font-size: 8px;
+  vertical-align: 15%;
   display: inline-block;
 }
 
