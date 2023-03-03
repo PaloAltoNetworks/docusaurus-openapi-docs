@@ -7,6 +7,7 @@
 
 import React from "react";
 
+import { usePrismTheme } from "@docusaurus/theme-common";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import CodeBlock from "@theme/CodeBlock";
 import SchemaTabs from "@theme/SchemaTabs";
@@ -14,7 +15,6 @@ import TabItem from "@theme/TabItem";
 import clsx from "clsx";
 
 import { clearResponse, clearCode, clearHeaders } from "./slice";
-import { usePrismTheme } from "@docusaurus/theme-common";
 
 // TODO: We probably shouldn't attempt to format XML...
 function formatXml(xml: string) {
