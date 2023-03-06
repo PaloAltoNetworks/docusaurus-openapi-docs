@@ -25,6 +25,10 @@
 
   &.active {
     background-color: var(--ifm-color-emphasis-100);
+    border-bottom-color: var(--ifm-tabs-color-active-border);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    color: var(--ifm-tabs-color-active);
   }
 
   &:last-child {
