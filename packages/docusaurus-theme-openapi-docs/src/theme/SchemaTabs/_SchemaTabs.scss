@@ -50,20 +50,9 @@
 }
 
 .openapi-tabs__schema-container {
+  width: 100%;
   margin-top: 1rem;
   display: flex;
   align-items: center;
-  max-width: 600px;
   overflow: hidden;
-}
-
-@media screen and (max-width: 500px) {
-  .openapi-tabs__schema-container {
-    width: 100%;
-  }
-}
-
-.marginVertical {
-  margin-top: 1rem !important;
-  margin-bottom: unset !important;
 }
