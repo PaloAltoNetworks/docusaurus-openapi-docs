@@ -1,16 +1,16 @@
-name: Release
+name: Release Beta
 
 on:
   push:
     branches:
-      - main
+      - v2.0.0
 
 env:
   FORCE_COLOR: true
 
 jobs:
   release:
-    name: Release
+    name: Release Beta
     runs-on: ubuntu-latest
     if: ${{ github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' }}
     steps:
@@ -24,8 +24,8 @@ jobs:
         with:
           node-version: "*"
           registry-url: "https://registry.npmjs.org"
-      - name: Release
-        run: npx ts-node --transpile-only scripts/publish.ts
+      - name: Release Beta
+        run: npx ts-node --transpile-only scripts/publish-beta.ts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
