@@ -87,7 +87,7 @@ function TabList({ className, block, selectedValue, selectValue, tabValues }) {
       <div className="openapi-tabs__response-container">
         {showTabArrows && (
           <button
-            className="openapi-tabs__arrows left"
+            className="openapi-tabs__arrow left"
             onClick={handleLeftClick}
           />
         )}

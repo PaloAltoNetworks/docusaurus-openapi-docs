@@ -85,7 +85,7 @@ function TabList({ className, block, selectedValue, selectValue, tabValues }) {
       <div className="openapi-tabs__discriminator-container">
         {showTabArrows && (
           <button
-            className="openapi-tabs__arrows left"
+            className="openapi-tabs__arrow left"
             onClick={handleLeftClick}
           />
         )}
@@ -130,7 +130,7 @@ function TabList({ className, block, selectedValue, selectValue, tabValues }) {
         </ul>
         {showTabArrows && (
           <button
-            className="openapi-tabs__arrows right"
+            className="openapi-tabs__arrow right"
             onClick={handleRightClick}
           />
         )}
