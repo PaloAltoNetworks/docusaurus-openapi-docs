@@ -10,7 +10,13 @@ import React from "react";
 import sdk from "@paloaltonetworks/postman-collection";
 import buildPostmanRequest from "@theme/ApiDemoPanel/buildPostmanRequest";
 import { Param } from "@theme/ApiDemoPanel/ParamOptions/slice";
-import { setResponse } from "@theme/ApiDemoPanel/Response/slice";
+import {
+  setResponse,
+  setCode,
+  clearCode,
+  setHeaders,
+  clearHeaders,
+} from "@theme/ApiDemoPanel/Response/slice";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import Modal from "react-modal";
 
@@ -118,10 +124,15 @@ function Execute({ postman, proxy }: Props) {
           try {
             await delay(1200);
             const res = await makeRequest(postmanRequest, proxy, body);
-            dispatch(setResponse(res));
+            dispatch(setResponse(await res.text()));
+            dispatch(setCode(res.status));
+            res.headers &&
+              dispatch(setHeaders(Object.fromEntries(res.headers)));
           } catch (e: any) {
             console.log(e);
             dispatch(setResponse("Connection failed"));
+            dispatch(clearCode());
+            dispatch(clearHeaders());
           }
         }}
       >
