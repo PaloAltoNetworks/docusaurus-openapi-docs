@@ -64,10 +64,10 @@ function Response() {
   }
 
   return (
-    <details className={`details__demo-panel`} open={true}>
-      <summary>
-        <div className={`details__response-summary`}>
-          <h4>Response</h4>
+    <details className="openapi-demo__details" open={true}>
+      <summary className="openapi-demo__summary-container">
+        <div className="openapi-demo__summary-content">
+          <h4 className="openapi-demo__summary-header">Response</h4>
           <button
             className="button button--sm button--secondary"
             onClick={() => {

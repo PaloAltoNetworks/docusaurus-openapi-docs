@@ -19,8 +19,6 @@ import { useTypedSelector } from "@theme/ApiItem/hooks";
 import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 
-import styles from "./styles.module.css";
-
 function Request({ item }: { item: NonNullable<ApiItem> }) {
   const response = useTypedSelector((state: any) => state.response.value);
   const postman = new sdk.Request(item.postman);
@@ -44,16 +42,16 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
 
   return (
     <div>
-      <details className={`details__demo-panel`} open={response ? false : true}>
-        <summary>
-          <div className={`details__request-summary`}>
-            <h4>Request</h4>
+      <details className="openapi-demo__details" open={response ? false : true}>
+        <summary className="openapi-demo__summary-container">
+          <div className="openapi-demo__summary-content">
+            <h4 className="openapi-demo__summary-header">Request</h4>
             {item.servers && !hide_send_button && (
               <Execute postman={postman} proxy={proxy} />
             )}
           </div>
         </summary>
-        <div className={styles.optionsPanel}>
+        <div className="openapi-demo__options-panel">
           <Server />
           <Authorization />
           <ParamOptions />
