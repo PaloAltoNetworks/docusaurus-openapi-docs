@@ -74,6 +74,7 @@ function TabList({
       aria-orientation="horizontal"
       className={clsx(
         "tabs",
+        "openapi-tabs__code-list-container",
         {
           "tabs--block": block,
         },
@@ -91,9 +92,14 @@ function TabList({
           onKeyDown={handleKeydown}
           onClick={handleTabChange}
           {...attributes}
-          className={clsx("tabs__item", attributes?.className, {
-            "tabs__item--active": selectedValue === value,
-          })}
+          className={clsx(
+            "tabs__item",
+            "openapi-tabs__code-item",
+            attributes?.className,
+            {
+              active: selectedValue === value,
+            }
+          )}
         >
           {label ?? value}
         </li>
