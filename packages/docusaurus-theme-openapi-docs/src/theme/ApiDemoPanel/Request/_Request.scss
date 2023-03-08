@@ -26,13 +26,16 @@
 .openapi-demo__summary-container {
   padding: 1rem;
   list-style-type: none;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .openapi-demo__summary-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  cursor: pointer;
 }
 
 .openapi-demo__summary-header {
