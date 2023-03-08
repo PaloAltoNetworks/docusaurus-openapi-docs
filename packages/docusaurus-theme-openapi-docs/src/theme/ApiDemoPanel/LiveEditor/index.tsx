@@ -12,8 +12,6 @@ import useIsBrowser from "@docusaurus/useIsBrowser";
 import { setStringRawBody } from "@theme/ApiDemoPanel/Body/slice";
 import { LiveProvider, LiveEditor, withLive } from "react-live";
 
-import styles from "./styles.module.css";
-
 function Live({ onEdit }: any) {
   const isBrowser = useIsBrowser();
   const [editorDisabled, setEditorDisabled] = useState(false);
@@ -30,7 +28,7 @@ function Live({ onEdit }: any) {
     <div onClick={() => setEditorDisabled(false)}>
       <LiveEditor
         key={String(isBrowser)}
-        className={styles.playgroundEditor}
+        className="openapi-demo__playground-editor"
         onChange={onEdit}
         disabled={editorDisabled}
         onKeyDown={handleKeydown}
@@ -57,7 +55,7 @@ function App({
   }, [action, code]);
 
   return (
-    <div className={styles.playgroundContainer}>
+    <div className="openapi-demo__playground-container">
       <LiveProvider
         code={children.replace(/\n$/, "")}
         transformCode={transformCode ?? ((code) => `${code};`)}

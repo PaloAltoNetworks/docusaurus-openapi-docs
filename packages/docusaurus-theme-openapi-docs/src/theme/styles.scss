@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
-//  API Demo Panel
+/* API Demo Panel */
 @use "./ApiDemoPanel/CodeTabs/CodeTabs";
 @use "./ApiDemoPanel/Curl/Curl";
 @use "./ApiDemoPanel/FloatingButton/FloatingButton";
@@ -13,15 +13,16 @@
 @use "./ApiDemoPanel/FormMultiSelect/FormMultiSelect";
 @use "./ApiDemoPanel/FormSelect/FormSelect";
 @use "./ApiDemoPanel/FormTextInput/FormTextInput";
-//  Schema Styling
+@use "./ApiDemoPanel/LiveEditor/LiveEditor";
+/* Schema Styling */
 @use "./ParamsItem/ParamsItem";
 @use "./SchemaItem/SchemaItem";
-// Tabs Styling
+/* Tabs Styling */
 @use "./ApiTabs/ApiTabs";
 @use "./DiscriminatorTabs/DiscriminatorTabs";
 @use "./MimeTabs/MimeTabs";
 @use "./SchemaTabs/SchemaTabs";
-// Code Samples
+/* Code Samples */
 @use "./ResponseSamples/ResponseSamples";
 
 :root {
