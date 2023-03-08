@@ -15,7 +15,6 @@ import FormTextInput from "@theme/ApiDemoPanel/FormTextInput";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 
 import { Param, setParam } from "./slice";
-import styles from "./styles.module.css";
 
 export interface ParamProps {
   param: Param;
@@ -80,7 +79,7 @@ function ParamOptions() {
       {optionalParams.length > 0 && (
         <>
           <button
-            className={styles.showMoreButton}
+            className="openapi-demo__show-more-btn"
             onClick={() => setShowOptional((prev) => !prev)}
           >
             <span
@@ -91,7 +90,11 @@ function ParamOptions() {
               }}
             >
               <span
-                className={showOptional ? styles.plusExpanded : styles.plus}
+                className={
+                  showOptional
+                    ? "openapi-demo__plus-btn--expanded"
+                    : "openapi-demo__plus-btn"
+                }
               >
                 <div>
                   <svg
@@ -119,7 +122,11 @@ function ParamOptions() {
           </button>
 
           <div
-            className={showOptional ? styles.showOptions : styles.hideOptions}
+            className={
+              showOptional
+                ? "openapi-demo__show-options"
+                : "openapi-demo__hide-options"
+            }
           >
             {optionalParams.map((param) => (
               <ParamOptionWrapper
@@ -212,7 +219,7 @@ function ParamArrayFormItem({ param }: ParamProps) {
         <div key={item.id} style={{ display: "flex" }}>
           <ArrayItem param={param} onChange={handleChangeItem(item)} />
           <button
-            className={styles.buttonDelete}
+            className="openapi-demo__delete-btn"
             onClick={handleDeleteItem(item)}
           >
             <svg
@@ -231,7 +238,7 @@ function ParamArrayFormItem({ param }: ParamProps) {
           </button>
         </div>
       ))}
-      <button className={styles.buttonThin} onClick={handleAddItem}>
+      <button className="openapi-demo__thin-btn" onClick={handleAddItem}>
         Add item
       </button>
     </>
