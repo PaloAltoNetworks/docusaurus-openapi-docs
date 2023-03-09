@@ -26,6 +26,8 @@
 @use "./SchemaTabs/SchemaTabs";
 /* Code Samples */
 @use "./ResponseSamples/ResponseSamples";
+/* Markdown Styling */
+@use "./Markdown/Details/Details";
 
 :root {
   --openapi-required: var(--ifm-color-danger);
@@ -68,43 +70,6 @@
 .theme-api-markdown div[class^="collapsibleContent"] {
   margin-top: 0 !important;
   padding-left: 2px;
-}
-
-/* Main details */
-
-.theme-api-markdown details {
-  margin: unset;
-  max-width: 600px;
-  background-color: transparent;
-  color: var(--ifm-font-color-base);
-  padding: unset;
-  border: unset !important;
-  box-shadow: unset !important;
-  --docusaurus-details-decoration-color: var(--ifm-font-color-base);
-}
-
-.theme-api-markdown details ul {
-  padding-left: 0;
-  font-size: 14px;
-}
-
-.theme-api-markdown details li {
-  list-style: none;
-  padding-top: 5px;
-}
-
-.theme-api-markdown .tabs__item {
-  padding-bottom: unset;
-  padding-top: unset;
-}
-
-.theme-api-markdown details > div > div {
-  padding-top: unset !important;
-  border-top: unset !important;
-}
-
-.theme-api-markdown details p {
-  margin-bottom: 0;
 }
 
 /* Demo panel details */

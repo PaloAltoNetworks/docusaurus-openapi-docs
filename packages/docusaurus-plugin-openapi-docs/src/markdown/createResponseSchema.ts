@@ -472,6 +472,7 @@ function createDetailsNode(
     className: "schemaItem",
     children: [
       createDetails({
+        className: "openapi-markdown__details",
         children: [
           createDetailsSummary({
             children: [
@@ -904,6 +905,7 @@ export function createResponseSchema({ title, body, ...rest }: Props) {
                     value: `${title}`,
                     children: [
                       createDetails({
+                        className: "openapi-markdown__details",
                         "data-collapsed": false,
                         open: true,
                         ...rest,

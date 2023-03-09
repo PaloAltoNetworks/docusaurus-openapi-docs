@@ -1,0 +1,36 @@
+/* Markdown Details Styling */
+
+.openapi-markdown__details {
+  margin: unset;
+  max-width: 600px;
+  background-color: transparent;
+  color: var(--ifm-font-color-base);
+  padding: unset;
+  border: unset !important;
+  box-shadow: unset !important;
+  --docusaurus-details-decoration-color: var(--ifm-font-color-base);
+}
+
+.openapi-markdown__details ul {
+  padding-left: 0;
+  font-size: 14px;
+}
+
+.openapi-markdown__details li {
+  list-style: none;
+  padding-top: 5px;
+}
+
+.theme-api-markdown .tabs__item {
+  padding-bottom: unset;
+  padding-top: unset;
+}
+
+.openapi-markdown__details > div > div {
+  padding-top: unset !important;
+  border-top: unset !important;
+}
+
+.openapi-markdown__details p {
+  margin-bottom: 0;
+}

@@ -465,6 +465,7 @@ function createDetailsNode(
     className: "schemaItem",
     children: [
       createDetails({
+        className: "openapi-markdown__details",
         children: [
           createDetailsSummary({
             children: [
@@ -875,6 +876,7 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
           value: `${mimeType}`,
           children: [
             createDetails({
+              className: "openapi-markdown__details",
               "data-collapsed": false,
               open: true,
               ...rest,
@@ -939,6 +941,7 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
         value: `${randomFirstKey}-schema`,
         children: [
           createDetails({
+            className: "openapi-markdown__details",
             "data-collapsed": false,
             open: true,
             ...rest,
