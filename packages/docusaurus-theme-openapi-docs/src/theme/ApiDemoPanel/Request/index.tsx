@@ -41,7 +41,7 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
   );
 
   return (
-    <div>
+    <>
       <details className="openapi-demo__details" open={response ? false : true}>
         <summary className="openapi-demo__summary-container">
           <div className="openapi-demo__summary-content">
@@ -62,7 +62,7 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
           <Accept />
         </div>
       </details>
-    </div>
+    </>
   );
 }
 
