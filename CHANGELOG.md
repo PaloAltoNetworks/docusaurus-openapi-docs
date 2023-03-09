@@ -1,3 +1,19 @@
+## 2.0.0-beta.0 (Mar 9, 2023)
+
+High level enhancements
+
+- Add support for Docusaurus 2.3.0 ([#471](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/471))
+- [UI Enhancement] Move MethodEndpoint from ApiDemoPanel to left doc panel ([#429](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/429))
+- [UI Enhancement] Migration to SCSS and BEM-style convention for theme components ([#450](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/450))
+- [UI Enhancement] Include status code tabs in Response card ([#476](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/476))
+
+Other enhancements and bug fixes
+
+- Split beta release into separate script/workflow ([#480](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/480))
+- Add bold, svg and ensure parity between opening/closing regex ([#479](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/479))
+- Relax if statement ([#477](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/477))
+- Add v2.0.0 branch to release workflows ([#475](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/475))
+
 ## 1.6.1 (Feb 28, 2023)
 
 High level enhancements
