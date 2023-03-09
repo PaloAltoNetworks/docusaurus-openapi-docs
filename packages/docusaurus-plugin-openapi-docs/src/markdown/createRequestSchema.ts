@@ -391,7 +391,7 @@ function createItems(schema: SchemaObject) {
 //   }
 
 //   return create("div", {
-//     className: "discriminatorItem",
+//     className: "openapi-discriminator__item",
 //     children: create("div", {
 //       children: [
 //         create("strong", {
@@ -547,7 +547,7 @@ function createPropertyDiscriminator(
   }
 
   return create("div", {
-    className: "discriminatorItem",
+    className: "openapi-discriminator__item",
     children: create("div", {
       children: [
         create("strong", { style: { paddingLeft: "1rem" }, children: name }),
