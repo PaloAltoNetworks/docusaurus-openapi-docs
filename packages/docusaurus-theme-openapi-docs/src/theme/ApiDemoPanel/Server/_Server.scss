@@ -1,0 +1,16 @@
+.openapi-demo__server-container {
+  background: var(--openapi-card-background-color);
+  border-radius: var(--openapi-card-border-radius);
+  color: var(--ifm-pre-color);
+  line-height: var(--ifm-pre-line-height);
+  margin-bottom: var(--ifm-spacing-vertical);
+  margin-top: 0;
+  overflow: auto;
+
+  /* hack for view calculation when monaco is hidden */
+  position: relative;
+
+  &:empty {
+    display: none;
+  }
+}

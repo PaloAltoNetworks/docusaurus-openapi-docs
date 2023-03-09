@@ -14,7 +14,6 @@ import FormTextInput from "@theme/ApiDemoPanel/FormTextInput";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 
 import { setServer, setServerVariable } from "./slice";
-import styles from "./styles.module.css";
 
 function Server() {
   const [isEditing, setIsEditing] = useState(false);
@@ -73,7 +72,7 @@ function Server() {
     );
   }
   return (
-    <div className={styles.optionsPanel}>
+    <div className="openapi-demo__server-container">
       <FloatingButton onClick={() => setIsEditing(false)} label="Hide">
         <FormItem label="Base URL">
           <FormSelect
