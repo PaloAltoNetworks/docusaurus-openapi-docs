@@ -14,8 +14,10 @@
 @use "./ApiDemoPanel/FormSelect/FormSelect";
 @use "./ApiDemoPanel/FormTextInput/FormTextInput";
 @use "./ApiDemoPanel/LiveEditor/LiveEditor";
+@use "./ApiDemoPanel/MethodEndpoint/MethodEndpoint";
 @use "./ApiDemoPanel/ParamOptions/ParamOptions";
 @use "./ApiDemoPanel/Request/Request";
+@use "./ApiDemoPanel/Response/Response";
 @use "./ApiDemoPanel/Server/Server";
 /* Schema Styling */
 @use "./ParamsItem/ParamsItem";
@@ -107,71 +109,10 @@
 //   top: 1px;
 // }
 
-/* Params, Schema and Discriminator Items */
-
-.openapi-discriminator__item {
-  list-style: none;
-  position: relative;
-  margin: 0 !important;
-  padding: 5px 0 5px 0 !important;
-  border-left: thin solid var(--ifm-color-gray-500) !important;
-}
-
-// .discriminatorTabsContainer {
-//   padding-left: 0 !important;
-// }
-
-/* Prism code styles */
-// .prism-code.language-java {
-//   white-space: pre !important;
-// }
-
-/* Begin BEM-style CSS styles */
-
 .openapi__logo {
   width: 250px;
 }
 
 .openapi__heading {
   font-size: var(--ifm-h1-font-size);
-}
-
-/* Method Endpoint Styles */
-.openapi__method-endpoint {
-  max-width: 100%;
-  width: fit-content;
-  padding: 0.65rem;
-  border: 1px solid var(--ifm-toc-border-color);
-}
-
-// html[data-theme="dark"] .openapi__method-endpoint {
-//   border-color: var(--ifm-pre-background);
-// }
-
-.openapi-response__dot > :first-child > span:before {
-  content: "\2B24";
-  color: var(--ifm-color-primary);
-  font-size: 8px;
-  vertical-align: 15%;
-  display: inline-block;
-}
-
-.openapi-response__dot--danger > :first-child > span:before {
-  color: var(--ifm-color-danger);
-}
-
-.openapi-response__dot--success > :first-child > span:before {
-  color: var(--ifm-color-success);
-}
-
-.openapi-response__dot--info > :first-child > span:before {
-  color: var(--ifm-color-info);
-}
-
-.openapi-response__status-code {
-  margin-left: -1rem;
-}
-
-.openapi-response__status-headers {
-  margin-left: -1rem;
 }

@@ -93,9 +93,16 @@ function Response() {
         }}
       >
         {code && prettyResponse !== "Fetching..." ? (
-          <SchemaTabs className={clsx(responseStatusClass)} lazy>
+          <SchemaTabs lazy>
             {/* @ts-ignore */}
-            <TabItem label={` ${code}`} value="body" default>
+            <TabItem
+              label={` ${code}`}
+              value="body"
+              attributes={{
+                className: clsx("openapi-response__dot", responseStatusClass),
+              }}
+              default
+            >
               <CodeBlock
                 className="openapi-response__status-code"
                 language={response.startsWith("<") ? `xml` : `json`}

@@ -34,7 +34,7 @@
   }
 }
 
-/* Open API Schema Tabs */
+/* Open API Discriminator Tabs */
 .openapi-tabs__discriminator-top-section {
   margin-top: 1rem;
   margin-left: 0.9rem;
@@ -68,6 +68,14 @@
 
 .openapi-tabs__discriminator-tab-label {
   white-space: nowrap;
+}
+
+.openapi-discriminator__item {
+  list-style: none;
+  position: relative;
+  margin: 0 !important;
+  padding: 5px 0 5px 0 !important;
+  border-left: thin solid var(--ifm-color-gray-500) !important;
 }
 
 @media screen and (max-width: 500px) {
