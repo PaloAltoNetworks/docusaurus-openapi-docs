@@ -1,0 +1,12 @@
+.openapi-demo__form-item {
+  margin-top: var(--ifm-pre-padding);
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  .required {
+    font-size: var(--ifm-code-font-size);
+    color: var(--openapi-required);
+  }
+}

@@ -1,6 +1,5 @@
-.inputBase {
+.openapi-demo__input {
   margin-top: calc(var(--ifm-pre-padding) / 2);
-  /* height: 40px; */
   background-color: var(--openapi-input-background);
   border: none;
   outline: none;
@@ -8,14 +7,9 @@
   font-size: var(--ifm-code-font-size);
   color: var(--ifm-pre-color);
   padding: 12px var(--ifm-pre-padding);
-
   border-radius: 4px;
-}
 
-.input {
-  composes: inputBase;
-}
-
-.input:focus {
-  box-shadow: inset 0px 0px 0px 2px var(--openapi-input-border);
+  &:focus {
+    box-shadow: inset 0px 0px 0px 2px var(--openapi-input-border);
+  }
 }

@@ -44,11 +44,12 @@ function Response() {
   const dispatch = useTypedDispatch();
   const responseStatusClass =
     code &&
-    (parseInt(code) >= 400
-      ? "response__status--danger"
-      : parseInt(code) >= 200 && parseInt(code) < 300
-      ? "response__status--success"
-      : "response__status--info");
+    "openapi-response__dot " +
+      (parseInt(code) >= 400
+        ? "openapi-response__dot--danger"
+        : parseInt(code) >= 200 && parseInt(code) < 300
+        ? "openapi-response__dot--success"
+        : "openapi-response__dot--info");
 
   if (response === undefined) {
     return null;
@@ -64,10 +65,10 @@ function Response() {
   }
 
   return (
-    <details className={`details__demo-panel`} open={true}>
-      <summary>
-        <div className={`details__response-summary`}>
-          <h4>Response</h4>
+    <details className="openapi-demo__details" open={true}>
+      <summary className="openapi-demo__summary-container">
+        <div className="openapi-demo__summary-content">
+          <h4 className="openapi-demo__summary-header">Response</h4>
           <button
             className="button button--sm button--secondary"
             onClick={() => {
@@ -92,11 +93,18 @@ function Response() {
         }}
       >
         {code && prettyResponse !== "Fetching..." ? (
-          <SchemaTabs className={clsx(responseStatusClass)} lazy>
+          <SchemaTabs lazy>
             {/* @ts-ignore */}
-            <TabItem label={` ${code}`} value="body" default>
+            <TabItem
+              label={` ${code}`}
+              value="body"
+              attributes={{
+                className: clsx("openapi-response__dot", responseStatusClass),
+              }}
+              default
+            >
               <CodeBlock
-                className="response__status-code"
+                className="openapi-response__status-code"
                 language={response.startsWith("<") ? `xml` : `json`}
               >
                 {prettyResponse || "No Response"}
@@ -105,7 +113,7 @@ function Response() {
             {/* @ts-ignore */}
             <TabItem label="Headers" value="headers">
               <CodeBlock
-                className="response__status-headers"
+                className="openapi-response__status-headers"
                 language={response.startsWith("<") ? `xml` : `json`}
               >
                 {JSON.stringify(headers, undefined, 2)}

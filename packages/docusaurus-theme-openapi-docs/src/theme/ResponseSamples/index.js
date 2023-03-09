@@ -9,15 +9,10 @@ import React from "react";
 
 import CodeBlock from "@theme/CodeBlock";
 
-import styles from "./styles.module.css";
-
 function ResponseSamples({ responseExample, language }) {
   return (
-    <div className={styles.responseSamplesContainer}>
-      <CodeBlock
-        language={language ? language : "json"}
-        className={styles.responseSamplesCodeBlock}
-      >
+    <div className="openapi-code__response-samples-container">
+      <CodeBlock language={language ? language : "json"}>
         {responseExample}
       </CodeBlock>
     </div>

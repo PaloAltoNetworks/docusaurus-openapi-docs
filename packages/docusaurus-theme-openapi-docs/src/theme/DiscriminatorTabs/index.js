@@ -15,8 +15,6 @@ import useIsBrowser from "@docusaurus/useIsBrowser";
 import clsx from "clsx";
 import flatten from "lodash/flatten";
 
-import styles from "./styles.module.css";
-
 function TabList({ className, block, selectedValue, selectValue, tabValues }) {
   const tabRefs = [];
   const { blockElementScrollPositionUntilNextRender } =
@@ -83,11 +81,11 @@ function TabList({ className, block, selectedValue, selectValue, tabValues }) {
   };
 
   return (
-    <div className={styles.schemaTabsTopSection}>
-      <div className={styles.schemaTabsContainer}>
+    <div className="openapi-tabs__discriminator-top-section">
+      <div className="openapi-tabs__discriminator-container">
         {showTabArrows && (
           <button
-            className={clsx(styles.tabArrow, styles.tabArrowLeft)}
+            className="openapi-tabs__arrow left"
             onClick={handleLeftClick}
           />
         )}
@@ -96,7 +94,7 @@ function TabList({ className, block, selectedValue, selectValue, tabValues }) {
           role="tablist"
           aria-orientation="horizontal"
           className={clsx(
-            styles.discriminatorTabsListContainer,
+            "openapi-tabs__discriminator-list-container",
             "tabs",
             {
               "tabs--block": block,
@@ -117,20 +115,22 @@ function TabList({ className, block, selectedValue, selectValue, tabValues }) {
               {...attributes}
               className={clsx(
                 "tabs__item",
-                styles.tabItem,
+                "openapi-tabs__discriminator-item",
                 attributes?.className,
                 {
-                  [styles.discriminatorTabActive]: selectedValue === value,
+                  active: selectedValue === value,
                 }
               )}
             >
-              <span className={styles.schemaTabLabel}>{label ?? value}</span>
+              <span className="openapi-tabs__discriminator-tab-label">
+                {label ?? value}
+              </span>
             </li>
           ))}
         </ul>
         {showTabArrows && (
           <button
-            className={clsx(styles.tabArrow, styles.tabArrowRight)}
+            className="openapi-tabs__arrow right"
             onClick={handleRightClick}
           />
         )}
@@ -166,7 +166,7 @@ function TabContent({ lazy, children, selectedValue }) {
 function TabsComponent(props) {
   const tabs = useTabs(props);
   return (
-    <div className={clsx("tabs-container", styles.tabList)}>
+    <div className="openapi-tabs__container">
       <TabList {...props} {...tabs} />
       <TabContent {...props} {...tabs} />
     </div>

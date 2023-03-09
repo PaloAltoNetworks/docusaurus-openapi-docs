@@ -1,0 +1,117 @@
+/* ============================================================================
+ * Copyright (c) Palo Alto Networks
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ * ========================================================================== */
+/* API Demo Panel */
+@use "./ApiDemoPanel/CodeTabs/CodeTabs";
+@use "./ApiDemoPanel/FloatingButton/FloatingButton";
+@use "./ApiDemoPanel/FormFileUpload/FormFileUpload";
+@use "./ApiDemoPanel/FormItem/FormItem";
+@use "./ApiDemoPanel/FormMultiSelect/FormMultiSelect";
+@use "./ApiDemoPanel/FormSelect/FormSelect";
+@use "./ApiDemoPanel/FormTextInput/FormTextInput";
+@use "./ApiDemoPanel/LiveEditor/LiveEditor";
+@use "./ApiDemoPanel/MethodEndpoint/MethodEndpoint";
+@use "./ApiDemoPanel/ParamOptions/ParamOptions";
+@use "./ApiDemoPanel/Request/Request";
+@use "./ApiDemoPanel/Response/Response";
+@use "./ApiDemoPanel/Server/Server";
+/* Schema Styling */
+@use "./ParamsItem/ParamsItem";
+@use "./SchemaItem/SchemaItem";
+/* Tabs Styling */
+@use "./ApiTabs/ApiTabs";
+@use "./DiscriminatorTabs/DiscriminatorTabs";
+@use "./MimeTabs/MimeTabs";
+@use "./SchemaTabs/SchemaTabs";
+/* Code Samples */
+@use "./ResponseSamples/ResponseSamples";
+/* Markdown Styling */
+@use "./Markdown/Details/Details";
+
+:root {
+  --openapi-required: var(--ifm-color-danger);
+  --openapi-deprecated: var(--ifm-color-warning);
+  --openapi-nullable: var(--ifm-color-info);
+  --openapi-code-blue: var(--ifm-color-info);
+  --openapi-code-red: var(--ifm-color-danger);
+  --openapi-code-orange: var(--ifm-color-warning);
+  --openapi-code-green: var(--ifm-color-success);
+  --openapi-card-background-color: var(--ifm-color-gray-100);
+  --openapi-card-border-radius: var(--ifm-pre-border-radius);
+  --openapi-input-border: var(--ifm-color-primary);
+  --openapi-input-background: var(--openapi-card-background-color);
+}
+
+[data-theme="dark"] {
+  --openapi-card-background-color: var(--ifm-color-gray-900) !important;
+}
+
+.docs-wrapper {
+  height: 100%;
+}
+
+@media (min-width: 997px) {
+  .docItemCol {
+    max-width: 75% !important;
+  }
+
+  /* Prevent hydration FOUC, as the mobile TOC needs to be server-rendered */
+  .tocMobile {
+    display: none;
+  }
+}
+
+/* Begin OpenAPI theme styles */
+// [data-theme="dark"] {
+//   --openapi-card-background-color: var(--ifm-color-gray-900) !important;
+// }
+
+// .theme-api-markdown div[class^="collapsibleContent"] {
+//   margin-top: 0 !important;
+//   padding-left: 2px;
+// }
+
+/* Demo panel details */
+
+// .theme-api-markdown .openapi-demo__details > div > div > pre {
+//   border-top-left-radius: 0;
+//   border-top-right-radius: 0;
+// }
+
+/* Code block */
+
+// .theme-api-markdown code {
+//   max-width: 600px;
+//   max-height: 500px;
+//   overflow: auto;
+// }
+
+/* Version button */
+
+// .version-button div {
+//   display: block;
+// }
+
+// .version-button div > button > span::after {
+//   border-color: currentcolor transparent;
+//   border-style: solid;
+//   border-width: 0.4em 0.4em 0;
+//   content: "";
+//   margin-left: 0.3em;
+//   position: relative;
+//   transform: translateY(-50%);
+//   display: inline-block;
+//   font-size: 0.8rem;
+//   top: 1px;
+// }
+
+.openapi__logo {
+  width: 250px;
+}
+
+.openapi__heading {
+  font-size: var(--ifm-h1-font-size);
+}

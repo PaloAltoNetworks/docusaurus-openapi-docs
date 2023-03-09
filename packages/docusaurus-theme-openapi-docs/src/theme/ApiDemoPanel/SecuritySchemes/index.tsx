@@ -23,9 +23,9 @@ function SecuritySchemes(props: any) {
 
   const selectedAuth = options[selected];
   return (
-    <details className={`details__demo-panel`} open={false}>
-      <summary className={`details__request-summary`}>
-        <h4>Authorization</h4>
+    <details className="openapi-demo__details" open={false}>
+      <summary className="openapi-demo__summary-container">
+        <h4 className="openapi-demo__summary-header">Authorization</h4>
       </summary>
       {selectedAuth.map((auth: any) => {
         const isHttp = auth.type === "http";

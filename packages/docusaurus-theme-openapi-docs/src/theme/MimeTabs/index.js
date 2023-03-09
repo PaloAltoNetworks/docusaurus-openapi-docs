@@ -17,8 +17,6 @@ import { setContentType } from "@theme/ApiDemoPanel/ContentType/slice";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import clsx from "clsx";
 
-import styles from "./styles.module.css";
-
 function TabList({
   className,
   block,
@@ -120,12 +118,11 @@ function TabList({
   };
 
   return (
-    <div className={styles.mimeTabsTopSection}>
-      {/* <strong>MIME Type</strong> */}
-      <div className={styles.mimeTabsContainer}>
+    <div className="tabs__container">
+      <div className="openapi-tabs__mime-container">
         {showTabArrows && (
           <button
-            className={clsx(styles.tabArrow, styles.tabArrowLeft)}
+            className={clsx("openapi-tabs__arrow", "left")}
             onClick={handleLeftClick}
           />
         )}
@@ -134,7 +131,7 @@ function TabList({
           role="tablist"
           aria-orientation="horizontal"
           className={clsx(
-            styles.mimeTabsListContainer,
+            "openapi-tabs__mime-list-container",
             "tabs",
             {
               "tabs--block": block,
@@ -142,33 +139,35 @@ function TabList({
             className
           )}
         >
-          {tabValues.map(({ value, label, attributes }) => (
-            <li
-              // TODO extract TabListItem
-              role="tab"
-              tabIndex={selectedValue === value ? 0 : -1}
-              aria-selected={selectedValue === value}
-              key={value}
-              ref={(tabControl) => tabRefs.push(tabControl)}
-              onKeyDown={handleKeydown}
-              onClick={handleTabChange}
-              {...attributes}
-              className={clsx(
-                "tabs__item",
-                styles.tabItem,
-                attributes?.className,
-                {
-                  [styles.mimeTabActive]: selectedValue === value,
-                }
-              )}
-            >
-              {label ?? value}
-            </li>
-          ))}
+          {tabValues.map(({ value, label, attributes }) => {
+            return (
+              <li
+                role="tab"
+                tabIndex={selectedValue === value ? 0 : -1}
+                aria-selected={selectedValue === value}
+                key={value}
+                ref={(tabControl) => tabRefs.push(tabControl)}
+                onKeyDown={handleKeydown}
+                onFocus={handleTabChange}
+                onClick={(e) => handleTabChange(e)}
+                {...attributes}
+                className={clsx(
+                  "tabs__item",
+                  "openapi-tabs__mime-item",
+                  attributes?.className,
+                  {
+                    active: selectedValue === value,
+                  }
+                )}
+              >
+                {label ?? value}
+              </li>
+            );
+          })}
         </ul>
         {showTabArrows && (
           <button
-            className={clsx(styles.tabArrow, styles.tabArrowRight)}
+            className={clsx("openapi-tabs__arrow", "right")}
             onClick={handleRightClick}
           />
         )}
@@ -203,7 +202,7 @@ function TabContent({ lazy, children, selectedValue }) {
 function TabsComponent(props) {
   const tabs = useTabs(props);
   return (
-    <div className={clsx("tabs-container", styles.tabList)}>
+    <div className="tabs-container">
       <TabList {...props} {...tabs} />
       <TabContent {...props} {...tabs} />
     </div>

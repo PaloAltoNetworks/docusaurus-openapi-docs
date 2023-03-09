@@ -7,8 +7,6 @@
 
 import React from "react";
 
-import styles from "./styles.module.css";
-
 export interface Props {
   value?: string;
   options?: string[];
@@ -21,7 +19,11 @@ function FormSelect({ value, options, onChange }: Props) {
   }
 
   return (
-    <select className={styles.selectInput} value={value} onChange={onChange}>
+    <select
+      className="openapi-demo__select-input"
+      value={value}
+      onChange={onChange}
+    >
       {options.map((option) => {
         return (
           <option key={option} value={option}>

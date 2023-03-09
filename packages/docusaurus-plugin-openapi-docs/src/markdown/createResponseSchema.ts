@@ -398,7 +398,7 @@ function createItems(schema: SchemaObject) {
 //   }
 
 //   return create("div", {
-//     className: "discriminatorItem",
+//     className: "openapi-discriminator__item",
 //     children: create("div", {
 //       children: [
 //         create("strong", {
@@ -472,6 +472,7 @@ function createDetailsNode(
     className: "schemaItem",
     children: [
       createDetails({
+        className: "openapi-markdown__details",
         children: [
           createDetailsSummary({
             children: [
@@ -553,7 +554,7 @@ function createPropertyDiscriminator(
   }
 
   return create("div", {
-    className: "discriminatorItem",
+    className: "openapi-discriminator__item",
     children: create("div", {
       children: [
         create("strong", { style: { paddingLeft: "1rem" }, children: name }),
@@ -593,7 +594,7 @@ function createPropertyDiscriminator(
           children: Object.keys(discriminator?.mapping!).map((key, index) => {
             const label = key;
             return create("TabItem", {
-              className: "openapi-tabs__discriminator-item",
+              // className: "openapi-tabs__discriminator-item",
               label: label,
               value: `${index}-item-discriminator`,
               children: [createNodes(discriminator?.mapping[key])],
@@ -904,6 +905,7 @@ export function createResponseSchema({ title, body, ...rest }: Props) {
                     value: `${title}`,
                     children: [
                       createDetails({
+                        className: "openapi-markdown__details",
                         "data-collapsed": false,
                         open: true,
                         ...rest,

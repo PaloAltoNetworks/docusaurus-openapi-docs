@@ -14,10 +14,7 @@ import buildPostmanRequest from "@theme/ApiDemoPanel/buildPostmanRequest";
 import CodeTabs from "@theme/ApiDemoPanel/CodeTabs";
 import { useTypedSelector } from "@theme/ApiItem/hooks";
 import CodeBlock from "@theme/CodeBlock";
-import clsx from "clsx";
 import merge from "lodash/merge";
-
-import styles from "./styles.module.css";
 
 export interface Language {
   highlight?: string;
@@ -120,11 +117,7 @@ export interface Props {
 
 function CodeTab({ children, hidden, className, onClick }: any): JSX.Element {
   return (
-    <div
-      role="tabpanel"
-      className={clsx(styles.tabItem, className)}
-      {...{ hidden }}
-    >
+    <div role="tabpanel" className={className} {...{ hidden }}>
       {children}
     </div>
   );
@@ -278,9 +271,14 @@ function Curl({ postman, codeSamples }: Props) {
                   ? `${lang.language}-${lang.variant}`
                   : lang.language
               }
-              attributes={{ className: `code__tab--${lang.logoClass}` }}
+              attributes={{
+                className: `openapi-tabs__code-item--${lang.logoClass}`,
+              }}
             >
-              <CodeBlock language={lang.highlight} className={styles.codeBlock}>
+              <CodeBlock
+                language={lang.highlight}
+                className="openapi-demo__code-block"
+              >
                 {codeText}
               </CodeBlock>
             </CodeTab>

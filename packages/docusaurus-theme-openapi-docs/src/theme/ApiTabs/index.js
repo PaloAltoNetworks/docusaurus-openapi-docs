@@ -14,8 +14,6 @@ import {
 import useIsBrowser from "@docusaurus/useIsBrowser";
 import clsx from "clsx";
 
-import styles from "./styles.module.css";
-
 function TabList({ className, block, selectedValue, selectValue, tabValues }) {
   const tabRefs = [];
   const { blockElementScrollPositionUntilNextRender } =
@@ -84,12 +82,12 @@ function TabList({ className, block, selectedValue, selectValue, tabValues }) {
   };
 
   return (
-    <div className={styles.responseTabsTopSection}>
+    <div className="openapi-tabs__response-header-section">
       <strong>Responses</strong>
-      <div className={styles.responseTabsContainer}>
+      <div className="openapi-tabs__response-container">
         {showTabArrows && (
           <button
-            className={clsx(styles.tabArrow, styles.tabArrowLeft)}
+            className="openapi-tabs__arrow left"
             onClick={handleLeftClick}
           />
         )}
@@ -98,7 +96,7 @@ function TabList({ className, block, selectedValue, selectValue, tabValues }) {
           role="tablist"
           aria-orientation="horizontal"
           className={clsx(
-            styles.responseTabsListContainer,
+            "openapi-tabs__response-list-container",
             "tabs",
             {
               "tabs--block": block,
@@ -122,24 +120,23 @@ function TabList({ className, block, selectedValue, selectValue, tabValues }) {
                 "openapi-tabs__response-code-item",
                 attributes?.className,
                 parseInt(value) >= 400
-                  ? styles.responseStatusDanger
+                  ? "danger"
                   : parseInt(value) >= 200 && parseInt(value) < 300
-                  ? styles.responseStatusSuccess
-                  : styles.responseStatusInfo,
+                  ? "success"
+                  : "info",
                 {
-                  "openapi-tabs__response-code-item--active":
-                    selectedValue === value,
+                  active: selectedValue === value,
                 }
               )}
             >
-              <div className={styles.responseTabDot} />
+              <div className="openapi-tabs__response-dot" />
               {label ?? value}
             </li>
           ))}
         </ul>
         {showTabArrows && (
           <button
-            className={clsx(styles.tabArrow, styles.tabArrowRight)}
+            className="openapi-tabs__arrow right"
             onClick={handleRightClick}
           />
         )}
@@ -174,7 +171,7 @@ function TabContent({ lazy, children, selectedValue }) {
 function TabsComponent(props) {
   const tabs = useTabs(props);
   return (
-    <div className={clsx("tabs-container", styles.tabList)}>
+    <div className="openapi-tabs__container">
       <TabList {...props} {...tabs} />
       <hr />
       <TabContent {...props} {...tabs} />

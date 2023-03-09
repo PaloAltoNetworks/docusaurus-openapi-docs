@@ -11,14 +11,9 @@ import CodeBlock from "@theme/CodeBlock";
 /* eslint-disable import/no-extraneous-dependencies*/
 import { createDescription } from "docusaurus-theme-openapi-docs/lib/markdown/createDescription";
 /* eslint-disable import/no-extraneous-dependencies*/
-import {
-  guard,
-  toString,
-} from "docusaurus-theme-openapi-docs/lib/markdown/utils";
+import { guard } from "docusaurus-theme-openapi-docs/lib/markdown/utils";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
-
-import styles from "./styles.module.css";
 
 function SchemaItem({
   children: collapsibleSchemaContent,
@@ -42,15 +37,15 @@ function SchemaItem({
 
   const renderRequired = guard(
     Array.isArray(required) ? required.includes(name) : required,
-    () => <strong className={styles.required}> required</strong>
+    () => <strong className="openapi-schema__required"> required</strong>
   );
 
   const renderDeprecated = guard(deprecated, () => (
-    <strong className={styles.deprecated}> deprecated</strong>
+    <strong className="openapi-schema__deprecated"> deprecated</strong>
   ));
 
   const renderNullable = guard(nullable, () => (
-    <strong className={styles.nullable}> nullable</strong>
+    <strong className="openapi-schema__nullable"> nullable</strong>
   ));
 
   const renderSchemaDescription = guard(schemaDescription, (description) => (
@@ -75,7 +70,7 @@ function SchemaItem({
   ));
 
   const renderQualifierMessage = guard(qualifierMessage, (message) => (
-    <div className={styles.schemaQualifierMessage}>
+    <div>
       <ReactMarkdown
         children={createDescription(message)}
         rehypePlugins={[rehypeRaw]}
@@ -83,16 +78,21 @@ function SchemaItem({
     </div>
   ));
 
-  const renderDefaultValue = guard(toString(defaultValue), (value) => (
-    <div className={styles.schemaQualifierMessage}>
-      <ReactMarkdown children={`**Default value:** \`${value}\``} />
-    </div>
-  ));
+  const renderDefaultValue = guard(
+    typeof defaultValue === "boolean" ? defaultValue.toString() : defaultValue,
+    (value) => (
+      <div className="">
+        <ReactMarkdown children={`**Default value:** \`${value}\``} />
+      </div>
+    )
+  );
 
   const schemaContent = (
     <div>
-      <strong className={deprecated && styles.strikethrough}>{name}</strong>
-      <span className={styles.schemaName}> {schemaName}</span>
+      <strong className={deprecated && "openapi-schema__strikethrough"}>
+        {name}
+      </strong>
+      <span className="openapi-schema__name"> {schemaName}</span>
       {renderNullable}
       {!deprecated && renderRequired}
       {renderDeprecated}
@@ -103,7 +103,7 @@ function SchemaItem({
   );
 
   return (
-    <li className={styles.schemaItem}>
+    <li className="openapi-schema__list-item">
       {collapsible ? collapsibleSchemaContent : schemaContent}
     </li>
   );

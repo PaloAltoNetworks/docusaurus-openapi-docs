@@ -10,8 +10,6 @@ import React, { useState } from "react";
 import FloatingButton from "@theme/ApiDemoPanel/FloatingButton";
 import MagicDropzone from "react-magic-dropzone";
 
-import styles from "./styles.module.css";
-
 type PreviewFile = { preview: string } & File;
 
 interface RenderPreviewProps {
@@ -55,7 +53,7 @@ function RenderPreview({ file }: RenderPreviewProps) {
               d="M0.210,-0.000 L40.000,39.790 L40.000,40.000 L15.000,40.000 C6.716,40.000 0.000,33.284 0.000,25.000 L0.000,-0.000 L0.210,-0.000 Z"
             />
           </svg>
-          <div className={styles.filename}>{file.name}</div>
+          <div className="openapi-demo__file-name">{file.name}</div>
         </div>
       );
   }
@@ -84,7 +82,9 @@ function FormFileUpload({ placeholder, onChange }: Props) {
   return (
     <FloatingButton>
       <MagicDropzone
-        className={hover ? styles.dropzoneHover : styles.dropzone}
+        className={
+          hover ? "openapi-demo__dropzone-hover" : "openapi-demo__dropzone"
+        }
         onDrop={handleDrop}
         onDragEnter={() => setHover(true)}
         onDragLeave={() => setHover(false)}
@@ -105,7 +105,7 @@ function FormFileUpload({ placeholder, onChange }: Props) {
             <RenderPreview file={file} />
           </>
         ) : (
-          <div className={styles.dropzoneContent}>{placeholder}</div>
+          <div className="openapi-demo__dropzone-content">{placeholder}</div>
         )}
       </MagicDropzone>
     </FloatingButton>

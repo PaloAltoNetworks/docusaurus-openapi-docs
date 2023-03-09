@@ -25,6 +25,7 @@ export function createParamsDetails({ parameters, type }: Props) {
   }
 
   return createDetails({
+    className: "openapi-markdown__details",
     "data-collapsed": false,
     open: true,
     style: { marginBottom: "1rem" },

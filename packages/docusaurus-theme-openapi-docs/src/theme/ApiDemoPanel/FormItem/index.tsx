@@ -7,8 +7,6 @@
 
 import React from "react";
 
-import styles from "./styles.module.css";
-
 export interface Props {
   label?: string;
   type?: string;
@@ -18,14 +16,14 @@ export interface Props {
 
 function FormItem({ label, type, required, children }: Props) {
   return (
-    <div className={styles.formItem}>
+    <div className="openapi-demo__form-item">
       <code>{label}</code>
       {type && <span style={{ opacity: 0.6 }}> — {type}</span>}
       {required && (
         <span>
           {" "}
           <small>
-            <strong className={styles.required}> required</strong>
+            <strong className="required"> required</strong>
           </small>
         </span>
       )}

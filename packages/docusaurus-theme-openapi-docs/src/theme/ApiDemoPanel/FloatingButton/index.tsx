@@ -7,8 +7,6 @@
 
 import React from "react";
 
-import styles from "./styles.module.css";
-
 export interface Props {
   label?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
@@ -17,7 +15,7 @@ export interface Props {
 
 function FloatingButton({ label, onClick, children }: Props) {
   return (
-    <div tabIndex={0} className={styles.floatingButton}>
+    <div tabIndex={0} className="openapi-demo__floating-btn">
       {label && (
         <button tabIndex={0} onClick={onClick}>
           {label}

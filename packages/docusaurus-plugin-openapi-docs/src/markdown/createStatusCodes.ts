@@ -280,6 +280,7 @@ export function createStatusCodes({ responses }: Props) {
                   }),
                   responseHeaders &&
                     createDetails({
+                      className: "openapi-markdown__details",
                       "data-collaposed": true,
                       open: false,
                       style: { textAlign: "left", marginBottom: "1rem" },

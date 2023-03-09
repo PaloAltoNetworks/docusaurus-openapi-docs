@@ -1,0 +1,27 @@
+.openapi-response__dot::before {
+  margin-right: 0.2rem;
+  margin-bottom: 0.15rem;
+  content: "⬤";
+  color: var(--ifm-color-primary);
+  font-size: 8px;
+}
+
+.openapi-response__dot--danger::before {
+  color: var(--ifm-color-danger);
+}
+
+.openapi-response__dot--success::before {
+  color: var(--ifm-color-success);
+}
+
+.openapi-response__dot--info::before {
+  color: var(--ifm-color-info);
+}
+
+.openapi-response__status-code {
+  margin-left: -1rem;
+}
+
+.openapi-response__status-headers {
+  margin-left: -1rem;
+}

@@ -1,0 +1,39 @@
+.openapi-params__list-item {
+  margin: 0 0 0 1rem !important;
+  position: relative;
+  padding-left: 1rem;
+  border-left: thin solid var(--ifm-color-gray-500) !important;
+  margin-top: unset !important;
+
+  // Horizonal line styling for param attributes
+  &::before {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    width: 0.7rem;
+    /* width of horizontal line */
+    height: 0.5rem;
+    /* vertical position of line */
+    vertical-align: top;
+    border-bottom: thin solid var(--ifm-color-gray-500);
+    content: "";
+    display: inline-block;
+  }
+}
+
+.openapi-params__list-item:hover {
+  background-color: var(--ifm-menu-color-background-active);
+}
+
+.openapi-params__list-item:focus {
+  background-color: var(--ifm-menu-color-background-active);
+}
+
+.openapi-schema__type {
+  opacity: 0.6;
+}
+
+.openapi-schema__required {
+  font-size: var(--ifm-code-font-size);
+  color: var(--openapi-required);
+}
