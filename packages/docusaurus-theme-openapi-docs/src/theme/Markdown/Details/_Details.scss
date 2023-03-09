@@ -1,14 +1,14 @@
 /* Markdown Details Styling */
 
 .openapi-markdown__details {
-  margin: unset;
+  margin: unset !important;
   max-width: 600px;
   background-color: transparent;
   color: var(--ifm-font-color-base);
   padding: unset;
   border: unset !important;
   box-shadow: unset !important;
-  --docusaurus-details-decoration-color: var(--ifm-font-color-base);
+  --docusaurus-details-decoration-color: var(--ifm-font-color-base) !important;
 }
 
 .openapi-markdown__details ul {
