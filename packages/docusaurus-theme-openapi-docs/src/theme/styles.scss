@@ -149,6 +149,7 @@
 
 .openapi-response__dot > :first-child > span:before {
   content: "\2B24";
+  color: var(--ifm-color-primary);
   font-size: 8px;
   vertical-align: 15%;
   display: inline-block;

@@ -44,11 +44,12 @@ function Response() {
   const dispatch = useTypedDispatch();
   const responseStatusClass =
     code &&
-    (parseInt(code) >= 400
-      ? "openapi-response__dot--danger"
-      : parseInt(code) >= 200 && parseInt(code) < 300
-      ? "openapi-response__dot--success"
-      : "openapi-response__dot--info");
+    "openapi-response__dot " +
+      (parseInt(code) >= 400
+        ? "openapi-response__dot--danger"
+        : parseInt(code) >= 200 && parseInt(code) < 300
+        ? "openapi-response__dot--success"
+        : "openapi-response__dot--info");
 
   if (response === undefined) {
     return null;
