@@ -34,6 +34,7 @@
     "test:cypress:dev": "start-server-and-test watch:demo http://localhost:3000 cy:open",
     "test:cypress": "start-server-and-test serve http://localhost:3000 cy:run",
     "release:changelog": "scripts/changelog.ts",
+    "release:changelogBeta": "scripts/changelog-beta.ts",
     "release:version": "scripts/version.ts",
     "release:publish": "scripts/publish.ts",
     "clean": "yarn workspace demo clean-all && rm -rf node_modules build demo/.docusaurus demo/build demo/node_modules && find packages -name node_modules -type d -maxdepth 2 -exec rm -rf {} + && find packages -name dist -type d -maxdepth 2 -exec rm -rf {} + && find packages -name lib -type d -maxdepth 2 -exec rm -rf {} + && find packages -name lib-next -type d -maxdepth 2 -exec rm -rf {} +"
