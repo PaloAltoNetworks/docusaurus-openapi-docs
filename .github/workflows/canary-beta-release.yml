@@ -1,9 +1,9 @@
-name: Canary Release
+name: Canary Beta Release
 
 on:
   push:
     branches:
-      - main
+      - v2.0.0
     paths:
       - packages/**
 
@@ -12,9 +12,9 @@ permissions:
 
 jobs:
   publish-canary:
-    name: Publish Canary
+    name: Publish Canary Beta
     runs-on: ubuntu-latest
-    if: ${{ github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' && github.ref == 'refs/heads/main' && github.event_name == 'push' }}
+    if: ${{ github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' && github.ref == 'refs/heads/v2.0.0' && github.event_name == 'push' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -38,6 +38,6 @@ jobs:
         run: yarn && yarn build-packages
       - name: Publish Canary release
         run: |
-          yarn canary
+          yarn canaryBeta
         env:
           NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
