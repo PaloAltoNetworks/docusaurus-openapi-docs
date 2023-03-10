@@ -2,7 +2,7 @@
   margin: 0 0 0 1rem !important;
   position: relative;
   padding-left: 1rem;
-  border-left: thin solid var(--ifm-color-gray-500) !important;
+  border-left: thin solid var(--openapi-tree-line-color) !important;
   margin-top: unset !important;
 
   // Horizonal line styling for param attributes
@@ -15,7 +15,7 @@
     height: 0.5rem;
     /* vertical position of line */
     vertical-align: top;
-    border-bottom: thin solid var(--ifm-color-gray-500);
+    border-bottom: thin solid var(--openapi-tree-line-color);
     content: "";
     display: inline-block;
   }
