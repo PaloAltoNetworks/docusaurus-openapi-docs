@@ -192,7 +192,7 @@ const config = {
       announcementBar: {
         id: "announcementBar_1",
         content:
-          "⚠️ The OpenAPI docs plugin is currently not compatible with Docusaurus v2.3.0. We are working on a fix. ⚠️",
+          "🥳 Support for Docusaurus v2.3.0 is now available in v2.0.0-beta. See badges/releases for latest beta release.",
       },
     }),
 
