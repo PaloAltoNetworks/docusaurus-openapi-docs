@@ -1,0 +1,43 @@
+name: Canary Beta Release
+
+on:
+  push:
+    branches:
+      - v2.0.0
+    paths:
+      - packages/**
+
+permissions:
+  contents: read
+
+jobs:
+  publish-canary:
+    name: Publish Canary Beta
+    runs-on: ubuntu-latest
+    if: ${{ github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' && github.ref == 'refs/heads/v2.0.0' && github.event_name == 'push' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Needed to get the commit number with "git rev-list --count HEAD"
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: yarn
+      - name: Prepare git
+        run: |
+          git config --global user.name "Steven Serrata"
+          git config --global user.email "sserrata@paloaltonetworks.com"
+          git fetch
+          git checkout main
+          echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" >> .npmrc
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+      - name: Installation
+        run: yarn && yarn build-packages
+      - name: Publish Canary release
+        run: |
+          yarn canaryBeta
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
