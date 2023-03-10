@@ -17,7 +17,7 @@ jobs:
     if: ${{ github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' && github.ref == 'refs/heads/main' && github.event_name == 'push' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # v3
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0 # Needed to get the commit number with "git rev-list --count HEAD"
       - name: Set up Node
@@ -32,9 +32,6 @@ jobs:
           git fetch
           git checkout main
           echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" >> .npmrc
-          cat .npmrc
-          echo "npm whoami"
-          npm whoami
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
       - name: Installation
