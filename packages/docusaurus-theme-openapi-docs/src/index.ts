@@ -28,9 +28,48 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
       return path.resolve(__dirname, "..", "src", "theme");
     },
 
-    configureWebpack() {
+    configureWebpack(_, isServer, utils) {
+      const { getStyleLoaders } = utils;
+      const isProd = process.env.NODE_ENV === "production";
       return {
         plugins: [new NodePolyfillPlugin()],
+        module: {
+          rules: [
+            {
+              test: /\.s[ca]ss$/,
+              oneOf: [
+                {
+                  test: /\.module\.s[ca]ss$/,
+                  use: [
+                    ...getStyleLoaders(isServer, {
+                      modules: {
+                        localIdentName: isProd
+                          ? `[local]_[hash:base64:4]`
+                          : `[local]_[path][name]`,
+                        exportOnlyLocals: isServer,
+                      },
+                      importLoaders: 2,
+                      sourceMap: !isProd,
+                    }),
+                    {
+                      loader: require.resolve("sass-loader"),
+                      options: {},
+                    },
+                  ],
+                },
+                {
+                  use: [
+                    ...getStyleLoaders(isServer, {}),
+                    {
+                      loader: require.resolve("sass-loader"),
+                      options: {},
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
     },
   };
