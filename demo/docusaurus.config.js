@@ -190,11 +190,9 @@ const config = {
         indexName: "docusaurus-openapi",
       },
       announcementBar: {
-        id: "v2_announcement",
-        content: "Preview for upcoming v2.0.0 release. Stay tuned!",
-        backgroundColor: "#fafbfc",
-        textColor: "#091E42",
-        isCloseable: true,
+        id: "announcementBar_1",
+        content:
+          "🥳 Support for Docusaurus v2.3.0 is now available in v2.0.0-beta. See badges/releases for latest beta release.",
       },
     }),
 
