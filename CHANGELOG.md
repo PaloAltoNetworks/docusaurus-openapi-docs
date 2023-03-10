@@ -1,3 +1,15 @@
+## 2.0.0-beta.1 (Mar 10, 2023)
+
+High level enhancements
+
+- Added sass loader to theme webpack config
+
+Other enhancements and bug fixes
+
+- Checkout v2.0.0 instead of main ([#486](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/486))
+- Add sass loader to theme webpack config ([#484](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/484))
+- Add canary support to v2 ([#485](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/485))
+
 ## 2.0.0-beta.0 (Mar 9, 2023)
 
 High level enhancements
