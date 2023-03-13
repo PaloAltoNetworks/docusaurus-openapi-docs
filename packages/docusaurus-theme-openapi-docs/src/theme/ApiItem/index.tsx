@@ -17,11 +17,10 @@ import { createPersistanceMiddleware } from "@theme/ApiDemoPanel/persistanceMidd
 import DocItemLayout from "@theme/ApiItem/Layout";
 import type { Props } from "@theme/DocItem";
 import DocItemMetadata from "@theme/DocItem/Metadata";
-import clsx from "clsx";
+import Split from "@uiw/react-split";
 import { ServerObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import type { ApiItem as ApiItemType } from "docusaurus-plugin-openapi-docs/src/types";
-import Split from "@uiw/react-split";
 /* eslint-disable import/no-extraneous-dependencies*/
 import type {
   DocFrontMatter,
