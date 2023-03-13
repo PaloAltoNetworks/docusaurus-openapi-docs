@@ -1,0 +1,17 @@
+.openapi-doc__left-panel,
+.openapi-doc__right-panel {
+  min-width: 350px;
+}
+
+.w-split.openapi-doc__split-panel-container {
+  .w-split-bar {
+    margin: 0 0.5rem;
+    border-radius: var(--ifm-global-radius);
+    background: var(--ifm-toc-border-color);
+    box-shadow: none;
+
+    &:hover {
+      background: var(--ifm-color-primary);
+    }
+  }
+}

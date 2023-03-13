@@ -44,6 +44,7 @@ interface ApiFrontMatter extends DocFrontMatter {
 
 export default function ApiItem(props: Props): JSX.Element {
   const docHtmlClassName = `docs-doc-id-${props.content.metadata.unversionedId}`;
+  console.log({ props });
   const MDXComponent = props.content;
   const { frontMatter } = MDXComponent;
   const { info_path: infoPath } = frontMatter as DocFrontMatter;
@@ -133,11 +134,11 @@ export default function ApiItem(props: Props): JSX.Element {
           <DocItemMetadata />
           <DocItemLayout>
             <Provider store={store2}>
-              <Split>
-                <div style={{ minWidth: "30" }}>
+              <Split className="openapi-doc__split-panel-container">
+                <div className="openapi-doc__left-panel">
                   <MDXComponent />
                 </div>
-                <div style={{ minWidth: "30" }}>
+                <div className="openapi-doc__right-panel">
                   <BrowserOnly fallback={<div>Loading...</div>}>
                     {() => {
                       return <ApiDemoPanel item={api} infoPath={infoPath} />;
