@@ -21,6 +21,7 @@ import clsx from "clsx";
 import { ServerObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import type { ApiItem as ApiItemType } from "docusaurus-plugin-openapi-docs/src/types";
+import Split from "@uiw/react-split";
 /* eslint-disable import/no-extraneous-dependencies*/
 import type {
   DocFrontMatter,
@@ -133,18 +134,18 @@ export default function ApiItem(props: Props): JSX.Element {
           <DocItemMetadata />
           <DocItemLayout>
             <Provider store={store2}>
-              <div className={clsx("row", "theme-api-markdown")}>
-                <div className="col col--7">
+              <Split>
+                <div style={{ minWidth: "30" }}>
                   <MDXComponent />
                 </div>
-                <div className="col col--5">
+                <div style={{ minWidth: "30" }}>
                   <BrowserOnly fallback={<div>Loading...</div>}>
                     {() => {
                       return <ApiDemoPanel item={api} infoPath={infoPath} />;
                     }}
                   </BrowserOnly>
                 </div>
-              </div>
+              </Split>
             </Provider>
           </DocItemLayout>
         </HtmlClassNameProvider>
