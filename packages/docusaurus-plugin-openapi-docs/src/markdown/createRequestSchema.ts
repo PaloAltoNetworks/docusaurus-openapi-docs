@@ -34,7 +34,7 @@ export function mergeAllOf(allOf: SchemaObject[]) {
         return true;
       },
     },
-    ignoreAdditionalProperties: false,
+    ignoreAdditionalProperties: true,
   });
 
   const required = allOf.reduce((acc, cur) => {
