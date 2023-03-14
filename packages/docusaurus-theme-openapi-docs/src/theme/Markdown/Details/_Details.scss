@@ -33,3 +33,8 @@
 .openapi-markdown__details p {
   margin-bottom: 0;
 }
+
+/* Hide defaul details marker by default */
+details summary::-webkit-details-marker {
+  display: none;
+}
