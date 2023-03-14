@@ -46,7 +46,7 @@ export interface APIOptions {
 
 export interface SidebarOptions {
   groupPathsBy?: string;
-  categoryLinkSource?: string;
+  categoryLinkSource?: "info" | "tag" | "auto";
   customProps?: { [key: string]: unknown };
   sidebarCollapsible?: boolean;
   sidebarCollapsed?: boolean;
