@@ -3,9 +3,18 @@
   min-width: 350px;
 }
 
+.openapi-doc__left-panel {
+  width: 55%;
+}
+
+.openapi-doc__right-panel {
+  width: 45%;
+}
+
 .w-split.openapi-doc__split-panel-container {
   .w-split-bar {
-    margin: 0 0.5rem;
+    width: 3px;
+    margin: 0 1rem;
     border-radius: var(--ifm-global-radius);
     background: var(--ifm-toc-border-color);
     box-shadow: none;
