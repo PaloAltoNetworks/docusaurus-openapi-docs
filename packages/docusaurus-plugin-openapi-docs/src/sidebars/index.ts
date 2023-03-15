@@ -130,6 +130,7 @@ function groupByTags(
       );
 
       // TODO: perhaps move this into a getLinkConfig() function
+      // Default to no link config (spindowns only)
       let linkConfig = undefined;
       if (taggedInfoObject !== undefined && categoryLinkSource === "info") {
         linkConfig = {
@@ -151,8 +152,7 @@ function groupByTags(
         } as SidebarItemCategoryLinkConfig;
       }
 
-      // Default behavior
-      if (categoryLinkSource === undefined) {
+      if (categoryLinkSource === "auto") {
         linkConfig = {
           type: "generated-index" as "generated-index",
           title: tag,
