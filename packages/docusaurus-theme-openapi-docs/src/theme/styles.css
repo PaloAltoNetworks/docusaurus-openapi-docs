@@ -155,14 +155,6 @@
   margin-right: 1rem;
 }
 
-/* Code block */
-
-.theme-api-markdown code {
-  max-width: 600px;
-  max-height: 500px;
-  overflow: auto;
-}
-
 /* Version button */
 
 .version-button div {
