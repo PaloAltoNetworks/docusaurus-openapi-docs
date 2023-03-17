@@ -111,6 +111,16 @@ export const languageSet: Language[] = [
     },
     variant: "OkHttp",
   },
+  {
+    highlight: "powershell",
+    language: "powershell",
+    logoClass: "powershell",
+    options: {
+      followRedirect: true,
+      trimRequestBody: true,
+    },
+    variant: "RestMethod",
+  },
 ];
 
 export interface Props {
