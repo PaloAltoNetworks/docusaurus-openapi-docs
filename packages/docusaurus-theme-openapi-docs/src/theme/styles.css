@@ -17,10 +17,14 @@
   --openapi-card-border-radius: var(--ifm-pre-border-radius);
   --openapi-input-border: var(--ifm-color-primary);
   --openapi-input-background: var(--openapi-card-background-color);
+  --bash-background-color: transparent;
+  --bash-border-radius: none;
 }
 
 [data-theme="dark"] {
   --openapi-card-background-color: var(--ifm-color-gray-900) !important;
+  --bash-background-color: lightgrey;
+  --bash-border-radius: 20px;
 }
 
 .docs-wrapper {
@@ -319,7 +323,9 @@
   content: "";
   width: 28px;
   height: 28px;
-  background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/bash/bash-original.svg");
+  background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/bash/bash-plain.svg");
+  background-color: var(--bash-background-color);
+  border-radius: var(--bash-border-radius);
   margin-block: auto;
 }
 
@@ -467,6 +473,32 @@
 }
 
 .language-java {
+  max-height: 500px;
+  overflow: auto;
+}
+
+.code__tab--powershell::after {
+  content: "";
+  width: 28px;
+  height: 28px;
+  background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/windows8/windows8-original.svg");
+  margin-block: auto;
+}
+
+.code__tab--powershell {
+  color: var(--ifm-color-info);
+  padding-left: 1.4rem;
+  padding-right: 1.4rem;
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
+}
+
+.code__tab--powershell.tabs__item--active {
+  border-bottom-color: var(--ifm-color-info);
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+.language-powershell {
   max-height: 500px;
   overflow: auto;
 }
