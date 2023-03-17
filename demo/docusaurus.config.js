@@ -166,12 +166,12 @@ const config = {
           language: "ruby",
           logoClass: "ruby",
         },
-        // {
-        //   highlight: "csharp",
-        //   language: "csharp",
-        //   logoClass: "csharp",
-        //   variant: "httpclient",
-        // },
+        {
+          highlight: "csharp",
+          language: "csharp",
+          logoClass: "csharp",
+          variant: "httpclient",
+        },
         {
           highlight: "php",
           language: "php",
@@ -183,11 +183,11 @@ const config = {
           logoClass: "java",
           variant: "unirest",
         },
-        {
-          highlight: "powershell",
-          language: "powershell",
-          logoClass: "powershell",
-        },
+        // {
+        //   highlight: "powershell",
+        //   language: "powershell",
+        //   logoClass: "powershell",
+        // },
       ],
       algolia: {
         apiKey: "441074cace987cbf4640c039ebed303c",
