@@ -475,3 +475,8 @@
 div:has(> ul.openapi-tabs__security-schemes) {
   max-width: 100%;
 }
+
+.openapi-demo__code-block code {
+  max-height: 500px;
+  overflow: auto;
+}

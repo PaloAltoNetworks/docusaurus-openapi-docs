@@ -62,7 +62,10 @@ function Response() {
           </button>
         </div>
       </summary>
-      <CodeBlock language={response.startsWith("<") ? `xml` : `json`}>
+      <CodeBlock
+        language={response.startsWith("<") ? `xml` : `json`}
+        className="openapi-demo__code-block"
+      >
         {prettyResponse || "No Response"}
       </CodeBlock>
     </details>
