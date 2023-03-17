@@ -183,11 +183,11 @@ const config = {
           logoClass: "java",
           variant: "unirest",
         },
-        // {
-        //   highlight: "powershell",
-        //   language: "powershell",
-        //   logoClass: "powershell",
-        // },
+        {
+          highlight: "powershell",
+          language: "powershell",
+          logoClass: "powershell",
+        },
       ],
       algolia: {
         apiKey: "441074cace987cbf4640c039ebed303c",
