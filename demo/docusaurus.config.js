@@ -148,7 +148,7 @@ const config = {
           highlight: "python",
           language: "python",
           logoClass: "python",
-          variant: "http.client",
+          variant: "requests",
         },
         {
           highlight: "go",
