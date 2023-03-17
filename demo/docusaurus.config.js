@@ -166,12 +166,12 @@ const config = {
           language: "ruby",
           logoClass: "ruby",
         },
-        {
-          highlight: "csharp",
-          language: "csharp",
-          logoClass: "csharp",
-          variant: "httpclient",
-        },
+        // {
+        //   highlight: "csharp",
+        //   language: "csharp",
+        //   logoClass: "csharp",
+        //   variant: "httpclient",
+        // },
         {
           highlight: "php",
           language: "php",
