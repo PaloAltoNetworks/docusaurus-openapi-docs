@@ -38,9 +38,7 @@ export function createContactInfo(contact: ContactObject) {
       }),
       guard(url, () =>
         create("span", {
-          children: [
-            `URL: [${url}](${url})`,
-          ],
+          children: [`URL: [${url}](${url})`],
         })
       ),
     ],
