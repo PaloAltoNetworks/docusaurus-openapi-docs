@@ -1,3 +1,18 @@
+## 1.7.0 (Mar 20, 2023)
+
+High level enhancements
+
+- Added support for powershell
+- Now including `language / variant` in code block title.
+
+Other enhancements and bug fixes
+
+- [Bug] Fix double scrollbars ([#504](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/504))
+- [Enhancement] Add support for powershell ([#507](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/507))
+- Bump webpack from 5.75.0 to 5.76.0 ([#498](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/498))
+- [Bug] Set ignoreAdditionalProperties back to true ([#493](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/493))
+- [Bug] Add bold, svg and ensure parity between opening/closing regex ([#479](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/479))
+
 ## 1.6.1 (Feb 28, 2023)
 
 High level enhancements
