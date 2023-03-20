@@ -103,7 +103,7 @@ function Response() {
               default
             >
               <CodeBlock
-                className="openapi-response__status-code"
+                className="openapi-demo__code-block openapi-response__status-code"
                 language={response.startsWith("<") ? `xml` : `json`}
               >
                 {prettyResponse || "No Response"}
@@ -112,7 +112,7 @@ function Response() {
             {/* @ts-ignore */}
             <TabItem label="Headers" value="headers">
               <CodeBlock
-                className="openapi-response__status-headers"
+                className="openapi-demo__code-block openapi-response__status-headers"
                 language={response.startsWith("<") ? `xml` : `json`}
               >
                 {JSON.stringify(headers, undefined, 2)}
