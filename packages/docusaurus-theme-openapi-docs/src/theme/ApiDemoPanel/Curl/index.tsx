@@ -108,6 +108,16 @@ export const languageSet: Language[] = [
     },
     variant: "OkHttp",
   },
+  {
+    highlight: "powershell",
+    language: "powershell",
+    logoClass: "powershell",
+    options: {
+      followRedirect: true,
+      trimRequestBody: true,
+    },
+    variant: "RestMethod",
+  },
 ];
 
 export interface Props {
@@ -278,6 +288,7 @@ function Curl({ postman, codeSamples }: Props) {
               <CodeBlock
                 language={lang.highlight}
                 className="openapi-demo__code-block"
+                title={`${lang.language} / ${lang.variant}`}
               >
                 {codeText}
               </CodeBlock>

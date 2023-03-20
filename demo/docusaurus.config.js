@@ -136,7 +136,7 @@ const config = {
         copyright: `Copyright © ${new Date().getFullYear()} Palo Alto Networks, Inc. Built with Docusaurus ${DOCUSAURUS_VERSION}.`,
       },
       prism: {
-        additionalLanguages: ["ruby", "csharp", "php", "java"],
+        additionalLanguages: ["ruby", "csharp", "php", "java", "powershell"],
       },
       languageTabs: [
         {
@@ -148,7 +148,7 @@ const config = {
           highlight: "python",
           language: "python",
           logoClass: "python",
-          variant: "http.client",
+          variant: "requests",
         },
         {
           highlight: "go",
@@ -161,27 +161,32 @@ const config = {
           logoClass: "nodejs",
           variant: "axios",
         },
-        // {
-        //   highlight: "ruby",
-        //   language: "ruby",
-        //   logoClass: "ruby",
-        // },
+        {
+          highlight: "ruby",
+          language: "ruby",
+          logoClass: "ruby",
+        },
         {
           highlight: "csharp",
           language: "csharp",
           logoClass: "csharp",
           variant: "httpclient",
         },
-        // {
-        //   highlight: "php",
-        //   language: "php",
-        //   logoClass: "php",
-        // },
+        {
+          highlight: "php",
+          language: "php",
+          logoClass: "php",
+        },
         {
           highlight: "java",
           language: "java",
           logoClass: "java",
           variant: "unirest",
+        },
+        {
+          highlight: "powershell",
+          language: "powershell",
+          logoClass: "powershell",
         },
       ],
       algolia: {
