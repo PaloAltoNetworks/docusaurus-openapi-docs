@@ -81,12 +81,48 @@ function Response() {
           </button>
         </div>
       </summary>
-      <CodeBlock
-        language={response.startsWith("<") ? `xml` : `json`}
-        className="openapi-demo__code-block"
+      <div
+        style={{
+          backgroundColor: prismTheme.plain.backgroundColor,
+          paddingLeft: "1rem",
+          paddingTop: "1rem",
+          ...((prettyResponse === "Fetching..." || !code) && {
+            paddingBottom: "1rem",
+          }),
+        }}
       >
-        {prettyResponse || "No Response"}
-      </CodeBlock>
+        {code && prettyResponse !== "Fetching..." ? (
+          <SchemaTabs lazy>
+            {/* @ts-ignore */}
+            <TabItem
+              label={` ${code}`}
+              value="body"
+              attributes={{
+                className: clsx("openapi-response__dot", responseStatusClass),
+              }}
+              default
+            >
+              <CodeBlock
+                className="openapi-response__status-code"
+                language={response.startsWith("<") ? `xml` : `json`}
+              >
+                {prettyResponse || "No Response"}
+              </CodeBlock>
+            </TabItem>
+            {/* @ts-ignore */}
+            <TabItem label="Headers" value="headers">
+              <CodeBlock
+                className="openapi-response__status-headers"
+                language={response.startsWith("<") ? `xml` : `json`}
+              >
+                {JSON.stringify(headers, undefined, 2)}
+              </CodeBlock>
+            </TabItem>
+          </SchemaTabs>
+        ) : (
+          prettyResponse || "No Response"
+        )}
+      </div>
     </details>
   );
 }
