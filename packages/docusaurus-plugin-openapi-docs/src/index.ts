@@ -209,12 +209,10 @@ custom_edit_url: null
 
 {{{markdown}}}
 
-\`\`\`mdx-code-block
 import DocCardList from '@theme/DocCardList';
 import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
 
 <DocCardList items={useCurrentSidebarCategory().items}/>
-\`\`\`
       `;
 
       const tagMdTemplate = `---
@@ -226,12 +224,10 @@ custom_edit_url: null
 
 {{{markdown}}}
 
-\`\`\`mdx-code-block
 import DocCardList from '@theme/DocCardList';
 import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
 
 <DocCardList items={useCurrentSidebarCategory().items}/>
-\`\`\`
       `;
 
       loadedApi.map(async (item) => {
