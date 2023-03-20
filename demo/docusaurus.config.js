@@ -136,7 +136,7 @@ const config = {
         copyright: `Copyright © ${new Date().getFullYear()} Palo Alto Networks, Inc. Built with Docusaurus ${DOCUSAURUS_VERSION}.`,
       },
       prism: {
-        additionalLanguages: ["ruby", "csharp", "php", "java"],
+        additionalLanguages: ["ruby", "csharp", "php", "java", "powershell"],
       },
       languageTabs: [
         {
@@ -148,7 +148,7 @@ const config = {
           highlight: "python",
           language: "python",
           logoClass: "python",
-          variant: "http.client",
+          variant: "requests",
         },
         {
           highlight: "go",
@@ -161,27 +161,32 @@ const config = {
           logoClass: "nodejs",
           variant: "axios",
         },
-        // {
-        //   highlight: "ruby",
-        //   language: "ruby",
-        //   logoClass: "ruby",
-        // },
+        {
+          highlight: "ruby",
+          language: "ruby",
+          logoClass: "ruby",
+        },
         {
           highlight: "csharp",
           language: "csharp",
           logoClass: "csharp",
           variant: "httpclient",
         },
-        // {
-        //   highlight: "php",
-        //   language: "php",
-        //   logoClass: "php",
-        // },
+        {
+          highlight: "php",
+          language: "php",
+          logoClass: "php",
+        },
         {
           highlight: "java",
           language: "java",
           logoClass: "java",
           variant: "unirest",
+        },
+        {
+          highlight: "powershell",
+          language: "powershell",
+          logoClass: "powershell",
         },
       ],
       algolia: {
@@ -233,7 +238,7 @@ const config = {
             template: "api.mustache", // Customize API MDX with mustache template
             downloadUrl:
               "https://raw.githubusercontent.com/PaloAltoNetworks/docusaurus-openapi-docs/main/demo/examples/petstore.yaml",
-            hideSendButton: true,
+            hideSendButton: false,
           },
           cos: {
             specPath: "examples/openapi-cos.json",

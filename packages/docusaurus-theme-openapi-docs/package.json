@@ -45,7 +45,7 @@
   "dependencies": {
     "@docusaurus/theme-common": ">=2.0.1 <2.3.0",
     "@mdx-js/react": "^1.6.21",
-    "@paloaltonetworks/postman-code-generators": "^1.1.15",
+    "@paloaltonetworks/postman-code-generators": "1.1.15-patch.2",
     "@paloaltonetworks/postman-collection": "^4.1.0",
     "@reduxjs/toolkit": "^1.7.1",
     "buffer": "^6.0.3",

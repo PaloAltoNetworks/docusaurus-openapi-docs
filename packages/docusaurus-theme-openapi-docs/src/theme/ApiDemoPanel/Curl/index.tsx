@@ -111,6 +111,16 @@ export const languageSet: Language[] = [
     },
     variant: "OkHttp",
   },
+  {
+    highlight: "powershell",
+    language: "powershell",
+    logoClass: "powershell",
+    options: {
+      followRedirect: true,
+      trimRequestBody: true,
+    },
+    variant: "RestMethod",
+  },
 ];
 
 export interface Props {
@@ -280,7 +290,13 @@ function Curl({ postman, codeSamples }: Props) {
               }
               attributes={{ className: `code__tab--${lang.logoClass}` }}
             >
-              <CodeBlock language={lang.highlight}>{codeText}</CodeBlock>
+              <CodeBlock
+                language={lang.highlight}
+                className={styles.codeBlock}
+                title={`${lang.language} / ${lang.variant}`}
+              >
+                {codeText}
+              </CodeBlock>
             </CodeTab>
           );
         })}
