@@ -209,6 +209,28 @@
   }
 }
 
+.language-powershell {
+  max-height: 500px;
+  overflow: auto;
+}
+
+.openapi-tabs__code-item--powershell {
+  color: var(--ifm-color-info);
+
+  &::after {
+    content: "";
+    width: 28px;
+    height: 28px;
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/windows8/windows8-original.svg");
+    margin-block: auto;
+  }
+
+  &.active {
+    border-bottom-color: var(--ifm-color-success);
+    background-color: var(--ifm-color-emphasis-100);
+  }
+}
+
 @media only screen and (min-width: 768px) and (max-width: 996px) {
   .openapi-tabs__code-list {
     justify-content: space-around;
