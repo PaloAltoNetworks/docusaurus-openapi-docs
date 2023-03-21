@@ -29,16 +29,15 @@ export function createContactInfo(contact: ContactObject) {
         children: [
           guard(name, () => `${name}: `),
           guard(email, () =>
-            create("a", {
-              href: `mailto:${email}`,
-              children: `${email}`,
+            create("span", {
+              children: `\nmailto:${email}\n`,
             })
           ),
         ],
       }),
       guard(url, () =>
         create("span", {
-          children: [`URL: [${url}](${url})`],
+          children: [`\nURL: [${url}](${url})\n`],
         })
       ),
     ],
