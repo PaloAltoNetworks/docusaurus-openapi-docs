@@ -5,10 +5,55 @@ on:
     branches: [main, v2.0.0]
 
 jobs:
-  analyze:
-    if: github.repository_owner	== 'PaloAltoNetworks'
-    name: Analyze
+  precheck:
+    name: Precheck
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    outputs:
+      is-org-member-result: ${{ steps.is-org-member.outputs.is-org-member-result }}
+    steps:
+      - name: Check if actor is org member
+        id: is-org-member
+        run: echo "is-org-member-result=$(gh api -X GET orgs/PaloAltoNetworks/memberships/${{ github.actor }} | jq -r .message)" >> "$GITHUB_OUTPUT"
+    env:
+      GH_TOKEN: ${{ secrets.PAT }}
+
+  analyze:
+    if: github.repository_owner	== 'PaloAltoNetworks' && needs.precheck.outputs.is-org-member-result == 'null'
+    name: Analyze
+    needs: precheck
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: true
+      matrix:
+        language: ["javascript"]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: ${{ matrix.language }}
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+
+  analyze_unsafe:
+    if: github.repository_owner	== 'PaloAltoNetworks' && needs.precheck.outputs.is-org-member-result != 'null'
+    name: Analyze Unsafe
+    needs: precheck
+    runs-on: ubuntu-latest
+    environment: default
     permissions:
       contents: read
       security-events: write
@@ -34,7 +79,10 @@ jobs:
 
   build:
     name: Build
-    needs: analyze
+    needs: [analyze, analyze_unsafe]
+    if: |
+      !failure() && !cancelled() && 
+      (success('analyze') || success('analyze_unsafe'))
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -68,6 +116,7 @@ jobs:
   deploy:
     name: Deploy
     needs: build
+    if: ${{ !failure() && !cancelled() }}
     runs-on: ubuntu-latest
 
     steps:
