@@ -35,15 +35,19 @@ export function createAuthentication(securitySchemes: SecuritySchemeObject) {
             create("td", {
               children: [
                 guard(tokenUrl, () =>
-                  create("p", { children: `Token URL: ${tokenUrl}` })
+                  create("p", {
+                    children: `Token URL: [${tokenUrl}](${tokenUrl})`,
+                  })
                 ),
                 guard(authorizationUrl, () =>
                   create("p", {
-                    children: `Authorization URL: ${authorizationUrl}`,
+                    children: `Authorization URL: [${authorizationUrl}](${authorizationUrl})`,
                   })
                 ),
                 guard(refreshUrl, () =>
-                  create("p", { children: `Refresh URL: ${refreshUrl}` })
+                  create("p", {
+                    children: `Refresh URL: [${refreshUrl}](${refreshUrl})`,
+                  })
                 ),
                 create("span", { children: "Scopes:" }),
                 create("ul", {
@@ -129,7 +133,9 @@ export function createAuthentication(securitySchemes: SecuritySchemeObject) {
                     create("tr", {
                       children: [
                         create("th", { children: "OpenID Connect URL:" }),
-                        create("td", { children: openIdConnectUrl }),
+                        create("td", {
+                          children: `[${openIdConnectUrl}](${openIdConnectUrl})`,
+                        }),
                       ],
                     })
                   ),

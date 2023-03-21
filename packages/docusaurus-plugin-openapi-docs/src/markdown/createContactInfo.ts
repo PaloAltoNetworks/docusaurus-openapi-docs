@@ -26,14 +26,7 @@ export function createContactInfo(contact: ContactObject) {
         children: "Contact",
       }),
       create("span", {
-        children: [
-          guard(name, () => `${name}: `),
-          guard(email, () =>
-            create("span", {
-              children: `${email}`,
-            })
-          ),
-        ],
+        children: [guard(name, () => `${name}: [${email}](mailto:${email})`)],
       }),
       guard(url, () =>
         create("span", {

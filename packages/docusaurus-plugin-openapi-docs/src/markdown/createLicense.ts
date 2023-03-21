@@ -24,9 +24,8 @@ export function createLicense(license: LicenseObject) {
         children: "License",
       }),
       guard(url, () =>
-        create("a", {
-          href: url,
-          children: name ?? url,
+        create("span", {
+          children: `[${name ?? url}](${url})`,
         })
       ),
     ],
