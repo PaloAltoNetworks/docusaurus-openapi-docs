@@ -1,3 +1,24 @@
+## 2.0.0-beta.2 (Mar 20, 2023)
+
+High level enhancements
+
+- Added support for powershell
+- Added `categorySourceLink` "auto" option
+- Restyled tree lines to match toc-border-color
+
+Other enhancements and bug fixes
+
+- Add powershell styles
+- Remove old styles.css
+- [Enhancement] Add support for powershell ([#507](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/507))
+- Resolve conflicts
+- Bump webpack from 5.75.0 to 5.76.0 ([#498](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/498))
+- Breaking: Default categoryLinkSource to none, add `auto` option ([#495](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/495))
+- Hide details marker ([#497](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/497))
+- Set ignoreAdditionalProperties back to true ([#493](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/493))
+- [UI Enhancement] Restyle tree lines ([#489](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/489))
+- Update banner and badges
+
 ## 2.0.0-beta.1 (Mar 10, 2023)
 
 High level enhancements
