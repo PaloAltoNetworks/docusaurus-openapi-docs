@@ -36,27 +36,9 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
         module: {
           rules: [
             {
-              test: /\.s[ca]ss$/,
+              test: /\styles.scss$/,
+              include: path.resolve(__dirname, "..", "src", "theme"),
               oneOf: [
-                {
-                  test: /\.module\.s[ca]ss$/,
-                  use: [
-                    ...getStyleLoaders(isServer, {
-                      modules: {
-                        localIdentName: isProd
-                          ? `[local]_[hash:base64:4]`
-                          : `[local]_[path][name]`,
-                        exportOnlyLocals: isServer,
-                      },
-                      importLoaders: 2,
-                      sourceMap: !isProd,
-                    }),
-                    {
-                      loader: require.resolve("sass-loader"),
-                      options: {},
-                    },
-                  ],
-                },
                 {
                   use: [
                     ...getStyleLoaders(isServer, {}),
