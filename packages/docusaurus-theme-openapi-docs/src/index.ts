@@ -30,7 +30,6 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
 
     configureWebpack(_, isServer, utils) {
       const { getStyleLoaders } = utils;
-      console.log(path.resolve(__dirname, "theme/styles.scss"));
       return {
         plugins: [new NodePolyfillPlugin()],
         module: {
