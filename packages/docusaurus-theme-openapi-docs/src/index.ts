@@ -30,7 +30,6 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
 
     configureWebpack(_, isServer, utils) {
       const { getStyleLoaders } = utils;
-      const isProd = process.env.NODE_ENV === "production";
       return {
         plugins: [new NodePolyfillPlugin()],
         module: {
