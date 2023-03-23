@@ -36,16 +36,12 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
           rules: [
             {
               test: /styles.scss$/,
-              include: path.resolve(__dirname, "theme/styles.scss"),
-              oneOf: [
+              include: path.resolve(__dirname, "theme", "styles.scss"),
+              use: [
+                ...getStyleLoaders(isServer, {}),
                 {
-                  use: [
-                    ...getStyleLoaders(isServer, {}),
-                    {
-                      loader: require.resolve("sass-loader"),
-                      options: {},
-                    },
-                  ],
+                  loader: require.resolve("sass-loader"),
+                  options: {},
                 },
               ],
             },
