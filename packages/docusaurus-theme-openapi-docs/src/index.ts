@@ -16,12 +16,16 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
     name: "docusaurus-theme-openapi",
 
     getClientModules() {
-      const modules = [require.resolve("./theme/styles.scss")];
+      const modules = [
+        require.resolve(
+          path.join(__dirname, "..", "lib", "theme", "styles.scss")
+        ),
+      ];
       return modules;
     },
 
     getThemePath() {
-      return path.join(__dirname, "..", "lib-next", "theme");
+      return path.join(__dirname, "..", "lib", "theme");
     },
 
     getTypeScriptThemePath() {
