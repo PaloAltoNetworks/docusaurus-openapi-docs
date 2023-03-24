@@ -35,8 +35,8 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
         module: {
           rules: [
             {
-              test: /styles.scss$/,
-              include: path.resolve(__dirname, "theme", "styles.scss"),
+              test: /\.s[ca]ss$/,
+              include: path.resolve(__dirname, "..", "lib", "theme"),
               use: [
                 ...getStyleLoaders(isServer, {}),
                 {
