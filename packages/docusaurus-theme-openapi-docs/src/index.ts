@@ -42,7 +42,7 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
         plugins: [new NodePolyfillPlugin()],
         module: {
           rules: [
-            !sassLoader
+            sassLoader.length === 0
               ? {
                   test: /\.s[ac]ss$/,
                   include: path.resolve(__dirname, "..", "lib", "theme"),
