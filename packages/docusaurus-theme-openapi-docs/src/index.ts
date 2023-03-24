@@ -33,22 +33,28 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
     },
 
     configureWebpack(_, isServer, utils) {
+      const rules: any = _.module?.rules ?? [];
+      const sassLoader = rules.filter((r: any) => {
+        return String(r.test) === String(/\.s[ca]ss$/);
+      });
       const { getStyleLoaders } = utils;
       return {
         plugins: [new NodePolyfillPlugin()],
         module: {
           rules: [
-            {
-              test: /^styles\.scss$/,
-              include: path.resolve(__dirname, "..", "lib", "theme"),
-              use: [
-                ...getStyleLoaders(isServer, {}),
-                {
-                  loader: require.resolve("sass-loader"),
-                  options: {},
-                },
-              ],
-            },
+            !sassLoader
+              ? {
+                  test: /\.s[ac]ss$/,
+                  include: path.resolve(__dirname, "..", "lib", "theme"),
+                  use: [
+                    ...getStyleLoaders(isServer, {}),
+                    {
+                      loader: require.resolve("sass-loader"),
+                      options: {},
+                    },
+                  ],
+                }
+              : {},
           ],
         },
       };
