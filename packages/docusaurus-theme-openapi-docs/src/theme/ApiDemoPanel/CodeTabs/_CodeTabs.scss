@@ -1,3 +1,15 @@
+:root {
+  --bash-background-color: transparent;
+  --bash-border-radius: none;
+  --code-tab-logo-width: 26px;
+  --code-tab-logo-height: 26px;
+}
+
+[data-theme="dark"] {
+  --bash-background-color: lightgrey;
+  --bash-border-radius: 20px;
+}
+
 .openapi-tabs__code-list-container {
   display: table-row-group;
 }
@@ -21,8 +33,8 @@
 
   &::after {
     content: "";
-    width: 28px;
-    height: 28px;
+    width: var(--code-tab-logo-width);
+    height: var(--code-tab-logo-height);
     background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg");
     margin-block: auto;
   }
@@ -43,8 +55,8 @@
 
   &::after {
     content: "";
-    width: 28px;
-    height: 28px;
+    width: var(--code-tab-logo-width);
+    height: var(--code-tab-logo-height);
     background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/go/go-original-wordmark.svg");
     margin-block: auto;
   }
@@ -65,8 +77,8 @@
 
   &::after {
     content: "";
-    width: 28px;
-    height: 28px;
+    width: var(--code-tab-logo-width);
+    height: var(--code-tab-logo-height);
     background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg");
     margin-block: auto;
   }
@@ -87,10 +99,12 @@
 
   &::after {
     content: "";
-    width: 28px;
-    height: 28px;
-    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg");
+    width: var(--code-tab-logo-width);
+    height: var(--code-tab-logo-height);
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/bash/bash-plain.svg");
     margin-block: auto;
+    background-color: var(--bash-background-color);
+    border-radius: var(--bash-border-radius);
   }
 
   &.active {
@@ -109,8 +123,8 @@
 
   &::after {
     content: "";
-    width: 28px;
-    height: 28px;
+    width: var(--code-tab-logo-width);
+    height: var(--code-tab-logo-height);
     background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/ruby/ruby-plain.svg");
     margin-block: auto;
   }
@@ -131,8 +145,8 @@
 
   &::after {
     content: "";
-    width: 28px;
-    height: 28px;
+    width: var(--code-tab-logo-width);
+    height: var(--code-tab-logo-height);
     background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/csharp/csharp-original.svg");
     margin-block: auto;
   }
@@ -153,8 +167,8 @@
 
   &::after {
     content: "";
-    width: 28px;
-    height: 28px;
+    width: var(--code-tab-logo-width);
+    height: var(--code-tab-logo-height);
     background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/nodejs/nodejs-original.svg");
     margin-block: auto;
   }
@@ -175,8 +189,8 @@
 
   &::after {
     content: "";
-    width: 28px;
-    height: 28px;
+    width: var(--code-tab-logo-width);
+    height: var(--code-tab-logo-height);
     background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/php/php-original.svg");
     margin-block: auto;
   }
@@ -197,8 +211,8 @@
 
   &::after {
     content: "";
-    width: 28px;
-    height: 28px;
+    width: var(--code-tab-logo-width);
+    height: var(--code-tab-logo-height);
     background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg");
     margin-block: auto;
   }
@@ -219,8 +233,8 @@
 
   &::after {
     content: "";
-    width: 28px;
-    height: 28px;
+    width: var(--code-tab-logo-width);
+    height: var(--code-tab-logo-height);
     background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/windows8/windows8-original.svg");
     margin-block: auto;
   }
