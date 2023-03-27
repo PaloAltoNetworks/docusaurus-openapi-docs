@@ -14,6 +14,10 @@
   display: table-row-group;
 }
 
+.openapi-demo__code-block code {
+  max-height: 500px;
+}
+
 .openapi-tabs__code-item {
   margin-top: 0 !important;
   margin-right: 0.5rem;
@@ -45,11 +49,6 @@
   }
 }
 
-.language-python {
-  max-height: 500px;
-  overflow: auto;
-}
-
 .openapi-tabs__code-item--go {
   color: var(--ifm-color-info);
 
@@ -67,11 +66,6 @@
   }
 }
 
-.language-go {
-  max-height: 500px;
-  overflow: auto;
-}
-
 .openapi-tabs__code-item--javascript {
   color: var(--ifm-color-warning);
 
@@ -87,11 +81,6 @@
     border-bottom-color: var(--ifm-color-warning);
     background-color: var(--ifm-color-emphasis-100);
   }
-}
-
-.language-javascript {
-  max-height: 500px;
-  overflow: auto;
 }
 
 .openapi-tabs__code-item--bash {
@@ -113,11 +102,6 @@
   }
 }
 
-.language-bash {
-  max-height: 500px;
-  overflow: auto;
-}
-
 .openapi-tabs__code-item--ruby {
   color: var(--ifm-color-danger);
 
@@ -133,11 +117,6 @@
     border-bottom-color: var(--ifm-color-danger);
     background-color: var(--ifm-color-emphasis-100);
   }
-}
-
-.language-ruby {
-  max-height: 500px;
-  overflow: auto;
 }
 
 .openapi-tabs__code-item--csharp {
@@ -157,11 +136,6 @@
   }
 }
 
-.language-csharp {
-  max-height: 500px;
-  overflow: auto;
-}
-
 .openapi-tabs__code-item--nodejs {
   color: var(--ifm-color-success);
 
@@ -177,11 +151,6 @@
     border-bottom-color: var(--ifm-color-success);
     background-color: var(--ifm-color-emphasis-100);
   }
-}
-
-.language-nodejs {
-  max-height: 500px;
-  overflow: auto;
 }
 
 .openapi-tabs__code-item--php {
@@ -201,11 +170,6 @@
   }
 }
 
-.language-php {
-  max-height: 500px;
-  overflow: auto;
-}
-
 .openapi-tabs__code-item--java {
   color: var(--ifm-color-warning);
 
@@ -221,11 +185,6 @@
     border-bottom-color: var(--ifm-color-warning);
     background-color: var(--ifm-color-emphasis-100);
   }
-}
-
-.language-powershell {
-  max-height: 500px;
-  overflow: auto;
 }
 
 .openapi-tabs__code-item--powershell {
