@@ -144,6 +144,13 @@ function createItems(
         ? kebabCase(operationObject.operationId)
         : kebabCase(operationObject.summary);
 
+      const extensions = [];
+      for (const [key, value] of Object.entries(operationObject)) {
+        if (key.startsWith("x-")) {
+          extensions.push({ key, value });
+        }
+      }
+
       const servers =
         operationObject.servers ?? pathObject.servers ?? openapiData.servers;
 
@@ -224,9 +231,13 @@ function createItems(
           ...(options?.hideSendButton && {
             hide_send_button: options.hideSendButton,
           }),
+          ...(options?.showExtensions && {
+            show_extensions: options.showExtensions,
+          }),
         },
         api: {
           ...defaults,
+          ...(extensions.length > 0 && { extensions: extensions }),
           tags: operationObject.tags,
           method,
           path,
@@ -264,6 +275,13 @@ function createItems(
         ? kebabCase(operationObject.operationId)
         : kebabCase(operationObject.summary);
 
+      const extensions = [];
+      for (const [key, value] of Object.entries(operationObject)) {
+        if (key.startsWith("x-")) {
+          extensions.push({ key, value });
+        }
+      }
+
       const servers =
         operationObject.servers ?? pathObject.servers ?? openapiData.servers;
 
@@ -344,9 +362,13 @@ function createItems(
           ...(options?.hideSendButton && {
             hide_send_button: options.hideSendButton,
           }),
+          ...(options?.showExtensions && {
+            show_extensions: options.showExtensions,
+          }),
         },
         api: {
           ...defaults,
+          ...(extensions.length > 0 && { extensions: extensions }),
           tags: operationObject.tags,
           method,
           path,
