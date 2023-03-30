@@ -145,8 +145,10 @@ function createItems(
         : kebabCase(operationObject.summary);
 
       const extensions = [];
+      const commonExtensions = ["x-codeSamples"];
+
       for (const [key, value] of Object.entries(operationObject)) {
-        if (key.startsWith("x-")) {
+        if (key.startsWith("x-") && !commonExtensions.includes(key)) {
           extensions.push({ key, value });
         }
       }
@@ -276,8 +278,10 @@ function createItems(
         : kebabCase(operationObject.summary);
 
       const extensions = [];
+      const commonExtensions = ["x-codeSamples"];
+
       for (const [key, value] of Object.entries(operationObject)) {
-        if (key.startsWith("x-")) {
+        if (key.startsWith("x-") && !commonExtensions.includes(key)) {
           extensions.push({ key, value });
         }
       }
