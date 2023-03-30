@@ -34,6 +34,7 @@ export interface APIOptions {
   template?: string;
   downloadUrl?: string;
   hideSendButton?: boolean;
+  showExtensions?: boolean;
   sidebarOptions?: SidebarOptions;
   version?: string;
   label?: string;
@@ -103,6 +104,7 @@ export interface ApiItem extends OperationObject {
   postman?: Request;
   proxy?: string;
   info: InfoObject;
+  extensions?: object;
 }
 
 export interface InfoPageMetadata extends ApiMetadataBase {
