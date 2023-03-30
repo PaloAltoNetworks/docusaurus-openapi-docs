@@ -14,7 +14,7 @@ export function createVendorExtensions(extensions: any) {
     const extensionRow = () => {
       return `${extension.key}: ${JSON.stringify(extension.value)}`;
     };
-    rows.push(extensionRow());
+    return rows.push(extensionRow());
   });
   return `\n\n\`\`\`
 ${rows.join("\n")}
