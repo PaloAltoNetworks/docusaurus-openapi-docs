@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
-
+// @ts-nocheck
 import React from "react";
 
 import sdk from "@paloaltonetworks/postman-collection";
@@ -44,6 +44,7 @@ export interface Props {
 }
 
 function Execute({ postman, proxy }: Props) {
+  // Execute takes all the necessary params from the redux store to validate, and create a postmanRequest
   const pathParams = useTypedSelector((state: any) => state.params.path);
   const queryParams = useTypedSelector((state: any) => state.params.query);
   const cookieParams = useTypedSelector((state: any) => state.params.cookie);
@@ -74,127 +75,29 @@ function Execute({ postman, proxy }: Props) {
   const delay = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
 
-  function openModal() {
-    setIsOpen(true);
-  }
-
-  function closeModal() {
-    setIsOpen(false);
-  }
-
-  function acceptAgreement() {
-    setIsOpen(false);
-    setAgreementAccepted(true);
-    sessionStorage.setItem("agreement-ack", "true");
-  }
-
-  const [modalIsOpen, setIsOpen] = React.useState(false);
-  // Set the following as default value to persist to session and enable modal
-  // sessionStorage.getItem("agreement-ack") === "true"
-  const [agreementAccepted, setAgreementAccepted] = React.useState(true);
-
-  const customStyles = {
-    overlay: {
-      backdropFilter: "blur(10px)",
-      backgroundColor: "transparent",
-    },
-    content: {
-      top: "50%",
-      left: "50%",
-      right: "auto",
-      bottom: "auto",
-      marginRight: "-50%",
-      border: "none",
-      padding: "none",
-      borderRadius: "var(--openapi-card-border-radius)",
-      background: "var(--ifm-card-background-color)",
-      transform: "translate(-50%, -50%)",
-      maxWidth: "550px",
-    },
-  };
-
-  if (agreementAccepted) {
-    return (
-      <button
-        className="button button--sm button--secondary"
-        disabled={!isValidRequest}
-        style={!isValidRequest ? { pointerEvents: "all" } : {}}
-        onClick={async () => {
-          dispatch(setResponse("Fetching..."));
-          try {
-            await delay(1200);
-            const res = await makeRequest(postmanRequest, proxy, body);
-            dispatch(setResponse(await res.text()));
-            dispatch(setCode(res.status));
-            res.headers &&
-              dispatch(setHeaders(Object.fromEntries(res.headers)));
-          } catch (e: any) {
-            console.log(e);
-            dispatch(setResponse("Connection failed"));
-            dispatch(clearCode());
-            dispatch(clearHeaders());
-          }
-        }}
-      >
-        Send API Request
-      </button>
-    );
-  } else {
-    return (
-      <React.Fragment>
-        <button
-          className="button button--sm button--secondary"
-          onClick={openModal}
-        >
-          Send API Request
-        </button>
-        <Modal
-          isOpen={modalIsOpen}
-          onRequestClose={closeModal}
-          style={customStyles}
-          contentLabel="Terms of Use"
-        >
-          <form>
-            <div className="card">
-              <div className="card__header">
-                <h2>Terms of Use</h2>
-                <hr></hr>
-              </div>
-              <div className="card__body">
-                <p>
-                  By accepting this agreement the end user acknowledges the
-                  risks of performing authenticated and non-authenticated API
-                  requests from the browser.
-                </p>
-                <p>
-                  The end user also accepts the responsibility of safeguarding
-                  API credentials and any potentially sensitive data returned by
-                  the API.
-                </p>
-                <br></br>
-              </div>
-              <div className="card__footer">
-                <div className="button-group button-group--block">
-                  <button
-                    className="button button--sm button--outline button--success"
-                    onClick={acceptAgreement}
-                  >
-                    AGREE
-                  </button>
-                  <button
-                    className="button button--sm button--outline button--danger"
-                    onClick={closeModal}
-                  >
-                    DISAGREE
-                  </button>
-                </div>
-              </div>
-            </div>
-          </form>
-        </Modal>
-      </React.Fragment>
-    );
-  }
+  return (
+    <input
+      value="Send API Request"
+      className="button button--sm button--secondary"
+      disabled={!isValidRequest}
+      style={!isValidRequest ? { pointerEvents: "all" } : {}}
+      onClick={async () => {
+        dispatch(setResponse("Fetching..."));
+        try {
+          await delay(1200);
+          const res = await makeRequest(postmanRequest, proxy, body);
+          dispatch(setResponse(await res.text()));
+          dispatch(setCode(res.status));
+          res.headers && dispatch(setHeaders(Object.fromEntries(res.headers)));
+        } catch (e: any) {
+          console.log(e);
+          dispatch(setResponse("Connection failed"));
+          dispatch(clearCode());
+          dispatch(clearHeaders());
+        }
+      }}
+    />
+  );
 }
 
 export default Execute;
