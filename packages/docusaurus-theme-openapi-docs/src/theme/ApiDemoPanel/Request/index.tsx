@@ -46,7 +46,6 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
   const acceptOptions = useTypedDispatch((state: any) => state.accept.options);
   const server = useTypedSelector((state: any) => state.server.value);
   const serverOptions = useTypedSelector((state: any) => state.server.options);
-  const params = useTypedSelector((state: any) => state.params);
   const auth = useTypedSelector((state: any) => state.auth);
   const dispatch = useTypedDispatch();
 
@@ -61,6 +60,8 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
     server,
     auth,
   });
+
+  console.log({ body });
 
   const delay = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
@@ -105,8 +106,10 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
 
   const showServerOptions = serverOptions.length > 0;
   const showAcceptOptions = acceptOptions.length > 1;
-  const showBodyRequest = contentType !== undefined;
+  const showRequestBody = contentType !== undefined;
   const showRequestButton = item.servers && !hideSendButton;
+  const requestBodyRequired = item.requestBody?.required;
+
   console.log({ acceptOptions, serverOptions });
   // High level considerations
   // Do we have access to required properties? If so, we can use them to pass now the required prop
@@ -133,9 +136,18 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
               <summary>Parameters</summary>
               <ParamOptions errors={errors} register={register} />
             </details>
-            {showBodyRequest && (
+            {showRequestBody && (
               <details>
-                <summary>Body</summary>
+                <summary>
+                  Body{" "}
+                  {requestBodyRequired && (
+                    <span>
+                      <small>
+                        <strong className="required"> required</strong>
+                      </small>
+                    </span>
+                  )}
+                </summary>
                 <>
                   <ContentType />
                   <Body
