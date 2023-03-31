@@ -126,67 +126,66 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
 
   return (
     <>
-      <details className="openapi-demo__details" open={response ? false : true}>
-        <summary className="openapi-demo__summary-container">
-          <h4 className="openapi-demo__summary-header">Request</h4>
-        </summary>
-        <form
-          className="openapi-demo__options-panel"
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          {showServerOptions && (
-            <details>
-              <summary>Base URL</summary>
-              <Server />
-            </details>
-          )}
-          {showAuth && (
-            <details>
-              <summary>Auth</summary>
-              <Authorization />
-            </details>
-          )}
-          {showParams && (
-            <details>
-              <summary>Parameters</summary>
-              <ParamOptions errors={errors} register={register} />
-            </details>
-          )}
-          {showRequestBody && (
-            <details>
-              <summary>
-                Body{" "}
-                {requestBodyRequired && (
-                  <span>
-                    <small>
-                      <strong className="required"> required</strong>
-                    </small>
-                  </span>
-                )}
-              </summary>
-              <>
-                <ContentType />
-                <Body
-                  jsonRequestBodyExample={item.jsonRequestBodyExample}
-                  requestBodyMetadata={item.requestBody}
-                  register={register}
-                />
-              </>
-            </details>
-          )}
-          {showAcceptOptions && (
-            <details>
-              <summary>Accept</summary>
-              <Accept />
-            </details>
-          )}
-          {showRequestButton && (
-            <button type="submit" value="Submit">
-              Send API Request
-            </button>
-          )}
-        </form>
-      </details>
+      <form
+        className="openapi-demo__options-panel"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        {showServerOptions && (
+          <details className="openapi-demo__details-container">
+            <summary className="openapi-demo__details-summary">
+              Base URL
+            </summary>
+            <Server />
+          </details>
+        )}
+        {showAuth && (
+          <details className="openapi-demo__details-container">
+            <summary className="openapi-demo__details-summary">Auth</summary>
+            <Authorization />
+          </details>
+        )}
+        {showParams && (
+          <details className="openapi-demo__details-container">
+            <summary className="openapi-demo__details-summary">
+              Parameters
+            </summary>
+            <ParamOptions errors={errors} register={register} />
+          </details>
+        )}
+        {showRequestBody && (
+          <details className="openapi-demo__details-container">
+            <summary className="openapi-demo__details-summary">
+              Body{" "}
+              {requestBodyRequired && (
+                <span>
+                  <small>
+                    <strong className="required"> required</strong>
+                  </small>
+                </span>
+              )}
+            </summary>
+            <>
+              <ContentType />
+              <Body
+                jsonRequestBodyExample={item.jsonRequestBodyExample}
+                requestBodyMetadata={item.requestBody}
+                register={register}
+              />
+            </>
+          </details>
+        )}
+        {showAcceptOptions && (
+          <details className="openapi-demo__details-container">
+            <summary className="openapi-demo__details-summary">Accept</summary>
+            <Accept />
+          </details>
+        )}
+        {showRequestButton && (
+          <button type="submit" value="Submit">
+            Send API Request
+          </button>
+        )}
+      </form>
     </>
   );
 }
