@@ -1,15 +1,10 @@
-.openapi-demo__input {
+.openpai-demo__form-item-input {
   margin-top: calc(var(--ifm-pre-padding) / 2);
   background-color: var(--openapi-input-background);
   border: none;
   outline: none;
   width: 100%;
-  font-size: var(--ifm-code-font-size);
   color: var(--ifm-pre-color);
-  padding: 12px var(--ifm-pre-padding);
+  padding: 0.5rem;
   border-radius: 4px;
-
-  &:focus {
-    box-shadow: inset 0px 0px 0px 2px var(--openapi-input-border);
-  }
 }

@@ -37,7 +37,7 @@ function FormTextInput({
           {...register(paramName, {
             required: isRequired ? "This field is required" : false,
           })}
-          className="openapi-demo__input"
+          className="openpai-demo__form-item-input"
           type={password ? "password" : "text"}
           placeholder={placeholder}
           title={placeholder}
@@ -47,7 +47,7 @@ function FormTextInput({
         />
       ) : (
         <input
-          className="openapi-demo__input"
+          className="openpai-demo__form-item-input"
           type={password ? "password" : "text"}
           placeholder={placeholder}
           title={placeholder}

@@ -17,7 +17,9 @@ export interface Props {
 function FormItem({ label, type, required, children }: Props) {
   return (
     <div className="openapi-demo__form-item">
-      {label && <code>{label}</code>}
+      {label && (
+        <label className="openapi-demo__form-item-label">{label}</label>
+      )}
       {type && <span style={{ opacity: 0.6 }}> — {type}</span>}
       {required && (
         <span>
