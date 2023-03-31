@@ -44,10 +44,18 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
   const body = useTypedSelector((state: any) => state.body);
   const accept = useTypedSelector((state: any) => state.accept.value);
   const acceptOptions = useTypedDispatch((state: any) => state.accept.options);
+  const authSelected = useTypedSelector((state: any) => state.auth.selected);
   const server = useTypedSelector((state: any) => state.server.value);
   const serverOptions = useTypedSelector((state: any) => state.server.options);
   const auth = useTypedSelector((state: any) => state.auth);
   const dispatch = useTypedDispatch();
+
+  const allParams = [
+    ...pathParams,
+    ...queryParams,
+    ...cookieParams,
+    ...headerParams,
+  ];
 
   const postmanRequest = buildPostmanRequest(postman, {
     queryParams,
@@ -108,6 +116,8 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
   const showAcceptOptions = acceptOptions.length > 1;
   const showRequestBody = contentType !== undefined;
   const showRequestButton = item.servers && !hideSendButton;
+  const showAuth = authSelected !== undefined;
+  const showParams = allParams.length > 0;
   const requestBodyRequired = item.requestBody?.required;
 
   console.log({ acceptOptions, serverOptions });
@@ -120,57 +130,62 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
         <summary className="openapi-demo__summary-container">
           <h4 className="openapi-demo__summary-header">Request</h4>
         </summary>
-        <div className="openapi-demo__options-panel">
-          <form onSubmit={handleSubmit(onSubmit)}>
-            {showServerOptions && (
-              <details>
-                <summary>Base URL</summary>
-                <Server />
-              </details>
-            )}
+        <form
+          className="openapi-demo__options-panel"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          {showServerOptions && (
+            <details>
+              <summary>Base URL</summary>
+              <Server />
+            </details>
+          )}
+          {showAuth && (
             <details>
               <summary>Auth</summary>
               <Authorization />
             </details>
+          )}
+          {showParams && (
             <details>
               <summary>Parameters</summary>
               <ParamOptions errors={errors} register={register} />
             </details>
-            {showRequestBody && (
-              <details>
-                <summary>
-                  Body{" "}
-                  {requestBodyRequired && (
-                    <span>
-                      <small>
-                        <strong className="required"> required</strong>
-                      </small>
-                    </span>
-                  )}
-                </summary>
-                <>
-                  <ContentType />
-                  <Body
-                    jsonRequestBodyExample={item.jsonRequestBodyExample}
-                    requestBodyMetadata={item.requestBody}
-                    register={register}
-                  />
-                </>
-              </details>
-            )}
-            {showAcceptOptions && (
-              <details>
-                <summary>Accept</summary>
-                <Accept />
-              </details>
-            )}
-            {showRequestButton && (
-              <button type="submit" value="Submit">
-                Send API Request
-              </button>
-            )}
-          </form>
-        </div>
+          )}
+          {showRequestBody && (
+            <details>
+              <summary>
+                Body{" "}
+                {requestBodyRequired && (
+                  <span>
+                    <small>
+                      <strong className="required"> required</strong>
+                    </small>
+                  </span>
+                )}
+              </summary>
+              <>
+                <ContentType />
+                <Body
+                  jsonRequestBodyExample={item.jsonRequestBodyExample}
+                  requestBodyMetadata={item.requestBody}
+                  register={register}
+                />
+              </>
+            </details>
+          )}
+          {showAcceptOptions && (
+            <details>
+              <summary>Accept</summary>
+              <Accept />
+            </details>
+          )}
+          {showRequestButton && (
+            <button type="submit" value="Submit">
+              Send API Request
+            </button>
+          )}
+        </form>
       </details>
     </>
   );
