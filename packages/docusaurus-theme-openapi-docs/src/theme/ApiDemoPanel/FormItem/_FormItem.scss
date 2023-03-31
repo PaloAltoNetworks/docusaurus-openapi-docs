@@ -14,21 +14,3 @@
   font-size: 12px;
   font-weight: bold;
 }
-
-.openpai-demo__form-item-input {
-  background-color: none;
-  transition: 300ms ease-in;
-
-  &:focus {
-    border: 1px solid var(--ifm-color-primary);
-    box-shadow: none;
-  }
-
-  &:hover {
-    border: 1px solid var(--ifm-toc-border-color);
-  }
-}
-
-.openapi-demo__details-summary {
-  font-size: 14px;
-}
