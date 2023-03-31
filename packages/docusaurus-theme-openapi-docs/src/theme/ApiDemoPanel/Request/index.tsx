@@ -13,7 +13,6 @@ import Accept from "@theme/ApiDemoPanel/Accept";
 import Authorization from "@theme/ApiDemoPanel/Authorization";
 import Body from "@theme/ApiDemoPanel/Body";
 import ContentType from "@theme/ApiDemoPanel/ContentType";
-import Execute from "@theme/ApiDemoPanel/Execute";
 import ParamOptions from "@theme/ApiDemoPanel/ParamOptions";
 import Server from "@theme/ApiDemoPanel/Server";
 import { useTypedSelector } from "@theme/ApiItem/hooks";
@@ -35,13 +34,13 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
   const response = useTypedSelector((state: any) => state.response.value);
   const postman = new sdk.Request(item.postman);
   const metadata = useDoc();
-  const { proxy, hide_send_button } = metadata.frontMatter;
+  const { proxy, hide_send_button: hideSendButton } = metadata.frontMatter;
 
   const pathParams = useTypedSelector((state: any) => state.params.path);
   const queryParams = useTypedSelector((state: any) => state.params.query);
   const cookieParams = useTypedSelector((state: any) => state.params.cookie);
-  const headerParams = useTypedSelector((state: any) => state.params.header);
   const contentType = useTypedSelector((state: any) => state.contentType.value);
+  const headerParams = useTypedSelector((state: any) => state.params.header);
   const body = useTypedSelector((state: any) => state.body);
   const accept = useTypedSelector((state: any) => state.accept.value);
   const acceptOptions = useTypedDispatch((state: any) => state.accept.options);
@@ -104,10 +103,11 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
     }
   };
 
-  const showServerOptions = serverOptions > 0;
-  const showAcceptOptions = acceptOptions > 1;
-
-  console.log({ errors, accept });
+  const showServerOptions = serverOptions.length > 0;
+  const showAcceptOptions = acceptOptions.length > 1;
+  const showBodyRequest = contentType !== undefined;
+  const showRequestButton = item.servers && !hideSendButton;
+  console.log({ acceptOptions, serverOptions });
   // High level considerations
   // Do we have access to required properties? If so, we can use them to pass now the required prop
 
@@ -131,26 +131,28 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
             </details>
             <details>
               <summary>Parameters</summary>
-              <ParamOptions register={register} />
+              <ParamOptions errors={errors} register={register} />
             </details>
-            <details>
-              <summary>Body</summary>
-              <>
-                <ContentType />
-                <Body
-                  jsonRequestBodyExample={item.jsonRequestBodyExample}
-                  requestBodyMetadata={item.requestBody}
-                  register={register}
-                />
-              </>
-            </details>
+            {showBodyRequest && (
+              <details>
+                <summary>Body</summary>
+                <>
+                  <ContentType />
+                  <Body
+                    jsonRequestBodyExample={item.jsonRequestBodyExample}
+                    requestBodyMetadata={item.requestBody}
+                    register={register}
+                  />
+                </>
+              </details>
+            )}
             {showAcceptOptions && (
               <details>
                 <summary>Accept</summary>
                 <Accept />
               </details>
             )}
-            {item.servers && !hide_send_button && (
+            {showRequestButton && (
               <button type="submit" value="Submit">
                 Send API Request
               </button>

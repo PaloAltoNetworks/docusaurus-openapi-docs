@@ -27,29 +27,44 @@ function FormTextInput({
 }: Props) {
   placeholder = placeholder?.split("\n")[0];
 
-  console.log({ isRequired });
+  const showErrorMessage = errors?.[paramName]?.message;
+  console.log({ errors });
   // const registerInput = register ? {...register.register}
   return (
     <>
-      <input
-        {...register?.register(paramName, {
-          required: "This field is required",
-        })}
-        className="openapi-demo__input"
-        type={password ? "password" : "text"}
-        placeholder={placeholder}
-        title={placeholder}
-        value={value}
-        onChange={onChange}
-        autoComplete="off"
-      />
-      {/* <ErrorMessage
-        errors={errors}
-        name={paramName}
-        render={({ message }) => (
-          <div className="openapi-demo__error">{message}</div>
-        )}
-      /> */}
+      {register ? (
+        <input
+          {...register(paramName, {
+            required: isRequired ? "This field is required" : false,
+          })}
+          className="openapi-demo__input"
+          type={password ? "password" : "text"}
+          placeholder={placeholder}
+          title={placeholder}
+          value={value}
+          onChange={onChange}
+          autoComplete="off"
+        />
+      ) : (
+        <input
+          className="openapi-demo__input"
+          type={password ? "password" : "text"}
+          placeholder={placeholder}
+          title={placeholder}
+          value={value}
+          onChange={onChange}
+          autoComplete="off"
+        />
+      )}
+      {showErrorMessage && (
+        <ErrorMessage
+          errors={errors}
+          name={paramName}
+          render={({ message }) => (
+            <div className="openapi-demo__error">{message}</div>
+          )}
+        />
+      )}
     </>
   );
 }

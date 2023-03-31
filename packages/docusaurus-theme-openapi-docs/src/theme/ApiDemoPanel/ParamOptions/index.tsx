@@ -20,7 +20,7 @@ export interface ParamProps {
   param: Param;
 }
 
-function ParamOption({ param, register }: ParamProps) {
+function ParamOption({ errors, param, register }: ParamProps) {
   if (param.schema?.type === "array" && param.schema.items?.enum) {
     return <ParamMultiSelectFormItem param={param} />;
   }
@@ -39,18 +39,20 @@ function ParamOption({ param, register }: ParamProps) {
 
   // integer, number, string, int32, int64, float, double, object, byte, binary,
   // date-time, date, password
-  return <ParamTextFormItem register={register} param={param} />;
+  return (
+    <ParamTextFormItem errors={errors} register={register} param={param} />
+  );
 }
 
-function ParamOptionWrapper({ param, register }: ParamProps) {
+function ParamOptionWrapper({ errors, param, register }: ParamProps) {
   return (
     <FormItem label={param.name} type={param.in} required={param.required}>
-      <ParamOption register={register} param={param} />
+      <ParamOption errors={errors} register={register} param={param} />
     </FormItem>
   );
 }
 
-function ParamOptions(register) {
+function ParamOptions({ register, errors }) {
   const [showOptional, setShowOptional] = useState(false);
 
   const pathParams = useTypedSelector((state: any) => state.params.path);
@@ -74,6 +76,7 @@ function ParamOptions(register) {
       {requiredParams.map((param) => (
         <ParamOptionWrapper
           register={register}
+          errors={errors}
           key={`${param.in}-${param.name}`}
           param={param}
         />
@@ -314,10 +317,11 @@ function ParamMultiSelectFormItem({ param }: ParamProps) {
   );
 }
 
-function ParamTextFormItem({ param, register }: ParamProps) {
+function ParamTextFormItem({ errors, param, register }: ParamProps) {
   const dispatch = useTypedDispatch();
   return (
     <FormTextInput
+      errors={errors}
       isRequired={param.required}
       register={register}
       paramName={param.name}
