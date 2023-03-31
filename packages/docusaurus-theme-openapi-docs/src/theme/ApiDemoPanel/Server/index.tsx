@@ -58,7 +58,7 @@ function Server() {
     }
     return (
       <FloatingButton onClick={() => setIsEditing(true)} label="Edit">
-        <FormItem label="Base URL">
+        <FormItem>
           <pre
             style={{
               background: "var(--openapi-card-background-color)",
@@ -74,7 +74,7 @@ function Server() {
   return (
     <div className="openapi-demo__server-container">
       <FloatingButton onClick={() => setIsEditing(false)} label="Hide">
-        <FormItem label="Base URL">
+        <FormItem>
           <FormSelect
             options={options.map((s: any) => s.url)}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {

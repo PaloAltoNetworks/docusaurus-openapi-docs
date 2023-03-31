@@ -8,7 +8,6 @@
 import React from "react";
 
 import json2xml from "@theme/ApiDemoPanel/Body/json2xml";
-import ContentType from "@theme/ApiDemoPanel/ContentType";
 import FormFileUpload from "@theme/ApiDemoPanel/FormFileUpload";
 import FormItem from "@theme/ApiDemoPanel/FormItem";
 import FormSelect from "@theme/ApiDemoPanel/FormSelect";
@@ -45,13 +44,10 @@ function BodyWrap({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
   }
 
   return (
-    <>
-      <ContentType />
-      <Body
-        requestBodyMetadata={requestBodyMetadata}
-        jsonRequestBodyExample={jsonRequestBodyExample}
-      />
-    </>
+    <Body
+      requestBodyMetadata={requestBodyMetadata}
+      jsonRequestBodyExample={jsonRequestBodyExample}
+    />
   );
 }
 
@@ -88,7 +84,7 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
 
   if (schema?.format === "binary") {
     return (
-      <FormItem label="Body" required={required}>
+      <FormItem required={required}>
         <FormFileUpload
           placeholder={schema.description || "Body"}
           onChange={(file: any) => {
@@ -114,7 +110,7 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
     schema?.type === "object"
   ) {
     return (
-      <FormItem label="Body" required={required}>
+      <FormItem required={required}>
         <div
           style={{
             marginTop: "calc(var(--ifm-pre-padding) / 2)",
@@ -282,7 +278,7 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
 
   if (exampleBody) {
     return (
-      <FormItem label="Body" required={required}>
+      <FormItem required={required}>
         <SchemaTabs className="openapi-tabs__schema" lazy>
           {/* @ts-ignore */}
           <TabItem label="Default" value="default" default>
@@ -305,7 +301,7 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
 
   if (examplesBodies && examplesBodies.length > 0) {
     return (
-      <FormItem label="Body" required={required}>
+      <FormItem required={required}>
         <SchemaTabs className="openapi-tabs__schema" lazy>
           {/* @ts-ignore */}
           <TabItem label="Default" value="default" default>
@@ -336,7 +332,7 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
   }
 
   return (
-    <FormItem label="Body" required={required}>
+    <FormItem required={required}>
       <LiveApp action={dispatch} language={language}>
         {defaultBody}
       </LiveApp>

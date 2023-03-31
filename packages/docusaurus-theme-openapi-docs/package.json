@@ -41,6 +41,7 @@
   },
   "dependencies": {
     "@docusaurus/theme-common": "^2.3.0",
+    "@hookform/error-message": "^2.0.1",
     "@mdx-js/react": "^1.6.21",
     "@paloaltonetworks/postman-code-generators": "1.1.15-patch.2",
     "@paloaltonetworks/postman-collection": "^4.1.0",
@@ -55,6 +56,7 @@
     "lodash": "^4.17.20",
     "node-polyfill-webpack-plugin": "^2.0.1",
     "process": "^0.11.10",
+    "react-hook-form": "^7.43.8",
     "react-live": "^3.1.1",
     "react-magic-dropzone": "^1.0.1",
     "react-markdown": "^8.0.1",

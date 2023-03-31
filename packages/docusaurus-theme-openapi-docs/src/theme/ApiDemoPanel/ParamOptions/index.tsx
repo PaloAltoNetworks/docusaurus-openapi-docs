@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
-
+// @ts-nocheck
 import React, { useState, useEffect } from "react";
 
 import { nanoid } from "@reduxjs/toolkit";
@@ -20,7 +20,7 @@ export interface ParamProps {
   param: Param;
 }
 
-function ParamOption({ param }: ParamProps) {
+function ParamOption({ param, register }: ParamProps) {
   if (param.schema?.type === "array" && param.schema.items?.enum) {
     return <ParamMultiSelectFormItem param={param} />;
   }
@@ -39,18 +39,18 @@ function ParamOption({ param }: ParamProps) {
 
   // integer, number, string, int32, int64, float, double, object, byte, binary,
   // date-time, date, password
-  return <ParamTextFormItem param={param} />;
+  return <ParamTextFormItem register={register} param={param} />;
 }
 
-function ParamOptionWrapper({ param }: ParamProps) {
+function ParamOptionWrapper({ param, register }: ParamProps) {
   return (
     <FormItem label={param.name} type={param.in} required={param.required}>
-      <ParamOption param={param} />
+      <ParamOption register={register} param={param} />
     </FormItem>
   );
 }
 
-function ParamOptions() {
+function ParamOptions(register) {
   const [showOptional, setShowOptional] = useState(false);
 
   const pathParams = useTypedSelector((state: any) => state.params.path);
@@ -72,7 +72,11 @@ function ParamOptions() {
     <>
       {/* Required Parameters */}
       {requiredParams.map((param) => (
-        <ParamOptionWrapper key={`${param.in}-${param.name}`} param={param} />
+        <ParamOptionWrapper
+          register={register}
+          key={`${param.in}-${param.name}`}
+          param={param}
+        />
       ))}
 
       {/* Optional Parameters */}
@@ -159,6 +163,7 @@ function ArrayItem({
 
   return (
     <FormTextInput
+      // {...register(`${param.name}`)}
       placeholder={param.description || param.name}
       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
         onChange(e.target.value);
@@ -309,11 +314,13 @@ function ParamMultiSelectFormItem({ param }: ParamProps) {
   );
 }
 
-function ParamTextFormItem({ param }: ParamProps) {
+function ParamTextFormItem({ param, register }: ParamProps) {
   const dispatch = useTypedDispatch();
-
   return (
     <FormTextInput
+      isRequired={param.required}
+      register={register}
+      paramName={param.name}
       placeholder={param.description || param.name}
       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
         dispatch(
