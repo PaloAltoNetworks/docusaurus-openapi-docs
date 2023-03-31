@@ -84,7 +84,7 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
 
   if (schema?.format === "binary") {
     return (
-      <FormItem required={required}>
+      <FormItem>
         <FormFileUpload
           placeholder={schema.description || "Body"}
           onChange={(file: any) => {
@@ -110,7 +110,7 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
     schema?.type === "object"
   ) {
     return (
-      <FormItem required={required}>
+      <FormItem>
         <div
           style={{
             marginTop: "calc(var(--ifm-pre-padding) / 2)",
@@ -278,7 +278,7 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
 
   if (exampleBody) {
     return (
-      <FormItem required={required}>
+      <FormItem>
         <SchemaTabs className="openapi-tabs__schema" lazy>
           {/* @ts-ignore */}
           <TabItem label="Default" value="default" default>
@@ -301,7 +301,7 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
 
   if (examplesBodies && examplesBodies.length > 0) {
     return (
-      <FormItem required={required}>
+      <FormItem>
         <SchemaTabs className="openapi-tabs__schema" lazy>
           {/* @ts-ignore */}
           <TabItem label="Default" value="default" default>
@@ -332,7 +332,7 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
   }
 
   return (
-    <FormItem required={required}>
+    <FormItem>
       <LiveApp action={dispatch} language={language}>
         {defaultBody}
       </LiveApp>

@@ -15,6 +15,11 @@
   &:empty {
     display: none;
   }
+
+  .required {
+    font-size: var(--ifm-code-font-size);
+    color: var(--openapi-required);
+  }
 }
 
 .openapi-demo__details {
