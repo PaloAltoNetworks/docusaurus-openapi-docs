@@ -127,61 +127,66 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
   return (
     <>
       <form
-        className="openapi-demo__options-panel"
+        className="openapi-demo__request-form"
         onSubmit={handleSubmit(onSubmit)}
       >
-        {showServerOptions && (
-          <details className="openapi-demo__details-container">
-            <summary className="openapi-demo__details-summary">
-              Base URL
-            </summary>
-            <Server />
-          </details>
-        )}
-        {showAuth && (
-          <details className="openapi-demo__details-container">
-            <summary className="openapi-demo__details-summary">Auth</summary>
-            <Authorization />
-          </details>
-        )}
-        {showParams && (
-          <details className="openapi-demo__details-container">
-            <summary className="openapi-demo__details-summary">
-              Parameters
-            </summary>
-            <ParamOptions errors={errors} register={register} />
-          </details>
-        )}
-        {showRequestBody && (
-          <details className="openapi-demo__details-container">
-            <summary className="openapi-demo__details-summary">
-              Body{" "}
-              {requestBodyRequired && (
-                <span>
-                  <small>
-                    <strong className="required"> required</strong>
-                  </small>
-                </span>
-              )}
-            </summary>
-            <>
-              <ContentType />
-              <Body
-                jsonRequestBodyExample={item.jsonRequestBodyExample}
-                requestBodyMetadata={item.requestBody}
-                register={register}
-              />
-            </>
-          </details>
-        )}
-        {showAcceptOptions && (
-          <details className="openapi-demo__details-container">
-            <summary className="openapi-demo__details-summary">Accept</summary>
-            <Accept />
-          </details>
-        )}
+        <p className="openapi-demo__request-title">Request</p>
+        <div className="openapi-demo__details-outer-container">
+          {showServerOptions && (
+            <details className="openapi-demo__details-container">
+              <summary className="openapi-demo__details-summary">
+                Base URL
+              </summary>
+              <Server />
+            </details>
+          )}
+          {showAuth && (
+            <details className="openapi-demo__details-container">
+              <summary className="openapi-demo__details-summary">Auth</summary>
+              <Authorization />
+            </details>
+          )}
+          {showParams && (
+            <details className="openapi-demo__details-container">
+              <summary className="openapi-demo__details-summary">
+                Parameters
+              </summary>
+              <ParamOptions errors={errors} register={register} />
+            </details>
+          )}
+          {showRequestBody && (
+            <details className="openapi-demo__details-container">
+              <summary className="openapi-demo__details-summary">
+                Body{" "}
+                {requestBodyRequired && (
+                  <span>
+                    <small>
+                      <strong className="required"> required</strong>
+                    </small>
+                  </span>
+                )}
+              </summary>
+              <>
+                <ContentType />
+                <Body
+                  jsonRequestBodyExample={item.jsonRequestBodyExample}
+                  requestBodyMetadata={item.requestBody}
+                  register={register}
+                />
+              </>
+            </details>
+          )}
+          {showAcceptOptions && (
+            <details className="openapi-demo__details-container">
+              <summary className="openapi-demo__details-summary">
+                Accept
+              </summary>
+              <Accept />
+            </details>
+          )}
+        </div>
         {showRequestButton && (
-          <button type="submit" value="Submit">
+          <button className="openapi-demo__request-btn" type="submit">
             Send API Request
           </button>
         )}
