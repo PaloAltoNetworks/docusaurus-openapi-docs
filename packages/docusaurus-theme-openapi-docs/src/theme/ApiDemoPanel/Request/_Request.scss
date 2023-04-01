@@ -1,6 +1,7 @@
-.openapi-demo__options-panel {
-  background: var(--openapi-card-background-color);
+.openapi-demo__request-form {
+  background: #f8f8f8;
   border-radius: var(--openapi-card-border-radius);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   box-shadow: 0 2px 3px hsla(222, 8%, 43%, 0.1),
     0 8px 16px -10px hsla(222, 8%, 43%, 0.2);
   color: var(--ifm-pre-color);
@@ -8,7 +9,6 @@
   margin-bottom: var(--ifm-spacing-vertical);
   margin-top: 0;
   overflow: auto;
-  padding: var(--ifm-pre-padding);
   transition: 300ms;
 
   /* hack for view calculation when monaco is hidden */
@@ -28,6 +28,19 @@
     font-size: var(--ifm-code-font-size);
     color: var(--openapi-required);
   }
+}
+
+.openapi-demo__request-title {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  margin: 0;
+  padding: 0.75rem var(--ifm-pre-padding);
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.openapi-demo__details-outer-container {
+  padding: 1rem;
 }
 
 .openapi-demo__details-summary {
