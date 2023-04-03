@@ -13,6 +13,7 @@ import {
 } from "../openapi/types";
 import { ApiPageMetadata, InfoPageMetadata, TagPageMetadata } from "../types";
 import { createAuthentication } from "./createAuthentication";
+import { createAuthorization } from "./createAuthorization";
 import { createContactInfo } from "./createContactInfo";
 import { createDeprecationNotice } from "./createDeprecationNotice";
 import { createDescription } from "./createDescription";
@@ -25,6 +26,7 @@ import { createParamsDetails } from "./createParamsDetails";
 import { createRequestBodyDetails } from "./createRequestBodyDetails";
 import { createStatusCodes } from "./createStatusCodes";
 import { createTermsOfService } from "./createTermsOfService";
+import { createVendorExtensions } from "./createVendorExtensions";
 import { createVersionBadge } from "./createVersionBadge";
 import { greaterThan, lessThan, render } from "./utils";
 
@@ -47,15 +49,19 @@ export function createApiPageMD({
     description,
     method,
     path,
+    extensions,
     parameters,
     requestBody,
     responses,
   },
+  infoPath,
+  frontMatter,
 }: ApiPageMetadata) {
   return render([
     `import ApiTabs from "@theme/ApiTabs";\n`,
     `import DiscriminatorTabs from "@theme/DiscriminatorTabs";\n`,
     `import MethodEndpoint from "@theme/ApiDemoPanel/MethodEndpoint";\n`,
+    `import SecuritySchemes from "@theme/ApiDemoPanel/SecuritySchemes";\n`,
     `import MimeTabs from "@theme/MimeTabs";\n`,
     `import ParamsItem from "@theme/ParamsItem";\n`,
     `import ResponseSamples from "@theme/ResponseSamples";\n`,
@@ -64,6 +70,9 @@ export function createApiPageMD({
     `import TabItem from "@theme/TabItem";\n\n`,
     createHeading(title.replace(lessThan, "&lt;").replace(greaterThan, "&gt;")),
     createMethodEndpoint(method, path),
+    `## ${title.replace(lessThan, "&lt;").replace(greaterThan, "&gt;")}\n\n`,
+    infoPath && createAuthorization(infoPath),
+    frontMatter.show_extensions && createVendorExtensions(extensions),
     createDeprecationNotice({ deprecated, description: deprecatedDescription }),
     createDescription(description),
     createParamsDetails({ parameters, type: "path" }),

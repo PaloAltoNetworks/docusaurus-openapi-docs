@@ -193,6 +193,9 @@ proxy: {{{frontMatter.proxy}}}
 {{#frontMatter.hide_send_button}}
 hide_send_button: true
 {{/frontMatter.hide_send_button}}
+{{#frontMatter.show_extensions}}
+show_extensions: true
+{{/frontMatter.show_extensions}}
 ---
 
 {{{markdown}}}
@@ -240,13 +243,6 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
             item.downloadUrl = downloadUrl;
           }
         }
-        const markdown =
-          item.type === "api"
-            ? createApiPageMD(item)
-            : item.type === "info"
-            ? createInfoPageMD(item)
-            : createTagPageMD(item);
-        item.markdown = markdown;
         if (item.type === "api") {
           item.json = JSON.stringify(item.api);
           let infoBasePath = `${outputDir}/${item.infoId}`;
@@ -257,6 +253,13 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
           }
           if (item.infoId) item.infoPath = infoBasePath;
         }
+        const markdown =
+          item.type === "api"
+            ? createApiPageMD(item)
+            : item.type === "info"
+            ? createInfoPageMD(item)
+            : createTagPageMD(item);
+        item.markdown = markdown;
 
         const view = render(mdTemplate, item);
         const utils = render(infoMdTemplate, item);
