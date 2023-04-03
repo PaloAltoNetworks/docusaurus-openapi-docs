@@ -46,4 +46,18 @@
 .openapi-demo__details-summary {
   padding: 0.35rem 0;
   font-size: 14px;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &::before {
+    content: "";
+    background: var(--ifm-menu-link-sublist-icon) 50% / 2rem 2rem;
+    filter: var(--ifm-menu-link-sublist-icon-filter);
+    height: 1.25rem;
+    transform: rotate(180deg);
+    width: 1.25rem;
+    transition: transform var(--ifm-transition-fast) linear;
+  }
 }

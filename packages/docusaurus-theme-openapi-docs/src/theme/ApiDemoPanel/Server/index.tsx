@@ -59,14 +59,9 @@ function Server() {
     return (
       <FloatingButton onClick={() => setIsEditing(true)} label="Edit">
         <FormItem>
-          <pre
-            style={{
-              background: "var(--openapi-card-background-color)",
-              paddingLeft: "0px",
-            }}
-          >
-            <code title={url}>{url}</code>
-          </pre>
+          <span className="openapi-demo__server-url" title={url}>
+            {url}
+          </span>
         </FormItem>
       </FloatingButton>
     );
@@ -88,7 +83,9 @@ function Server() {
             }}
             value={value?.url}
           />
-          <small>{value?.description}</small>
+          <small className="openapi-demo__server-description">
+            {value?.description}
+          </small>
         </FormItem>
         {value?.variables &&
           Object.keys(value.variables).map((key) => {
