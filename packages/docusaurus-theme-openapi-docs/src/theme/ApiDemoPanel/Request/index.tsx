@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 // @ts-nocheck
-import React from "react";
+import React, { useState } from "react";
 
 import { useDoc } from "@docusaurus/theme-common/internal";
 import sdk from "@paloaltonetworks/postman-collection";
@@ -49,6 +49,7 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
   const serverOptions = useTypedSelector((state: any) => state.server.options);
   const auth = useTypedSelector((state: any) => state.auth);
   const dispatch = useTypedDispatch();
+  const [isDetailsOpen, setIsDetailsOpen] = useState(true);
 
   const allParams = [
     ...pathParams,
@@ -130,10 +131,21 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
         className="openapi-demo__request-form"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <p className="openapi-demo__request-title">Request</p>
+        <div className="openapi-demo__request-header-container">
+          <span className="openapi-demo__request-title">Request </span>
+          <span
+            className="openapi-demo__expand-details-btn"
+            onClick={() => setIsDetailsOpen(!isDetailsOpen)}
+          >
+            {isDetailsOpen ? "Collapse all" : "Expand all"}
+          </span>
+        </div>
         <div className="openapi-demo__details-outer-container">
           {showServerOptions && (
-            <details className="openapi-demo__details-container">
+            <details
+              open={isDetailsOpen}
+              className="openapi-demo__details-container"
+            >
               <summary className="openapi-demo__details-summary">
                 Base URL
               </summary>
@@ -141,13 +153,19 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
             </details>
           )}
           {showAuth && (
-            <details className="openapi-demo__details-container">
+            <details
+              open={isDetailsOpen}
+              className="openapi-demo__details-container"
+            >
               <summary className="openapi-demo__details-summary">Auth</summary>
               <Authorization />
             </details>
           )}
           {showParams && (
-            <details className="openapi-demo__details-container">
+            <details
+              open={isDetailsOpen}
+              className="openapi-demo__details-container"
+            >
               <summary className="openapi-demo__details-summary">
                 Parameters
               </summary>
@@ -155,7 +173,10 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
             </details>
           )}
           {showRequestBody && (
-            <details className="openapi-demo__details-container">
+            <details
+              open={isDetailsOpen}
+              className="openapi-demo__details-container"
+            >
               <summary className="openapi-demo__details-summary">
                 Body{" "}
                 {requestBodyRequired && (
@@ -177,7 +198,10 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
             </details>
           )}
           {showAcceptOptions && (
-            <details className="openapi-demo__details-container">
+            <details
+              open={isDetailsOpen}
+              className="openapi-demo__details-container"
+            >
               <summary className="openapi-demo__details-summary">
                 Accept
               </summary>
