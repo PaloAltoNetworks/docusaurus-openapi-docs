@@ -25,6 +25,7 @@ import { createParamsDetails } from "./createParamsDetails";
 import { createRequestBodyDetails } from "./createRequestBodyDetails";
 import { createStatusCodes } from "./createStatusCodes";
 import { createTermsOfService } from "./createTermsOfService";
+import { createVendorExtensions } from "./createVendorExtensions";
 import { createVersionBadge } from "./createVersionBadge";
 import { greaterThan, lessThan, render } from "./utils";
 
@@ -47,10 +48,12 @@ export function createApiPageMD({
     description,
     method,
     path,
+    extensions,
     parameters,
     requestBody,
     responses,
   },
+  frontMatter,
 }: ApiPageMetadata) {
   return render([
     `import ApiTabs from "@theme/ApiTabs";\n`,
@@ -64,6 +67,8 @@ export function createApiPageMD({
     `import TabItem from "@theme/TabItem";\n\n`,
     createHeading(title.replace(lessThan, "&lt;").replace(greaterThan, "&gt;")),
     createMethodEndpoint(method, path),
+    `## ${title.replace(lessThan, "&lt;").replace(greaterThan, "&gt;")}\n\n`,
+    frontMatter.show_extensions && createVendorExtensions(extensions),
     createDeprecationNotice({ deprecated, description: deprecatedDescription }),
     createDescription(description),
     createParamsDetails({ parameters, type: "path" }),
