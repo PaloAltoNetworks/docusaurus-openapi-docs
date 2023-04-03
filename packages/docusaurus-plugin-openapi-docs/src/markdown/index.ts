@@ -13,6 +13,7 @@ import {
 } from "../openapi/types";
 import { ApiPageMetadata, InfoPageMetadata, TagPageMetadata } from "../types";
 import { createAuthentication } from "./createAuthentication";
+import { createAuthorization } from "./createAuthorization";
 import { createContactInfo } from "./createContactInfo";
 import { createDeprecationNotice } from "./createDeprecationNotice";
 import { createDescription } from "./createDescription";
@@ -27,7 +28,6 @@ import { createStatusCodes } from "./createStatusCodes";
 import { createTermsOfService } from "./createTermsOfService";
 import { createVendorExtensions } from "./createVendorExtensions";
 import { createVersionBadge } from "./createVersionBadge";
-import { createAuthorization } from "./createAuthorization";
 import { greaterThan, lessThan, render } from "./utils";
 
 interface Props {
