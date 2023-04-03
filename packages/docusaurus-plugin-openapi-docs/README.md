@@ -125,6 +125,7 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 | `template`       | `string`  | `null`  | _Optional:_ Customize MDX content with a desired template.                                                                  |
 | `downloadUrl`    | `string`  | `null`  | _Optional:_ Designated URL for downloading OpenAPI specification. (requires `info` section/doc)                             |
 | `hideSendButton` | `boolean` | `null`  | _Optional:_ If set to `true`, hides the "Send API Request" button in API demo panel                                         |
+| `showExtensions` | `boolean` | `null`  | _Optional:_ If set to `true`, renders operation-level vendor-extensions in description.                                     |
 | `sidebarOptions` | `object`  | `null`  | _Optional:_ Set of options for sidebar configuration. See below for a list of supported options.                            |
 | `version`        | `string`  | `null`  | _Optional:_ Version assigned to single or micro-spec API specified in `specPath`.                                           |
 | `label`          | `string`  | `null`  | _Optional:_ Version label used when generating version selector dropdown menu.                                              |
