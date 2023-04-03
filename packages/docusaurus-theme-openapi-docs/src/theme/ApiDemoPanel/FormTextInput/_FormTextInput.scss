@@ -16,4 +16,19 @@
     border: 1px solid var(--ifm-color-primary);
     box-shadow: none;
   }
+
+  &.error {
+    border: 1px solid var(--openapi-required);
+  }
+}
+
+.openapi-demo__input-error {
+  font-size: var(--openapi-demo-font-size-input);
+  color: var(--openapi-required);
+  padding-top: var(--openapi-demo-padding-input);
+
+  &::before {
+    display: inline;
+    content: "⚠ ";
+  }
 }
