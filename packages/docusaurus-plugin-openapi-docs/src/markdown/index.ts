@@ -27,6 +27,7 @@ import { createStatusCodes } from "./createStatusCodes";
 import { createTermsOfService } from "./createTermsOfService";
 import { createVendorExtensions } from "./createVendorExtensions";
 import { createVersionBadge } from "./createVersionBadge";
+import { createAuthorization } from "./createAuthorization";
 import { greaterThan, lessThan, render } from "./utils";
 
 interface Props {
@@ -53,12 +54,14 @@ export function createApiPageMD({
     requestBody,
     responses,
   },
+  infoPath,
   frontMatter,
 }: ApiPageMetadata) {
   return render([
     `import ApiTabs from "@theme/ApiTabs";\n`,
     `import DiscriminatorTabs from "@theme/DiscriminatorTabs";\n`,
     `import MethodEndpoint from "@theme/ApiDemoPanel/MethodEndpoint";\n`,
+    `import SecuritySchemes from "@theme/ApiDemoPanel/SecuritySchemes";\n`,
     `import MimeTabs from "@theme/MimeTabs";\n`,
     `import ParamsItem from "@theme/ParamsItem";\n`,
     `import ResponseSamples from "@theme/ResponseSamples";\n`,
@@ -68,6 +71,7 @@ export function createApiPageMD({
     createHeading(title.replace(lessThan, "&lt;").replace(greaterThan, "&gt;")),
     createMethodEndpoint(method, path),
     `## ${title.replace(lessThan, "&lt;").replace(greaterThan, "&gt;")}\n\n`,
+    infoPath && createAuthorization(infoPath),
     frontMatter.show_extensions && createVendorExtensions(extensions),
     createDeprecationNotice({ deprecated, description: deprecatedDescription }),
     createDescription(description),
