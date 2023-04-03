@@ -38,3 +38,28 @@
 details summary::-webkit-details-marker {
   display: none;
 }
+
+.openapi-security__details {
+  margin-bottom: 1rem;
+  background-color: transparent;
+  color: var(--ifm-font-color-base);
+  padding: unset;
+  border: thin solid var(--ifm-toc-border-color);
+  border-radius: var(--ifm-pre-border-radius);
+  box-shadow: unset !important;
+  --docusaurus-details-decoration-color: var(--ifm-font-color-base) !important;
+}
+
+.openapi-security__details pre {
+  margin-bottom: unset;
+}
+
+.openapi-security__summary-container {
+  padding: 1rem;
+  list-style-type: none;
+  border-bottom: thin solid var(--ifm-toc-border-color);
+
+  &:hover {
+    cursor: pointer;
+  }
+}
