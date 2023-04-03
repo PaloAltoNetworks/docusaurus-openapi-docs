@@ -25,7 +25,6 @@ function ApiDemoPanel({
 
   return (
     <div>
-      <SecuritySchemes infoPath={infoPath} />
       <Request item={item} />
       <Response />
       <Curl
