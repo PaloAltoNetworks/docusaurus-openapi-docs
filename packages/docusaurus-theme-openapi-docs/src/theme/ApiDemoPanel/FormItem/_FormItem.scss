@@ -1,5 +1,5 @@
 .openapi-demo__form-item {
-  padding: 1rem;
+  padding: var(--openapi-demo-padding-input);
 
   &:first-child {
     margin-top: 0;

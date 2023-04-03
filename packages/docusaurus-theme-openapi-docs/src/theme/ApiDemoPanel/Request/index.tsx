@@ -184,12 +184,12 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
               <Accept />
             </details>
           )}
+          {showRequestButton && (
+            <button className="openapi-demo__request-btn" type="submit">
+              Send API Request
+            </button>
+          )}
         </div>
-        {showRequestButton && (
-          <button className="openapi-demo__request-btn" type="submit">
-            Send API Request
-          </button>
-        )}
       </form>
     </>
   );
