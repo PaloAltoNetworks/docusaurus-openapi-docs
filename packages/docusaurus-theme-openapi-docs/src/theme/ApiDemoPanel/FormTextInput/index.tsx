@@ -6,6 +6,7 @@
  * ========================================================================== */
 // @ts-nocheck
 import React from "react";
+import clsx from "clsx";
 import { ErrorMessage } from "@hookform/error-message";
 
 export interface Props {
@@ -37,7 +38,9 @@ function FormTextInput({
           {...register(paramName, {
             required: isRequired ? "This field is required" : false,
           })}
-          className="openpai-demo__form-item-input"
+          className={clsx("openpai-demo__form-item-input", {
+            error: showErrorMessage,
+          })}
           type={password ? "password" : "text"}
           placeholder={placeholder}
           title={placeholder}
@@ -61,7 +64,7 @@ function FormTextInput({
           errors={errors}
           name={paramName}
           render={({ message }) => (
-            <div className="openapi-demo__error">{message}</div>
+            <div className="openapi-demo__input-error">{message}</div>
           )}
         />
       )}
