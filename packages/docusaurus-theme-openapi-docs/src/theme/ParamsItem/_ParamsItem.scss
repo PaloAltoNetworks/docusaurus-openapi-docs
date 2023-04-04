@@ -31,9 +31,22 @@
 
 .openapi-schema__type {
   opacity: 0.6;
+  padding-left: 0.3rem;
 }
 
 .openapi-schema__required {
-  font-size: var(--ifm-code-font-size);
   color: var(--openapi-required);
+  margin-left: 1%;
+  background-color: transparent;
+  font-size: 10.5px;
+}
+
+.openapi-schema__divider {
+  flex-grow: 1;
+  border-bottom: thin solid var(--ifm-toc-border-color);
+  margin: 10px;
+}
+
+.openapi-schema__container {
+  display: flex;
 }

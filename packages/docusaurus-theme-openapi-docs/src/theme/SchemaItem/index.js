@@ -37,15 +37,21 @@ function SchemaItem({
 
   const renderRequired = guard(
     Array.isArray(required) ? required.includes(name) : required,
-    () => <strong className="openapi-schema__required"> required</strong>
+    () => (
+      <span className="badge badge--danger openapi-schema__required">
+        required
+      </span>
+    )
   );
 
   const renderDeprecated = guard(deprecated, () => (
-    <strong className="openapi-schema__deprecated"> deprecated</strong>
+    <span className="badge badge--warning openapi-schema__deprecated">
+      deprecated
+    </span>
   ));
 
   const renderNullable = guard(nullable, () => (
-    <strong className="openapi-schema__nullable"> nullable</strong>
+    <span className="badge badge--info openapi-schema__nullable">nullable</span>
   ));
 
   const renderSchemaDescription = guard(schemaDescription, (description) => (
@@ -89,13 +95,18 @@ function SchemaItem({
 
   const schemaContent = (
     <div>
-      <strong className={deprecated && "openapi-schema__strikethrough"}>
-        {name}
-      </strong>
-      <span className="openapi-schema__name"> {schemaName}</span>
-      {renderNullable}
-      {!deprecated && renderRequired}
-      {renderDeprecated}
+      <span className="openapi-schema__container">
+        <strong className={deprecated && "openapi-schema__strikethrough"}>
+          {name}
+        </strong>
+        <span className="openapi-schema__name"> {schemaName}</span>
+        {(nullable || required || deprecated) && (
+          <span class="openapi-schema__divider"></span>
+        )}
+        {renderNullable}
+        {!deprecated && renderRequired}
+        {renderDeprecated}
+      </span>
       {renderQualifierMessage}
       {renderDefaultValue}
       {renderSchemaDescription}
