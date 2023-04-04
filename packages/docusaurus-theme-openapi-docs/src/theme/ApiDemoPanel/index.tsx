@@ -24,12 +24,12 @@ function ApiDemoPanel({
 
   return (
     <div>
-      <Request item={item} />
-      <Response />
       <Curl
         postman={postman}
         codeSamples={(item as any)["x-code-samples"] ?? []}
       />
+      <Request item={item} />
+      <Response />
     </div>
   );
 }
