@@ -23,14 +23,14 @@ function ApiDemoPanel({
   const postman = new sdk.Request(item.postman);
 
   return (
-    <div>
+    <>
       <Curl
         postman={postman}
         codeSamples={(item as any)["x-code-samples"] ?? []}
       />
       <Request item={item} />
       <Response />
-    </div>
+    </>
   );
 }
 
