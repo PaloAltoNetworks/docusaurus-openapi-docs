@@ -122,7 +122,7 @@ function TabContent({ lazy, children, selectedValue }) {
     return cloneElement(selectedTabItem, { className: "margin-top--md" });
   }
   return (
-    <div className="margin-top--md">
+    <div className="margin-top--md openapi-tabs__code-content">
       {children.map((tabItem, i) =>
         cloneElement(tabItem, {
           key: i,
