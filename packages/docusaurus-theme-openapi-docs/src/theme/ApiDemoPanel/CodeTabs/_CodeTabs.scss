@@ -13,6 +13,11 @@
 .openapi-tabs__code-list-container {
   display: flex;
   justify-content: start;
+  padding-bottom: 0.6rem;
+}
+
+.openapi-tabs__code-content {
+  margin-top: unset !important;
 }
 
 .openapi-demo__code-block code {
