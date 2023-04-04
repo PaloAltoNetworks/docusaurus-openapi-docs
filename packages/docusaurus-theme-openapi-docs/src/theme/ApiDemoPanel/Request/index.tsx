@@ -183,7 +183,10 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
                 {requestBodyRequired && (
                   <span>
                     <small>
-                      <strong className="required"> required</strong>
+                      <strong className="request-body required">
+                        {" "}
+                        required
+                      </strong>
                     </small>
                   </span>
                 )}
