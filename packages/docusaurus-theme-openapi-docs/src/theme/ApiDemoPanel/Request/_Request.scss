@@ -110,3 +110,12 @@
     background-color: var(--ifm-color-primary-light);
   }
 }
+
+// Prevent auto zoom on mobile iOS devices when focusing on input elmenents
+@media screen and (-webkit-min-device-pixel-ratio: 0) and (max-device-width: 1024px) {
+  select,
+  textarea,
+  input {
+    font-size: 1rem;
+  }
+}
