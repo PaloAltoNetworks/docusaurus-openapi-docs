@@ -25,7 +25,7 @@ function SecuritySchemes(props: any) {
   return (
     <details className="openapi-security__details" open={false}>
       <summary className="openapi-security__summary-container">
-        <h4 className="openapi-demo__summary-header">
+        <h4 className="openapi-security__summary-header">
           Authorization: {selectedAuth[0].name ?? selectedAuth[0].type}
         </h4>
       </summary>
