@@ -1,8 +1,8 @@
 :root {
   --bash-background-color: transparent;
   --bash-border-radius: none;
-  --code-tab-logo-width: 26px;
-  --code-tab-logo-height: 26px;
+  --code-tab-logo-width: 24px;
+  --code-tab-logo-height: 24px;
 }
 
 [data-theme="dark"] {
@@ -11,7 +11,8 @@
 }
 
 .openapi-tabs__code-list-container {
-  display: table-row-group;
+  display: flex;
+  justify-content: space-between;
 }
 
 .openapi-demo__code-block code {
