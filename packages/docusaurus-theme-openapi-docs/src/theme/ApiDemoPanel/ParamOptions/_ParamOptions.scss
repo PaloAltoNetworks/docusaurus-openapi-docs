@@ -8,29 +8,21 @@
 }
 
 .openapi-demo__show-more-btn {
+  width: 100%;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-
-  cursor: pointer;
-  font-size: var(--ifm-code-font-size);
-
+  margin-left: 0.25rem;
+  margin-bottom: 0.5rem;
   padding: 0;
-
+  cursor: pointer;
+  font-size: var(--openapi-demo-font-size-input);
   user-select: none;
   white-space: nowrap;
-
   border: 0px solid transparent;
-
   display: block;
-  width: 100%;
-
   background-color: transparent;
-
   color: var(--ifm-color-primary);
-  cursor: pointer;
-  margin-top: var(--ifm-pre-padding);
-  margin-bottom: 0;
   text-align: left;
 
   &:hover {
@@ -132,7 +124,6 @@
 
 .openapi-demo__show-options {
   visibility: visible;
-  margin-top: var(--ifm-pre-padding);
 }
 
 .openapi-demo__hide-options {

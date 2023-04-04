@@ -1,18 +1,17 @@
 .openapi-demo__form-item {
   padding: var(--openapi-demo-padding-input);
+  font-size: var(--openapi-demo-font-size-input);
 
   &:first-child {
     margin-top: 0;
   }
 
   .required {
-    font-size: var(--ifm-code-font-size);
     color: var(--openapi-required);
   }
 }
 
 .openapi-demo__form-item-label {
   font-family: var(--ifm-font-family-monospace);
-  font-size: 12px;
   font-weight: bold;
 }
