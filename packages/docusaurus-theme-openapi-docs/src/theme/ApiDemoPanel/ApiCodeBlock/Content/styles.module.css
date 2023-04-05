@@ -77,3 +77,9 @@
 :global(.theme-code-block:hover) .buttonGroup button {
   opacity: 0.4;
 }
+
+@media screen and (max-width: 996px) {
+  .expandButton {
+    display: none !important;
+  }
+}

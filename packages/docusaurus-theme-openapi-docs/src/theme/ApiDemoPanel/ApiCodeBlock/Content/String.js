@@ -107,7 +107,7 @@ export default function CodeBlockString({
           )}
           <CopyButton className={styles.codeButton} code={code} />
           <ExpandButton
-            className={styles.codeButton}
+            className={clsx(styles.codeButton, styles.expandButton)}
             code={code}
             language={language}
             showLineNumbers={showLineNumbers}
