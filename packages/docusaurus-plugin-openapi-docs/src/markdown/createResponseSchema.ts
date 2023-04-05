@@ -479,32 +479,34 @@ function createDetailsNode(
               create("span", {
                 className: "openapi-schema__container",
                 children: [
-                  create("strong", { children: name }),
+                  create("strong", {
+                    ...(schema.deprecated && {
+                      className: "openapi-schema__strikethrough",
+                    }),
+                    children: name,
+                  }),
                   create("span", {
                     className: "openapi-schema__name",
                     children: ` ${schemaName}`,
                   }),
                   guard(
-                    (schema.nullable && schema.nullable === true) ||
-                      (nullable && nullable === true) ||
-                      schema.required ||
-                      required,
+                    (Array.isArray(required)
+                      ? required.includes(name)
+                      : required === true) ||
+                      schema.deprecated ||
+                      nullable,
                     () => [
                       create("span", {
                         className: "openapi-schema__divider",
                       }),
                     ]
                   ),
-                  guard(
-                    (schema.nullable && schema.nullable === true) ||
-                      (nullable && nullable === true),
-                    () => [
-                      create("span", {
-                        className: "badge badge--info openapi-schema__nullable",
-                        children: "nullable",
-                      }),
-                    ]
-                  ),
+                  guard(nullable, () => [
+                    create("span", {
+                      className: "badge badge--info openapi-schema__nullable",
+                      children: "nullable",
+                    }),
+                  ]),
                   guard(
                     Array.isArray(required)
                       ? required.includes(name)
@@ -517,6 +519,13 @@ function createDetailsNode(
                       }),
                     ]
                   ),
+                  guard(schema.deprecated, () => [
+                    create("span", {
+                      className:
+                        "badge badge--warning openapi-schema__deprecated",
+                      children: "deprecated",
+                    }),
+                  ]),
                 ],
               }),
             ],
