@@ -21,7 +21,7 @@
 }
 
 .openapi-demo__code-block code {
-  max-height: 500px;
+  height: 250px;
 }
 
 .openapi-tabs__code-item {
@@ -214,4 +214,12 @@
   .openapi-tabs__code-list {
     justify-content: space-around;
   }
+}
+
+.ReactModal__Body--open {
+  overflow: hidden !important;
+}
+
+.openapi-modal--open {
+  background-color: rgba(0, 0, 0, 0.7) !important;
 }
