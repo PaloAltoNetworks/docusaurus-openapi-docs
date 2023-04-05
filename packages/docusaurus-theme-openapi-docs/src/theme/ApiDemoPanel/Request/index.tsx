@@ -4,6 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
+
 // @ts-nocheck
 import React, { useState } from "react";
 
@@ -12,16 +13,9 @@ import sdk from "@paloaltonetworks/postman-collection";
 import Accept from "@theme/ApiDemoPanel/Accept";
 import Authorization from "@theme/ApiDemoPanel/Authorization";
 import Body from "@theme/ApiDemoPanel/Body";
+import buildPostmanRequest from "@theme/ApiDemoPanel/buildPostmanRequest";
 import ContentType from "@theme/ApiDemoPanel/ContentType";
 import ParamOptions from "@theme/ApiDemoPanel/ParamOptions";
-import Server from "@theme/ApiDemoPanel/Server";
-import { useTypedSelector } from "@theme/ApiItem/hooks";
-import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
-import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
-import { ErrorMessage } from "@hookform/error-message";
-import { useForm } from "react-hook-form";
-import buildPostmanRequest from "@theme/ApiDemoPanel/buildPostmanRequest";
-import makeRequest from "./makeRequest";
 import {
   setResponse,
   setCode,
@@ -29,10 +23,15 @@ import {
   setHeaders,
   clearHeaders,
 } from "@theme/ApiDemoPanel/Response/slice";
+import Server from "@theme/ApiDemoPanel/Server";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
+import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
+import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
+import { useForm } from "react-hook-form";
+
+import makeRequest from "./makeRequest";
 
 function Request({ item }: { item: NonNullable<ApiItem> }) {
-  const response = useTypedSelector((state: any) => state.response.value);
   const postman = new sdk.Request(item.postman);
   const metadata = useDoc();
   const { proxy, hide_send_button: hideSendButton } = metadata.frontMatter;
@@ -70,8 +69,6 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
     server,
     auth,
   });
-
-  console.log({ body });
 
   const delay = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
@@ -121,7 +118,6 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
   const showParams = allParams.length > 0;
   const requestBodyRequired = item.requestBody?.required;
 
-  console.log({ acceptOptions, serverOptions });
   // High level considerations
   // Do we have access to required properties? If so, we can use them to pass now the required prop
 
