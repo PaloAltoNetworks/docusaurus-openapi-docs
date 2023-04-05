@@ -1,0 +1,40 @@
+:global(.theme-code-block:hover) .exitButtonCopied {
+  opacity: 1 !important;
+}
+
+.exitButtonIcons {
+  position: relative;
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.exitButtonIcon,
+.exitButtonSuccessIcon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  fill: currentColor;
+  opacity: inherit;
+  width: inherit;
+  height: inherit;
+  transition: all 0.15s ease;
+}
+
+.exitButtonSuccessIcon {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.33);
+  opacity: 0;
+  color: #00d600;
+}
+
+.exitButtonCopied .exitButtonIcon {
+  transform: scale(0.33);
+  opacity: 0;
+}
+
+.exitButtonCopied .exitButtonSuccessIcon {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  transition-delay: 0.075s;
+}

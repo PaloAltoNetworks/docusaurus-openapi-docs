@@ -1,0 +1,135 @@
+:global(.theme-code-block:hover) .expandButtonCopied {
+  opacity: 1 !important;
+}
+
+.expandButtonIcons {
+  position: relative;
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.expandButtonIcon,
+.expandButtonSuccessIcon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  fill: currentColor;
+  opacity: inherit;
+  width: inherit;
+  height: inherit;
+  transition: all 0.15s ease;
+}
+
+.expandButtonSuccessIcon {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.33);
+  opacity: 0;
+  color: #00d600;
+}
+
+.expandButtonCopied .expandButtonIcon {
+  transform: scale(0.33);
+  opacity: 0;
+}
+
+.expandButtonCopied .expandButtonSuccessIcon {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  transition-delay: 0.075s;
+}
+
+/* Code Block styles */
+.codeBlockContent {
+  position: relative;
+  /* rtl:ignore */
+  direction: ltr;
+  border-radius: inherit;
+  max-height: 500px;
+}
+
+.codeBlockTitle {
+  border-bottom: 1px solid var(--ifm-color-emphasis-300);
+  font-size: var(--ifm-code-font-size);
+  font-weight: 500;
+  padding: 0.75rem var(--ifm-pre-padding);
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+}
+
+.codeBlock {
+  --ifm-pre-background: var(--prism-background-color);
+  margin: 0;
+  padding: 0;
+}
+
+.codeBlock code {
+  height: unset;
+}
+
+.codeBlockTitle + .codeBlockContent .codeBlock {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.codeBlockStandalone {
+  padding: 0;
+}
+
+.codeBlockLines {
+  font: inherit;
+  /* rtl:ignore */
+  float: left;
+  min-width: 100%;
+  padding: var(--ifm-pre-padding);
+}
+
+.codeBlockLinesWithNumbering {
+  display: table;
+  padding: var(--ifm-pre-padding) 0;
+}
+
+@media print {
+  .codeBlockLines {
+    white-space: pre-wrap;
+  }
+}
+
+.buttonGroup {
+  display: flex;
+  column-gap: 0.2rem;
+  position: absolute;
+  right: calc(var(--ifm-pre-padding) / 2);
+  top: calc(var(--ifm-pre-padding) / 2);
+}
+
+.buttonGroup button {
+  display: flex;
+  align-items: center;
+  background: var(--prism-background-color);
+  color: var(--prism-color);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-global-radius);
+  padding: 0.4rem;
+  line-height: 0;
+  transition: opacity 200ms ease-in-out;
+  opacity: 0;
+}
+
+.buttonGroup button:focus-visible,
+.buttonGroup button:hover {
+  opacity: 1 !important;
+}
+
+:global(.theme-code-block:hover) .buttonGroup button {
+  opacity: 0.4;
+}
+
+/* Container */
+.codeBlockContainer {
+  background: var(--prism-background-color);
+  color: var(--prism-color);
+  margin-bottom: unset;
+  box-shadow: var(--ifm-global-shadow-lw);
+  border-radius: var(--ifm-code-border-radius);
+}
