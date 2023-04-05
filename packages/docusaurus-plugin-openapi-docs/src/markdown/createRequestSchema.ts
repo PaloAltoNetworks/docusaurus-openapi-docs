@@ -561,22 +561,27 @@ function createPropertyDiscriminator(
     className: "openapi-discriminator__item",
     children: create("div", {
       children: [
-        create("strong", { style: { paddingLeft: "1rem" }, children: name }),
-        guard(schemaName, (name) =>
-          create("span", {
-            style: { opacity: "0.6" },
-            children: ` ${schemaName}`,
-          })
-        ),
-        guard(required, () => [
-          create("strong", {
-            style: {
-              fontSize: "var(--ifm-code-font-size)",
-              color: "var(--openapi-required)",
-            },
-            children: " required",
-          }),
-        ]),
+        create("span", {
+          className: "openapi-schema__container",
+          children: [
+            create("strong", {
+              className: "openapi-discriminator__name",
+              children: name,
+            }),
+            guard(schemaName, (name) =>
+              create("span", {
+                className: "openapi-schema__name",
+                children: ` ${schemaName}`,
+              })
+            ),
+            guard(required, () => [
+              create("span", {
+                className: "badge badge--danger openapi-schema__required",
+                children: "required",
+              }),
+            ]),
+          ],
+        }),
         guard(getQualifierMessage(discriminator), (message) =>
           create("div", {
             style: {
