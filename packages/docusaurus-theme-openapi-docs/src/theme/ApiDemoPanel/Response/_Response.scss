@@ -16,6 +16,10 @@
       0 2px 3px hsla(222, 8%, 43%, 0.15),
       0 16px 16px -10px hsla(222, 8%, 43%, 0.2);
   }
+
+  .openapi-demo__code-block code {
+    padding-top: 0;
+  }
 }
 
 .openapi-demo__response-title-container {
