@@ -53,7 +53,6 @@ function BodyWrap({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
 
 function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
   const contentType = useTypedSelector((state: any) => state.contentType.value);
-  const required = requestBodyMetadata?.required;
 
   const dispatch = useTypedDispatch();
 

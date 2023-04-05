@@ -8,8 +8,8 @@
 import React from "react";
 
 import { usePrismTheme } from "@docusaurus/theme-common";
-import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import { Loading } from "@nextui-org/react";
+import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import CodeBlock from "@theme/CodeBlock";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
