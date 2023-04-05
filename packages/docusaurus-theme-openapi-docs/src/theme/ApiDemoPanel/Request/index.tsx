@@ -98,7 +98,6 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
   } = useForm();
 
   const onSubmit = async () => {
-    console.log("React Form Hook button clicked");
     dispatch(setResponse("Fetching..."));
     try {
       await delay(1200);

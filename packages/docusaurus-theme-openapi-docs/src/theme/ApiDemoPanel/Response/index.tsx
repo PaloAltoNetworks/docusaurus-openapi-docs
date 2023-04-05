@@ -9,6 +9,7 @@ import React from "react";
 
 import { usePrismTheme } from "@docusaurus/theme-common";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
+import { Loading } from "@nextui-org/react";
 import CodeBlock from "@theme/CodeBlock";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
@@ -51,36 +52,37 @@ function Response() {
         ? "openapi-response__dot--success"
         : "openapi-response__dot--info");
 
-  if (response === undefined) {
-    return null;
-  }
+  // if (response === undefined) {
+  //   return null;
+  // }
 
   let prettyResponse: string = response;
-  try {
-    prettyResponse = JSON.stringify(JSON.parse(response), null, 2);
-  } catch {
-    if (response.startsWith("<")) {
-      prettyResponse = formatXml(response);
+
+  if (prettyResponse) {
+    try {
+      prettyResponse = JSON.stringify(JSON.parse(response), null, 2);
+    } catch {
+      if (response.startsWith("<")) {
+        prettyResponse = formatXml(response);
+      }
     }
   }
 
   return (
-    <details className="openapi-demo__details" open={true}>
-      <summary className="openapi-demo__summary-container">
-        <div className="openapi-demo__summary-content">
-          <h4 className="openapi-demo__summary-header">Response</h4>
-          <button
-            className="button button--sm button--secondary"
-            onClick={() => {
-              dispatch(clearResponse());
-              dispatch(clearCode());
-              dispatch(clearHeaders());
-            }}
-          >
-            Clear
-          </button>
-        </div>
-      </summary>
+    <div className="openapi-demo__response-container">
+      <div className="openapi-demo__response-title-container">
+        <span className="openapi-demo__response-title">Response</span>
+        <span
+          className="openapi-demo__response-clear-btn"
+          onClick={() => {
+            dispatch(clearResponse());
+            dispatch(clearCode());
+            dispatch(clearHeaders());
+          }}
+        >
+          Clear
+        </span>
+      </div>
       <div
         style={{
           backgroundColor: prismTheme.plain.backgroundColor,
@@ -106,7 +108,12 @@ function Response() {
                 className="openapi-demo__code-block openapi-response__status-code"
                 language={response.startsWith("<") ? `xml` : `json`}
               >
-                {prettyResponse || "No Response"}
+                {prettyResponse || (
+                  <p className="openapi-demo__response-placeholder-message">
+                    Click the <code>Send API Request</code> button above and see
+                    the response here!
+                  </p>
+                )}
               </CodeBlock>
             </TabItem>
             {/* @ts-ignore */}
@@ -119,11 +126,18 @@ function Response() {
               </CodeBlock>
             </TabItem>
           </SchemaTabs>
+        ) : prettyResponse === "Fetching..." ? (
+          <div className="openapi-demo__loading-container">
+            <Loading color="success" />
+          </div>
         ) : (
-          prettyResponse || "No Response"
+          <p className="openapi-demo__response-placeholder-message">
+            Click the <code>Send API Request</code> button above and see the
+            response here!
+          </p>
         )}
       </div>
-    </details>
+    </div>
   );
 }
 
