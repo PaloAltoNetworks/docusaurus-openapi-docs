@@ -1,9 +1,19 @@
+/* ============================================================================
+ * Copyright (c) Palo Alto Networks
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ * ========================================================================== */
+
 import React, { useCallback, useState, useRef, useEffect } from "react";
+
+import { translate } from "@docusaurus/Translate";
 import clsx from "clsx";
 // @ts-expect-error: TODO, we need to make theme-classic have type: module
 import copy from "copy-text-to-clipboard";
-import { translate } from "@docusaurus/Translate";
+
 import styles from "./styles.module.css";
+
 export default function CopyButton({ code, className }) {
   const [isCopied, setIsCopied] = useState(false);
   const copyTimeout = useRef(undefined);

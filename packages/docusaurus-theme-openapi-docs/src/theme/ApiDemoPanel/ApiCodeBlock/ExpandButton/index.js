@@ -1,15 +1,25 @@
+/* ============================================================================
+ * Copyright (c) Palo Alto Networks
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ * ========================================================================== */
+
 import React, { useEffect } from "react";
-import clsx from "clsx";
+
 import { usePrismTheme } from "@docusaurus/theme-common";
 import { translate } from "@docusaurus/Translate";
-import Highlight, { defaultProps } from "prism-react-renderer";
-import Line from "@theme/ApiDemoPanel/ApiCodeBlock/Line";
 import Container from "@theme/ApiDemoPanel/ApiCodeBlock/Container";
 import CopyButton from "@theme/ApiDemoPanel/ApiCodeBlock/CopyButton";
 import ExitButton from "@theme/ApiDemoPanel/ApiCodeBlock/ExitButton";
+import Line from "@theme/ApiDemoPanel/ApiCodeBlock/Line";
 import WordWrapButton from "@theme/ApiDemoPanel/ApiCodeBlock/WordWrapButton";
+import clsx from "clsx";
+import Highlight, { defaultProps } from "prism-react-renderer";
 import Modal from "react-modal";
+
 import styles from "./styles.module.css";
+
 export default function ExpandButton({
   code,
   className,

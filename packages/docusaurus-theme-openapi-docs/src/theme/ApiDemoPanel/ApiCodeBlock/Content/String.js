@@ -1,5 +1,12 @@
+/* ============================================================================
+ * Copyright (c) Palo Alto Networks
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ * ========================================================================== */
+
 import React from "react";
-import clsx from "clsx";
+
 import { useThemeConfig, usePrismTheme } from "@docusaurus/theme-common";
 import {
   parseCodeBlockTitle,
@@ -8,12 +15,14 @@ import {
   containsLineNumbers,
   useCodeWordWrap,
 } from "@docusaurus/theme-common/internal";
-import Highlight, { defaultProps } from "prism-react-renderer";
-import Line from "@theme/ApiDemoPanel/ApiCodeBlock/Line";
+import Container from "@theme/ApiDemoPanel/ApiCodeBlock/Container";
 import CopyButton from "@theme/ApiDemoPanel/ApiCodeBlock/CopyButton";
 import ExpandButton from "@theme/ApiDemoPanel/ApiCodeBlock/ExpandButton";
+import Line from "@theme/ApiDemoPanel/ApiCodeBlock/Line";
 import WordWrapButton from "@theme/ApiDemoPanel/ApiCodeBlock/WordWrapButton";
-import Container from "@theme/ApiDemoPanel/ApiCodeBlock/Container";
+import clsx from "clsx";
+import Highlight, { defaultProps } from "prism-react-renderer";
+
 import styles from "./styles.module.css";
 
 export default function CodeBlockString({

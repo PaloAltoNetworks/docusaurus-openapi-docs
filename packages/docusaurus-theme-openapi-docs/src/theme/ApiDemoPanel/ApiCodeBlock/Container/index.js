@@ -1,8 +1,18 @@
+/* ============================================================================
+ * Copyright (c) Palo Alto Networks
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ * ========================================================================== */
+
 import React from "react";
-import clsx from "clsx";
+
 import { ThemeClassNames, usePrismTheme } from "@docusaurus/theme-common";
 import { getPrismCssVariables } from "@docusaurus/theme-common/internal";
+import clsx from "clsx";
+
 import styles from "./styles.module.css";
+
 export default function CodeBlockContainer({ as: As, ...props }) {
   const prismTheme = usePrismTheme();
   const prismCssVariables = getPrismCssVariables(prismTheme);
