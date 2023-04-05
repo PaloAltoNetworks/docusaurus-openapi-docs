@@ -902,12 +902,10 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
                   children: [
                     create("strong", { children: `${title}` }),
                     guard(body.required && body.required === true, () => [
-                      create("strong", {
-                        style: {
-                          fontSize: "var(--ifm-code-font-size)",
-                          color: "var(--openapi-required)",
-                        },
-                        children: " required",
+                      create("span", {
+                        className:
+                          "badge badge--danger openapi-schema__required",
+                        children: "required",
                       }),
                     ]),
                   ],
@@ -974,11 +972,8 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
                   ),
                   guard(body.required, () => [
                     create("strong", {
-                      style: {
-                        fontSize: "var(--ifm-code-font-size)",
-                        color: "var(--openapi-required)",
-                      },
-                      children: " required",
+                      className: "badge badge--danger openapi-schema__required",
+                      children: "required",
                     }),
                   ]),
                 ],

@@ -933,12 +933,10 @@ export function createResponseSchema({ title, body, ...rest }: Props) {
                               guard(
                                 body.required && body.required === true,
                                 () => [
-                                  create("strong", {
-                                    style: {
-                                      fontSize: "var(--ifm-code-font-size)",
-                                      color: "var(--openapi-required)",
-                                    },
-                                    children: " required",
+                                  create("span", {
+                                    className:
+                                      "badge badge--danger openapi-schema__required",
+                                    children: "required",
                                   }),
                                 ]
                               ),
