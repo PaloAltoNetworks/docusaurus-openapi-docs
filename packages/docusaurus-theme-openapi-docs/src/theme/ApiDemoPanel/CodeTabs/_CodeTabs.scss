@@ -54,7 +54,7 @@
 
 .openapi-demo__code-block code {
   max-height: 200px;
-  font-size: 12px;
+  font-size: var(--openapi-demo-font-size-code);
   padding-top: 0;
 }
 
