@@ -469,38 +469,49 @@ function createDetailsNode(
         children: [
           createDetailsSummary({
             children: [
-              create("strong", { children: name }),
               create("span", {
-                style: { opacity: "0.6" },
-                children: ` ${schemaName}`,
+                className: "openapi-schema__container",
+                children: [
+                  create("strong", { children: name }),
+                  create("span", {
+                    className: "openapi-schema__name",
+                    children: ` ${schemaName}`,
+                  }),
+                  guard(
+                    (schema.nullable && schema.nullable === true) ||
+                      (nullable && nullable === true) ||
+                      schema.required ||
+                      required,
+                    () => [
+                      create("span", {
+                        className: "openapi-schema__divider",
+                      }),
+                    ]
+                  ),
+                  guard(
+                    (schema.nullable && schema.nullable === true) ||
+                      (nullable && nullable === true),
+                    () => [
+                      create("span", {
+                        className: "badge badge--info openapi-schema__nullable",
+                        children: "nullable",
+                      }),
+                    ]
+                  ),
+                  guard(
+                    Array.isArray(required)
+                      ? required.includes(name)
+                      : required === true,
+                    () => [
+                      create("span", {
+                        className:
+                          "badge badge--danger openapi-schema__required",
+                        children: "required",
+                      }),
+                    ]
+                  ),
+                ],
               }),
-              guard(
-                (schema.nullable && schema.nullable === true) ||
-                  (nullable && nullable === true),
-                () => [
-                  create("strong", {
-                    style: {
-                      fontSize: "var(--ifm-code-font-size)",
-                      color: "var(--openapi-nullable)",
-                    },
-                    children: " nullable",
-                  }),
-                ]
-              ),
-              guard(
-                Array.isArray(required)
-                  ? required.includes(name)
-                  : required === true,
-                () => [
-                  create("strong", {
-                    style: {
-                      fontSize: "var(--ifm-code-font-size)",
-                      color: "var(--openapi-required)",
-                    },
-                    children: " required",
-                  }),
-                ]
-              ),
             ],
           }),
           create("div", {
