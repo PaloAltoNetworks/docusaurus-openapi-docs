@@ -123,7 +123,7 @@ function ParamsItem({
       <span className="openapi-schema__container">
         <strong>{name}</strong>
         {renderSchemaName}
-        {required && <span class="openapi-schema__divider"></span>}
+        {required && <span className="openapi-schema__divider"></span>}
         {renderSchemaRequired}
       </span>
       {renderSchema}
