@@ -13,7 +13,7 @@ import sdk from "@paloaltonetworks/postman-collection";
 import buildPostmanRequest from "@theme/ApiDemoPanel/buildPostmanRequest";
 import CodeTabs from "@theme/ApiDemoPanel/CodeTabs";
 import { useTypedSelector } from "@theme/ApiItem/hooks";
-import CodeBlock from "@theme/CodeBlock";
+import ApiCodeBlock from "@theme/ApiDemoPanel/ApiCodeBlock";
 import merge from "lodash/merge";
 
 export interface Language {
@@ -285,13 +285,14 @@ function Curl({ postman, codeSamples }: Props) {
                 className: `openapi-tabs__code-item--${lang.logoClass}`,
               }}
             >
-              <CodeBlock
+              {/* @ts-ignore */}
+              <ApiCodeBlock
                 language={lang.highlight}
                 className="openapi-demo__code-block"
                 title={`${lang.language} / ${lang.variant}`}
               >
                 {codeText}
-              </CodeBlock>
+              </ApiCodeBlock>
             </CodeTab>
           );
         })}
