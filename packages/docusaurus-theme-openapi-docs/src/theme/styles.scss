@@ -22,6 +22,7 @@
 /* Api Demo Panel / ApiCodeBlock */
 @use "./ApiDemoPanel/ApiCodeBlock/Container/Container";
 @use "./ApiDemoPanel/ApiCodeBlock/Content/Content";
+@use "./ApiDemoPanel/ApiCodeBlock/CopyButton/CopyButton";
 
 /* Schema Styling */
 @use "./ParamsItem/ParamsItem";
