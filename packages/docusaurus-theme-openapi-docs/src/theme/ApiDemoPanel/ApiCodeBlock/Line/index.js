@@ -9,8 +9,6 @@ import React from "react";
 
 import clsx from "clsx";
 
-import styles from "./styles.module.css";
-
 export default function CodeBlockLine({
   line,
   classNames,
@@ -23,7 +21,10 @@ export default function CodeBlockLine({
   }
   const lineProps = getLineProps({
     line,
-    className: clsx(classNames, showLineNumbers && styles.codeLine),
+    className: clsx(
+      classNames,
+      showLineNumbers && "openapi-demo__code-block-code-line"
+    ),
   });
   const lineTokens = line.map((token, key) => (
     <span key={key} {...getTokenProps({ token, key })} />
@@ -32,8 +33,10 @@ export default function CodeBlockLine({
     <span {...lineProps}>
       {showLineNumbers ? (
         <>
-          <span className={styles.codeLineNumber} />
-          <span className={styles.codeLineContent}>{lineTokens}</span>
+          <span className="openapi-demo__code-block-code-line-number" />
+          <span className="openapi-demo__code-block-code-line-content">
+            {lineTokens}
+          </span>
         </>
       ) : (
         lineTokens

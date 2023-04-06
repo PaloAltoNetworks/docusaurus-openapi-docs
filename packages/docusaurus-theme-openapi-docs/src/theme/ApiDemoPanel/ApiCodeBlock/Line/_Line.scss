@@ -15,12 +15,12 @@ the background in custom CSS file due bug https://github.com/facebook/docusaurus
   padding: 0 var(--ifm-pre-padding);
 }
 
-.codeLine {
+.openapi-demo__code-block-code-line {
   display: table-row;
   counter-increment: line-count;
 }
 
-.codeLineNumber {
+.openapi-demo__code-block-code-line-number {
   display: table-cell;
   text-align: right;
   width: 1%;
@@ -31,15 +31,16 @@ the background in custom CSS file due bug https://github.com/facebook/docusaurus
   overflow-wrap: normal;
 }
 
-.codeLineNumber::before {
+.openapi-demo__code-block-code-line-number::before {
   content: counter(line-count);
   opacity: 0.4;
 }
 
-:global(.theme-code-block-highlighted-line) .codeLineNumber::before {
+:global(.theme-code-block-highlighted-line)
+  .openapi-demo__code-block-code-line-number::before {
   opacity: 0.8;
 }
 
-.codeLineContent {
+.openapi-demo__code-block-code-line-number {
   padding-right: var(--ifm-pre-padding);
 }
