@@ -29,7 +29,7 @@ function ApiDemoPanel({
         codeSamples={(item as any)["x-code-samples"] ?? []}
       />
       <Request item={item} />
-      <Response />
+      <Response item={item} />
     </>
   );
 }
