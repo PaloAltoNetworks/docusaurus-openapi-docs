@@ -290,6 +290,7 @@ function Curl({ postman, codeSamples }: Props) {
                 language={lang.highlight}
                 className="openapi-demo__code-block"
                 title={`${lang.language} / ${lang.variant}`}
+                showLineNumbers={true}
               >
                 {codeText}
               </ApiCodeBlock>
