@@ -10,8 +10,6 @@ import React from "react";
 import { translate } from "@docusaurus/Translate";
 import clsx from "clsx";
 
-import styles from "./styles.module.css";
-
 export default function WordWrapButton({ className, onClick, isEnabled }) {
   const title = translate({
     id: "theme.CodeBlock.wordWrapToggle",
@@ -26,13 +24,13 @@ export default function WordWrapButton({ className, onClick, isEnabled }) {
       className={clsx(
         "clean-btn",
         className,
-        isEnabled && styles.wordWrapButtonEnabled
+        isEnabled && "openapi-demo__code-block-word-wrap-btn--enabled"
       )}
       aria-label={title}
       title={title}
     >
       <svg
-        className={styles.wordWrapButtonIcon}
+        className="openapi-demo__code-block-word-wrap-btn-icon"
         viewBox="0 0 24 24"
         aria-hidden="true"
       >

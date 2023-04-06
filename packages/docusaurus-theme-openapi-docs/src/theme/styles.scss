@@ -25,6 +25,8 @@
 @use "./ApiDemoPanel/ApiCodeBlock/CopyButton/CopyButton";
 @use "./ApiDemoPanel/ApiCodeBlock/ExitButton/ExitButton";
 @use "./ApiDemoPanel/ApiCodeBlock/ExpandButton/ExpandButton";
+@use "./ApiDemoPanel/ApiCodeBlock/Line/Line";
+@use "./ApiDemoPanel/ApiCodeBlock/WordWrapButton/WordWrapButton";
 
 /* Schema Styling */
 @use "./ParamsItem/ParamsItem";
