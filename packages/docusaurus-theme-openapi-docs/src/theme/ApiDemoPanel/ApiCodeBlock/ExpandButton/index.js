@@ -13,7 +13,6 @@ import Container from "@theme/ApiDemoPanel/ApiCodeBlock/Container";
 import CopyButton from "@theme/ApiDemoPanel/ApiCodeBlock/CopyButton";
 import ExitButton from "@theme/ApiDemoPanel/ApiCodeBlock/ExitButton";
 import Line from "@theme/ApiDemoPanel/ApiCodeBlock/Line";
-import WordWrapButton from "@theme/ApiDemoPanel/ApiCodeBlock/WordWrapButton";
 import clsx from "clsx";
 import Highlight, { defaultProps } from "prism-react-renderer";
 import Modal from "react-modal";
@@ -26,7 +25,6 @@ export default function ExpandButton({
   blockClassName,
   title,
   lineClassNames,
-  wordWrap,
 }) {
   const prismTheme = usePrismTheme();
 
@@ -137,7 +135,6 @@ export default function ExpandButton({
                 <pre
                   /* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */
                   tabIndex={0}
-                  ref={wordWrap.codeBlockRef}
                   className={clsx(
                     className,
                     "openapi-demo__code-block",
@@ -166,13 +163,6 @@ export default function ExpandButton({
               )}
             </Highlight>
             <div className="openapi-demo__code-block-btn-group">
-              {(wordWrap.isEnabled || wordWrap.isCodeScrollable) && (
-                <WordWrapButton
-                  className="openapi-demo__code-block-code-btn"
-                  onClick={() => wordWrap.toggle()}
-                  isEnabled={wordWrap.isEnabled}
-                />
-              )}
               <CopyButton
                 className="openapi-demo__code-block-code-btn"
                 code={code}
