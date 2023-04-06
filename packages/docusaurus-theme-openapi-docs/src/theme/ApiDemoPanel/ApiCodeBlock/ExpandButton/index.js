@@ -86,16 +86,25 @@ export default function ExpandButton({
         className={clsx(
           "clean-btn",
           className,
-          styles.expandButton,
-          modalIsOpen && styles.expandButtonCopied
+          "openapi-demo__code-block-expand-btn",
+          modalIsOpen && "openapi-demo__code-block-expand-btn--copied"
         )}
         onClick={openModal}
       >
-        <span className={styles.expandButtonIcons} aria-hidden="true">
-          <svg className={styles.expandButtonIcon} viewBox="0 0 448 512">
+        <span
+          className="openapi-demo__code-block-expand-btn-icons"
+          aria-hidden="true"
+        >
+          <svg
+            className="openapi-demo__code-block-expand-btn-icon"
+            viewBox="0 0 448 512"
+          >
             <path d="M32 32C14.3 32 0 46.3 0 64v96c0 17.7 14.3 32 32 32s32-14.3 32-32V96h64c17.7 0 32-14.3 32-32s-14.3-32-32-32H32zM64 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7 14.3 32 32 32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H64V352zM320 32c-17.7 0-32 14.3-32 32s14.3 32 32 32h64v64c0 17.7 14.3 32 32 32s32-14.3 32-32V64c0-17.7-14.3-32-32-32H320zM448 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v64H320c-17.7 0-32 14.3-32 32s14.3 32 32 32h96c17.7 0 32-14.3 32-32V352z" />
           </svg>
-          <svg className={styles.expandButtonSuccessIcon} viewBox="0 0 24 24">
+          <svg
+            className="openapi-demo__code-block-expand-btn-icon--success"
+            viewBox="0 0 24 24"
+          >
             <path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" />
           </svg>
         </span>
@@ -109,14 +118,16 @@ export default function ExpandButton({
         <Container
           as="div"
           className={clsx(
-            styles.codeBlockContainer,
+            "openapi-demo__code-block-container",
             language &&
               !blockClassName.includes(`language-${language}`) &&
               `language-${language}`
           )}
         >
-          {title && <div className={styles.codeBlockTitle}>{title}</div>}
-          <div className={styles.codeBlockContent}>
+          {title && (
+            <div className="openapi-demo__code-block-title">{title}</div>
+          )}
+          <div className="openapi-demo__code-block-content">
             <Highlight
               {...defaultProps}
               theme={prismTheme}
@@ -130,14 +141,15 @@ export default function ExpandButton({
                   ref={wordWrap.codeBlockRef}
                   className={clsx(
                     className,
-                    styles.codeBlock,
+                    "openapi-demo__code-block",
                     "thin-scrollbar"
                   )}
                 >
                   <code
                     className={clsx(
-                      styles.codeBlockLines,
-                      showLineNumbers && styles.codeBlockLinesWithNumbering
+                      "openapi-demo__code-block-lines",
+                      showLineNumbers &&
+                        "openapi-demo__code-block-lines-numbers"
                     )}
                   >
                     {tokens.map((line, i) => (
@@ -154,16 +166,22 @@ export default function ExpandButton({
                 </pre>
               )}
             </Highlight>
-            <div className={styles.buttonGroup}>
+            <div className="openapi-demo__code-block-btn-group">
               {(wordWrap.isEnabled || wordWrap.isCodeScrollable) && (
                 <WordWrapButton
-                  className={styles.codeButton}
+                  className="openapi-demo__code-block-code-btn"
                   onClick={() => wordWrap.toggle()}
                   isEnabled={wordWrap.isEnabled}
                 />
               )}
-              <CopyButton className={styles.codeButton} code={code} />
-              <ExitButton className={styles.codeButton} handler={closeModal} />
+              <CopyButton
+                className="openapi-demo__code-block-code-btn"
+                code={code}
+              />
+              <ExitButton
+                className="openapi-dmeo__code-block-code-btn"
+                handler={closeModal}
+              />
             </div>
           </div>
         </Container>
