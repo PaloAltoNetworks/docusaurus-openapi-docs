@@ -47,12 +47,14 @@ export default function ExpandButton({
       left: "50%",
       right: "auto",
       bottom: "auto",
-      marginRight: "-50%",
       padding: "none",
+      border: "thin solid var(--ifm-toc-border-color)",
       borderRadius: "var(--ifm-global-radius)",
       transform: "translate(-50%, -50%)",
-      maxWidth: "75%",
+      maxWidth: "95%",
+      width: "min-content",
       overflow: "auto",
+      zIndex: "201",
     },
   };
   useEffect(() => {
