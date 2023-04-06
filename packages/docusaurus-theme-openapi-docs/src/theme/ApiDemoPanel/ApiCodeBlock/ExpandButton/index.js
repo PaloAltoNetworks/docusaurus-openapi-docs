@@ -41,17 +41,18 @@ export default function ExpandButton({
   const [modalIsOpen, setIsOpen] = React.useState(false);
 
   const customStyles = {
-    overlay: { backgroundColor: "rgba(0, 0, 0, 0.8)" },
+    overlay: { backgroundColor: "rgba(0, 0, 0, 0.9)", zIndex: "201" },
     content: {
       top: "50%",
       left: "50%",
       right: "auto",
       bottom: "auto",
-      marginRight: "-50%",
       padding: "none",
+      border: "thin solid var(--ifm-toc-border-color)",
       borderRadius: "var(--ifm-global-radius)",
       transform: "translate(-50%, -50%)",
-      maxWidth: "75%",
+      maxWidth: "95%",
+      width: "min-content",
       overflow: "auto",
     },
   };

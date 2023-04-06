@@ -40,7 +40,8 @@
 }
 
 .openapi-demo__code-block-lines-numbering {
-  display: table;
+  // This causes max-height to unset
+  // display: table;
   padding: var(--ifm-pre-padding) 0;
 }
 

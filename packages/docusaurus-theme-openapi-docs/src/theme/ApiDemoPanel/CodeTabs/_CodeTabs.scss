@@ -10,6 +10,10 @@
   --bash-border-radius: 20px;
 }
 
+.openapi-tabs__code-container {
+  margin-bottom: 1rem;
+}
+
 .openapi-tabs__code-list-container {
   display: flex;
   justify-content: flex-start;
@@ -21,7 +25,13 @@
 }
 
 .openapi-demo__code-block code {
-  max-height: 250px;
+  max-height: 200px;
+}
+
+body[class="ReactModal__Body--open"] {
+  .openapi-demo__code-block code {
+    max-height: 600px;
+  }
 }
 
 .openapi-tabs__code-item {

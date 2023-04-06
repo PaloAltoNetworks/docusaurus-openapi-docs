@@ -136,7 +136,7 @@ function TabContent({ lazy, children, selectedValue }) {
 function TabsComponent(props) {
   const tabs = useTabs(props);
   return (
-    <div className="tabs-container">
+    <div className="tabs-container openapi-tabs__code-container">
       <TabList {...props} {...tabs} />
       <TabContent {...props} {...tabs} />
     </div>
