@@ -8,7 +8,7 @@ the background in custom CSS file due bug https://github.com/facebook/docusaurus
   --docusaurus-highlighted-code-line-bg: rgb(100 100 100);
 }
 
-:global(.theme-code-block-highlighted-line) {
+.theme-code-block-highlighted-line {
   background-color: var(--docusaurus-highlighted-code-line-bg);
   display: block;
   margin: 0 calc(-1 * var(--ifm-pre-padding));

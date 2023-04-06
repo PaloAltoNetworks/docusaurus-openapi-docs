@@ -76,7 +76,7 @@
   opacity: 1 !important;
 }
 
-:global(.theme-code-block:hover) .openapi-demo__code-block-btn-group button {
+.theme-code-block:hover .openapi-demo__code-block-btn-group button {
   opacity: 0.4;
 }
 
