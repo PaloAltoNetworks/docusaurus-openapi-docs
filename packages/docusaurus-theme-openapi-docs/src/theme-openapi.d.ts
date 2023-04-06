@@ -209,7 +209,13 @@ declare module "@theme/ApiDemoPanel/Request" {
 }
 
 declare module "@theme/ApiDemoPanel/Response" {
-  export default function Response(): JSX.Element;
+  import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
+
+  export interface ResponseProps {
+    item: NonNullable<ApiItem>;
+  }
+
+  export default function Response(props: ResponseProps): JSX.Element;
 }
 
 declare module "@theme/ApiDemoPanel/Response/slice" {

@@ -7,9 +7,11 @@
 
 import React from "react";
 
+import { useDoc } from "@docusaurus/theme-common/internal";
 import { usePrismTheme } from "@docusaurus/theme-common";
 import { Loading } from "@nextui-org/react";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
+import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 import CodeBlock from "@theme/CodeBlock";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
@@ -37,7 +39,9 @@ function formatXml(xml: string) {
   return formatted.substring(1, formatted.length - 3);
 }
 
-function Response() {
+function Response({ item }: { item: NonNullable<ApiItem> }) {
+  const metadata = useDoc();
+  const hideSendButton = metadata.frontMatter.hide_send_button;
   const prismTheme = usePrismTheme();
   const code = useTypedSelector((state: any) => state.response.code);
   const headers = useTypedSelector((state: any) => state.response.headers);
@@ -52,9 +56,9 @@ function Response() {
         ? "openapi-response__dot--success"
         : "openapi-response__dot--info");
 
-  // if (response === undefined) {
-  //   return null;
-  // }
+  if (!item.servers || hideSendButton) {
+    return null;
+  }
 
   let prettyResponse: string = response;
 
