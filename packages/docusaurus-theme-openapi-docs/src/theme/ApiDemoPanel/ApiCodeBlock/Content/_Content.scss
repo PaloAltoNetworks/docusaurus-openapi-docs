@@ -1,11 +1,11 @@
-.codeBlockContent {
+.openapi-demo__code-block-content {
   position: relative;
   /* rtl:ignore */
   direction: ltr;
   border-radius: inherit;
 }
 
-.codeBlockTitle {
+.openapi-demo__code-block-title {
   border-bottom: 1px solid var(--ifm-color-emphasis-300);
   font-size: var(--ifm-code-font-size);
   font-weight: 500;
@@ -14,22 +14,24 @@
   border-top-right-radius: inherit;
 }
 
-.codeBlock {
+.openapi-demo__code-block {
   --ifm-pre-background: var(--prism-background-color);
   margin: 0;
   padding: 0;
 }
 
-.codeBlockTitle + .codeBlockContent .codeBlock {
+.openapi-demo__code-block-title
+  + .openapi-demo__code-block-content
+  .openapi-demo__code-block {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
 
-.codeBlockStandalone {
+.openapi-demo__code-block-standalone {
   padding: 0;
 }
 
-.codeBlockLines {
+.openapi-demo__code-block-lines {
   font: inherit;
   /* rtl:ignore */
   float: left;
@@ -37,18 +39,18 @@
   padding: var(--ifm-pre-padding);
 }
 
-.codeBlockLinesWithNumbering {
+.openapi-demo__code-block-lines-numbering {
   display: table;
   padding: var(--ifm-pre-padding) 0;
 }
 
 @media print {
-  .codeBlockLines {
+  .openapi-demo__code-block-lines {
     white-space: pre-wrap;
   }
 }
 
-.buttonGroup {
+.openapi-demo__code-block-btn-group {
   display: flex;
   column-gap: 0.2rem;
   position: absolute;
@@ -56,7 +58,7 @@
   top: calc(var(--ifm-pre-padding) / 2);
 }
 
-.buttonGroup button {
+.openapi-demo__code-block-btn-group button {
   display: flex;
   align-items: center;
   background: var(--prism-background-color);
@@ -69,17 +71,17 @@
   opacity: 0;
 }
 
-.buttonGroup button:focus-visible,
-.buttonGroup button:hover {
+.openapi-demo__code-block-btn-group button:focus-visible,
+.openapi-demo__code-block-btn-group button:hover {
   opacity: 1 !important;
 }
 
-:global(.theme-code-block:hover) .buttonGroup button {
+:global(.theme-code-block:hover) .openapi-demo__code-block-btn-group button {
   opacity: 0.4;
 }
 
 @media screen and (max-width: 996px) {
-  .expandButton {
+  .openapi-demo__expand-btn {
     display: none !important;
   }
 }

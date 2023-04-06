@@ -23,8 +23,6 @@ import WordWrapButton from "@theme/ApiDemoPanel/ApiCodeBlock/WordWrapButton";
 import clsx from "clsx";
 import Highlight, { defaultProps } from "prism-react-renderer";
 
-import styles from "./styles.module.css";
-
 export default function CodeBlockString({
   children,
   className: blockClassName = "",
@@ -62,8 +60,8 @@ export default function CodeBlockString({
           `language-${language}`
       )}
     >
-      {title && <div className={styles.codeBlockTitle}>{title}</div>}
-      <div className={styles.codeBlockContent}>
+      {title && <div className="openapi-demo__code-block-title">{title}</div>}
+      <div className="openapi-demo__code-block-content">
         <Highlight
           {...defaultProps}
           theme={prismTheme}
@@ -75,12 +73,16 @@ export default function CodeBlockString({
               /* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */
               tabIndex={0}
               ref={wordWrap.codeBlockRef}
-              className={clsx(className, styles.codeBlock, "thin-scrollbar")}
+              className={clsx(
+                className,
+                "openapi-demo__code-block",
+                "thin-scrollbar"
+              )}
             >
               <code
                 className={clsx(
-                  styles.codeBlockLines,
-                  showLineNumbers && styles.codeBlockLinesWithNumbering
+                  "openapi-demo__code-block-lines",
+                  showLineNumbers && "openapi-demo__code-block-lines-numbering"
                 )}
               >
                 {tokens.map((line, i) => (
@@ -97,17 +99,23 @@ export default function CodeBlockString({
             </pre>
           )}
         </Highlight>
-        <div className={styles.buttonGroup}>
+        <div className="openapi-demo__code-block-btn-group">
           {(wordWrap.isEnabled || wordWrap.isCodeScrollable) && (
             <WordWrapButton
-              className={styles.codeButton}
+              className="openapi-api__code-block-code-btn"
               onClick={() => wordWrap.toggle()}
               isEnabled={wordWrap.isEnabled}
             />
           )}
-          <CopyButton className={styles.codeButton} code={code} />
+          <CopyButton
+            className="openapi-api__code-block-code-btn"
+            code={code}
+          />
           <ExpandButton
-            className={clsx(styles.codeButton, styles.expandButton)}
+            className={clsx(
+              "openapi-api__code-block-code-btn",
+              "openapi-demo__expand-btn"
+            )}
             code={code}
             language={language}
             showLineNumbers={showLineNumbers}
