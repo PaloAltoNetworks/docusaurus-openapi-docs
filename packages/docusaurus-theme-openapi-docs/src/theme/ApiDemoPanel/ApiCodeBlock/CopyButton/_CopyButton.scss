@@ -1,4 +1,4 @@
-:global(.theme-code-block:hover) {
+.theme-code-block:hover {
   .openapi-demo__code-block-copy-btn--copied {
     opacity: 1 !important;
   }
