@@ -1,7 +1,7 @@
 .openpai-demo__form-item-input {
   margin-top: calc(var(--ifm-pre-padding) / 2);
   background-color: var(--openapi-input-background);
-  border: none;
+  border: 1px solid transparent;
   outline: none;
   width: 100%;
   color: var(--ifm-pre-color);
