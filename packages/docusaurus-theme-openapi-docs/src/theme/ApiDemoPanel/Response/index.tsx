@@ -7,15 +7,15 @@
 
 import React from "react";
 
-import { useDoc } from "@docusaurus/theme-common/internal";
 import { usePrismTheme } from "@docusaurus/theme-common";
+import { useDoc } from "@docusaurus/theme-common/internal";
 import { Loading } from "@nextui-org/react";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
-import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 import CodeBlock from "@theme/CodeBlock";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
 import clsx from "clsx";
+import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 
 import { clearResponse, clearCode, clearHeaders } from "./slice";
 

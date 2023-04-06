@@ -118,6 +118,15 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
   const showParams = allParams.length > 0;
   const requestBodyRequired = item.requestBody?.required;
 
+  if (
+    !showAcceptOptions &&
+    !showAuth &&
+    !showParams &&
+    !showRequestBody &&
+    !showServerOptions
+  ) {
+    return null;
+  }
   // High level considerations
   // Do we have access to required properties? If so, we can use them to pass now the required prop
 
