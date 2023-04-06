@@ -102,18 +102,18 @@ export default function CodeBlockString({
         <div className="openapi-demo__code-block-btn-group">
           {(wordWrap.isEnabled || wordWrap.isCodeScrollable) && (
             <WordWrapButton
-              className="openapi-api__code-block-code-btn"
+              className="openapi-demo__code-block-code-btn"
               onClick={() => wordWrap.toggle()}
               isEnabled={wordWrap.isEnabled}
             />
           )}
           <CopyButton
-            className="openapi-api__code-block-code-btn"
+            className="openapi-demo__code-block-code-btn"
             code={code}
           />
           <ExpandButton
             className={clsx(
-              "openapi-api__code-block-code-btn",
+              "openapi-demo__code-block-code-btn",
               "openapi-demo__expand-btn"
             )}
             code={code}

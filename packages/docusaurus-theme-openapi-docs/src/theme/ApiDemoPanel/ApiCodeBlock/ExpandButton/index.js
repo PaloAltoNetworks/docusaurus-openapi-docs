@@ -18,8 +18,6 @@ import clsx from "clsx";
 import Highlight, { defaultProps } from "prism-react-renderer";
 import Modal from "react-modal";
 
-import styles from "./styles.module.css";
-
 export default function ExpandButton({
   code,
   className,
