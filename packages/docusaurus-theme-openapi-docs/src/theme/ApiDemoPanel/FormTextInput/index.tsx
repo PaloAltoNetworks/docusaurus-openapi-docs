@@ -31,7 +31,6 @@ function FormTextInput({
   placeholder = placeholder?.split("\n")[0];
 
   const showErrorMessage = errors?.[paramName]?.message;
-  console.log({ errors });
   // const registerInput = register ? {...register.register}
   return (
     <>
