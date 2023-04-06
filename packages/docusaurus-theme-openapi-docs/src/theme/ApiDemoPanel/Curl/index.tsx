@@ -10,10 +10,10 @@ import React, { useState, useEffect } from "react";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import codegen from "@paloaltonetworks/postman-code-generators";
 import sdk from "@paloaltonetworks/postman-collection";
+import ApiCodeBlock from "@theme/ApiDemoPanel/ApiCodeBlock";
 import buildPostmanRequest from "@theme/ApiDemoPanel/buildPostmanRequest";
 import CodeTabs from "@theme/ApiDemoPanel/CodeTabs";
 import { useTypedSelector } from "@theme/ApiItem/hooks";
-import CodeBlock from "@theme/CodeBlock";
 import merge from "lodash/merge";
 
 export interface Language {
@@ -285,13 +285,15 @@ function Curl({ postman, codeSamples }: Props) {
                 className: `openapi-tabs__code-item--${lang.logoClass}`,
               }}
             >
-              <CodeBlock
+              {/* @ts-ignore */}
+              <ApiCodeBlock
                 language={lang.highlight}
                 className="openapi-demo__code-block"
                 title={`${lang.language} / ${lang.variant}`}
+                showLineNumbers={true}
               >
                 {codeText}
-              </CodeBlock>
+              </ApiCodeBlock>
             </CodeTab>
           );
         })}

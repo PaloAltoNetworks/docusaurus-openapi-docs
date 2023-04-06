@@ -225,6 +225,10 @@ declare module "@theme/ApiDemoPanel/Server" {
   export default function Server(): JSX.Element;
 }
 
+declare module "@theme/ApiDemoPanel/ApiCodeBlock" {
+  export default function ApiCodeBlock(): JSX.Element;
+}
+
 declare module "@theme/ApiDemoPanel/Server/slice" {
   export default server as Reducer<State, AnyAction>;
 }

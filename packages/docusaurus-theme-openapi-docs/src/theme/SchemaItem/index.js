@@ -101,7 +101,7 @@ function SchemaItem({
         </strong>
         <span className="openapi-schema__name"> {schemaName}</span>
         {(nullable || required || deprecated) && (
-          <span class="openapi-schema__divider"></span>
+          <span className="openapi-schema__divider"></span>
         )}
         {renderNullable}
         {!deprecated && renderRequired}
