@@ -28,6 +28,12 @@
   max-height: 200px;
 }
 
+body[class="ReactModal__Body--open"] {
+  .openapi-demo__code-block code {
+    max-height: 600px;
+  }
+}
+
 .openapi-tabs__code-item {
   margin-top: 0 !important;
   margin-right: 0.5rem;
