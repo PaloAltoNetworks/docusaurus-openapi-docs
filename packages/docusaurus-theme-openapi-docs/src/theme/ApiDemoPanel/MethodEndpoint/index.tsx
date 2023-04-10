@@ -40,6 +40,7 @@ export interface Props {
 function MethodEndpoint({ method, path }: Props) {
   return (
     <pre
+      className="openapi-method-endpoint"
       style={{
         background: "var(--openapi-card-background-color)",
         borderRadius: "var(--openapi-card-border-radius)",
@@ -51,7 +52,9 @@ function MethodEndpoint({ method, path }: Props) {
       >
         {method.toUpperCase()}
       </span>{" "}
-      <span>{path.replace(/{([a-z0-9-_]+)}/gi, ":$1")}</span>
+      <span className="openapi-method-endpoint__path">
+        {path.replace(/{([a-z0-9-_]+)}/gi, ":$1")}
+      </span>
     </pre>
   );
 }
