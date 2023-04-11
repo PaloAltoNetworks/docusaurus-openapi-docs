@@ -21,7 +21,7 @@ export interface ParamProps {
   param: Param;
 }
 
-function ParamOption({ errors, param, register }: ParamProps) {
+function ParamOption({ param }: ParamProps) {
   if (param.schema?.type === "array" && param.schema.items?.enum) {
     return <ParamMultiSelectFormItem param={param} />;
   }
@@ -40,20 +40,18 @@ function ParamOption({ errors, param, register }: ParamProps) {
 
   // integer, number, string, int32, int64, float, double, object, byte, binary,
   // date-time, date, password
-  return (
-    <ParamTextFormItem errors={errors} register={register} param={param} />
-  );
+  return <ParamTextFormItem param={param} />;
 }
 
-function ParamOptionWrapper({ errors, param, register }: ParamProps) {
+function ParamOptionWrapper({ param }: ParamProps) {
   return (
     <FormItem label={param.name} type={param.in} required={param.required}>
-      <ParamOption errors={errors} register={register} param={param} />
+      <ParamOption param={param} />
     </FormItem>
   );
 }
 
-function ParamOptions({ register, errors }) {
+function ParamOptions() {
   const [showOptional, setShowOptional] = useState(false);
 
   const pathParams = useTypedSelector((state: any) => state.params.path);
@@ -75,12 +73,7 @@ function ParamOptions({ register, errors }) {
     <>
       {/* Required Parameters */}
       {requiredParams.map((param) => (
-        <ParamOptionWrapper
-          register={register}
-          errors={errors}
-          key={`${param.in}-${param.name}`}
-          param={param}
-        />
+        <ParamOptionWrapper key={`${param.in}-${param.name}`} param={param} />
       ))}
 
       {/* Optional Parameters */}
@@ -322,9 +315,7 @@ function ParamTextFormItem({ errors, param, register }: ParamProps) {
   const dispatch = useTypedDispatch();
   return (
     <FormTextInput
-      errors={errors}
       isRequired={param.required}
-      register={register}
       paramName={param.name}
       placeholder={param.description || param.name}
       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>

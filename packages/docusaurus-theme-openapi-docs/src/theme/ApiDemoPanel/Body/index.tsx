@@ -53,7 +53,6 @@ function BodyWrap({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
 
 function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
   const contentType = useTypedSelector((state: any) => state.contentType.value);
-
   const dispatch = useTypedDispatch();
 
   // Lot's of possible content-types:
@@ -191,6 +190,11 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
                 }
               >
                 <FormTextInput
+                  paramName={key}
+                  isRequired={
+                    Array.isArray(schema.required) &&
+                    schema.required.includes(key)
+                  }
                   placeholder={val.description || key}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     dispatch(
