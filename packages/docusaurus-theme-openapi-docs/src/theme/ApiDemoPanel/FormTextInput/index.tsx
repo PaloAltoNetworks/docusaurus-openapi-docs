@@ -9,6 +9,7 @@
 import React from "react";
 
 import { ErrorMessage } from "@hookform/error-message";
+import { useFormContext } from "react-hook-form";
 import clsx from "clsx";
 
 export interface Props {
@@ -24,17 +25,20 @@ function FormTextInput({
   placeholder,
   password,
   onChange,
-  register,
   paramName,
-  errors,
 }: Props) {
   placeholder = placeholder?.split("\n")[0];
 
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
+
   const showErrorMessage = errors?.[paramName]?.message;
-  // const registerInput = register ? {...register.register}
+
   return (
     <>
-      {register ? (
+      {paramName && (
         <input
           {...register(paramName, {
             required: isRequired ? "This field is required" : false,
@@ -42,16 +46,6 @@ function FormTextInput({
           className={clsx("openpai-demo__form-item-input", {
             error: showErrorMessage,
           })}
-          type={password ? "password" : "text"}
-          placeholder={placeholder}
-          title={placeholder}
-          value={value}
-          onChange={onChange}
-          autoComplete="off"
-        />
-      ) : (
-        <input
-          className="openpai-demo__form-item-input"
           type={password ? "password" : "text"}
           placeholder={placeholder}
           title={placeholder}

@@ -27,7 +27,7 @@ import Server from "@theme/ApiDemoPanel/Server";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 
 import makeRequest from "./makeRequest";
 
@@ -49,7 +49,6 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
   const serverOptions = useTypedSelector((state: any) => state.server.options);
   const auth = useTypedSelector((state: any) => state.auth);
   const dispatch = useTypedDispatch();
-  const [isDetailsOpen, setIsDetailsOpen] = useState(true);
 
   const allParams = [
     ...pathParams,
@@ -88,13 +87,9 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
     }
   );
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const methods = useForm();
 
-  const onSubmit = async () => {
+  const onSubmit = async (data) => {
     dispatch(setResponse("Fetching..."));
     try {
       await delay(1200);
@@ -127,31 +122,69 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
   ) {
     return null;
   }
-  // High level considerations
-  // Do we have access to required properties? If so, we can use them to pass now the required prop
+
+  const [expandAccept, setExpandAccept] = useState(true);
+  const [expandAuth, setExpandAuth] = useState(true);
+  const [expandBody, setExpandBody] = useState(true);
+  const [expandParams, setExpandParams] = useState(true);
+  const [expandServer, setExpandServer] = useState(true);
+
+  const expandAllDetails = () => {
+    setExpandAccept(true);
+    setExpandAuth(true);
+    setExpandBody(true);
+    setExpandParams(true);
+    setExpandServer(true);
+  };
+
+  const collapseAllDetails = () => {
+    setExpandAccept(false);
+    setExpandAuth(false);
+    setExpandBody(false);
+    setExpandParams(false);
+    setExpandServer(false);
+  };
+
+  const allDetailsExpanded =
+    expandParams && expandBody && expandServer && expandAuth && expandAccept;
 
   return (
-    <>
+    <FormProvider {...methods}>
       <form
         className="openapi-demo__request-form"
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={methods.handleSubmit(onSubmit)}
       >
         <div className="openapi-demo__request-header-container">
           <span className="openapi-demo__request-title">Request </span>
-          <span
-            className="openapi-demo__expand-details-btn"
-            onClick={() => setIsDetailsOpen(!isDetailsOpen)}
-          >
-            {isDetailsOpen ? "Collapse all" : "Expand all"}
-          </span>
+          {allDetailsExpanded ? (
+            <span
+              className="openapi-demo__expand-details-btn"
+              onClick={collapseAllDetails}
+            >
+              Collapse all
+            </span>
+          ) : (
+            <span
+              className="openapi-demo__expand-details-btn"
+              onClick={expandAllDetails}
+            >
+              Expand all
+            </span>
+          )}
         </div>
         <div className="openapi-demo__details-outer-container">
           {showServerOptions && (
             <details
-              open={isDetailsOpen}
+              open={expandServer}
               className="openapi-demo__details-container"
             >
-              <summary className="openapi-demo__details-summary">
+              <summary
+                className="openapi-demo__details-summary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setExpandServer(!expandServer);
+                }}
+              >
                 Base URL
               </summary>
               <Server />
@@ -159,30 +192,52 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
           )}
           {showAuth && (
             <details
-              open={isDetailsOpen}
+              open={expandAuth}
               className="openapi-demo__details-container"
             >
-              <summary className="openapi-demo__details-summary">Auth</summary>
+              <summary
+                className="openapi-demo__details-summary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setExpandAuth(!expandAuth);
+                }}
+              >
+                Auth
+              </summary>
               <Authorization />
             </details>
           )}
           {showParams && (
             <details
-              open={isDetailsOpen}
+              open={
+                expandParams || Object.keys(methods.formState.errors).length
+              }
               className="openapi-demo__details-container"
             >
-              <summary className="openapi-demo__details-summary">
+              <summary
+                className="openapi-demo__details-summary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setExpandParams(!expandParams);
+                }}
+              >
                 Parameters
               </summary>
-              <ParamOptions errors={errors} register={register} />
+              <ParamOptions />
             </details>
           )}
           {showRequestBody && (
             <details
-              open={isDetailsOpen}
+              open={expandBody}
               className="openapi-demo__details-container"
             >
-              <summary className="openapi-demo__details-summary">
+              <summary
+                className="openapi-demo__details-summary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setExpandBody(!expandBody);
+                }}
+              >
                 Body{" "}
                 {requestBodyRequired && (
                   <span>
@@ -200,17 +255,22 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
                 <Body
                   jsonRequestBodyExample={item.jsonRequestBodyExample}
                   requestBodyMetadata={item.requestBody}
-                  register={register}
                 />
               </>
             </details>
           )}
           {showAcceptOptions && (
             <details
-              open={isDetailsOpen}
+              open={expandAccept}
               className="openapi-demo__details-container"
             >
-              <summary className="openapi-demo__details-summary">
+              <summary
+                className="openapi-demo__details-summary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setExpandAccept(!expandAccept);
+                }}
+              >
                 Accept
               </summary>
               <Accept />
@@ -223,7 +283,7 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
           )}
         </div>
       </form>
-    </>
+    </FormProvider>
   );
 }
 
