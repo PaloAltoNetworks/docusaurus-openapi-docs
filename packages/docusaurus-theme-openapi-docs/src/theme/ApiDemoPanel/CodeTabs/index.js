@@ -101,7 +101,7 @@ function TabList({
             }
           )}
         >
-          {label ?? value}
+          <span>{label ?? value}</span>
         </li>
       ))}
     </ul>

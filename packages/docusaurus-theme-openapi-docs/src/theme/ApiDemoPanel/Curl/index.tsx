@@ -275,7 +275,7 @@ function Curl({ postman, codeSamples }: Props) {
           return (
             <CodeTab
               value={lang.language}
-              label={""}
+              label={lang.language}
               key={
                 lang.variant
                   ? `${lang.language}-${lang.variant}`
