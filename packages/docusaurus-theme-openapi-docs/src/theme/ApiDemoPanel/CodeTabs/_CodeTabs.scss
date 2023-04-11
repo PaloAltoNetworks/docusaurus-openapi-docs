@@ -12,6 +12,33 @@
 
 .openapi-tabs__code-container {
   margin-bottom: 1rem;
+
+  .openapi-tabs__code-item {
+    display: flex;
+    flex-direction: column-reverse;
+    flex: 0 0 80px;
+    align-items: center;
+    padding: 0.5rem 0 !important;
+    margin-top: 0 !important;
+    margin-right: 0.5rem;
+    border: 1px solid transparent;
+    transition: 300ms;
+
+    &:not(.active):hover {
+      border: 1px solid var(--openapi-code-tab-border-color);
+    }
+
+    &:hover {
+      background-color: transparent;
+    }
+
+    span {
+      padding-top: 0.5rem;
+      color: var(--ifm-font-color-secondary);
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+  }
 }
 
 .openapi-tabs__code-list-container {
@@ -32,32 +59,6 @@
 body[class="ReactModal__Body--open"] {
   .openapi-demo__code-block code {
     max-height: 600px;
-  }
-}
-
-.openapi-tabs__code-item {
-  display: flex;
-  flex-direction: column-reverse;
-  align-items: center;
-  margin-top: 0 !important;
-  margin-right: 0.5rem;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-  padding-top: 1rem !important;
-  padding-bottom: 1rem !important;
-  border: 1px solid transparent;
-  transition: 300ms;
-
-  &:hover {
-    border: 1px solid var(--openapi-code-tab-border-color);
-    background-color: transparent;
-  }
-
-  span {
-    padding-top: 0.5rem;
-    color: var(--ifm-font-color-secondary);
-    font-size: 10px;
-    text-transform: uppercase;
   }
 }
 
