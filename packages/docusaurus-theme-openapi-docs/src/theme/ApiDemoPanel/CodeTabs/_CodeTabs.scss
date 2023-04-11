@@ -17,6 +17,7 @@
 .openapi-tabs__code-list-container {
   display: flex;
   justify-content: flex-start;
+  padding: 0.25rem;
   padding-bottom: 0.6rem;
 }
 
@@ -41,10 +42,11 @@ body[class="ReactModal__Body--open"] {
   padding-right: 1.5rem;
   padding-top: 1rem !important;
   padding-bottom: 1rem !important;
+  border: 1px solid transparent;
 
-  &.active {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
+  &:hover {
+    border: 1px solid var(--openapi-code-tab-border-color);
+    background-color: transparent;
   }
 }
 
@@ -60,8 +62,8 @@ body[class="ReactModal__Body--open"] {
   }
 
   &.active {
-    border-bottom-color: var(--ifm-color-success);
-    background-color: var(--ifm-color-emphasis-100);
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-python);
+    border-color: var(--openapi-code-tab-border-color-python);
   }
 }
 
@@ -77,8 +79,8 @@ body[class="ReactModal__Body--open"] {
   }
 
   &.active {
-    border-bottom-color: var(--ifm-color-info);
-    background-color: var(--ifm-color-emphasis-100);
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-go);
+    border-color: var(--openapi-code-tab-border-color-go);
   }
 }
 
@@ -94,8 +96,8 @@ body[class="ReactModal__Body--open"] {
   }
 
   &.active {
-    border-bottom-color: var(--ifm-color-warning);
-    background-color: var(--ifm-color-emphasis-100);
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-js);
+    border-color: var(--openapi-code-tab-border-color-js);
   }
 }
 
@@ -113,8 +115,8 @@ body[class="ReactModal__Body--open"] {
   }
 
   &.active {
-    border-bottom-color: var(--ifm-color-danger);
-    background-color: var(--ifm-color-emphasis-100);
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-bash);
+    border-color: var(--ifm-color-danger);
   }
 }
 
@@ -130,8 +132,8 @@ body[class="ReactModal__Body--open"] {
   }
 
   &.active {
-    border-bottom-color: var(--ifm-color-danger);
-    background-color: var(--ifm-color-emphasis-100);
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-ruby);
+    border-color: var(--openapi-code-tab-border-color-ruby);
   }
 }
 
@@ -147,8 +149,8 @@ body[class="ReactModal__Body--open"] {
   }
 
   &.active {
-    border-bottom-color: var(--ifm-color-gray-500);
-    background-color: var(--ifm-color-emphasis-100);
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-csharp);
+    border-color: var(--openapi-code-tab-border-color-csharp);
   }
 }
 
@@ -164,8 +166,8 @@ body[class="ReactModal__Body--open"] {
   }
 
   &.active {
-    border-bottom-color: var(--ifm-color-success);
-    background-color: var(--ifm-color-emphasis-100);
+    box-shadow: 0 0 0 3px var(--opeanpi-code-tab-shadow-color-nodejs);
+    border-color: var(--openapi-code-tab-border-color-nodejs);
   }
 }
 
@@ -181,8 +183,8 @@ body[class="ReactModal__Body--open"] {
   }
 
   &.active {
-    border-bottom-color: var(--ifm-color-gray-500);
-    background-color: var(--ifm-color-emphasis-100);
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-php);
+    border-color: var(--openapi-code-tab-border-color-php);
   }
 }
 
@@ -198,8 +200,8 @@ body[class="ReactModal__Body--open"] {
   }
 
   &.active {
-    border-bottom-color: var(--ifm-color-warning);
-    background-color: var(--ifm-color-emphasis-100);
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-java);
+    border-color: var(--openapi-code-tab-border-color-java);
   }
 }
 
@@ -215,8 +217,8 @@ body[class="ReactModal__Body--open"] {
   }
 
   &.active {
-    border-bottom-color: var(--ifm-color-success);
-    background-color: var(--ifm-color-emphasis-100);
+    box-shadow: 0 0 0 3px var(--opeanpi-code-tab-shadow-color-powershell);
+    border-color: var(--openapi-code-tab-border-color-powershell);
   }
 }
 
