@@ -331,12 +331,13 @@ function Curl({ postman, codeSamples }: Props) {
                 }}
                 includeVariant={true}
                 currentLanguage={lang.language}
+                defaultValue={selectedVariant}
                 lazy
               >
                 {lang.variants.map((variant) => {
                   return (
                     <CodeTab
-                      value={variant}
+                      value={variant.toLowerCase()}
                       label={variant.toUpperCase()}
                       key={`${lang.language}-${lang.variant}`}
                       attributes={{
