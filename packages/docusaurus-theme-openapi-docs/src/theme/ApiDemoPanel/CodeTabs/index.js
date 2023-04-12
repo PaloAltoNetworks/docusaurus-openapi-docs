@@ -17,6 +17,8 @@ import clsx from "clsx";
 
 function TabList({
   action,
+  currentLanguage,
+  includeVariant,
   className,
   block,
   selectedValue,
@@ -38,10 +40,19 @@ function TabList({
     }
 
     if (action) {
-      const newLanguage = languageSet.filter(
-        (lang) => lang.language === newTabValue
-      );
-      action(newLanguage[0]);
+      let newLanguage;
+      if (currentLanguage && includeVariant) {
+        newLanguage = languageSet.filter(
+          (lang) => lang.language === currentLanguage
+        )[0];
+        newLanguage.variant = newTabValue;
+        action.setSelectedVariant(newTabValue);
+      } else {
+        newLanguage = languageSet.filter(
+          (lang) => lang.language === newTabValue
+        )[0];
+      }
+      action.setLanguage(newLanguage);
     }
   };
 
