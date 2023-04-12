@@ -51,6 +51,7 @@ function TabList({
         newLanguage = languageSet.filter(
           (lang) => lang.language === newTabValue
         )[0];
+        action.setSelectedVariant(newLanguage.variant);
       }
       action.setLanguage(newLanguage);
     }
