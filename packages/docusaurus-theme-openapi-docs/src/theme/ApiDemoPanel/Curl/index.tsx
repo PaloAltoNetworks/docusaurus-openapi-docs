@@ -315,7 +315,6 @@ function Curl({ postman, codeSamples }: Props) {
         lazy
       >
         {mergedLangs.map((lang) => {
-          const defaultVariant = lang.variants[0];
           return (
             <CodeTab
               value={lang.language}
@@ -358,8 +357,6 @@ function Curl({ postman, codeSamples }: Props) {
               </CodeTabs>
             </CodeTab>
           );
-
-          return undefined;
         })}
       </CodeTabs>
     </>
