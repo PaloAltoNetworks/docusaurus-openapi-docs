@@ -54,6 +54,27 @@
   --openapi-input-border: var(--ifm-color-primary);
   --openapi-input-background: var(--openapi-card-background-color);
   --openapi-tree-line-color: var(--ifm-toc-border-color);
+  --openapi-code-tab-border-color: var(--ifm-toc-border-color);
+  --openapi-code-tab-border-color-python: #ffdb50;
+  --openapi-code-tab-border-color-bash: var(--ifm-color-danger);
+  --openapi-code-tab-border-color-go: var(--ifm-color-info);
+  --openapi-code-tab-border-color-js: var(--ifm-color-warning);
+  --openapi-code-tab-border-color-ruby: var(--ifm-color-danger);
+  --openapi-code-tab-border-color-csharp: #9b4f96;
+  --openapi-code-tab-border-color-nodejs: var(--ifm-color-success);
+  --openapi-code-tab-border-color-php: #6181b6;
+  --openapi-code-tab-border-color-java: #0374bd;
+  --openapi-code-tab-border-color-powershell: #00adef;
+  --openapi-code-tab-shadow-color-python: rgba(255, 219, 80, 0.25);
+  --openapi-code-tab-shadow-color-bash: rgba(250, 56, 62, 0.25);
+  --openapi-code-tab-shadow-color-go: rgba(84, 199, 236, 0.25);
+  --openapi-code-tab-shadow-color-js: rgba(255, 186, 0, 0.25);
+  --openapi-code-tab-shadow-color-ruby: rgba(250, 56, 62, 0.25);
+  --openapi-code-tab-shadow-color-csharp: rgba(155, 79, 150, 0.25);
+  --opeanpi-code-tab-shadow-color-nodejs: rgba(0, 164, 0, 0.25);
+  --openapi-code-tab-shadow-color-php: rgba(97, 129, 182, 0.25);
+  --openapi-code-tab-shadow-color-java: rgba(3, 116, 189, 0.25);
+  --opeanpi-code-tab-shadow-color-powershell: rgba(3, 116, 189, 0.25);
 }
 
 [data-theme="dark"] {

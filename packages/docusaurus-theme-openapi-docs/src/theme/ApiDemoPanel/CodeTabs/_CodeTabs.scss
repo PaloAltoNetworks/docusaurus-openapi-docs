@@ -12,11 +12,39 @@
 
 .openapi-tabs__code-container {
   margin-bottom: 1rem;
+
+  .openapi-tabs__code-item {
+    display: flex;
+    flex-direction: column-reverse;
+    flex: 0 0 80px;
+    align-items: center;
+    padding: 0.5rem 0 !important;
+    margin-top: 0 !important;
+    margin-right: 0.5rem;
+    border: 1px solid transparent;
+    transition: 300ms;
+
+    &:not(.active):hover {
+      border: 1px solid var(--openapi-code-tab-border-color);
+    }
+
+    &:hover {
+      background-color: transparent;
+    }
+
+    span {
+      padding-top: 0.5rem;
+      color: var(--ifm-font-color-secondary);
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+  }
 }
 
 .openapi-tabs__code-list-container {
   display: flex;
   justify-content: flex-start;
+  padding: 0.25rem;
   padding-bottom: 0.6rem;
 }
 
@@ -34,18 +62,18 @@ body[class="ReactModal__Body--open"] {
   }
 }
 
-.openapi-tabs__code-item {
-  margin-top: 0 !important;
-  margin-right: 0.5rem;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-  padding-top: 1rem !important;
-  padding-bottom: 1rem !important;
+.openapi-tabs__code-item--variant {
+  color: var(--ifm-color-secondary);
 
   &.active {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
+    border-color: var(--ifm-toc-border-color);
   }
+}
+
+.openapi-tabs__code-item--variant > span {
+  padding-top: unset !important;
+  padding-left: 0.5rem !important;
+  padding-right: 0.5rem !important;
 }
 
 .openapi-tabs__code-item--python {
@@ -55,13 +83,14 @@ body[class="ReactModal__Body--open"] {
     content: "";
     width: var(--code-tab-logo-width);
     height: var(--code-tab-logo-height);
-    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg");
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg")
+      no-repeat;
     margin-block: auto;
   }
 
   &.active {
-    border-bottom-color: var(--ifm-color-success);
-    background-color: var(--ifm-color-emphasis-100);
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-python);
+    border-color: var(--openapi-code-tab-border-color-python);
   }
 }
 
@@ -72,13 +101,14 @@ body[class="ReactModal__Body--open"] {
     content: "";
     width: var(--code-tab-logo-width);
     height: var(--code-tab-logo-height);
-    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/go/go-original-wordmark.svg");
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/go/go-original-wordmark.svg")
+      no-repeat;
     margin-block: auto;
   }
 
   &.active {
-    border-bottom-color: var(--ifm-color-info);
-    background-color: var(--ifm-color-emphasis-100);
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-go);
+    border-color: var(--openapi-code-tab-border-color-go);
   }
 }
 
@@ -89,13 +119,14 @@ body[class="ReactModal__Body--open"] {
     content: "";
     width: var(--code-tab-logo-width);
     height: var(--code-tab-logo-height);
-    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg");
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg")
+      no-repeat;
     margin-block: auto;
   }
 
   &.active {
-    border-bottom-color: var(--ifm-color-warning);
-    background-color: var(--ifm-color-emphasis-100);
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-js);
+    border-color: var(--openapi-code-tab-border-color-js);
   }
 }
 
@@ -106,15 +137,16 @@ body[class="ReactModal__Body--open"] {
     content: "";
     width: var(--code-tab-logo-width);
     height: var(--code-tab-logo-height);
-    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/bash/bash-plain.svg");
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/bash/bash-plain.svg")
+      no-repeat;
     margin-block: auto;
     background-color: var(--bash-background-color);
     border-radius: var(--bash-border-radius);
   }
 
   &.active {
-    border-bottom-color: var(--ifm-color-danger);
-    background-color: var(--ifm-color-emphasis-100);
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-bash);
+    border-color: var(--ifm-color-danger);
   }
 }
 
@@ -125,13 +157,14 @@ body[class="ReactModal__Body--open"] {
     content: "";
     width: var(--code-tab-logo-width);
     height: var(--code-tab-logo-height);
-    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/ruby/ruby-plain.svg");
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/ruby/ruby-plain.svg")
+      no-repeat;
     margin-block: auto;
   }
 
   &.active {
-    border-bottom-color: var(--ifm-color-danger);
-    background-color: var(--ifm-color-emphasis-100);
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-ruby);
+    border-color: var(--openapi-code-tab-border-color-ruby);
   }
 }
 
@@ -142,13 +175,14 @@ body[class="ReactModal__Body--open"] {
     content: "";
     width: var(--code-tab-logo-width);
     height: var(--code-tab-logo-height);
-    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/csharp/csharp-original.svg");
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/csharp/csharp-original.svg")
+      no-repeat;
     margin-block: auto;
   }
 
   &.active {
-    border-bottom-color: var(--ifm-color-gray-500);
-    background-color: var(--ifm-color-emphasis-100);
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-csharp);
+    border-color: var(--openapi-code-tab-border-color-csharp);
   }
 }
 
@@ -159,13 +193,14 @@ body[class="ReactModal__Body--open"] {
     content: "";
     width: var(--code-tab-logo-width);
     height: var(--code-tab-logo-height);
-    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/nodejs/nodejs-original.svg");
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/nodejs/nodejs-original.svg")
+      no-repeat;
     margin-block: auto;
   }
 
   &.active {
-    border-bottom-color: var(--ifm-color-success);
-    background-color: var(--ifm-color-emphasis-100);
+    box-shadow: 0 0 0 3px var(--opeanpi-code-tab-shadow-color-nodejs);
+    border-color: var(--openapi-code-tab-border-color-nodejs);
   }
 }
 
@@ -176,13 +211,14 @@ body[class="ReactModal__Body--open"] {
     content: "";
     width: var(--code-tab-logo-width);
     height: var(--code-tab-logo-height);
-    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/php/php-original.svg");
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/php/php-original.svg")
+      no-repeat;
     margin-block: auto;
   }
 
   &.active {
-    border-bottom-color: var(--ifm-color-gray-500);
-    background-color: var(--ifm-color-emphasis-100);
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-php);
+    border-color: var(--openapi-code-tab-border-color-php);
   }
 }
 
@@ -193,13 +229,14 @@ body[class="ReactModal__Body--open"] {
     content: "";
     width: var(--code-tab-logo-width);
     height: var(--code-tab-logo-height);
-    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg");
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg")
+      no-repeat;
     margin-block: auto;
   }
 
   &.active {
-    border-bottom-color: var(--ifm-color-warning);
-    background-color: var(--ifm-color-emphasis-100);
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-java);
+    border-color: var(--openapi-code-tab-border-color-java);
   }
 }
 
@@ -210,13 +247,14 @@ body[class="ReactModal__Body--open"] {
     content: "";
     width: var(--code-tab-logo-width);
     height: var(--code-tab-logo-height);
-    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/windows8/windows8-original.svg");
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/windows8/windows8-original.svg")
+      no-repeat;
     margin-block: auto;
   }
 
   &.active {
-    border-bottom-color: var(--ifm-color-success);
-    background-color: var(--ifm-color-emphasis-100);
+    box-shadow: 0 0 0 3px var(--opeanpi-code-tab-shadow-color-powershell);
+    border-color: var(--openapi-code-tab-border-color-powershell);
   }
 }
 
