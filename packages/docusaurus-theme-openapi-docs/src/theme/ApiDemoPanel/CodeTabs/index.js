@@ -46,12 +46,12 @@ function TabList({
           (lang) => lang.language === currentLanguage
         )[0];
         newLanguage.variant = newTabValue;
-        action.setSelectedVariant(newTabValue);
+        action.setSelectedVariant(newTabValue.toLowerCase());
       } else {
         newLanguage = languageSet.filter(
           (lang) => lang.language === newTabValue
         )[0];
-        action.setSelectedVariant(newLanguage.variant);
+        action.setSelectedVariant(newLanguage.variant.toLowerCase());
       }
       action.setLanguage(newLanguage);
     }
