@@ -62,6 +62,20 @@ body[class="ReactModal__Body--open"] {
   }
 }
 
+.openapi-tabs__code-item--variant {
+  color: var(--ifm-color-secondary);
+
+  &.active {
+    border-color: var(--ifm-toc-border-color);
+  }
+}
+
+.openapi-tabs__code-item--variant > span {
+  padding-top: unset !important;
+  padding-left: 0.5rem !important;
+  padding-right: 0.5rem !important;
+}
+
 .openapi-tabs__code-item--python {
   color: var(--ifm-color-success);
 
