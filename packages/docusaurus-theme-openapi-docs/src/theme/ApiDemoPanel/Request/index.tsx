@@ -50,6 +50,12 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
   const auth = useTypedSelector((state: any) => state.auth);
   const dispatch = useTypedDispatch();
 
+  const [expandAccept, setExpandAccept] = useState(true);
+  const [expandAuth, setExpandAuth] = useState(true);
+  const [expandBody, setExpandBody] = useState(true);
+  const [expandParams, setExpandParams] = useState(true);
+  const [expandServer, setExpandServer] = useState(true);
+
   const allParams = [
     ...pathParams,
     ...queryParams,
@@ -122,12 +128,6 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
   ) {
     return null;
   }
-
-  const [expandAccept, setExpandAccept] = useState(true);
-  const [expandAuth, setExpandAuth] = useState(true);
-  const [expandBody, setExpandBody] = useState(true);
-  const [expandParams, setExpandParams] = useState(true);
-  const [expandServer, setExpandServer] = useState(true);
 
   const expandAllDetails = () => {
     setExpandAccept(true);

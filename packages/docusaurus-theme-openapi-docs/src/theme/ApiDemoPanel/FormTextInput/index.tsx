@@ -9,8 +9,8 @@
 import React from "react";
 
 import { ErrorMessage } from "@hookform/error-message";
-import { useFormContext } from "react-hook-form";
 import clsx from "clsx";
+import { useFormContext } from "react-hook-form";
 
 export interface Props {
   value?: string;
