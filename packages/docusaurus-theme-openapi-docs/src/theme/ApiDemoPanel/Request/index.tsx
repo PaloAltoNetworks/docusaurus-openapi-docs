@@ -87,7 +87,7 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
     }
   );
 
-  const methods = useForm();
+  const methods = useForm({ shouldFocusError: false });
 
   const onSubmit = async (data) => {
     dispatch(setResponse("Fetching..."));
