@@ -469,38 +469,58 @@ function createDetailsNode(
         children: [
           createDetailsSummary({
             children: [
-              create("strong", { children: name }),
               create("span", {
-                style: { opacity: "0.6" },
-                children: ` ${schemaName}`,
+                className: "openapi-schema__container",
+                children: [
+                  create("strong", {
+                    ...(schema.deprecated && {
+                      className: "openapi-schema__strikethrough",
+                    }),
+                    children: name,
+                  }),
+                  create("span", {
+                    className: "openapi-schema__name",
+                    children: ` ${schemaName}`,
+                  }),
+                  guard(
+                    (Array.isArray(required)
+                      ? required.includes(name)
+                      : required === true) ||
+                      schema.deprecated ||
+                      nullable,
+                    () => [
+                      create("span", {
+                        className: "openapi-schema__divider",
+                      }),
+                    ]
+                  ),
+                  guard(nullable, () => [
+                    create("span", {
+                      className: "badge badge--info openapi-schema__nullable",
+                      children: "nullable",
+                    }),
+                  ]),
+                  guard(
+                    Array.isArray(required)
+                      ? required.includes(name)
+                      : required === true,
+                    () => [
+                      create("span", {
+                        className:
+                          "badge badge--danger openapi-schema__required",
+                        children: "required",
+                      }),
+                    ]
+                  ),
+                  guard(schema.deprecated, () => [
+                    create("span", {
+                      className:
+                        "badge badge--warning openapi-schema__deprecated",
+                      children: "deprecated",
+                    }),
+                  ]),
+                ],
               }),
-              guard(
-                (schema.nullable && schema.nullable === true) ||
-                  (nullable && nullable === true),
-                () => [
-                  create("strong", {
-                    style: {
-                      fontSize: "var(--ifm-code-font-size)",
-                      color: "var(--openapi-nullable)",
-                    },
-                    children: " nullable",
-                  }),
-                ]
-              ),
-              guard(
-                Array.isArray(required)
-                  ? required.includes(name)
-                  : required === true,
-                () => [
-                  create("strong", {
-                    style: {
-                      fontSize: "var(--ifm-code-font-size)",
-                      color: "var(--openapi-required)",
-                    },
-                    children: " required",
-                  }),
-                ]
-              ),
             ],
           }),
           create("div", {
@@ -550,22 +570,27 @@ function createPropertyDiscriminator(
     className: "openapi-discriminator__item",
     children: create("div", {
       children: [
-        create("strong", { style: { paddingLeft: "1rem" }, children: name }),
-        guard(schemaName, (name) =>
-          create("span", {
-            style: { opacity: "0.6" },
-            children: ` ${schemaName}`,
-          })
-        ),
-        guard(required, () => [
-          create("strong", {
-            style: {
-              fontSize: "var(--ifm-code-font-size)",
-              color: "var(--openapi-required)",
-            },
-            children: " required",
-          }),
-        ]),
+        create("span", {
+          className: "openapi-schema__container",
+          children: [
+            create("strong", {
+              className: "openapi-discriminator__name",
+              children: name,
+            }),
+            guard(schemaName, (name) =>
+              create("span", {
+                className: "openapi-schema__name",
+                children: ` ${schemaName}`,
+              })
+            ),
+            guard(required, () => [
+              create("span", {
+                className: "badge badge--danger openapi-schema__required",
+                children: "required",
+              }),
+            ]),
+          ],
+        }),
         guard(getQualifierMessage(discriminator), (message) =>
           create("div", {
             style: {
@@ -886,12 +911,10 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
                   children: [
                     create("strong", { children: `${title}` }),
                     guard(body.required && body.required === true, () => [
-                      create("strong", {
-                        style: {
-                          fontSize: "var(--ifm-code-font-size)",
-                          color: "var(--openapi-required)",
-                        },
-                        children: " required",
+                      create("span", {
+                        className:
+                          "badge badge--danger openapi-schema__required",
+                        children: "required",
                       }),
                     ]),
                   ],
@@ -958,11 +981,8 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
                   ),
                   guard(body.required, () => [
                     create("strong", {
-                      style: {
-                        fontSize: "var(--ifm-code-font-size)",
-                        color: "var(--openapi-required)",
-                      },
-                      children: " required",
+                      className: "badge badge--danger openapi-schema__required",
+                      children: "required",
                     }),
                   ]),
                 ],

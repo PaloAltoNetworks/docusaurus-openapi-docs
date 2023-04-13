@@ -78,6 +78,10 @@
   border-left: thin solid var(--openapi-tree-line-color) !important;
 }
 
+.openapi-discriminator__name {
+  padding-left: 1rem;
+}
+
 @media screen and (max-width: 500px) {
   .openapi-tabs__discriminator-top-section {
     flex-direction: column;
