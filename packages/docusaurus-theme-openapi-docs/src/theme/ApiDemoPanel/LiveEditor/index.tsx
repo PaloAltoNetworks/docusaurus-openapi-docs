@@ -55,14 +55,12 @@ function App({
 
   const {
     control,
-    clearErrors,
     formState: { errors },
   } = useFormContext();
 
   const showErrorMessage = errors?.requestBody;
 
   const handleChange = (snippet: string, onChange: any) => {
-    if (showErrorMessage) clearErrors();
     setCode(snippet);
     onChange(snippet);
   };
