@@ -23,6 +23,7 @@ import { createLicense } from "./createLicense";
 import { createLogo } from "./createLogo";
 import { createMethodEndpoint } from "./createMethodEndpoint";
 import { createParamsDetails } from "./createParamsDetails";
+import { createRequestHeader } from "./createRequestHeader";
 import { createRequestBodyDetails } from "./createRequestBodyDetails";
 import { createStatusCodes } from "./createStatusCodes";
 import { createTermsOfService } from "./createTermsOfService";
@@ -70,17 +71,17 @@ export function createApiPageMD({
     `import TabItem from "@theme/TabItem";\n\n`,
     createHeading(title.replace(lessThan, "&lt;").replace(greaterThan, "&gt;")),
     createMethodEndpoint(method, path),
-    `## ${title.replace(lessThan, "&lt;").replace(greaterThan, "&gt;")}\n\n`,
     infoPath && createAuthorization(infoPath),
     frontMatter.show_extensions && createVendorExtensions(extensions),
     createDeprecationNotice({ deprecated, description: deprecatedDescription }),
     createDescription(description),
+    createRequestHeader("Request"),
     createParamsDetails({ parameters, type: "path" }),
     createParamsDetails({ parameters, type: "query" }),
     createParamsDetails({ parameters, type: "header" }),
     createParamsDetails({ parameters, type: "cookie" }),
     createRequestBodyDetails({
-      title: "Request Body",
+      title: "Body",
       body: requestBody,
     } as Props),
     createStatusCodes({ responses }),

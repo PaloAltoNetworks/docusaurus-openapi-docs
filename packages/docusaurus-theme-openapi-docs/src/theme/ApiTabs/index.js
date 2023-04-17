@@ -83,7 +83,7 @@ function TabList({ className, block, selectedValue, selectValue, tabValues }) {
 
   return (
     <div className="openapi-tabs__response-header-section">
-      <strong>Responses</strong>
+      <h2 className="openapi-tabs__response-header">Responses</h2>
       <div className="openapi-tabs__response-container">
         {showTabArrows && (
           <button
