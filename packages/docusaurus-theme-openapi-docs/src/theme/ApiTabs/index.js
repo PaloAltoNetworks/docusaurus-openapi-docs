@@ -173,7 +173,6 @@ function TabsComponent(props) {
   return (
     <div className="openapi-tabs__container">
       <TabList {...props} {...tabs} />
-      <hr />
       <TabContent {...props} {...tabs} />
     </div>
   );
