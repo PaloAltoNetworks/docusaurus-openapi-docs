@@ -19,14 +19,6 @@ function Live({ onEdit, showErrors }: any) {
   const isBrowser = useIsBrowser();
   const [editorDisabled, setEditorDisabled] = useState(false);
 
-  // TODO: Temporary solution for disabling tab key
-  // const handleKeydown = (event: React.KeyboardEvent) => {
-  //   if (event.key === "Tab") {
-  //     event.preventDefault();
-  //     setEditorDisabled(true);
-  //   }
-  // };
-
   return (
     <div onClick={() => setEditorDisabled(false)}>
       <LiveEditor
