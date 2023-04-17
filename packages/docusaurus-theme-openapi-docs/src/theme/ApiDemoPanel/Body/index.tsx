@@ -30,9 +30,16 @@ import {
 export interface Props {
   jsonRequestBodyExample: string;
   requestBodyMetadata?: RequestBodyObject;
+  methods?: any;
+  required?: boolean;
 }
 
-function BodyWrap({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
+function BodyWrap({
+  requestBodyMetadata,
+  jsonRequestBodyExample,
+  methods,
+  required,
+}: Props) {
   const contentType = useTypedSelector((state: any) => state.contentType.value);
 
   // NOTE: We used to check if body was required, but opted to always show the request body
@@ -47,11 +54,17 @@ function BodyWrap({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
     <Body
       requestBodyMetadata={requestBodyMetadata}
       jsonRequestBodyExample={jsonRequestBodyExample}
+      required={required}
     />
   );
 }
 
-function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
+function Body({
+  requestBodyMetadata,
+  jsonRequestBodyExample,
+  methods,
+  required,
+}: Props) {
   const contentType = useTypedSelector((state: any) => state.contentType.value);
   const dispatch = useTypedDispatch();
 
@@ -285,14 +298,18 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
         <SchemaTabs className="openapi-tabs__schema" lazy>
           {/* @ts-ignore */}
           <TabItem label="Default" value="default" default>
-            <LiveApp action={dispatch} language={language}>
+            <LiveApp action={dispatch} language={language} required={required}>
               {defaultBody}
             </LiveApp>
           </TabItem>
           {/* @ts-ignore */}
           <TabItem label="Example" value="example">
             {exampleBody && (
-              <LiveApp action={dispatch} language={language}>
+              <LiveApp
+                action={dispatch}
+                language={language}
+                required={required}
+              >
                 {exampleBody}
               </LiveApp>
             )}
@@ -308,7 +325,7 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
         <SchemaTabs className="openapi-tabs__schema" lazy>
           {/* @ts-ignore */}
           <TabItem label="Default" value="default" default>
-            <LiveApp action={dispatch} language={language}>
+            <LiveApp action={dispatch} language={language} required={required}>
               {defaultBody}
             </LiveApp>
           </TabItem>
@@ -336,7 +353,7 @@ function Body({ requestBodyMetadata, jsonRequestBodyExample }: Props) {
 
   return (
     <FormItem>
-      <LiveApp action={dispatch} language={language}>
+      <LiveApp action={dispatch} language={language} required={required}>
         {defaultBody}
       </LiveApp>
     </FormItem>

@@ -255,6 +255,7 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
                 <Body
                   jsonRequestBodyExample={item.jsonRequestBodyExample}
                   requestBodyMetadata={item.requestBody}
+                  required={requestBodyRequired}
                 />
               </>
             </details>
