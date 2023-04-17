@@ -311,7 +311,7 @@ function ParamMultiSelectFormItem({ param }: ParamProps) {
   );
 }
 
-function ParamTextFormItem({ errors, param, register }: ParamProps) {
+function ParamTextFormItem({ param }: ParamProps) {
   const dispatch = useTypedDispatch();
   return (
     <FormTextInput
