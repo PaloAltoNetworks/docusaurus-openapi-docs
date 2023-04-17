@@ -11,8 +11,11 @@ import { usePrismTheme } from "@docusaurus/theme-common";
 import useIsBrowser from "@docusaurus/useIsBrowser";
 import { setStringRawBody } from "@theme/ApiDemoPanel/Body/slice";
 import { LiveProvider, LiveEditor, withLive } from "react-live";
+import { Controller, useFormContext } from "react-hook-form";
+import { ErrorMessage } from "@hookform/error-message";
+import clsx from "clsx";
 
-function Live({ onEdit }: any) {
+function Live({ onEdit, showErrors }: any) {
   const isBrowser = useIsBrowser();
   const [editorDisabled, setEditorDisabled] = useState(false);
 
@@ -28,10 +31,13 @@ function Live({ onEdit }: any) {
     <div onClick={() => setEditorDisabled(false)}>
       <LiveEditor
         key={String(isBrowser)}
-        className="openapi-demo__playground-editor"
+        className={clsx({
+          ["openapi-demo__playground-editor"]: true,
+          ["openpai-demo__form-item-input"]: showErrors,
+          ["error"]: showErrors,
+        })}
         onChange={onEdit}
         disabled={editorDisabled}
-        onKeyDown={handleKeydown}
       />
     </div>
   );
@@ -45,6 +51,7 @@ function App({
   value,
   language,
   action,
+  required: isRequired,
   ...props
 }: any): JSX.Element {
   const prismTheme = usePrismTheme();
@@ -54,8 +61,26 @@ function App({
     action(setStringRawBody(code));
   }, [action, code]);
 
+  const {
+    control,
+    clearErrors,
+    formState: { errors },
+  } = useFormContext();
+
+  const showErrorMessage = errors?.requestBody;
+
+  const handleChange = (snippet: string, onChange: any) => {
+    if (showErrorMessage) clearErrors();
+    setCode(snippet);
+    onChange(snippet);
+  };
+
   return (
-    <div className="openapi-demo__playground-container">
+    <div
+      className={clsx({
+        ["openapi-demo__playground-container"]: true,
+      })}
+    >
       <LiveProvider
         code={children.replace(/\n$/, "")}
         transformCode={transformCode ?? ((code) => `${code};`)}
@@ -63,7 +88,27 @@ function App({
         language={language}
         {...props}
       >
-        <LiveComponent onEdit={setCode} />
+        <Controller
+          control={control}
+          rules={{ required: isRequired ? "This field is required" : false }}
+          name="requestBody"
+          render={({ field: { onChange, name } }) => (
+            <LiveComponent
+              onEdit={(e: any) => handleChange(e, onChange)}
+              name={name}
+              showErrors={showErrorMessage}
+            />
+          )}
+        />
+        {showErrorMessage && (
+          <ErrorMessage
+            errors={errors}
+            name="requestBody"
+            render={({ message }) => (
+              <div className="openapi-demo__input-error">{message}</div>
+            )}
+          />
+        )}
       </LiveProvider>
     </div>
   );
