@@ -10,6 +10,7 @@ import React from "react";
 import CodeBlock from "@theme/CodeBlock";
 /* eslint-disable import/no-extraneous-dependencies*/
 import { createDescription } from "docusaurus-theme-openapi-docs/lib/markdown/createDescription";
+import clsx from "clsx";
 /* eslint-disable import/no-extraneous-dependencies*/
 import { guard } from "docusaurus-theme-openapi-docs/lib/markdown/utils";
 import ReactMarkdown from "react-markdown";
@@ -96,7 +97,11 @@ function SchemaItem({
   const schemaContent = (
     <div>
       <span className="openapi-schema__container">
-        <strong className={deprecated && "openapi-schema__strikethrough"}>
+        <strong
+          className={clsx("openapi-schema__property", {
+            "openapi-schema__strikethrough": deprecated,
+          })}
+        >
           {name}
         </strong>
         <span className="openapi-schema__name"> {schemaName}</span>

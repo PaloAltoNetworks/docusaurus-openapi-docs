@@ -121,7 +121,7 @@ function ParamsItem({
   return (
     <li className="openapi-params__list-item">
       <span className="openapi-schema__container">
-        <strong>{name}</strong>
+        <strong className="openapi-schema__property">{name}</strong>
         {renderSchemaName}
         {required && <span className="openapi-schema__divider"></span>}
         {renderSchemaRequired}

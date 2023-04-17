@@ -4,6 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
+import clsx from "clsx";
 
 import { MediaTypeObject, SchemaObject } from "../openapi/types";
 import {
@@ -480,8 +481,8 @@ function createDetailsNode(
                 className: "openapi-schema__container",
                 children: [
                   create("strong", {
-                    ...(schema.deprecated && {
-                      className: "openapi-schema__strikethrough",
+                    className: clsx("openapi-schema__property", {
+                      "openapi-schema__strikethrough": schema.deprecated,
                     }),
                     children: name,
                   }),
@@ -581,7 +582,7 @@ function createPropertyDiscriminator(
           className: "openapi-schema__container",
           children: [
             create("strong", {
-              className: "openapi-discriminator__name",
+              className: "openapi-discriminator__name openapi-schema__property",
               children: name,
             }),
             guard(schemaName, (name) =>
