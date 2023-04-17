@@ -9,32 +9,32 @@ import React, { useEffect, useState } from "react";
 
 import { usePrismTheme } from "@docusaurus/theme-common";
 import useIsBrowser from "@docusaurus/useIsBrowser";
-import { setStringRawBody } from "@theme/ApiDemoPanel/Body/slice";
-import { LiveProvider, LiveEditor, withLive } from "react-live";
-import { Controller, useFormContext } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
+import { setStringRawBody } from "@theme/ApiDemoPanel/Body/slice";
 import clsx from "clsx";
+import { Controller, useFormContext } from "react-hook-form";
+import { LiveProvider, LiveEditor, withLive } from "react-live";
 
 function Live({ onEdit, showErrors }: any) {
   const isBrowser = useIsBrowser();
   const [editorDisabled, setEditorDisabled] = useState(false);
 
   // TODO: Temporary solution for disabling tab key
-  const handleKeydown = (event: React.KeyboardEvent) => {
-    if (event.key === "Tab") {
-      event.preventDefault();
-      setEditorDisabled(true);
-    }
-  };
+  // const handleKeydown = (event: React.KeyboardEvent) => {
+  //   if (event.key === "Tab") {
+  //     event.preventDefault();
+  //     setEditorDisabled(true);
+  //   }
+  // };
 
   return (
     <div onClick={() => setEditorDisabled(false)}>
       <LiveEditor
         key={String(isBrowser)}
         className={clsx({
-          ["openapi-demo__playground-editor"]: true,
-          ["openpai-demo__form-item-input"]: showErrors,
-          ["error"]: showErrors,
+          "openapi-demo__playground-editor": true,
+          "openpai-demo__form-item-input": showErrors,
+          error: showErrors,
         })}
         onChange={onEdit}
         disabled={editorDisabled}
@@ -78,7 +78,7 @@ function App({
   return (
     <div
       className={clsx({
-        ["openapi-demo__playground-container"]: true,
+        "openapi-demo__playground-container": true,
       })}
     >
       <LiveProvider
