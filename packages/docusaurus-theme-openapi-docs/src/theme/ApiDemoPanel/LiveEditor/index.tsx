@@ -30,6 +30,7 @@ function Live({ onEdit, showErrors }: any) {
         })}
         onChange={onEdit}
         disabled={editorDisabled}
+        tabMode="focus"
       />
     </div>
   );
