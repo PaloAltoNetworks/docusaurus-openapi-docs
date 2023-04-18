@@ -38,7 +38,7 @@ function FormTextInput({
 
   return (
     <>
-      {paramName && (
+      {paramName ? (
         <input
           {...register(paramName, {
             required: isRequired ? "This field is required" : false,
@@ -46,6 +46,16 @@ function FormTextInput({
           className={clsx("openpai-demo__form-item-input", {
             error: showErrorMessage,
           })}
+          type={password ? "password" : "text"}
+          placeholder={placeholder}
+          title={placeholder}
+          value={value}
+          onChange={onChange}
+          autoComplete="off"
+        />
+      ) : (
+        <input
+          className="openapi-demo__form-item-input"
           type={password ? "password" : "text"}
           placeholder={placeholder}
           title={placeholder}
