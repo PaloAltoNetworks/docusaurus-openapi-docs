@@ -28,7 +28,7 @@ function Live({ onEdit, showErrors }: any) {
         key={String(isBrowser)}
         className={clsx({
           "openapi-demo__playground-editor": true,
-          "openpai-demo__form-item-input": showErrors,
+          "openapi-demo__form-item-input": showErrors,
           error: showErrors,
         })}
         onChange={onEdit}
