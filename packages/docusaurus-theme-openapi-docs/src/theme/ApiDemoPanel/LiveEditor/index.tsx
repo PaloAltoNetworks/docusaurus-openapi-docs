@@ -20,7 +20,10 @@ function Live({ onEdit, showErrors }: any) {
   const [editorDisabled, setEditorDisabled] = useState(false);
 
   return (
-    <div onClick={() => setEditorDisabled(false)}>
+    <div
+      onClick={() => setEditorDisabled(false)}
+      onBlur={() => setEditorDisabled(true)}
+    >
       <LiveEditor
         key={String(isBrowser)}
         className={clsx({
