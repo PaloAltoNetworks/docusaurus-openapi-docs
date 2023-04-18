@@ -1,5 +1,22 @@
 /* Markdown Details Styling */
 
+/* Top-Level Details Styling */
+.openapi-left-panel__container > .openapi-markdown__details > summary,
+.openapi-markdown__details.mime > summary,
+.openapi-markdown__details.response > summary {
+  font-size: 12px;
+  text-transform: uppercase;
+}
+/* End of Top-Level Details Styling */
+
+/* Top-Level Details Caret Styling */
+.openapi-left-panel__container > .openapi-markdown__details > summary::before,
+.openapi-markdown__details.mime > summary::before,
+.openapi-markdown__details.response > summary::before {
+  top: 0.25rem;
+}
+/* End of Top-Level Details Caret Styling */
+
 .openapi-markdown__details {
   margin: unset !important;
   background-color: transparent;
@@ -49,6 +66,10 @@
 
 .openapi-markdown__details p {
   margin-bottom: 0;
+}
+
+.openapi-markdown__details-summary-mime {
+  display: flex;
 }
 
 /* Hide defaul details marker by default */

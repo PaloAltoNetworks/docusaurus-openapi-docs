@@ -931,13 +931,14 @@ export function createResponseSchema({ title, body, ...rest }: Props) {
                     value: `${title}`,
                     children: [
                       createDetails({
-                        className: "openapi-markdown__details",
+                        className: "openapi-markdown__details response",
                         "data-collapsed": false,
                         open: true,
                         ...rest,
                         children: [
                           createDetailsSummary({
-                            style: { textAlign: "left" },
+                            className:
+                              "openapi-markdown__details-summary-response",
                             children: [
                               create("strong", { children: `${title}` }),
                               guard(

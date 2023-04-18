@@ -903,13 +903,13 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
           value: `${mimeType}`,
           children: [
             createDetails({
-              className: "openapi-markdown__details",
+              className: "openapi-markdown__details mime",
               "data-collapsed": false,
               open: true,
               ...rest,
               children: [
                 createDetailsSummary({
-                  style: { textAlign: "left" },
+                  className: "openapi-markdown__details-summary-mime",
                   children: [
                     create("strong", { children: `${title}` }),
                     guard(body.required && body.required === true, () => [
@@ -966,13 +966,13 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
         value: `${randomFirstKey}-schema`,
         children: [
           createDetails({
-            className: "openapi-markdown__details",
+            className: "openapi-markdown__details mime",
             "data-collapsed": false,
             open: true,
             ...rest,
             children: [
               createDetailsSummary({
-                style: { textAlign: "left" },
+                className: "openapi-markdown__details-summary-mime",
                 children: [
                   create("strong", { children: `${title}` }),
                   guard(firstBody.type === "array", (format) =>
