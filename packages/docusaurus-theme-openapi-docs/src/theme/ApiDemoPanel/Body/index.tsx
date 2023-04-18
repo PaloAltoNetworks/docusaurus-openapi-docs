@@ -121,15 +121,8 @@ function Body({
     schema?.type === "object"
   ) {
     return (
-      <FormItem>
-        <div
-          style={{
-            marginTop: "calc(var(--ifm-pre-padding) / 2)",
-            borderRadius: "4px",
-            padding: "var(--ifm-pre-padding)",
-            border: "1px solid var(--openapi-monaco-border-color)",
-          }}
-        >
+      <FormItem className="openapi-demo__form-item-body-container">
+        <div>
           {Object.entries(schema.properties ?? {}).map(([key, val]: any) => {
             if (val.format === "binary") {
               return (
@@ -321,7 +314,7 @@ function Body({
 
   if (examplesBodies && examplesBodies.length > 0) {
     return (
-      <FormItem>
+      <FormItem className="openapi-demo__form-item-body-container">
         <SchemaTabs className="openapi-tabs__schema" lazy>
           {/* @ts-ignore */}
           <TabItem label="Default" value="default" default>
