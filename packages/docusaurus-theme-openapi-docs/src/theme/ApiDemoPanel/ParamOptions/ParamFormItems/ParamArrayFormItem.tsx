@@ -10,8 +10,7 @@ import React, { useEffect, useState } from "react";
 import { nanoid } from "@reduxjs/toolkit";
 import FormSelect from "@theme/ApiDemoPanel/FormSelect";
 import FormTextInput from "@theme/ApiDemoPanel/FormTextInput";
-import { Param } from "@theme/ApiDemoPanel/ParamOptions/slice";
-import setParam from "@theme/ApiDemoPanel/ParamOptions/slice";
+import { Param, setParam } from "@theme/ApiDemoPanel/ParamOptions/slice";
 import { useTypedDispatch } from "@theme/ApiItem/hooks";
 
 export interface ParamProps {

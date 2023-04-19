@@ -224,6 +224,7 @@ declare module "@theme/ApiDemoPanel/ParamOptions/ParamFormItems/ParamTextFormIte
 
 declare module "@theme/ApiDemoPanel/ParamOptions/slice" {
   export type { Param };
+  export const setParam;
   export default params as Reducer<State, AnyAction>;
 }
 

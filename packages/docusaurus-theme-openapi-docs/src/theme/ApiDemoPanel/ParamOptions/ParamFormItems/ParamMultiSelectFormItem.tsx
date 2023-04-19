@@ -9,8 +9,7 @@ import React from "react";
 
 import { ErrorMessage } from "@hookform/error-message";
 import FormMultiSelect from "@theme/ApiDemoPanel/FormMultiSelect";
-import { Param } from "@theme/ApiDemoPanel/ParamOptions/slice";
-import setParam from "@theme/ApiDemoPanel/ParamOptions/slice";
+import { Param, setParam } from "@theme/ApiDemoPanel/ParamOptions/slice";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import { Controller, useFormContext } from "react-hook-form";
 

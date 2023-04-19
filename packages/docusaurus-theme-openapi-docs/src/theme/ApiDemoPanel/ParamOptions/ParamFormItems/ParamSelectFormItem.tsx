@@ -8,8 +8,7 @@
 import React from "react";
 
 import FormSelect from "@theme/ApiDemoPanel/FormSelect";
-import { Param } from "@theme/ApiDemoPanel/ParamOptions/slice";
-import setParam from "@theme/ApiDemoPanel/ParamOptions/slice";
+import { Param, setParam } from "@theme/ApiDemoPanel/ParamOptions/slice";
 import { useTypedDispatch } from "@theme/ApiItem/hooks";
 
 export interface ParamProps {
