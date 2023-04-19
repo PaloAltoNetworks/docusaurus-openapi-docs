@@ -190,6 +190,38 @@ declare module "@theme/ApiDemoPanel/ParamOptions" {
   export default function ParamOptions(props: ParamProps): JSX.Element;
 }
 
+declare module "@theme/ApiDemoPanel/ParamOptions/ParamFormItems/ParamMultiSelectFormItem" {
+  import { ParamProps } from "@theme/ApiDemoPanel/ParamOptions";
+
+  export default function ParamMultiSelectFormItem(
+    props: ParamProps
+  ): JSX.Element;
+}
+
+declare module "@theme/ApiDemoPanel/ParamOptions/ParamFormItems/ParamArrayFormItem" {
+  import { ParamProps } from "@theme/ApiDemoPanel/ParamOptions";
+
+  export default function ParamArrayFormItem(props: ParamProps): JSX.Element;
+}
+
+declare module "@theme/ApiDemoPanel/ParamOptions/ParamFormItems/ParamSelectFormItem" {
+  import { ParamProps } from "@theme/ApiDemoPanel/ParamOptions";
+
+  export default function ParamSelectFormItem(props: ParamProps): JSX.Element;
+}
+
+declare module "@theme/ApiDemoPanel/ParamOptions/ParamFormItems/ParamBooleanFormItem" {
+  import { ParamProps } from "@theme/ApiDemoPanel/ParamOptions";
+
+  export default function ParamBooleanFormItem(props: ParamProps): JSX.Element;
+}
+
+declare module "@theme/ApiDemoPanel/ParamOptions/ParamFormItems/ParamTextFormItem" {
+  import { ParamProps } from "@theme/ApiDemoPanel/ParamOptions";
+
+  export default function ParamTextFormItem(props: ParamProps): JSX.Element;
+}
+
 declare module "@theme/ApiDemoPanel/ParamOptions/slice" {
   export type { Param };
   export default params as Reducer<State, AnyAction>;
