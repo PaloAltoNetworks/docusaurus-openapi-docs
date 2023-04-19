@@ -80,32 +80,22 @@
 .openapi-demo__thin-btn {
   -webkit-appearance: none;
   -moz-appearance: none;
-  appearance: none;
-
   cursor: pointer;
-  font-size: calc(0.875rem * var(--ifm-button-size-multiplier));
-  font-weight: normal;
-  line-height: 1.5;
-
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  font-size: 12px;
   transition-property: color, background, border-color, box-shadow;
   transition-duration: 100ms, 100ms, 100ms,
     var(--ifm-button-transition-duration);
   transition-timing-function: cubic-bezier(0.08, 0.52, 0.52, 1);
-
-  -webkit-user-select: none;
   user-select: none;
   white-space: nowrap;
-
   background-color: transparent;
   color: var(--openapi-input-border);
   border: 1px solid var(--openapi-input-border);
   border-radius: var(--ifm-pre-border-radius);
-  /* height: 48px; */
-  padding: 3px 60px 3px 12px;
   margin-top: calc(var(--ifm-pre-padding) / 2);
-  margin-bottom: var(--ifm-pre-padding);
-
-  display: block;
+  text-transform: uppercase;
 
   &:hover {
     color: var(--openapi-inverse-color);
