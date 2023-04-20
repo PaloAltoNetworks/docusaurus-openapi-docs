@@ -7,31 +7,59 @@
 
 import React from "react";
 
+import { ErrorMessage } from "@hookform/error-message";
 import FormSelect from "@theme/ApiDemoPanel/FormSelect";
 import { Param, setParam } from "@theme/ApiDemoPanel/ParamOptions/slice";
 import { useTypedDispatch } from "@theme/ApiItem/hooks";
+import { Controller, useFormContext } from "react-hook-form";
 
 export interface ParamProps {
   param: Param;
 }
 
 export default function ParamSelectFormItem({ param }: ParamProps) {
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext();
+
+  const showErrorMessage = errors?.paramSelect;
+
   const dispatch = useTypedDispatch();
 
   const options = param.schema?.enum ?? [];
 
   return (
-    <FormSelect
-      options={["---", ...(options as string[])]}
-      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-        const val = e.target.value;
-        dispatch(
-          setParam({
-            ...param,
-            value: val === "---" ? undefined : val,
-          })
-        );
-      }}
-    />
+    <>
+      <Controller
+        control={control}
+        rules={{ required: param.required ? "This field is required" : false }}
+        name="paramSelect"
+        render={({ field: { onChange, name } }) => (
+          <FormSelect
+            options={["---", ...(options as string[])]}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              const val = e.target.value;
+              dispatch(
+                setParam({
+                  ...param,
+                  value: val === "---" ? undefined : val,
+                })
+              );
+              onChange(val);
+            }}
+          />
+        )}
+      />
+      {showErrorMessage && (
+        <ErrorMessage
+          errors={errors}
+          name="paramSelect"
+          render={({ message }) => (
+            <div className="openapi-demo__input-error">{message}</div>
+          )}
+        />
+      )}
+    </>
   );
 }
