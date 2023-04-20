@@ -1,3 +1,9 @@
+## 1.7.2 (Apr 20, 2023)
+
+High level enhancements
+
+- Upgrade redocly-core and json-schema-ref-parser ([#551](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/551))
+
 ## 1.7.1 (Apr 20, 2023)
 
 High level enhancements
