@@ -1,3 +1,12 @@
+## 1.7.1 (Apr 20, 2023)
+
+High level enhancements
+
+- Remove PWA ([#548](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/548))
+- Add classnames to MethodEndpoint ([#541](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/541))
+- [Enhancement] Add support for rendering vendor extensions ([#527](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/527))
+- Update deploy preview workflow
+
 ## 1.7.0 (Mar 20, 2023)
 
 High level enhancements
