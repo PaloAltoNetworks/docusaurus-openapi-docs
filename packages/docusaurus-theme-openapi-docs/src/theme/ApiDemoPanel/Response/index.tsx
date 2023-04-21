@@ -11,7 +11,7 @@ import { usePrismTheme } from "@docusaurus/theme-common";
 import { useDoc } from "@docusaurus/theme-common/internal";
 import { Loading } from "@nextui-org/react";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
-import CodeBlock from "@theme/CodeBlock";
+import ApiCodeBlock from "@theme/ApiDemoPanel/ApiCodeBlock";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
 import clsx from "clsx";
@@ -108,7 +108,8 @@ function Response({ item }: { item: NonNullable<ApiItem> }) {
               }}
               default
             >
-              <CodeBlock
+              {/* @ts-ignore */}
+              <ApiCodeBlock
                 className="openapi-demo__code-block openapi-response__status-code"
                 language={response.startsWith("<") ? `xml` : `json`}
               >
@@ -118,16 +119,17 @@ function Response({ item }: { item: NonNullable<ApiItem> }) {
                     the response here!
                   </p>
                 )}
-              </CodeBlock>
+              </ApiCodeBlock>
             </TabItem>
             {/* @ts-ignore */}
             <TabItem label="Headers" value="headers">
-              <CodeBlock
+              {/* @ts-ignore */}
+              <ApiCodeBlock
                 className="openapi-demo__code-block openapi-response__status-headers"
                 language={response.startsWith("<") ? `xml` : `json`}
               >
                 {JSON.stringify(headers, undefined, 2)}
-              </CodeBlock>
+              </ApiCodeBlock>
             </TabItem>
           </SchemaTabs>
         ) : prettyResponse === "Fetching..." ? (
