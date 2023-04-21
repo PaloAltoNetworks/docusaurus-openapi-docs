@@ -5,7 +5,12 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+// @ts-nocheck
 import React from "react";
+
+import { ErrorMessage } from "@hookform/error-message";
+import clsx from "clsx";
+import { useFormContext } from "react-hook-form";
 
 export interface Props {
   value?: string;
@@ -14,18 +19,61 @@ export interface Props {
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }
 
-function FormTextInput({ value, placeholder, password, onChange }: Props) {
+function FormTextInput({
+  isRequired,
+  value,
+  placeholder,
+  password,
+  onChange,
+  paramName,
+}: Props) {
   placeholder = placeholder?.split("\n")[0];
+
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
+
+  const showErrorMessage = errors?.[paramName]?.message;
+
   return (
-    <input
-      className="openapi-demo__input"
-      type={password ? "password" : "text"}
-      placeholder={placeholder}
-      title={placeholder}
-      value={value}
-      onChange={onChange}
-      autoComplete="off"
-    />
+    <>
+      {paramName ? (
+        <input
+          {...register(paramName, {
+            required: isRequired ? "This field is required" : false,
+          })}
+          className={clsx("openapi-demo__form-item-input", {
+            error: showErrorMessage,
+          })}
+          type={password ? "password" : "text"}
+          placeholder={placeholder}
+          title={placeholder}
+          value={value}
+          onChange={onChange}
+          autoComplete="off"
+        />
+      ) : (
+        <input
+          className="openapi-demo__form-item-input"
+          type={password ? "password" : "text"}
+          placeholder={placeholder}
+          title={placeholder}
+          value={value}
+          onChange={onChange}
+          autoComplete="off"
+        />
+      )}
+      {showErrorMessage && (
+        <ErrorMessage
+          errors={errors}
+          name={paramName}
+          render={({ message }) => (
+            <div className="openapi-demo__input-error">{message}</div>
+          )}
+        />
+      )}
+    </>
   );
 }
 

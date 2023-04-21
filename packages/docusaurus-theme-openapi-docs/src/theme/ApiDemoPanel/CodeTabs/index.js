@@ -147,8 +147,14 @@ function TabContent({ lazy, children, selectedValue }) {
 
 function TabsComponent(props) {
   const tabs = useTabs(props);
+  const { className } = props;
+
   return (
-    <div className="tabs-container openapi-tabs__code-container">
+    <div
+      className={clsx("tabs-container openapi-tabs__code-container", {
+        [className]: className,
+      })}
+    >
       <TabList {...props} {...tabs} />
       <TabContent {...props} {...tabs} />
     </div>

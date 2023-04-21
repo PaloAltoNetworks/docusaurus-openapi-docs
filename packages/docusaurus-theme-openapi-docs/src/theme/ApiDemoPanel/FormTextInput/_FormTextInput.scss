@@ -1,15 +1,34 @@
-.openapi-demo__input {
+.openapi-demo__form-item-input {
   margin-top: calc(var(--ifm-pre-padding) / 2);
   background-color: var(--openapi-input-background);
-  border: none;
+  border: 1px solid transparent;
   outline: none;
   width: 100%;
-  font-size: var(--ifm-code-font-size);
   color: var(--ifm-pre-color);
-  padding: 12px var(--ifm-pre-padding);
+  padding: var(--openapi-demo-padding-input);
   border-radius: 4px;
 
+  &:hover {
+    border: 1px solid var(--ifm-toc-border-color);
+  }
+
   &:focus {
-    box-shadow: inset 0px 0px 0px 2px var(--openapi-input-border);
+    border: 1px solid var(--ifm-color-primary);
+    box-shadow: none;
+  }
+
+  &.error {
+    border: 1px solid var(--openapi-required);
+  }
+}
+
+.openapi-demo__input-error {
+  font-size: var(--openapi-demo-font-size-input);
+  color: var(--openapi-required);
+  padding-top: var(--openapi-demo-padding-input);
+
+  &::before {
+    display: inline;
+    content: "⚠ ";
   }
 }

@@ -7,13 +7,16 @@
 
 import React from "react";
 
+import clsx from "clsx";
+
 export interface Props {
   value?: string;
   options: string[];
   onChange?: React.ChangeEventHandler<HTMLSelectElement>;
+  showErrors?: boolean;
 }
 
-function FormMultiSelect({ value, options, onChange }: Props) {
+function FormMultiSelect({ value, options, onChange, showErrors }: Props) {
   if (options.length === 0) {
     return null;
   }
@@ -32,7 +35,9 @@ function FormMultiSelect({ value, options, onChange }: Props) {
   return (
     <select
       style={{ height: height }}
-      className="openapi-demo__multi-select-input"
+      className={clsx("openapi-demo__multi-select-input", {
+        error: showErrors,
+      })}
       value={value}
       onChange={onChange}
       size={Math.min(6, options.length + 1)}

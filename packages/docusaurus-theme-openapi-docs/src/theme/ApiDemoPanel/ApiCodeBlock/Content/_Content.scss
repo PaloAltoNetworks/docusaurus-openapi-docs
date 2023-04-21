@@ -15,6 +15,7 @@
 }
 
 .openapi-demo__code-block {
+  border-radius: var(--ifm-global-radius);
   --ifm-pre-background: var(--prism-background-color);
   margin: 0;
   padding: 0;
