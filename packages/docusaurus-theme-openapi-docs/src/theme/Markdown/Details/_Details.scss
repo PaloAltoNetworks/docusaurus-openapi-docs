@@ -78,6 +78,7 @@ details summary::-webkit-details-marker {
 }
 
 .openapi-security__details {
+  font-size: 12px;
   margin-bottom: 1rem;
   background-color: transparent;
   color: var(--ifm-font-color-base);
@@ -90,16 +91,20 @@ details summary::-webkit-details-marker {
 
 .openapi-security__details pre {
   margin-bottom: unset;
+  border-top-left-radius: 0;
+  border-top: thin solid var(--ifm-toc-border-color);
+  border-top-right-radius: 0;
 }
 
 .openapi-security__summary-header {
+  font-size: 12px;
+  text-transform: uppercase;
   margin-bottom: unset;
 }
 
 .openapi-security__summary-container {
   padding: 1rem;
   list-style-type: none;
-  border-bottom: thin solid var(--ifm-toc-border-color);
 
   &:hover {
     cursor: pointer;
