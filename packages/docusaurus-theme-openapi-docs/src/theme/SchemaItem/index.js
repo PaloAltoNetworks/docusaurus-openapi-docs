@@ -38,11 +38,7 @@ function SchemaItem({
 
   const renderRequired = guard(
     Array.isArray(required) ? required.includes(name) : required,
-    () => (
-      <span className="badge badge--danger openapi-schema__required">
-        required
-      </span>
-    )
+    () => <span className="openapi-schema__required">required</span>
   );
 
   const renderDeprecated = guard(deprecated, () => (

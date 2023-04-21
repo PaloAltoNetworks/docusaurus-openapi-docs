@@ -514,8 +514,7 @@ function createDetailsNode(
                       : required === true,
                     () => [
                       create("span", {
-                        className:
-                          "badge badge--danger openapi-schema__required",
+                        className: "openapi-schema__required",
                         children: "required",
                       }),
                     ]
@@ -593,7 +592,7 @@ function createPropertyDiscriminator(
             ),
             guard(required, () => [
               create("span", {
-                className: "badge badge--danger openapi-schema__required",
+                className: "openapi-schema__required",
                 children: "required",
               }),
             ]),
@@ -945,8 +944,7 @@ export function createResponseSchema({ title, body, ...rest }: Props) {
                                 body.required && body.required === true,
                                 () => [
                                   create("span", {
-                                    className:
-                                      "badge badge--danger openapi-schema__required",
+                                    className: "openapi-schema__required",
                                     children: "required",
                                   }),
                                 ]

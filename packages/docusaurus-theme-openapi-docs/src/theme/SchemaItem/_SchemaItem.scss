@@ -37,10 +37,11 @@
 .openapi-schema__required {
   display: flex;
   align-items: center;
+  font-size: 10.5px;
+  font-weight: bold;
   color: var(--openapi-required);
   margin-left: 1%;
   background-color: transparent;
-  font-size: 10.5px;
   text-transform: uppercase;
 }
 
