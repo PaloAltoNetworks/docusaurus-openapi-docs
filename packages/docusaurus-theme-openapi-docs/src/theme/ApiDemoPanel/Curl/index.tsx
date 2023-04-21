@@ -325,6 +325,7 @@ function Curl({ postman, codeSamples }: Props) {
               }}
             >
               <CodeTabs
+                className="openapi-tabs__code-container-inner"
                 action={{
                   setLanguage: setLanguage,
                   setSelectedVariant: setSelectedVariant,

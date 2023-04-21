@@ -58,15 +58,10 @@ function Server() {
     }
     return (
       <FloatingButton onClick={() => setIsEditing(true)} label="Edit">
-        <FormItem label="Base URL">
-          <pre
-            style={{
-              background: "var(--openapi-card-background-color)",
-              paddingLeft: "0px",
-            }}
-          >
-            <code title={url}>{url}</code>
-          </pre>
+        <FormItem>
+          <span className="openapi-demo__server-url" title={url}>
+            {url}
+          </span>
         </FormItem>
       </FloatingButton>
     );
@@ -74,7 +69,7 @@ function Server() {
   return (
     <div className="openapi-demo__server-container">
       <FloatingButton onClick={() => setIsEditing(false)} label="Hide">
-        <FormItem label="Base URL">
+        <FormItem>
           <FormSelect
             options={options.map((s: any) => s.url)}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,7 +83,9 @@ function Server() {
             }}
             value={value?.url}
           />
-          <small>{value?.description}</small>
+          <small className="openapi-demo__server-description">
+            {value?.description}
+          </small>
         </FormItem>
         {value?.variables &&
           Object.keys(value.variables).map((key) => {
