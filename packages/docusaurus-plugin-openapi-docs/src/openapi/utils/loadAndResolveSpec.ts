@@ -101,7 +101,19 @@ async function resolveJsonRefs(specUrlOrObject: object | string) {
     });
     return schema as OpenApiObject;
   } catch (err: any) {
-    console.error(chalk.yellow(err.errors[0]?.message ?? err));
+    let errorMsg = "";
+
+    if (err.errors[0] !== undefined) {
+      const error = err.errors[0];
+      errorMsg = JSON.stringify({
+        footprint: error.footprint,
+        message: error.message,
+      });
+    } else {
+      errorMsg = err;
+    }
+
+    console.error(chalk.yellow(errorMsg));
     return;
   }
 }
