@@ -105,10 +105,7 @@ async function resolveJsonRefs(specUrlOrObject: object | string) {
 
     if (err.errors[0] !== undefined) {
       const error = err.errors[0];
-      errorMsg = JSON.stringify({
-        footprint: error.footprint,
-        message: error.message,
-      });
+      errorMsg = `Error: [${error.message}] with footprint [${error.footprint}]`;
     } else {
       errorMsg = err;
     }
