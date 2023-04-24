@@ -568,7 +568,7 @@ function createPropertyDiscriminator(
   }
 
   return create("div", {
-    className: "openapi-discriminator__item",
+    className: "openapi-discriminator__item openapi-schema__list-item",
     children: create("div", {
       children: [
         create("span", {
@@ -908,15 +908,29 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
               ...rest,
               children: [
                 createDetailsSummary({
+                  id: "request-body",
                   className: "openapi-markdown__details-summary-mime",
                   children: [
-                    create("strong", { children: `${title}` }),
+                    create("h3", {
+                      className:
+                        "openapi-markdown__details-summary-header-body",
+                      children: `${title}`,
+                    }),
                     guard(body.required && body.required === true, () => [
                       create("span", {
                         className: "openapi-schema__required",
                         children: "required",
                       }),
                     ]),
+                    create("span", {
+                      onClick: `(e: Event) => e.preventDefault()`,
+                      children: create("a", {
+                        className: "hash-link",
+                        href: "#request-body",
+                        "aria-label": "Direct link to Request Body",
+                        title: "Direct link to Request Body",
+                      }),
+                    }),
                   ],
                 }),
                 create("div", {
@@ -970,9 +984,13 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
             ...rest,
             children: [
               createDetailsSummary({
+                id: "request-body",
                 className: "openapi-markdown__details-summary-mime",
                 children: [
-                  create("strong", { children: `${title}` }),
+                  create("h3", {
+                    className: "openapi-markdown__details-summary-header-body",
+                    children: `${title}`,
+                  }),
                   guard(firstBody.type === "array", (format) =>
                     create("span", {
                       style: { opacity: "0.6" },
@@ -985,6 +1003,15 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
                       children: "required",
                     }),
                   ]),
+                  create("span", {
+                    onClick: `(e: Event) => e.preventDefault()`,
+                    children: create("a", {
+                      className: "hash-link",
+                      href: "#request-body",
+                      "aria-label": "Direct link to Request Body",
+                      title: "Direct link to Request Body",
+                    }),
+                  }),
                 ],
               }),
               create("div", {
