@@ -31,11 +31,26 @@ export function createParamsDetails({ parameters, type }: Props) {
     style: { marginBottom: "1rem" },
     children: [
       createDetailsSummary({
+        id: `${type}-params`,
         children: [
-          create("strong", {
+          create("h3", {
+            className: "openapi-markdown__details-summary-header-params",
             children: `${
               type.charAt(0).toUpperCase() + type.slice(1)
             } Parameters`,
+          }),
+          create("span", {
+            onClick: `(e: Event) => e.preventDefault()`,
+            children: create("a", {
+              className: "hash-link",
+              href: `#${type}-params`,
+              "aria-label": `Direct link to ${
+                type.charAt(0).toUpperCase() + type.slice(1)
+              } Parameters`,
+              title: `Direct link to ${
+                type.charAt(0).toUpperCase() + type.slice(1)
+              } Parameters`,
+            }),
           }),
         ],
       }),

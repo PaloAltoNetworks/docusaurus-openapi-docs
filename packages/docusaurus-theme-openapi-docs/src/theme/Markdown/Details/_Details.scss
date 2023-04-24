@@ -4,8 +4,28 @@
 .openapi-left-panel__container > .openapi-markdown__details > summary,
 .openapi-markdown__details.mime > summary,
 .openapi-markdown__details.response > summary {
-  font-size: 12px;
+  display: flex;
+  align-items: center;
   text-transform: uppercase;
+  font-size: 12px;
+  scroll-margin-top: calc(var(--ifm-navbar-height) + 0.5rem);
+
+  .hash-link {
+    color: var(--ifm-color-primary);
+    padding-left: 0.25rem;
+    text-decoration: none;
+  }
+
+  &:hover {
+    .hash-link {
+      opacity: 1;
+    }
+  }
+}
+
+.openapi-markdown__details-summary-header-params {
+  font-size: 12px;
+  margin-bottom: 0;
 }
 /* End of Top-Level Details Styling */
 
