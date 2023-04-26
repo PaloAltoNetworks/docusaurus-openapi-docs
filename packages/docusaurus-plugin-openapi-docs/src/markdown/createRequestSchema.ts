@@ -68,14 +68,17 @@ function createAnyOneOf(schema: SchemaObject): any {
 
           if (anyOneSchema.properties !== undefined) {
             anyOneChildren.push(createProperties(anyOneSchema));
+            delete anyOneSchema.properties;
           }
 
           if (anyOneSchema.allOf !== undefined) {
             anyOneChildren.push(createNodes(anyOneSchema));
+            delete anyOneSchema.allOf;
           }
 
           if (anyOneSchema.items !== undefined) {
             anyOneChildren.push(createItems(anyOneSchema));
+            delete anyOneSchema.items;
           }
 
           if (
@@ -526,6 +529,95 @@ function createDetailsNode(
   });
 }
 
+function createOneOfProperty(
+  name: string,
+  schemaName: string,
+  schema: SchemaObject,
+  required: string[] | boolean,
+  nullable: boolean | unknown
+): any {
+  return create("SchemaItem", {
+    collapsible: true,
+    className: "schemaItem",
+    children: [
+      createDetails({
+        children: [
+          createDetailsSummary({
+            children: [
+              create("strong", { children: name }),
+              create("span", {
+                style: { opacity: "0.6" },
+                children: ` ${schemaName}`,
+              }),
+              guard(
+                (schema.nullable && schema.nullable === true) ||
+                  (nullable && nullable === true),
+                () => [
+                  create("strong", {
+                    style: {
+                      fontSize: "var(--ifm-code-font-size)",
+                      color: "var(--openapi-nullable)",
+                    },
+                    children: " nullable",
+                  }),
+                ]
+              ),
+              guard(
+                Array.isArray(required)
+                  ? required.includes(name)
+                  : required === true,
+                () => [
+                  create("strong", {
+                    style: {
+                      fontSize: "var(--ifm-code-font-size)",
+                      color: "var(--openapi-required)",
+                    },
+                    children: " required",
+                  }),
+                ]
+              ),
+            ],
+          }),
+          create("div", {
+            style: { marginLeft: "1rem" },
+            children: [
+              guard(getQualifierMessage(schema), (message) =>
+                create("div", {
+                  style: { marginTop: ".5rem", marginBottom: ".5rem" },
+                  children: createDescription(message),
+                })
+              ),
+              guard(schema.description, (description) =>
+                create("div", {
+                  style: { marginTop: ".5rem", marginBottom: ".5rem" },
+                  children: createDescription(description),
+                })
+              ),
+            ],
+          }),
+          create("div", {
+            children: [
+              create("span", {
+                className: "badge badge--info",
+                children: "oneOf",
+              }),
+              create("SchemaTabs", {
+                children: schema["oneOf"]!.map((property, index) => {
+                  const label = property.type ?? `MOD${index + 1}`;
+                  return create("TabItem", {
+                    label: label,
+                    value: `${index}-property`,
+                  });
+                }),
+              }),
+            ],
+          }),
+        ],
+      }),
+    ],
+  });
+}
+
 /**
  * For handling discriminators that map to a same-level property (like 'petType').
  * Note: These should only be encountered while iterating through properties.
@@ -630,7 +722,7 @@ function createEdges({
   }
 
   if (schema.oneOf !== undefined || schema.anyOf !== undefined) {
-    return createDetailsNode(
+    return createOneOfProperty(
       name,
       schemaName,
       schema,
