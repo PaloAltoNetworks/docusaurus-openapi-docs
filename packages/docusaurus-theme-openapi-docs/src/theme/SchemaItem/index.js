@@ -103,9 +103,9 @@ function SchemaItem({
   );
 
   return (
-    <li className={styles.schemaItem}>
+    <div className={styles.schemaItem}>
       {collapsible ? collapsibleSchemaContent : schemaContent}
-    </li>
+    </div>
   );
 }
 

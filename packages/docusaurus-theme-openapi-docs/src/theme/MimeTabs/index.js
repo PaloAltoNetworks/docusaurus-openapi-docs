@@ -200,7 +200,7 @@ function MimeTabsComponent(props) {
               onClick={handleLeftClick}
             />
           )}
-          <ul
+          <div
             ref={tabItemListContainerRef}
             role="tablist"
             aria-orientation="horizontal"
@@ -215,7 +215,7 @@ function MimeTabsComponent(props) {
           >
             {values.map(({ value, label, attributes }) => {
               return (
-                <li
+                <div
                   role="tab"
                   tabIndex={selectedValue === value ? 0 : -1}
                   aria-selected={selectedValue === value}
@@ -238,10 +238,10 @@ function MimeTabsComponent(props) {
                     className={clsx(styles.mimeTabDot, mimeTabDotStyle)}
                   /> */}
                   {label ?? value}
-                </li>
+                </div>
               );
             })}
-          </ul>
+          </div>
           {showTabArrows && (
             <button
               className={clsx(styles.tabArrow, styles.tabArrowRight)}

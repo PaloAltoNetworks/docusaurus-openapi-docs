@@ -119,7 +119,7 @@ function ParamsItem({
   });
 
   return (
-    <li className={styles.paramsItem}>
+    <div className={styles.paramsItem}>
       <strong>{name}</strong>
       {renderSchemaName}
       {renderSchemaRequired}
@@ -128,7 +128,7 @@ function ParamsItem({
       {renderDescription}
       {renderExample}
       {renderExamples}
-    </li>
+    </div>
   );
 }
 

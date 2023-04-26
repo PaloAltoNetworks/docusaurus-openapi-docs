@@ -182,7 +182,7 @@ function SchemaTabsComponent(props) {
               onClick={handleLeftClick}
             />
           )}
-          <ul
+          <div
             ref={tabItemListContainerRef}
             role="tablist"
             aria-orientation="horizontal"
@@ -197,7 +197,7 @@ function SchemaTabsComponent(props) {
           >
             {values.map(({ value, label, attributes }) => {
               return (
-                <li
+                <div
                   role="tab"
                   tabIndex={selectedValue === value ? 0 : -1}
                   aria-selected={selectedValue === value}
@@ -219,10 +219,10 @@ function SchemaTabsComponent(props) {
                   <span className={styles.schemaTabLabel}>
                     {label ?? value}
                   </span>
-                </li>
+                </div>
               );
             })}
-          </ul>
+          </div>
           {showTabArrows && (
             <button
               className={clsx(styles.tabArrow, styles.tabArrowRight)}
