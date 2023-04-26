@@ -498,7 +498,7 @@ function createDetailsNode(
                   ),
                   guard(nullable, () => [
                     create("span", {
-                      className: "badge badge--info openapi-schema__nullable",
+                      className: "openapi-schema__nullable",
                       children: "nullable",
                     }),
                   ]),
@@ -515,8 +515,7 @@ function createDetailsNode(
                   ),
                   guard(schema.deprecated, () => [
                     create("span", {
-                      className:
-                        "badge badge--warning openapi-schema__deprecated",
+                      className: "openapi-schema__deprecated",
                       children: "deprecated",
                     }),
                   ]),
@@ -882,6 +881,7 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
 
   // Get all MIME types, including vendor-specific
   const mimeTypes = Object.keys(body.content);
+  const handleAnchorClick = (e: Event) => e.preventDefault();
 
   if (mimeTypes && mimeTypes.length > 1) {
     return create("MimeTabs", {
@@ -923,7 +923,7 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
                       }),
                     ]),
                     create("span", {
-                      onClick: `(e: Event) => e.preventDefault()`,
+                      onClick: handleAnchorClick,
                       children: create("a", {
                         className: "hash-link",
                         href: "#request-body",
@@ -1004,7 +1004,7 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
                     }),
                   ]),
                   create("span", {
-                    onClick: `(e: Event) => e.preventDefault()`,
+                    onClick: handleAnchorClick,
                     children: create("a", {
                       className: "hash-link",
                       href: "#request-body",

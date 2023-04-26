@@ -42,13 +42,11 @@ function SchemaItem({
   );
 
   const renderDeprecated = guard(deprecated, () => (
-    <span className="badge badge--warning openapi-schema__deprecated">
-      deprecated
-    </span>
+    <span className="openapi-schema__deprecated">deprecated</span>
   ));
 
   const renderNullable = guard(nullable, () => (
-    <span className="badge badge--info openapi-schema__nullable">nullable</span>
+    <span className="openapi-schema__nullable">nullable</span>
   ));
 
   const renderSchemaDescription = guard(schemaDescription, (description) => (

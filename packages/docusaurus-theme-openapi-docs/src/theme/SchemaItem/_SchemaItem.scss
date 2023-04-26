@@ -39,24 +39,32 @@
   align-items: center;
   font-size: 10.5px;
   font-weight: bold;
+  text-transform: uppercase;
   color: var(--openapi-required);
   margin-left: 1%;
   background-color: transparent;
-  text-transform: uppercase;
 }
 
 .openapi-schema__deprecated {
+  display: flex;
+  align-items: center;
+  font-size: 10.5px;
+  font-weight: bold;
+  text-transform: uppercase;
   color: var(--openapi-deprecated);
   margin-left: 1%;
   background-color: transparent;
-  font-size: 10.5px;
 }
 
 .openapi-schema__nullable {
+  display: flex;
+  align-items: center;
+  font-size: 10.5px;
+  font-weight: bold;
+  text-transform: uppercase;
   color: var(--openapi-nullable);
   margin-left: 1%;
   background-color: transparent;
-  font-size: 10.5px;
 }
 
 .openapi-schema__strikethrough {

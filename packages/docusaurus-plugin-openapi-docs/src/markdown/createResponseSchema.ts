@@ -505,7 +505,7 @@ function createDetailsNode(
                   ),
                   guard(nullable, () => [
                     create("span", {
-                      className: "badge badge--info openapi-schema__nullable",
+                      className: "openapi-schema__nullable",
                       children: "nullable",
                     }),
                   ]),
@@ -522,8 +522,7 @@ function createDetailsNode(
                   ),
                   guard(schema.deprecated, () => [
                     create("span", {
-                      className:
-                        "badge badge--warning openapi-schema__deprecated",
+                      className: "openapi-schema__deprecated",
                       children: "deprecated",
                     }),
                   ]),
@@ -575,7 +574,7 @@ function createPropertyDiscriminator(
   }
 
   return create("div", {
-    className: "openapi-discriminator__item",
+    className: "openapi-discriminator__item openapi-schema__list-item",
     children: create("div", {
       children: [
         create("span", {
