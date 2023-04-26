@@ -607,6 +607,15 @@ function createOneOfProperty(
                   return create("TabItem", {
                     label: label,
                     value: `${index}-property`,
+                    children: [
+                      create("p", { children: label }),
+                      guard(schema.description, (description) =>
+                        create("div", {
+                          style: { marginTop: ".5rem", marginBottom: ".5rem" },
+                          children: createDescription(description),
+                        })
+                      ),
+                    ],
                   });
                 }),
               }),
