@@ -164,7 +164,7 @@ function DiscriminatorTabsComponent(props) {
   };
 
   return (
-    <div className="tabs__container">
+    <div className={clsx("tabs__container", "discriminatorTabs")}>
       <div className={styles.discriminatorTabsTopSection}>
         <div className={clsx(styles.discriminatorTabsContainer)}>
           {showTabArrows && (

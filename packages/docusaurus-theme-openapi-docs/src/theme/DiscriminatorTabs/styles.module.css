@@ -32,9 +32,13 @@
 }
 
 /* Open API Schema Tabs */
+.discriminatorTabs {
+  margin-left: -20px !important;
+}
+
 .discriminatorTabsTopSection {
   margin-top: 1rem;
-  margin-left: 0.9rem;
+  margin-left: 0.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
