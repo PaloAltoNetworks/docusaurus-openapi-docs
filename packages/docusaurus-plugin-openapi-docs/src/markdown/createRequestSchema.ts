@@ -637,7 +637,7 @@ function createPropertyDiscriminator(
   schema: SchemaObject,
   discriminator: any,
   required: string[] | boolean
-): any {
+) {
   if (schema === undefined) {
     return undefined;
   }
@@ -646,59 +646,26 @@ function createPropertyDiscriminator(
     return undefined;
   }
 
-  return create("div", {
-    className: "discriminatorItem",
-    children: create("div", {
-      children: [
-        create("strong", { style: { paddingLeft: "1rem" }, children: name }),
-        guard(schemaName, (name) =>
-          create("span", {
-            style: { opacity: "0.6" },
-            children: ` ${schemaName}`,
-          })
-        ),
-        guard(required, () => [
-          create("strong", {
-            style: {
-              fontSize: "var(--ifm-code-font-size)",
-              color: "var(--openapi-required)",
-            },
-            children: " required",
-          }),
-        ]),
-        guard(getQualifierMessage(discriminator), (message) =>
-          create("div", {
-            style: {
-              paddingLeft: "1rem",
-            },
-            children: createDescription(message),
-          })
-        ),
-        guard(schema.description, (description) =>
-          create("div", {
-            style: {
-              paddingLeft: "1rem",
-            },
-            children: createDescription(description),
-          })
-        ),
-        create("DiscriminatorTabs", {
-          children: Object.keys(discriminator?.mapping!).map((key, index) => {
-            const label = key;
-            return create("TabItem", {
-              label: label,
-              value: `${index}-item-discriminator`,
-              children: [
-                create("div", {
-                  style: { marginLeft: "-4px" },
-                  children: createNodes(discriminator?.mapping[key]),
-                }),
-              ],
-            });
-          }),
+  return create("SchemaItem", {
+    name,
+    required: Array.isArray(required) ? required.includes(name) : required,
+    schemaName: schemaName,
+    qualifierMessage: getQualifierMessage(schema),
+    schema: schema,
+    collapsible: false,
+    discriminator: true,
+    children: [
+      create("DiscriminatorTabs", {
+        children: Object.keys(discriminator?.mapping!).map((key, index) => {
+          const label = key;
+          return create("TabItem", {
+            label: label,
+            value: `${index}-item-discriminator`,
+            children: createNodes(discriminator?.mapping[key]),
+          });
         }),
-      ],
-    }),
+      }),
+    ],
   });
 }
 
@@ -903,30 +870,38 @@ function createNodes(schema: SchemaObject): any {
 
   // primitive
   if (schema.type !== undefined) {
-    return create("li", {
-      children: create("div", {
-        children: [
-          create("strong", { children: schema.type }),
-          guard(schema.format, (format) =>
-            create("span", {
-              style: { opacity: "0.6" },
-              children: ` ${format}`,
-            })
-          ),
-          guard(getQualifierMessage(schema), (message) =>
-            create("div", {
-              style: { marginTop: "var(--ifm-table-cell-padding)" },
-              children: createDescription(message),
-            })
-          ),
-          guard(schema.description, (description) =>
-            create("div", {
-              style: { marginTop: "var(--ifm-table-cell-padding)" },
-              children: createDescription(description),
-            })
-          ),
-        ],
-      }),
+    if (schema.allOf) {
+      //handle circular result in allOf
+      if (schema.allOf.length && typeof schema.allOf[0] === "string") {
+        return create("div", {
+          style: {
+            marginTop: ".5rem",
+            marginBottom: ".5rem",
+            marginLeft: "1rem",
+          },
+          children: createDescription(schema.allOf[0]),
+        });
+      }
+    }
+    return create("div", {
+      style: {
+        marginTop: ".5rem",
+        marginBottom: ".5rem",
+        marginLeft: "1rem",
+      },
+      children: createDescription(schema.type),
+    });
+  }
+
+  // handle circular references
+  if (typeof schema === "string") {
+    return create("div", {
+      style: {
+        marginTop: ".5rem",
+        marginBottom: ".5rem",
+        marginLeft: "1rem",
+      },
+      children: [createDescription(schema)],
     });
   }
 
