@@ -28,6 +28,7 @@ function SchemaItem({
   required,
   schemaName,
   schema,
+  discriminator,
 }) {
   let deprecated;
   let schemaDescription;
@@ -99,6 +100,7 @@ function SchemaItem({
       {renderQualifierMessage}
       {renderDefaultValue}
       {renderSchemaDescription}
+      {collapsibleSchemaContent ?? collapsibleSchemaContent}
     </div>
   );
 
