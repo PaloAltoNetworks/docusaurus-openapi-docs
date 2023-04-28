@@ -217,6 +217,10 @@
   padding-left: 0 !important;
 }
 
+.discriminatorTabs {
+  margin-left: -20px;
+}
+
 .schemaItem:hover {
   background-color: var(--ifm-menu-color-background-active);
 }
