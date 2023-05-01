@@ -206,11 +206,10 @@ function createAdditionalProperties(schema: SchemaObject) {
       schema.additionalProperties?.additionalProperties;
     if (additionalProperties !== undefined) {
       const type = schema.additionalProperties?.additionalProperties?.type;
-      const format = schema.additionalProperties?.additionalProperties?.format;
       return create("SchemaItem", {
         name: "property name*",
         required: false,
-        schemaName: format ? format : "any",
+        schemaName: type ? type : "any",
         qualifierMessage:
           schema.additionalProperties ??
           getQualifierMessage(schema.additionalProperties),
