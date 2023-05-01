@@ -168,7 +168,7 @@ function createAdditionalProperties(schema: SchemaObject) {
       name: "property name*",
       required: false,
       schemaName: "any",
-      qualifierMessage: getQualifierMessage(schema),
+      qualifierMessage: getQualifierMessage(schema.additionalProperties),
       schema: schema,
       collapsible: false,
       discriminator: false,
@@ -183,12 +183,12 @@ function createAdditionalProperties(schema: SchemaObject) {
       additionalProperties?.oneOf ||
       additionalProperties?.anyOf)
   ) {
-    const title = additionalProperties.title;
-    const schemaName = title ? `object (${title})` : "object";
+    const title = additionalProperties.title as string;
+    const schemaName = getSchemaName(additionalProperties);
     const required = schema.required ?? false;
     return createDetailsNode(
       "property name*",
-      schemaName,
+      title ?? schemaName,
       additionalProperties,
       required,
       schema.nullable
@@ -206,10 +206,13 @@ function createAdditionalProperties(schema: SchemaObject) {
       schema.additionalProperties?.additionalProperties;
     if (additionalProperties !== undefined) {
       const type = schema.additionalProperties?.additionalProperties?.type;
+      const schemaName = getSchemaName(
+        schema.additionalProperties?.additionalProperties!
+      );
       return create("SchemaItem", {
         name: "property name*",
         required: false,
-        schemaName: type ? type : "any",
+        schemaName: schemaName ?? type,
         qualifierMessage:
           schema.additionalProperties ??
           getQualifierMessage(schema.additionalProperties),
@@ -218,14 +221,13 @@ function createAdditionalProperties(schema: SchemaObject) {
         discriminator: false,
       });
     }
+    const schemaName = getSchemaName(schema.additionalProperties!);
     return create("SchemaItem", {
       name: "property name*",
       required: false,
-      schemaName: "any",
-      qualifierMessage:
-        schema.additionalProperties ??
-        getQualifierMessage(schema.additionalProperties),
-      schema: schema,
+      schemaName: schemaName,
+      qualifierMessage: getQualifierMessage(schema),
+      schema: schema.additionalProperties,
       collapsible: false,
       discriminator: false,
     });
