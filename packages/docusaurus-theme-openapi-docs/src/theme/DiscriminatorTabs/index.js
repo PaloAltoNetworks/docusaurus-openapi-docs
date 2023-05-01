@@ -147,12 +147,21 @@ function DiscriminatorTabsComponent(props) {
   const [showTabArrows, setShowTabArrows] = useState(false);
 
   useEffect(() => {
-    const tabOffsetWidth = tabItemListContainerRef.current.offsetWidth;
-    const tabScrollWidth = tabItemListContainerRef.current.scrollWidth;
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        if (entry.target.offsetWidth < entry.target.scrollWidth) {
+          setShowTabArrows(true);
+        } else {
+          setShowTabArrows(false);
+        }
+      }
+    });
 
-    if (tabOffsetWidth < tabScrollWidth) {
-      setShowTabArrows(true);
-    }
+    resizeObserver.observe(tabItemListContainerRef.current);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
   }, []);
 
   const handleRightClick = () => {
@@ -164,7 +173,7 @@ function DiscriminatorTabsComponent(props) {
   };
 
   return (
-    <div className="tabs__container">
+    <div className={clsx("tabs__container", "discriminatorTabs")}>
       <div className={styles.discriminatorTabsTopSection}>
         <div className={clsx(styles.discriminatorTabsContainer)}>
           {showTabArrows && (

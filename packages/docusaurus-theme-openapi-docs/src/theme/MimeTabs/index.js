@@ -173,12 +173,21 @@ function MimeTabsComponent(props) {
   const [showTabArrows, setShowTabArrows] = useState(false);
 
   useEffect(() => {
-    const tabOffsetWidth = tabItemListContainerRef.current.offsetWidth;
-    const tabScrollWidth = tabItemListContainerRef.current.scrollWidth;
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        if (entry.target.offsetWidth < entry.target.scrollWidth) {
+          setShowTabArrows(true);
+        } else {
+          setShowTabArrows(false);
+        }
+      }
+    });
 
-    if (tabOffsetWidth < tabScrollWidth) {
-      setShowTabArrows(true);
-    }
+    resizeObserver.observe(tabItemListContainerRef.current);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
   }, []);
 
   const handleRightClick = () => {
@@ -200,7 +209,7 @@ function MimeTabsComponent(props) {
               onClick={handleLeftClick}
             />
           )}
-          <ul
+          <div
             ref={tabItemListContainerRef}
             role="tablist"
             aria-orientation="horizontal"
@@ -215,7 +224,7 @@ function MimeTabsComponent(props) {
           >
             {values.map(({ value, label, attributes }) => {
               return (
-                <li
+                <div
                   role="tab"
                   tabIndex={selectedValue === value ? 0 : -1}
                   aria-selected={selectedValue === value}
@@ -238,10 +247,10 @@ function MimeTabsComponent(props) {
                     className={clsx(styles.mimeTabDot, mimeTabDotStyle)}
                   /> */}
                   {label ?? value}
-                </li>
+                </div>
               );
             })}
-          </ul>
+          </div>
           {showTabArrows && (
             <button
               className={clsx(styles.tabArrow, styles.tabArrowRight)}
