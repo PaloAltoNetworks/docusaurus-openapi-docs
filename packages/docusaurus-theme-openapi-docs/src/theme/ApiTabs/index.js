@@ -132,7 +132,6 @@ function TabList({ className, block, selectedValue, selectValue, tabValues }) {
                 }
               )}
             >
-              <div className="openapi-tabs__response-dot" />
               {label ?? value}
             </li>
           ))}
