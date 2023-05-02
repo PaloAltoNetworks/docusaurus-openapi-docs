@@ -19,14 +19,12 @@
     content: "";
     display: inline-block;
   }
-}
 
-.openapi-schema__list-item:hover {
-  background-color: var(--ifm-menu-color-background-active);
-}
-
-.openapi-schema__list-item:focus {
-  background-color: var(--ifm-menu-color-background-active);
+  &:hover {
+    .openapi-schema__property {
+      color: var(--ifm-color-primary);
+    }
+  }
 }
 
 .openapi-schema__name {
@@ -74,6 +72,7 @@
 .openapi-schema__property {
   margin-top: 1.25px;
   font-family: var(--ifm-font-family-monospace);
+  transition: 300ms;
 }
 
 .openapi-schema__divider {

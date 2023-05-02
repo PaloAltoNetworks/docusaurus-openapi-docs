@@ -19,14 +19,12 @@
     content: "";
     display: inline-block;
   }
-}
 
-.openapi-params__list-item:hover {
-  background-color: var(--ifm-menu-color-background-active);
-}
-
-.openapi-params__list-item:focus {
-  background-color: var(--ifm-menu-color-background-active);
+  &:hover {
+    .openapi-schema__property {
+      color: var(--ifm-color-primary);
+    }
+  }
 }
 
 .openapi-schema__type {
