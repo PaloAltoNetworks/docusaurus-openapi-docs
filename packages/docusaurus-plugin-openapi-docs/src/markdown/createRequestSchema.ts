@@ -908,7 +908,6 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
               ...rest,
               children: [
                 createDetailsSummary({
-                  id: "request-body",
                   className: "openapi-markdown__details-summary-mime",
                   children: [
                     create("h3", {
@@ -922,15 +921,6 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
                         children: "required",
                       }),
                     ]),
-                    create("span", {
-                      onClick: handleAnchorClick,
-                      children: create("a", {
-                        className: "hash-link",
-                        href: "#request-body",
-                        "aria-label": "Direct link to Request Body",
-                        title: "Direct link to Request Body",
-                      }),
-                    }),
                   ],
                 }),
                 create("div", {
@@ -984,7 +974,6 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
             ...rest,
             children: [
               createDetailsSummary({
-                id: "request-body",
                 className: "openapi-markdown__details-summary-mime",
                 children: [
                   create("h3", {
@@ -1003,15 +992,6 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
                       children: "required",
                     }),
                   ]),
-                  create("span", {
-                    onClick: handleAnchorClick,
-                    children: create("a", {
-                      className: "hash-link",
-                      href: "#request-body",
-                      "aria-label": "Direct link to Request Body",
-                      title: "Direct link to Request Body",
-                    }),
-                  }),
                 ],
               }),
               create("div", {

@@ -4,23 +4,14 @@
 .openapi-left-panel__container > .openapi-markdown__details > summary,
 .openapi-markdown__details.mime > summary,
 .openapi-markdown__details.response > summary {
-  display: flex;
-  align-items: center;
   text-transform: uppercase;
   font-size: 12px;
-  scroll-margin-top: calc(var(--ifm-navbar-height) + 0.5rem);
+}
 
-  .hash-link {
-    color: var(--ifm-color-primary);
-    padding-left: 0.25rem;
-    text-decoration: none;
-  }
-
-  &:hover {
-    .hash-link {
-      opacity: 1;
-    }
-  }
+.openapi-left-panel__container > .openapi-markdown__details,
+.openapi-markdown__details.mime,
+.openapi-markdown__details.response {
+  margin-bottom: 1rem !important;
 }
 
 .openapi-markdown__details-summary-header-params,
@@ -34,7 +25,7 @@
 .openapi-left-panel__container > .openapi-markdown__details > summary::before,
 .openapi-markdown__details.mime > summary::before,
 .openapi-markdown__details.response > summary::before {
-  top: 0.25rem;
+  top: 0;
 }
 /* End of Top-Level Details Caret Styling */
 
