@@ -5,6 +5,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+.openapi-tabs__schema-container {
+  margin-top: 1rem;
+}
+
 .openapi-tabs__schema-item {
   display: flex;
   align-items: center;
@@ -14,6 +18,7 @@
   margin-top: 0 !important;
   margin-right: 0.5rem;
   font-weight: var(--ifm-font-weight-bold);
+  font-family: var(--ifm-font-family-monospace);
   font-size: 10px;
   white-space: nowrap;
   transition: 300ms;
@@ -51,7 +56,7 @@
   white-space: nowrap;
 }
 
-.openapi-tabs__schema-container {
+.openapi-tabs__schema-tabs-container {
   width: 100%;
   display: flex;
   align-items: center;
