@@ -881,7 +881,6 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
 
   // Get all MIME types, including vendor-specific
   const mimeTypes = Object.keys(body.content);
-  const handleAnchorClick = (e: Event) => e.preventDefault();
 
   if (mimeTypes && mimeTypes.length > 1) {
     return create("MimeTabs", {
