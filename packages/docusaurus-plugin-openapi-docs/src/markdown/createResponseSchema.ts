@@ -60,14 +60,13 @@ export function mergeAllOf(allOf: SchemaObject[]) {
  */
 function createAnyOneOf(schema: SchemaObject): any {
   const type = schema.oneOf ? "oneOf" : "anyOf";
-  return create("li", {
+  return create("div", {
     children: [
       create("span", {
         className: "badge badge--info",
         children: type,
       }),
       create("SchemaTabs", {
-        className: "openapi-tabs__schema",
         children: schema[type]!.map((anyOneSchema, index) => {
           const label = anyOneSchema.title
             ? anyOneSchema.title
@@ -76,14 +75,17 @@ function createAnyOneOf(schema: SchemaObject): any {
 
           if (anyOneSchema.properties !== undefined) {
             anyOneChildren.push(createProperties(anyOneSchema));
+            delete anyOneSchema.properties;
           }
 
           if (anyOneSchema.allOf !== undefined) {
             anyOneChildren.push(createNodes(anyOneSchema));
+            delete anyOneSchema.allOf;
           }
 
           if (anyOneSchema.items !== undefined) {
             anyOneChildren.push(createItems(anyOneSchema));
+            delete anyOneSchema.items;
           }
 
           if (
@@ -94,7 +96,6 @@ function createAnyOneOf(schema: SchemaObject): any {
           ) {
             anyOneChildren.push(createNodes(anyOneSchema));
           }
-
           if (anyOneChildren.length) {
             if (schema.type === "array") {
               return create("TabItem", {
@@ -112,7 +113,7 @@ function createAnyOneOf(schema: SchemaObject): any {
             return create("TabItem", {
               label: label,
               value: `${index}-item-properties`,
-              children: anyOneChildren,
+              children: anyOneChildren.filter(Boolean).flat(),
             });
           }
 
@@ -168,6 +169,18 @@ function createAdditionalProperties(schema: SchemaObject) {
   // }
   const additionalProperties = schema.additionalProperties;
   const type: string | unknown = additionalProperties?.type;
+  // Handle free-form objects
+  if (String(additionalProperties) === "true" && schema.type === "object") {
+    return create("SchemaItem", {
+      name: "property name*",
+      required: false,
+      schemaName: "any",
+      qualifierMessage: getQualifierMessage(schema.additionalProperties),
+      schema: schema,
+      collapsible: false,
+      discriminator: false,
+    });
+  }
   if (
     (type === "object" || type === "array") &&
     (additionalProperties?.properties ||
@@ -177,12 +190,12 @@ function createAdditionalProperties(schema: SchemaObject) {
       additionalProperties?.oneOf ||
       additionalProperties?.anyOf)
   ) {
-    const title = additionalProperties.title;
-    const schemaName = title ? `object (${title})` : "object";
+    const title = additionalProperties.title as string;
+    const schemaName = getSchemaName(additionalProperties);
     const required = schema.required ?? false;
     return createDetailsNode(
       "property name*",
-      schemaName,
+      title ?? schemaName,
       additionalProperties,
       required,
       schema.nullable
@@ -200,51 +213,30 @@ function createAdditionalProperties(schema: SchemaObject) {
       schema.additionalProperties?.additionalProperties;
     if (additionalProperties !== undefined) {
       const type = schema.additionalProperties?.additionalProperties?.type;
-      const format = schema.additionalProperties?.additionalProperties?.format;
-      return create("li", {
-        children: create("div", {
-          children: [
-            create("code", { children: `property name*` }),
-            guard(type, (type) =>
-              create("span", {
-                style: { opacity: "0.6" },
-                children: ` ${type}`,
-              })
-            ),
-            guard(format, (format) =>
-              create("span", {
-                style: { opacity: "0.6" },
-                children: ` (${format})`,
-              })
-            ),
-            guard(getQualifierMessage(schema.additionalProperties), (message) =>
-              create("div", {
-                style: { marginTop: "var(--ifm-table-cell-padding)" },
-                children: createDescription(message),
-              })
-            ),
-          ],
-        }),
+      const schemaName = getSchemaName(
+        schema.additionalProperties?.additionalProperties!
+      );
+      return create("SchemaItem", {
+        name: "property name*",
+        required: false,
+        schemaName: schemaName ?? type,
+        qualifierMessage:
+          schema.additionalProperties ??
+          getQualifierMessage(schema.additionalProperties),
+        schema: schema,
+        collapsible: false,
+        discriminator: false,
       });
     }
-    return create("li", {
-      children: create("div", {
-        children: [
-          create("code", { children: `property name*` }),
-          guard(type, (type) =>
-            create("span", {
-              style: { opacity: "0.6" },
-              children: ` ${type}`,
-            })
-          ),
-          guard(getQualifierMessage(schema.additionalProperties), (message) =>
-            create("div", {
-              style: { marginTop: "var(--ifm-table-cell-padding)" },
-              children: createDescription(message),
-            })
-          ),
-        ],
-      }),
+    const schemaName = getSchemaName(schema.additionalProperties!);
+    return create("SchemaItem", {
+      name: "property name*",
+      required: false,
+      schemaName: schemaName,
+      qualifierMessage: getQualifierMessage(schema),
+      schema: schema.additionalProperties,
+      collapsible: false,
+      discriminator: false,
     });
   }
   return Object.entries(schema.additionalProperties!).map(([key, val]) =>

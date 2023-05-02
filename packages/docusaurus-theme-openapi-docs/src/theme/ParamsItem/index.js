@@ -117,7 +117,7 @@ function ParamsItem({
   });
 
   return (
-    <li className="openapi-params__list-item">
+    <div className="openapi-params__list-item">
       <span className="openapi-schema__container">
         <strong className="openapi-schema__property">{name}</strong>
         {renderSchemaName}
@@ -129,7 +129,7 @@ function ParamsItem({
       {renderDescription}
       {renderExample}
       {renderExamples}
-    </li>
+    </div>
   );
 }
 

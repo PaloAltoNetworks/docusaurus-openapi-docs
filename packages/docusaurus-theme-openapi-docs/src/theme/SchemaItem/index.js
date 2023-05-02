@@ -109,13 +109,14 @@ function SchemaItem({
       {renderQualifierMessage}
       {renderDefaultValue}
       {renderSchemaDescription}
+      {collapsibleSchemaContent ?? collapsibleSchemaContent}
     </div>
   );
 
   return (
-    <li className="openapi-schema__list-item">
+    <div className="openapi-schema__list-item">
       {collapsible ? collapsibleSchemaContent : schemaContent}
-    </li>
+    </div>
   );
 }
 
