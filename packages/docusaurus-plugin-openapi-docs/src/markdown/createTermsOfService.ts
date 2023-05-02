@@ -21,9 +21,8 @@ export function createTermsOfService(termsOfService: string | undefined) {
         },
         children: "Terms of Service",
       }),
-      create("a", {
-        href: `${termsOfService}`,
-        children: termsOfService,
+      create("span", {
+        children: `[${termsOfService}](${termsOfService})`,
       }),
     ],
   });

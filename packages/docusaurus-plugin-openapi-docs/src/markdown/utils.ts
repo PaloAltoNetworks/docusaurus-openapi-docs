@@ -17,7 +17,7 @@ export function create(tag: string, props: Props): string {
     propString += ` ${key}={${JSON.stringify(value)}}`;
   }
 
-  return `<${tag}${propString}>${render(children)}</${tag}>`;
+  return `\n<${tag}${propString}>${render(children)}</${tag}>\n`;
 }
 
 export function guard<T>(
