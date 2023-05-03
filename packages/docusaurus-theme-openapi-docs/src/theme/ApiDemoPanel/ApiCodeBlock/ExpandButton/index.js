@@ -38,22 +38,6 @@ export default function ExpandButton({
 
   const [modalIsOpen, setIsOpen] = React.useState(false);
 
-  const customStyles = {
-    overlay: { backgroundColor: "rgba(0, 0, 0, 0.9)", zIndex: "201" },
-    content: {
-      top: "50%",
-      left: "50%",
-      right: "auto",
-      bottom: "auto",
-      padding: "none",
-      border: "thin solid var(--ifm-toc-border-color)",
-      borderRadius: "var(--ifm-global-radius)",
-      transform: "translate(-50%, -50%)",
-      maxWidth: "95%",
-      width: "min-content",
-      overflow: "auto",
-    },
-  };
   useEffect(() => {
     Modal.setAppElement("body");
   });
@@ -107,9 +91,10 @@ export default function ExpandButton({
         </span>
       </button>
       <Modal
+        className="openapi-demo__expand-modal-content"
+        overlayClassName="openapi-demo__expand-modal-overlay"
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
-        style={customStyles}
         contentLabel="Code Snippet"
       >
         <Container

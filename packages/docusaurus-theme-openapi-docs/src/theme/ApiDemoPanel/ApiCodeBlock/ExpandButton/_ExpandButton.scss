@@ -1,3 +1,24 @@
+.openapi-demo__expand-modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  padding: none;
+  border: thin solid var(--ifm-toc-border-color);
+  border-radius: var(--ifm-global-radius);
+  transform: translate(-50%, -50%);
+  max-width: 95%;
+  overflow: auto;
+}
+
+.openapi-demo__expand-modal-overlay {
+  position: fixed;
+  inset: 0px;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 201;
+}
+
 .theme-code-block:hover .openapi-demo__code-block-expand-btn--copied {
   opacity: 1 !important;
 }
