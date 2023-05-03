@@ -67,15 +67,18 @@ function MethodEndpoint({ method, path }: Props) {
   };
 
   return (
-    <pre className="openapi__method-endpoint">
-      <span className={"badge badge--" + colorForMethod(method)}>
-        {method.toUpperCase()}
-      </span>{" "}
-      <span>
-        {renderServerUrl()}
-        {`${path.replace(/{([a-z0-9-_]+)}/gi, ":$1")}`}
-      </span>
-    </pre>
+    <>
+      <pre className="openapi__method-endpoint">
+        <span className={"badge badge--" + colorForMethod(method)}>
+          {method.toUpperCase()}
+        </span>{" "}
+        <h2 className="openapi__method-endpoint-path">
+          {renderServerUrl()}
+          {`${path.replace(/{([a-z0-9-_]+)}/gi, ":$1")}`}
+        </h2>
+      </pre>
+      <div className="openapi__divider" />
+    </>
   );
 }
 

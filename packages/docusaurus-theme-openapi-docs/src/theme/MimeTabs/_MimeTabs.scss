@@ -8,7 +8,7 @@
 .openapi-tabs__mime-container {
   display: flex;
   align-items: center;
-  max-width: 390px;
+  margin-top: 1rem;
   overflow: hidden;
 }
 
@@ -16,18 +16,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 2rem;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid transparent;
   margin-top: 0 !important;
   margin-right: 0.5rem;
-  font-weight: var(--ifm-font-weight-normal);
-  font-size: 12px;
+  font-weight: var(--ifm-font-weight-bold);
+  font-size: 10px;
+  text-transform: uppercase;
   white-space: nowrap;
+  transition: 300ms;
+
+  &:hover {
+    background-color: transparent;
+    border: 1px solid var(--ifm-toc-border-color);
+  }
 
   &.active {
-    background-color: var(--ifm-color-emphasis-100);
-    border-bottom-color: var(--ifm-tabs-color-active-border);
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
+    border: 1px solid var(--ifm-tabs-color-active-border);
     color: var(--ifm-tabs-color-active);
   }
 

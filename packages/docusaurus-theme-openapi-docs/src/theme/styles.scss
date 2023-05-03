@@ -151,5 +151,10 @@
 }
 
 .openapi__heading {
-  font-size: var(--ifm-h1-font-size);
+  font-size: 2rem;
+  margin-bottom: 0.5rem !important;
+}
+
+.openapi-left-panel__container {
+  border-right: thin solid var(--ifm-toc-border-color);
 }

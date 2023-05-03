@@ -37,9 +37,7 @@ function ParamsItem({
   ));
 
   const renderSchemaRequired = guard(required, () => (
-    <span className="badge badge--danger openapi-schema__required">
-      required
-    </span>
+    <span className="openapi-schema__required">required</span>
   ));
 
   const renderSchema = guard(getQualifierMessage(schema), (message) => (
@@ -121,7 +119,7 @@ function ParamsItem({
   return (
     <div className="openapi-params__list-item">
       <span className="openapi-schema__container">
-        <strong>{name}</strong>
+        <strong className="openapi-schema__property">{name}</strong>
         {renderSchemaName}
         {required && <span className="openapi-schema__divider"></span>}
         {renderSchemaRequired}

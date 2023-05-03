@@ -81,60 +81,56 @@ function TabList({ className, block, selectedValue, selectValue, tabValues }) {
   };
 
   return (
-    <div className="tabs__container">
-      <div className="openapi-tabs__schema-container">
-        {showTabArrows && (
-          <button
-            className="openapi-tabs__arrow left"
-            onClick={handleLeftClick}
-          />
+    <div className="openapi-tabs__schema-tabs-container">
+      {showTabArrows && (
+        <button
+          className="openapi-tabs__arrow left"
+          onClick={handleLeftClick}
+        />
+      )}
+      <ul
+        ref={tabItemListContainerRef}
+        role="tablist"
+        aria-orientation="horizontal"
+        className={clsx(
+          "openapi-tabs__schema-list-container",
+          "tabs",
+          {
+            "tabs--block": block,
+          },
+          className
         )}
-        <ul
-          ref={tabItemListContainerRef}
-          role="tablist"
-          aria-orientation="horizontal"
-          className={clsx(
-            "openapi-tabs__schema-list-container",
-            "tabs",
-            {
-              "tabs--block": block,
-            },
-            className
-          )}
-        >
-          {tabValues.map(({ value, label, attributes }) => (
-            <li
-              // TODO extract TabListItem
-              role="tab"
-              tabIndex={selectedValue === value ? 0 : -1}
-              aria-selected={selectedValue === value}
-              key={value}
-              ref={(tabControl) => tabRefs.push(tabControl)}
-              onKeyDown={handleKeydown}
-              onClick={handleTabChange}
-              {...attributes}
-              className={clsx(
-                "tabs__item",
-                "openapi-tabs__schema-item",
-                attributes?.className,
-                {
-                  active: selectedValue === value,
-                }
-              )}
-            >
-              <span className="openapi-tabs__schema-label">
-                {label ?? value}
-              </span>
-            </li>
-          ))}
-        </ul>
-        {showTabArrows && (
-          <button
-            className="openapi-tabs__arrow right"
-            onClick={handleRightClick}
-          />
-        )}
-      </div>
+      >
+        {tabValues.map(({ value, label, attributes }) => (
+          <li
+            // TODO extract TabListItem
+            role="tab"
+            tabIndex={selectedValue === value ? 0 : -1}
+            aria-selected={selectedValue === value}
+            key={value}
+            ref={(tabControl) => tabRefs.push(tabControl)}
+            onKeyDown={handleKeydown}
+            onClick={handleTabChange}
+            {...attributes}
+            className={clsx(
+              "tabs__item",
+              "openapi-tabs__schema-item",
+              attributes?.className,
+              {
+                active: selectedValue === value,
+              }
+            )}
+          >
+            <span className="openapi-tabs__schema-label">{label ?? value}</span>
+          </li>
+        ))}
+      </ul>
+      {showTabArrows && (
+        <button
+          className="openapi-tabs__arrow right"
+          onClick={handleRightClick}
+        />
+      )}
     </div>
   );
 }
@@ -167,7 +163,7 @@ function TabContent({ lazy, children, selectedValue }) {
 function TabsComponent(props) {
   const tabs = useTabs(props);
   return (
-    <div className="tabs-container">
+    <div className="openapi-tabs__schema-container">
       <TabList {...props} {...tabs} />
       <TabContent {...props} {...tabs} />
     </div>

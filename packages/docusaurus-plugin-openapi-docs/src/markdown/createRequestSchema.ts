@@ -5,6 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import clsx from "clsx";
+
 import { MediaTypeObject, SchemaObject } from "../openapi/types";
 import {
   createClosingArrayBracket,
@@ -467,8 +469,8 @@ function createDetailsNode(
                 className: "openapi-schema__container",
                 children: [
                   create("strong", {
-                    ...(schema.deprecated && {
-                      className: "openapi-schema__strikethrough",
+                    className: clsx("openapi-schema__property", {
+                      "openapi-schema__strikethrough": schema.deprecated,
                     }),
                     children: name,
                   }),
@@ -490,7 +492,7 @@ function createDetailsNode(
                   ),
                   guard(nullable, () => [
                     create("span", {
-                      className: "badge badge--info openapi-schema__nullable",
+                      className: "openapi-schema__nullable",
                       children: "nullable",
                     }),
                   ]),
@@ -500,16 +502,14 @@ function createDetailsNode(
                       : required === true,
                     () => [
                       create("span", {
-                        className:
-                          "badge badge--danger openapi-schema__required",
+                        className: "openapi-schema__required",
                         children: "required",
                       }),
                     ]
                   ),
                   guard(schema.deprecated, () => [
                     create("span", {
-                      className:
-                        "badge badge--warning openapi-schema__deprecated",
+                      className: "openapi-schema__deprecated",
                       children: "deprecated",
                     }),
                   ]),
@@ -561,14 +561,14 @@ function createPropertyDiscriminator(
   }
 
   return create("div", {
-    className: "openapi-discriminator__item",
+    className: "openapi-discriminator__item openapi-schema__list-item",
     children: create("div", {
       children: [
         create("span", {
           className: "openapi-schema__container",
           children: [
             create("strong", {
-              className: "openapi-discriminator__name",
+              className: "openapi-discriminator__name openapi-schema__property",
               children: name,
             }),
             guard(schemaName, (name) =>
@@ -579,7 +579,7 @@ function createPropertyDiscriminator(
             ),
             guard(required, () => [
               create("span", {
-                className: "badge badge--danger openapi-schema__required",
+                className: "openapi-schema__required",
                 children: "required",
               }),
             ]),
@@ -895,19 +895,22 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
           value: `${mimeType}`,
           children: [
             createDetails({
-              className: "openapi-markdown__details",
+              className: "openapi-markdown__details mime",
               "data-collapsed": false,
               open: true,
               ...rest,
               children: [
                 createDetailsSummary({
-                  style: { textAlign: "left" },
+                  className: "openapi-markdown__details-summary-mime",
                   children: [
-                    create("strong", { children: `${title}` }),
+                    create("h3", {
+                      className:
+                        "openapi-markdown__details-summary-header-body",
+                      children: `${title}`,
+                    }),
                     guard(body.required && body.required === true, () => [
                       create("span", {
-                        className:
-                          "badge badge--danger openapi-schema__required",
+                        className: "openapi-schema__required",
                         children: "required",
                       }),
                     ]),
@@ -958,15 +961,18 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
         value: `${randomFirstKey}-schema`,
         children: [
           createDetails({
-            className: "openapi-markdown__details",
+            className: "openapi-markdown__details mime",
             "data-collapsed": false,
             open: true,
             ...rest,
             children: [
               createDetailsSummary({
-                style: { textAlign: "left" },
+                className: "openapi-markdown__details-summary-mime",
                 children: [
-                  create("strong", { children: `${title}` }),
+                  create("h3", {
+                    className: "openapi-markdown__details-summary-header-body",
+                    children: `${title}`,
+                  }),
                   guard(firstBody.type === "array", (format) =>
                     create("span", {
                       style: { opacity: "0.6" },
@@ -975,7 +981,7 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
                   ),
                   guard(body.required, () => [
                     create("strong", {
-                      className: "badge badge--danger openapi-schema__required",
+                      className: "openapi-schema__required",
                       children: "required",
                     }),
                   ]),

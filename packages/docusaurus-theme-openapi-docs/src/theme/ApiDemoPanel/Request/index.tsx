@@ -238,15 +238,10 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
                   setExpandBody(!expandBody);
                 }}
               >
-                Body{" "}
+                Body
                 {requestBodyRequired && (
-                  <span>
-                    <small>
-                      <strong className="request-body required">
-                        {" "}
-                        required
-                      </strong>
-                    </small>
+                  <span className="openapi-schema__required">
+                    &nbsp;required
                   </span>
                 )}
               </summary>

@@ -9,6 +9,7 @@ import React from "react";
 
 import CodeBlock from "@theme/CodeBlock";
 /* eslint-disable import/no-extraneous-dependencies*/
+import clsx from "clsx";
 import { createDescription } from "docusaurus-theme-openapi-docs/lib/markdown/createDescription";
 /* eslint-disable import/no-extraneous-dependencies*/
 import { guard } from "docusaurus-theme-openapi-docs/lib/markdown/utils";
@@ -37,21 +38,15 @@ function SchemaItem({
 
   const renderRequired = guard(
     Array.isArray(required) ? required.includes(name) : required,
-    () => (
-      <span className="badge badge--danger openapi-schema__required">
-        required
-      </span>
-    )
+    () => <span className="openapi-schema__required">required</span>
   );
 
   const renderDeprecated = guard(deprecated, () => (
-    <span className="badge badge--warning openapi-schema__deprecated">
-      deprecated
-    </span>
+    <span className="openapi-schema__deprecated">deprecated</span>
   ));
 
   const renderNullable = guard(nullable, () => (
-    <span className="badge badge--info openapi-schema__nullable">nullable</span>
+    <span className="openapi-schema__nullable">nullable</span>
   ));
 
   const renderSchemaDescription = guard(schemaDescription, (description) => (
@@ -96,7 +91,11 @@ function SchemaItem({
   const schemaContent = (
     <div>
       <span className="openapi-schema__container">
-        <strong className={deprecated && "openapi-schema__strikethrough"}>
+        <strong
+          className={clsx("openapi-schema__property", {
+            "openapi-schema__strikethrough": deprecated,
+          })}
+        >
           {name}
         </strong>
         <span className="openapi-schema__name"> {schemaName}</span>

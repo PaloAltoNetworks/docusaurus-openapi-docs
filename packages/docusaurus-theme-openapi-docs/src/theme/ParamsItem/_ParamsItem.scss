@@ -19,14 +19,12 @@
     content: "";
     display: inline-block;
   }
-}
 
-.openapi-params__list-item:hover {
-  background-color: var(--ifm-menu-color-background-active);
-}
-
-.openapi-params__list-item:focus {
-  background-color: var(--ifm-menu-color-background-active);
+  &:hover {
+    .openapi-schema__property {
+      color: var(--ifm-color-primary);
+    }
+  }
 }
 
 .openapi-schema__type {
@@ -35,10 +33,14 @@
 }
 
 .openapi-schema__required {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10.5px;
+  font-weight: bold;
   color: var(--openapi-required);
   margin-left: 1%;
   background-color: transparent;
-  font-size: 10.5px;
+  text-transform: uppercase;
 }
 
 .openapi-schema__divider {

@@ -1,5 +1,34 @@
 /* Markdown Details Styling */
 
+/* Top-Level Details Styling */
+.openapi-left-panel__container > .openapi-markdown__details > summary,
+.openapi-markdown__details.mime > summary,
+.openapi-markdown__details.response > summary {
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+.openapi-left-panel__container > .openapi-markdown__details,
+.openapi-markdown__details.mime,
+.openapi-markdown__details.response {
+  margin-bottom: 1rem !important;
+}
+
+.openapi-markdown__details-summary-header-params,
+.openapi-markdown__details-summary-header-body {
+  font-size: 12px;
+  margin-bottom: 0;
+}
+/* End of Top-Level Details Styling */
+
+/* Top-Level Details Caret Styling */
+.openapi-left-panel__container > .openapi-markdown__details > summary::before,
+.openapi-markdown__details.mime > summary::before,
+.openapi-markdown__details.response > summary::before {
+  top: 0.1rem;
+}
+/* End of Top-Level Details Caret Styling */
+
 .openapi-markdown__details {
   margin: unset !important;
   background-color: transparent;
@@ -37,11 +66,6 @@
   transform: rotate(180deg) !important;
 }
 
-.theme-api-markdown .tabs__item {
-  padding-bottom: unset;
-  padding-top: unset;
-}
-
 .openapi-markdown__details > div > div {
   padding-top: unset !important;
   border-top: unset !important;
@@ -51,12 +75,17 @@
   margin-bottom: 0;
 }
 
+.openapi-markdown__details-summary-mime {
+  display: flex;
+}
+
 /* Hide defaul details marker by default */
 details summary::-webkit-details-marker {
   display: none;
 }
 
 .openapi-security__details {
+  font-size: 12px;
   margin-bottom: 1rem;
   background-color: transparent;
   color: var(--ifm-font-color-base);
@@ -69,16 +98,20 @@ details summary::-webkit-details-marker {
 
 .openapi-security__details pre {
   margin-bottom: unset;
+  border-top-left-radius: 0;
+  border-top: thin solid var(--ifm-toc-border-color);
+  border-top-right-radius: 0;
 }
 
 .openapi-security__summary-header {
+  font-size: 12px;
+  text-transform: uppercase;
   margin-bottom: unset;
 }
 
 .openapi-security__summary-container {
   padding: 1rem;
   list-style-type: none;
-  border-bottom: thin solid var(--ifm-toc-border-color);
 
   &:hover {
     cursor: pointer;

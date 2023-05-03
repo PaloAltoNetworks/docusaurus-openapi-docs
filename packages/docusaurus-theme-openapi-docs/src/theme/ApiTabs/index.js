@@ -12,6 +12,7 @@ import {
   useTabs,
 } from "@docusaurus/theme-common/internal";
 import useIsBrowser from "@docusaurus/useIsBrowser";
+import Heading from "@theme/Heading";
 import clsx from "clsx";
 
 function TabList({ className, block, selectedValue, selectValue, tabValues }) {
@@ -83,7 +84,9 @@ function TabList({ className, block, selectedValue, selectValue, tabValues }) {
 
   return (
     <div className="openapi-tabs__response-header-section">
-      <strong>Responses</strong>
+      <Heading as="h2" id="responses" className="openapi-tabs__response-header">
+        Responses
+      </Heading>
       <div className="openapi-tabs__response-container">
         {showTabArrows && (
           <button
@@ -129,7 +132,6 @@ function TabList({ className, block, selectedValue, selectValue, tabValues }) {
                 }
               )}
             >
-              <div className="openapi-tabs__response-dot" />
               {label ?? value}
             </li>
           ))}
@@ -173,7 +175,6 @@ function TabsComponent(props) {
   return (
     <div className="openapi-tabs__container">
       <TabList {...props} {...tabs} />
-      <hr />
       <TabContent {...props} {...tabs} />
     </div>
   );

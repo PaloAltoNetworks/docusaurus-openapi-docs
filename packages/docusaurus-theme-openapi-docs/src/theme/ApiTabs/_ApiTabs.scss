@@ -9,39 +9,44 @@
   margin-bottom: var(--ifm-leading);
 }
 
+.openapi-tabs__response-header {
+  margin-bottom: 0;
+}
+
 .openapi-tabs__response-code-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 2.5rem;
+  border: 1px solid transparent;
   margin-top: 0 !important;
   margin-right: 0.5rem;
-  border: 1px solid var(--ifm-color-primary);
+  padding: 0.35rem 0.85rem;
   border-radius: var(--ifm-global-radius);
-  color: var(--ifm-color-primary);
-  font-weight: var(--ifm-font-weight-normal);
+  font-weight: var(--ifm-font-weight-bold);
+  font-size: 12px;
+  transition: 300ms;
+  color: var(--ifm-font-color-secondary);
 
-  &.success {
-    .openapi-tabs__response-dot {
-      background-color: var(--ifm-color-success);
-    }
+  &.success.active {
+    background-color: var(--ifm-color-success);
+    color: var(--ifm-color-white);
   }
 
-  &.danger {
-    .openapi-tabs__response-dot {
-      background-color: var(--ifm-color-danger);
-    }
+  &.danger.active {
+    background-color: var(--ifm-color-danger);
+    color: var(--ifm-color-white);
   }
 
-  &.info {
-    .openapi-tabs__response-dot {
-      background-color: var(--ifm-color-info);
-    }
+  &.info.active {
+    background-color: var(--ifm-color-info);
+    color: var(--ifm-color-white);
   }
 
-  &.active {
+  &.active,
+  &:hover {
     opacity: 1;
-    background-color: var(--ifm-color-emphasis-100);
+  }
+
+  &:hover:not(.active) {
+    background-color: transparent;
+    border: 1px solid var(--ifm-toc-border-color);
   }
 }
 
@@ -59,7 +64,9 @@
 
 /* Open API Response Code Tabs */
 .openapi-tabs__response-header-section {
+  border-top: 1px solid var(--ifm-toc-border-color);
   margin-top: 2rem;
+  padding-top: 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -32,7 +32,8 @@ export function createParamsDetails({ parameters, type }: Props) {
     children: [
       createDetailsSummary({
         children: [
-          create("strong", {
+          create("h3", {
+            className: "openapi-markdown__details-summary-header-params",
             children: `${
               type.charAt(0).toUpperCase() + type.slice(1)
             } Parameters`,

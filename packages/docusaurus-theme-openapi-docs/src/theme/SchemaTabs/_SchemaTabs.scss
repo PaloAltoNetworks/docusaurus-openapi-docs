@@ -5,30 +5,37 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+.openapi-tabs__schema-container {
+  margin-top: 1rem;
+}
+
 .openapi-tabs__schema-item {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 1.8rem;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid transparent;
   margin-top: 0 !important;
   margin-right: 0.5rem;
-  border: 1px solid var(--ifm-color-primary);
-  border-radius: var(--ifm-global-radius);
-  color: var(--ifm-color-primary);
-  font-size: 12px;
-}
+  font-weight: var(--ifm-font-weight-bold);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 10px;
+  white-space: nowrap;
+  transition: 300ms;
 
-.openapi-tabs__schema-item:not(.active) {
-  opacity: 0.65;
-}
+  &:hover {
+    background-color: transparent;
+    border: 1px solid var(--ifm-toc-border-color);
+  }
 
-.openapi-tabs__schema-item:hover {
-  opacity: 1;
-  background-color: var(--ifm-color-emphasis-100);
-}
+  &.active {
+    border: 1px solid var(--ifm-color-primary);
+    color: var(--ifm-color-primary);
+  }
 
-.openapi-tabs__schema-item:last-child {
-  margin-right: 0 !important;
+  &:last-child {
+    margin-right: 0 !important;
+  }
 }
 
 .openapi-tabs__schema-list-container {
@@ -49,7 +56,7 @@
   white-space: nowrap;
 }
 
-.openapi-tabs__schema-container {
+.openapi-tabs__schema-tabs-container {
   width: 100%;
   display: flex;
   align-items: center;
