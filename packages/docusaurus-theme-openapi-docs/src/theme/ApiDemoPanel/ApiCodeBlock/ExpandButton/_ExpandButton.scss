@@ -1,18 +1,15 @@
 .openapi-demo__expand-modal-content {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  right: auto;
-  bottom: auto;
   padding: none;
   border: thin solid var(--ifm-toc-border-color);
   border-radius: var(--ifm-global-radius);
-  transform: translate(-50%, -50%);
   max-width: 95%;
   overflow: auto;
 }
 
 .openapi-demo__expand-modal-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: fixed;
   inset: 0px;
   background-color: rgba(0, 0, 0, 0.9);
