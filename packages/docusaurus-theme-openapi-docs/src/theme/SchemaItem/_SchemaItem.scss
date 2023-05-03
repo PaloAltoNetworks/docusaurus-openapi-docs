@@ -1,3 +1,11 @@
+.openapi-schema__container {
+  &:hover {
+    .openapi-schema__property {
+      color: var(--ifm-color-primary);
+    }
+  }
+}
+
 .openapi-schema__list-item {
   list-style: none;
   position: relative;
@@ -18,12 +26,6 @@
     border-bottom: thin solid var(--openapi-tree-line-color);
     content: "";
     display: inline-block;
-  }
-
-  &:hover {
-    .openapi-schema__property {
-      color: var(--ifm-color-primary);
-    }
   }
 }
 
