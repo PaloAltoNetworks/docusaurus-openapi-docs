@@ -7,7 +7,7 @@ High level enhancements
 
 Other enhancements and bug fixes
 
-- [Bug] Add handler for oneOf properties, fix nested <li> and and avoid duplicate properties in createAnyOneOf ([#561](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/561))
+- [Bug] Add handler for oneOf properties, fix nested `<li>` and avoid duplicate properties in createAnyOneOf ([#561](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/561))
 
 ## 1.7.2 (Apr 20, 2023)
 
