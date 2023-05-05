@@ -1,3 +1,31 @@
+## 2.0.0-beta.3 (May 5, 2023)
+
+High level enhancements
+
+- [UI Enhancement] Updated left doc panel styling ([#557](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/557))
+- Improve support for additional properties, cleanup nested <li>, support SchemaItem children ([#563](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/563))
+- Upgrade demo to 2.4.0 and update supported range in plugin and theme ([#554](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/554))
+- [UI Enhancement] Enable Expand button for Response ([#553](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/553))
+- [UI Enhancement] Request form validation and updated styling ([#530](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/530))
+- [UI Enhancement] Response Examples: Updated styling and support for multiple language variants ([#542](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/542))
+- [UI Enhancement] Add expand button to CodeBlock ([#537](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/537))
+- [Enhancement] Add support for rendering vendor extensions ([#527](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/527))
+
+Other enhancements and bug fixes
+
+- [UI Enhancement] ApiDemoPanel: Expand modal cleanup ([#566](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/566))
+- Add more debug info to resolveJsonRefs ([#560](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/560))
+- [UI Enhancement] Restyle schema property labels ([#534](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/534))
+- Restyle details markers ([#540](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/540))
+- Remove PWA ([#548](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/548))
+- Upgrade redocly-core and json-schema-ref-parser ([#551](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/551))
+- [UI Enhancement] Move CodeTabs above Request ([#533](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/533))
+- [UI Enhancement] Move authorization card to ApiItem ([#531](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/531))
+- Update bash/curl logo and refactor how logo width/height are defined ([#525](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/525))
+- [Cleanup] Optimize theme typescript build ([#524](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/524))
+- Point test and include to lib dir ([#521](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/521))
+- [Bug] Narrow SASS loader rules to avoid conflicts with docusaurus-plugin-sass ([#519](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/519))
+
 ## 2.0.0-beta.2 (Mar 20, 2023)
 
 High level enhancements
