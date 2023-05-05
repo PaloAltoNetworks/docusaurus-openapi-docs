@@ -1,3 +1,14 @@
+## 1.7.3 (May 5, 2023)
+
+High level enhancements
+
+- Add optional `markdownGenerators` config option ([#567](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/567))
+- Add more debug info to resolveJsonRefs ([#560](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/560))
+
+Other enhancements and bug fixes
+
+- [Bug] Add handler for oneOf properties, fix nested <li> and and avoid duplicate properties in createAnyOneOf ([#561](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/561))
+
 ## 1.7.2 (Apr 20, 2023)
 
 High level enhancements
