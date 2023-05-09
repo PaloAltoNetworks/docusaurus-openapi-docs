@@ -819,36 +819,26 @@ function createNodes(schema: SchemaObject): any {
 
   // primitive
   if (schema.type !== undefined) {
-    return create("li", {
-      children: create("div", {
-        children: [
-          create("strong", { children: schema.type }),
-          guard(schema.format, (format) =>
-            create("span", {
-              style: { opacity: "0.6" },
-              children: ` ${format}`,
-            })
-          ),
-          guard(getQualifierMessage(schema), (message) =>
-            create("div", {
-              style: { marginTop: "var(--ifm-table-cell-padding)" },
-              children: createDescription(message),
-            })
-          ),
-          guard(schema.description, (description) =>
-            create("div", {
-              style: { marginTop: "var(--ifm-table-cell-padding)" },
-              children: createDescription(description),
-            })
-          ),
-        ],
-      }),
+    return create("SchemaItem", {
+      collapsible: false,
+      name: schema.type,
+      required: false,
+      schemaName: schema.format,
+      qualifierMessage: getQualifierMessage(schema),
+      schema: schema,
     });
   }
 
   // Unknown node/schema type should return undefined
   // So far, haven't seen this hit in testing
-  return "any";
+  return create("SchemaItem", {
+    collapsible: false,
+    name: "any",
+    required: false,
+    schemaName: schema.format,
+    qualifierMessage: getQualifierMessage(schema),
+    schema: schema,
+  });
 }
 
 interface Props {
