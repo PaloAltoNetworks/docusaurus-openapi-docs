@@ -7,10 +7,15 @@
 
 import React, { useEffect, useState } from "react";
 
+import { usePrismTheme } from "@docusaurus/theme-common";
 import { translate } from "@docusaurus/Translate";
+import Container from "@theme/ApiExplorer/ApiCodeBlock/Container";
+import CopyButton from "@theme/ApiExplorer/ApiCodeBlock/CopyButton";
+import ExitButton from "@theme/ApiExplorer/ApiCodeBlock/ExitButton";
+import Line from "@theme/ApiExplorer/ApiCodeBlock/Line";
 import clsx from "clsx";
+import Highlight, { defaultProps } from "prism-react-renderer";
 import Modal from "react-modal";
-import ExpandModal from "../ExpandModal";
 
 export default function ExpandButton({
   code,
@@ -21,26 +26,19 @@ export default function ExpandButton({
   title,
   lineClassNames,
 }) {
-  const [modalIsOpen, setIsOpen] = useState(false);
-  console.log(modalIsOpen);
-  function openModal() {
-    setIsOpen(true);
-  }
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const prismTheme = usePrismTheme();
 
-  function closeModal() {
-    console.log("close modal calledx");
-    setIsOpen(false);
-  }
   useEffect(() => {
     Modal.setAppElement("body");
-  });
+  }, []);
 
   return (
     <>
       <button
         type="button"
         aria-label={
-          modalIsOpen
+          isModalOpen
             ? translate({
                 id: "theme.CodeBlock.expanded",
                 message: "Expanded",
@@ -61,9 +59,9 @@ export default function ExpandButton({
           "clean-btn",
           className,
           "openapi-demo__code-block-expand-btn",
-          modalIsOpen && "openapi-demo__code-block-expand-btn--copied"
+          isModalOpen && "openapi-demo__code-block-expand-btn--copied"
         )}
-        onClick={openModal}
+        onClick={() => setIsModalOpen(true)}
       >
         <span
           className="openapi-demo__code-block-expand-btn-icons"
@@ -82,17 +80,77 @@ export default function ExpandButton({
             <path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" />
           </svg>
         </span>
-        <ExpandModal
-          code={code}
-          language={language}
-          showLineNumbers={showLineNumbers}
-          blockClassName={blockClassName}
-          title={title}
-          lineClassNames={lineClassNames}
-          modalIsOpen={modalIsOpen}
-          closeModal={closeModal}
-        />
       </button>
+      <Modal
+        className="openapi-demo__expand-modal-content"
+        overlayClassName="openapi-demo__expand-modal-overlay"
+        isOpen={isModalOpen}
+        onRequestClose={() => setIsModalOpen(false)}
+        contentLabel="Code Snippet"
+      >
+        <Container
+          as="div"
+          className={clsx(
+            "openapi-demo__code-block-container",
+            language &&
+              !blockClassName.includes(`language-${language}`) &&
+              `language-${language}`
+          )}
+        >
+          {title && (
+            <div className="openapi-demo__code-block-title">{title}</div>
+          )}
+          <div className="openapi-demo__code-block-content">
+            <Highlight
+              {...defaultProps}
+              theme={prismTheme}
+              code={code}
+              language={language ?? "text"}
+            >
+              {({ className, tokens, getLineProps, getTokenProps }) => (
+                <pre
+                  /* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */
+                  tabIndex={0}
+                  className={clsx(
+                    className,
+                    "openapi-demo__code-block",
+                    "thin-scrollbar"
+                  )}
+                >
+                  <code
+                    className={clsx(
+                      "openapi-demo__code-block-lines",
+                      showLineNumbers &&
+                        "openapi-demo__code-block-lines-numbers"
+                    )}
+                  >
+                    {tokens.map((line, i) => (
+                      <Line
+                        key={i}
+                        line={line}
+                        getLineProps={getLineProps}
+                        getTokenProps={getTokenProps}
+                        classNames={lineClassNames[i]}
+                        showLineNumbers={showLineNumbers}
+                      />
+                    ))}
+                  </code>
+                </pre>
+              )}
+            </Highlight>
+            <div className="openapi-demo__code-block-btn-group">
+              <CopyButton
+                className="openapi-demo__code-block-code-btn"
+                code={code}
+              />
+              <ExitButton
+                className="openapi-demo__code-block-code-btn"
+                handler={() => setIsModalOpen(false)}
+              />
+            </div>
+          </div>
+        </Container>
+      </Modal>
     </>
   );
 }
