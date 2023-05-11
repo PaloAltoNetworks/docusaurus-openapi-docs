@@ -63,176 +63,176 @@ declare module "@theme/SchemaTabs" {
   export default function SchemaTabs(props: any): JSX.Element;
 }
 
-declare module "@theme/ApiDemoPanel/Accept" {
+declare module "@theme/ApiExplorer/Accept" {
   export default function Accept(): JSX.Element;
 }
 
-declare module "@theme/ApiDemoPanel/Accept/slice" {
+declare module "@theme/ApiExplorer/Accept/slice" {
   export default accept as Reducer<State, AnyAction>;
 }
 
-declare module "@theme/ApiDemoPanel/Authorization" {
+declare module "@theme/ApiExplorer/Authorization" {
   export default function Authorization(): JSX.Element;
 }
 
-declare module "@theme/ApiDemoPanel/Authorization/slice" {
+declare module "@theme/ApiExplorer/Authorization/slice" {
   export { AuthState, Scheme, setAuthData, setSelectedAuth, createAuth };
   export default auth as Reducer<State, AnyAction>;
 }
 
-declare module "@theme/ApiDemoPanel/Body" {
-  import { Props as BodyProps } from "@theme/ApiDemoPanel/Body";
+declare module "@theme/ApiExplorer/Body" {
+  import { Props as BodyProps } from "@theme/ApiExplorer/Body";
 
   export default function Body(props: BodyProps): JSX.Element;
 }
 
-declare module "@theme/ApiDemoPanel/Body/json2xml" {
+declare module "@theme/ApiExplorer/Body/json2xml" {
   export default function json2xml(any, any?): any;
 }
 
-declare module "@theme/ApiDemoPanel/Body/slice" {
-  import { Body, Content, State } from "@theme/ApiDemoPanel/Body/slice";
+declare module "@theme/ApiExplorer/Body/slice" {
+  import { Body, Content, State } from "@theme/ApiExplorer/Body/slice";
 
   export { Body, Content, State };
   export function setStringRawBody(any, any?): any;
   export default body as Reducer<State, AnyAction>;
 }
 
-declare module "@theme/ApiDemoPanel/buildPostmanRequest" {
+declare module "@theme/ApiExplorer/buildPostmanRequest" {
   export default function buildPostmanRequest(any, any?): any;
 }
 
-declare module "@theme/ApiDemoPanel/CodeTabs" {
-  import { Props as CodeTabsProps } from "@theme/ApiDemoPanel/CodeTabs";
+declare module "@theme/ApiExplorer/CodeTabs" {
+  import { Props as CodeTabsProps } from "@theme/ApiExplorer/CodeTabs";
 
   export default function CodeTabs(props: CodeTabsProps): JSX.Element;
 }
 
-declare module "@theme/ApiDemoPanel/ContentType" {
+declare module "@theme/ApiExplorer/ContentType" {
   export default function ContentType(): JSX.Element;
 }
 
-declare module "@theme/ApiDemoPanel/ContentType/slice" {
+declare module "@theme/ApiExplorer/ContentType/slice" {
   export { setContentType };
   export default contentType as Reducer<State, AnyAction>;
 }
 
-declare module "@theme/ApiDemoPanel/Curl" {
-  import { Props as CurlProps } from "@theme/ApiDemoPanel/Curl";
+declare module "@theme/ApiExplorer/CodeSnippets" {
+  import { Props as CurlProps } from "@theme/ApiExplorer/CodeSnippets";
 
-  export { languageSet, Language } from "@theme/ApiDemoPanel/Curl";
+  export { languageSet, Language } from "@theme/ApiExplorer/CodeSnippets";
   export default function Curl(props: CurlProps): JSX.Element;
 }
 
-declare module "@theme/ApiDemoPanel/FloatingButton" {
-  import { Props as FloatingButtonProps } from "@theme/ApiDemoPanel/FloatingButton";
+declare module "@theme/ApiExplorer/FloatingButton" {
+  import { Props as FloatingButtonProps } from "@theme/ApiExplorer/FloatingButton";
 
   export default function FloatingButton(
     props: FloatingButtonProps
   ): JSX.Element;
 }
 
-declare module "@theme/ApiDemoPanel/FormItem" {
-  import { Props as FormItemProps } from "@theme/ApiDemoPanel/FormItem";
+declare module "@theme/ApiExplorer/FormItem" {
+  import { Props as FormItemProps } from "@theme/ApiExplorer/FormItem";
 
   export default function FormItem(props: FormItemProps): JSX.Element;
 }
 
-declare module "@theme/ApiDemoPanel/FormSelect" {
-  import { Props as FormSelectProps } from "@theme/ApiDemoPanel/FormSelect";
+declare module "@theme/ApiExplorer/FormSelect" {
+  import { Props as FormSelectProps } from "@theme/ApiExplorer/FormSelect";
 
   export default function FormSelect(props: FormSelectProps): JSX.Element;
 }
 
-declare module "@theme/ApiDemoPanel/FormTextInput" {
-  import { Props as FormTextInputProps } from "@theme/ApiDemoPanel/FormTextInput";
+declare module "@theme/ApiExplorer/FormTextInput" {
+  import { Props as FormTextInputProps } from "@theme/ApiExplorer/FormTextInput";
 
   export default function FormTextInput(props: FormTextInputProps): JSX.Element;
 }
 
-declare module "@theme/ApiDemoPanel/FormFileUpload" {
-  import { Props as FormFileUploadProps } from "@theme/ApiDemoPanel/FormFileUpload";
+declare module "@theme/ApiExplorer/FormFileUpload" {
+  import { Props as FormFileUploadProps } from "@theme/ApiExplorer/FormFileUpload";
 
   export default function FormFileUpload(
     props: FormFileUploadProps
   ): JSX.Element;
 }
 
-declare module "@theme/ApiDemoPanel/FormMultiSelect" {
-  import { Props as FormMultiSelectProps } from "@theme/ApiDemoPanel/FormMultiSelect";
+declare module "@theme/ApiExplorer/FormMultiSelect" {
+  import { Props as FormMultiSelectProps } from "@theme/ApiExplorer/FormMultiSelect";
 
   export default function FormMultiSelect(
     props: FormMultiSelectProps
   ): JSX.Element;
 }
 
-declare module "@theme/ApiDemoPanel/Execute" {
-  import { Props as ExecuteProps } from "@theme/ApiDemoPanel/Execute";
+declare module "@theme/ApiExplorer/Execute" {
+  import { Props as ExecuteProps } from "@theme/ApiExplorer/Execute";
 
   export default function Execute(props: ExecuteProps): JSX.Element;
 }
 
-declare module "@theme/ApiDemoPanel/LiveEditor" {
+declare module "@theme/ApiExplorer/LiveEditor" {
   export default function LiveEditor(props: any): JSX.Element;
 }
 
-declare module "@theme/ApiDemoPanel/MethodEndpoint" {
-  import { Props as MethodEndpointProps } from "@theme/ApiDemoPanel/MethodEndpoint";
+declare module "@theme/ApiExplorer/MethodEndpoint" {
+  import { Props as MethodEndpointProps } from "@theme/ApiExplorer/MethodEndpoint";
 
   export default function MethodEndpoint(
     props: MethodEndpointProps
   ): JSX.Element;
 }
 
-declare module "@theme/ApiDemoPanel/ParamOptions" {
-  import { ParamProps } from "@theme/ApiDemoPanel/ParamOptions";
+declare module "@theme/ApiExplorer/ParamOptions" {
+  import { ParamProps } from "@theme/ApiExplorer/ParamOptions";
 
   export default function ParamOptions(props: ParamProps): JSX.Element;
 }
 
-declare module "@theme/ApiDemoPanel/ParamOptions/ParamFormItems/ParamMultiSelectFormItem" {
-  import { ParamProps } from "@theme/ApiDemoPanel/ParamOptions";
+declare module "@theme/ApiExplorer/ParamOptions/ParamFormItems/ParamMultiSelectFormItem" {
+  import { ParamProps } from "@theme/ApiExplorer/ParamOptions";
 
   export default function ParamMultiSelectFormItem(
     props: ParamProps
   ): JSX.Element;
 }
 
-declare module "@theme/ApiDemoPanel/ParamOptions/ParamFormItems/ParamArrayFormItem" {
-  import { ParamProps } from "@theme/ApiDemoPanel/ParamOptions";
+declare module "@theme/ApiExplorer/ParamOptions/ParamFormItems/ParamArrayFormItem" {
+  import { ParamProps } from "@theme/ApiExplorer/ParamOptions";
 
   export default function ParamArrayFormItem(props: ParamProps): JSX.Element;
 }
 
-declare module "@theme/ApiDemoPanel/ParamOptions/ParamFormItems/ParamSelectFormItem" {
-  import { ParamProps } from "@theme/ApiDemoPanel/ParamOptions";
+declare module "@theme/ApiExplorer/ParamOptions/ParamFormItems/ParamSelectFormItem" {
+  import { ParamProps } from "@theme/ApiExplorer/ParamOptions";
 
   export default function ParamSelectFormItem(props: ParamProps): JSX.Element;
 }
 
-declare module "@theme/ApiDemoPanel/ParamOptions/ParamFormItems/ParamBooleanFormItem" {
-  import { ParamProps } from "@theme/ApiDemoPanel/ParamOptions";
+declare module "@theme/ApiExplorer/ParamOptions/ParamFormItems/ParamBooleanFormItem" {
+  import { ParamProps } from "@theme/ApiExplorer/ParamOptions";
 
   export default function ParamBooleanFormItem(props: ParamProps): JSX.Element;
 }
 
-declare module "@theme/ApiDemoPanel/ParamOptions/ParamFormItems/ParamTextFormItem" {
-  import { ParamProps } from "@theme/ApiDemoPanel/ParamOptions";
+declare module "@theme/ApiExplorer/ParamOptions/ParamFormItems/ParamTextFormItem" {
+  import { ParamProps } from "@theme/ApiExplorer/ParamOptions";
 
   export default function ParamTextFormItem(props: ParamProps): JSX.Element;
 }
 
-declare module "@theme/ApiDemoPanel/ParamOptions/slice" {
+declare module "@theme/ApiExplorer/ParamOptions/slice" {
   export type { Param };
   export const setParam;
   export default params as Reducer<State, AnyAction>;
 }
 
-declare module "@theme/ApiDemoPanel/persistanceMiddleware" {
+declare module "@theme/ApiExplorer/persistanceMiddleware" {
   export { createPersistanceMiddleware };
 }
 
-declare module "@theme/ApiDemoPanel/Request" {
+declare module "@theme/ApiExplorer/Request" {
   import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 
   export interface RequestProps {
@@ -241,7 +241,7 @@ declare module "@theme/ApiDemoPanel/Request" {
   export default function Request(props: RequestProps): JSX.Element;
 }
 
-declare module "@theme/ApiDemoPanel/Response" {
+declare module "@theme/ApiExplorer/Response" {
   import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 
   export interface ResponseProps {
@@ -251,27 +251,27 @@ declare module "@theme/ApiDemoPanel/Response" {
   export default function Response(props: ResponseProps): JSX.Element;
 }
 
-declare module "@theme/ApiDemoPanel/Response/slice" {
+declare module "@theme/ApiExplorer/Response/slice" {
   export { setResponse, setCode, setHeaders, clearCode, clearHeaders };
   export default response as Reducer<State, AnyAction>;
 }
 
-declare module "@theme/ApiDemoPanel/SecuritySchemes" {
+declare module "@theme/ApiExplorer/SecuritySchemes" {
   export default function SecuritySchemes(props: any): JSX.Element;
 }
 
-declare module "@theme/ApiDemoPanel/Server" {
+declare module "@theme/ApiExplorer/Server" {
   export default function Server(): JSX.Element;
 }
 
-declare module "@theme/ApiDemoPanel/ApiCodeBlock" {
+declare module "@theme/ApiExplorer/ApiCodeBlock" {
   export default function ApiCodeBlock(): JSX.Element;
 }
 
-declare module "@theme/ApiDemoPanel/Server/slice" {
+declare module "@theme/ApiExplorer/Server/slice" {
   export default server as Reducer<State, AnyAction>;
 }
 
-declare module "@theme/ApiDemoPanel/storage-utils" {
+declare module "@theme/ApiExplorer/storage-utils" {
   export { createStorage, hashArray };
 }

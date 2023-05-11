@@ -61,8 +61,8 @@ export function createApiPageMD({
   return render([
     `import ApiTabs from "@theme/ApiTabs";\n`,
     `import DiscriminatorTabs from "@theme/DiscriminatorTabs";\n`,
-    `import MethodEndpoint from "@theme/ApiDemoPanel/MethodEndpoint";\n`,
-    `import SecuritySchemes from "@theme/ApiDemoPanel/SecuritySchemes";\n`,
+    `import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";\n`,
+    `import SecuritySchemes from "@theme/ApiExplorer/SecuritySchemes";\n`,
     `import MimeTabs from "@theme/MimeTabs";\n`,
     `import ParamsItem from "@theme/ParamsItem";\n`,
     `import ResponseSamples from "@theme/ResponseSamples";\n`,
@@ -106,7 +106,7 @@ export function createInfoPageMD({
     `import ApiLogo from "@theme/ApiLogo";\n`,
     `import SchemaTabs from "@theme/SchemaTabs";\n`,
     `import TabItem from "@theme/TabItem";\n`,
-    `import Export from "@theme/ApiDemoPanel/Export";\n\n`,
+    `import Export from "@theme/ApiExplorer/Export";\n\n`,
 
     createVersionBadge(version),
     createDownload(downloadUrl),

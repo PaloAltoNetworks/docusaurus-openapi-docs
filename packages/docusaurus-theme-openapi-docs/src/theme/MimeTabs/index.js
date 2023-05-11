@@ -12,8 +12,8 @@ import {
   useTabs,
 } from "@docusaurus/theme-common/internal";
 import useIsBrowser from "@docusaurus/useIsBrowser";
-import { setAccept } from "@theme/ApiDemoPanel/Accept/slice";
-import { setContentType } from "@theme/ApiDemoPanel/ContentType/slice";
+import { setAccept } from "@theme/ApiExplorer/Accept/slice";
+import { setContentType } from "@theme/ApiExplorer/ContentType/slice";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import clsx from "clsx";
 
