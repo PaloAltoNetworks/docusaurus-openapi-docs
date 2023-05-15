@@ -526,13 +526,15 @@ function createDetailsNode(
   });
 }
 
-function createOneOfProperty(
+function createOneOfOrAnyOfProperty(
   name: string,
   schemaName: string,
   schema: SchemaObject,
   required: string[] | boolean,
   nullable: boolean | unknown
 ): any {
+  const type = schema.oneOf ? "oneOf" : "anyOf";
+  const children = schema[type] || [];
   return create("SchemaItem", {
     collapsible: true,
     className: "schemaItem",
@@ -596,10 +598,10 @@ function createOneOfProperty(
             children: [
               create("span", {
                 className: "badge badge--info",
-                children: "oneOf",
+                children: type,
               }),
               create("SchemaTabs", {
-                children: schema["oneOf"]!.map((property, index) => {
+                children: children.map((property, index) => {
                   const label = property.type ?? `MOD${index + 1}`;
                   return create("TabItem", {
                     label: label,
@@ -695,7 +697,7 @@ function createEdges({
   }
 
   if (schema.oneOf !== undefined || schema.anyOf !== undefined) {
-    return createOneOfProperty(
+    return createOneOfOrAnyOfProperty(
       name,
       schemaName,
       schema,
