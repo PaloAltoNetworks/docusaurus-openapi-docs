@@ -37,7 +37,7 @@ info:
     Petstore offers two forms of authentication:
       - API Key
       - OAuth2
-      
+
     OAuth2 - an open protocol to allow secure authorization in a simple
     and standard method from web, mobile and desktop applications.
 
@@ -1124,7 +1124,7 @@ components:
         id:
           $ref: "#/components/schemas/Id"
         pet:
-          oneOf:
+          anyOf:
             - $ref: "#/components/schemas/Pet"
             - $ref: "#/components/schemas/Tag"
         username:
