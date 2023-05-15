@@ -59,7 +59,7 @@ function Server() {
     return (
       <FloatingButton onClick={() => setIsEditing(true)} label="Edit">
         <FormItem>
-          <span className="openapi-demo__server-url" title={url}>
+          <span className="openapi-explorer__server-url" title={url}>
             {url}
           </span>
         </FormItem>
@@ -67,7 +67,7 @@ function Server() {
     );
   }
   return (
-    <div className="openapi-demo__server-container">
+    <div className="openapi-explorer__server-container">
       <FloatingButton onClick={() => setIsEditing(false)} label="Hide">
         <FormItem>
           <FormSelect
@@ -83,7 +83,7 @@ function Server() {
             }}
             value={value?.url}
           />
-          <small className="openapi-demo__server-description">
+          <small className="openapi-explorer__server-description">
             {value?.description}
           </small>
         </FormItem>

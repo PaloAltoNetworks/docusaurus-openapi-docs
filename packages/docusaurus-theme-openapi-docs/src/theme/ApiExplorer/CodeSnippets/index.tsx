@@ -348,7 +348,7 @@ function CodeSnippets({ postman, codeSamples }: Props) {
                       {/* @ts-ignore */}
                       <ApiCodeBlock
                         language={lang.highlight}
-                        className="openapi-demo__code-block"
+                        className="openapi-explorer__code-block"
                         showLineNumbers={true}
                       >
                         {codeText}

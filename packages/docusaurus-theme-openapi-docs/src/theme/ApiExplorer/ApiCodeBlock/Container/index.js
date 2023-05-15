@@ -20,7 +20,7 @@ export default function CodeBlockContainer({ as: As, ...props }) {
       {...props}
       style={prismCssVariables}
       className={clsx(
-        "openapi-demo__code-block-container",
+        "openapi-explorer__code-block-container",
         props.className,
         ThemeClassNames.common.codeBlock
       )}

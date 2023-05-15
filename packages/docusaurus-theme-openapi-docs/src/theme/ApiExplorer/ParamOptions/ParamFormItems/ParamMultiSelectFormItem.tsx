@@ -77,7 +77,7 @@ export default function ParamMultiSelectFormItem({ param }: ParamProps) {
           errors={errors}
           name="paramMultiSelect"
           render={({ message }) => (
-            <div className="openapi-demo__input-error">{message}</div>
+            <div className="openapi-explorer__input-error">{message}</div>
           )}
         />
       )}

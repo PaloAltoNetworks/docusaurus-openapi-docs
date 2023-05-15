@@ -56,7 +56,7 @@ export default function ParamSelectFormItem({ param }: ParamProps) {
           errors={errors}
           name="paramSelect"
           render={({ message }) => (
-            <div className="openapi-demo__input-error">{message}</div>
+            <div className="openapi-explorer__input-error">{message}</div>
           )}
         />
       )}

@@ -80,7 +80,7 @@ function ParamOptions() {
       {optionalParams.length > 0 && (
         <>
           <button
-            className="openapi-demo__show-more-btn"
+            className="openapi-explorer__show-more-btn"
             onClick={() => setShowOptional((prev) => !prev)}
           >
             <span
@@ -93,8 +93,8 @@ function ParamOptions() {
               <span
                 className={
                   showOptional
-                    ? "openapi-demo__plus-btn--expanded"
-                    : "openapi-demo__plus-btn"
+                    ? "openapi-explorer__plus-btn--expanded"
+                    : "openapi-explorer__plus-btn"
                 }
               >
                 <div>
@@ -125,8 +125,8 @@ function ParamOptions() {
           <div
             className={
               showOptional
-                ? "openapi-demo__show-options"
-                : "openapi-demo__hide-options"
+                ? "openapi-explorer__show-options"
+                : "openapi-explorer__hide-options"
             }
           >
             {optionalParams.map((param) => (

@@ -17,7 +17,7 @@
     padding: 1rem;
     background-color: var(--ifm-pre-background);
     border-radius: var(--ifm-global-radius);
-    border: 1px solid var(--openapi-demo-border-color);
+    border: 1px solid var(--openapi-explorer-border-color);
     box-shadow: 0 2px 3px hsla(222, 8%, 43%, 0.1),
       0 8px 16px -10px hsla(222, 8%, 43%, 0.2);
     transition: 300ms;
@@ -68,14 +68,14 @@
   margin-top: unset !important;
 }
 
-.openapi-demo__code-block code {
+.openapi-explorer__code-block code {
   max-height: 200px;
-  font-size: var(--openapi-demo-font-size-code);
+  font-size: var(--openapi-explorer-font-size-code);
   padding-top: var(--ifm-pre-padding);
 }
 
 body[class="ReactModal__Body--open"] {
-  .openapi-demo__code-block code {
+  .openapi-explorer__code-block code {
     max-height: 600px;
   }
 }

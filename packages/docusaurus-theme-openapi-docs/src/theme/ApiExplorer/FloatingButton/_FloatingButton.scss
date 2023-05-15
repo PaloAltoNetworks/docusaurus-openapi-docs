@@ -1,4 +1,4 @@
-.openapi-demo__floating-btn {
+.openapi-explorer__floating-btn {
   position: relative;
 
   button {
@@ -17,9 +17,9 @@
     right: calc(var(--ifm-pre-padding) / 2);
   }
 }
-.openapi-demo__floating-btn:hover button,
-.openapi-demo__floating-btn:focus-visible button,
-.openapi-demo__floating-btn button:focus-visible {
+.openapi-explorer__floating-btn:hover button,
+.openapi-explorer__floating-btn:focus-visible button,
+.openapi-explorer__floating-btn button:focus-visible {
   visibility: visible;
   opacity: 1;
 }

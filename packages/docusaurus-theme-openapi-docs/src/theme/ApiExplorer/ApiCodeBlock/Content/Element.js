@@ -19,12 +19,12 @@ export default function CodeBlockJSX({ children, className }) {
       as="pre"
       tabIndex={0}
       className={clsx(
-        "openapi-demo__code-block-standalone",
+        "openapi-explorer__code-block-standalone",
         "thin-scrollbar",
         className
       )}
     >
-      <code className="openapi-demo__code-block-lines">{children}</code>
+      <code className="openapi-explorer__code-block-lines">{children}</code>
     </Container>
   );
 }

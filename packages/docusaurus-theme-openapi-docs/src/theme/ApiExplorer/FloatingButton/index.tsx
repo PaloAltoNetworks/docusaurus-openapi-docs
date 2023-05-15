@@ -15,7 +15,7 @@ export interface Props {
 
 function FloatingButton({ label, onClick, children }: Props) {
   return (
-    <div tabIndex={0} className="openapi-demo__floating-btn">
+    <div tabIndex={0} className="openapi-explorer__floating-btn">
       {label && (
         <button tabIndex={0} onClick={onClick}>
           {label}

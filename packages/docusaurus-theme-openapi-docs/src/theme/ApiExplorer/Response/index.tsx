@@ -73,11 +73,11 @@ function Response({ item }: { item: NonNullable<ApiItem> }) {
   }
 
   return (
-    <div className="openapi-demo__response-container">
-      <div className="openapi-demo__response-title-container">
-        <span className="openapi-demo__response-title">Response</span>
+    <div className="openapi-explorer__response-container">
+      <div className="openapi-explorer__response-title-container">
+        <span className="openapi-explorer__response-title">Response</span>
         <span
-          className="openapi-demo__response-clear-btn"
+          className="openapi-explorer__response-clear-btn"
           onClick={() => {
             dispatch(clearResponse());
             dispatch(clearCode());
@@ -110,11 +110,11 @@ function Response({ item }: { item: NonNullable<ApiItem> }) {
             >
               {/* @ts-ignore */}
               <ApiCodeBlock
-                className="openapi-demo__code-block openapi-response__status-code"
+                className="openapi-explorer__code-block openapi-response__status-code"
                 language={response.startsWith("<") ? `xml` : `json`}
               >
                 {prettyResponse || (
-                  <p className="openapi-demo__response-placeholder-message">
+                  <p className="openapi-explorer__response-placeholder-message">
                     Click the <code>Send API Request</code> button above and see
                     the response here!
                   </p>
@@ -125,7 +125,7 @@ function Response({ item }: { item: NonNullable<ApiItem> }) {
             <TabItem label="Headers" value="headers">
               {/* @ts-ignore */}
               <ApiCodeBlock
-                className="openapi-demo__code-block openapi-response__status-headers"
+                className="openapi-explorer__code-block openapi-response__status-headers"
                 language={response.startsWith("<") ? `xml` : `json`}
               >
                 {JSON.stringify(headers, undefined, 2)}
@@ -133,11 +133,11 @@ function Response({ item }: { item: NonNullable<ApiItem> }) {
             </TabItem>
           </SchemaTabs>
         ) : prettyResponse === "Fetching..." ? (
-          <div className="openapi-demo__loading-container">
+          <div className="openapi-explorer__loading-container">
             <Loading color="success" />
           </div>
         ) : (
-          <p className="openapi-demo__response-placeholder-message">
+          <p className="openapi-explorer__response-placeholder-message">
             Click the <code>Send API Request</code> button above and see the
             response here!
           </p>

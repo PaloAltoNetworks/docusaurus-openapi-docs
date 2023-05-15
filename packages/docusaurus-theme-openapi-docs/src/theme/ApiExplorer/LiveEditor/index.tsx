@@ -27,8 +27,8 @@ function Live({ onEdit, showErrors }: any) {
       <LiveEditor
         key={String(isBrowser)}
         className={clsx({
-          "openapi-demo__playground-editor": true,
-          "openapi-demo__form-item-input": showErrors,
+          "openapi-explorer__playground-editor": true,
+          "openapi-explorer__form-item-input": showErrors,
           error: showErrors,
         })}
         onChange={onEdit}
@@ -72,7 +72,7 @@ function App({
   return (
     <div
       className={clsx({
-        "openapi-demo__playground-container": true,
+        "openapi-explorer__playground-container": true,
       })}
     >
       <LiveProvider
@@ -99,7 +99,7 @@ function App({
             errors={errors}
             name="requestBody"
             render={({ message }) => (
-              <div className="openapi-demo__input-error">{message}</div>
+              <div className="openapi-explorer__input-error">{message}</div>
             )}
           />
         )}

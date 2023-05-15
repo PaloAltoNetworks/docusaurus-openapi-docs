@@ -60,8 +60,10 @@ export default function CodeBlockString({
           `language-${language}`
       )}
     >
-      {title && <div className="openapi-demo__code-block-title">{title}</div>}
-      <div className="openapi-demo__code-block-content">
+      {title && (
+        <div className="openapi-explorer__code-block-title">{title}</div>
+      )}
+      <div className="openapi-explorer__code-block-content">
         <Highlight
           {...defaultProps}
           theme={prismTheme}
@@ -75,14 +77,15 @@ export default function CodeBlockString({
               ref={wordWrap.codeBlockRef}
               className={clsx(
                 className,
-                "openapi-demo__code-block",
+                "openapi-explorer__code-block",
                 "thin-scrollbar"
               )}
             >
               <code
                 className={clsx(
-                  "openapi-demo__code-block-lines",
-                  showLineNumbers && "openapi-demo__code-block-lines-numbering"
+                  "openapi-explorer__code-block-lines",
+                  showLineNumbers &&
+                    "openapi-explorer__code-block-lines-numbering"
                 )}
               >
                 {tokens.map((line, i) => (
@@ -99,22 +102,22 @@ export default function CodeBlockString({
             </pre>
           )}
         </Highlight>
-        <div className="openapi-demo__code-block-btn-group">
+        <div className="openapi-explorer__code-block-btn-group">
           {(wordWrap.isEnabled || wordWrap.isCodeScrollable) && (
             <WordWrapButton
-              className="openapi-demo__code-block-code-btn"
+              className="openapi-explorer__code-block-code-btn"
               onClick={() => wordWrap.toggle()}
               isEnabled={wordWrap.isEnabled}
             />
           )}
           <CopyButton
-            className="openapi-demo__code-block-code-btn"
+            className="openapi-explorer__code-block-code-btn"
             code={code}
           />
           <ExpandButton
             className={clsx(
-              "openapi-demo__code-block-code-btn",
-              "openapi-demo__expand-btn"
+              "openapi-explorer__code-block-code-btn",
+              "openapi-explorer__expand-btn"
             )}
             code={code}
             language={language}

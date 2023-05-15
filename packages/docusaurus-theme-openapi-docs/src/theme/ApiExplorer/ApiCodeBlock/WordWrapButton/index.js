@@ -24,13 +24,13 @@ export default function WordWrapButton({ className, onClick, isEnabled }) {
       className={clsx(
         "clean-btn",
         className,
-        isEnabled && "openapi-demo__code-block-word-wrap-btn--enabled"
+        isEnabled && "openapi-explorer__code-block-word-wrap-btn--enabled"
       )}
       aria-label={title}
       title={title}
     >
       <svg
-        className="openapi-demo__code-block-word-wrap-btn-icon"
+        className="openapi-explorer__code-block-word-wrap-btn-icon"
         viewBox="0 0 24 24"
         aria-hidden="true"
       >

@@ -43,7 +43,7 @@ function FormTextInput({
           {...register(paramName, {
             required: isRequired ? "This field is required" : false,
           })}
-          className={clsx("openapi-demo__form-item-input", {
+          className={clsx("openapi-explorer__form-item-input", {
             error: showErrorMessage,
           })}
           type={password ? "password" : "text"}
@@ -55,7 +55,7 @@ function FormTextInput({
         />
       ) : (
         <input
-          className="openapi-demo__form-item-input"
+          className="openapi-explorer__form-item-input"
           type={password ? "password" : "text"}
           placeholder={placeholder}
           title={placeholder}
@@ -69,7 +69,7 @@ function FormTextInput({
           errors={errors}
           name={paramName}
           render={({ message }) => (
-            <div className="openapi-demo__input-error">{message}</div>
+            <div className="openapi-explorer__input-error">{message}</div>
           )}
         />
       )}

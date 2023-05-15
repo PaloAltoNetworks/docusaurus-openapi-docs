@@ -121,7 +121,7 @@ function Body({
     schema?.type === "object"
   ) {
     return (
-      <FormItem className="openapi-demo__form-item-body-container">
+      <FormItem className="openapi-explorer__form-item-body-container">
         <div>
           {Object.entries(schema.properties ?? {}).map(([key, val]: any) => {
             if (val.format === "binary") {
@@ -314,7 +314,7 @@ function Body({
 
   if (examplesBodies && examplesBodies.length > 0) {
     return (
-      <FormItem className="openapi-demo__form-item-body-container">
+      <FormItem className="openapi-explorer__form-item-body-container">
         <SchemaTabs className="openapi-tabs__schema" lazy>
           {/* @ts-ignore */}
           <TabItem label="Default" value="default" default>

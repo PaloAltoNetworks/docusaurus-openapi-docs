@@ -1,4 +1,4 @@
-.openapi-demo__playground-container {
+.openapi-explorer__playground-container {
   margin-top: 1rem;
   margin-bottom: var(--ifm-leading);
   border-radius: var(--ifm-global-radius);
@@ -7,7 +7,7 @@
   max-height: 500px;
 }
 
-.openapi-demo__playground-editor {
+.openapi-explorer__playground-editor {
   font: var(--ifm-code-font-size) / var(--ifm-pre-line-height)
     var(--ifm-font-family-monospace) !important;
   /* rtl:ignore */

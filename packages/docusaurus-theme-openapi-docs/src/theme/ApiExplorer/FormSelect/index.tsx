@@ -20,7 +20,7 @@ function FormSelect({ value, options, onChange }: Props) {
 
   return (
     <select
-      className="openapi-demo__select-input"
+      className="openapi-explorer__select-input"
       value={value}
       onChange={onChange}
     >

@@ -55,7 +55,7 @@ export default function ParamBooleanFormItem({ param }: ParamProps) {
           errors={errors}
           name="paramBoolean"
           render={({ message }) => (
-            <div className="openapi-demo__input-error">{message}</div>
+            <div className="openapi-explorer__input-error">{message}</div>
           )}
         />
       )}

@@ -114,7 +114,7 @@ export default function ParamArrayFormItem({ param }: ParamProps) {
                   onChange={handleChangeItem(item, onChange)}
                 />
                 <button
-                  className="openapi-demo__delete-btn"
+                  className="openapi-explorer__delete-btn"
                   onClick={handleDeleteItem(item)}
                 >
                   <svg
@@ -133,7 +133,10 @@ export default function ParamArrayFormItem({ param }: ParamProps) {
                 </button>
               </div>
             ))}
-            <button className="openapi-demo__thin-btn" onClick={handleAddItem}>
+            <button
+              className="openapi-explorer__thin-btn"
+              onClick={handleAddItem}
+            >
               Add item
             </button>
           </>
@@ -144,7 +147,7 @@ export default function ParamArrayFormItem({ param }: ParamProps) {
           errors={errors}
           name="paramArray"
           render={({ message }) => (
-            <div className="openapi-demo__input-error">{message}</div>
+            <div className="openapi-explorer__input-error">{message}</div>
           )}
         />
       )}

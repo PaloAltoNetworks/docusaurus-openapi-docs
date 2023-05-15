@@ -1,4 +1,4 @@
-.openapi-demo__code-block-content {
+.openapi-explorer__code-block-content {
   height: 100%;
   position: relative;
   /* rtl:ignore */
@@ -6,7 +6,7 @@
   border-radius: inherit;
 }
 
-.openapi-demo__code-block-title {
+.openapi-explorer__code-block-title {
   border-bottom: 1px solid var(--ifm-color-emphasis-300);
   font-size: var(--ifm-code-font-size);
   font-weight: 500;
@@ -15,7 +15,7 @@
   border-top-right-radius: inherit;
 }
 
-.openapi-demo__code-block {
+.openapi-explorer__code-block {
   height: 100%;
   border-radius: var(--ifm-global-radius);
   --ifm-pre-background: var(--prism-background-color);
@@ -23,18 +23,18 @@
   padding: 0;
 }
 
-.openapi-demo__code-block-title
-  + .openapi-demo__code-block-content
-  .openapi-demo__code-block {
+.openapi-explorer__code-block-title
+  + .openapi-explorer__code-block-content
+  .openapi-explorer__code-block {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
 
-.openapi-demo__code-block-standalone {
+.openapi-explorer__code-block-standalone {
   padding: 0;
 }
 
-.openapi-demo__code-block-lines {
+.openapi-explorer__code-block-lines {
   font: inherit;
   /* rtl:ignore */
   float: left;
@@ -42,19 +42,19 @@
   padding: var(--ifm-pre-padding);
 }
 
-.openapi-demo__code-block-lines-numbering {
+.openapi-explorer__code-block-lines-numbering {
   // This causes max-height to unset
   // display: table;
   padding: var(--ifm-pre-padding) 0;
 }
 
 @media print {
-  .openapi-demo__code-block-lines {
+  .openapi-explorer__code-block-lines {
     white-space: pre-wrap;
   }
 }
 
-.openapi-demo__code-block-btn-group {
+.openapi-explorer__code-block-btn-group {
   display: flex;
   column-gap: 0.2rem;
   position: absolute;
@@ -62,7 +62,7 @@
   top: calc(var(--ifm-pre-padding) / 2);
 }
 
-.openapi-demo__code-block-btn-group button {
+.openapi-explorer__code-block-btn-group button {
   display: flex;
   align-items: center;
   background: var(--prism-background-color);
@@ -75,17 +75,17 @@
   opacity: 0;
 }
 
-.openapi-demo__code-block-btn-group button:focus-visible,
-.openapi-demo__code-block-btn-group button:hover {
+.openapi-explorer__code-block-btn-group button:focus-visible,
+.openapi-explorer__code-block-btn-group button:hover {
   opacity: 1 !important;
 }
 
-.theme-code-block:hover .openapi-demo__code-block-btn-group button {
+.theme-code-block:hover .openapi-explorer__code-block-btn-group button {
   opacity: 0.4;
 }
 
 @media screen and (max-width: 996px) {
-  .openapi-demo__expand-btn {
+  .openapi-explorer__expand-btn {
     display: none !important;
   }
 }

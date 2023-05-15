@@ -23,7 +23,7 @@ export default function CodeBlockLine({
     line,
     className: clsx(
       classNames,
-      showLineNumbers && "openapi-demo__code-block-code-line"
+      showLineNumbers && "openapi-explorer__code-block-code-line"
     ),
   });
   const lineTokens = line.map((token, key) => (
@@ -33,8 +33,8 @@ export default function CodeBlockLine({
     <span {...lineProps}>
       {showLineNumbers ? (
         <>
-          <span className="openapi-demo__code-block-code-line-number" />
-          <span className="openapi-demo__code-block-code-line-content">
+          <span className="openapi-explorer__code-block-code-line-number" />
+          <span className="openapi-explorer__code-block-code-line-content">
             {lineTokens}
           </span>
         </>
