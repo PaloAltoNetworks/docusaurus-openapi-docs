@@ -5,28 +5,28 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 /* API Demo Panel */
-@use "./ApiDemoPanel/CodeTabs/CodeTabs";
-@use "./ApiDemoPanel/FloatingButton/FloatingButton";
-@use "./ApiDemoPanel/FormFileUpload/FormFileUpload";
-@use "./ApiDemoPanel/FormItem/FormItem";
-@use "./ApiDemoPanel/FormMultiSelect/FormMultiSelect";
-@use "./ApiDemoPanel/FormSelect/FormSelect";
-@use "./ApiDemoPanel/FormTextInput/FormTextInput";
-@use "./ApiDemoPanel/LiveEditor/LiveEditor";
-@use "./ApiDemoPanel/MethodEndpoint/MethodEndpoint";
-@use "./ApiDemoPanel/ParamOptions/ParamOptions";
-@use "./ApiDemoPanel/Request/Request";
-@use "./ApiDemoPanel/Response/Response";
-@use "./ApiDemoPanel/Server/Server";
+@use "./ApiExplorer/CodeTabs/CodeTabs";
+@use "./ApiExplorer/FloatingButton/FloatingButton";
+@use "./ApiExplorer/FormFileUpload/FormFileUpload";
+@use "./ApiExplorer/FormItem/FormItem";
+@use "./ApiExplorer/FormMultiSelect/FormMultiSelect";
+@use "./ApiExplorer/FormSelect/FormSelect";
+@use "./ApiExplorer/FormTextInput/FormTextInput";
+@use "./ApiExplorer/LiveEditor/LiveEditor";
+@use "./ApiExplorer/MethodEndpoint/MethodEndpoint";
+@use "./ApiExplorer/ParamOptions/ParamOptions";
+@use "./ApiExplorer/Request/Request";
+@use "./ApiExplorer/Response/Response";
+@use "./ApiExplorer/Server/Server";
 
 /* Api Demo Panel / ApiCodeBlock */
-@use "./ApiDemoPanel/ApiCodeBlock/Container/Container";
-@use "./ApiDemoPanel/ApiCodeBlock/Content/Content";
-@use "./ApiDemoPanel/ApiCodeBlock/CopyButton/CopyButton";
-@use "./ApiDemoPanel/ApiCodeBlock/ExitButton/ExitButton";
-@use "./ApiDemoPanel/ApiCodeBlock/ExpandButton/ExpandButton";
-@use "./ApiDemoPanel/ApiCodeBlock/Line/Line";
-@use "./ApiDemoPanel/ApiCodeBlock/WordWrapButton/WordWrapButton";
+@use "./ApiExplorer/ApiCodeBlock/Container/Container";
+@use "./ApiExplorer/ApiCodeBlock/Content/Content";
+@use "./ApiExplorer/ApiCodeBlock/CopyButton/CopyButton";
+@use "./ApiExplorer/ApiCodeBlock/ExitButton/ExitButton";
+@use "./ApiExplorer/ApiCodeBlock/ExpandButton/ExpandButton";
+@use "./ApiExplorer/ApiCodeBlock/Line/Line";
+@use "./ApiExplorer/ApiCodeBlock/WordWrapButton/WordWrapButton";
 
 /* Schema Styling */
 @use "./ParamsItem/ParamsItem";
@@ -75,16 +75,16 @@
   --openapi-code-tab-shadow-color-php: rgba(97, 129, 182, 0.25);
   --openapi-code-tab-shadow-color-java: rgba(3, 116, 189, 0.25);
   --opeanpi-code-tab-shadow-color-powershell: rgba(3, 116, 189, 0.25);
-  --openapi-demo-font-size-input: 12px;
-  --openapi-demo-font-size-code: 12px;
-  --openapi-demo-padding-input: 0.5rem;
-  --openapi-demo-border-color: var(--ifm-toc-border-color);
-  --openapi-demo-caret-bg: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path></svg>');
+  --openapi-explorer-font-size-input: 12px;
+  --openapi-explorer-font-size-code: 12px;
+  --openapi-explorer-padding-input: 0.5rem;
+  --openapi-explorer-border-color: var(--ifm-toc-border-color);
+  --openapi-explorer-caret-bg: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path></svg>');
 }
 
 [data-theme="dark"] {
   --openapi-card-background-color: var(--ifm-color-gray-900) !important;
-  --openapi-demo-caret-bg: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" fill="white"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path></svg>') !important;
+  --openapi-explorer-caret-bg: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" fill="white"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path></svg>') !important;
 }
 
 .docs-wrapper {
@@ -114,7 +114,7 @@
 
 /* Demo panel details */
 
-// .theme-api-markdown .openapi-demo__details > div > div > pre {
+// .theme-api-markdown .openapi-explorer__details > div > div > pre {
 //   border-top-left-radius: 0;
 //   border-top-right-radius: 0;
 // }

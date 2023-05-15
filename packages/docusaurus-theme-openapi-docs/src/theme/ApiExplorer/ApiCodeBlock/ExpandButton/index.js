@@ -5,14 +5,14 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { usePrismTheme } from "@docusaurus/theme-common";
 import { translate } from "@docusaurus/Translate";
-import Container from "@theme/ApiDemoPanel/ApiCodeBlock/Container";
-import CopyButton from "@theme/ApiDemoPanel/ApiCodeBlock/CopyButton";
-import ExitButton from "@theme/ApiDemoPanel/ApiCodeBlock/ExitButton";
-import Line from "@theme/ApiDemoPanel/ApiCodeBlock/Line";
+import Container from "@theme/ApiExplorer/ApiCodeBlock/Container";
+import CopyButton from "@theme/ApiExplorer/ApiCodeBlock/CopyButton";
+import ExitButton from "@theme/ApiExplorer/ApiCodeBlock/ExitButton";
+import Line from "@theme/ApiExplorer/ApiCodeBlock/Line";
 import clsx from "clsx";
 import Highlight, { defaultProps } from "prism-react-renderer";
 import Modal from "react-modal";
@@ -26,28 +26,19 @@ export default function ExpandButton({
   title,
   lineClassNames,
 }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const prismTheme = usePrismTheme();
-
-  function openModal() {
-    setIsOpen(true);
-  }
-
-  function closeModal() {
-    setIsOpen(false);
-  }
-
-  const [modalIsOpen, setIsOpen] = React.useState(false);
 
   useEffect(() => {
     Modal.setAppElement("body");
-  });
+  }, []);
 
   return (
     <>
       <button
         type="button"
         aria-label={
-          modalIsOpen
+          isModalOpen
             ? translate({
                 id: "theme.CodeBlock.expanded",
                 message: "Expanded",
@@ -68,9 +59,9 @@ export default function ExpandButton({
           "clean-btn",
           className,
           "openapi-explorer__code-block-expand-btn",
-          modalIsOpen && "openapi-explorer__code-block-expand-btn--copied"
+          isModalOpen && "openapi-explorer__code-block-expand-btn--copied"
         )}
-        onClick={openModal}
+        onClick={() => setIsModalOpen(true)}
       >
         <span
           className="openapi-explorer__code-block-expand-btn-icons"
@@ -93,8 +84,8 @@ export default function ExpandButton({
       <Modal
         className="openapi-explorer__expand-modal-content"
         overlayClassName="openapi-explorer__expand-modal-overlay"
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
+        isOpen={isModalOpen}
+        onRequestClose={() => setIsModalOpen(false)}
         contentLabel="Code Snippet"
       >
         <Container
@@ -153,8 +144,8 @@ export default function ExpandButton({
                 code={code}
               />
               <ExitButton
-                className="openapi-dmeo__code-block-code-btn"
-                handler={closeModal}
+                className="openapi-explorer__code-block-code-btn"
+                handler={() => setIsModalOpen(false)}
               />
             </div>
           </div>

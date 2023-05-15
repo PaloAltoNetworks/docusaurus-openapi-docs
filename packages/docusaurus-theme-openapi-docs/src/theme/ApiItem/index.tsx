@@ -12,8 +12,8 @@ import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import { HtmlClassNameProvider } from "@docusaurus/theme-common";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import useIsBrowser from "@docusaurus/useIsBrowser";
-import { createAuth } from "@theme/ApiDemoPanel/Authorization/slice";
-import { createPersistanceMiddleware } from "@theme/ApiDemoPanel/persistanceMiddleware";
+import { createAuth } from "@theme/ApiExplorer/Authorization/slice";
+import { createPersistanceMiddleware } from "@theme/ApiExplorer/persistanceMiddleware";
 import DocItemLayout from "@theme/ApiItem/Layout";
 import type { Props } from "@theme/DocItem";
 import DocItemMetadata from "@theme/DocItem/Metadata";
@@ -32,10 +32,10 @@ import { createStoreWithoutState, createStoreWithState } from "./store";
 
 const { DocProvider } = require("@docusaurus/theme-common/internal");
 
-let ApiDemoPanel = (_: { item: any; infoPath: any }) => <div />;
+let ApiExplorer = (_: { item: any; infoPath: any }) => <div />;
 
 if (ExecutionEnvironment.canUseDOM) {
-  ApiDemoPanel = require("@theme/ApiDemoPanel").default;
+  ApiExplorer = require("@theme/ApiExplorer").default;
 }
 
 interface ApiFrontMatter extends DocFrontMatter {
@@ -140,7 +140,7 @@ export default function ApiItem(props: Props): JSX.Element {
                 <div className="col col--5 openapi-right-panel__container">
                   <BrowserOnly fallback={<div>Loading...</div>}>
                     {() => {
-                      return <ApiDemoPanel item={api} infoPath={infoPath} />;
+                      return <ApiExplorer item={api} infoPath={infoPath} />;
                     }}
                   </BrowserOnly>
                 </div>
