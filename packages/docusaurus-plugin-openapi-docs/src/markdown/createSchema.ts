@@ -402,7 +402,7 @@ function createDetailsNode(
 /**
  * For handling anyOf/oneOf properties.
  */
-function createOneOfOrAnyOfProperty(
+function createAnyOneOfProperty(
   name: string,
   schemaName: string,
   schema: SchemaObject,
@@ -573,7 +573,7 @@ function createEdges({
   }
 
   if (schema.oneOf !== undefined || schema.anyOf !== undefined) {
-    return createOneOfOrAnyOfProperty(
+    return createAnyOneOfProperty(
       name,
       schemaName,
       schema,
