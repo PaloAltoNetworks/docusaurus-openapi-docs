@@ -9,13 +9,13 @@ import { MediaTypeObject } from "../openapi/types";
 import { createDescription } from "./createDescription";
 import { createDetails } from "./createDetails";
 import { createDetailsSummary } from "./createDetailsSummary";
+import { createNodes } from "./createSchema";
 import {
   createExampleFromSchema,
   createResponseExample,
   createResponseExamples,
 } from "./createStatusCodes";
 import { create, guard } from "./utils";
-import { createNodes } from "./createSchema";
 
 interface Props {
   style?: any;

@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { MediaTypeObject, SchemaObject } from "../openapi/types";
+import { SchemaObject } from "../openapi/types";
 import {
   createClosingArrayBracket,
   createOpeningArrayBracket,
