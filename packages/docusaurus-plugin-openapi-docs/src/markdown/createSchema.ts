@@ -478,7 +478,14 @@ function createAnyOneOfProperty(
               }),
               create("SchemaTabs", {
                 children: children.map((property, index) => {
-                  const label = property.type ?? `MOD${index + 1}`;
+                  const label = property.title ?? `MOD${index + 1}`;
+                  if (property.properties) {
+                    return create("TabItem", {
+                      label: label,
+                      value: `${index}-property`,
+                      children: [createNodes(property)],
+                    });
+                  }
                   return create("TabItem", {
                     label: label,
                     value: `${index}-property`,
