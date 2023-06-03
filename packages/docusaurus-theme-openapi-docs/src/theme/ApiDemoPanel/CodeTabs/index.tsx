@@ -46,6 +46,7 @@ export interface Props {
   }[];
   readonly groupId?: string;
   readonly className?: string;
+  readonly mergedLangs?: Language[];
   readonly action?: any;
 }
 
@@ -57,6 +58,7 @@ function TabsComponent(props: Props): JSX.Element {
     values: valuesProp,
     groupId,
     className,
+    mergedLangs,
     action,
   } = props;
   const children = React.Children.map(props.children, (child) => {
@@ -133,7 +135,8 @@ function TabsComponent(props: Props): JSX.Element {
       blockElementScrollPositionUntilNextRender(newTab);
       setSelectedValue(newTabValue);
       if (action) {
-        const newLanguage = languageSet.filter(
+        const langs = mergedLangs ? mergedLangs : languageSet;
+        const newLanguage = langs.filter(
           (lang: Language) => lang.language === newTabValue
         );
         action(newLanguage[0]);
