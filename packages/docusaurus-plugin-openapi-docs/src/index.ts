@@ -7,6 +7,7 @@
 
 import fs from "fs";
 import path from "path";
+import zlib from "zlib";
 
 import type { LoadContext, Plugin } from "@docusaurus/types";
 import { Globby, posixPath } from "@docusaurus/utils";
@@ -264,7 +265,16 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
             : tagPageGenerator(item);
         item.markdown = markdown;
         if (item.type === "api") {
-          item.json = JSON.stringify(item.api);
+          // opportunity to compress JSON
+          // const serialize = (o: any) => {
+          //   return zlib.deflateSync(JSON.stringify(o)).toString("base64");
+          // };
+          // const deserialize = (s: any) => {
+          //   return zlib.inflateSync(Buffer.from(s, "base64")).toString();
+          // };
+          item.json = zlib
+            .deflateSync(JSON.stringify(item.api))
+            .toString("base64");
           let infoBasePath = `${outputDir}/${item.infoId}`;
           if (docRouteBasePath) {
             infoBasePath = `${docRouteBasePath}/${outputDir
