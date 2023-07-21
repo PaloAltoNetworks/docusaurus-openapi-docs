@@ -50,9 +50,12 @@ export default function ApiItem(props: Props): JSX.Element {
   const { info_path: infoPath } = frontMatter as DocFrontMatter;
   let { api } = frontMatter as ApiFrontMatter;
   // decompress and parse
-  api = JSON.parse(
-    zlib.inflateSync(Buffer.from(api as any, "base64")).toString()
-  );
+  if (api) {
+    api = JSON.parse(
+      zlib.inflateSync(Buffer.from(api as any, "base64")).toString()
+    );
+  }
+
   const { siteConfig } = useDocusaurusContext();
   const themeConfig = siteConfig.themeConfig as ThemeConfig;
   const options = themeConfig.api;
