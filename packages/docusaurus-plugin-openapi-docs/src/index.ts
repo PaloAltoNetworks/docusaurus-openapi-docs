@@ -18,6 +18,7 @@ import { readOpenapiFiles, processOpenapiFiles } from "./openapi";
 import { OptionsSchema } from "./options";
 import generateSidebarSlice from "./sidebars";
 import type { PluginOptions, LoadedContent, APIOptions } from "./types";
+import zlib from "zlib";
 
 export function isURL(str: string): boolean {
   return /^(https?:)\/\//m.test(str);
@@ -264,7 +265,16 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
             : tagPageGenerator(item);
         item.markdown = markdown;
         if (item.type === "api") {
-          item.json = JSON.stringify(item.api);
+          // opportunity to compress JSON
+          // const serialize = (o: any) => {
+          //   return zlib.deflateSync(JSON.stringify(o)).toString("base64");
+          // };
+          // const deserialize = (s: any) => {
+          //   return zlib.inflateSync(Buffer.from(s, "base64")).toString();
+          // };
+          item.json = zlib
+            .deflateSync(JSON.stringify(item.api))
+            .toString("base64");
           let infoBasePath = `${outputDir}/${item.infoId}`;
           if (docRouteBasePath) {
             infoBasePath = `${docRouteBasePath}/${outputDir

@@ -27,6 +27,7 @@ import type {
   ThemeConfig,
 } from "docusaurus-theme-openapi-docs/src/types";
 import { Provider } from "react-redux";
+import zlib from "zlib";
 
 import { createStoreWithoutState, createStoreWithState } from "./store";
 
@@ -47,7 +48,11 @@ export default function ApiItem(props: Props): JSX.Element {
   const MDXComponent = props.content;
   const { frontMatter } = MDXComponent;
   const { info_path: infoPath } = frontMatter as DocFrontMatter;
-  const { api } = frontMatter as ApiFrontMatter;
+  let { api } = frontMatter as ApiFrontMatter;
+  // decompress and parse
+  api = JSON.parse(
+    zlib.inflateSync(Buffer.from(api as any, "base64")).toString()
+  );
   const { siteConfig } = useDocusaurusContext();
   const themeConfig = siteConfig.themeConfig as ThemeConfig;
   const options = themeConfig.api;
