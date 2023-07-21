@@ -5,6 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import zlib from "zlib";
+
 import React from "react";
 
 import BrowserOnly from "@docusaurus/BrowserOnly";
@@ -27,7 +29,6 @@ import type {
   ThemeConfig,
 } from "docusaurus-theme-openapi-docs/src/types";
 import { Provider } from "react-redux";
-import zlib from "zlib";
 
 import { createStoreWithoutState, createStoreWithState } from "./store";
 
