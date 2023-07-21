@@ -7,6 +7,7 @@
 
 import fs from "fs";
 import path from "path";
+import zlib from "zlib";
 
 import type { LoadContext, Plugin } from "@docusaurus/types";
 import { Globby, posixPath } from "@docusaurus/utils";
@@ -18,7 +19,6 @@ import { readOpenapiFiles, processOpenapiFiles } from "./openapi";
 import { OptionsSchema } from "./options";
 import generateSidebarSlice from "./sidebars";
 import type { PluginOptions, LoadedContent, APIOptions } from "./types";
-import zlib from "zlib";
 
 export function isURL(str: string): boolean {
   return /^(https?:)\/\//m.test(str);
