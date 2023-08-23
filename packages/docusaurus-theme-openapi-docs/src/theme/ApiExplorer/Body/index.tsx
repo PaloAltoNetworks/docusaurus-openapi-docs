@@ -290,7 +290,11 @@ function Body({
       <FormItem>
         <SchemaTabs className="openapi-tabs__schema" lazy>
           {/* @ts-ignore */}
-          <TabItem label="Example (from schema)" value="Example (from schema)" default>
+          <TabItem
+            label="Example (from schema)"
+            value="Example (from schema)"
+            default
+          >
             <LiveApp action={dispatch} language={language} required={required}>
               {defaultBody}
             </LiveApp>
