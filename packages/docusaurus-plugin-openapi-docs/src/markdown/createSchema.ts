@@ -6,6 +6,7 @@
  * ========================================================================== */
 
 import clsx from "clsx";
+
 import { SchemaObject } from "../openapi/types";
 import {
   createClosingArrayBracket,
