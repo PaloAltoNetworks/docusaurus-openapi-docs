@@ -5,6 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import clsx from "clsx";
 import { SchemaObject } from "../openapi/types";
 import {
   createClosingArrayBracket,
@@ -338,41 +339,60 @@ function createDetailsNode(
     className: "schemaItem",
     children: [
       createDetails({
+        className: "openapi-markdown__details",
         children: [
           createDetailsSummary({
             children: [
-              create("strong", { children: name }),
               create("span", {
-                style: { opacity: "0.6" },
-                children: ` ${schemaName}`,
+                className: "openapi-schema__container",
+                children: [
+                  create("strong", {
+                    className: clsx("openapi-schema__property", {
+                      "openapi-schema__strikethrough": schema.deprecated,
+                    }),
+                    children: name,
+                  }),
+                  create("span", {
+                    className: "openapi-schema__name",
+                    children: ` ${schemaName}`,
+                  }),
+                  guard(
+                    (Array.isArray(required)
+                      ? required.includes(name)
+                      : required === true) ||
+                      schema.deprecated ||
+                      nullable,
+                    () => [
+                      create("span", {
+                        className: "openapi-schema__divider",
+                      }),
+                    ]
+                  ),
+                  guard(nullable, () => [
+                    create("span", {
+                      className: "openapi-schema__nullable",
+                      children: "nullable",
+                    }),
+                  ]),
+                  guard(
+                    Array.isArray(required)
+                      ? required.includes(name)
+                      : required === true,
+                    () => [
+                      create("span", {
+                        className: "openapi-schema__required",
+                        children: "required",
+                      }),
+                    ]
+                  ),
+                  guard(schema.deprecated, () => [
+                    create("span", {
+                      className: "openapi-schema__deprecated",
+                      children: "deprecated",
+                    }),
+                  ]),
+                ],
               }),
-              guard(
-                (schema.nullable && schema.nullable === true) ||
-                  (nullable && nullable === true),
-                () => [
-                  create("strong", {
-                    style: {
-                      fontSize: "var(--ifm-code-font-size)",
-                      color: "var(--openapi-nullable)",
-                    },
-                    children: " nullable",
-                  }),
-                ]
-              ),
-              guard(
-                Array.isArray(required)
-                  ? required.includes(name)
-                  : required === true,
-                () => [
-                  create("strong", {
-                    style: {
-                      fontSize: "var(--ifm-code-font-size)",
-                      color: "var(--openapi-required)",
-                    },
-                    children: " required",
-                  }),
-                ]
-              ),
             ],
           }),
           create("div", {
@@ -519,7 +539,7 @@ function createPropertyDiscriminator(
   schema: SchemaObject,
   discriminator: any,
   required: string[] | boolean
-) {
+): any {
   if (schema === undefined) {
     return undefined;
   }
@@ -528,26 +548,61 @@ function createPropertyDiscriminator(
     return undefined;
   }
 
-  return create("SchemaItem", {
-    name,
-    required: Array.isArray(required) ? required.includes(name) : required,
-    schemaName: schemaName,
-    qualifierMessage: getQualifierMessage(schema),
-    schema: schema,
-    collapsible: false,
-    discriminator: true,
-    children: [
-      create("DiscriminatorTabs", {
-        children: Object.keys(discriminator?.mapping!).map((key, index) => {
-          const label = key;
-          return create("TabItem", {
-            label: label,
-            value: `${index}-item-discriminator`,
-            children: createNodes(discriminator?.mapping[key]),
-          });
+  return create("div", {
+    className: "openapi-discriminator__item openapi-schema__list-item",
+    children: create("div", {
+      children: [
+        create("span", {
+          className: "openapi-schema__container",
+          children: [
+            create("strong", {
+              className: "openapi-discriminator__name openapi-schema__property",
+              children: name,
+            }),
+            guard(schemaName, (name) =>
+              create("span", {
+                className: "openapi-schema__name",
+                children: ` ${schemaName}`,
+              })
+            ),
+            guard(required, () => [
+              create("span", {
+                className: "openapi-schema__required",
+                children: "required",
+              }),
+            ]),
+          ],
         }),
-      }),
-    ],
+        guard(getQualifierMessage(discriminator), (message) =>
+          create("div", {
+            style: {
+              paddingLeft: "1rem",
+            },
+            children: createDescription(message),
+          })
+        ),
+        guard(schema.description, (description) =>
+          create("div", {
+            style: {
+              paddingLeft: "1rem",
+            },
+            children: createDescription(description),
+          })
+        ),
+        create("DiscriminatorTabs", {
+          className: "openapi-tabs__discriminator",
+          children: Object.keys(discriminator?.mapping!).map((key, index) => {
+            const label = key;
+            return create("TabItem", {
+              // className: "openapi-tabs__discriminator-item",
+              label: label,
+              value: `${index}-item-discriminator`,
+              children: [createNodes(discriminator?.mapping[key])],
+            });
+          }),
+        }),
+      ],
+    }),
   });
 }
 
