@@ -437,6 +437,7 @@ function createAnyOneOfProperty(
     className: "schemaItem",
     children: [
       createDetails({
+        className: "openapi-markdown__details",
         children: [
           createDetailsSummary({
             children: [
