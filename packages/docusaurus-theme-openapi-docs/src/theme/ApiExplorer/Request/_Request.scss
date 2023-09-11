@@ -80,12 +80,13 @@
   &::before {
     margin-right: 0.25rem;
     margin-bottom: 0.25rem;
+    margin-top: 0.25rem;
     background-image: var(--openapi-explorer-caret-bg);
     border: none !important;
     transform: rotate(90deg);
     content: "";
-    height: 0.75rem;
-    width: 0.75rem;
+    height: 1rem;
+    width: 1rem;
   }
 }
 

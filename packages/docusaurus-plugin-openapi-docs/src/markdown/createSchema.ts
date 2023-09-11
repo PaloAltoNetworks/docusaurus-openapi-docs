@@ -6,6 +6,7 @@
  * ========================================================================== */
 
 import clsx from "clsx";
+
 import { SchemaObject } from "../openapi/types";
 import {
   createClosingArrayBracket,
@@ -436,6 +437,7 @@ function createAnyOneOfProperty(
     className: "schemaItem",
     children: [
       createDetails({
+        className: "openapi-markdown__details",
         children: [
           createDetailsSummary({
             children: [
