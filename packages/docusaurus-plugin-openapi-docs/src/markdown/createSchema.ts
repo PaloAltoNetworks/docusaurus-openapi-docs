@@ -430,8 +430,6 @@ function createAnyOneOfProperty(
   required: string[] | boolean,
   nullable: boolean | unknown
 ): any {
-  const type = schema.oneOf ? "oneOf" : "anyOf";
-  const children = schema[type] || [];
   return create("SchemaItem", {
     collapsible: true,
     className: "schemaItem",
@@ -492,39 +490,7 @@ function createAnyOneOfProperty(
               ),
             ],
           }),
-          create("div", {
-            children: [
-              create("span", {
-                className: "badge badge--info",
-                children: type,
-              }),
-              create("SchemaTabs", {
-                children: children.map((property, index) => {
-                  const label = property.title ?? `MOD${index + 1}`;
-                  if (property.properties) {
-                    return create("TabItem", {
-                      label: label,
-                      value: `${index}-property`,
-                      children: [createNodes(property)],
-                    });
-                  }
-                  return create("TabItem", {
-                    label: label,
-                    value: `${index}-property`,
-                    children: [
-                      create("p", { children: label }),
-                      guard(schema.description, (description) =>
-                        create("div", {
-                          style: { marginTop: ".5rem", marginBottom: ".5rem" },
-                          children: createDescription(description),
-                        })
-                      ),
-                    ],
-                  });
-                }),
-              }),
-            ],
-          }),
+          createAnyOneOf(schema),
         ],
       }),
     ],
