@@ -71,11 +71,12 @@ module.exports = {
   },
   overrides: [
     {
-      files: ["**/scripts/**", "cypress/**"],
+      files: ["**/scripts/**", "cypress/**", "**/*.test.ts"],
       rules: {
         "import/no-extraneous-dependencies": [
           "warn",
           {
+            packageDir: [__dirname, "."],
             devDependencies: true,
             optionalDependencies: false,
             peerDependencies: true,
