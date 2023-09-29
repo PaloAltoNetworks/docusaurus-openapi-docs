@@ -152,11 +152,14 @@ async function makeRequest(
         break;
       }
       case "formdata": {
+        // The Content-Type header will be set automatically based on the type of body.
+        myHeaders.delete("Content-Type");
+
         myBody = new FormData();
-        if (Array.isArray(body.formdata)) {
-          for (const data of body.formdata) {
-            if (data.key && data.value) {
-              myBody.append(data.key, data.value);
+        if (Array.isArray(request.body.formdata.members)) {
+          for (const data of request.body.formdata.members) {
+            if (data.key && data.value.content) {
+              myBody.append(data.key, data.value.content);
             }
           }
         }
