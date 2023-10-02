@@ -1,3 +1,20 @@
+## 2.0.0-beta.4 (Sep 29, 2023)
+
+High level enhancements
+
+- Expand capacity for building large sites by compressing frontmatter api property.
+
+Other enhancements and bug fixes
+
+- Fix `makeRequest()` for `formdata` request type ([#625](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/625))
+- [UI] Cleanup schema item and explorer panel caret alignment ([#624](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/624))
+- revert v2.0.0 schema styles
+- Add support for anyOf properties and apply DRY to createSchema ([#582](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/582))
+- Adds compression support to frontmatter api prop ([#606](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/606))
+- Unify tabs naming ([#612](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/612))
+- [Enhancement] Introduce new theme component names: ApiExplorer, CodeSnippets ([#577](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/577))
+- Use SchemaItem to render leaf discriminator properties/nodes ([#573](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/573))
+
 ## 2.0.0-beta.3 (May 5, 2023)
 
 High level enhancements

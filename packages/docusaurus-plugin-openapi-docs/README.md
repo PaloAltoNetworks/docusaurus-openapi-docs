@@ -22,7 +22,7 @@ The `docusaurus-plugin-openapi-docs` package extends the Docusaurus CLI with com
 
 Key Features:
 
-- **Compatible:** Works with Swagger 2.0 and OpenAPI 3.x.
+- **Compatible:** Works with Swagger 2.0 and OpenAPI 3.0.
 - **Fast:** Convert large OpenAPI specs into MDX docs in seconds. 🔥
 - **Stylish:** Based on the same [Infima styling framework](https://infima.dev/) that powers the Docusaurus UI.
 - **Capable:** Supports single, multi and _even micro_ OpenAPI specs.
