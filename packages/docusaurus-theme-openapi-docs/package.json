@@ -63,6 +63,7 @@
     "redux-devtools-extension": "^2.13.8",
     "rehype-raw": "^6.1.1",
     "sass": "^1.58.1",
+    "sass-loader": "^13.3.2",
     "webpack": "^5.61.0",
     "xml-formatter": "^2.6.1"
   },
