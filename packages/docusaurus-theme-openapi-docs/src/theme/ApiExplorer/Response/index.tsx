@@ -9,7 +9,6 @@ import React from "react";
 
 import { usePrismTheme } from "@docusaurus/theme-common";
 import { useDoc } from "@docusaurus/theme-common/internal";
-import { Loading } from "@nextui-org/react";
 import ApiCodeBlock from "@theme/ApiExplorer/ApiCodeBlock";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import SchemaTabs from "@theme/SchemaTabs";
@@ -133,9 +132,7 @@ function Response({ item }: { item: NonNullable<ApiItem> }) {
             </TabItem>
           </SchemaTabs>
         ) : prettyResponse === "Fetching..." ? (
-          <div className="openapi-explorer__loading-container">
-            <Loading color="success" />
-          </div>
+          <div className="openapi-explorer__loading-container">Loading...</div>
         ) : (
           <p className="openapi-explorer__response-placeholder-message">
             Click the <code>Send API Request</code> button above and see the
