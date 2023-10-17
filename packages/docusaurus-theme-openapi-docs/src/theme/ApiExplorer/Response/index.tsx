@@ -132,7 +132,14 @@ function Response({ item }: { item: NonNullable<ApiItem> }) {
             </TabItem>
           </SchemaTabs>
         ) : prettyResponse === "Fetching..." ? (
-          <div className="openapi-explorer__loading-container">Loading...</div>
+          <div className="openapi-explorer__loading-container">
+            <div className="openapi-response__lds-ring">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          </div>
         ) : (
           <p className="openapi-explorer__response-placeholder-message">
             Click the <code>Send API Request</code> button above and see the
