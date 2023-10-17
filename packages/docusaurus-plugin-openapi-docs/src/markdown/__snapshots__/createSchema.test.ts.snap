@@ -1,0 +1,98 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createNodes should create readable MODs for oneOf primitive properties 1`] = `
+Array [
+  "<SchemaItem collapsible={true} className={\\"schemaItem\\"}>
+  <details style={{}} className={\\"openapi-markdown__details\\"}>
+    <summary style={{}}>
+      <strong>oneOfProperty</strong>
+      <span style={{ opacity: \\"0.6\\" }}> object</span>
+    </summary>
+    <div style={{ marginLeft: \\"1rem\\" }}></div>
+    <div>
+      <span className={\\"badge badge--info\\"}>oneOf</span>
+      <SchemaTabs>
+        <TabItem label={\\"MOD1\\"} value={\\"0-item-properties\\"}>
+          <SchemaItem
+            collapsible={false}
+            name={\\"noseLength\\"}
+            required={true}
+            schemaName={\\"number\\"}
+            qualifierMessage={undefined}
+            schema={{ type: \\"number\\" }}
+          ></SchemaItem>
+        </TabItem>
+        <TabItem label={\\"MOD2\\"} value={\\"1-item-properties\\"}>
+          <li>
+            <div
+              style={{
+                fontSize: \\"var(--ifm-code-font-size)\\",
+                opacity: \\"0.6\\",
+                marginLeft: \\"-.5rem\\",
+                paddingBottom: \\".5rem\\",
+              }}
+            >
+              Array [
+            </div>
+          </li>
+          <div
+            style={{
+              marginTop: \\".5rem\\",
+              marginBottom: \\".5rem\\",
+              marginLeft: \\"1rem\\",
+            }}
+          >
+            string
+          </div>
+          <li>
+            <div
+              style={{
+                fontSize: \\"var(--ifm-code-font-size)\\",
+                opacity: \\"0.6\\",
+                marginLeft: \\"-.5rem\\",
+              }}
+            >
+              ]
+            </div>
+          </li>
+        </TabItem>
+        <TabItem label={\\"MOD3\\"} value={\\"2-item-properties\\"}>
+          <div
+            style={{
+              marginTop: \\".5rem\\",
+              marginBottom: \\".5rem\\",
+              marginLeft: \\"1rem\\",
+            }}
+          >
+            boolean
+          </div>
+        </TabItem>
+        <TabItem label={\\"MOD4\\"} value={\\"3-item-properties\\"}>
+          <div
+            style={{
+              marginTop: \\".5rem\\",
+              marginBottom: \\".5rem\\",
+              marginLeft: \\"1rem\\",
+            }}
+          >
+            number
+          </div>
+        </TabItem>
+        <TabItem label={\\"MOD5\\"} value={\\"4-item-properties\\"}>
+          <div
+            style={{
+              marginTop: \\".5rem\\",
+              marginBottom: \\".5rem\\",
+              marginLeft: \\"1rem\\",
+            }}
+          >
+            string
+          </div>
+        </TabItem>
+      </SchemaTabs>
+    </div>
+  </details>
+</SchemaItem>;
+",
+]
+`;

@@ -7,6 +7,7 @@
 
 import path from "path";
 
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { posixPath } from "@docusaurus/utils";
 
 import { readOpenapiFiles } from ".";
