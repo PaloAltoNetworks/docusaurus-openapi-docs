@@ -114,7 +114,6 @@ function Body({
       </FormItem>
     );
   }
-
   if (
     (contentType === "multipart/form-data" ||
       contentType === "application/x-www-form-urlencoded") &&
@@ -221,7 +220,10 @@ function Body({
   let exampleBody;
   let examplesBodies = [] as any;
 
-  if (contentType === "application/json" || contentType.endsWith("+json")) {
+  if (
+    contentType.includes("application/json") ||
+    contentType.endsWith("+json")
+  ) {
     if (jsonRequestBodyExample) {
       defaultBody = JSON.stringify(jsonRequestBodyExample, null, 2);
     }

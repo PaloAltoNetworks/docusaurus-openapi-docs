@@ -171,7 +171,18 @@ function createItems(
       }
 
       let jsonRequestBodyExample;
-      const body = operationObject.requestBody?.content?.["application/json"];
+      const content = operationObject.requestBody?.content;
+      let body;
+      for (let key in content) {
+        if (
+          key.toLowerCase() === "application/json" ||
+          key.toLowerCase() === "application/json; charset=utf-8"
+        ) {
+          body = content[key];
+          break;
+        }
+      }
+
       if (body?.schema) {
         jsonRequestBodyExample = sampleRequestFromSchema(body.schema);
       }
@@ -304,7 +315,18 @@ function createItems(
       }
 
       let jsonRequestBodyExample;
-      const body = operationObject.requestBody?.content?.["application/json"];
+      const content = operationObject.requestBody?.content;
+      let body;
+      for (let key in content) {
+        if (
+          key.toLowerCase() === "application/json" ||
+          key.toLowerCase() === "application/json; charset=utf-8"
+        ) {
+          body = content[key];
+          break;
+        }
+      }
+
       if (body?.schema) {
         jsonRequestBodyExample = sampleRequestFromSchema(body.schema);
       }
