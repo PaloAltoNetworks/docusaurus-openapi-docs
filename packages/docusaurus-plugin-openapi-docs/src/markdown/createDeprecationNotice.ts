@@ -24,7 +24,7 @@ export function createDeprecationNotice({
     createAdmonition({
       children:
         description ??
-        "This endpoint has been deprecated and may be removed in future versions of the API.",
+        "This endpoint has been deprecated and may be replaced or removed in future versions of the API.",
     })
   );
 }
