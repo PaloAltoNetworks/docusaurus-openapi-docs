@@ -70,12 +70,14 @@ function MethodEndpoint({ method, path }: Props) {
     <>
       <pre className="openapi__method-endpoint">
         <span className={"badge badge--" + colorForMethod(method)}>
-          {method.toUpperCase()}
+          {method === "event" ? "Webhook" : method.toUpperCase()}
         </span>{" "}
-        <h2 className="openapi__method-endpoint-path">
-          {renderServerUrl()}
-          {`${path.replace(/{([a-z0-9-_]+)}/gi, ":$1")}`}
-        </h2>
+        {method !== "event" && (
+          <h2 className="openapi__method-endpoint-path">
+            {renderServerUrl()}
+            {`${path.replace(/{([a-z0-9-_]+)}/gi, ":$1")}`}
+          </h2>
+        )}
       </pre>
       <div className="openapi__divider" />
     </>
