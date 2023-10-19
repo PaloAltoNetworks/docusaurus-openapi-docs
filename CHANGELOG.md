@@ -1,3 +1,9 @@
+## 1.2.10 (Oct 19, 2023)
+
+High level enhancements
+
+- Display the SlashID ORG ID placeholder when empty
+
 ## 1.2.9 (Nov 8, 2022)
 
 High level enhancements
