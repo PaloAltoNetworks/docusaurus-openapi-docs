@@ -72,7 +72,7 @@
     "start-server-and-test": "^1.14.0",
     "ts-jest": "^27.0.6",
     "ts-node": "^10.4.0",
-    "typescript": "^4.4.4"
+    "typescript": "5.2.2"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
@@ -81,6 +81,7 @@
     "node": ">=14"
   },
   "dependencies": {
-    "@slashid/slashid": "^1.6.1"
+    "@slashid/slashid": "^1.6.1",
+    "yalc": "^1.0.0-pre.53"
   }
 }
