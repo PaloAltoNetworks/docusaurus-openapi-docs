@@ -144,10 +144,15 @@ function createAdditionalProperties(schema: SchemaObject) {
   // }
 
   if (
+    //@ts-ignore
     schema.additionalProperties?.type === "string" ||
+    //@ts-ignore
     schema.additionalProperties?.type === "object" ||
+    //@ts-ignore
     schema.additionalProperties?.type === "boolean" ||
+    //@ts-ignore
     schema.additionalProperties?.type === "integer" ||
+    //@ts-ignore
     schema.additionalProperties?.type === "number"
   ) {
     const type = schema.additionalProperties?.type;

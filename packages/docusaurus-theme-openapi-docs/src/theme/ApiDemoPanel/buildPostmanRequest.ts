@@ -221,6 +221,20 @@ function buildPostmanRequest(
   clonedPostman.url.protocol = undefined;
   clonedPostman.url.host = [window.location.origin];
 
+  // add a placeholder value for SlashID-OrgID header param
+  const headerParamsWithPlaceholders = headerParams.map((param) => {
+    if (param.name === "SlashID-OrgID") {
+      if (!param.value) {
+        return {
+          ...param,
+          value: "<SLASHID_ORG_ID_VALUE>",
+        };
+      }
+    }
+
+    return param;
+  });
+
   if (server) {
     let url = server.url.replace(/\/$/, "");
     const variables = server.variables;
@@ -316,7 +330,7 @@ function buildPostmanRequest(
     contentType,
     accept,
     cookie,
-    headerParams,
+    headerParamsWithPlaceholders,
     otherHeaders
   );
 
