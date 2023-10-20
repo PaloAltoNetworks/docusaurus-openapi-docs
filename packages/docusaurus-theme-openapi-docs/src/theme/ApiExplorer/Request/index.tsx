@@ -173,7 +173,7 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
           )}
         </div>
         <div className="openapi-explorer__details-outer-container">
-          {showServerOptions && (
+          {showServerOptions && item.method !== "event" && (
             <details
               open={expandServer}
               className="openapi-explorer__details-container"
@@ -272,7 +272,7 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
               <Accept />
             </details>
           )}
-          {showRequestButton && (
+          {showRequestButton && item.method !== "event" && (
             <button className="openapi-explorer__request-btn" type="submit">
               Send API Request
             </button>

@@ -24,10 +24,12 @@ function ApiExplorer({
 
   return (
     <>
-      <CodeSnippets
-        postman={postman}
-        codeSamples={(item as any)["x-code-samples"] ?? []}
-      />
+      {item.method !== "event" && (
+        <CodeSnippets
+          postman={postman}
+          codeSamples={(item as any)["x-code-samples"] ?? []}
+        />
+      )}
       <Request item={item} />
       <Response item={item} />
     </>
