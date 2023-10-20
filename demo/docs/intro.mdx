@@ -50,15 +50,46 @@ Key Features:
 - **Compatible:** Works with Swagger 2.0 and OpenAPI 3.0.
 - **Fast:** Convert large OpenAPI specs into MDX docs in seconds. 🔥
 - **Stylish:** Based on the same [Infima styling framework](https://infima.dev/) that powers the Docusaurus UI.
-- **Capable:** Supports single, multi and _even micro_ OpenAPI specs.
+- **Flexible:** Supports single, multi and _even micro_ OpenAPI specs.
 
 ---
 
+## Compatibility Matrix
+
+| Docusaurus OpenAPI Docs | Docusaurus      |
+| ----------------------- | --------------- |
+| 1.x.x                   | `2.0.1 - 2.2.0` |
+| 2.x.x (beta)            | `2.3.0 - 2.4.0` |
+
+
 :::tip
-If you"re building a Docusaurus site from scratch the easiest way to get started is by [installing from template](#installing-from-template).
+If you"re building a Docusaurus site from scratch the easiest way to get started is by [installing from template](#bootstrapping-from-template-new-docusaurus-site).
 :::
 
-## Installation
+## Bootstrapping from Template (new Docusaurus site)
+
+Run the following to bootstrap a Docsaurus v2 site (classic theme) with `docusaurus-openapi-docs`:
+
+```bash
+npx create-docusaurus@2.2.0 my-website --package-manager yarn
+```
+
+> When prompted to select a template choose `Git repository`.
+
+Template Repository URL:
+
+```bash
+https://github.com/PaloAltoNetworks/docusaurus-template-openapi-docs.git
+```
+
+> When asked how the template repo should be cloned choose "copy" (unless you know better).
+
+```bash
+cd my-website
+yarn start
+```
+
+## Installation (existing Docusaurus site)
 
 :::note
 Both the plugin and theme are currently designed to pair with a specific Docusaurus release. The Docusaurus badge in the `README.md` and at the top of this page will always reflect the current compatible versions.
@@ -290,7 +321,7 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 
 | Name          | Type     | Default | Description                                                                                                                                          |
 | ------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------  |
-| `id`          | `string` | `null`  | A unique document id.                                                                                                                                |
+| `id`          | `string` | `null`  | A unique plugin id.                                                                                                                                |
 | `docsPluginId` | `string` | `null`  | The ID associated with the `plugin-content-docs` or `preset` instance used to render the OpenAPI docs (e.g. "your-plugin-id", "classic", "default"). |
 
 ### config
@@ -360,29 +391,6 @@ If a config option is not provided, its default markdown generator will be used.
 
 This config option is intended for advanced users who wish to highly customize the markdown content and layout of generated pages.
 :::
-
-## Installing from Template
-
-Run the following to bootstrap a Docsaurus v2 site (classic theme) with `docusaurus-openapi-docs`:
-
-```bash
-npx create-docusaurus@2.1.0 my-website --package-manager yarn
-```
-
-> When prompted to select a template choose `Git repository`.
-
-Template Repository URL:
-
-```bash
-https://github.com/PaloAltoNetworks/docusaurus-template-openapi-docs.git
-```
-
-> When asked how the template repo should be cloned choose "copy" (unless you know better).
-
-```bash
-cd my-website
-yarn start
-```
 
 ## Developer Quick Start
 
