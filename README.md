@@ -56,7 +56,7 @@ yarn add docusaurus-theme-openapi-docs
 | Docusaurus OpenAPI Docs | Docusaurus       |
 | ----------------------- | ---------------- |
 | 1.x.x                   | `>=2.0.1 <2.3.0` |
-| 2.x.x (beta)            | `>=2.3.0`        |
+| 2.x.x (beta)            | `>=2.3.0 <2.4.1` |
 
 ## Configuring `docusaurus.config.js` (Plugin and theme usage)
 
