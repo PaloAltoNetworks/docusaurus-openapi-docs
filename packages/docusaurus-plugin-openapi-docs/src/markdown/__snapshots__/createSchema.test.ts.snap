@@ -6,7 +6,7 @@ Array [
   <details style={{}} className={\\"openapi-markdown__details\\"}>
     <summary style={{}}>
       <strong>oneOfProperty</strong>
-      <span style={{ opacity: \\"0.6\\" }}> object</span>
+      <span style={{ opacity: \\"0.6\\" }}>object</span>
     </summary>
     <div style={{ marginLeft: \\"1rem\\" }}></div>
     <div>
