@@ -1,3 +1,19 @@
+## 2.0.0-beta.5 (Oct 23, 2023)
+
+High level enhancements
+
+- Extend charset support for application/json
+- Improve webhook API page layout
+
+Other enhancements and bug fixes
+
+- Improve webhook layout ([#646](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/646))
+- update deprecation message ([#644](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/644))
+- allow charset support for application/json ([#643](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/643))
+- Reuse `createAnyOneOf` while creating a property ([#628](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/628))
+- Use `sass-loader` module as dependency ([#639](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/639))
+- Remove react nextui dependency in v2.0.0 ([#641](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/641))
+
 ## 2.0.0-beta.4 (Sep 29, 2023)
 
 High level enhancements
