@@ -55,7 +55,7 @@
     "xml-formatter": "^2.6.1"
   },
   "peerDependencies": {
-    "react": "^16.8.4 || ^17.0.0"
+    "react": "^16.8.4 || ^17.0.0 || ^18.0.0"
   },
   "engines": {
     "node": ">=14"
