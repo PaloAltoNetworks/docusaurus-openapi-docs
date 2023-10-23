@@ -1418,7 +1418,7 @@
     utility-types "^3.10.0"
     webpack "^5.73.0"
 
-"@docusaurus/plugin-content-docs@2.4.0", "@docusaurus/plugin-content-docs@>=2.3.0 <2.5.0":
+"@docusaurus/plugin-content-docs@2.4.0", "@docusaurus/plugin-content-docs@>=2.3.0 <2.4.1":
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/@docusaurus/plugin-content-docs/-/plugin-content-docs-2.4.0.tgz#36e235adf902325735b873b4f535205884363728"
   integrity sha512-ic/Z/ZN5Rk/RQo+Io6rUGpToOtNbtPloMR2JcGwC1xT2riMu6zzfSwmBi9tHJgdXH6CB5jG+0dOZZO8QS5tmDg==
@@ -1569,7 +1569,7 @@
     tslib "^2.4.0"
     utility-types "^3.10.0"
 
-"@docusaurus/theme-common@2.4.0", "@docusaurus/theme-common@>=2.3.0 <2.5.0":
+"@docusaurus/theme-common@2.4.0", "@docusaurus/theme-common@>=2.3.0 <2.4.1":
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/@docusaurus/theme-common/-/theme-common-2.4.0.tgz#626096fe9552d240a2115b492c7e12099070cf2d"
   integrity sha512-IkG/l5f/FLY6cBIxtPmFnxpuPzc5TupuqlOx+XDN+035MdQcAh8wHXXZJAkTeYDeZ3anIUSUIvWa7/nRKoQEfg==
@@ -1621,7 +1621,7 @@
     fs-extra "^10.1.0"
     tslib "^2.4.0"
 
-"@docusaurus/types@2.4.0", "@docusaurus/types@>=2.3.0 <2.5.0":
+"@docusaurus/types@2.4.0", "@docusaurus/types@>=2.3.0 <2.4.1":
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/@docusaurus/types/-/types-2.4.0.tgz#f94f89a0253778b617c5d40ac6f16b17ec55ce41"
   integrity sha512-xaBXr+KIPDkIaef06c+i2HeTqVNixB7yFut5fBXPGI2f1rrmEV2vLMznNGsFwvZ5XmA3Quuefd4OGRkdo97Dhw==
@@ -1642,7 +1642,7 @@
   dependencies:
     tslib "^2.4.0"
 
-"@docusaurus/utils-validation@2.4.0", "@docusaurus/utils-validation@>=2.3.0 <2.5.0":
+"@docusaurus/utils-validation@2.4.0", "@docusaurus/utils-validation@>=2.3.0 <2.4.1":
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/@docusaurus/utils-validation/-/utils-validation-2.4.0.tgz#1ed92bfab5da321c4a4d99cad28a15627091aa90"
   integrity sha512-IrBsBbbAp6y7mZdJx4S4pIA7dUyWSA0GNosPk6ZJ0fX3uYIEQgcQSGIgTeSC+8xPEx3c16o03en1jSDpgQgz/w==
@@ -1653,7 +1653,7 @@
     js-yaml "^4.1.0"
     tslib "^2.4.0"
 
-"@docusaurus/utils@2.4.0", "@docusaurus/utils@>=2.3.0 <2.5.0":
+"@docusaurus/utils@2.4.0", "@docusaurus/utils@>=2.3.0 <2.4.1":
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/@docusaurus/utils/-/utils-2.4.0.tgz#fdf0c3545819e48bb57eafc5057495fd4d50e900"
   integrity sha512-89hLYkvtRX92j+C+ERYTuSUK6nF9bGM32QThcHPg2EDDHVw6FzYQXmX6/p+pU5SDyyx5nBlE4qXR92RxCAOqfg==
