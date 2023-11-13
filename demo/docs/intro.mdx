@@ -50,15 +50,46 @@ Key Features:
 - **Compatible:** Works with Swagger 2.0 and OpenAPI 3.0.
 - **Fast:** Convert large OpenAPI specs into MDX docs in seconds. 🔥
 - **Stylish:** Based on the same [Infima styling framework](https://infima.dev/) that powers the Docusaurus UI.
-- **Capable:** Supports single, multi and _even micro_ OpenAPI specs.
+- **Flexible:** Supports single, multi and _even micro_ OpenAPI specs.
 
 ---
 
+## Compatibility Matrix
+
+| Docusaurus OpenAPI Docs | Docusaurus      |
+| ----------------------- | --------------- |
+| 2.0.x (current)         | `2.4.1 - 2.4.3` |
+| 1.7.3 (legacy)          | `2.0.1 - 2.2.0` |
+
+
 :::tip
-If you"re building a Docusaurus site from scratch the easiest way to get started is by [installing from template](#installing-from-template).
+If you"re building a Docusaurus site from scratch the easiest way to get started is by [installing from template](#bootstrapping-from-template-new-docusaurus-site).
 :::
 
-## Installation
+## Bootstrapping from Template (new Docusaurus site)
+
+Run the following to bootstrap a Docsaurus v2 site (classic theme) with `docusaurus-openapi-docs`:
+
+```bash
+npx create-docusaurus@2.4.3 my-website --package-manager yarn
+```
+
+> When prompted to select a template choose `Git repository`.
+
+Template Repository URL:
+
+```bash
+https://github.com/PaloAltoNetworks/docusaurus-template-openapi-docs.git
+```
+
+> When asked how the template repo should be cloned choose "copy" (unless you know better).
+
+```bash
+cd my-website
+yarn start
+```
+
+## Installation (existing Docusaurus site)
 
 :::note
 Both the plugin and theme are currently designed to pair with a specific Docusaurus release. The Docusaurus badge in the `README.md` and at the top of this page will always reflect the current compatible versions.
@@ -114,7 +145,7 @@ plugins: [
 To use the theme you"ll need to define it under `themes` in `docusaurus.config.js`:
 
 ```javascript title="docusaurus-theme-openapi-docs"
-themes: ["docusaurus-theme-openapi-docs"] // exports ApiItem and ApiExplorer
+themes: ["docusaurus-theme-openapi-docs"] // exports ApiItem and ApiDemoPanel
 ```
 
 Finally, you"ll need to replace `@theme/DocItem` with `@theme/ApiItem` as your `docItemComponent`. Where you do this will depend on whether you are using `@docusaurus/preset-classic` or a standalone `@docusaurus/plugin-content-docs` to render your docs (see examples below).
@@ -283,27 +314,28 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 
 | Name          | Type     | Default | Description                                                                                                                                          |
 | ------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------  |
-| `id`          | `string` | `null`  | A unique document id.                                                                                                                                |
+| `id`          | `string` | `null`  | A unique plugin id.                                                                                                                                |
 | `docsPluginId` | `string` | `null`  | The ID associated with the `plugin-content-docs` or `preset` instance used to render the OpenAPI docs (e.g. "your-plugin-id", "classic", "default"). |
 
 ### config
 
 `config` can be configured with the following options:
 
-| Name             | Type     | Default | Description                                                                                                                 |
-| ---------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `specPath`       | `string` | `null`  | Designated URL or path to the source of an OpenAPI specification file or directory of multiple OpenAPI specification files. |
-| `ouputDir`       | `string` | `null`  | Desired output path for generated MDX files.                                                                                |
-| `proxy`          | `string` | `null`  | _Optional:_ Proxy URL to prepend to base URL when performing API requests from browser.                                     |                                                                               
-| `template`       | `string` | `null`  | _Optional:_ Customize MDX content with a desired template.                                                                  |
-| `downloadUrl`    | `string` | `null`  | _Optional:_ Designated URL for downloading OpenAPI specification. (requires `info` section/doc)                             |
-| `hideSendButton` | `boolean`| `null`  | _Optional:_ If set to `true`, hides the "Send API Request" button in API demo panel.                                        |
-| `showExtensions` | `boolean`| `null`  | _Optional:_ If set to `true`, renders operation-level vendor-extensions in description.                                    |
-| `sidebarOptions` | `object` | `null`  | _Optional:_ Set of options for sidebar configuration. See below for a list of supported options.                            |
-| `version`        | `string` | `null`  | _Optional:_ Version assigned to single or micro-spec API specified in `specPath`.                                           |
-| `label`          | `string` | `null`  | _Optional:_ Version label used when generating version selector dropdown menu.                                              |
-| `baseUrl`        | `string` | `null`  | _Optional:_ Version base URL used when generating version selector dropdown menu.                                           |
-| `versions`       | `object` | `null`  | _Optional:_ Set of options for versioning configuration. See below for a list of supported options.                         |
+| Name                 | Type     | Default | Description                                                                                                                              |
+| -------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `specPath`           | `string` | `null`  | Designated URL or path to the source of an OpenAPI specification file or directory of multiple OpenAPI specification files.              |
+| `ouputDir`           | `string` | `null`  | Desired output path for generated MDX files.                                                                                             |
+| `proxy`              | `string` | `null`  | _Optional:_ Proxy URL to prepend to base URL when performing API requests from browser.                                                  |                                                                               
+| `template`           | `string` | `null`  | _Optional:_ Customize MDX content with a desired template.                                                                               |
+| `downloadUrl`        | `string` | `null`  | _Optional:_ Designated URL for downloading OpenAPI specification. (requires `info` section/doc)                                          |
+| `hideSendButton`     | `boolean`| `null`  | _Optional:_ If set to `true`, hides the "Send API Request" button in API demo panel.                                                     |
+| `showExtensions`     | `boolean`| `null`  | _Optional:_ If set to `true`, renders operation-level vendor-extensions in description.                                                  |
+| `sidebarOptions`     | `object` | `null`  | _Optional:_ Set of options for sidebar configuration. See below for a list of supported options.                                         |
+| `version`            | `string` | `null`  | _Optional:_ Version assigned to single or micro-spec API specified in `specPath`.                                                        |
+| `label`              | `string` | `null`  | _Optional:_ Version label used when generating version selector dropdown menu.                                                           |
+| `baseUrl`            | `string` | `null`  | _Optional:_ Version base URL used when generating version selector dropdown menu.                                                        |
+| `versions`           | `object` | `null`  | _Optional:_ Set of options for versioning configuration. See below for a list of supported options.                                      |
+| `markdownGenerators` | `object` | `null`  | _Optional:_ Customize MDX content with a set of options for specifying markdown generator functions. See below for a list of supported options. |
 
 ### sidebarOptions
 
@@ -313,7 +345,7 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 | Name                 | Type      | Default | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | -------------------- | --------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `groupPathsBy`       | `string`  | `null`  | Organize and group sidebar slice by specified option. Note: Currently, `groupPathsBy` only contains support for grouping by `tag`.                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| `categoryLinkSource` | `string`  | `null`  | Defines what source to use for rendering category pages when grouping paths by tag. By default, pages are not created for categories, only groups that can be expanded/collapsed. <br/><br/>The supported options are as follows: <br/><br/>  `auto`: Sets the category link config type to `generated-index`, building an index page with links to each page in the group.<br/><br/> `tag`: Sets the category link config type to `generated-index` and uses the tag description at the top of the page. <br/><br/>`info`: Sets the category link config type to `doc` and renders the `info` section as the category link (recommended only for multi/micro-spec scenarios). |
+| `categoryLinkSource` | `string`  | `null`  | Defines what source to use for rendering category link pages when grouping paths by tag. <br/><br/>The supported options are as follows: <br/><br/> `tag`: Sets the category link config type to `generated-index` and uses the tag description as the link config description. <br/><br/>`info`: Sets the category link config type to `doc` and renders the `info` section as the category link (recommended only for multi/micro-spec scenarios). <br/><br/>`none`: Does not create pages for categories, only groups that can be expanded/collapsed. |
 | `sidebarCollapsible` | `boolean` | `true`  | Whether sidebar categories are collapsible by default.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | `sidebarCollapsed`   | `boolean` | `true`  | Whether sidebar categories are collapsed by default.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | `customProps`        | `object`  | `null`  | Additional props for customizing a sidebar item.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
@@ -337,28 +369,21 @@ You may optionally configure a `sidebarOptions`. In doing so, an individual `sid
 All versions will automatically inherit `sidebarOptions` from the parent/base config.
 :::
 
-## Installing from Template
+### markdownGenerators
 
-Run the following to bootstrap a Docsaurus v2 site (classic theme) with `docusaurus-openapi-docs`:
+`markdownGenerators` can be configured with the following options:
 
-```bash
-npx create-docusaurus@2.1.0 my-website --package-manager yarn
-```
+| Name                 | Type      | Default | Description                                                                                                                    |
+| ------------------ | ---------- | ------- | --------------------------------------------------------------------------------------------------------------------------------|
+| `createApiPageMD`  | `function` | `null`  | _Optional:_ Returns a string of the raw markdown body for API pages.<br/><br/>**Function type:** `(pageData: ApiPageMetadata) => string`   |
+| `createInfoPageMD` | `function` | `null`  | _Optional:_ Returns a string of the raw markdown body for info pages.<br/><br/>**Function type:** `(pageData: InfoPageMetadata) => string` |
+| `createTagPageMD`  | `function` | `null`  | _Optional:_ Returns a string of the raw markdown body for tag pages.<br/><br/>**Function type:** `(pageData: TagPageMetadata) => string`   |
 
-> When prompted to select a template choose `Git repository`.
+:::info NOTE
+If a config option is not provided, its default markdown generator will be used. 
 
-Template Repository URL:
-
-```bash
-https://github.com/PaloAltoNetworks/docusaurus-template-openapi-docs.git
-```
-
-> When asked how the template repo should be cloned choose "copy" (unless you know better).
-
-```bash
-cd my-website
-yarn start
-```
+This config option is intended for advanced users who wish to highly customize the markdown content and layout of generated pages.
+:::
 
 ## Developer Quick Start
 

@@ -1,3 +1,17 @@
+## 2.0.0 (Nov 13, 2023)
+
+High level enhancements
+
+- First v2.0.0 stable release!
+
+> Currently only compatible with Docusaurus v2.4.1 -> v2.4.3
+
+Other enhancements and bug fixes
+
+- upgrade to react 18 and demo docusaurus to 2.4.3 ([#656](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/656))
+- allow upgrade to react 18 ([#651](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/651))
+- stop docusaurus support at v2.4.0 ([#650](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/650))
+
 ## 2.0.0-beta.5 (Oct 23, 2023)
 
 High level enhancements

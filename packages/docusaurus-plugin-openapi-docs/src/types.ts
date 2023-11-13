@@ -43,6 +43,13 @@ export interface APIOptions {
     [key: string]: APIVersionOptions;
   };
   proxy?: string;
+  markdownGenerators?: MarkdownGenerator;
+}
+
+export interface MarkdownGenerator {
+  createApiPageMD?: (pageData: ApiPageMetadata) => string;
+  createInfoPageMD?: (pageData: InfoPageMetadata) => string;
+  createTagPageMD?: (pageData: TagPageMetadata) => string;
 }
 
 export interface SidebarOptions {

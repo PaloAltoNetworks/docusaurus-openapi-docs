@@ -197,7 +197,7 @@ const config = {
       announcementBar: {
         id: "announcementBar_1",
         content:
-          "🥳 Support for Docusaurus v2.3.0 is now available in v2.0.0-beta. See badges/releases for latest beta release.",
+          "🥳 First v2.0.0 stable release! Currently only compatible with Docusaurus v2.4.1 -> v2.4.3",
       },
     }),
 

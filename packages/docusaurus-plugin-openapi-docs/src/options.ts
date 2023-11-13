@@ -15,6 +15,12 @@ const sidebarOptions = Joi.object({
   sidebarCollapsed: Joi.boolean(),
 });
 
+const markdownGenerators = Joi.object({
+  createApiPageMD: Joi.function(),
+  createInfoPageMD: Joi.function(),
+  createTagPageMD: Joi.function(),
+});
+
 export const OptionsSchema = Joi.object({
   id: Joi.string().required(),
   docsPluginId: Joi.string().required(),
@@ -30,6 +36,7 @@ export const OptionsSchema = Joi.object({
         hideSendButton: Joi.boolean(),
         showExtensions: Joi.boolean(),
         sidebarOptions: sidebarOptions,
+        markdownGenerators: markdownGenerators,
         version: Joi.string().when("versions", {
           is: Joi.exist(),
           then: Joi.required(),

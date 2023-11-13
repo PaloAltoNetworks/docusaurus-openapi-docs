@@ -10,16 +10,17 @@ description: Configuring language tabs for the API Demo Panel.
 
 The Docusaurus OpenAPI docs plugin comes with support for 8 languages which you can render as code snippets on an API operation page. The languages currently supported are:
 
-| Language | Prism Highlighter | Variants                                         |
-| -------- | ----------------- | ------------------------------------------------ |
-| `curl`   | bash              | `curl`\*                                         |
-| `python` | python            | `requests`\*, `http.client`                      |
-| `go`     | go                | `native`\*                                       |
-| `nodejs` | javascript        | `axios`\*, `native`, `requests`, `unirest`       |
-| `ruby`   | ruby              | `net::http`\*                                    |
-| `csharp` | csharp            | `restsharp`\*, `httpclient`                      |
-| `php`    | php               | `curl`\*, `guzzle`, `pecl_http`, `http_request2` |
-| `java`   | java              | `okhttp`\*, `unirest`                            |
+| Language     | Prism Highlighter | Variants                                         |
+| ------------ | ----------------- | ------------------------------------------------ |
+| `curl`       | bash              | `curl`\*                                         |
+| `python`     | python            | `requests`\*, `http.client`                      |
+| `go`         | go                | `native`\*                                       |
+| `nodejs`     | javascript        | `axios`\*, `native`, `requests`, `unirest`       |
+| `ruby`       | ruby              | `net::http`\*                                    |
+| `csharp`     | csharp            | `restsharp`\*, `httpclient`                      |
+| `php`        | php               | `curl`\*, `guzzle`, `pecl_http`, `http_request2` |
+| `java`       | java              | `okhttp`\*, `unirest`                            |
+| `powershell` | powershell        | `RestMethod`\*                                   |
 
 \* Default variant
 
@@ -60,6 +61,7 @@ The demo site disables the `ruby` and `php` languages using the following `langu
           highlight: "python",
           language: "python",
           logoClass: "python",
+          variant: "requests",
         },
         {
           highlight: "go",
@@ -70,26 +72,34 @@ The demo site disables the `ruby` and `php` languages using the following `langu
           highlight: "javascript",
           language: "nodejs",
           logoClass: "nodejs",
+          variant: "axios",
         },
-        // {
-        //   highlight: "ruby",
-        //   language: "ruby",
-        //   logoClass: "ruby",
-        // },
+        {
+          highlight: "ruby",
+          language: "ruby",
+          logoClass: "ruby",
+        },
         {
           highlight: "csharp",
           language: "csharp",
           logoClass: "csharp",
+          variant: "httpclient",
         },
-        // {
-        //   highlight: "php",
-        //   language: "php",
-        //   logoClass: "php",
-        // },
+        {
+          highlight: "php",
+          language: "php",
+          logoClass: "php",
+        },
         {
           highlight: "java",
           language: "java",
           logoClass: "java",
+          variant: "unirest",
+        },
+        {
+          highlight: "powershell",
+          language: "powershell",
+          logoClass: "powershell",
         },
       ],
 ```
