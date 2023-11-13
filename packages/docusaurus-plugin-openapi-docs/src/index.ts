@@ -92,8 +92,14 @@ export default function pluginOpenAPIDocs(
   let docPath = docData ? (docData.path ? docData.path : "docs") : undefined;
 
   async function generateApiDocs(options: APIOptions, pluginId: any) {
-    let { specPath, outputDir, template, downloadUrl, sidebarOptions } =
-      options;
+    let {
+      specPath,
+      outputDir,
+      template,
+      markdownGenerators,
+      downloadUrl,
+      sidebarOptions,
+    } = options;
 
     // Remove trailing slash before proceeding
     outputDir = outputDir.replace(/\/$/, "");
@@ -238,12 +244,26 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
 \`\`\`
       `;
 
+      const apiPageGenerator =
+        markdownGenerators?.createApiPageMD ?? createApiPageMD;
+      const infoPageGenerator =
+        markdownGenerators?.createInfoPageMD ?? createInfoPageMD;
+      const tagPageGenerator =
+        markdownGenerators?.createTagPageMD ?? createTagPageMD;
+
       loadedApi.map(async (item) => {
         if (item.type === "info") {
           if (downloadUrl && isURL(downloadUrl)) {
             item.downloadUrl = downloadUrl;
           }
         }
+        const markdown =
+          item.type === "api"
+            ? apiPageGenerator(item)
+            : item.type === "info"
+            ? infoPageGenerator(item)
+            : tagPageGenerator(item);
+        item.markdown = markdown;
         if (item.type === "api") {
           // opportunity to compress JSON
           // const serialize = (o: any) => {
@@ -263,13 +283,6 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
           }
           if (item.infoId) item.infoPath = infoBasePath;
         }
-        const markdown =
-          item.type === "api"
-            ? createApiPageMD(item)
-            : item.type === "info"
-            ? createInfoPageMD(item)
-            : createTagPageMD(item);
-        item.markdown = markdown;
 
         const view = render(mdTemplate, item);
         const utils = render(infoMdTemplate, item);
