@@ -19,54 +19,54 @@ The demo site uses the following CSS to add coloured labels to each request incl
 ```css
 /* API Menu Items */
 .api-method > .menu__link {
-  align-items: center;
-  justify-content: start;
+  align-items: center;
+  justify-content: start;
 }
 
 .api-method > .menu__link::before {
-  width: 50px;
-  height: 20px;
-  font-size: 12px;
-  line-height: 20px;
-  text-transform: uppercase;
-  font-weight: 600;
-  border-radius: 0.25rem;
-  border: 1px solid;
-  margin-right: var(--ifm-spacing-horizontal);
-  text-align: center;
-  flex-shrink: 0;
-  border-color: transparent;
-  color: white;
+  width: 50px;
+  height: 20px;
+  font-size: 12px;
+  line-height: 20px;
+  text-transform: uppercase;
+  font-weight: 600;
+  border-radius: 0.25rem;
+  border: 1px solid;
+  margin-right: var(--ifm-spacing-horizontal);
+  text-align: center;
+  flex-shrink: 0;
+  border-color: transparent;
+  color: white;
 }
 
 .get > .menu__link::before {
-  content: "get";
-  background-color: var(--ifm-color-primary);
+  content: "get";
+  background-color: var(--ifm-color-primary);
 }
 
 .post > .menu__link::before {
-  content: "post";
-  background-color: var(--openapi-code-green);
+  content: "post";
+  background-color: var(--openapi-code-green);
 }
 
 .delete > .menu__link::before {
-  content: "del";
-  background-color: var(--openapi-code-red);
+  content: "del";
+  background-color: var(--openapi-code-red);
 }
 
 .put > .menu__link::before {
-  content: "put";
-  background-color: var(--openapi-code-blue);
+  content: "put";
+  background-color: var(--openapi-code-blue);
 }
 
 .patch > .menu__link::before {
-  content: "patch";
-  background-color: var(--openapi-code-orange);
+  content: "patch";
+  background-color: var(--openapi-code-orange);
 }
 
 .head > .menu__link::before {
-  content: "head";
-  background-color: var(--ifm-color-secondary-darkest);
+  content: "head";
+  background-color: var(--ifm-color-secondary-darkest);
 }
 ```
 
