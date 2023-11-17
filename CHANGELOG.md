@@ -1,3 +1,20 @@
+## 3.0.0-beta.1 (Nov 17, 2023)
+
+High level enhancements
+
+- First beta release for v3.0.0
+
+Other enhancements and bug fixes
+
+- update v2.0.0 refs to v3.0.0
+- update createSchema snapshot
+- support v3.0.0 canary releases
+- bump version to 3.0.0-beta.0
+- re-enable all API docs
+- convert contact info to markdown, update lessThan regex and escape description
+- initial refactor
+- Update README.md
+
 ## 2.0.0 (Nov 13, 2023)
 
 High level enhancements
