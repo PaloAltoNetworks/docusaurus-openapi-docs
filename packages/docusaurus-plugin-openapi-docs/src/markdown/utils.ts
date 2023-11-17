@@ -14,10 +14,14 @@ export function create(tag: string, props: Props): string {
 
   let propString = "";
   for (const [key, value] of Object.entries(rest)) {
-    propString += ` ${key}={${JSON.stringify(value)}}`;
+    propString += `\n  ${key}={${JSON.stringify(value)}}`;
   }
+  propString += propString ? "\n" : "";
 
-  return `<${tag}${propString}>${render(children)}</${tag}>`;
+  let indentedChildren = render(children).replace(/^/gm, "  ");
+  indentedChildren += indentedChildren ? "\n" : "";
+  console.log(indentedChildren);
+  return `<${tag}${propString}>\n${indentedChildren}</${tag}>`;
 }
 
 export function guard<T>(

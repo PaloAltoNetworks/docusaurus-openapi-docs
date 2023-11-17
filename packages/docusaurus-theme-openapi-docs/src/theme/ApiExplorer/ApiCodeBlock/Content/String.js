@@ -21,7 +21,7 @@ import ExpandButton from "@theme/ApiExplorer/ApiCodeBlock/ExpandButton";
 import Line from "@theme/ApiExplorer/ApiCodeBlock/Line";
 import WordWrapButton from "@theme/ApiExplorer/ApiCodeBlock/WordWrapButton";
 import clsx from "clsx";
-import Highlight, { defaultProps } from "prism-react-renderer";
+import { Highlight } from "prism-react-renderer";
 
 export default function CodeBlockString({
   children,
@@ -65,7 +65,7 @@ export default function CodeBlockString({
       )}
       <div className="openapi-explorer__code-block-content">
         <Highlight
-          {...defaultProps}
+          // {...defaultProps}
           theme={prismTheme}
           code={code}
           language={language ?? "text"}

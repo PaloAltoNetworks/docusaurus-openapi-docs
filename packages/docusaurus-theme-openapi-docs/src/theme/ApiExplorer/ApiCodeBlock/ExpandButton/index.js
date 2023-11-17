@@ -14,7 +14,7 @@ import CopyButton from "@theme/ApiExplorer/ApiCodeBlock/CopyButton";
 import ExitButton from "@theme/ApiExplorer/ApiCodeBlock/ExitButton";
 import Line from "@theme/ApiExplorer/ApiCodeBlock/Line";
 import clsx from "clsx";
-import Highlight, { defaultProps } from "prism-react-renderer";
+import { Highlight } from "prism-react-renderer";
 import Modal from "react-modal";
 
 export default function ExpandButton({
@@ -102,7 +102,7 @@ export default function ExpandButton({
           )}
           <div className="openapi-explorer__code-block-content">
             <Highlight
-              {...defaultProps}
+              // {...defaultProps}
               theme={prismTheme}
               code={code}
               language={language ?? "text"}

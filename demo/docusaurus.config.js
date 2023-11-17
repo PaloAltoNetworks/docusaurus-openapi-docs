@@ -25,7 +25,7 @@ const config = {
           sidebarPath: require.resolve("./sidebars.js"),
           editUrl:
             "https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/tree/main/demo",
-          docLayoutComponent: "@theme/DocPage",
+          // docRootComponent: "@theme/DocPage",
           docItemComponent: "@theme/ApiItem", // Derived from docusaurus-theme-openapi
         },
         blog: false,
@@ -269,12 +269,6 @@ const config = {
 };
 
 async function createConfig() {
-  const lightTheme = (await import("./src/utils/prismLight.mjs")).default;
-  const darkTheme = (await import("./src/utils/prismDark.mjs")).default;
-  // @ts-expect-error: we know it exists, right
-  config.themeConfig.prism.theme = lightTheme;
-  // @ts-expect-error: we know it exists, right
-  config.themeConfig.prism.darkTheme = darkTheme;
   return config;
 }
 
