@@ -3,7 +3,7 @@ name: Release Beta
 on:
   push:
     branches:
-      - v2.0.0
+      - v3.0.0
 
 env:
   FORCE_COLOR: true
