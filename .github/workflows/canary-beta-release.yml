@@ -3,7 +3,7 @@ name: Canary Beta Release
 on:
   push:
     branches:
-      - v2.0.0
+      - v3.0.0
     paths:
       - packages/**
 
@@ -14,7 +14,7 @@ jobs:
   publish-canary:
     name: Publish Canary Beta
     runs-on: ubuntu-latest
-    if: ${{ github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' && github.ref == 'refs/heads/v2.0.0' && github.event_name == 'push' }}
+    if: ${{ github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' && github.ref == 'refs/heads/v3.0.0' && github.event_name == 'push' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -30,7 +30,7 @@ jobs:
           git config --global user.name "Steven Serrata"
           git config --global user.email "sserrata@paloaltonetworks.com"
           git fetch
-          git checkout v2.0.0
+          git checkout v3.0.0
           echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" >> .npmrc
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
