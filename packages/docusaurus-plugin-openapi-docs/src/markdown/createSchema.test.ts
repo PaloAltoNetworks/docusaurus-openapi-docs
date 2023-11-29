@@ -48,7 +48,7 @@ describe("createNodes", () => {
       },
     };
     expect(
-      createNodes(schema).map((md: any) =>
+      createNodes(schema, "request").map((md: any) =>
         prettier.format(md, { parser: "babel" })
       )
     ).toMatchSnapshot();

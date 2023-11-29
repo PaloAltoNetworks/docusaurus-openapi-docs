@@ -20,6 +20,8 @@ import { create, guard } from "./utils";
 
 const jsonSchemaMergeAllOf = require("json-schema-merge-allof");
 
+let SCHEMA_TYPE: "request" | "response";
+
 /**
  * Returns a merged representation of allOf array of schemas.
  */
@@ -27,6 +29,9 @@ export function mergeAllOf(allOf: SchemaObject[]) {
   const mergedSchemas = jsonSchemaMergeAllOf(allOf, {
     resolvers: {
       readOnly: function () {
+        return true;
+      },
+      writeOnly: function () {
         return true;
       },
       example: function () {
@@ -74,7 +79,7 @@ function createAnyOneOf(schema: SchemaObject): any {
           }
 
           if (anyOneSchema.allOf !== undefined) {
-            anyOneChildren.push(createNodes(anyOneSchema));
+            anyOneChildren.push(createNodes(anyOneSchema, SCHEMA_TYPE));
             delete anyOneSchema.allOf;
           }
 
@@ -89,7 +94,7 @@ function createAnyOneOf(schema: SchemaObject): any {
             anyOneSchema.type === "integer" ||
             anyOneSchema.type === "boolean"
           ) {
-            anyOneChildren.push(createNodes(anyOneSchema));
+            anyOneChildren.push(createNodes(anyOneSchema, SCHEMA_TYPE));
           }
           if (anyOneChildren.length) {
             if (schema.type === "array") {
@@ -304,7 +309,7 @@ function createItems(schema: SchemaObject) {
   ) {
     return [
       createOpeningArrayBracket(),
-      createNodes(schema.items),
+      createNodes(schema.items, SCHEMA_TYPE),
       createClosingArrayBracket(),
     ].flat();
   }
@@ -411,7 +416,7 @@ function createDetailsNode(
                   children: createDescription(description),
                 })
               ),
-              createNodes(schema),
+              createNodes(schema, SCHEMA_TYPE),
             ],
           }),
         ],
@@ -565,7 +570,7 @@ function createPropertyDiscriminator(
               // className: "openapi-tabs__discriminator-item",
               label: label,
               value: `${index}-item-discriminator`,
-              children: [createNodes(discriminator?.mapping[key])],
+              children: [createNodes(discriminator?.mapping[key], SCHEMA_TYPE)],
             });
           }),
         }),
@@ -664,8 +669,16 @@ function createEdges({
       );
     }
 
-    if (mergedSchemas.readOnly && mergedSchemas.readOnly === true) {
-      return undefined;
+    if (SCHEMA_TYPE === "request") {
+      if (mergedSchemas.readOnly && mergedSchemas.readOnly === true) {
+        return undefined;
+      }
+    }
+
+    if (SCHEMA_TYPE === "response") {
+      if (mergedSchemas.writeOnly && mergedSchemas.writeOnly === true) {
+        return undefined;
+      }
     }
 
     return create("SchemaItem", {
@@ -719,8 +732,16 @@ function createEdges({
     );
   }
 
-  if (schema.readOnly && schema.readOnly === true) {
-    return undefined;
+  if (SCHEMA_TYPE === "request") {
+    if (schema.readOnly && schema.readOnly === true) {
+      return undefined;
+    }
+  }
+
+  if (SCHEMA_TYPE === "response") {
+    if (schema.writeOnly && schema.writeOnly === true) {
+      return undefined;
+    }
   }
 
   // primitives and array of non-objects
@@ -737,7 +758,11 @@ function createEdges({
 /**
  * Creates a hierarchical level of a schema tree. Nodes produce edges that can branch into sub-nodes with edges, recursively.
  */
-export function createNodes(schema: SchemaObject): any {
+export function createNodes(
+  schema: SchemaObject,
+  schemaType: "request" | "response"
+): any {
+  SCHEMA_TYPE = schemaType;
   const nodes = [];
   // if (schema.discriminator !== undefined) {
   //   return createDiscriminator(schema);
