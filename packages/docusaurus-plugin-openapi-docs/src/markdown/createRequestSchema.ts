@@ -90,7 +90,7 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
                 }),
                 create("ul", {
                   style: { marginLeft: "1rem" },
-                  children: createNodes(firstBody),
+                  children: createNodes(firstBody, "request"),
                 }),
               ],
             }),
@@ -161,7 +161,7 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
               }),
               create("ul", {
                 style: { marginLeft: "1rem" },
-                children: createNodes(firstBody),
+                children: createNodes(firstBody, "request"),
               }),
             ],
           }),
