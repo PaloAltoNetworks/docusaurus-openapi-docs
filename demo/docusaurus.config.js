@@ -228,8 +228,9 @@ const config = {
             },
           },
           petstore: {
-            specPath: "examples/petstore.yaml",
-            proxy: "https://cors.pan.dev",
+            specPath:
+              "https://raw.githubusercontent.com/APIs-guru/openapi-directory/780ef441b8d6134229c8b8ef75eb3ec8a0218e7f/APIs/pdfblocks.com/1.5.0/openapi.yaml",
+            // proxy: "https://crossorigin.me",
             outputDir: "docs/petstore",
             sidebarOptions: {
               groupPathsBy: "tag",
