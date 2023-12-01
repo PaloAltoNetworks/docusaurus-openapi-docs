@@ -1,3 +1,9 @@
+## 3.0.0-beta.2 (Dec 1, 2023)
+
+High level enhancements
+
+- Port recent v2 changes/fixes into v3 ([#667](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/667))
+
 ## 3.0.0-beta.1 (Nov 17, 2023)
 
 High level enhancements

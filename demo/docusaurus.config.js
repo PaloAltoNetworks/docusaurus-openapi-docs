@@ -196,8 +196,7 @@ const config = {
       },
       announcementBar: {
         id: "announcementBar_1",
-        content:
-          "🥳 First v2.0.0 stable release! Currently only compatible with Docusaurus v2.4.1 -> v2.4.3",
+        content: "Beta preview that adds support for Docusaurus v3.0.0",
       },
     }),
 
