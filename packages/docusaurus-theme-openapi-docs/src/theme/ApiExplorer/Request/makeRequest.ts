@@ -161,6 +161,10 @@ async function makeRequest(
             if (data.key && data.value.content) {
               myBody.append(data.key, data.value.content);
             }
+            // handle generic key-value payload
+            if (data.key && typeof data.value === "string") {
+              myBody.append(data.key, data.value);
+            }
           }
         }
         break;
@@ -189,11 +193,62 @@ async function makeRequest(
     finalUrl = normalizedProxy + request.url.toString();
   }
 
-  return await fetchWithtimeout(finalUrl, requestOptions).then(
-    (response: any) => {
-      return response;
+  return fetchWithtimeout(finalUrl, requestOptions).then((response: any) => {
+    const contentType = response.headers.get("content-type");
+    let fileExtension = "";
+
+    if (contentType) {
+      if (contentType.includes("application/pdf")) {
+        fileExtension = ".pdf";
+      } else if (contentType.includes("image/jpeg")) {
+        fileExtension = ".jpg";
+      } else if (contentType.includes("image/png")) {
+        fileExtension = ".png";
+      } else if (contentType.includes("image/gif")) {
+        fileExtension = ".gif";
+      } else if (contentType.includes("image/webp")) {
+        fileExtension = ".webp";
+      } else if (contentType.includes("video/mpeg")) {
+        fileExtension = ".mpeg";
+      } else if (contentType.includes("video/mp4")) {
+        fileExtension = ".mp4";
+      } else if (contentType.includes("audio/mpeg")) {
+        fileExtension = ".mp3";
+      } else if (contentType.includes("audio/ogg")) {
+        fileExtension = ".ogg";
+      } else if (contentType.includes("application/octet-stream")) {
+        fileExtension = ".bin";
+      } else if (contentType.includes("application/zip")) {
+        fileExtension = ".zip";
+      }
+
+      if (fileExtension) {
+        return response.blob().then((blob: any) => {
+          const url = window.URL.createObjectURL(blob);
+
+          const link = document.createElement("a");
+          link.href = url;
+          // Now the file name includes the extension
+          link.setAttribute("download", `file${fileExtension}`);
+
+          // These two lines are necessary to make the link click in Firefox
+          link.style.display = "none";
+          document.body.appendChild(link);
+
+          link.click();
+
+          // After link is clicked, it's safe to remove it.
+          setTimeout(() => document.body.removeChild(link), 0);
+
+          return response;
+        });
+      } else {
+        return response;
+      }
     }
-  );
+
+    return response;
+  });
 }
 
 export default makeRequest;
