@@ -469,8 +469,7 @@ function bindCollectionToApiItems(
     const method = item.request.method.toLowerCase();
     const path = item.request.url
       .getPath({ unresolved: true }) // unresolved returns "/:variableName" instead of "/<type>"
-      .replace(/:([a-z0-9-_]+)/gi, "{$1}"); // replace "/:variableName" with "/{variableName}"
-
+      .replace(/(?<![a-z0-9-_]+):([a-z0-9-_]+)/gi, "{$1}"); // replace "/:variableName" with "/{variableName}"
     const apiItem = items.find((item) => {
       if (item.type === "info" || item.type === "tag") {
         return false;

@@ -118,7 +118,7 @@ export function createResponseSchema({ title, body, ...rest }: Props) {
                           }),
                           create("ul", {
                             style: { marginLeft: "1rem" },
-                            children: createNodes(firstBody!),
+                            children: createNodes(firstBody!, "response"),
                           }),
                         ],
                       }),
