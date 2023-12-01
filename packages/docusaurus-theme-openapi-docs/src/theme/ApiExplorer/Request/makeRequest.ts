@@ -195,6 +195,8 @@ async function makeRequest(
 
   return await fetchWithtimeout(finalUrl, requestOptions).then(
     (response: any) => {
+      const contentType = response.headers.get("content-type");
+      console.log(contentType);
       return response;
     }
   );
