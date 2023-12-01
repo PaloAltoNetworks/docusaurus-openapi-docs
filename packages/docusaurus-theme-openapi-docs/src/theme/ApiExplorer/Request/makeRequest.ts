@@ -161,6 +161,10 @@ async function makeRequest(
             if (data.key && data.value.content) {
               myBody.append(data.key, data.value.content);
             }
+            // handle generic key-value payload
+            if (data.key && typeof data.value === "string") {
+              myBody.append(data.key, data.value);
+            }
           }
         }
         break;
