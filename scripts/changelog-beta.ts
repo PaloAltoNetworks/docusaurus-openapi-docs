@@ -12,7 +12,7 @@ import { printBanner, printSpacer } from "./utils/print-utils";
 
 const ORG = "PaloAltoNetworks";
 const REPO = "docusaurus-openapi-docs";
-const BRANCH = "v2.0.0";
+const BRANCH = "v3.0.0";
 
 const COMMIT_FILTERS = [/\(release\) v.*/];
 
