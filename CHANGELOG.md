@@ -1,3 +1,20 @@
+## 2.0.1 (Dec 1, 2023)
+
+High level enhancements
+
+- Improve support for handling multi-part form data
+
+Other enhancements and bug fixes
+
+- Improve support for handling multipart form data ([#666](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/666))
+- use SCHEMA_TYPE to distinguish request/response to support readOnly/writeOnly properties ([#665](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/665))
+- add negative look behind to exclude colon delimited path segments ([#663](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/663))
+- Update deploy-preview.yml
+- update v2.0.0 refs to v3.0.0
+- Update pr-title-check.yaml
+- Update canary-beta-release.yml
+- Update README.md
+
 ## 2.0.0 (Nov 13, 2023)
 
 High level enhancements
