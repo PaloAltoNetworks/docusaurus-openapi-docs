@@ -1,3 +1,13 @@
+## 2.0.2 (Dec 5, 2023)
+
+High level enhancements
+
+- Adds security schemes to API Explorer panel
+
+Other enhancements and bug fixes
+
+- Add missing security schemes component ([#673](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/673))
+
 ## 2.0.1 (Dec 1, 2023)
 
 High level enhancements
