@@ -22,15 +22,14 @@ const config = {
       ({
         docs: {
           routeBasePath: "/",
-          sidebarPath: require.resolve("./sidebars.js"),
+          sidebarPath: "./sidebars.ts",
           editUrl:
             "https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/tree/main/demo",
-          // docRootComponent: "@theme/DocPage",
           docItemComponent: "@theme/ApiItem", // Derived from docusaurus-theme-openapi
         },
         blog: false,
         theme: {
-          customCss: require.resolve("./src/css/custom.css"),
+          customCss: "./src/css/custom.css",
         },
         gtag: {
           trackingID: "GTM-THVM29S",

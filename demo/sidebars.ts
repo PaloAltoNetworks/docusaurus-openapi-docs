@@ -8,13 +8,21 @@
 
  Create as many sidebars as you want.
  */
-const petstoreVersions = require("./docs/petstore_versioned/versions.json");
-const {
-  versionSelector,
-  versionCrumb,
-} = require("docusaurus-plugin-openapi-docs/lib/sidebars/utils");
+import type { SidebarsConfig } from "@docusaurus/plugin-content-docs";
 
-const sidebars = {
+import petstoreVersions from "./docs/petstore_versioned/versions.json";
+import {
+  versionCrumb,
+  versionSelector,
+} from "docusaurus-plugin-openapi-docs/lib/sidebars/utils";
+
+import petstoreSidebar from "./docs/petstore/sidebar";
+import petstoreVersionedSidebar from "./docs/petstore_versioned/sidebar";
+import petstoreVersionSidebar from "./docs/petstore_versioned/1.0.0/sidebar";
+
+import cloudObjectStorageSidebar from "./docs/cos/sidebar";
+
+const sidebars: SidebarsConfig = {
   tutorialSidebar: [
     {
       type: "html",
@@ -58,7 +66,7 @@ const sidebars = {
           "This is a sample server Petstore server. You can find out more about Swagger at http://swagger.io or on irc.freenode.net, #swagger. For this sample, you can use the api key special-key to test the authorization filters.",
         slug: "/category/petstore-api",
       },
-      items: require("./docs/petstore/sidebar.js"),
+      items: petstoreSidebar,
     },
     {
       type: "category",
@@ -68,7 +76,7 @@ const sidebars = {
         title: "Cloud Object Storage API",
         slug: "/category/cos-api",
       },
-      items: require("./docs/cos/sidebar.js"),
+      items: cloudObjectStorageSidebar,
     },
     {
       type: "category",
@@ -123,7 +131,7 @@ const sidebars = {
           "This is a sample server Petstore server. You can find out more about Swagger at http://swagger.io or on irc.freenode.net, #swagger. For this sample, you can use the api key special-key to test the authorization filters.",
         slug: "/category/petstore-versioned-api",
       },
-      items: require("./docs/petstore_versioned/sidebar.js"),
+      items: petstoreVersionedSidebar,
     },
   ],
 
@@ -149,9 +157,9 @@ const sidebars = {
           "This is a sample server Petstore server. You can find out more about Swagger at http://swagger.io or on irc.freenode.net, #swagger. For this sample, you can use the api key special-key to test the authorization filters.",
         slug: "/category/petstore-api-1.0.0",
       },
-      items: require("./docs/petstore_versioned/1.0.0/sidebar.js"),
+      items: petstoreVersionSidebar,
     },
   ],
 };
 
-module.exports = sidebars;
+export default sidebars;

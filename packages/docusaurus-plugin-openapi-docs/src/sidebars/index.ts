@@ -228,5 +228,6 @@ export default function generateSidebarSlice(
       docPath
     );
   }
+
   return sidebarSlice;
 }

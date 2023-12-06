@@ -144,21 +144,23 @@ export default function pluginOpenAPIDocs(
           docPath
         );
 
-        const sidebarSliceTemplate = `module.exports = {{{slice}}};`;
+        let sidebarSliceTemplate = `import {SidebarConfig} from "@docusaurus/plugin-content-docs/src/sidebars/types";\n\n`;
+        sidebarSliceTemplate += `const sidebar: SidebarConfig = {{{slice}}};\n\n`;
+        sidebarSliceTemplate += `export default sidebar;`;
 
         const view = render(sidebarSliceTemplate, {
-          slice: JSON.stringify(sidebarSlice),
+          slice: JSON.stringify(sidebarSlice, null, 2),
         });
 
-        if (!fs.existsSync(`${outputDir}/sidebar.js`)) {
+        if (!fs.existsSync(`${outputDir}/sidebar.ts`)) {
           try {
-            fs.writeFileSync(`${outputDir}/sidebar.js`, view, "utf8");
+            fs.writeFileSync(`${outputDir}/sidebar.ts`, view, "utf8");
             console.log(
-              chalk.green(`Successfully created "${outputDir}/sidebar.js"`)
+              chalk.green(`Successfully created "${outputDir}/sidebar.ts"`)
             );
           } catch (err) {
             console.error(
-              chalk.red(`Failed to write "${outputDir}/sidebar.js"`),
+              chalk.red(`Failed to write "${outputDir}/sidebar.ts"`),
               chalk.yellow(err)
             );
           }
@@ -380,7 +382,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
       cwd: path.resolve(apiDir),
       deep: 1,
     });
-    const sidebarFile = await Globby(["sidebar.js"], {
+    const sidebarFile = await Globby(["sidebar.ts"], {
       cwd: path.resolve(apiDir),
       deep: 1,
     });
@@ -461,7 +463,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
       cli
         .command(`gen-api-docs`)
         .description(
-          `Generates OpenAPI docs in MDX file format and sidebar.js (if enabled).`
+          `Generates OpenAPI docs in MDX file format and sidebar.ts (if enabled).`
         )
         .usage("<id>")
         .arguments("<id>")
@@ -519,7 +521,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
       cli
         .command(`gen-api-docs:version`)
         .description(
-          `Generates versioned OpenAPI docs in MDX file format, versions.js and sidebar.js (if enabled).`
+          `Generates versioned OpenAPI docs in MDX file format, versions.js and sidebar.ts (if enabled).`
         )
         .usage("<id:version>")
         .arguments("<id:version>")
@@ -610,7 +612,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
       cli
         .command(`clean-api-docs`)
         .description(
-          `Clears the generated OpenAPI docs MDX files and sidebar.js (if enabled).`
+          `Clears the generated OpenAPI docs MDX files and sidebar.ts (if enabled).`
         )
         .usage("<id>")
         .arguments("<id>")
@@ -661,7 +663,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
       cli
         .command(`clean-api-docs:version`)
         .description(
-          `Clears the versioned, generated OpenAPI docs MDX files, versions.json and sidebar.js (if enabled).`
+          `Clears the versioned, generated OpenAPI docs MDX files, versions.json and sidebar.ts (if enabled).`
         )
         .usage("<id:version>")
         .arguments("<id:version>")
