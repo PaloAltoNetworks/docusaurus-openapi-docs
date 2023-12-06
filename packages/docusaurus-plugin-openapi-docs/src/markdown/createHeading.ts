@@ -5,15 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { create, greaterThan, lessThan } from "./utils";
+import { clean, create } from "./utils";
 
 export function createHeading(heading: string) {
   return [
     create("h1", {
       className: "openapi__heading",
-      children: `${heading
-        .replace(lessThan, "&lt;")
-        .replace(greaterThan, "&gt;")}`,
+      children: clean(heading),
     }),
     `\n\n`,
   ];

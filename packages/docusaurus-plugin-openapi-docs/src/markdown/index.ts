@@ -29,7 +29,7 @@ import { createStatusCodes } from "./createStatusCodes";
 import { createTermsOfService } from "./createTermsOfService";
 import { createVendorExtensions } from "./createVendorExtensions";
 import { createVersionBadge } from "./createVersionBadge";
-import { greaterThan, lessThan, render } from "./utils";
+import { render } from "./utils";
 
 interface Props {
   title: string;
@@ -69,7 +69,7 @@ export function createApiPageMD({
     `import SchemaItem from "@theme/SchemaItem";\n`,
     `import SchemaTabs from "@theme/SchemaTabs";\n`,
     `import TabItem from "@theme/TabItem";\n\n`,
-    createHeading(title.replace(lessThan, "&lt;").replace(greaterThan, "&gt;")),
+    createHeading(title),
     createMethodEndpoint(method, path),
     infoPath && createAuthorization(infoPath),
     frontMatter.show_extensions && createVendorExtensions(extensions),
@@ -110,7 +110,7 @@ export function createInfoPageMD({
 
     createVersionBadge(version),
     createDownload(downloadUrl),
-    createHeading(title.replace(lessThan, "&lt;").replace(greaterThan, "&gt;")),
+    createHeading(title),
     createLogo(logo, darkLogo),
     createDescription(description),
     createAuthentication(securitySchemes as unknown as SecuritySchemeObject),
