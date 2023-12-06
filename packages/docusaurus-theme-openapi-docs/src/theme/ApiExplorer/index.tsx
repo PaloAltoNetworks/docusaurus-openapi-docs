@@ -13,6 +13,8 @@ import Request from "@theme/ApiExplorer/Request";
 import Response from "@theme/ApiExplorer/Response";
 import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 
+import SecuritySchemes from "./SecuritySchemes";
+
 function ApiExplorer({
   item,
   infoPath,
@@ -24,6 +26,7 @@ function ApiExplorer({
 
   return (
     <>
+      <SecuritySchemes infoPath={infoPath} />
       {item.method !== "event" && (
         <CodeSnippets
           postman={postman}
