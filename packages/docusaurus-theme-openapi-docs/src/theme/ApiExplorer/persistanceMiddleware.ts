@@ -8,7 +8,7 @@
 import { Middleware } from "@reduxjs/toolkit";
 import {
   setAuthData,
-  setSelectedAuth
+  setSelectedAuth,
 } from "@theme/ApiExplorer/Authorization/slice";
 import { AppDispatch, RootState } from "@theme/ApiItem/store";
 /* eslint-disable import/no-extraneous-dependencies*/

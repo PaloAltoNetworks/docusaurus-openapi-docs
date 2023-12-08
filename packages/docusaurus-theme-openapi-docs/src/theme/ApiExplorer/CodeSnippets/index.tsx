@@ -34,10 +34,10 @@ export const languageSet: Language[] = [
     options: {
       longFormat: false,
       followRedirect: true,
-      trimRequestBody: true
+      trimRequestBody: true,
     },
     variant: "cURL",
-    variants: ["curl"]
+    variants: ["curl"],
   },
   {
     highlight: "python",
@@ -45,10 +45,10 @@ export const languageSet: Language[] = [
     logoClass: "python",
     options: {
       followRedirect: true,
-      trimRequestBody: true
+      trimRequestBody: true,
     },
     variant: "requests",
-    variants: ["requests", "http.client"]
+    variants: ["requests", "http.client"],
   },
   {
     highlight: "go",
@@ -56,10 +56,10 @@ export const languageSet: Language[] = [
     logoClass: "go",
     options: {
       followRedirect: true,
-      trimRequestBody: true
+      trimRequestBody: true,
     },
     variant: "native",
-    variants: ["native"]
+    variants: ["native"],
   },
   {
     highlight: "javascript",
@@ -68,10 +68,10 @@ export const languageSet: Language[] = [
     options: {
       ES6_enabled: true,
       followRedirect: true,
-      trimRequestBody: true
+      trimRequestBody: true,
     },
     variant: "axios",
-    variants: ["axios", "native", "request", "unirest"]
+    variants: ["axios", "native", "request", "unirest"],
   },
   {
     highlight: "ruby",
@@ -79,10 +79,10 @@ export const languageSet: Language[] = [
     logoClass: "ruby",
     options: {
       followRedirect: true,
-      trimRequestBody: true
+      trimRequestBody: true,
     },
     variant: "Net::HTTP",
-    variants: ["net::http"]
+    variants: ["net::http"],
   },
   {
     highlight: "csharp",
@@ -90,10 +90,10 @@ export const languageSet: Language[] = [
     logoClass: "csharp",
     options: {
       followRedirect: true,
-      trimRequestBody: true
+      trimRequestBody: true,
     },
     variant: "RestSharp",
-    variants: ["restsharp", "httpclient"]
+    variants: ["restsharp", "httpclient"],
   },
   {
     highlight: "php",
@@ -101,10 +101,10 @@ export const languageSet: Language[] = [
     logoClass: "php",
     options: {
       followRedirect: true,
-      trimRequestBody: true
+      trimRequestBody: true,
     },
     variant: "cURL",
-    variants: ["curl", "guzzle", "pecl_http", "http_request2"]
+    variants: ["curl", "guzzle", "pecl_http", "http_request2"],
   },
   {
     highlight: "java",
@@ -112,10 +112,10 @@ export const languageSet: Language[] = [
     logoClass: "java",
     options: {
       followRedirect: true,
-      trimRequestBody: true
+      trimRequestBody: true,
     },
     variant: "OkHttp",
-    variants: ["okhttp", "unirest"]
+    variants: ["okhttp", "unirest"],
   },
   {
     highlight: "powershell",
@@ -123,11 +123,11 @@ export const languageSet: Language[] = [
     logoClass: "powershell",
     options: {
       followRedirect: true,
-      trimRequestBody: true
+      trimRequestBody: true,
     },
     variant: "RestMethod",
-    variants: ["restmethod"]
-  }
+    variants: ["restmethod"],
+  },
 ];
 
 export interface Props {
@@ -165,7 +165,7 @@ function CodeSnippets({ postman, codeSamples }: Props) {
   const langs = [
     ...((siteConfig?.themeConfig?.languageTabs as Language[] | undefined) ??
       languageSet),
-    ...codeSamples
+    ...codeSamples,
   ];
 
   // Filter languageSet by user-defined langs
@@ -205,7 +205,7 @@ function CodeSnippets({ postman, codeSamples }: Props) {
         headerParams,
         body,
         server,
-        auth
+        auth,
       });
       codegen.convert(
         language.language,
@@ -239,7 +239,7 @@ function CodeSnippets({ postman, codeSamples }: Props) {
         headerParams,
         body,
         server,
-        auth
+        auth,
       });
 
       codegen.convert(
@@ -269,7 +269,7 @@ function CodeSnippets({ postman, codeSamples }: Props) {
     queryParams,
     server,
     auth,
-    mergedLangs
+    mergedLangs,
   ]);
 
   useEffect(() => {
@@ -283,7 +283,7 @@ function CodeSnippets({ postman, codeSamples }: Props) {
         headerParams,
         body,
         server,
-        auth
+        auth,
       });
       codegen.convert(
         language.language,
@@ -310,7 +310,7 @@ function CodeSnippets({ postman, codeSamples }: Props) {
         groupId="code-samples"
         action={{
           setLanguage: setLanguage,
-          setSelectedVariant: setSelectedVariant
+          setSelectedVariant: setSelectedVariant,
         }}
         lazy
       >
@@ -321,14 +321,14 @@ function CodeSnippets({ postman, codeSamples }: Props) {
               label={lang.language}
               key={lang.language}
               attributes={{
-                className: `openapi-tabs__code-item--${lang.logoClass}`
+                className: `openapi-tabs__code-item--${lang.logoClass}`,
               }}
             >
               <CodeTabs
                 className="openapi-tabs__code-container-inner"
                 action={{
                   setLanguage: setLanguage,
-                  setSelectedVariant: setSelectedVariant
+                  setSelectedVariant: setSelectedVariant,
                 }}
                 includeVariant={true}
                 currentLanguage={lang.language}
@@ -342,7 +342,7 @@ function CodeSnippets({ postman, codeSamples }: Props) {
                       label={variant.toUpperCase()}
                       key={`${lang.language}-${lang.variant}`}
                       attributes={{
-                        className: `openapi-tabs__code-item--variant`
+                        className: `openapi-tabs__code-item--variant`,
                       }}
                     >
                       {/* @ts-ignore */}

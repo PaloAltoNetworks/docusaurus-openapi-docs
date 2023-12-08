@@ -14,21 +14,21 @@ export function createLicense(license: LicenseObject) {
 
   return create("div", {
     style: {
-      marginBottom: "var(--ifm-paragraph-margin-bottom)"
+      marginBottom: "var(--ifm-paragraph-margin-bottom)",
     },
     children: [
       create("h3", {
         style: {
-          marginBottom: "0.25rem"
+          marginBottom: "0.25rem",
         },
-        children: "License"
+        children: "License",
       }),
       guard(url, () =>
         create("a", {
           href: url,
-          children: name ?? url
+          children: name ?? url,
         })
-      )
-    ]
+      ),
+    ],
   });
 }

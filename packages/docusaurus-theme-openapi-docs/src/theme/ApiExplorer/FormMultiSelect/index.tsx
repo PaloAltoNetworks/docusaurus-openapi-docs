@@ -36,7 +36,7 @@ function FormMultiSelect({ value, options, onChange, showErrors }: Props) {
     <select
       style={{ height: height }}
       className={clsx("openapi-explorer__multi-select-input", {
-        error: showErrors
+        error: showErrors,
       })}
       value={value}
       onChange={onChange}

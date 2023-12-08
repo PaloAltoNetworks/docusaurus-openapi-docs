@@ -10,6 +10,6 @@ module.exports = {
   testEnvironment: "node",
   roots: [
     "<rootDir>/packages/docusaurus-plugin-openapi-docs/src",
-    "<rootDir>/packages/docusaurus-theme-openapi-docs/src"
-  ]
+    "<rootDir>/packages/docusaurus-theme-openapi-docs/src",
+  ],
 };

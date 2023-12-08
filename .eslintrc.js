@@ -16,7 +16,7 @@ module.exports = {
     "plugin:jest/recommended",
     "plugin:jest/style",
     "plugin:testing-library/react",
-    "plugin:jest-dom/recommended"
+    "plugin:jest-dom/recommended",
   ],
   plugins: ["import", "header"],
   rules: {
@@ -29,9 +29,9 @@ module.exports = {
         " *",
         " * This source code is licensed under the MIT license found in the",
         " * LICENSE file in the root directory of this source tree.",
-        " * ========================================================================== "
+        " * ========================================================================== ",
       ],
-      2
+      2,
     ],
     "import/newline-after-import": ["warn", { count: 1 }],
     "import/no-extraneous-dependencies": [
@@ -40,15 +40,15 @@ module.exports = {
         devDependencies: false,
         optionalDependencies: false,
         peerDependencies: true,
-        bundledDependencies: true
-      }
+        bundledDependencies: true,
+      },
     ],
     "import/order": [
       "warn",
       {
         alphabetize: {
           order: "asc",
-          caseInsensitive: true
+          caseInsensitive: true,
         },
         "newlines-between": "always",
         groups: [
@@ -56,18 +56,18 @@ module.exports = {
           "external",
           "internal",
           ["parent", "sibling", "index"],
-          "object"
+          "object",
         ],
         pathGroups: [
           {
             pattern: "react?(-dom)",
             group: "external",
-            position: "before"
-          }
+            position: "before",
+          },
         ],
-        pathGroupsExcludedImportTypes: ["builtin"]
-      }
-    ]
+        pathGroupsExcludedImportTypes: ["builtin"],
+      },
+    ],
   },
   overrides: [
     {
@@ -80,22 +80,22 @@ module.exports = {
             devDependencies: true,
             optionalDependencies: false,
             peerDependencies: true,
-            bundledDependencies: true
-          }
-        ]
-      }
-    }
+            bundledDependencies: true,
+          },
+        ],
+      },
+    },
   ],
   settings: {
     "import/extensions": allExtensions,
     "import/external-module-folders": ["node_modules", "node_modules/@types"],
     "import/parsers": {
-      "@typescript-eslint/parser": tsExtensions
+      "@typescript-eslint/parser": tsExtensions,
     },
     "import/resolver": {
       node: {
-        extensions: allExtensions
-      }
-    }
-  }
+        extensions: allExtensions,
+      },
+    },
+  },
 };

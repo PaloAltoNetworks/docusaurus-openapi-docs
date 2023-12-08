@@ -21,31 +21,31 @@ describe("createNodes", () => {
               type: "object",
               properties: {
                 noseLength: {
-                  type: "number"
-                }
+                  type: "number",
+                },
               },
               required: ["noseLength"],
-              description: "Clown's nose length"
+              description: "Clown's nose length",
             },
             {
               type: "array",
               items: {
-                type: "string"
+                type: "string",
               },
-              description: "Array of strings"
+              description: "Array of strings",
             },
             {
-              type: "boolean"
+              type: "boolean",
             },
             {
-              type: "number"
+              type: "number",
             },
             {
-              type: "string"
-            }
-          ]
-        }
-      }
+              type: "string",
+            },
+          ],
+        },
+      },
     };
     expect(
       createNodes(schema, "request").map((md: any) =>

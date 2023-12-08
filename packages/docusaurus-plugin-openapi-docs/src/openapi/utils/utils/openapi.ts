@@ -19,14 +19,14 @@ import {
   OpenAPIResponse,
   OpenAPISchema,
   OpenAPIServer,
-  Referenced
+  Referenced,
 } from "../types";
 import {
   isNumeric,
   removeQueryString,
   resolveUrl,
   isArray,
-  isBoolean
+  isBoolean,
 } from "./helpers";
 
 function isWildcardStatusCode(
@@ -79,7 +79,7 @@ const operationNames = {
   patch: true,
   delete: true,
   options: true,
-  $ref: true
+  $ref: true,
 };
 
 export function isOperationName(key: string): boolean {
@@ -120,7 +120,7 @@ const schemaKeywordTypes = {
   additionalProperties: "object",
   unevaluatedProperties: "object",
   properties: "object",
-  patternProperties: "object"
+  patternProperties: "object",
 };
 
 export function detectType(schema: OpenAPISchema): string {
@@ -623,7 +623,7 @@ export function mergeSimilarMediaTypes(
     }
     mergedTypes[normalizedMimeName] = {
       ...mergedTypes[normalizedMimeName],
-      ...mime
+      ...mime,
     };
   });
 
@@ -659,8 +659,8 @@ export function normalizeServers(
     // Behaviour defined in OpenAPI spec: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#openapi-object
     servers = [
       {
-        url: "/"
-      }
+        url: "/",
+      },
     ];
   }
 
@@ -672,7 +672,7 @@ export function normalizeServers(
     return {
       ...server,
       url: normalizeUrl(server.url),
-      description: server.description || ""
+      description: server.description || "",
     };
   });
 }
@@ -688,7 +688,7 @@ export function setSecuritySchemePrefix(prefix: string) {
 export const shortenHTTPVerb = (verb) =>
   ({
     delete: "del",
-    options: "opts"
+    options: "opts",
   })[verb] || verb;
 
 export function isRedocExtension(key: string): boolean {
@@ -705,7 +705,7 @@ export function isRedocExtension(key: string): boolean {
     "x-tagGroups": true,
     "x-traitTag": true,
     "x-additionalPropertiesName": true,
-    "x-explicitMappingOnly": true
+    "x-explicitMappingOnly": true,
   };
 
   return key in redocExtensions;
@@ -753,7 +753,7 @@ export function getContentWithLegacyExamples(
       const examples = xExamples[mime];
       mediaContent[mime] = {
         ...mediaContent[mime],
-        examples
+        examples,
       };
     }
   } else if (xExample) {
@@ -762,7 +762,7 @@ export function getContentWithLegacyExamples(
       const example = xExample[mime];
       mediaContent[mime] = {
         ...mediaContent[mime],
-        example
+        example,
       };
     }
   }

@@ -10,7 +10,7 @@ import clsx from "clsx";
 import { SchemaObject } from "../openapi/types";
 import {
   createClosingArrayBracket,
-  createOpeningArrayBracket
+  createOpeningArrayBracket,
 } from "./createArrayBracket";
 import { createDescription } from "./createDescription";
 import { createDetails } from "./createDetails";
@@ -39,9 +39,9 @@ export function mergeAllOf(allOf: SchemaObject[]) {
       },
       "x-examples": function () {
         return true;
-      }
+      },
     },
-    ignoreAdditionalProperties: true
+    ignoreAdditionalProperties: true,
   });
 
   const required = allOf.reduce((acc, cur) => {
@@ -64,7 +64,7 @@ function createAnyOneOf(schema: SchemaObject): any {
     children: [
       create("span", {
         className: "badge badge--info",
-        children: type
+        children: type,
       }),
       create("SchemaTabs", {
         children: schema[type]!.map((anyOneSchema, index) => {
@@ -104,23 +104,23 @@ function createAnyOneOf(schema: SchemaObject): any {
                 children: [
                   createOpeningArrayBracket(),
                   anyOneChildren,
-                  createClosingArrayBracket()
+                  createClosingArrayBracket(),
                 ]
                   .filter(Boolean)
-                  .flat()
+                  .flat(),
               });
             }
             return create("TabItem", {
               label: label,
               value: `${index}-item-properties`,
-              children: anyOneChildren.filter(Boolean).flat()
+              children: anyOneChildren.filter(Boolean).flat(),
             });
           }
 
           return undefined;
-        })
-      })
-    ]
+        }),
+      }),
+    ],
   });
 }
 
@@ -136,7 +136,7 @@ function createProperties(schema: SchemaObject) {
       required: Array.isArray(schema.required)
         ? schema.required.includes(key)
         : false,
-      discriminator
+      discriminator,
     });
   });
 }
@@ -156,7 +156,7 @@ function createAdditionalProperties(schema: SchemaObject) {
       qualifierMessage: getQualifierMessage(schema.additionalProperties),
       schema: schema,
       collapsible: false,
-      discriminator: false
+      discriminator: false,
     });
   }
   if (
@@ -203,7 +203,7 @@ function createAdditionalProperties(schema: SchemaObject) {
           getQualifierMessage(schema.additionalProperties),
         schema: schema,
         collapsible: false,
-        discriminator: false
+        discriminator: false,
       });
     }
     const schemaName = getSchemaName(schema.additionalProperties!);
@@ -214,7 +214,7 @@ function createAdditionalProperties(schema: SchemaObject) {
       qualifierMessage: getQualifierMessage(schema),
       schema: schema.additionalProperties,
       collapsible: false,
-      discriminator: false
+      discriminator: false,
     });
   }
   return Object.entries(schema.additionalProperties!).map(([key, val]) =>
@@ -223,7 +223,7 @@ function createAdditionalProperties(schema: SchemaObject) {
       schema: val,
       required: Array.isArray(schema.required)
         ? schema.required.includes(key)
-        : false
+        : false,
     })
   );
 }
@@ -236,7 +236,7 @@ function createItems(schema: SchemaObject) {
     return [
       createOpeningArrayBracket(),
       createProperties(schema.items),
-      createClosingArrayBracket()
+      createClosingArrayBracket(),
     ].flat();
   }
 
@@ -244,7 +244,7 @@ function createItems(schema: SchemaObject) {
     return [
       createOpeningArrayBracket(),
       createAdditionalProperties(schema.items),
-      createClosingArrayBracket()
+      createClosingArrayBracket(),
     ].flat();
   }
 
@@ -252,14 +252,14 @@ function createItems(schema: SchemaObject) {
     return [
       createOpeningArrayBracket(),
       createAnyOneOf(schema.items!),
-      createClosingArrayBracket()
+      createClosingArrayBracket(),
     ].flat();
   }
 
   if (schema.items?.allOf !== undefined) {
     // TODO: figure out if and how we should pass merged required array
     const {
-      mergedSchemas
+      mergedSchemas,
     }: { mergedSchemas: SchemaObject; required: string[] } = mergeAllOf(
       schema.items?.allOf
     );
@@ -274,7 +274,7 @@ function createItems(schema: SchemaObject) {
         createOpeningArrayBracket(),
         createAnyOneOf(mergedSchemas),
         createProperties(mergedSchemas),
-        createClosingArrayBracket()
+        createClosingArrayBracket(),
       ].flat();
     }
 
@@ -286,7 +286,7 @@ function createItems(schema: SchemaObject) {
       return [
         createOpeningArrayBracket(),
         createAnyOneOf(mergedSchemas),
-        createClosingArrayBracket()
+        createClosingArrayBracket(),
       ].flat();
     }
 
@@ -295,7 +295,7 @@ function createItems(schema: SchemaObject) {
       return [
         createOpeningArrayBracket(),
         createProperties(mergedSchemas),
-        createClosingArrayBracket()
+        createClosingArrayBracket(),
       ].flat();
     }
   }
@@ -310,7 +310,7 @@ function createItems(schema: SchemaObject) {
     return [
       createOpeningArrayBracket(),
       createNodes(schema.items, SCHEMA_TYPE),
-      createClosingArrayBracket()
+      createClosingArrayBracket(),
     ].flat();
   }
 
@@ -323,10 +323,10 @@ function createItems(schema: SchemaObject) {
         schema: val,
         required: Array.isArray(schema.required)
           ? schema.required.includes(key)
-          : false
+          : false,
       })
     ),
-    createClosingArrayBracket()
+    createClosingArrayBracket(),
   ].flat();
 }
 
@@ -354,13 +354,13 @@ function createDetailsNode(
                 children: [
                   create("strong", {
                     className: clsx("openapi-schema__property", {
-                      "openapi-schema__strikethrough": schema.deprecated
+                      "openapi-schema__strikethrough": schema.deprecated,
                     }),
-                    children: name
+                    children: name,
                   }),
                   create("span", {
                     className: "openapi-schema__name",
-                    children: ` ${schemaName}`
+                    children: ` ${schemaName}`,
                   }),
                   guard(
                     (Array.isArray(required)
@@ -370,15 +370,15 @@ function createDetailsNode(
                       nullable,
                     () => [
                       create("span", {
-                        className: "openapi-schema__divider"
-                      })
+                        className: "openapi-schema__divider",
+                      }),
                     ]
                   ),
                   guard(nullable, () => [
                     create("span", {
                       className: "openapi-schema__nullable",
-                      children: "nullable"
-                    })
+                      children: "nullable",
+                    }),
                   ]),
                   guard(
                     Array.isArray(required)
@@ -387,19 +387,19 @@ function createDetailsNode(
                     () => [
                       create("span", {
                         className: "openapi-schema__required",
-                        children: "required"
-                      })
+                        children: "required",
+                      }),
                     ]
                   ),
                   guard(schema.deprecated, () => [
                     create("span", {
                       className: "openapi-schema__deprecated",
-                      children: "deprecated"
-                    })
-                  ])
-                ]
-              })
-            ]
+                      children: "deprecated",
+                    }),
+                  ]),
+                ],
+              }),
+            ],
           }),
           create("div", {
             style: { marginLeft: "1rem" },
@@ -407,21 +407,21 @@ function createDetailsNode(
               guard(getQualifierMessage(schema), (message) =>
                 create("div", {
                   style: { marginTop: ".5rem", marginBottom: ".5rem" },
-                  children: createDescription(message)
+                  children: createDescription(message),
                 })
               ),
               guard(schema.description, (description) =>
                 create("div", {
                   style: { marginTop: ".5rem", marginBottom: ".5rem" },
-                  children: createDescription(description)
+                  children: createDescription(description),
                 })
               ),
-              createNodes(schema, SCHEMA_TYPE)
-            ]
-          })
-        ]
-      })
-    ]
+              createNodes(schema, SCHEMA_TYPE),
+            ],
+          }),
+        ],
+      }),
+    ],
   });
 }
 
@@ -447,7 +447,7 @@ function createAnyOneOfProperty(
               create("strong", { children: name }),
               create("span", {
                 style: { opacity: "0.6" },
-                children: ` ${schemaName}`
+                children: ` ${schemaName}`,
               }),
               guard(
                 (schema.nullable && schema.nullable === true) ||
@@ -456,10 +456,10 @@ function createAnyOneOfProperty(
                   create("strong", {
                     style: {
                       fontSize: "var(--ifm-code-font-size)",
-                      color: "var(--openapi-nullable)"
+                      color: "var(--openapi-nullable)",
                     },
-                    children: " nullable"
-                  })
+                    children: " nullable",
+                  }),
                 ]
               ),
               guard(
@@ -470,13 +470,13 @@ function createAnyOneOfProperty(
                   create("strong", {
                     style: {
                       fontSize: "var(--ifm-code-font-size)",
-                      color: "var(--openapi-required)"
+                      color: "var(--openapi-required)",
                     },
-                    children: " required"
-                  })
+                    children: " required",
+                  }),
                 ]
-              )
-            ]
+              ),
+            ],
           }),
           create("div", {
             style: { marginLeft: "1rem" },
@@ -484,21 +484,21 @@ function createAnyOneOfProperty(
               guard(getQualifierMessage(schema), (message) =>
                 create("div", {
                   style: { marginTop: ".5rem", marginBottom: ".5rem" },
-                  children: createDescription(message)
+                  children: createDescription(message),
                 })
               ),
               guard(schema.description, (description) =>
                 create("div", {
                   style: { marginTop: ".5rem", marginBottom: ".5rem" },
-                  children: createDescription(description)
+                  children: createDescription(description),
                 })
-              )
-            ]
+              ),
+            ],
           }),
-          createAnyOneOf(schema)
-        ]
-      })
-    ]
+          createAnyOneOf(schema),
+        ],
+      }),
+    ],
   });
 }
 
@@ -530,36 +530,36 @@ function createPropertyDiscriminator(
           children: [
             create("strong", {
               className: "openapi-discriminator__name openapi-schema__property",
-              children: name
+              children: name,
             }),
             guard(schemaName, (name) =>
               create("span", {
                 className: "openapi-schema__name",
-                children: ` ${schemaName}`
+                children: ` ${schemaName}`,
               })
             ),
             guard(required, () => [
               create("span", {
                 className: "openapi-schema__required",
-                children: "required"
-              })
-            ])
-          ]
+                children: "required",
+              }),
+            ]),
+          ],
         }),
         guard(getQualifierMessage(discriminator), (message) =>
           create("div", {
             style: {
-              paddingLeft: "1rem"
+              paddingLeft: "1rem",
             },
-            children: createDescription(message)
+            children: createDescription(message),
           })
         ),
         guard(schema.description, (description) =>
           create("div", {
             style: {
-              paddingLeft: "1rem"
+              paddingLeft: "1rem",
             },
-            children: createDescription(description)
+            children: createDescription(description),
           })
         ),
         create("DiscriminatorTabs", {
@@ -570,12 +570,12 @@ function createPropertyDiscriminator(
               // className: "openapi-tabs__discriminator-item",
               label: label,
               value: `${index}-item-discriminator`,
-              children: [createNodes(discriminator?.mapping[key], SCHEMA_TYPE)]
+              children: [createNodes(discriminator?.mapping[key], SCHEMA_TYPE)],
             });
-          })
-        })
-      ]
-    })
+          }),
+        }),
+      ],
+    }),
   });
 }
 
@@ -593,7 +593,7 @@ function createEdges({
   name,
   schema,
   required,
-  discriminator
+  discriminator,
 }: EdgeProps): any {
   const schemaName = getSchemaName(schema);
 
@@ -620,7 +620,7 @@ function createEdges({
   if (schema.allOf !== undefined) {
     const {
       mergedSchemas,
-      required
+      required,
     }: { mergedSchemas: SchemaObject; required: string[] | boolean } =
       mergeAllOf(schema.allOf);
     const mergedSchemaName = getSchemaName(mergedSchemas);
@@ -687,7 +687,7 @@ function createEdges({
       required: Array.isArray(required) ? required.includes(name) : required,
       schemaName: schemaName,
       qualifierMessage: getQualifierMessage(schema),
-      schema: mergedSchemas
+      schema: mergedSchemas,
     });
   }
 
@@ -751,7 +751,7 @@ function createEdges({
     required: Array.isArray(required) ? required.includes(name) : required,
     schemaName: schemaName,
     qualifierMessage: getQualifierMessage(schema),
-    schema: schema
+    schema: schema,
   });
 }
 
@@ -807,9 +807,9 @@ export function createNodes(
           style: {
             marginTop: ".5rem",
             marginBottom: ".5rem",
-            marginLeft: "1rem"
+            marginLeft: "1rem",
           },
-          children: createDescription(schema.allOf[0])
+          children: createDescription(schema.allOf[0]),
         });
       }
     }
@@ -817,9 +817,9 @@ export function createNodes(
       style: {
         marginTop: ".5rem",
         marginBottom: ".5rem",
-        marginLeft: "1rem"
+        marginLeft: "1rem",
       },
-      children: createDescription(schema.type)
+      children: createDescription(schema.type),
     });
   }
 
@@ -829,9 +829,9 @@ export function createNodes(
       style: {
         marginTop: ".5rem",
         marginBottom: ".5rem",
-        marginLeft: "1rem"
+        marginLeft: "1rem",
       },
-      children: [createDescription(schema)]
+      children: [createDescription(schema)],
     });
   }
 

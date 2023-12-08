@@ -76,10 +76,10 @@ function createResponseHeaders(responseHeaders: any) {
                     guard(type, () => [
                       create("span", {
                         style: { opacity: "0.6" },
-                        children: ` ${type}`
-                      })
-                    ])
-                  ]
+                        children: ` ${type}`,
+                      }),
+                    ]),
+                  ],
                 }),
                 create("div", {
                   children: [
@@ -87,21 +87,21 @@ function createResponseHeaders(responseHeaders: any) {
                       create("div", {
                         style: {
                           marginTop: ".5rem",
-                          marginBottom: ".5rem"
+                          marginBottom: ".5rem",
                         },
                         children: [
                           guard(example, () => `Example: ${example}`),
-                          createDescription(description)
-                        ]
+                          createDescription(description),
+                        ],
                       })
-                    )
-                  ]
-                })
-              ]
+                    ),
+                  ],
+                }),
+              ],
             });
           }
-        )
-      ]
+        ),
+      ],
     })
   );
 }
@@ -126,14 +126,14 @@ export function createResponseExamples(
           children: [
             guard(exampleValue.summary, (summary) => [
               create("p", {
-                children: ` ${summary}`
-              })
+                children: ` ${summary}`,
+              }),
             ]),
             create("ResponseSamples", {
               responseExample: JSON.stringify(exampleValue.value, null, 2),
-              language: language
-            })
-          ]
+              language: language,
+            }),
+          ],
         });
       }
       return create("TabItem", {
@@ -142,14 +142,14 @@ export function createResponseExamples(
         children: [
           guard(exampleValue.summary, (summary) => [
             create("p", {
-              children: ` ${summary}`
-            })
+              children: ` ${summary}`,
+            }),
           ]),
           create("ResponseSamples", {
             responseExample: exampleValue.value,
-            language: language
-          })
-        ]
+            language: language,
+          }),
+        ],
       });
     }
   );
@@ -170,14 +170,14 @@ export function createResponseExample(responseExample: any, mimeType: string) {
       children: [
         guard(responseExample.summary, (summary) => [
           create("p", {
-            children: ` ${summary}`
-          })
+            children: ` ${summary}`,
+          }),
         ]),
         create("ResponseSamples", {
           responseExample: JSON.stringify(responseExample, null, 2),
-          language: language
-        })
-      ]
+          language: language,
+        }),
+      ],
     });
   }
   return create("TabItem", {
@@ -186,14 +186,14 @@ export function createResponseExample(responseExample: any, mimeType: string) {
     children: [
       guard(responseExample.summary, (summary) => [
         create("p", {
-          children: ` ${summary}`
-        })
+          children: ` ${summary}`,
+        }),
       ]),
       create("ResponseSamples", {
         responseExample: responseExample,
-        language: language
-      })
-    ]
+        language: language,
+      }),
+    ],
   });
 }
 
@@ -213,7 +213,7 @@ export function createExampleFromSchema(schema: any, mimeType: string) {
         xmlExample = format(json2xml(responseExampleObject, ""), {
           indentation: "  ",
           lineSeparator: "\n",
-          collapseContent: true
+          collapseContent: true,
         });
       } catch {
         const xmlExampleWithRoot = { root: responseExampleObject };
@@ -221,7 +221,7 @@ export function createExampleFromSchema(schema: any, mimeType: string) {
           xmlExample = format(json2xml(xmlExampleWithRoot, ""), {
             indentation: "  ",
             lineSeparator: "\n",
-            collapseContent: true
+            collapseContent: true,
           });
         } catch {
           xmlExample = json2xml(responseExampleObject, "");
@@ -233,9 +233,9 @@ export function createExampleFromSchema(schema: any, mimeType: string) {
         children: [
           create("ResponseSamples", {
             responseExample: xmlExample,
-            language: "xml"
-          })
-        ]
+            language: "xml",
+          }),
+        ],
       });
     }
   }
@@ -246,9 +246,9 @@ export function createExampleFromSchema(schema: any, mimeType: string) {
       children: [
         create("ResponseSamples", {
           responseExample: JSON.stringify(responseExample, null, 2),
-          language: "json"
-        })
-      ]
+          language: "json",
+        }),
+      ],
     });
   }
   return undefined;
@@ -276,7 +276,7 @@ export function createStatusCodes({ responses }: Props) {
                 value: code,
                 children: [
                   create("div", {
-                    children: createDescription(responses[code].description)
+                    children: createDescription(responses[code].description),
                   }),
                   responseHeaders &&
                     createDetails({
@@ -288,27 +288,27 @@ export function createStatusCodes({ responses }: Props) {
                         createDetailsSummary({
                           children: [
                             create("strong", {
-                              children: "Response Headers"
-                            })
-                          ]
+                              children: "Response Headers",
+                            }),
+                          ],
                         }),
-                        createResponseHeaders(responseHeaders)
-                      ]
+                        createResponseHeaders(responseHeaders),
+                      ],
                     }),
                   create("div", {
                     children: createResponseSchema({
                       title: "Schema",
                       body: {
-                        content: responses[code].content
-                      }
-                    })
-                  })
-                ]
+                        content: responses[code].content,
+                      },
+                    }),
+                  }),
+                ],
               });
-            })
-          })
-        ]
-      })
-    ]
+            }),
+          }),
+        ],
+      }),
+    ],
   });
 }

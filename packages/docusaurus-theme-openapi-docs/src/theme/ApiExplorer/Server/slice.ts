@@ -30,8 +30,8 @@ export const slice = createSlice({
         const parsedPayload = JSON.parse(action.payload);
         state.value.variables[parsedPayload.key].default = parsedPayload.value;
       }
-    }
-  }
+    },
+  },
 });
 
 export const { setServer, setServerVariable } = slice.actions;

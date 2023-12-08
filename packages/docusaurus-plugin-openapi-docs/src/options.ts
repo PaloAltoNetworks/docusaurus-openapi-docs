@@ -12,13 +12,13 @@ const sidebarOptions = Joi.object({
   categoryLinkSource: Joi.string().valid("tag", "info", "auto"),
   customProps: Joi.object(),
   sidebarCollapsible: Joi.boolean(),
-  sidebarCollapsed: Joi.boolean()
+  sidebarCollapsed: Joi.boolean(),
 });
 
 const markdownGenerators = Joi.object({
   createApiPageMD: Joi.function(),
   createInfoPageMD: Joi.function(),
-  createTagPageMD: Joi.function()
+  createTagPageMD: Joi.function(),
 });
 
 export const OptionsSchema = Joi.object({
@@ -39,15 +39,15 @@ export const OptionsSchema = Joi.object({
         markdownGenerators: markdownGenerators,
         version: Joi.string().when("versions", {
           is: Joi.exist(),
-          then: Joi.required()
+          then: Joi.required(),
         }),
         label: Joi.string().when("versions", {
           is: Joi.exist(),
-          then: Joi.required()
+          then: Joi.required(),
         }),
         baseUrl: Joi.string().when("versions", {
           is: Joi.exist(),
-          then: Joi.required()
+          then: Joi.required(),
         }),
         versions: Joi.object().pattern(
           /^/,
@@ -55,10 +55,10 @@ export const OptionsSchema = Joi.object({
             specPath: Joi.string().required(),
             outputDir: Joi.string().required(),
             label: Joi.string().required(),
-            baseUrl: Joi.string().required()
+            baseUrl: Joi.string().required(),
           })
-        )
+        ),
       })
     )
-    .required()
+    .required(),
 });

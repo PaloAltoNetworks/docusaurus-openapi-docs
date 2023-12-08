@@ -13,7 +13,7 @@ import {
   parseLanguage,
   parseLines,
   containsLineNumbers,
-  useCodeWordWrap
+  useCodeWordWrap,
 } from "@docusaurus/theme-common/internal";
 import Container from "@theme/ApiExplorer/ApiCodeBlock/Container";
 import CopyButton from "@theme/ApiExplorer/ApiCodeBlock/CopyButton";
@@ -29,10 +29,10 @@ export default function CodeBlockString({
   metastring,
   title: titleProp,
   showLineNumbers: showLineNumbersProp,
-  language: languageProp
+  language: languageProp,
 }) {
   const {
-    prism: { defaultLanguage, magicComments }
+    prism: { defaultLanguage, magicComments },
   } = useThemeConfig();
   const language =
     languageProp ?? parseLanguage(blockClassName) ?? defaultLanguage;
@@ -45,7 +45,7 @@ export default function CodeBlockString({
   const { lineClassNames, code } = parseLines(children, {
     metastring,
     language,
-    magicComments
+    magicComments,
   });
   const showLineNumbers =
     showLineNumbersProp ?? containsLineNumbers(metastring);

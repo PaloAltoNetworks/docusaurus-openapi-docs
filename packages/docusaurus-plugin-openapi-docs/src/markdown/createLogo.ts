@@ -15,7 +15,7 @@ export function createLogo(
   return guard(logo || darkLogo, () => [
     create("ApiLogo", {
       logo: logo,
-      darkLogo: darkLogo
-    })
+      darkLogo: darkLogo,
+    }),
   ]);
 }

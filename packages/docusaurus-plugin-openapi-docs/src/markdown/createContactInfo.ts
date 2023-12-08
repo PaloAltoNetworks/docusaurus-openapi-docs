@@ -16,26 +16,26 @@ export function createContactInfo(contact: ContactObject) {
     style: {
       display: "flex",
       flexDirection: "column",
-      marginBottom: "var(--ifm-paragraph-margin-bottom)"
+      marginBottom: "var(--ifm-paragraph-margin-bottom)",
     },
     children: [
       create("h3", {
         style: {
-          marginBottom: "0.25rem"
+          marginBottom: "0.25rem",
         },
-        children: "Contact"
+        children: "Contact",
       }),
       create("span", {
         children: [
           guard(name, () => `${name}: `),
-          guard(email, () => `[${email}](mailto:${email})`)
-        ]
+          guard(email, () => `[${email}](mailto:${email})`),
+        ],
       }),
       guard(url, () =>
         create("span", {
-          children: ["URL: ", `[${url}](mailto:${url})`]
+          children: ["URL: ", `[${url}](mailto:${url})`],
         })
-      )
-    ]
+      ),
+    ],
   });
 }

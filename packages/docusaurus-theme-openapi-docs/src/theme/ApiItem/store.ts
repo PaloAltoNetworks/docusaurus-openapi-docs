@@ -21,7 +21,7 @@ const rootReducer = combineReducers({
   server,
   body,
   params,
-  auth
+  auth,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
@@ -34,7 +34,7 @@ export const createStoreWithState = (
     reducer: rootReducer,
     preloadedState,
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(...middlewares)
+      getDefaultMiddleware().concat(...middlewares),
   });
 
 export const createStoreWithoutState = (
@@ -45,7 +45,7 @@ export const createStoreWithoutState = (
     reducer: rootReducer,
     preloadedState,
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(...middlewares)
+      getDefaultMiddleware().concat(...middlewares),
   });
 
 export type AppDispatch = ReturnType<typeof createStoreWithState>["dispatch"];

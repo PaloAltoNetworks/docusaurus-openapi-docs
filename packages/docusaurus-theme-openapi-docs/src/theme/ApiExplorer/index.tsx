@@ -15,7 +15,7 @@ import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 
 function ApiExplorer({
   item,
-  infoPath
+  infoPath,
 }: {
   item: NonNullable<ApiItem>;
   infoPath: string;

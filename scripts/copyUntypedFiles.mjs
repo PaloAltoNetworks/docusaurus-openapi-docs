@@ -18,7 +18,7 @@ async function copy() {
   await fs.copy(srcDir, libDir, {
     filter(testedPath) {
       return !ignoredPattern.test(testedPath);
-    }
+    },
   });
 }
 
@@ -26,7 +26,7 @@ if (process.argv.includes("--watch")) {
   const watcher = chokidar.watch(srcDir, {
     ignored: ignoredPattern,
     ignoreInitial: true,
-    persistent: true
+    persistent: true,
   });
   ["add", "change", "unlink", "addDir", "unlinkDir"].forEach((event) =>
     watcher.on(event, copy)

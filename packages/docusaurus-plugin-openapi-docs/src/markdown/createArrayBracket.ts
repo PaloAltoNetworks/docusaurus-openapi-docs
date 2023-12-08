@@ -14,10 +14,10 @@ export function createOpeningArrayBracket() {
         fontSize: "var(--ifm-code-font-size)",
         opacity: "0.6",
         marginLeft: "-.5rem",
-        paddingBottom: ".5rem"
+        paddingBottom: ".5rem",
       },
-      children: ["Array ["]
-    })
+      children: ["Array ["],
+    }),
   });
 }
 
@@ -27,9 +27,9 @@ export function createClosingArrayBracket() {
       style: {
         fontSize: "var(--ifm-code-font-size)",
         opacity: "0.6",
-        marginLeft: "-.5rem"
+        marginLeft: "-.5rem",
       },
-      children: ["]"]
-    })
+      children: ["]"],
+    }),
   });
 }

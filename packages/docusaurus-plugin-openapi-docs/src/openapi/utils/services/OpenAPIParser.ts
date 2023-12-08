@@ -190,13 +190,13 @@ export class OpenAPIParser {
       )
     ) {
       return {
-        allOf: [rest, resolved]
+        allOf: [rest, resolved],
       };
     } else {
       // small optimization
       return {
         ...resolved,
-        ...rest
+        ...rest,
       };
     }
   }
@@ -227,7 +227,7 @@ export class OpenAPIParser {
       ...schema,
       allOf: undefined,
       parentRefs: [],
-      title: schema.title || getDefinitionName($ref)
+      title: schema.title || getDefinitionName($ref),
     };
 
     // avoid mutating inner objects
@@ -258,7 +258,7 @@ export class OpenAPIParser {
         receiver.parentRefs!.push(...(subMerged.parentRefs || []));
         return {
           $ref: subRef,
-          schema: subMerged
+          schema: subMerged,
         };
       })
       .filter((child) => child !== undefined) as Array<{
@@ -355,7 +355,7 @@ export class OpenAPIParser {
       receiver = {
         ...receiver,
         title: receiver.title || title,
-        ...otherConstraints
+        ...otherConstraints,
       };
 
       if (subSchemaRef) {
@@ -389,7 +389,7 @@ export class OpenAPIParser {
         )
       ) {
         res["#/components/schemas/" + defName] = [
-          def["x-discriminator-value"] || defName
+          def["x-discriminator-value"] || defName,
         ];
       }
     }
@@ -416,14 +416,14 @@ export class OpenAPIParser {
         return {
           oneOf: sub.oneOf.map((part) => {
             const merged = this.mergeAllOf({
-              allOf: [...beforeAllOf, part, ...afterAllOf]
+              allOf: [...beforeAllOf, part, ...afterAllOf],
             });
 
             // each oneOf should be independent so exiting all the parent refs
             // otherwise it will cause false-positive recursive detection
             this.exitParents(merged);
             return merged;
-          })
+          }),
         };
       }
     }

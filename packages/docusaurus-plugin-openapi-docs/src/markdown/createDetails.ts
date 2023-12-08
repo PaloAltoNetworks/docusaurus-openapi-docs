@@ -11,6 +11,6 @@ export function createDetails({ children, style, ...rest }: Props) {
   return create("details", {
     style: { ...style },
     ...rest,
-    children
+    children,
   });
 }

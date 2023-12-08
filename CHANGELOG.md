@@ -952,7 +952,7 @@ High level enhancements
   // docusaurus.config.js
 
   const config = {
-    plugins: [["docusaurus-plugin-proxy", { "/api": "http://localhost:3001" }]]
+    plugins: [["docusaurus-plugin-proxy", { "/api": "http://localhost:3001" }]],
     // ...
   };
   ```
@@ -969,11 +969,11 @@ High level enhancements
         {
           "/api": {
             target: "http://localhost:3001",
-            pathRewrite: { "^/api": "" }
-          }
-        }
-      ]
-    ]
+            pathRewrite: { "^/api": "" },
+          },
+        },
+      ],
+    ],
     // ...
   };
   ```

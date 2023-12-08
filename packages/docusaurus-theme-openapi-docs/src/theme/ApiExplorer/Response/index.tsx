@@ -92,8 +92,8 @@ function Response({ item }: { item: NonNullable<ApiItem> }) {
           paddingLeft: "1rem",
           paddingTop: "1rem",
           ...((prettyResponse === "Fetching..." || !code) && {
-            paddingBottom: "1rem"
-          })
+            paddingBottom: "1rem",
+          }),
         }}
       >
         {code && prettyResponse !== "Fetching..." ? (
@@ -103,7 +103,7 @@ function Response({ item }: { item: NonNullable<ApiItem> }) {
               label={` ${code}`}
               value="body"
               attributes={{
-                className: clsx("openapi-response__dot", responseStatusClass)
+                className: clsx("openapi-response__dot", responseStatusClass),
               }}
               default
             >

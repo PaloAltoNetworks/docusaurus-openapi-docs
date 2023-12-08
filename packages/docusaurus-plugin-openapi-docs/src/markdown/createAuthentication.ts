@@ -20,8 +20,8 @@ export function createAuthentication(securitySchemes: SecuritySchemeObject) {
       create("tr", {
         children: [
           create("th", { children: "Security Scheme Type:" }),
-          create("td", { children: type })
-        ]
+          create("td", { children: type }),
+        ],
       });
 
     const createOAuthFlowRows = () => {
@@ -39,7 +39,7 @@ export function createAuthentication(securitySchemes: SecuritySchemeObject) {
                 ),
                 guard(authorizationUrl, () =>
                   create("p", {
-                    children: `Authorization URL: ${authorizationUrl}`
+                    children: `Authorization URL: ${authorizationUrl}`,
                   })
                 ),
                 guard(refreshUrl, () =>
@@ -49,11 +49,11 @@ export function createAuthentication(securitySchemes: SecuritySchemeObject) {
                 create("ul", {
                   children: Object.entries(scopes).map(([scope, description]) =>
                     create("li", { children: `${scope}: ${description}` })
-                  )
-                })
-              ]
-            })
-          ]
+                  ),
+                }),
+              ],
+            }),
+          ],
         });
       });
 
@@ -71,13 +71,13 @@ export function createAuthentication(securitySchemes: SecuritySchemeObject) {
                   create("tr", {
                     children: [
                       create("th", { children: "Header parameter name:" }),
-                      create("td", { children: name })
-                    ]
-                  })
-                ]
-              })
-            })
-          ]
+                      create("td", { children: name }),
+                    ],
+                  }),
+                ],
+              }),
+            }),
+          ],
         });
       case "http":
         return create("div", {
@@ -89,31 +89,34 @@ export function createAuthentication(securitySchemes: SecuritySchemeObject) {
                   create("tr", {
                     children: [
                       create("th", { children: "HTTP Authorization Scheme:" }),
-                      create("td", { children: scheme })
-                    ]
+                      create("td", { children: scheme }),
+                    ],
                   }),
                   guard(bearerFormat, () =>
                     create("tr", {
                       children: [
                         create("th", { children: "Bearer format:" }),
-                        create("td", { children: bearerFormat })
-                      ]
+                        create("td", { children: bearerFormat }),
+                      ],
                     })
-                  )
-                ]
-              })
-            })
-          ]
+                  ),
+                ],
+              }),
+            }),
+          ],
         });
       case "oauth2":
         return create("div", {
           children: [
             create("table", {
               children: create("tbody", {
-                children: [createSecuritySchemeTypeRow(), createOAuthFlowRows()]
-              })
-            })
-          ]
+                children: [
+                  createSecuritySchemeTypeRow(),
+                  createOAuthFlowRows(),
+                ],
+              }),
+            }),
+          ],
         });
       case "openIdConnect":
         return create("div", {
@@ -126,14 +129,14 @@ export function createAuthentication(securitySchemes: SecuritySchemeObject) {
                     create("tr", {
                       children: [
                         create("th", { children: "OpenID Connect URL:" }),
-                        create("td", { children: openIdConnectUrl })
-                      ]
+                        create("td", { children: openIdConnectUrl }),
+                      ],
                     })
-                  )
-                ]
-              })
-            })
-          ]
+                  ),
+                ],
+              }),
+            }),
+          ],
         });
       default:
         return "";
@@ -167,7 +170,7 @@ export function createAuthentication(securitySchemes: SecuritySchemeObject) {
       create("h2", {
         children: "Authentication",
         id: "authentication",
-        style: { marginBottom: "1rem" }
+        style: { marginBottom: "1rem" },
       }),
       create("SchemaTabs", {
         className: "openapi-tabs__security-schemes",
@@ -182,12 +185,12 @@ export function createAuthentication(securitySchemes: SecuritySchemeObject) {
               value: `${schemeKey}`,
               children: [
                 createDescription(schemeObj.description),
-                createAuthenticationTable(schemeObj)
-              ]
+                createAuthenticationTable(schemeObj),
+              ],
             })
-        )
-      })
+        ),
+      }),
     ],
-    style: { marginBottom: "2rem" }
+    style: { marginBottom: "2rem" },
   });
 }

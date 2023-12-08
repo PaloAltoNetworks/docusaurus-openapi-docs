@@ -14,7 +14,7 @@ export default function CodeBlockLine({
   classNames,
   showLineNumbers,
   getLineProps,
-  getTokenProps
+  getTokenProps,
 }) {
   if (line.length === 1 && line[0].content === "\n") {
     line[0].content = "";
@@ -24,7 +24,7 @@ export default function CodeBlockLine({
     className: clsx(
       classNames,
       showLineNumbers && "openapi-explorer__code-block-code-line"
-    )
+    ),
   });
   const lineTokens = line.map((token, key) => (
     <span key={key} {...getTokenProps({ token, key })} />

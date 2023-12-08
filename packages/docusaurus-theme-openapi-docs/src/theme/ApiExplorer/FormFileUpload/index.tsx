@@ -25,7 +25,7 @@ function RenderPreview({ file }: RenderPreviewProps) {
       return (
         <img
           style={{
-            borderRadius: "4px"
+            borderRadius: "4px",
           }}
           src={file.preview}
           alt=""
@@ -37,7 +37,7 @@ function RenderPreview({ file }: RenderPreviewProps) {
           style={{
             display: "flex",
             alignItems: "center",
-            minWidth: 0
+            minWidth: 0,
           }}
         >
           <svg viewBox="0 0 100 120" style={{ width: "50px", height: "60px" }}>

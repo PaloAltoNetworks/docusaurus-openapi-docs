@@ -11,6 +11,6 @@ export function createDetailsSummary({ children, style, ...rest }: Props) {
   return create("summary", {
     style: { ...style },
     ...rest,
-    children
+    children,
   });
 }

@@ -25,7 +25,7 @@ import {
   ApiPageMetadata,
   InfoPageMetadata,
   SidebarOptions,
-  TagPageMetadata
+  TagPageMetadata,
 } from "../types";
 import { sampleRequestFromSchema } from "./createRequestExample";
 import { OpenApiObject, TagObject } from "./types";
@@ -113,7 +113,7 @@ function createItems(
           ? splitDescription[0]
               .replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
               .replace(/\s+$/, "")
-          : ""
+          : "",
       },
       securitySchemes: openapiData.components?.securitySchemes,
       info: {
@@ -121,8 +121,8 @@ function createItems(
         tags: openapiData.tags,
         title: openapiData.info.title ?? "Introduction",
         logo: openapiData.info["x-logo"]! as any,
-        darkLogo: openapiData.info["x-dark-logo"]! as any
-      }
+        darkLogo: openapiData.info["x-dark-logo"]! as any,
+      },
     };
     items.push(infoPage);
   }
@@ -242,11 +242,11 @@ function createItems(
             : "",
           ...(options?.proxy && { proxy: options.proxy }),
           ...(options?.hideSendButton && {
-            hide_send_button: options.hideSendButton
+            hide_send_button: options.hideSendButton,
           }),
           ...(options?.showExtensions && {
-            show_extensions: options.showExtensions
-          })
+            show_extensions: options.showExtensions,
+          }),
         },
         api: {
           ...defaults,
@@ -258,8 +258,8 @@ function createItems(
           security,
           securitySchemes,
           jsonRequestBodyExample,
-          info: openapiData.info
-        }
+          info: openapiData.info,
+        },
       };
 
       items.push(apiPage);
@@ -386,11 +386,11 @@ function createItems(
             : "",
           ...(options?.proxy && { proxy: options.proxy }),
           ...(options?.hideSendButton && {
-            hide_send_button: options.hideSendButton
+            hide_send_button: options.hideSendButton,
           }),
           ...(options?.showExtensions && {
-            show_extensions: options.showExtensions
-          })
+            show_extensions: options.showExtensions,
+          }),
         },
         api: {
           ...defaults,
@@ -402,8 +402,8 @@ function createItems(
           security,
           securitySchemes,
           jsonRequestBodyExample,
-          info: openapiData.info
-        }
+          info: openapiData.info,
+        },
       };
       items.push(apiPage);
     }
@@ -445,11 +445,11 @@ function createItems(
               ? splitDescription[0]
                   .replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
                   .replace(/\s+$/, "")
-              : ""
+              : "",
           },
           tag: {
-            ...tag
-          }
+            ...tag,
+          },
         };
         items.push(tagPage);
       });
@@ -499,7 +499,7 @@ export async function readOpenapiFiles(
       const allFiles = await Globby(["**/*.{json,yaml,yml}"], {
         cwd: openapiPath,
         ignore: GlobExcludeDefault,
-        deep: 1
+        deep: 1,
       });
       const sources = allFiles.filter((x) => !x.includes("_category_")); // todo: regex exclude?
       return Promise.all(
@@ -512,7 +512,7 @@ export async function readOpenapiFiles(
           return {
             source: fullPath, // This will be aliased in process.
             sourceDirName: path.dirname(source),
-            data
+            data,
           };
         })
       );
@@ -525,8 +525,8 @@ export async function readOpenapiFiles(
     {
       source: openapiPath, // This will be aliased in process.
       sourceDirName: ".",
-      data
-    }
+      data,
+    },
   ];
 }
 
@@ -543,7 +543,7 @@ export async function processOpenapiFiles(
         sidebarOptions
       );
       const itemsObjectsArray = processedFile[0].map((item) => ({
-        ...item
+        ...item,
       }));
       const tags = processedFile[1];
       return [itemsObjectsArray, tags];
@@ -600,7 +600,7 @@ export function getTagDisplayName(tagName: string, tags: TagObject[]): string {
   // find the very own tagObject
   const tagObject = tags.find((tagObject) => tagObject.name === tagName) ?? {
     // if none found, just fake one
-    name: tagName
+    name: tagName,
   };
 
   // return the first found and filled value from the property list

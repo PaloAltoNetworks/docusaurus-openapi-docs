@@ -21,7 +21,7 @@ import {
   setCode,
   clearCode,
   setHeaders,
-  clearHeaders
+  clearHeaders,
 } from "@theme/ApiExplorer/Response/slice";
 import Server from "@theme/ApiExplorer/Server";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
@@ -60,7 +60,7 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
     ...pathParams,
     ...queryParams,
     ...cookieParams,
-    ...headerParams
+    ...headerParams,
   ];
 
   const postmanRequest = buildPostmanRequest(postman, {
@@ -72,7 +72,7 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
     headerParams,
     body,
     server,
-    auth
+    auth,
   });
 
   const delay = (ms: number) =>
@@ -82,7 +82,7 @@ function Request({ item }: { item: NonNullable<ApiItem> }) {
     path: [] as ParameterObject[],
     query: [] as ParameterObject[],
     header: [] as ParameterObject[],
-    cookie: [] as ParameterObject[]
+    cookie: [] as ParameterObject[],
   };
 
   item.parameters?.forEach(

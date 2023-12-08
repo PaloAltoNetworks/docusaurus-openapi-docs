@@ -50,7 +50,7 @@ describe("getQualifierMessage", () => {
     const actual = getQualifierMessage({
       minLength: 1,
       maxLength: 40,
-      pattern: "^[a-zA-Z0-9_-]*$"
+      pattern: "^[a-zA-Z0-9_-]*$",
     });
     expect(actual).toBe(expected);
   });
@@ -113,7 +113,7 @@ describe("getQualifierMessage", () => {
     const expected = "**Possible values:** `<= 40`";
     const actual = getQualifierMessage({
       maximum: 40,
-      exclusiveMaximum: false
+      exclusiveMaximum: false,
     });
     expect(actual).toBe(expected);
   });
@@ -129,7 +129,7 @@ describe("getQualifierMessage", () => {
     const actual = getQualifierMessage({
       minimum: 1,
       maximum: 40,
-      exclusiveMinimum: true
+      exclusiveMinimum: true,
     });
     expect(actual).toBe(expected);
   });
@@ -139,7 +139,7 @@ describe("getQualifierMessage", () => {
     const actual = getQualifierMessage({
       minimum: 1,
       maximum: 40,
-      exclusiveMaximum: true
+      exclusiveMaximum: true,
     });
     expect(actual).toBe(expected);
   });
@@ -148,7 +148,7 @@ describe("getQualifierMessage", () => {
     const expected = "**Possible values:** `> 1` and `<= 40`";
     const actual = getQualifierMessage({
       exclusiveMinimum: 1,
-      maximum: 40
+      maximum: 40,
     });
     expect(actual).toBe(expected);
   });
@@ -157,7 +157,7 @@ describe("getQualifierMessage", () => {
     const expected = "**Possible values:** `>= 1` and `< 40`";
     const actual = getQualifierMessage({
       minimum: 1,
-      exclusiveMaximum: 40
+      exclusiveMaximum: 40,
     });
     expect(actual).toBe(expected);
   });
@@ -167,21 +167,21 @@ describe("getQualifierMessage", () => {
     const actual = getQualifierMessage({
       exclusiveMinimum: 1,
       maximum: 40,
-      exclusiveMaximum: true
+      exclusiveMaximum: true,
     });
     expect(actual).toBe(expected);
   });
 
   it("should render nothing with empty boolean exclusiveMinimum", () => {
     const actual = getQualifierMessage({
-      exclusiveMinimum: true
+      exclusiveMinimum: true,
     });
     expect(actual).toBeUndefined();
   });
 
   it("should render nothing with empty boolean exclusiveMaximum", () => {
     const actual = getQualifierMessage({
-      exclusiveMaximum: true
+      exclusiveMaximum: true,
     });
     expect(actual).toBeUndefined();
   });
@@ -189,7 +189,7 @@ describe("getQualifierMessage", () => {
   it("should render nothing with empty boolean exclusiveMinimum and exclusiveMaximum", () => {
     const actual = getQualifierMessage({
       exclusiveMinimum: true,
-      exclusiveMaximum: true
+      exclusiveMaximum: true,
     });
     expect(actual).toBeUndefined();
   });

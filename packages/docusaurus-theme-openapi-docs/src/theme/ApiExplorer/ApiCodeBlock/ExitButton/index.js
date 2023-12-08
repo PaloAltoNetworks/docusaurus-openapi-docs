@@ -17,12 +17,12 @@ export default function ExitButton({ className, handler }) {
       aria-label={translate({
         id: "theme.CodeBlock.exitButtonAriaLabel",
         message: "Exit expanded view",
-        description: "The ARIA label for exit expanded view button"
+        description: "The ARIA label for exit expanded view button",
       })}
       title={translate({
         id: "theme.CodeBlock.copy",
         message: "Copy",
-        description: "The exit button label on code blocks"
+        description: "The exit button label on code blocks",
       })}
       className={clsx(
         "clean-btn",

@@ -55,7 +55,7 @@ function Authorization() {
                     setAuthData({
                       scheme: a.key,
                       key: "token",
-                      value: value ? value : undefined
+                      value: value ? value : undefined,
                     })
                   );
                 }}
@@ -76,7 +76,7 @@ function Authorization() {
                     setAuthData({
                       scheme: a.key,
                       key: "token",
-                      value: value ? value : undefined
+                      value: value ? value : undefined,
                     })
                   );
                 }}
@@ -98,7 +98,7 @@ function Authorization() {
                       setAuthData({
                         scheme: a.key,
                         key: "username",
-                        value: value ? value : undefined
+                        value: value ? value : undefined,
                       })
                     );
                   }}
@@ -115,7 +115,7 @@ function Authorization() {
                       setAuthData({
                         scheme: a.key,
                         key: "password",
-                        value: value ? value : undefined
+                        value: value ? value : undefined,
                       })
                     );
                   }}
@@ -137,7 +137,7 @@ function Authorization() {
                     setAuthData({
                       scheme: a.key,
                       key: "apiKey",
-                      value: value ? value : undefined
+                      value: value ? value : undefined,
                     })
                   );
                 }}

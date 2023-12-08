@@ -71,7 +71,7 @@ export function convertSwagger2OpenAPI(spec: object) {
         warnOnly: true,
         text: "{}",
         anchors: true,
-        resolveInternal: true
+        resolveInternal: true,
       },
       (err: any, res: any) => {
         // TODO: log any warnings
@@ -92,12 +92,12 @@ async function resolveJsonRefs(specUrlOrObject: object | string) {
         file: true,
         external: true,
         http: {
-          timeout: 15000 // 15 sec timeout
-        }
+          timeout: 15000, // 15 sec timeout
+        },
       },
       dereference: {
-        circular: true
-      }
+        circular: true,
+      },
     });
     return schema as OpenApiObject;
   } catch (err: any) {
@@ -119,13 +119,13 @@ export async function loadAndResolveSpec(specUrlOrObject: object | string) {
   const config = new Config({} as ResolvedConfig);
   const bundleOpts = {
     config,
-    base: process.cwd()
+    base: process.cwd(),
   } as any;
 
   if (typeof specUrlOrObject === "object" && specUrlOrObject !== null) {
     bundleOpts["doc"] = {
       source: { absoluteRef: "" } as Source,
-      parsed: specUrlOrObject
+      parsed: specUrlOrObject,
     } as Document;
   } else {
     bundleOpts["ref"] = specUrlOrObject;
@@ -135,7 +135,7 @@ export async function loadAndResolveSpec(specUrlOrObject: object | string) {
   // bundleOpts["dereference"] = true;
 
   const {
-    bundle: { parsed }
+    bundle: { parsed },
   } = await bundle(bundleOpts);
 
   //Pre-processing before resolving JSON refs

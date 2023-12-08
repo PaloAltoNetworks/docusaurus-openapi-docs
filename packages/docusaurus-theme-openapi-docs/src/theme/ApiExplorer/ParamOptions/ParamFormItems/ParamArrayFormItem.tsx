@@ -21,7 +21,7 @@ export interface ParamProps {
 
 function ArrayItem({
   param,
-  onChange
+  onChange,
 }: ParamProps & { onChange(value?: string): any }) {
   if (param.schema?.items?.type === "boolean") {
     return (
@@ -51,7 +51,7 @@ export default function ParamArrayFormItem({ param }: ParamProps) {
 
   const {
     control,
-    formState: { errors }
+    formState: { errors },
   } = useFormContext();
 
   const showErrorMessage = errors?.paramArray?.message;
@@ -60,8 +60,8 @@ export default function ParamArrayFormItem({ param }: ParamProps) {
     setItems((i) => [
       ...i,
       {
-        id: nanoid()
-      }
+        id: nanoid(),
+      },
     ]);
   }
 
@@ -73,7 +73,7 @@ export default function ParamArrayFormItem({ param }: ParamProps) {
     dispatch(
       setParam({
         ...param,
-        value: values.length > 0 ? values : undefined
+        value: values.length > 0 ? values : undefined,
       })
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps

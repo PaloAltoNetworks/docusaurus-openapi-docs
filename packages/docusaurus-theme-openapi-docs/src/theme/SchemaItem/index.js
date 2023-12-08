@@ -23,7 +23,7 @@ function SchemaItem({
   qualifierMessage,
   required,
   schemaName,
-  schema
+  schema,
 }) {
   let deprecated;
   let schemaDescription;
@@ -63,7 +63,7 @@ function SchemaItem({
             ) : (
               <CodeBlock>{children}</CodeBlock>
             );
-          }
+          },
         }}
         rehypePlugins={[rehypeRaw]}
       />
@@ -93,7 +93,7 @@ function SchemaItem({
       <span className="openapi-schema__container">
         <strong
           className={clsx("openapi-schema__property", {
-            "openapi-schema__strikethrough": deprecated
+            "openapi-schema__strikethrough": deprecated,
           })}
         >
           {name}

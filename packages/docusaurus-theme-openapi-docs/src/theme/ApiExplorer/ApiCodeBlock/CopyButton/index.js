@@ -31,18 +31,18 @@ export default function CopyButton({ code, className }) {
           ? translate({
               id: "theme.CodeBlock.copied",
               message: "Copied",
-              description: "The copied button label on code blocks"
+              description: "The copied button label on code blocks",
             })
           : translate({
               id: "theme.CodeBlock.copyButtonAriaLabel",
               message: "Copy code to clipboard",
-              description: "The ARIA label for copy code blocks button"
+              description: "The ARIA label for copy code blocks button",
             })
       }
       title={translate({
         id: "theme.CodeBlock.copy",
         message: "Copy",
-        description: "The copy button label on code blocks"
+        description: "The copy button label on code blocks",
       })}
       className={clsx(
         "clean-btn",

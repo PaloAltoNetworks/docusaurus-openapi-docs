@@ -10,6 +10,6 @@ import { create, guard } from "./utils";
 export function createDownload(url: string | undefined) {
   return guard(url, (url) => [
     create("Export", { url: url, proxy: undefined }),
-    `\n\n`
+    `\n\n`,
   ]);
 }

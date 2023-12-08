@@ -20,7 +20,7 @@ export interface ParamProps {
 export default function ParamMultiSelectFormItem({ param }: ParamProps) {
   const {
     control,
-    formState: { errors }
+    formState: { errors },
   } = useFormContext();
 
   const showErrorMessage = errors?.paramMultiSelect;
@@ -50,7 +50,7 @@ export default function ParamMultiSelectFormItem({ param }: ParamProps) {
     dispatch(
       setParam({
         ...param,
-        value: values.length > 0 ? values : undefined
+        value: values.length > 0 ? values : undefined,
       })
     );
 

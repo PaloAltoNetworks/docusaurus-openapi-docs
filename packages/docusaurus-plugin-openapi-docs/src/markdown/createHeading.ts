@@ -11,8 +11,8 @@ export function createHeading(heading: string) {
   return [
     create("h1", {
       className: "openapi__heading",
-      children: clean(heading)
+      children: clean(heading),
     }),
-    `\n\n`
+    `\n\n`,
   ];
 }

@@ -29,7 +29,7 @@ export default function ApiLogo(props: any): JSX.Element | undefined {
         alt={altText()}
         sources={{
           light: lightLogoUrl,
-          dark: darkLogoUrl
+          dark: darkLogoUrl,
         }}
         className="openapi__logo"
       />
@@ -41,7 +41,7 @@ export default function ApiLogo(props: any): JSX.Element | undefined {
         alt={altText()}
         sources={{
           light: lightLogoUrl ?? darkLogoUrl,
-          dark: lightLogoUrl ?? darkLogoUrl
+          dark: lightLogoUrl ?? darkLogoUrl,
         }}
         className="openapi__logo"
       />

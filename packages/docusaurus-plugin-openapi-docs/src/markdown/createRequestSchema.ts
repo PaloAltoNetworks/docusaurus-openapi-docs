@@ -67,15 +67,15 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
                     create("h3", {
                       className:
                         "openapi-markdown__details-summary-header-body",
-                      children: `${title}`
+                      children: `${title}`,
                     }),
                     guard(body.required && body.required === true, () => [
                       create("span", {
                         className: "openapi-schema__required",
-                        children: "required"
-                      })
-                    ])
-                  ]
+                        children: "required",
+                      }),
+                    ]),
+                  ],
                 }),
                 create("div", {
                   style: { textAlign: "left", marginLeft: "1rem" },
@@ -83,20 +83,20 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
                     guard(body.description, () => [
                       create("div", {
                         style: { marginTop: "1rem", marginBottom: "1rem" },
-                        children: createDescription(body.description)
-                      })
-                    ])
-                  ]
+                        children: createDescription(body.description),
+                      }),
+                    ]),
+                  ],
                 }),
                 create("ul", {
                   style: { marginLeft: "1rem" },
-                  children: createNodes(firstBody, "request")
-                })
-              ]
-            })
-          ]
+                  children: createNodes(firstBody, "request"),
+                }),
+              ],
+            }),
+          ],
         });
-      })
+      }),
     });
   }
 
@@ -132,21 +132,21 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
                 children: [
                   create("h3", {
                     className: "openapi-markdown__details-summary-header-body",
-                    children: `${title}`
+                    children: `${title}`,
                   }),
                   guard(firstBody.type === "array", (format) =>
                     create("span", {
                       style: { opacity: "0.6" },
-                      children: ` array`
+                      children: ` array`,
                     })
                   ),
                   guard(body.required, () => [
                     create("strong", {
                       className: "openapi-schema__required",
-                      children: "required"
-                    })
-                  ])
-                ]
+                      children: "required",
+                    }),
+                  ]),
+                ],
               }),
               create("div", {
                 style: { textAlign: "left", marginLeft: "1rem" },
@@ -154,19 +154,19 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
                   guard(body.description, () => [
                     create("div", {
                       style: { marginTop: "1rem", marginBottom: "1rem" },
-                      children: createDescription(body.description)
-                    })
-                  ])
-                ]
+                      children: createDescription(body.description),
+                    }),
+                  ]),
+                ],
               }),
               create("ul", {
                 style: { marginLeft: "1rem" },
-                children: createNodes(firstBody, "request")
-              })
-            ]
-          })
-        ]
-      })
-    ]
+                children: createNodes(firstBody, "request"),
+              }),
+            ],
+          }),
+        ],
+      }),
+    ],
   });
 }

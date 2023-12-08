@@ -9,7 +9,7 @@ import {
   ContactObject,
   LicenseObject,
   MediaTypeObject,
-  SecuritySchemeObject
+  SecuritySchemeObject,
 } from "../openapi/types";
 import { ApiPageMetadata, InfoPageMetadata, TagPageMetadata } from "../types";
 import { createAuthentication } from "./createAuthentication";
@@ -53,10 +53,10 @@ export function createApiPageMD({
     extensions,
     parameters,
     requestBody,
-    responses
+    responses,
   },
   infoPath,
-  frontMatter
+  frontMatter,
 }: ApiPageMetadata) {
   return render([
     `import ApiTabs from "@theme/ApiTabs";\n`,
@@ -82,9 +82,9 @@ export function createApiPageMD({
     createParamsDetails({ parameters, type: "cookie" }),
     createRequestBodyDetails({
       title: "Body",
-      body: requestBody
+      body: requestBody,
     } as Props),
-    createStatusCodes({ responses })
+    createStatusCodes({ responses }),
   ]);
 }
 
@@ -97,10 +97,10 @@ export function createInfoPageMD({
     license,
     termsOfService,
     logo,
-    darkLogo
+    darkLogo,
   },
   securitySchemes,
-  downloadUrl
+  downloadUrl,
 }: InfoPageMetadata) {
   return render([
     `import ApiLogo from "@theme/ApiLogo";\n`,
@@ -116,7 +116,7 @@ export function createInfoPageMD({
     createAuthentication(securitySchemes as unknown as SecuritySchemeObject),
     createContactInfo(contact as ContactObject),
     createTermsOfService(termsOfService),
-    createLicense(license as LicenseObject)
+    createLicense(license as LicenseObject),
   ]);
 }
 
