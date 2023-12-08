@@ -8,7 +8,7 @@
 module.exports = {
   plugins: ["cypress"],
   env: {
-    "cypress/globals": true,
+    "cypress/globals": true
   },
   rules: {
     "testing-library/await-async-query": "off", // Cypress chains don't use promises
@@ -18,6 +18,6 @@ module.exports = {
     "jest/expect-expect": "off",
     "jest/valid-expect": "off",
     "jest/valid-expect-in-promise": "off",
-    "jest/no-conditional-expect": "off",
-  },
+    "jest/no-conditional-expect": "off"
+  }
 };

@@ -20,8 +20,8 @@ export const slice = createSlice({
   reducers: {
     setContentType: (state, action: PayloadAction<string>) => {
       state.value = action.payload;
-    },
-  },
+    }
+  }
 });
 
 export const { setContentType } = slice.actions;

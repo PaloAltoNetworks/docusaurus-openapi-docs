@@ -19,7 +19,7 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
       const modules = [
         require.resolve(
           path.join(__dirname, "..", "lib", "theme", "styles.scss")
-        ),
+        )
       ];
       return modules;
     },
@@ -51,17 +51,17 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
                   ...getStyleLoaders(isServer, {}),
                   {
                     loader: require.resolve("sass-loader"),
-                    options: {},
-                  },
-                ],
-              },
-            ],
-          },
+                    options: {}
+                  }
+                ]
+              }
+            ]
+          }
         };
       }
       return {
-        plugins: [new NodePolyfillPlugin()],
+        plugins: [new NodePolyfillPlugin()]
       };
-    },
+    }
   };
 }

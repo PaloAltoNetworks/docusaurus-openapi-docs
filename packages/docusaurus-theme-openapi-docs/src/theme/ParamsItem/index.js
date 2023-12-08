@@ -15,18 +15,18 @@ import { createDescription } from "docusaurus-theme-openapi-docs/lib/markdown/cr
 /* eslint-disable import/no-extraneous-dependencies*/
 import {
   getQualifierMessage,
-  getSchemaName,
+  getSchemaName
 } from "docusaurus-theme-openapi-docs/lib/markdown/schema";
 /* eslint-disable import/no-extraneous-dependencies*/
 import {
   guard,
-  toString,
+  toString
 } from "docusaurus-theme-openapi-docs/lib/markdown/utils";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
 function ParamsItem({
-  param: { description, example, examples, name, required, schema },
+  param: { description, example, examples, name, required, schema }
 }) {
   if (!schema || !schema?.type) {
     schema = { type: "any" };
@@ -63,7 +63,7 @@ function ParamsItem({
             ) : (
               <CodeBlock>{children}</CodeBlock>
             );
-          },
+          }
         }}
         rehypePlugins={[rehypeRaw]}
       />
@@ -74,8 +74,8 @@ function ParamsItem({
     schema && schema.items
       ? schema.items.default
       : schema
-      ? schema.default
-      : undefined,
+        ? schema.default
+        : undefined,
     (value) => (
       <div>
         <ReactMarkdown children={`**Default value:** \`${value}\``} />

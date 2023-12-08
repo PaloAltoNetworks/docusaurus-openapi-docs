@@ -63,7 +63,7 @@ function ParamOptions() {
     ...pathParams,
     ...queryParams,
     ...cookieParams,
-    ...headerParams,
+    ...headerParams
   ];
 
   const requiredParams = allParams.filter((p) => p.required);
@@ -87,7 +87,7 @@ function ParamOptions() {
               style={{
                 width: "1.5em",
                 display: "inline-block",
-                textAlign: "center",
+                textAlign: "center"
               }}
             >
               <span
@@ -102,7 +102,7 @@ function ParamOptions() {
                     style={{
                       fill: "currentColor",
                       width: "10px",
-                      height: "10px",
+                      height: "10px"
                     }}
                     height="16"
                     viewBox="0 0 16 16"

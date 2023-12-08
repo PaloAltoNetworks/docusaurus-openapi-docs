@@ -20,7 +20,7 @@ export interface ParamProps {
 export default function ParamSelectFormItem({ param }: ParamProps) {
   const {
     control,
-    formState: { errors },
+    formState: { errors }
   } = useFormContext();
 
   const showErrorMessage = errors?.paramSelect;
@@ -43,7 +43,7 @@ export default function ParamSelectFormItem({ param }: ParamProps) {
               dispatch(
                 setParam({
                   ...param,
-                  value: val === "---" ? undefined : val,
+                  value: val === "---" ? undefined : val
                 })
               );
               onChange(val);

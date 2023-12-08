@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="ac901705-aac6-4945-bcfb-828baea3e7ea" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/packages/docusaurus-plugin-openapi-docs/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/docusaurus-plugin-openapi-docs/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/docusaurus-theme-openapi-docs/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/docusaurus-theme-openapi-docs/package.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="PackageJsonUpdateNotifier">
+    <dismissed value="$PROJECT_DIR$/demo/package.json" />
+    <dismissed value="$PROJECT_DIR$/package.json" />
+    <dismissed value="$PROJECT_DIR$/packages/docusaurus-plugin-openapi-docs/package.json" />
+    <dismissed value="$PROJECT_DIR$/packages/docusaurus-theme-openapi-docs/package.json" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="2YX1yoqLelu4EaY4TNiZw7WEU3F" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "v3.0.0",
+    "last_opened_file_path": "/home/gijs/Documents/docusaurus-openapi-docs/demo",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.standard": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.standard": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "yarn",
+    "ts.external.directory.path": "/home/gijs/Documents/docusaurus-openapi-docs/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/demo" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ac901705-aac6-4945-bcfb-828baea3e7ea" name="Changes" comment="" />
+      <created>1700657366385</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1700657366385</updated>
+      <workItem from="1700657367411" duration="215000" />
+      <workItem from="1700657722460" duration="1901000" />
+      <workItem from="1700659947092" duration="1218000" />
+      <workItem from="1701436701523" duration="43000" />
+      <workItem from="1701857598825" duration="1535000" />
+      <workItem from="1701859138857" duration="5323000" />
+      <workItem from="1701865976686" duration="1149000" />
+      <workItem from="1701867148687" duration="242000" />
+      <workItem from="1701867399417" duration="3824000" />
+      <workItem from="1701871356280" duration="4603000" />
+      <workItem from="1701875994863" duration="2234000" />
+      <workItem from="1702022724328" duration="4427000" />
+      <workItem from="1702027640455" duration="31000" />
+      <workItem from="1702027687258" duration="6599000" />
+      <workItem from="1702035599211" duration="91000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

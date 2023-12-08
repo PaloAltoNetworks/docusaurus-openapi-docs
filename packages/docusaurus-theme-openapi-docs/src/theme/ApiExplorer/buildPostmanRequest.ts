@@ -10,7 +10,7 @@ import { AuthState, Scheme } from "@theme/ApiExplorer/Authorization/slice";
 import { Body, Content } from "@theme/ApiExplorer/Body/slice";
 import {
   ParameterObject,
-  ServerObject,
+  ServerObject
 } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import cloneDeep from "lodash/cloneDeep";
 
@@ -30,7 +30,7 @@ function setQueryParams(postman: sdk.Request, queryParams: Param[]) {
       if (Array.isArray(param.value)) {
         return new sdk.QueryParam({
           key: param.name,
-          value: param.value.join(","),
+          value: param.value.join(",")
         });
       }
 
@@ -39,7 +39,7 @@ function setQueryParams(postman: sdk.Request, queryParams: Param[]) {
         if (param.value === "true") {
           return new sdk.QueryParam({
             key: param.name,
-            value: null,
+            value: null
           });
         }
         return undefined;
@@ -47,7 +47,7 @@ function setQueryParams(postman: sdk.Request, queryParams: Param[]) {
 
       return new sdk.QueryParam({
         key: param.name,
-        value: param.value,
+        value: param.value
       });
     })
     .filter((item): item is sdk.QueryParam => item !== undefined);
@@ -61,7 +61,7 @@ function setPathParams(postman: sdk.Request, queryParams: Param[]) {
   const source = queryParams.map((param) => {
     return new sdk.Variable({
       key: param.name,
-      value: param.value || `:${param.name}`,
+      value: param.value || `:${param.name}`
     });
   });
   postman.url.variables.assimilate(source, false);
@@ -76,7 +76,7 @@ function buildCookie(cookieParams: Param[]) {
           path: "",
           domain: "",
           key: param.name,
-          value: param.value,
+          value: param.value
         });
       }
       return undefined;
@@ -212,7 +212,7 @@ function buildPostmanRequest(
     headerParams,
     body,
     server,
-    auth,
+    auth
   }: Options
 ) {
   const clonedPostman = cloneDeep(postman);
@@ -249,13 +249,13 @@ function buildPostmanRequest(
       if (token === undefined) {
         otherHeaders.push({
           key: "Authorization",
-          value: "Bearer <TOKEN>",
+          value: "Bearer <TOKEN>"
         });
         continue;
       }
       otherHeaders.push({
         key: "Authorization",
-        value: `Bearer ${token}`,
+        value: `Bearer ${token}`
       });
       continue;
     }
@@ -268,13 +268,13 @@ function buildPostmanRequest(
       if (token === undefined) {
         otherHeaders.push({
           key: "Authorization",
-          value: "Bearer <TOKEN>",
+          value: "Bearer <TOKEN>"
         });
         continue;
       }
       otherHeaders.push({
         key: "Authorization",
-        value: `Bearer ${token}`,
+        value: `Bearer ${token}`
       });
       continue;
     }
@@ -287,7 +287,7 @@ function buildPostmanRequest(
       }
       otherHeaders.push({
         key: "Authorization",
-        value: `Basic ${window.btoa(`${username}:${password}`)}`,
+        value: `Basic ${window.btoa(`${username}:${password}`)}`
       });
       continue;
     }
@@ -298,13 +298,13 @@ function buildPostmanRequest(
       if (apiKey === undefined) {
         otherHeaders.push({
           key: a.name,
-          value: "<API_KEY_VALUE>",
+          value: "<API_KEY_VALUE>"
         });
         continue;
       }
       otherHeaders.push({
         key: a.name,
-        value: apiKey,
+        value: apiKey
       });
       continue;
     }

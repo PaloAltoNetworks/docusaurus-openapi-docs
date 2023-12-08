@@ -52,7 +52,7 @@ function checkoutCode() {
   ensureCleanDir(BUILD_PATH);
 
   safeExec(`git clone git@github.com:${ORG}/${REPO}.git ${REPO}`, {
-    cwd: BUILD_PATH,
+    cwd: BUILD_PATH
   });
 
   REPO_ROOT = path.join(BUILD_PATH, REPO);
@@ -62,23 +62,23 @@ function configureGit() {
   const gitUserName = getGitUserName();
   const gitUserEmail = getGitUserEmail();
   safeExec(`git config user.name ${gitUserName}`, {
-    cwd: REPO_ROOT,
+    cwd: REPO_ROOT
   });
   safeExec(`git config user.email ${gitUserEmail}`, {
-    cwd: REPO_ROOT,
+    cwd: REPO_ROOT
   });
 }
 
 function buildAndPublish() {
   safeExec(`yarn install --frozen-lockfile`, {
     cwd: REPO_ROOT,
-    stdio: "ignore",
+    stdio: "ignore"
   });
 
   printBanner("Building Packages");
 
   safeExec(`yarn lerna run build --no-private`, {
-    cwd: REPO_ROOT,
+    cwd: REPO_ROOT
   });
 
   printBanner("Publishing Packages");
@@ -87,7 +87,7 @@ function buildAndPublish() {
   safeExec(
     `lerna publish --yes from-package --no-verify-access --dist-tag beta`,
     {
-      cwd: REPO_ROOT,
+      cwd: REPO_ROOT
     }
   );
 }
@@ -96,10 +96,10 @@ function tag() {
   const tag = `v${version}`;
   const message = `Version ${version}`;
   safeExec(`git tag -a ${tag} -m "${message}"`, {
-    cwd: REPO_ROOT,
+    cwd: REPO_ROOT
   });
   safeExec(`git push origin ${tag}`, {
-    cwd: REPO_ROOT,
+    cwd: REPO_ROOT
   });
 }
 

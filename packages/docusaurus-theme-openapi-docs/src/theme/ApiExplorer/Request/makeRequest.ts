@@ -17,7 +17,7 @@ function fetchWithtimeout(
     fetch(url, options),
     new Promise((_, reject) =>
       setTimeout(() => reject(new Error("Request timed out")), timeout)
-    ),
+    )
   ]);
 }
 
@@ -183,7 +183,7 @@ async function makeRequest(
   const requestOptions: RequestInit = {
     method: request.method,
     headers: myHeaders,
-    body: myBody,
+    body: myBody
   };
 
   let finalUrl = request.url.toString();

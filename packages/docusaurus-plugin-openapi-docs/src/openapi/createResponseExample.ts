@@ -35,21 +35,21 @@ const primitives: Primitives = {
     uuid: () => "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     hostname: () => "example.com",
     ipv4: () => "198.51.100.42",
-    ipv6: () => "2001:0db8:5b96:0000:0000:426f:8e17:642a",
+    ipv6: () => "2001:0db8:5b96:0000:0000:426f:8e17:642a"
   },
   number: {
     default: () => 0,
-    float: () => 0.0,
+    float: () => 0.0
   },
   integer: {
-    default: () => 0,
+    default: () => 0
   },
   boolean: {
     default: (schema) =>
-      typeof schema.default === "boolean" ? schema.default : true,
+      typeof schema.default === "boolean" ? schema.default : true
   },
   object: {},
-  array: {},
+  array: {}
 };
 
 function sampleResponseFromProp(name: string, prop: any, obj: any): any {

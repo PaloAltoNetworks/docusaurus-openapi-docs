@@ -50,7 +50,7 @@ export const slice = createSlice({
   reducers: {
     clearRawBody: (_state) => {
       return {
-        type: "empty",
+        type: "empty"
       };
     },
     setStringRawBody: (_state, action: PayloadAction<string>) => {
@@ -58,8 +58,8 @@ export const slice = createSlice({
         type: "raw",
         content: {
           type: "string",
-          value: action.payload,
-        },
+          value: action.payload
+        }
       };
     },
     setFileRawBody: (_state, action: PayloadAction<FileContent["value"]>) => {
@@ -67,8 +67,8 @@ export const slice = createSlice({
         type: "raw",
         content: {
           type: "file",
-          value: action.payload,
-        },
+          value: action.payload
+        }
       };
     },
     clearFormBodyKey: (state, action: PayloadAction<string>) => {
@@ -86,14 +86,14 @@ export const slice = createSlice({
           content: {
             [action.payload.key]: {
               type: "string",
-              value: action.payload.value,
-            },
-          },
+              value: action.payload.value
+            }
+          }
         };
       }
       state.content[action.payload.key] = {
         type: "string",
-        value: action.payload.value,
+        value: action.payload.value
       };
       return state;
     },
@@ -107,18 +107,18 @@ export const slice = createSlice({
           content: {
             [action.payload.key]: {
               type: "file",
-              value: action.payload.value,
-            },
-          },
+              value: action.payload.value
+            }
+          }
         };
       }
       state.content[action.payload.key] = {
         type: "file",
-        value: action.payload.value,
+        value: action.payload.value
       };
       return state;
-    },
-  },
+    }
+  }
 });
 
 export const {
@@ -127,7 +127,7 @@ export const {
   setFileRawBody,
   clearFormBodyKey,
   setStringFormBody,
-  setFileFormBody,
+  setFileFormBody
 } = slice.actions;
 
 export default slice.reducer;

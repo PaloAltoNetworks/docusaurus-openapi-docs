@@ -36,8 +36,8 @@ export const slice = createSlice({
     },
     clearHeaders: (state) => {
       state.headers = undefined;
-    },
-  },
+    }
+  }
 });
 
 export const {
@@ -46,7 +46,7 @@ export const {
   setCode,
   clearCode,
   setHeaders,
-  clearHeaders,
+  clearHeaders
 } = slice.actions;
 
 export default slice.reducer;

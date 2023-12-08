@@ -27,7 +27,7 @@ export function createStorage(persistance: Persistance): Storage {
       clear: () => {},
       key: () => null,
       removeItem: () => {},
-      length: 0,
+      length: 0
     };
   }
 

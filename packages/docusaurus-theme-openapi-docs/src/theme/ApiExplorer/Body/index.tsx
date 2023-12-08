@@ -24,7 +24,7 @@ import {
   clearRawBody,
   setFileFormBody,
   setFileRawBody,
-  setStringFormBody,
+  setStringFormBody
 } from "./slice";
 
 export interface Props {
@@ -38,7 +38,7 @@ function BodyWrap({
   requestBodyMetadata,
   jsonRequestBodyExample,
   methods,
-  required,
+  required
 }: Props) {
   const contentType = useTypedSelector((state: any) => state.contentType.value);
 
@@ -63,7 +63,7 @@ function Body({
   requestBodyMetadata,
   jsonRequestBodyExample,
   methods,
-  required,
+  required
 }: Props) {
   const contentType = useTypedSelector((state: any) => state.contentType.value);
   const dispatch = useTypedDispatch();
@@ -106,7 +106,7 @@ function Body({
             dispatch(
               setFileRawBody({
                 src: `/path/to/${file.name}`,
-                content: file,
+                content: file
               })
             );
           }}
@@ -145,8 +145,8 @@ function Body({
                           key: key,
                           value: {
                             src: `/path/to/${file.name}`,
-                            content: file,
-                          },
+                            content: file
+                          }
                         })
                       );
                     }}
@@ -175,7 +175,7 @@ function Body({
                         dispatch(
                           setStringFormBody({
                             key: key,
-                            value: val,
+                            value: val
                           })
                         );
                       }
@@ -235,7 +235,7 @@ function Body({
         examplesBodies.push({
           label: key,
           body: JSON.stringify(example.value, null, 2),
-          summary: example.summary,
+          summary: example.summary
         });
       }
     }
@@ -248,7 +248,7 @@ function Body({
         defaultBody = format(json2xml(jsonRequestBodyExample, ""), {
           indentation: "  ",
           lineSeparator: "\n",
-          collapseContent: true,
+          collapseContent: true
         });
       } catch {
         defaultBody = json2xml(jsonRequestBodyExample);
@@ -259,7 +259,7 @@ function Body({
         exampleBody = format(json2xml(example, ""), {
           indentation: "  ",
           lineSeparator: "\n",
-          collapseContent: true,
+          collapseContent: true
         });
       } catch {
         exampleBody = json2xml(example);
@@ -272,7 +272,7 @@ function Body({
           formattedXmlBody = format(example.value, {
             indentation: "  ",
             lineSeparator: "\n",
-            collapseContent: true,
+            collapseContent: true
           });
         } catch {
           formattedXmlBody = example.value;
@@ -280,7 +280,7 @@ function Body({
         examplesBodies.push({
           label: key,
           body: formattedXmlBody,
-          summary: example.summary,
+          summary: example.summary
         });
       }
     }

@@ -9,7 +9,7 @@ import React, { cloneElement, useRef, useEffect, useState } from "react";
 
 import {
   useScrollPositionBlocker,
-  useTabs,
+  useTabs
 } from "@docusaurus/theme-common/internal";
 import useIsBrowser from "@docusaurus/useIsBrowser";
 import clsx from "clsx";
@@ -96,7 +96,7 @@ function TabList({ className, block, selectedValue, selectValue, tabValues }) {
           "openapi-tabs__schema-list-container",
           "tabs",
           {
-            "tabs--block": block,
+            "tabs--block": block
           },
           className
         )}
@@ -117,7 +117,7 @@ function TabList({ className, block, selectedValue, selectValue, tabValues }) {
               "openapi-tabs__schema-item",
               attributes?.className,
               {
-                active: selectedValue === value,
+                active: selectedValue === value
               }
             )}
           >
@@ -154,7 +154,7 @@ function TabContent({ lazy, children, selectedValue }) {
       {children.map((tabItem, i) =>
         cloneElement(tabItem, {
           key: i,
-          hidden: tabItem.props.value !== selectedValue,
+          hidden: tabItem.props.value !== selectedValue
         })
       )}
     </div>

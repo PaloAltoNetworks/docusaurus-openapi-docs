@@ -9,7 +9,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { createStorage, hashArray } from "@theme/ApiExplorer/storage-utils";
 import {
   SecurityRequirementObject,
-  SecuritySchemeObject,
+  SecuritySchemeObject
 } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 /* eslint-disable import/no-extraneous-dependencies*/
 import { ThemeConfig } from "docusaurus-theme-openapi-docs/src/types";
@@ -50,7 +50,7 @@ import { getAuthDataKeys } from "./auth-types";
 export function createAuth({
   security,
   securitySchemes,
-  options: opts,
+  options: opts
 }: {
   security?: SecurityRequirementObject[];
   securitySchemes?: {
@@ -87,7 +87,7 @@ export function createAuth({
         options[id].push({
           ...scheme,
           key: schemeID,
-          scopes,
+          scopes
         });
       }
     }
@@ -101,7 +101,7 @@ export function createAuth({
   return {
     data,
     options,
-    selected: persisted ?? Object.keys(options)[0],
+    selected: persisted ?? Object.keys(options)[0]
   };
 }
 
@@ -137,8 +137,8 @@ export const slice = createSlice({
     },
     setSelectedAuth: (state, action: PayloadAction<string>) => {
       state.selected = action.payload;
-    },
-  },
+    }
+  }
 });
 
 export const { setAuthData, setSelectedAuth } = slice.actions;

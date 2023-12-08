@@ -11,8 +11,8 @@ export function createVersionBadge(version: string | undefined) {
   return guard(version, (version) => [
     create("span", {
       className: "theme-doc-version-badge badge badge--secondary",
-      children: `Version: ${escape(version)}`,
+      children: `Version: ${escape(version)}`
     }),
-    `\n\n`,
+    `\n\n`
   ]);
 }

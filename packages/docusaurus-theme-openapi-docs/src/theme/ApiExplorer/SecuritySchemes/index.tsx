@@ -44,7 +44,7 @@ function SecuritySchemes(props: any) {
                   style={{
                     display: "flex",
                     flexDirection: "column",
-                    background: "var(--openapi-card-background-color)",
+                    background: "var(--openapi-card-background-color)"
                   }}
                 >
                   <span>
@@ -85,7 +85,7 @@ function SecuritySchemes(props: any) {
                   style={{
                     display: "flex",
                     flexDirection: "column",
-                    background: "var(--openapi-card-background-color)",
+                    background: "var(--openapi-card-background-color)"
                   }}
                 >
                   <span>
@@ -124,7 +124,7 @@ function SecuritySchemes(props: any) {
                 style={{
                   display: "flex",
                   flexDirection: "column",
-                  background: "var(--openapi-card-background-color)",
+                  background: "var(--openapi-card-background-color)"
                 }}
               >
                 <span>
@@ -152,7 +152,7 @@ function SecuritySchemes(props: any) {
                 style={{
                   display: "flex",
                   flexDirection: "column",
-                  background: "var(--openapi-card-background-color)",
+                  background: "var(--openapi-card-background-color)"
                 }}
               >
                 <span>
@@ -194,7 +194,7 @@ function SecuritySchemes(props: any) {
                 style={{
                   display: "flex",
                   flexDirection: "column",
-                  background: "var(--openapi-card-background-color)",
+                  background: "var(--openapi-card-background-color)"
                 }}
               >
                 <span>
@@ -244,7 +244,7 @@ function SecuritySchemes(props: any) {
                 style={{
                   display: "flex",
                   flexDirection: "column",
-                  background: "var(--openapi-card-background-color)",
+                  background: "var(--openapi-card-background-color)"
                 }}
               >
                 <span>

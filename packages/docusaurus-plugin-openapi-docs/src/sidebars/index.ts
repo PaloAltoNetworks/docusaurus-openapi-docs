@@ -11,7 +11,7 @@ import {
   ProcessedSidebar,
   SidebarItemCategory,
   SidebarItemCategoryLinkConfig,
-  SidebarItemDoc,
+  SidebarItemDoc
 } from "@docusaurus/plugin-content-docs/src/sidebars/types";
 import { posixPath } from "@docusaurus/utils";
 import clsx from "clsx";
@@ -23,7 +23,7 @@ import type {
   SidebarOptions,
   APIOptions,
   ApiPageMetadata,
-  ApiMetadata,
+  ApiMetadata
 } from "../types";
 
 function isApiItem(item: ApiMetadata): item is ApiMetadata {
@@ -50,7 +50,7 @@ function groupByTags(
     sidebarCollapsed,
     sidebarCollapsible,
     customProps,
-    categoryLinkSource,
+    categoryLinkSource
   } = sidebarOptions;
 
   const apiItems = items.filter(isApiItem);
@@ -60,7 +60,7 @@ function groupByTags(
       id: item.id,
       title: item.title,
       description: item.description,
-      tags: item.info.tags,
+      tags: item.info.tags
     };
   });
 
@@ -98,10 +98,10 @@ function groupByTags(
       className: clsx(
         {
           "menu__list-item--deprecated": item.api.deprecated,
-          "api-method": !!item.api.method,
+          "api-method": !!item.api.method
         },
         item.api.method
-      ),
+      )
     };
   }
 
@@ -111,7 +111,7 @@ function groupByTags(
     const id = infoItem.id;
     rootIntroDoc = {
       type: "doc" as const,
-      id: basePath === "" || undefined ? `${id}` : `${basePath}/${id}`,
+      id: basePath === "" || undefined ? `${id}` : `${basePath}/${id}`
     };
   }
 
@@ -125,7 +125,7 @@ function groupByTags(
         (t) =>
           tag === t.name ?? {
             name: tag,
-            description: `${tag} Index`,
+            description: `${tag} Index`
           }
       );
 
@@ -138,7 +138,7 @@ function groupByTags(
           id:
             basePath === "" || undefined
               ? `${taggedInfoObject.id}`
-              : `${basePath}/${taggedInfoObject.id}`,
+              : `${basePath}/${taggedInfoObject.id}`
         } as SidebarItemCategoryLinkConfig;
       }
 
@@ -147,8 +147,7 @@ function groupByTags(
         const tagId = kebabCase(tagObject.name);
         linkConfig = {
           type: "doc",
-          id:
-            basePath === "" || undefined ? `${tagId}` : `${basePath}/${tagId}`,
+          id: basePath === "" || undefined ? `${tagId}` : `${basePath}/${tagId}`
         } as SidebarItemCategoryLinkConfig;
       }
 
@@ -165,7 +164,7 @@ function groupByTags(
                   kebabCase(tag)
                 )
               )
-            : posixPath(path.join("/category", basePath, kebabCase(tag))),
+            : posixPath(path.join("/category", basePath, kebabCase(tag)))
         } as SidebarItemCategoryLinkConfig;
       }
 
@@ -177,7 +176,7 @@ function groupByTags(
         collapsed: sidebarCollapsed,
         items: apiItems
           .filter((item) => !!item.api.tags?.includes(tag))
-          .map(createDocItem),
+          .map(createDocItem)
       };
     })
     .filter((item) => item.items.length > 0); // Filter out any categories with no items.
@@ -196,8 +195,8 @@ function groupByTags(
         collapsed: sidebarCollapsed!,
         items: apiItems
           .filter(({ api }) => api.tags === undefined || api.tags.length === 0)
-          .map(createDocItem),
-      },
+          .map(createDocItem)
+      }
     ];
   }
 

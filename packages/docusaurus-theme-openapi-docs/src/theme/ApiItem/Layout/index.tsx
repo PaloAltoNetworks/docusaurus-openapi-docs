@@ -43,7 +43,7 @@ function useDocTOC() {
   return {
     hidden,
     mobile,
-    desktop,
+    desktop
   };
 }
 
@@ -51,7 +51,7 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
   const docTOC = useDocTOC();
   const {
     metadata: { unlisted },
-    frontMatter: { api },
+    frontMatter: { api }
   } = useDoc();
 
   return (

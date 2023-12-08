@@ -28,8 +28,8 @@ export const slice = createSlice({
       const paramGroup = state[action.payload.in];
       const index = paramGroup.findIndex((p) => p.name === newParam.name);
       paramGroup[index] = newParam;
-    },
-  },
+    }
+  }
 });
 
 export const { setParam } = slice.actions;

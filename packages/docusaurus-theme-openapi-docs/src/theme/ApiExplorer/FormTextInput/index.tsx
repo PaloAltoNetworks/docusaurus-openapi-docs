@@ -25,13 +25,13 @@ function FormTextInput({
   placeholder,
   password,
   onChange,
-  paramName,
+  paramName
 }: Props) {
   placeholder = placeholder?.split("\n")[0];
 
   const {
     register,
-    formState: { errors },
+    formState: { errors }
   } = useFormContext();
 
   const showErrorMessage = errors?.[paramName]?.message;
@@ -41,10 +41,10 @@ function FormTextInput({
       {paramName ? (
         <input
           {...register(paramName, {
-            required: isRequired ? "This field is required" : false,
+            required: isRequired ? "This field is required" : false
           })}
           className={clsx("openapi-explorer__form-item-input", {
-            error: showErrorMessage,
+            error: showErrorMessage
           })}
           type={password ? "password" : "text"}
           placeholder={placeholder}

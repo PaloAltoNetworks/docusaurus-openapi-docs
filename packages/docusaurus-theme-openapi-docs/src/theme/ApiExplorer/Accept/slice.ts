@@ -20,8 +20,8 @@ export const slice = createSlice({
   reducers: {
     setAccept: (state, action: PayloadAction<string>) => {
       state.value = action.payload;
-    },
-  },
+    }
+  }
 });
 
 export const { setAccept } = slice.actions;

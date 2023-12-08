@@ -20,7 +20,7 @@ export interface ParamProps {
 export default function ParamMultiSelectFormItem({ param }: ParamProps) {
   const {
     control,
-    formState: { errors },
+    formState: { errors }
   } = useFormContext();
 
   const showErrorMessage = errors?.paramMultiSelect;
@@ -37,10 +37,10 @@ export default function ParamMultiSelectFormItem({ param }: ParamProps) {
   const paramTypeToWatch = pathParams.length
     ? pathParams
     : queryParams.length
-    ? queryParams
-    : cookieParams.length
-    ? cookieParams
-    : headerParams;
+      ? queryParams
+      : cookieParams.length
+        ? cookieParams
+        : headerParams;
 
   const handleChange = (e: any, onChange: any) => {
     const values = Array.prototype.filter
@@ -50,7 +50,7 @@ export default function ParamMultiSelectFormItem({ param }: ParamProps) {
     dispatch(
       setParam({
         ...param,
-        value: values.length > 0 ? values : undefined,
+        value: values.length > 0 ? values : undefined
       })
     );
 

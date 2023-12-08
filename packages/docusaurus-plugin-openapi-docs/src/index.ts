@@ -98,7 +98,7 @@ export default function pluginOpenAPIDocs(
       template,
       markdownGenerators,
       downloadUrl,
-      sidebarOptions,
+      sidebarOptions
     } = options;
 
     // Remove trailing slash before proceeding
@@ -149,7 +149,7 @@ export default function pluginOpenAPIDocs(
         sidebarSliceTemplate += `export default sidebar;`;
 
         const view = render(sidebarSliceTemplate, {
-          slice: JSON.stringify(sidebarSlice, null, 2),
+          slice: JSON.stringify(sidebarSlice, null, 2)
         });
 
         if (!fs.existsSync(`${outputDir}/sidebar.ts`)) {
@@ -263,8 +263,8 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
           item.type === "api"
             ? apiPageGenerator(item)
             : item.type === "info"
-            ? infoPageGenerator(item)
-            : tagPageGenerator(item);
+              ? infoPageGenerator(item)
+              : tagPageGenerator(item);
         item.markdown = markdown;
         if (item.type === "api") {
           // opportunity to compress JSON
@@ -380,11 +380,11 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
     const apiDir = posixPath(path.join(siteDir, outputDir));
     const apiMdxFiles = await Globby(["*.api.mdx", "*.info.mdx", "*.tag.mdx"], {
       cwd: path.resolve(apiDir),
-      deep: 1,
+      deep: 1
     });
     const sidebarFile = await Globby(["sidebar.ts"], {
       cwd: path.resolve(apiDir),
-      deep: 1,
+      deep: 1
     });
     apiMdxFiles.map((mdx) =>
       fs.unlink(`${apiDir}/${mdx}`, (err) => {
@@ -421,7 +421,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
       versionsArray.push({
         version: version,
         label: metadata.label,
-        baseUrl: metadata.baseUrl,
+        baseUrl: metadata.baseUrl
       });
     }
 
@@ -587,7 +587,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
                 const versionConfig = versions[key];
                 const mergedConfig = {
                   ...parentConfig,
-                  ...versionConfig,
+                  ...versionConfig
                 };
                 await generateApiDocs(mergedConfig, targetDocsPluginId);
               });
@@ -602,7 +602,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
             const versionConfig = versions[versionId];
             const mergedConfig = {
               ...parentConfig,
-              ...versionConfig,
+              ...versionConfig
             };
             await generateVersions(mergedVersions, parentConfig.outputDir);
             await generateApiDocs(mergedConfig, targetDocsPluginId);
@@ -711,7 +711,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
                 const versionConfig = versions[key];
                 const mergedConfig = {
                   ...parentConfig,
-                  ...versionConfig,
+                  ...versionConfig
                 };
                 await cleanApiDocs(mergedConfig);
               });
@@ -720,12 +720,12 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
             const versionConfig = versions[versionId];
             const mergedConfig = {
               ...parentConfig,
-              ...versionConfig,
+              ...versionConfig
             };
             await cleanApiDocs(mergedConfig);
           }
         });
-    },
+    }
   };
 }
 

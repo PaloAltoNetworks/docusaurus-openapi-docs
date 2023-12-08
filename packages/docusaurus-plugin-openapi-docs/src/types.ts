@@ -11,14 +11,14 @@ import {
   InfoObject,
   OperationObject,
   SecuritySchemeObject,
-  TagObject,
+  TagObject
 } from "./openapi/types";
 
 export type {
   PropSidebarItemCategory,
   SidebarItemLink,
   PropSidebar,
-  PropSidebarItem,
+  PropSidebarItem
 } from "@docusaurus/plugin-content-docs-types";
 export interface PluginOptions {
   id?: string;

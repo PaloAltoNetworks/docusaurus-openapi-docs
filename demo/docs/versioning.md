@@ -78,7 +78,7 @@ Import:
 
 ```javascript
 const {
-  versionSelector,
+  versionSelector
 } = require("docusaurus-plugin-openapi-docs/lib/sidebars/utils"); // imports utility
 const petstoreVersions = require("./docs/petstore/versions.json"); // imports Petstore versions.json
 ```
@@ -102,7 +102,7 @@ Import:
 
 ```javascript
 const {
-  versionCrumb,
+  versionCrumb
 } = require("docusaurus-plugin-openapi-docs/lib/sidebars/utils");
 ```
 

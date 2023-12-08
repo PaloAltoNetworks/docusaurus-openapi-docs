@@ -12,14 +12,14 @@ module.exports = {
     // we mostly need to transpile some features so that node does not crash...
     lib: {
       presets: [
-        ["@babel/preset-typescript", { isTSX: true, allExtensions: true }],
+        ["@babel/preset-typescript", { isTSX: true, allExtensions: true }]
       ],
       // Useful to transpile for older node versions
       plugins: [
         "@babel/plugin-transform-modules-commonjs",
         "@babel/plugin-proposal-nullish-coalescing-operator",
-        "@babel/plugin-proposal-optional-chaining",
-      ],
+        "@babel/plugin-proposal-optional-chaining"
+      ]
     },
 
     // USED FOR JS SWIZZLE
@@ -28,8 +28,8 @@ module.exports = {
     // This source code should look clean/human readable to be usable
     "lib-next": {
       presets: [
-        ["@babel/preset-typescript", { isTSX: true, allExtensions: true }],
-      ],
-    },
-  },
+        ["@babel/preset-typescript", { isTSX: true, allExtensions: true }]
+      ]
+    }
+  }
 };

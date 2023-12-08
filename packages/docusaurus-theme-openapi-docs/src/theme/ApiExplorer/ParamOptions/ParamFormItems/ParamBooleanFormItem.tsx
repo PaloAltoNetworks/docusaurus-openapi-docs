@@ -22,7 +22,7 @@ export default function ParamBooleanFormItem({ param }: ParamProps) {
 
   const {
     control,
-    formState: { errors },
+    formState: { errors }
   } = useFormContext();
 
   const showErrorMessage = errors?.paramBoolean;
@@ -42,7 +42,7 @@ export default function ParamBooleanFormItem({ param }: ParamProps) {
               dispatch(
                 setParam({
                   ...param,
-                  value: val === "---" ? undefined : val,
+                  value: val === "---" ? undefined : val
                 })
               );
               onChange(val);

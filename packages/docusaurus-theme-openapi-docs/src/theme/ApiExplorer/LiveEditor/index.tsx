@@ -29,7 +29,7 @@ function Live({ onEdit, showErrors }: any) {
         className={clsx({
           "openapi-explorer__playground-editor": true,
           "openapi-explorer__form-item-input": showErrors,
-          error: showErrors,
+          error: showErrors
         })}
         onChange={onEdit}
         disabled={editorDisabled}
@@ -59,7 +59,7 @@ function App({
 
   const {
     control,
-    formState: { errors },
+    formState: { errors }
   } = useFormContext();
 
   const showErrorMessage = errors?.requestBody;
@@ -72,7 +72,7 @@ function App({
   return (
     <div
       className={clsx({
-        "openapi-explorer__playground-container": true,
+        "openapi-explorer__playground-container": true
       })}
     >
       <LiveProvider

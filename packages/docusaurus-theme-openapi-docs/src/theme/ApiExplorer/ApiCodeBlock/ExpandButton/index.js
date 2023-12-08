@@ -24,7 +24,7 @@ export default function ExpandButton({
   showLineNumbers,
   blockClassName,
   title,
-  lineClassNames,
+  lineClassNames
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const prismTheme = usePrismTheme();
@@ -42,18 +42,18 @@ export default function ExpandButton({
             ? translate({
                 id: "theme.CodeBlock.expanded",
                 message: "Expanded",
-                description: "The expanded button label on code blocks",
+                description: "The expanded button label on code blocks"
               })
             : translate({
                 id: "theme.CodeBlock.expandButtonAriaLabel",
                 message: "Expand code to fullscreen",
-                description: "The ARIA label for expand code blocks button",
+                description: "The ARIA label for expand code blocks button"
               })
         }
         title={translate({
           id: "theme.CodeBlock.expand",
           message: "Expand",
-          description: "The expand button label on code blocks",
+          description: "The expand button label on code blocks"
         })}
         className={clsx(
           "clean-btn",

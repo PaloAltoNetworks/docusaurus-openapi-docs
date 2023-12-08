@@ -26,7 +26,7 @@ import type { ApiItem as ApiItemType } from "docusaurus-plugin-openapi-docs/src/
 /* eslint-disable import/no-extraneous-dependencies*/
 import type {
   DocFrontMatter,
-  ThemeConfig,
+  ThemeConfig
 } from "docusaurus-theme-openapi-docs/src/types";
 import { Provider } from "react-redux";
 
@@ -92,7 +92,7 @@ export default function ApiItem(props: Props): JSX.Element {
       path: [] as ParameterObject[],
       query: [] as ParameterObject[],
       header: [] as ParameterObject[],
-      cookie: [] as ParameterObject[],
+      cookie: [] as ParameterObject[]
     };
     api?.parameters?.forEach(
       (param: { in: "path" | "query" | "header" | "cookie" }) => {
@@ -104,7 +104,7 @@ export default function ApiItem(props: Props): JSX.Element {
     const auth = createAuth({
       security: api?.security,
       securitySchemes: api?.securitySchemes,
-      options,
+      options
     });
     // TODO: determine way to rehydrate without flashing
     // const acceptValue = window?.sessionStorage.getItem("accept");
@@ -116,20 +116,20 @@ export default function ApiItem(props: Props): JSX.Element {
       {
         accept: {
           value: acceptArray[0],
-          options: acceptArray,
+          options: acceptArray
         },
         contentType: {
           value: contentTypeArray[0],
-          options: contentTypeArray,
+          options: contentTypeArray
         },
         server: {
           value: serverObject.url ? serverObject : undefined,
-          options: servers,
+          options: servers
         },
         response: { value: undefined },
         body: { type: "empty" },
         params,
-        auth,
+        auth
       },
       [persistanceMiddleware]
     );

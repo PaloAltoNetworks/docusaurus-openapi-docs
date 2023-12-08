@@ -18,13 +18,13 @@ interface DeprecationNoticeProps {
 
 export function createDeprecationNotice({
   deprecated,
-  description,
+  description
 }: DeprecationNoticeProps) {
   return guard(deprecated, () =>
     createAdmonition({
       children:
         clean(description) ??
-        "This endpoint has been deprecated and may be replaced or removed in future versions of the API.",
+        "This endpoint has been deprecated and may be replaced or removed in future versions of the API."
     })
   );
 }

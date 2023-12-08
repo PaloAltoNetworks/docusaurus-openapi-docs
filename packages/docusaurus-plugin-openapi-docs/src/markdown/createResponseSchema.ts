@@ -13,7 +13,7 @@ import { createNodes } from "./createSchema";
 import {
   createExampleFromSchema,
   createResponseExample,
-  createResponseExamples,
+  createResponseExamples
 } from "./createStatusCodes";
 import { create, guard } from "./utils";
 
@@ -96,11 +96,11 @@ export function createResponseSchema({ title, body, ...rest }: Props) {
                                 () => [
                                   create("span", {
                                     className: "openapi-schema__required",
-                                    children: "required",
-                                  }),
+                                    children: "required"
+                                  })
                                 ]
-                              ),
-                            ],
+                              )
+                            ]
                           }),
                           create("div", {
                             style: { textAlign: "left", marginLeft: "1rem" },
@@ -109,31 +109,31 @@ export function createResponseSchema({ title, body, ...rest }: Props) {
                                 create("div", {
                                   style: {
                                     marginTop: "1rem",
-                                    marginBottom: "1rem",
+                                    marginBottom: "1rem"
                                   },
-                                  children: createDescription(body.description),
-                                }),
-                              ]),
-                            ],
+                                  children: createDescription(body.description)
+                                })
+                              ])
+                            ]
                           }),
                           create("ul", {
                             style: { marginLeft: "1rem" },
-                            children: createNodes(firstBody!, "response"),
-                          }),
-                        ],
-                      }),
-                    ],
+                            children: createNodes(firstBody!, "response")
+                          })
+                        ]
+                      })
+                    ]
                   }),
                 firstBody && createExampleFromSchema(firstBody, mimeType),
                 responseExamples &&
                   createResponseExamples(responseExamples, mimeType),
                 responseExample &&
-                  createResponseExample(responseExample, mimeType),
-              ],
-            }),
-          ],
+                  createResponseExample(responseExample, mimeType)
+              ]
+            })
+          ]
         });
-      }),
+      })
     });
   }
 

@@ -36,9 +36,9 @@ export function createParamsDetails({ parameters, type }: Props) {
             className: "openapi-markdown__details-summary-header-params",
             children: `${
               type.charAt(0).toUpperCase() + type.slice(1)
-            } Parameters`,
-          }),
-        ],
+            } Parameters`
+          })
+        ]
       }),
       create("div", {
         children: [
@@ -46,12 +46,12 @@ export function createParamsDetails({ parameters, type }: Props) {
             children: params.map((param) =>
               create("ParamsItem", {
                 className: "paramsItem",
-                param: param,
+                param: param
               })
-            ),
-          }),
-        ],
-      }),
-    ],
+            )
+          })
+        ]
+      })
+    ]
   });
 }

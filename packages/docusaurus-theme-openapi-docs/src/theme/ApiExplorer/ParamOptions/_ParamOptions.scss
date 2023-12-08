@@ -107,7 +107,8 @@
   }
 
   &:active {
-    box-shadow: inset 0 0 0 1px var(--openapi-input-border),
+    box-shadow:
+      inset 0 0 0 1px var(--openapi-input-border),
       inset 0 0 0 2px var(--openapi-inverse-color);
   }
 }
