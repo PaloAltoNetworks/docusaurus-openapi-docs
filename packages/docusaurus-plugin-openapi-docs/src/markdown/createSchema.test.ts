@@ -11,7 +11,7 @@ import { SchemaObject } from "../openapi/types";
 import { createNodes } from "./createSchema";
 
 describe("createNodes", () => {
-  it("should create readable MODs for oneOf primitive properties", () => {
+  it("should create readable MODs for oneOf primitive properties", async () => {
     const schema: SchemaObject = {
       type: "object",
       properties: {
@@ -48,8 +48,10 @@ describe("createNodes", () => {
       },
     };
     expect(
-      createNodes(schema, "request").map((md: any) =>
-        prettier.format(md, { parser: "babel" })
+      await Promise.all(
+        createNodes(schema, "request").map(
+          async (md: any) => await prettier.format(md, { parser: "babel" })
+        )
       )
     ).toMatchSnapshot();
   });
