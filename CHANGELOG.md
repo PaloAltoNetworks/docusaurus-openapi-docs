@@ -1,3 +1,18 @@
+## 3.0.0-beta.3 (Dec 13, 2023)
+
+High level enhancements
+
+- Improve Docusaurus 3 compatibility
+- Upgrade to Docusaurus 3.0.1
+
+Other enhancements and bug fixes
+
+- upgrade prettier
+- install prettier plugin ([#681](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/681))
+- [V3] Improved Docusaurus 3 compatibility ([#677](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/677))
+- Prepare release v3.0.0-beta.2 ([#668](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/668))
+- Port v2 changes/fixes into v3 ([#667](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/667))
+
 ## 3.0.0-beta.2 (Dec 1, 2023)
 
 High level enhancements
