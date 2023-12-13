@@ -7,6 +7,8 @@
 
 /// <reference types="docusaurus-plugin-openapi-docs" />
 
+/* eslint-disable @typescript-eslint/no-use-before-define */
+
 declare module "@docusaurus/plugin-content-docs-types" {
   // Makes all properties visible when hovering over the type
   type Expand<T extends Record<string, unknown>> = { [P in keyof T]: T[P] };

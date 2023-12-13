@@ -4,16 +4,15 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
+import prism from "prism-react-renderer";
 
-import darkTheme from "prism-react-renderer/themes/vsDark/index.cjs.js";
-
-export default {
+const prismDark = {
   plain: {
     color: "#D4D4D4",
     backgroundColor: "#212121",
   },
   styles: [
-    ...darkTheme.styles,
+    ...prism.themes.vsDark.styles,
     {
       types: ["title"],
       style: {
@@ -77,3 +76,5 @@ export default {
     },
   ],
 };
+
+export default prismDark;

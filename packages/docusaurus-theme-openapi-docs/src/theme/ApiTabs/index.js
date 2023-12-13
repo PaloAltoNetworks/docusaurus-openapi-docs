@@ -125,8 +125,8 @@ function TabList({ className, block, selectedValue, selectValue, tabValues }) {
                 parseInt(value) >= 400
                   ? "danger"
                   : parseInt(value) >= 200 && parseInt(value) < 300
-                  ? "success"
-                  : "info",
+                    ? "success"
+                    : "info",
                 {
                   active: selectedValue === value,
                 }

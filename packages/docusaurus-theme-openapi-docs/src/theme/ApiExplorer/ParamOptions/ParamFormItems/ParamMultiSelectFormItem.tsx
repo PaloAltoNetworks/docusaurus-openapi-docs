@@ -37,10 +37,10 @@ export default function ParamMultiSelectFormItem({ param }: ParamProps) {
   const paramTypeToWatch = pathParams.length
     ? pathParams
     : queryParams.length
-    ? queryParams
-    : cookieParams.length
-    ? cookieParams
-    : headerParams;
+      ? queryParams
+      : cookieParams.length
+        ? cookieParams
+        : headerParams;
 
   const handleChange = (e: any, onChange: any) => {
     const values = Array.prototype.filter

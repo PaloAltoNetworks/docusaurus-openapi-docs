@@ -326,8 +326,8 @@ export class OpenAPIParser {
         const receiverItems = isBoolean(receiver.items)
           ? { items: receiver.items }
           : receiver.items
-          ? (Object.assign({}, receiver.items) as OpenAPISchema)
-          : {};
+            ? (Object.assign({}, receiver.items) as OpenAPISchema)
+            : {};
         const subSchemaItems = isBoolean(items)
           ? { items }
           : (Object.assign({}, items) as OpenAPISchema);

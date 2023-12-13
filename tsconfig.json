@@ -2,7 +2,8 @@
   "compilerOptions": {
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "noEmit": true
+    "noEmit": true,
+    "jsx": "react"
   },
-  "include": ["scripts"]
+  "include": ["scripts", "demo"]
 }

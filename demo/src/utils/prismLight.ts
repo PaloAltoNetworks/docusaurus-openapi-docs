@@ -4,13 +4,12 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
+import prism from "prism-react-renderer";
 
-import lightTheme from "prism-react-renderer/themes/github/index.cjs.js";
-
-export default {
-  ...lightTheme,
+const prismLight = {
+  ...prism.themes.github,
   styles: [
-    ...lightTheme.styles,
+    ...prism.themes.github.styles,
     {
       types: ["title"],
       style: {
@@ -98,3 +97,5 @@ export default {
     },
   ],
 };
+
+export default prismLight;

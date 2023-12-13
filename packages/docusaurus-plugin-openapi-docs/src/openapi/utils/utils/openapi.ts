@@ -689,7 +689,7 @@ export const shortenHTTPVerb = (verb) =>
   ({
     delete: "del",
     options: "opts",
-  }[verb] || verb);
+  })[verb] || verb;
 
 export function isRedocExtension(key: string): boolean {
   const redocExtensions = {

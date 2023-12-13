@@ -74,8 +74,8 @@ function ParamsItem({
     schema && schema.items
       ? schema.items.default
       : schema
-      ? schema.default
-      : undefined,
+        ? schema.default
+        : undefined,
     (value) => (
       <div>
         <ReactMarkdown children={`**Default value:** \`${value}\``} />

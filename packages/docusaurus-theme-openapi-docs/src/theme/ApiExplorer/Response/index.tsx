@@ -52,8 +52,8 @@ function Response({ item }: { item: NonNullable<ApiItem> }) {
       (parseInt(code) >= 400
         ? "openapi-response__dot--danger"
         : parseInt(code) >= 200 && parseInt(code) < 300
-        ? "openapi-response__dot--success"
-        : "openapi-response__dot--info");
+          ? "openapi-response__dot--success"
+          : "openapi-response__dot--info");
 
   if (!item.servers || hideSendButton) {
     return null;

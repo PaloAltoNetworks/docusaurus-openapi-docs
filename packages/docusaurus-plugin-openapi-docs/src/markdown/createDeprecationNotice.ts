@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { guard, Props, render } from "./utils";
+import { clean, guard, Props, render } from "./utils";
 
 function createAdmonition({ children }: Props) {
   return `:::caution deprecated\n\n${render(children)}\n\n:::`;
@@ -23,7 +23,7 @@ export function createDeprecationNotice({
   return guard(deprecated, () =>
     createAdmonition({
       children:
-        description ??
+        clean(description) ??
         "This endpoint has been deprecated and may be replaced or removed in future versions of the API.",
     })
   );
