@@ -8,10 +8,9 @@
 /// <reference types="@docusaurus/theme-classic" />
 
 declare module "@docusaurus/theme-common/internal" {
-  import { CSSProperties, RefObject } from "react";
+  import { CSSProperties, ReactNode, RefObject } from "react";
 
-  import { ThemeConfig } from "@docusaurus/theme-common";
-  import { DocContextValue } from "@docusaurus/theme-common/lib/contexts/doc";
+  import type { PropDocContent } from "@docusaurus/plugin-content-docs";
   import { MagicCommentConfig } from "@docusaurus/theme-common/lib/utils/codeBlockUtils";
   import {
     TabsProps as ITabsProps,
@@ -20,8 +19,6 @@ declare module "@docusaurus/theme-common/internal" {
   import { Props as ICodeBlockProps } from "@theme/CodeBlock";
   import { Props as ICopyButtonProps } from "@theme/CodeBlock/CopyButton";
   import { Props as ILineProps } from "@theme/CodeBlock/Line";
-  import { APIOptions } from "docusaurus-plugin-openapi-docs/lib/types";
-  import { ApiMetadataBase } from "docusaurus-plugin-openapi-docs/lib/types";
   import { PrismTheme } from "prism-react-renderer";
 
   export interface TabProps extends ITabsProps {}
@@ -47,6 +44,14 @@ declare module "@docusaurus/theme-common/internal" {
   export function useScrollPositionBlocker(): {
     blockElementScrollPositionUntilNextRender: (el: HTMLElement) => void;
   };
+
+  export function DocProvider({
+    children,
+    content,
+  }: {
+    children: ReactNode;
+    content: PropDocContent;
+  });
 
   export function useTabs(props: TabProps): {
     selectedValue: string;

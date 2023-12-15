@@ -12,6 +12,7 @@ import React from "react";
 import BrowserOnly from "@docusaurus/BrowserOnly";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import { HtmlClassNameProvider } from "@docusaurus/theme-common";
+import { DocProvider } from "@docusaurus/theme-common/internal";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import useIsBrowser from "@docusaurus/useIsBrowser";
 import { createAuth } from "@theme/ApiExplorer/Authorization/slice";
@@ -30,9 +31,6 @@ import type {
 import { Provider } from "react-redux";
 
 import { createStoreWithoutState, createStoreWithState } from "./store";
-
-// TODO Gijs put this in internal stuff?
-const { DocProvider } = require("@docusaurus/theme-common/internal");
 
 let ApiExplorer = (_: { item: any; infoPath: any }) => <div />;
 

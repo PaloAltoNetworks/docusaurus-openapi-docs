@@ -5,7 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-export type Children = string | undefined | (string | undefined)[];
+import { ReactNode } from "react";
+
+export type Children = ReactNode | string | undefined | (string | undefined)[];
 
 export type Props = Record<string, any> & { children?: Children };
 
@@ -35,7 +37,7 @@ export function render(children: Children): string {
   if (Array.isArray(children)) {
     return children.filter((c) => c !== undefined).join("");
   }
-  return children ?? "";
+  return (children as string) ?? "";
 }
 
 export function toString(value: any): string | undefined {

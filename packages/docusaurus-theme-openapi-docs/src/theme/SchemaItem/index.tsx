@@ -5,18 +5,32 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React from "react";
+import React, { ReactNode } from "react";
 
 import CodeBlock from "@theme/CodeBlock";
 /* eslint-disable import/no-extraneous-dependencies*/
 import clsx from "clsx";
-import { createDescription } from "docusaurus-theme-openapi-docs/lib/markdown/createDescription";
+
 /* eslint-disable import/no-extraneous-dependencies*/
-import { guard } from "docusaurus-theme-openapi-docs/lib/markdown/utils";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
-function SchemaItem({
+import { createDescription } from "../../markdown/createDescription";
+import { guard } from "../../markdown/utils";
+
+export interface Props {
+  children: ReactNode;
+  collapsible: boolean;
+  name: string;
+  qualifierMessage: string | undefined;
+  required: boolean;
+  schemaName: string;
+  // TODO should probably be typed
+  schema: any;
+  discriminator: boolean;
+}
+
+export default function SchemaItem({
   children: collapsibleSchemaContent,
   collapsible,
   name,
@@ -24,7 +38,7 @@ function SchemaItem({
   required,
   schemaName,
   schema,
-}) {
+}: Props) {
   let deprecated;
   let schemaDescription;
   let defaultValue;
@@ -119,5 +133,3 @@ function SchemaItem({
     </div>
   );
 }
-
-export default SchemaItem;
