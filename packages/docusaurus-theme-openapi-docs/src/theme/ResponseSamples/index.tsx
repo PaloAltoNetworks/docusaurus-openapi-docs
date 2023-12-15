@@ -8,8 +8,17 @@
 import React from "react";
 
 import CodeBlock from "@theme/CodeBlock";
+import { Language } from "prism-react-renderer";
 
-function ResponseSamples({ responseExample, language }) {
+export interface Props {
+  readonly responseExample: string;
+  readonly language: Language;
+}
+
+function ResponseSamples({
+  responseExample,
+  language,
+}: Props): React.JSX.Element {
   return (
     <div className="openapi-code__response-samples-container">
       <CodeBlock language={language ? language : "json"}>

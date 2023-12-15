@@ -9,13 +9,27 @@ import React, { useEffect } from "react";
 
 import { usePrismTheme } from "@docusaurus/theme-common";
 import { translate } from "@docusaurus/Translate";
-import Container from "@theme/ApiDemoPanel/ApiCodeBlock/Container";
-import CopyButton from "@theme/ApiDemoPanel/ApiCodeBlock/CopyButton";
-import ExitButton from "@theme/ApiDemoPanel/ApiCodeBlock/ExitButton";
-import Line from "@theme/ApiDemoPanel/ApiCodeBlock/Line";
+// @ts-ignore
+import Container from "@theme/ApiExplorer/ApiCodeBlock/Container";
+// @ts-ignore
+import CopyButton from "@theme/ApiExplorer/ApiCodeBlock/CopyButton";
+// @ts-ignore
+import ExitButton from "@theme/ApiExplorer/ApiCodeBlock/ExitButton";
+// @ts-ignore
+import Line from "@theme/ApiExplorer/ApiCodeBlock/Line";
 import clsx from "clsx";
-import Highlight, { defaultProps } from "prism-react-renderer";
+import { Highlight, type Language } from "prism-react-renderer";
 import Modal from "react-modal";
+
+interface Props {
+  code: string;
+  className: string;
+  language: Language;
+  showLineNumbers: boolean;
+  blockClassName: string;
+  title: string;
+  lineClassNames: string[];
+}
 
 export default function ExpandButton({
   code,
@@ -25,7 +39,7 @@ export default function ExpandButton({
   blockClassName,
   title,
   lineClassNames,
-}) {
+}: Props): React.JSX.Element {
   const prismTheme = usePrismTheme();
 
   function openModal() {
@@ -111,7 +125,6 @@ export default function ExpandButton({
           )}
           <div className="openapi-explorer__code-block-content">
             <Highlight
-              {...defaultProps}
               theme={prismTheme}
               code={code}
               language={language ?? "text"}
@@ -139,7 +152,7 @@ export default function ExpandButton({
                         line={line}
                         getLineProps={getLineProps}
                         getTokenProps={getTokenProps}
-                        classNames={lineClassNames[i]}
+                        classNames={lineClassNames}
                         showLineNumbers={showLineNumbers}
                       />
                     ))}
