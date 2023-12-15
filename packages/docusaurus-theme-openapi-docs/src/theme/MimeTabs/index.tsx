@@ -5,17 +5,31 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React, { cloneElement, useEffect, useState, useRef } from "react";
+import React, {
+  cloneElement,
+  useEffect,
+  useState,
+  useRef,
+  ReactElement,
+} from "react";
 
 import {
+  sanitizeTabsChildren,
+  TabProps,
   useScrollPositionBlocker,
   useTabs,
 } from "@docusaurus/theme-common/internal";
+import { TabItemProps } from "@docusaurus/theme-common/lib/utils/tabsUtils";
 import useIsBrowser from "@docusaurus/useIsBrowser";
-import { setAccept } from "@theme/ApiExplorer/Accept/slice";
+import setAccept from "@theme/ApiExplorer/Accept/slice";
 import { setContentType } from "@theme/ApiExplorer/ContentType/slice";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
+import { RootState } from "@theme/ApiItem/store";
 import clsx from "clsx";
+
+export interface Props {
+  schemaType: any;
+}
 
 function TabList({
   className,
@@ -24,8 +38,8 @@ function TabList({
   selectValue,
   tabValues,
   schemaType,
-}) {
-  const tabRefs = [];
+}: Props & TabProps & ReturnType<typeof useTabs>): React.JSX.Element {
+  const tabRefs: (HTMLLIElement | null)[] = [];
   const { blockElementScrollPositionUntilNextRender } =
     useScrollPositionBlocker();
 
@@ -34,8 +48,12 @@ function TabList({
   const isRequestSchema = schemaType?.toLowerCase() === "request";
 
   const [selectedValue, setSelectedValue] = useState(selectedValueProp);
-  const contentTypeVal = useTypedSelector((state) => state.contentType.value);
-  const acceptTypeVal = useTypedSelector((state) => state.accept.value);
+  const contentTypeVal = useTypedSelector(
+    (state: RootState) => state.contentType.value
+  );
+  const acceptTypeVal = useTypedSelector(
+    (state: RootState) => state.accept.value
+  );
 
   useEffect(() => {
     if (tabRefs.length > 1) {
@@ -48,7 +66,12 @@ function TabList({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contentTypeVal, acceptTypeVal]);
 
-  const handleTabChange = (event) => {
+  const handleTabChange = (
+    event:
+      | React.FocusEvent<HTMLLIElement>
+      | React.MouseEvent<HTMLLIElement>
+      | React.KeyboardEvent<HTMLLIElement>
+  ) => {
     event.preventDefault();
     const newTab = event.currentTarget;
     const newTabIndex = tabRefs.indexOf(newTab);
@@ -65,8 +88,9 @@ function TabList({
     }
   };
 
-  const handleKeydown = (event) => {
-    let focusElement = null;
+  const handleKeydown = (event: React.KeyboardEvent<HTMLLIElement>) => {
+    let focusElement: HTMLLIElement | null = null;
+
     switch (event.key) {
       case "Enter": {
         handleTabChange(event);
@@ -74,27 +98,29 @@ function TabList({
       }
       case "ArrowRight": {
         const nextTab = tabRefs.indexOf(event.currentTarget) + 1;
-        focusElement = tabRefs[nextTab] ?? tabRefs[0];
+        focusElement = tabRefs[nextTab] ?? tabRefs[0]!;
         break;
       }
       case "ArrowLeft": {
         const prevTab = tabRefs.indexOf(event.currentTarget) - 1;
-        focusElement = tabRefs[prevTab] ?? tabRefs[tabRefs.length - 1];
+        focusElement = tabRefs[prevTab] ?? tabRefs[tabRefs.length - 1]!;
         break;
       }
       default:
         break;
     }
+
     focusElement?.focus();
   };
 
-  const tabItemListContainerRef = useRef(null);
-  const [showTabArrows, setShowTabArrows] = useState(false);
+  const tabItemListContainerRef = useRef<HTMLUListElement>(null);
+  const [showTabArrows, setShowTabArrows] = useState<boolean>(false);
 
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
       for (let entry of entries) {
-        if (entry.target.offsetWidth < entry.target.scrollWidth) {
+        // TODO Gijs check if correct
+        if (entry.target.clientWidth < entry.target.scrollWidth) {
           setShowTabArrows(true);
         } else {
           setShowTabArrows(false);
@@ -102,7 +128,7 @@ function TabList({
       }
     });
 
-    resizeObserver.observe(tabItemListContainerRef.current);
+    resizeObserver.observe(tabItemListContainerRef.current!);
 
     return () => {
       resizeObserver.disconnect();
@@ -110,11 +136,11 @@ function TabList({
   }, []);
 
   const handleRightClick = () => {
-    tabItemListContainerRef.current.scrollLeft += 90;
+    tabItemListContainerRef.current!.scrollLeft += 90;
   };
 
   const handleLeftClick = () => {
-    tabItemListContainerRef.current.scrollLeft -= 90;
+    tabItemListContainerRef.current!.scrollLeft -= 90;
   };
 
   return (
@@ -154,7 +180,7 @@ function TabList({
                 className={clsx(
                   "tabs__item",
                   "openapi-tabs__mime-item",
-                  attributes?.className,
+                  attributes?.className as string,
                   {
                     active: selectedValue === value,
                   }
@@ -175,11 +201,16 @@ function TabList({
     </div>
   );
 }
-function TabContent({ lazy, children, selectedValue }) {
-  // eslint-disable-next-line no-param-reassign
-  children = Array.isArray(children) ? children : [children];
+function TabContent({
+  lazy,
+  children,
+  selectedValue,
+}: Props & TabProps & ReturnType<typeof useTabs>) {
+  const childTabs = (Array.isArray(children) ? children : [children]).filter(
+    Boolean
+  ) as ReactElement<TabItemProps>[];
   if (lazy) {
-    const selectedTabItem = children.find(
+    const selectedTabItem = childTabs.find(
       (tabItem) => tabItem.props.value === selectedValue
     );
     if (!selectedTabItem) {
@@ -190,7 +221,7 @@ function TabContent({ lazy, children, selectedValue }) {
   }
   return (
     <div className="margin-top--md">
-      {children.map((tabItem, i) =>
+      {childTabs.map((tabItem, i) =>
         cloneElement(tabItem, {
           key: i,
           hidden: tabItem.props.value !== selectedValue,
@@ -199,7 +230,7 @@ function TabContent({ lazy, children, selectedValue }) {
     </div>
   );
 }
-function TabsComponent(props) {
+function TabsComponent(props: Props & TabProps): React.JSX.Element {
   const tabs = useTabs(props);
   return (
     <div className="tabs-container">
@@ -208,7 +239,7 @@ function TabsComponent(props) {
     </div>
   );
 }
-export default function MimeTabs(props) {
+export default function MimeTabs(props: Props & TabProps) {
   const isBrowser = useIsBrowser();
   return (
     <TabsComponent
@@ -216,6 +247,8 @@ export default function MimeTabs(props) {
       // Temporary fix for https://github.com/facebook/docusaurus/issues/5653
       key={String(isBrowser)}
       {...props}
-    />
+    >
+      {sanitizeTabsChildren(props.children)}
+    </TabsComponent>
   );
 }

@@ -23,7 +23,6 @@ import clsx from "clsx";
 import { ServerObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import type { ApiItem as ApiItemType } from "docusaurus-plugin-openapi-docs/src/types";
-/* eslint-disable import/no-extraneous-dependencies*/
 import type {
   DocFrontMatter,
   ThemeConfig,
@@ -32,6 +31,7 @@ import { Provider } from "react-redux";
 
 import { createStoreWithoutState, createStoreWithState } from "./store";
 
+// TODO Gijs put this in internal stuff?
 const { DocProvider } = require("@docusaurus/theme-common/internal");
 
 let ApiExplorer = (_: { item: any; infoPath: any }) => <div />;
@@ -45,7 +45,7 @@ interface ApiFrontMatter extends DocFrontMatter {
 }
 
 // @ts-ignore
-export default function ApiItem(props: Props): JSX.Element {
+export default function ApiItem(props: Props): React.JSX.Element {
   const docHtmlClassName = `docs-doc-id-${props.content.metadata.id}`;
   const MDXComponent = props.content;
   const { frontMatter } = MDXComponent;
