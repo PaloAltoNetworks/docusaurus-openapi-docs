@@ -44,6 +44,7 @@ interface ApiFrontMatter extends DocFrontMatter {
   readonly api?: ApiItemType;
 }
 
+// @ts-ignore
 export default function ApiItem(props: Props): JSX.Element {
   const docHtmlClassName = `docs-doc-id-${props.content.metadata.id}`;
   const MDXComponent = props.content;

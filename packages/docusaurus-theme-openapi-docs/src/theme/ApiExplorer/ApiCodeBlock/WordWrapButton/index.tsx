@@ -10,7 +10,17 @@ import React from "react";
 import { translate } from "@docusaurus/Translate";
 import clsx from "clsx";
 
-export default function WordWrapButton({ className, onClick, isEnabled }) {
+export interface Props {
+  readonly className?: string;
+  readonly onClick: React.MouseEventHandler;
+  readonly isEnabled: boolean;
+}
+
+export default function WordWrapButton({
+  className,
+  onClick,
+  isEnabled,
+}: Props): React.JSX.Element | null {
   const title = translate({
     id: "theme.CodeBlock.wordWrapToggle",
     message: "Toggle word wrap",
