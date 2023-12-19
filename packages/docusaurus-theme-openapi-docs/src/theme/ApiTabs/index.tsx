@@ -82,7 +82,6 @@ function TabList({
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
       for (let entry of entries) {
-        // TODO Gijs check if this is correct, used to be offsetwidth
         if (entry.target.clientWidth < entry.target.scrollWidth) {
           setShowTabArrows(true);
         } else {

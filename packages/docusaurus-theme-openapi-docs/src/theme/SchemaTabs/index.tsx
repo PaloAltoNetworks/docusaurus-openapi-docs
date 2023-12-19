@@ -82,7 +82,6 @@ function TabList({
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
       for (let entry of entries) {
-        // TODO Gijs check if correct
         if (entry.target.clientWidth < entry.target.scrollWidth) {
           setShowTabArrows(true);
         } else {
@@ -168,10 +167,9 @@ function TabContent({
   const childTabs = (Array.isArray(children) ? children : [children]).filter(
     Boolean
   ) as ReactElement<TabItemProps>[];
-  // TODO Gijs check what flatten does
-  // const flattenedChildren = flatten(children);
+  const flattenedChildTabs = flatten(childTabs);
   if (lazy) {
-    const selectedTabItem = childTabs.find(
+    const selectedTabItem = flattenedChildTabs.find(
       (tabItem) => tabItem.props.value === selectedValue
     );
     if (!selectedTabItem) {

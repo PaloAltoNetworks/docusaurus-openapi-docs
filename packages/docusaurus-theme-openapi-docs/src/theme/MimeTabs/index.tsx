@@ -119,7 +119,6 @@ function TabList({
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
       for (let entry of entries) {
-        // TODO Gijs check if correct
         if (entry.target.clientWidth < entry.target.scrollWidth) {
           setShowTabArrows(true);
         } else {
