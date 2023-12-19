@@ -8,10 +8,7 @@
 import React, { ReactNode } from "react";
 
 import CodeBlock from "@theme/CodeBlock";
-/* eslint-disable import/no-extraneous-dependencies*/
 import clsx from "clsx";
-
-/* eslint-disable import/no-extraneous-dependencies*/
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 

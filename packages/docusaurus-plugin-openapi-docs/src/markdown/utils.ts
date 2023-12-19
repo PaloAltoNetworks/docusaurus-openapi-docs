@@ -53,7 +53,6 @@ export const codeFence = /`{1,3}[\s\S]*?`{1,3}/g;
 export const curlyBrackets = /\{(.*)}/g;
 export const codeBlock = /(^```.*[\s\S]*?```$|`[^`].+?`)/gm;
 
-
 export function clean(value: string | undefined): string {
   if (!value) {
     return "";
