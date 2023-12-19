@@ -12,6 +12,7 @@ import zlib from "zlib";
 import type { LoadContext, Plugin } from "@docusaurus/types";
 import { Globby, posixPath } from "@docusaurus/utils";
 import chalk from "chalk";
+import JSON5 from "json5";
 import { render } from "mustache";
 
 import { createApiPageMD, createInfoPageMD, createTagPageMD } from "./markdown";
@@ -144,12 +145,15 @@ export default function pluginOpenAPIDocs(
           docPath
         );
 
-        let sidebarSliceTemplate = `import {SidebarConfig} from "@docusaurus/plugin-content-docs/src/sidebars/types";\n\n`;
-        sidebarSliceTemplate += `const sidebar: SidebarConfig = {{{slice}}};\n\n`;
-        sidebarSliceTemplate += `export default sidebar;`;
+        let sidebarSliceTemplate = `import type { SidebarsConfig } from "@docusaurus/plugin-content-docs";\n\n`;
+        sidebarSliceTemplate += `const sidebar: SidebarsConfig = {{{slice}}};\n\n`;
+        sidebarSliceTemplate += `export default sidebar.apisidebar;\n`;
 
         const view = render(sidebarSliceTemplate, {
-          slice: JSON.stringify(sidebarSlice, null, 2),
+          slice: JSON5.stringify(
+            { apisidebar: sidebarSlice },
+            { space: 2, quote: '"' }
+          ),
         });
 
         if (!fs.existsSync(`${outputDir}/sidebar.ts`)) {
@@ -427,7 +431,11 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
 
     const versionsJson = JSON.stringify(versionsArray, null, 2);
     try {
-      fs.writeFileSync(`${outputDir}/versions.json`, versionsJson, "utf8");
+      fs.writeFileSync(
+        `${outputDir}/versions.json`,
+        versionsJson + "\n",
+        "utf8"
+      );
       console.log(
         chalk.green(`Successfully created "${outputDir}/versions.json"`)
       );
