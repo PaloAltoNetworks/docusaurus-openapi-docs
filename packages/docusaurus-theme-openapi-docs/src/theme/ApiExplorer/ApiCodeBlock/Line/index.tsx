@@ -7,6 +7,7 @@
 
 import React from "react";
 
+import { LineProps } from "@docusaurus/theme-common/internal";
 import clsx from "clsx";
 
 export default function CodeBlockLine({
@@ -15,7 +16,7 @@ export default function CodeBlockLine({
   showLineNumbers,
   getLineProps,
   getTokenProps,
-}) {
+}: LineProps): React.JSX.Element {
   if (line.length === 1 && line[0].content === "\n") {
     line[0].content = "";
   }

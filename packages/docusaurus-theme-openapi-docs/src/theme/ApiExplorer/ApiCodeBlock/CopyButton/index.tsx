@@ -7,14 +7,17 @@
 
 import React, { useCallback, useState, useRef, useEffect } from "react";
 
+import { CopyButtonProps } from "@docusaurus/theme-common/internal";
 import { translate } from "@docusaurus/Translate";
 import clsx from "clsx";
-// @ts-expect-error: TODO, we need to make theme-classic have type: module
 import copy from "copy-text-to-clipboard";
 
-export default function CopyButton({ code, className }) {
+export default function CopyButton({
+  code,
+  className,
+}: CopyButtonProps): React.JSX.Element {
   const [isCopied, setIsCopied] = useState(false);
-  const copyTimeout = useRef(undefined);
+  const copyTimeout = useRef<number | undefined>(undefined);
   const handleCopyCode = useCallback(() => {
     copy(code);
     setIsCopied(true);
@@ -22,7 +25,9 @@ export default function CopyButton({ code, className }) {
       setIsCopied(false);
     }, 1000);
   }, [code]);
+
   useEffect(() => () => window.clearTimeout(copyTimeout.current), []);
+
   return (
     <button
       type="button"

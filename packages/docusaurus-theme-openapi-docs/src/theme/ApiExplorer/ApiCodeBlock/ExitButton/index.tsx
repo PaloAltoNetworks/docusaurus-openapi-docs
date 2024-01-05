@@ -10,7 +10,15 @@ import React from "react";
 import { translate } from "@docusaurus/Translate";
 import clsx from "clsx";
 
-export default function ExitButton({ className, handler }) {
+export interface Props {
+  readonly className: string;
+  readonly handler: () => void;
+}
+
+export default function ExitButton({
+  className,
+  handler,
+}: Props): React.JSX.Element {
   return (
     <button
       type="button"

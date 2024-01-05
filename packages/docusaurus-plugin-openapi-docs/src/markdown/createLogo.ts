@@ -5,8 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { LogoObject } from "../openapi/types";
 import { create, guard } from "./utils";
+import { LogoObject } from "../openapi/types";
 
 export function createLogo(
   logo: LogoObject | undefined,

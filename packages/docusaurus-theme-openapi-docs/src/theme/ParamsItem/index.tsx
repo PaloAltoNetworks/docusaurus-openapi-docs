@@ -10,24 +10,38 @@ import React from "react";
 import CodeBlock from "@theme/CodeBlock";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
-/* eslint-disable import/no-extraneous-dependencies*/
-import { createDescription } from "docusaurus-theme-openapi-docs/lib/markdown/createDescription";
-/* eslint-disable import/no-extraneous-dependencies*/
-import {
-  getQualifierMessage,
-  getSchemaName,
-} from "docusaurus-theme-openapi-docs/lib/markdown/schema";
-/* eslint-disable import/no-extraneous-dependencies*/
-import {
-  guard,
-  toString,
-} from "docusaurus-theme-openapi-docs/lib/markdown/utils";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
+import { createDescription } from "../../markdown/createDescription";
+import { getQualifierMessage, getSchemaName } from "../../markdown/schema";
+import { guard, toString } from "../../markdown/utils";
+
+interface Map<T> {
+  [key: string]: T;
+}
+
+export interface ExampleObject {
+  summary?: string;
+  description?: string;
+  value?: any;
+  externalValue?: string;
+}
+
+export interface Props {
+  param: {
+    description: string;
+    example: any;
+    examples: Map<ExampleObject>;
+    name: string;
+    required: boolean;
+    schema: any;
+  };
+}
+
 function ParamsItem({
   param: { description, example, examples, name, required, schema },
-}) {
+}: Props) {
   if (!schema || !schema?.type) {
     schema = { type: "any" };
   }
@@ -97,6 +111,7 @@ function ParamsItem({
         <strong>Examples:</strong>
         <SchemaTabs>
           {exampleEntries.map(([exampleName, exampleProperties]) => (
+            // @ts-ignore
             <TabItem value={exampleName} label={exampleName}>
               {exampleProperties.summary && <p>{exampleProperties.summary}</p>}
               {exampleProperties.description && (

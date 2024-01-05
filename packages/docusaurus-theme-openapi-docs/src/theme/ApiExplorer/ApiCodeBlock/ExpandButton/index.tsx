@@ -14,8 +14,18 @@ import CopyButton from "@theme/ApiExplorer/ApiCodeBlock/CopyButton";
 import ExitButton from "@theme/ApiExplorer/ApiCodeBlock/ExitButton";
 import Line from "@theme/ApiExplorer/ApiCodeBlock/Line";
 import clsx from "clsx";
-import { Highlight } from "prism-react-renderer";
+import { Highlight, Language } from "prism-react-renderer";
 import Modal from "react-modal";
+
+export interface Props {
+  readonly code: string;
+  readonly className: string;
+  readonly language: Language;
+  readonly showLineNumbers: boolean;
+  readonly blockClassName: string;
+  readonly title: string | undefined;
+  readonly lineClassNames: { [lineIndex: number]: string[] };
+}
 
 export default function ExpandButton({
   code,
@@ -25,7 +35,7 @@ export default function ExpandButton({
   blockClassName,
   title,
   lineClassNames,
-}) {
+}: Props): React.JSX.Element {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const prismTheme = usePrismTheme();
 

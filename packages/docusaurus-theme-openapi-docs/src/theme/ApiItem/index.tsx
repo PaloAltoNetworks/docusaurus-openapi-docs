@@ -12,6 +12,7 @@ import React from "react";
 import BrowserOnly from "@docusaurus/BrowserOnly";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import { HtmlClassNameProvider } from "@docusaurus/theme-common";
+import { DocProvider } from "@docusaurus/theme-common/internal";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import useIsBrowser from "@docusaurus/useIsBrowser";
 import { createAuth } from "@theme/ApiExplorer/Authorization/slice";
@@ -23,7 +24,6 @@ import clsx from "clsx";
 import { ServerObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import type { ApiItem as ApiItemType } from "docusaurus-plugin-openapi-docs/src/types";
-/* eslint-disable import/no-extraneous-dependencies*/
 import type {
   DocFrontMatter,
   ThemeConfig,
@@ -31,8 +31,6 @@ import type {
 import { Provider } from "react-redux";
 
 import { createStoreWithoutState, createStoreWithState } from "./store";
-
-const { DocProvider } = require("@docusaurus/theme-common/internal");
 
 let ApiExplorer = (_: { item: any; infoPath: any }) => <div />;
 
@@ -44,7 +42,8 @@ interface ApiFrontMatter extends DocFrontMatter {
   readonly api?: ApiItemType;
 }
 
-export default function ApiItem(props: Props): JSX.Element {
+// @ts-ignore
+export default function ApiItem(props: Props): React.JSX.Element {
   const docHtmlClassName = `docs-doc-id-${props.content.metadata.id}`;
   const MDXComponent = props.content;
   const { frontMatter } = MDXComponent;

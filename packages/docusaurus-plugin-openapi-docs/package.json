@@ -49,6 +49,7 @@
     "fs-extra": "^9.0.1",
     "json-pointer": "^0.6.2",
     "json-schema-merge-allof": "^0.8.1",
+    "json5": "^2.2.3",
     "lodash": "^4.17.20",
     "mustache": "^4.2.0",
     "slugify": "^1.6.5",

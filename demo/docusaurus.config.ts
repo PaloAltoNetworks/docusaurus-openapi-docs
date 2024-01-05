@@ -133,7 +133,15 @@ const config: Config = {
       copyright: `Copyright © ${new Date().getFullYear()} Palo Alto Networks, Inc. Built with Docusaurus ${DOCUSAURUS_VERSION}.`,
     },
     prism: {
-      additionalLanguages: ["ruby", "csharp", "php", "java", "powershell"],
+      additionalLanguages: [
+        "ruby",
+        "csharp",
+        "php",
+        "java",
+        "powershell",
+        "json",
+        "bash",
+      ],
     },
     languageTabs: [
       {

@@ -20,8 +20,9 @@ import CopyButton from "@theme/ApiExplorer/ApiCodeBlock/CopyButton";
 import ExpandButton from "@theme/ApiExplorer/ApiCodeBlock/ExpandButton";
 import Line from "@theme/ApiExplorer/ApiCodeBlock/Line";
 import WordWrapButton from "@theme/ApiExplorer/ApiCodeBlock/WordWrapButton";
+import type { Props } from "@theme/CodeBlock/Content/String";
 import clsx from "clsx";
-import { Highlight } from "prism-react-renderer";
+import { Highlight, Language } from "prism-react-renderer";
 
 export default function CodeBlockString({
   children,
@@ -30,7 +31,7 @@ export default function CodeBlockString({
   title: titleProp,
   showLineNumbers: showLineNumbersProp,
   language: languageProp,
-}) {
+}: Props): React.JSX.Element {
   const {
     prism: { defaultLanguage, magicComments },
   } = useThemeConfig();
@@ -120,12 +121,11 @@ export default function CodeBlockString({
               "openapi-explorer__expand-btn"
             )}
             code={code}
-            language={language}
+            language={(language ?? "text") as Language}
             showLineNumbers={showLineNumbers}
             blockClassName={blockClassName}
             title={title}
             lineClassNames={lineClassNames}
-            wordWrap={wordWrap}
           />
         </div>
       </div>

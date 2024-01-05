@@ -5,13 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import {
-  ContactObject,
-  LicenseObject,
-  MediaTypeObject,
-  SecuritySchemeObject,
-} from "../openapi/types";
-import { ApiPageMetadata, InfoPageMetadata, TagPageMetadata } from "../types";
 import { createAuthentication } from "./createAuthentication";
 import { createAuthorization } from "./createAuthorization";
 import { createContactInfo } from "./createContactInfo";
@@ -30,6 +23,13 @@ import { createTermsOfService } from "./createTermsOfService";
 import { createVendorExtensions } from "./createVendorExtensions";
 import { createVersionBadge } from "./createVersionBadge";
 import { render } from "./utils";
+import {
+  ContactObject,
+  LicenseObject,
+  MediaTypeObject,
+  SecuritySchemeObject,
+} from "../openapi/types";
+import { ApiPageMetadata, InfoPageMetadata, TagPageMetadata } from "../types";
 
 interface Props {
   title: string;
