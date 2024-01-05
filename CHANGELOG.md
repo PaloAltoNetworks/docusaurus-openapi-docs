@@ -1,3 +1,20 @@
+## 3.0.0-beta.4 (Jan 5, 2024)
+
+High level enhancements
+
+- Improve Typescript coverage of theme components
+- Fix syntax highlighting
+
+Other enhancements and bug fixes
+
+- [V3] Refactor theme package to Typescript ([#684](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/684))
+- Prepare release v3.0.0-beta.3 ([#682](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/682))
+- upgrade prettier
+- install prettier plugin ([#681](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/681))
+- [V3] Improved Docusaurus 3 compatibility ([#677](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/677))
+- Prepare release v3.0.0-beta.2 ([#668](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/668))
+- Port v2 changes/fixes into v3 ([#667](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/667))
+
 ## 3.0.0-beta.3 (Dec 13, 2023)
 
 High level enhancements
