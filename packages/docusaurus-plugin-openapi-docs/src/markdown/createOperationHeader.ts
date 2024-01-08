@@ -5,6 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-export function createRequestHeader(header: string) {
+export function createOperationHeader(header: string) {
   return `## ${header}\n\n`;
 }

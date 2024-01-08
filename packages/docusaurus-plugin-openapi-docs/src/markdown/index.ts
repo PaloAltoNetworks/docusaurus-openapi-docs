@@ -14,6 +14,7 @@ import {
 import { ApiPageMetadata, InfoPageMetadata, TagPageMetadata } from "../types";
 import { createAuthentication } from "./createAuthentication";
 import { createAuthorization } from "./createAuthorization";
+import { createCallbacks } from "./createCallbacks";
 import { createContactInfo } from "./createContactInfo";
 import { createDeprecationNotice } from "./createDeprecationNotice";
 import { createDescription } from "./createDescription";
@@ -22,9 +23,9 @@ import { createHeading } from "./createHeading";
 import { createLicense } from "./createLicense";
 import { createLogo } from "./createLogo";
 import { createMethodEndpoint } from "./createMethodEndpoint";
+import { createOperationHeader } from "./createOperationHeader";
 import { createParamsDetails } from "./createParamsDetails";
 import { createRequestBodyDetails } from "./createRequestBodyDetails";
-import { createRequestHeader } from "./createRequestHeader";
 import { createStatusCodes } from "./createStatusCodes";
 import { createTermsOfService } from "./createTermsOfService";
 import { createVendorExtensions } from "./createVendorExtensions";
@@ -54,6 +55,7 @@ export function createApiPageMD({
     parameters,
     requestBody,
     responses,
+    callbacks,
   },
   infoPath,
   frontMatter,
@@ -68,6 +70,7 @@ export function createApiPageMD({
     `import ResponseSamples from "@theme/ResponseSamples";\n`,
     `import SchemaItem from "@theme/SchemaItem";\n`,
     `import SchemaTabs from "@theme/SchemaTabs";\n`,
+    `import CallbacksTabs from "@theme/CallbacksTabs";\n`,
     `import TabItem from "@theme/TabItem";\n\n`,
     createHeading(title.replace(lessThan, "&lt;").replace(greaterThan, "&gt;")),
     createMethodEndpoint(method, path),
@@ -75,7 +78,7 @@ export function createApiPageMD({
     frontMatter.show_extensions && createVendorExtensions(extensions),
     createDeprecationNotice({ deprecated, description: deprecatedDescription }),
     createDescription(description),
-    createRequestHeader("Request"),
+    createOperationHeader("Request"),
     createParamsDetails({ parameters, type: "path" }),
     createParamsDetails({ parameters, type: "query" }),
     createParamsDetails({ parameters, type: "header" }),
@@ -85,6 +88,7 @@ export function createApiPageMD({
       body: requestBody,
     } as Props),
     createStatusCodes({ responses }),
+    createCallbacks({ callbacks }),
   ]);
 }
 

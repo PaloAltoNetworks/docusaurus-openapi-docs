@@ -1,0 +1,136 @@
+/* ============================================================================
+ * Copyright (c) Palo Alto Networks
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ * ========================================================================== */
+.callbacks-tabs__container {
+  margin-left: -1px;
+  margin-bottom: var(--ifm-leading);
+}
+
+.callbacks-tabs__callbacks-header {
+  margin-bottom: 0;
+}
+
+.callbacks-tabs__callbacks-code-item {
+  border: 1px solid transparent;
+  margin-top: 0 !important;
+  margin-right: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--ifm-global-radius);
+  font-weight: var(--ifm-font-weight-bold);
+  font-size: 12px;
+  transition: 300ms;
+  color: var(--ifm-font-color-secondary);
+
+  &.success.active {
+    background-color: var(--ifm-color-success);
+    color: var(--ifm-color-white);
+  }
+
+  &.danger.active {
+    background-color: var(--ifm-color-danger);
+    color: var(--ifm-color-white);
+  }
+
+  &.info.active {
+    background-color: var(--ifm-color-info);
+    color: var(--ifm-color-white);
+  }
+
+  &.active,
+  &:hover {
+    opacity: 1;
+  }
+
+  &:hover:not(.active) {
+    background-color: transparent;
+    border: 1px solid var(--ifm-toc-border-color);
+  }
+}
+
+.callbacks-tabs__callbacks-code-item:not(.active) {
+  opacity: 0.65;
+}
+
+.callbacks-tabs__callbacks-code-item:hover {
+  opacity: 1;
+}
+
+.callbacks-tabs__callbacks-code-item:last-child {
+  margin-right: 0 !important;
+}
+
+/* Open API Response Code Tabs */
+.callbacks-tabs__callbacks-header-section {
+  border-top: 1px solid var(--ifm-toc-border-color);
+  margin-top: 2rem;
+  padding-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.callbacks-tabs__callbacks-container {
+  display: flex;
+  align-items: center;
+  max-width: 390px;
+  padding-left: 1rem;
+  overflow: hidden;
+}
+
+.callbacks-tabs__callbacks-list-container {
+  padding: 0 0.25rem;
+  overflow-y: hidden;
+  overflow-x: scroll;
+  scroll-behavior: smooth;
+}
+
+.callbacks-tabs__callbacks-list-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Response Code Tabs - Colored Dots */
+.callbacks-tabs__callbacks-dot {
+  width: 12.5px;
+  height: 12.5px;
+  margin-right: 5px;
+  border-radius: 50%;
+}
+
+/* Tab Arrows */
+.callbacks-tabs__arrow {
+  content: "";
+  height: 1.25rem;
+  width: 1.25rem;
+  border: none;
+  min-width: 1.25rem;
+  background: var(--ifm-menu-link-sublist-icon) 50% / 2rem 2rem;
+  filter: var(--ifm-menu-link-sublist-icon-filter);
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &.left {
+    transform: rotate(270deg);
+  }
+
+  &.right {
+    transform: rotate(90deg);
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .callbacks-tabs__callbacks-header-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .callbacks-tabs__callbacks-container {
+    width: 100%;
+    margin-top: var(--ifm-spacing-vertical);
+    padding: 0;
+  }
+}
