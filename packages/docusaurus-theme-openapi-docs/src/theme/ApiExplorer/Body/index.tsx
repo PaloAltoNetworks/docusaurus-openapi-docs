@@ -15,6 +15,7 @@ import FormTextInput from "@theme/ApiExplorer/FormTextInput";
 import LiveApp from "@theme/ApiExplorer/LiveEditor";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import SchemaTabs from "@theme/SchemaTabs";
+import Markdown from "@theme/Markdown";
 import TabItem from "@theme/TabItem";
 import { RequestBodyObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import format from "xml-formatter";
@@ -303,6 +304,7 @@ function Body({
           </TabItem>
           {/* @ts-ignore */}
           <TabItem label="Example" value="example">
+            {example.summary && <Markdown children={example.summary} />}
             {exampleBody && (
               <LiveApp
                 action={dispatch}
@@ -340,7 +342,7 @@ function Body({
                 value={example.label}
                 key={example.label}
               >
-                {example.summary && <p>{example.summary}</p>}
+                {example.summary && <Markdown children={example.summary} />}
                 {example.body && (
                   <LiveApp action={dispatch} language={language}>
                     {example.body}

@@ -125,7 +125,7 @@ export function createResponseExamples(
           value: `${exampleName}`,
           children: [
             guard(exampleValue.summary, (summary) => [
-              create("p", {
+              create("Markdown", {
                 children: ` ${summary}`,
               }),
             ]),
@@ -141,7 +141,7 @@ export function createResponseExamples(
         value: `${exampleName}`,
         children: [
           guard(exampleValue.summary, (summary) => [
-            create("p", {
+            create("Markdown", {
               children: ` ${summary}`,
             }),
           ]),
@@ -169,7 +169,7 @@ export function createResponseExample(responseExample: any, mimeType: string) {
       value: `Example`,
       children: [
         guard(responseExample.summary, (summary) => [
-          create("p", {
+          create("Markdown", {
             children: ` ${summary}`,
           }),
         ]),
@@ -185,7 +185,7 @@ export function createResponseExample(responseExample: any, mimeType: string) {
     value: `Example`,
     children: [
       guard(responseExample.summary, (summary) => [
-        create("p", {
+        create("Markdown", {
           children: ` ${summary}`,
         }),
       ]),
