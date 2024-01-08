@@ -8,13 +8,11 @@
 import {
   ContactObject,
   LicenseObject,
-  MediaTypeObject,
   SecuritySchemeObject,
 } from "../openapi/types";
 import { ApiPageMetadata, InfoPageMetadata, TagPageMetadata } from "../types";
 import { createAuthentication } from "./createAuthentication";
 import { createAuthorization } from "./createAuthorization";
-import { createCallbacks } from "./createCallbacks";
 import { createContactInfo } from "./createContactInfo";
 import { createDeprecationNotice } from "./createDeprecationNotice";
 import { createDescription } from "./createDescription";
@@ -23,25 +21,11 @@ import { createHeading } from "./createHeading";
 import { createLicense } from "./createLicense";
 import { createLogo } from "./createLogo";
 import { createMethodEndpoint } from "./createMethodEndpoint";
-import { createOperationHeader } from "./createOperationHeader";
-import { createParamsDetails } from "./createParamsDetails";
-import { createRequestBodyDetails } from "./createRequestBodyDetails";
-import { createStatusCodes } from "./createStatusCodes";
+import { createOperationWithCallbacks } from "./createOperationWithCallbacks";
 import { createTermsOfService } from "./createTermsOfService";
 import { createVendorExtensions } from "./createVendorExtensions";
 import { createVersionBadge } from "./createVersionBadge";
 import { greaterThan, lessThan, render } from "./utils";
-
-interface Props {
-  title: string;
-  body: {
-    content?: {
-      [key: string]: MediaTypeObject;
-    };
-    description?: string;
-    required?: boolean;
-  };
-}
 
 export function createApiPageMD({
   title,
@@ -70,25 +54,25 @@ export function createApiPageMD({
     `import ResponseSamples from "@theme/ResponseSamples";\n`,
     `import SchemaItem from "@theme/SchemaItem";\n`,
     `import SchemaTabs from "@theme/SchemaTabs";\n`,
-    `import CallbacksTabs from "@theme/CallbacksTabs";\n`,
+    `import OperationTabs from "@theme/OperationTabs";\n`,
     `import TabItem from "@theme/TabItem";\n\n`,
     createHeading(title.replace(lessThan, "&lt;").replace(greaterThan, "&gt;")),
     createMethodEndpoint(method, path),
     infoPath && createAuthorization(infoPath),
-    frontMatter.show_extensions && createVendorExtensions(extensions),
+    frontMatter.show_extensions
+      ? createVendorExtensions(extensions)
+      : undefined,
     createDeprecationNotice({ deprecated, description: deprecatedDescription }),
     createDescription(description),
-    createOperationHeader("Request"),
-    createParamsDetails({ parameters, type: "path" }),
-    createParamsDetails({ parameters, type: "query" }),
-    createParamsDetails({ parameters, type: "header" }),
-    createParamsDetails({ parameters, type: "cookie" }),
-    createRequestBodyDetails({
-      title: "Body",
-      body: requestBody,
-    } as Props),
-    createStatusCodes({ responses }),
-    createCallbacks({ callbacks }),
+    ...createOperationWithCallbacks({
+      method,
+      path,
+      description,
+      requestBody,
+      parameters,
+      responses,
+      callbacks,
+    }),
   ]);
 }
 
