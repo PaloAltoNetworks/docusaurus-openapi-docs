@@ -21,7 +21,8 @@ function TabList({
   selectedValue,
   selectValue,
   tabValues,
-  label,
+  label = "Responses",
+  id = "responses",
 }) {
   const tabRefs = [];
   const { blockElementScrollPositionUntilNextRender } =
@@ -91,8 +92,8 @@ function TabList({
 
   return (
     <div className="openapi-tabs__response-header-section">
-      <Heading as="h2" id="responses" className="openapi-tabs__response-header">
-        {label || "Responses"}
+      <Heading as="h2" id={id} className="openapi-tabs__response-header">
+        {label}
       </Heading>
       <div className="openapi-tabs__response-container">
         {showTabArrows && (

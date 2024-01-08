@@ -8,11 +8,13 @@
 import {
   ContactObject,
   LicenseObject,
+  MediaTypeObject,
   SecuritySchemeObject,
 } from "../openapi/types";
 import { ApiPageMetadata, InfoPageMetadata, TagPageMetadata } from "../types";
 import { createAuthentication } from "./createAuthentication";
 import { createAuthorization } from "./createAuthorization";
+import { createCallbacks } from "./createCallbacks";
 import { createContactInfo } from "./createContactInfo";
 import { createDeprecationNotice } from "./createDeprecationNotice";
 import { createDescription } from "./createDescription";
@@ -21,11 +23,25 @@ import { createHeading } from "./createHeading";
 import { createLicense } from "./createLicense";
 import { createLogo } from "./createLogo";
 import { createMethodEndpoint } from "./createMethodEndpoint";
-import { createOperationWithCallbacks } from "./createOperationWithCallbacks";
+import { createOperationHeader } from "./createOperationHeader";
+import { createParamsDetails } from "./createParamsDetails";
+import { createRequestBodyDetails } from "./createRequestBodyDetails";
+import { createStatusCodes } from "./createStatusCodes";
 import { createTermsOfService } from "./createTermsOfService";
 import { createVendorExtensions } from "./createVendorExtensions";
 import { createVersionBadge } from "./createVersionBadge";
 import { greaterThan, lessThan, render } from "./utils";
+
+interface RequestBodyProps {
+  title: string;
+  body: {
+    content?: {
+      [key: string]: MediaTypeObject;
+    };
+    description?: string;
+    required?: boolean;
+  };
+}
 
 export function createApiPageMD({
   title,
@@ -64,15 +80,17 @@ export function createApiPageMD({
       : undefined,
     createDeprecationNotice({ deprecated, description: deprecatedDescription }),
     createDescription(description),
-    ...createOperationWithCallbacks({
-      method,
-      path,
-      description,
-      requestBody,
-      parameters,
-      responses,
-      callbacks,
-    }),
+    createOperationHeader("Request"),
+    createParamsDetails({ parameters, type: "path" }),
+    createParamsDetails({ parameters, type: "query" }),
+    createParamsDetails({ parameters, type: "header" }),
+    createParamsDetails({ parameters, type: "cookie" }),
+    createRequestBodyDetails({
+      title: "Body",
+      body: requestBody,
+    } as RequestBodyProps),
+    createStatusCodes({ responses }),
+    createCallbacks({ callbacks }),
   ]);
 }
 
