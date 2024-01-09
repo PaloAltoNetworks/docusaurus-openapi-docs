@@ -1,3 +1,15 @@
+## 2.0.3 (Jan 9, 2024)
+
+High level enhancements
+
+- Add callbacks support
+- Add markdown support to example/examples summary
+
+Other enhancements and bug fixes
+
+- Add markdown support to example summary ([#690](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/690))
+- Add Callbacks support ([#691](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/691))
+
 ## 2.0.2 (Dec 5, 2023)
 
 High level enhancements
