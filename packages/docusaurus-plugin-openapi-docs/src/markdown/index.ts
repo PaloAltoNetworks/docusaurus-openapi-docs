@@ -70,6 +70,7 @@ export function createApiPageMD({
     `import ResponseSamples from "@theme/ResponseSamples";\n`,
     `import SchemaItem from "@theme/SchemaItem";\n`,
     `import SchemaTabs from "@theme/SchemaTabs";\n`,
+    `import Markdown from "@theme/Markdown";\n`,
     `import OperationTabs from "@theme/OperationTabs";\n`,
     `import TabItem from "@theme/TabItem";\n\n`,
     createHeading(title.replace(lessThan, "&lt;").replace(greaterThan, "&gt;")),
