@@ -24,13 +24,20 @@ import useIsBrowser from "@docusaurus/useIsBrowser";
 import Heading from "@theme/Heading";
 import clsx from "clsx";
 
+export interface TabListProps extends TabProps {
+  label: string;
+  id: string;
+}
+
 function TabList({
   className,
   block,
   selectedValue,
   selectValue,
   tabValues,
-}: TabProps & ReturnType<typeof useTabs>) {
+  label = "Responses",
+  id = "responses",
+}: TabListProps & ReturnType<typeof useTabs>) {
   const tabRefs: (HTMLLIElement | null)[] = [];
   const { blockElementScrollPositionUntilNextRender } =
     useScrollPositionBlocker();
@@ -107,8 +114,8 @@ function TabList({
 
   return (
     <div className="openapi-tabs__response-header-section">
-      <Heading as="h2" id="responses" className="openapi-tabs__response-header">
-        Responses
+      <Heading as="h2" id={id} className="openapi-tabs__response-header">
+        {label}
       </Heading>
       <div className="openapi-tabs__response-container">
         {showTabArrows && (
@@ -148,8 +155,8 @@ function TabList({
                 parseInt(value) >= 400
                   ? "danger"
                   : parseInt(value) >= 200 && parseInt(value) < 300
-                    ? "success"
-                    : "info",
+                  ? "success"
+                  : "info",
                 {
                   active: selectedValue === value,
                 }
@@ -199,7 +206,7 @@ function TabContent({
     </div>
   );
 }
-function TabsComponent(props: TabProps): React.JSX.Element {
+function TabsComponent(props: TabListProps): React.JSX.Element {
   const tabs = useTabs(props);
   return (
     <div className="openapi-tabs__container">
@@ -208,7 +215,7 @@ function TabsComponent(props: TabProps): React.JSX.Element {
     </div>
   );
 }
-export default function ApiTabs(props: TabProps): React.JSX.Element {
+export default function ApiTabs(props: TabListProps): React.JSX.Element {
   const isBrowser = useIsBrowser();
   return (
     <TabsComponent

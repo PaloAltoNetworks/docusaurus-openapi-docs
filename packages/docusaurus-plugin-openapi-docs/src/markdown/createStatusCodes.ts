@@ -54,6 +54,8 @@ export default function json2xml(o: any, tab: any) {
 }
 
 interface Props {
+  id?: string;
+  label?: string;
   responses: ApiItem["responses"];
 }
 
@@ -254,7 +256,7 @@ export function createExampleFromSchema(schema: any, mimeType: string) {
   return undefined;
 }
 
-export function createStatusCodes({ responses }: Props) {
+export function createStatusCodes({ label, id, responses }: Props) {
   if (responses === undefined) {
     return undefined;
   }
@@ -269,6 +271,8 @@ export function createStatusCodes({ responses }: Props) {
       create("div", {
         children: [
           create("ApiTabs", {
+            label,
+            id,
             children: codes.map((code) => {
               const responseHeaders: any = responses[code].headers;
               return create("TabItem", {
