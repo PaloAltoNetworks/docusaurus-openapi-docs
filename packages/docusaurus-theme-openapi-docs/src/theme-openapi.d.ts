@@ -65,6 +65,10 @@ declare module "@theme/SchemaTabs" {
   export default function SchemaTabs(props: any): JSX.Element;
 }
 
+declare module "@theme/Markdown" {
+  export default function Markdown(props: any): JSX.Element;
+}
+
 declare module "@theme/ApiExplorer/Accept" {
   export default function Accept(): JSX.Element;
 }
