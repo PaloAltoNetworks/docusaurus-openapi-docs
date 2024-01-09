@@ -23,9 +23,9 @@ import { createHeading } from "./createHeading";
 import { createLicense } from "./createLicense";
 import { createLogo } from "./createLogo";
 import { createMethodEndpoint } from "./createMethodEndpoint";
-import { createOperationHeader } from "./createOperationHeader";
 import { createParamsDetails } from "./createParamsDetails";
 import { createRequestBodyDetails } from "./createRequestBodyDetails";
+import { createRequestHeader } from "./createRequestHeader";
 import { createStatusCodes } from "./createStatusCodes";
 import { createTermsOfService } from "./createTermsOfService";
 import { createVendorExtensions } from "./createVendorExtensions";
@@ -80,7 +80,7 @@ export function createApiPageMD({
       : undefined,
     createDeprecationNotice({ deprecated, description: deprecatedDescription }),
     createDescription(description),
-    createOperationHeader("Request"),
+    createRequestHeader("Request"),
     createParamsDetails({ parameters, type: "path" }),
     createParamsDetails({ parameters, type: "query" }),
     createParamsDetails({ parameters, type: "header" }),
