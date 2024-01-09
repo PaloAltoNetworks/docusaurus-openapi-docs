@@ -19,6 +19,6 @@ interface Props {
   };
 }
 
-export function createRequestBodyDetails({ title, body }: Props): any {
+export function createRequestBodyDetails({ title, body }: Props) {
   return createRequestSchema({ title, body });
 }

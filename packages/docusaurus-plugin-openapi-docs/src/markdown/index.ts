@@ -14,6 +14,7 @@ import {
 import { ApiPageMetadata, InfoPageMetadata, TagPageMetadata } from "../types";
 import { createAuthentication } from "./createAuthentication";
 import { createAuthorization } from "./createAuthorization";
+import { createCallbacks } from "./createCallbacks";
 import { createContactInfo } from "./createContactInfo";
 import { createDeprecationNotice } from "./createDeprecationNotice";
 import { createDescription } from "./createDescription";
@@ -31,7 +32,7 @@ import { createVendorExtensions } from "./createVendorExtensions";
 import { createVersionBadge } from "./createVersionBadge";
 import { greaterThan, lessThan, render } from "./utils";
 
-interface Props {
+interface RequestBodyProps {
   title: string;
   body: {
     content?: {
@@ -54,6 +55,7 @@ export function createApiPageMD({
     parameters,
     requestBody,
     responses,
+    callbacks,
   },
   infoPath,
   frontMatter,
@@ -69,11 +71,14 @@ export function createApiPageMD({
     `import SchemaItem from "@theme/SchemaItem";\n`,
     `import SchemaTabs from "@theme/SchemaTabs";\n`,
     `import Markdown from "@theme/Markdown";\n`,
+    `import OperationTabs from "@theme/OperationTabs";\n`,
     `import TabItem from "@theme/TabItem";\n\n`,
     createHeading(title.replace(lessThan, "&lt;").replace(greaterThan, "&gt;")),
     createMethodEndpoint(method, path),
     infoPath && createAuthorization(infoPath),
-    frontMatter.show_extensions && createVendorExtensions(extensions),
+    frontMatter.show_extensions
+      ? createVendorExtensions(extensions)
+      : undefined,
     createDeprecationNotice({ deprecated, description: deprecatedDescription }),
     createDescription(description),
     createRequestHeader("Request"),
@@ -84,8 +89,9 @@ export function createApiPageMD({
     createRequestBodyDetails({
       title: "Body",
       body: requestBody,
-    } as Props),
+    } as RequestBodyProps),
     createStatusCodes({ responses }),
+    createCallbacks({ callbacks }),
   ]);
 }
 
