@@ -1,3 +1,9 @@
+## 1.2.11 (Jan 11, 2024)
+
+High level enhancements
+
+- hardcoded the date in response examples to prevent unwanted diffs
+
 ## 1.2.10 (Oct 19, 2023)
 
 High level enhancements
