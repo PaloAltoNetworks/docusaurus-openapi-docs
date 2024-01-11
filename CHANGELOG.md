@@ -1,3 +1,9 @@
+## 1.2.12 (Jan 11, 2024)
+
+High level enhancements
+
+- Use fixed date and date-time values in generated request examples
+
 ## 1.2.11 (Jan 11, 2024)
 
 High level enhancements
