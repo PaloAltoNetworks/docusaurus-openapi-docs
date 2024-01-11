@@ -172,7 +172,7 @@ function CodeSnippets({ postman, codeSamples }: Props) {
   // Filter languageSet by user-defined langs
   const filteredLanguageSet = languageSet.filter((ls) => {
     return langs.some((lang) => {
-      return (lang as Language).language === ls.language;
+      return lang.language === ls.language;
     });
   });
 
