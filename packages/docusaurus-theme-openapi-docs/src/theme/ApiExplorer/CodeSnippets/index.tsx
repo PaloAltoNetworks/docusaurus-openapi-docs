@@ -281,15 +281,19 @@ function CodeSnippets({ postman, codeSamples }: Props) {
     mergedLangs,
   ]);
 
+  // no dependencies was intentionlly set for this particular hook. it's safe as long as if conditions are set
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(function onSelectedVariantUpdate() {
-    if (
-      language.source &&
-      selectedVariant === language.codeSampleLanguage.toLowerCase()
-    ) {
-      console.log("entered");
+    // selected a code sample variant
+    if (selectedVariant === language.codeSampleLanguage.toLowerCase()) {
+      const sample = codeSamples.find(
+        ({ lang }) => lang === language.codeSampleLanguage
+      );
 
-      setCodeText(language.source);
-      return;
+      if (sample) {
+        setCodeText(sample.source);
+        return;
+      }
     }
 
     if (selectedVariant && selectedVariant !== language.variant) {

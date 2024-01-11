@@ -18,7 +18,7 @@ export function mergeCodeSampleLanguage(
 
     if (sample) {
       const label = sample.label || sample.lang;
-      const variant = (sample.label || sample.lang).toLowerCase();
+      const variant = sample.lang.toLowerCase();
       const source = sample.source;
 
       return {
