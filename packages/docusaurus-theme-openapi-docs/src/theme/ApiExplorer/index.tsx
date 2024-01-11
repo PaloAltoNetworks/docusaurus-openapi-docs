@@ -30,7 +30,7 @@ function ApiExplorer({
       {item.method !== "event" && (
         <CodeSnippets
           postman={postman}
-          codeSamples={(item as any)["x-code-samples"] ?? []}
+          codeSamples={(item as any)["x-codeSamples"] ?? []}
         />
       )}
       <Request item={item} />

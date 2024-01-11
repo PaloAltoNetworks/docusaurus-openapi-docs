@@ -16,20 +16,14 @@ import CodeTabs from "@theme/ApiExplorer/CodeTabs";
 import { useTypedSelector } from "@theme/ApiItem/hooks";
 import merge from "lodash/merge";
 
-export interface Language {
-  highlight: string;
-  language: string;
-  logoClass: string;
-  variant: string;
-  variants: string[];
-  options: { [key: string]: boolean };
-  source?: string;
-}
+import { CodeSample, Language } from "./code-snippets-types";
+import { mergeCodeSampleLanguage } from "./languages";
 
 export const languageSet: Language[] = [
   {
     highlight: "bash",
     language: "curl",
+    codeSampleLanguage: "Shell",
     logoClass: "bash",
     options: {
       longFormat: false,
@@ -42,6 +36,7 @@ export const languageSet: Language[] = [
   {
     highlight: "python",
     language: "python",
+    codeSampleLanguage: "Python",
     logoClass: "python",
     options: {
       followRedirect: true,
@@ -53,6 +48,7 @@ export const languageSet: Language[] = [
   {
     highlight: "go",
     language: "go",
+    codeSampleLanguage: "Go",
     logoClass: "go",
     options: {
       followRedirect: true,
@@ -64,6 +60,7 @@ export const languageSet: Language[] = [
   {
     highlight: "javascript",
     language: "nodejs",
+    codeSampleLanguage: "JavaScript",
     logoClass: "nodejs",
     options: {
       ES6_enabled: true,
@@ -76,6 +73,7 @@ export const languageSet: Language[] = [
   {
     highlight: "ruby",
     language: "ruby",
+    codeSampleLanguage: "Ruby",
     logoClass: "ruby",
     options: {
       followRedirect: true,
@@ -87,6 +85,7 @@ export const languageSet: Language[] = [
   {
     highlight: "csharp",
     language: "csharp",
+    codeSampleLanguage: "C#",
     logoClass: "csharp",
     options: {
       followRedirect: true,
@@ -98,6 +97,7 @@ export const languageSet: Language[] = [
   {
     highlight: "php",
     language: "php",
+    codeSampleLanguage: "PHP",
     logoClass: "php",
     options: {
       followRedirect: true,
@@ -109,6 +109,7 @@ export const languageSet: Language[] = [
   {
     highlight: "java",
     language: "java",
+    codeSampleLanguage: "Java",
     logoClass: "java",
     options: {
       followRedirect: true,
@@ -120,6 +121,7 @@ export const languageSet: Language[] = [
   {
     highlight: "powershell",
     language: "powershell",
+    codeSampleLanguage: "PowerShell",
     logoClass: "powershell",
     options: {
       followRedirect: true,
@@ -132,10 +134,10 @@ export const languageSet: Language[] = [
 
 export interface Props {
   postman: sdk.Request;
-  codeSamples: any; // TODO: Type this...
+  codeSamples: CodeSample[];
 }
 
-function CodeTab({ children, hidden, className, onClick }: any): JSX.Element {
+function CodeTab({ children, hidden, className }: any): JSX.Element {
   return (
     <div role="tabpanel" className={className} {...{ hidden }}>
       {children}
@@ -165,25 +167,27 @@ function CodeSnippets({ postman, codeSamples }: Props) {
   const langs = [
     ...((siteConfig?.themeConfig?.languageTabs as Language[] | undefined) ??
       languageSet),
-    ...codeSamples,
   ];
 
   // Filter languageSet by user-defined langs
   const filteredLanguageSet = languageSet.filter((ls) => {
     return langs.some((lang) => {
-      return lang.language === ls.language;
+      return (lang as Language).language === ls.language;
     });
   });
 
   // Merge user-defined langs into languageSet
-  const mergedLangs = merge(filteredLanguageSet, langs);
+  const mergedLangs = mergeCodeSampleLanguage(
+    merge(filteredLanguageSet, langs),
+    codeSamples
+  );
 
   // Read defaultLang from localStorage
   const defaultLang: Language[] = mergedLangs.filter(
     (lang) =>
       lang.language === localStorage.getItem("docusaurus.tab.code-samples")
   );
-  const [selectedVariant, setSelectedVariant] = useState();
+  const [selectedVariant, setSelectedVariant] = useState<string | undefined>();
   const [language, setLanguage] = useState(() => {
     // Return first index if only 1 user-defined language exists
     if (mergedLangs.length === 1) {
@@ -192,10 +196,17 @@ function CodeSnippets({ postman, codeSamples }: Props) {
     // Fall back to language in localStorage or first user-defined language
     return defaultLang[0] ?? mergedLangs[0];
   });
-  const [codeText, setCodeText] = useState("");
+  const [codeText, setCodeText] = useState<string>("");
 
   useEffect(() => {
-    if (language && !!language.options) {
+    // initial active language is custom code sample
+    if (
+      language &&
+      !!language.source &&
+      language.codeSampleLanguage.toLowerCase() === language.variant
+    ) {
+      setCodeText(language.source);
+    } else if (language && !!language.options) {
       const postmanRequest = buildPostmanRequest(postman, {
         queryParams,
         pathParams,
@@ -219,8 +230,6 @@ function CodeSnippets({ postman, codeSamples }: Props) {
           setCodeText(snippet);
         }
       );
-    } else if (language && !!language.source) {
-      setCodeText(language.source);
     } else if (language && !language.options) {
       const langSource = mergedLangs.filter(
         (lang) => lang.language === language.language
@@ -272,7 +281,17 @@ function CodeSnippets({ postman, codeSamples }: Props) {
     mergedLangs,
   ]);
 
-  useEffect(() => {
+  useEffect(function onSelectedVariantUpdate() {
+    if (
+      language.source &&
+      selectedVariant === language.codeSampleLanguage.toLowerCase()
+    ) {
+      console.log("entered");
+
+      setCodeText(language.source);
+      return;
+    }
+
     if (selectedVariant && selectedVariant !== language.variant) {
       const postmanRequest = buildPostmanRequest(postman, {
         queryParams,
@@ -335,11 +354,13 @@ function CodeSnippets({ postman, codeSamples }: Props) {
                 defaultValue={selectedVariant}
                 lazy
               >
-                {lang.variants.map((variant) => {
+                {lang.variants.map((variant, index) => {
                   return (
                     <CodeTab
                       value={variant.toLowerCase()}
-                      label={variant.toUpperCase()}
+                      label={
+                        lang.labels ? lang.labels[index] : variant.toUpperCase()
+                      }
                       key={`${lang.language}-${lang.variant}`}
                       attributes={{
                         className: `openapi-tabs__code-item--variant`,
