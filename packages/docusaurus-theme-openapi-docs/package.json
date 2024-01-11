@@ -51,7 +51,7 @@
     "buffer": "^6.0.3",
     "clsx": "^1.1.1",
     "crypto-js": "^4.1.1",
-    "docusaurus-plugin-openapi-docs": "^1.2.0",
+    "@slashid/docusaurus-plugin-openapi-docs-slashid": "^1.2.12",
     "immer": "^9.0.7",
     "lodash": "^4.17.20",
     "process": "^0.11.10",
