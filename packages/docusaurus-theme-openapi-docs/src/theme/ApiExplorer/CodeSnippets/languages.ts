@@ -12,21 +12,23 @@ export function mergeCodeSampleLanguage(
   codeSamples: CodeSample[]
 ): Language[] {
   return languages.map((language) => {
-    const sample = codeSamples.find(
+    const languageCodeSamples = codeSamples.filter(
       ({ lang }) => lang === language.codeSampleLanguage
     );
 
-    if (sample) {
-      const label = sample.label || sample.lang;
-      const variant = sample.lang.toLowerCase();
-      const source = sample.source;
+    if (languageCodeSamples.length) {
+      const samples = languageCodeSamples.map(({ lang }) => lang);
+      const samplesLabels = languageCodeSamples.map(
+        ({ label, lang }) => label || lang
+      );
+      const samplesSources = languageCodeSamples.map(({ source }) => source);
 
       return {
         ...language,
-        source,
-        labels: [label, ...(language.labels || [])],
-        variant,
-        variants: [variant, ...language.variants],
+        sample: samples[0],
+        samples,
+        samplesSources,
+        samplesLabels,
       };
     }
 

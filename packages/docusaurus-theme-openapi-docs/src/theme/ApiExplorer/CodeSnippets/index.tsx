@@ -188,6 +188,7 @@ function CodeSnippets({ postman, codeSamples }: Props) {
       lang.language === localStorage.getItem("docusaurus.tab.code-samples")
   );
   const [selectedVariant, setSelectedVariant] = useState<string | undefined>();
+  const [selectedSample, setSelectedSample] = useState<string | undefined>();
   const [language, setLanguage] = useState(() => {
     // Return first index if only 1 user-defined language exists
     if (mergedLangs.length === 1) {
@@ -197,16 +198,23 @@ function CodeSnippets({ postman, codeSamples }: Props) {
     return defaultLang[0] ?? mergedLangs[0];
   });
   const [codeText, setCodeText] = useState<string>("");
+  const [codeSampleCodeText, setCodeSampleCodeText] = useState<string>("");
 
   useEffect(() => {
     // initial active language is custom code sample
     if (
       language &&
-      !!language.source &&
-      language.codeSampleLanguage.toLowerCase() === language.variant
+      language.sample &&
+      language.samples &&
+      language.samplesSources
     ) {
-      setCodeText(language.source);
-    } else if (language && !!language.options) {
+      const sampleIndex = language.samples.findIndex(
+        (smp) => smp === language.sample
+      );
+      setCodeSampleCodeText(language.samplesSources[sampleIndex]);
+    }
+
+    if (language && !!language.options) {
       const postmanRequest = buildPostmanRequest(postman, {
         queryParams,
         pathParams,
@@ -280,22 +288,8 @@ function CodeSnippets({ postman, codeSamples }: Props) {
     auth,
     mergedLangs,
   ]);
-
   // no dependencies was intentionlly set for this particular hook. it's safe as long as if conditions are set
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(function onSelectedVariantUpdate() {
-    // selected a code sample variant
-    if (selectedVariant === language.codeSampleLanguage.toLowerCase()) {
-      const sample = codeSamples.find(
-        ({ lang }) => lang === language.codeSampleLanguage
-      );
-
-      if (sample) {
-        setCodeText(sample.source);
-        return;
-      }
-    }
-
     if (selectedVariant && selectedVariant !== language.variant) {
       const postmanRequest = buildPostmanRequest(postman, {
         queryParams,
@@ -323,6 +317,22 @@ function CodeSnippets({ postman, codeSamples }: Props) {
     }
   });
 
+  // no dependencies was intentionlly set for this particular hook. it's safe as long as if conditions are set
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(function onSelectedSampleUpdate() {
+    if (
+      language.samples &&
+      language.samplesSources &&
+      selectedSample &&
+      selectedSample !== language.sample
+    ) {
+      const sampleIndex = language.samples.findIndex(
+        (smp) => smp === selectedSample
+      );
+      setCodeSampleCodeText(language.samplesSources[sampleIndex]);
+    }
+  });
+
   if (language === undefined) {
     return null;
   }
@@ -347,6 +357,46 @@ function CodeSnippets({ postman, codeSamples }: Props) {
                 className: `openapi-tabs__code-item--${lang.logoClass}`,
               }}
             >
+              {lang.samples && (
+                <CodeTabs
+                  className="openapi-tabs__code-container-inner"
+                  action={{
+                    setLanguage: setLanguage,
+                    setSelectedSample: setSelectedSample,
+                  }}
+                  includeSample={true}
+                  currentLanguage={lang.language}
+                  defaultValue={selectedSample}
+                  lazy
+                >
+                  {lang.samples.map((sample, index) => {
+                    return (
+                      <CodeTab
+                        value={sample}
+                        label={
+                          lang.samplesLabels
+                            ? lang.samplesLabels[index]
+                            : sample
+                        }
+                        key={`${lang.language}-${lang.sample}`}
+                        attributes={{
+                          className: `openapi-tabs__code-item--sample`,
+                        }}
+                      >
+                        {/* @ts-ignore */}
+                        <ApiCodeBlock
+                          language={lang.highlight}
+                          className="openapi-explorer__code-block"
+                          showLineNumbers={true}
+                        >
+                          {codeSampleCodeText}
+                        </ApiCodeBlock>
+                      </CodeTab>
+                    );
+                  })}
+                </CodeTabs>
+              )}
+
               <CodeTabs
                 className="openapi-tabs__code-container-inner"
                 action={{
@@ -362,9 +412,7 @@ function CodeSnippets({ postman, codeSamples }: Props) {
                   return (
                     <CodeTab
                       value={variant.toLowerCase()}
-                      label={
-                        lang.labels ? lang.labels[index] : variant.toUpperCase()
-                      }
+                      label={variant.toUpperCase()}
                       key={`${lang.language}-${lang.variant}`}
                       attributes={{
                         className: `openapi-tabs__code-item--variant`,

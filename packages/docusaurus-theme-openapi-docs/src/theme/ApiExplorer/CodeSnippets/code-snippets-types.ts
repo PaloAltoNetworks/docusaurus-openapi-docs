@@ -41,8 +41,10 @@ export interface Language {
   variant: string;
   variants: string[];
   options?: { [key: string]: boolean };
-  labels?: string[];
-  source?: string;
+  sample?: string;
+  samples?: string[];
+  samplesSources?: string[];
+  samplesLabels?: string[];
 }
 
 // https://redocly.com/docs/api-reference-docs/specification-extensions/x-code-samples
