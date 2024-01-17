@@ -15,7 +15,7 @@ The Docusaurus OpenAPI docs plugin comes with support for 8 languages which you 
 | `curl`       | bash              | `curl`\*                                         |
 | `python`     | python            | `requests`\*, `http.client`                      |
 | `go`         | go                | `native`\*                                       |
-| `nodejs`     | javascript        | `axios`\*, `native`, `requests`, `unirest`       |
+| `nodejs`     | javascript        | `axios`\*, `native`                              |
 | `ruby`       | ruby              | `net::http`\*                                    |
 | `csharp`     | csharp            | `restsharp`\*, `httpclient`                      |
 | `php`        | php               | `curl`\*, `guzzle`, `pecl_http`, `http_request2` |
