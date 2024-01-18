@@ -68,7 +68,7 @@ export const languageSet: Language[] = [
       trimRequestBody: true,
     },
     variant: "axios",
-    variants: ["axios", "native", "request", "unirest"],
+    variants: ["axios", "native"],
   },
   {
     highlight: "ruby",
