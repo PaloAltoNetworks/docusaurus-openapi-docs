@@ -179,13 +179,13 @@ function CodeSnippets({ postman, codeSamples }: Props) {
   // Merge user-defined langs into languageSet
   const mergedLangs = mergeCodeSampleLanguage(
     merge(filteredLanguageSet, langs),
-    codeSamples,
+    codeSamples
   );
 
   // Read defaultLang from localStorage
   const defaultLang: Language[] = mergedLangs.filter(
     (lang) =>
-      lang.language === localStorage.getItem("docusaurus.tab.code-samples"),
+      lang.language === localStorage.getItem("docusaurus.tab.code-samples")
   );
   const [selectedVariant, setSelectedVariant] = useState<string | undefined>();
   const [selectedSample, setSelectedSample] = useState<string | undefined>();
@@ -209,7 +209,7 @@ function CodeSnippets({ postman, codeSamples }: Props) {
       language.samplesSources
     ) {
       const sampleIndex = language.samples.findIndex(
-        (smp) => smp === language.sample,
+        (smp) => smp === language.sample
       );
       setCodeSampleCodeText(language.samplesSources[sampleIndex]);
     }
@@ -236,11 +236,11 @@ function CodeSnippets({ postman, codeSamples }: Props) {
             return;
           }
           setCodeText(snippet);
-        },
+        }
       );
     } else if (language && !language.options) {
       const langSource = mergedLangs.filter(
-        (lang) => lang.language === language.language,
+        (lang) => lang.language === language.language
       );
 
       // Merges user-defined language with default languageSet
@@ -269,7 +269,7 @@ function CodeSnippets({ postman, codeSamples }: Props) {
             return;
           }
           setCodeText(snippet);
-        },
+        }
       );
     } else {
       setCodeText("");
@@ -312,7 +312,7 @@ function CodeSnippets({ postman, codeSamples }: Props) {
             return;
           }
           setCodeText(snippet);
-        },
+        }
       );
     }
   });
@@ -327,7 +327,7 @@ function CodeSnippets({ postman, codeSamples }: Props) {
       selectedSample !== language.sample
     ) {
       const sampleIndex = language.samples.findIndex(
-        (smp) => smp === selectedSample,
+        (smp) => smp === selectedSample
       );
       setCodeSampleCodeText(language.samplesSources[sampleIndex]);
     }
