@@ -26,16 +26,21 @@ export interface Props {
   includeVariant: boolean;
 }
 
+export interface TabListProps extends Props, TabProps {
+  includeSample?: boolean;
+}
+
 function TabList({
   action,
   currentLanguage,
   includeVariant,
+  includeSample,
   className,
   block,
   selectedValue,
   selectValue,
   tabValues,
-}: Props & TabProps & ReturnType<typeof useTabs>) {
+}: TabListProps & ReturnType<typeof useTabs>) {
   const tabRefs: (HTMLLIElement | null)[] = [];
   const { blockElementScrollPositionUntilNextRender } =
     useScrollPositionBlocker();
@@ -68,6 +73,10 @@ function TabList({
           (lang: Language) => lang.language === newTabValue
         )[0];
         action.setSelectedVariant(newLanguage.variant.toLowerCase());
+      }
+      if (currentLanguage && includeSample) {
+        newLanguage.sample = newTabValue;
+        action.setSelectedSample(newTabValue.toLowerCase());
       }
       action.setLanguage(newLanguage);
     }
