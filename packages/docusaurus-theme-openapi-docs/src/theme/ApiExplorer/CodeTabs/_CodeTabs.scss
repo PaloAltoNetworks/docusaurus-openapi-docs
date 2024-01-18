@@ -94,6 +94,20 @@ body[class="ReactModal__Body--open"] {
   padding-right: 0.5rem !important;
 }
 
+.openapi-tabs__code-item--sample {
+  color: var(--ifm-color-secondary);
+
+  &.active {
+    border-color: var(--ifm-toc-border-color);
+  }
+}
+
+.openapi-tabs__code-item--sample > span {
+  padding-top: unset !important;
+  padding-left: 0.5rem !important;
+  padding-right: 0.5rem !important;
+}
+
 .openapi-tabs__code-item--python {
   color: var(--ifm-color-success);
 

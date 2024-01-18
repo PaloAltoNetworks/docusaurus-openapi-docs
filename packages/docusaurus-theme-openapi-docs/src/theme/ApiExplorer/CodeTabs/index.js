@@ -19,6 +19,7 @@ function TabList({
   action,
   currentLanguage,
   includeVariant,
+  includeSample,
   className,
   block,
   selectedValue,
@@ -53,6 +54,12 @@ function TabList({
         )[0];
         action.setSelectedVariant(newLanguage.variant.toLowerCase());
       }
+
+      if (currentLanguage && includeSample) {
+        newLanguage.sample = newTabValue;
+        action.setSelectedSample(newTabValue.toLowerCase());
+      }
+
       action.setLanguage(newLanguage);
     }
   };
