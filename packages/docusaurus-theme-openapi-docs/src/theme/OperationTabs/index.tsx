@@ -7,9 +7,9 @@
 
 import React, {
   cloneElement,
-  useRef,
-  useState,
   useEffect,
+  useState,
+  useRef,
   ReactElement,
 } from "react";
 
@@ -21,13 +21,7 @@ import {
 } from "@docusaurus/theme-common/internal";
 import { TabItemProps } from "@docusaurus/theme-common/lib/utils/tabsUtils";
 import useIsBrowser from "@docusaurus/useIsBrowser";
-import Heading from "@theme/Heading";
 import clsx from "clsx";
-
-export interface TabListProps extends TabProps {
-  label: string;
-  id: string;
-}
 
 function TabList({
   className,
@@ -35,9 +29,7 @@ function TabList({
   selectedValue,
   selectValue,
   tabValues,
-  label = "Responses",
-  id = "responses",
-}: TabListProps & ReturnType<typeof useTabs>) {
+}: TabProps & ReturnType<typeof useTabs>) {
   const tabRefs: (HTMLLIElement | null)[] = [];
   const { blockElementScrollPositionUntilNextRender } =
     useScrollPositionBlocker();
@@ -113,14 +105,11 @@ function TabList({
   };
 
   return (
-    <div className="openapi-tabs__response-header-section">
-      <Heading as="h2" id={id} className="openapi-tabs__response-header">
-        {label}
-      </Heading>
-      <div className="openapi-tabs__response-container">
+    <div className="tabs__container">
+      <div className="openapi-tabs__operation-container">
         {showTabArrows && (
           <button
-            className="openapi-tabs__arrow left"
+            className={clsx("openapi-tabs__arrow", "left")}
             onClick={handleLeftClick}
           />
         )}
@@ -129,7 +118,7 @@ function TabList({
           role="tablist"
           aria-orientation="horizontal"
           className={clsx(
-            "openapi-tabs__response-list-container",
+            "openapi-tabs__operation-list-container",
             "tabs",
             {
               "tabs--block": block,
@@ -137,38 +126,36 @@ function TabList({
             className
           )}
         >
-          {tabValues.map(({ value, label, attributes }) => (
-            <li
-              // TODO extract TabListItem
-              role="tab"
-              tabIndex={selectedValue === value ? 0 : -1}
-              aria-selected={selectedValue === value}
-              key={value}
-              ref={(tabControl) => tabRefs.push(tabControl)}
-              onKeyDown={handleKeydown}
-              onClick={handleTabChange}
-              {...attributes}
-              className={clsx(
-                "tabs__item",
-                "openapi-tabs__response-code-item",
-                attributes?.className as string,
-                parseInt(value) >= 400
-                  ? "danger"
-                  : parseInt(value) >= 200 && parseInt(value) < 300
-                    ? "success"
-                    : "info",
-                {
-                  active: selectedValue === value,
-                }
-              )}
-            >
-              {label ?? value}
-            </li>
-          ))}
+          {tabValues.map(({ value, label, attributes }) => {
+            return (
+              <li
+                // TODO extract TabListItem
+                role="tab"
+                tabIndex={selectedValue === value ? 0 : -1}
+                aria-selected={selectedValue === value}
+                key={value}
+                ref={(tabControl) => tabRefs.push(tabControl)}
+                onKeyDown={handleKeydown}
+                onFocus={handleTabChange}
+                onClick={(e) => handleTabChange(e)}
+                {...attributes}
+                className={clsx(
+                  "tabs__item",
+                  "openapi-tabs__operation-item",
+                  attributes?.className as string,
+                  {
+                    active: selectedValue === value,
+                  }
+                )}
+              >
+                {label ?? value}
+              </li>
+            );
+          })}
         </ul>
         {showTabArrows && (
           <button
-            className="openapi-tabs__arrow right"
+            className={clsx("openapi-tabs__arrow", "right")}
             onClick={handleRightClick}
           />
         )}
@@ -176,7 +163,6 @@ function TabList({
     </div>
   );
 }
-
 function TabContent({
   lazy,
   children,
@@ -206,16 +192,16 @@ function TabContent({
     </div>
   );
 }
-function TabsComponent(props: TabListProps): React.JSX.Element {
+function TabsComponent(props: TabProps): React.JSX.Element {
   const tabs = useTabs(props);
   return (
-    <div className="openapi-tabs__container">
+    <div className="tabs-container">
       <TabList {...props} {...tabs} />
       <TabContent {...props} {...tabs} />
     </div>
   );
 }
-export default function ApiTabs(props: TabListProps): React.JSX.Element {
+export default function OperationTabs(props: TabProps): React.JSX.Element {
   const isBrowser = useIsBrowser();
   return (
     <TabsComponent
