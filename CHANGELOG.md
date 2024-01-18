@@ -5,6 +5,7 @@ High level enhancements
 - Add support for x-CodeSamples
 - Add callbacks support
 - Add markdown support to example/examples summary
+- Remove deprecated node packages from generated snippets
 
 Other enhancements and bug fixes
 
