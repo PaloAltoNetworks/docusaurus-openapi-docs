@@ -18,12 +18,14 @@
     background-color: var(--ifm-pre-background);
     border-radius: var(--ifm-global-radius);
     border: 1px solid var(--openapi-explorer-border-color);
-    box-shadow: 0 2px 3px hsla(222, 8%, 43%, 0.1),
+    box-shadow:
+      0 2px 3px hsla(222, 8%, 43%, 0.1),
       0 8px 16px -10px hsla(222, 8%, 43%, 0.2);
     transition: 300ms;
 
     &:hover {
-      box-shadow: 0 0 0 2px rgba(38, 53, 61, 0.15),
+      box-shadow:
+        0 0 0 2px rgba(38, 53, 61, 0.15),
         0 2px 3px hsla(222, 8%, 43%, 0.15),
         0 16px 16px -10px hsla(222, 8%, 43%, 0.2);
     }
