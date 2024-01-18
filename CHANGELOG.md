@@ -1,3 +1,16 @@
+## 2.0.4 (Jan 18, 2024)
+
+High level enhancements
+
+- Add x-codeSamples support
+- Add callbacks support
+
+Other enhancements and bug fixes
+
+- Add support to x-codeSamples ([#697](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/697))
+- Remove deprecated node packages ([#699](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/699))
+- Add Callbacks support ([#691](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/691))
+
 ## 2.0.3 (Jan 9, 2024)
 
 High level enhancements
