@@ -12,12 +12,12 @@ import {
   useTabs,
 } from "@docusaurus/theme-common/internal";
 import useIsBrowser from "@docusaurus/useIsBrowser";
-import { languageSet } from "@theme/ApiExplorer/CodeSnippets";
 import clsx from "clsx";
 
 function TabList({
   action,
   currentLanguage,
+  languageSet,
   includeVariant,
   includeSample,
   className,
@@ -44,20 +44,22 @@ function TabList({
       let newLanguage;
       if (currentLanguage && includeVariant) {
         newLanguage = languageSet.filter(
-          (lang) => lang.language === currentLanguage
+          (lang) => lang.language === currentLanguage,
         )[0];
         newLanguage.variant = newTabValue;
         action.setSelectedVariant(newTabValue.toLowerCase());
+      } else if (currentLanguage && includeSample) {
+        newLanguage = languageSet.filter(
+          (lang) => lang.language === currentLanguage,
+        )[0];
+        newLanguage.sample = newTabValue;
+        action.setSelectedSample(newTabValue);
       } else {
         newLanguage = languageSet.filter(
-          (lang) => lang.language === newTabValue
+          (lang) => lang.language === newTabValue,
         )[0];
         action.setSelectedVariant(newLanguage.variant.toLowerCase());
-      }
-
-      if (currentLanguage && includeSample) {
-        newLanguage.sample = newTabValue;
-        action.setSelectedSample(newTabValue.toLowerCase());
+        action.setSelectedSample(newLanguage.sample);
       }
 
       action.setLanguage(newLanguage);
@@ -97,7 +99,7 @@ function TabList({
         {
           "tabs--block": block,
         },
-        className
+        className,
       )}
     >
       {tabValues.map(({ value, label, attributes }) => (
@@ -117,7 +119,7 @@ function TabList({
             attributes?.className,
             {
               active: selectedValue === value,
-            }
+            },
           )}
         >
           <span>{label ?? value}</span>
@@ -132,7 +134,7 @@ function TabContent({ lazy, children, selectedValue }) {
   children = Array.isArray(children) ? children : [children];
   if (lazy) {
     const selectedTabItem = children.find(
-      (tabItem) => tabItem.props.value === selectedValue
+      (tabItem) => tabItem.props.value === selectedValue,
     );
     if (!selectedTabItem) {
       // fail-safe or fail-fast? not sure what's best here
@@ -146,7 +148,7 @@ function TabContent({ lazy, children, selectedValue }) {
         cloneElement(tabItem, {
           key: i,
           hidden: tabItem.props.value !== selectedValue,
-        })
+        }),
       )}
     </div>
   );
