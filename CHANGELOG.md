@@ -1,3 +1,19 @@
+## 3.0.0-beta.5 (Jan 18, 2024)
+
+High level enhancements
+
+- Add support for x-CodeSamples
+- Add callbacks support
+- Add markdown support to example/examples summary
+- Remove deprecated node packages from generated snippets
+
+Other enhancements and bug fixes
+
+- Add support to x-codeSamples in v3 ([#701](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/701))
+- Add Callbacks Support to V3 ([#700](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/700))
+- Remove deprecated node packages ([#699](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/699))
+- Add markdown support to example summary ([#690](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/690))
+
 ## 3.0.0-beta.4 (Jan 5, 2024)
 
 High level enhancements
