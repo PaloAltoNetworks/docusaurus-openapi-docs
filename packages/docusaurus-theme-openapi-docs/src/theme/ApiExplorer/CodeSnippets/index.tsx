@@ -346,7 +346,7 @@ function CodeSnippets({ postman, codeSamples }: Props) {
           setSelectedVariant: setSelectedVariant,
           setSelectedSample: setSelectedSample,
         }}
-        mergedLanguages={mergedLangs}
+        languageSet={mergedLangs}
         lazy
       >
         {mergedLangs.map((lang) => {
@@ -369,7 +369,7 @@ function CodeSnippets({ postman, codeSamples }: Props) {
                   includeSample={true}
                   currentLanguage={lang.language}
                   defaultValue={selectedSample}
-                  mergedLanguages={mergedLangs}
+                  languageSet={mergedLangs}
                   lazy
                 >
                   {lang.samples.map((sample, index) => {
@@ -409,7 +409,7 @@ function CodeSnippets({ postman, codeSamples }: Props) {
                 includeVariant={true}
                 currentLanguage={lang.language}
                 defaultValue={selectedVariant}
-                mergedLanguages={mergedLangs}
+                languageSet={mergedLangs}
                 lazy
               >
                 {lang.variants.map((variant, index) => {
