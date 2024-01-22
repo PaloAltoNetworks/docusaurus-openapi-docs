@@ -35,3 +35,19 @@ export function mergeCodeSampleLanguage(
     return language;
   });
 }
+
+export function getCodeSampleSourceFromLanguage(language: Language) {
+  if (
+    language &&
+    language.sample &&
+    language.samples &&
+    language.samplesSources
+  ) {
+    const sampleIndex = language.samples.findIndex(
+      (smp) => smp === language.sample
+    );
+    return language.samplesSources[sampleIndex];
+  }
+
+  return "";
+}
