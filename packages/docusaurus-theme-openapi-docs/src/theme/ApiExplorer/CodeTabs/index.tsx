@@ -15,7 +15,7 @@ import {
 } from "@docusaurus/theme-common/internal";
 import { TabItemProps } from "@docusaurus/theme-common/lib/utils/tabsUtils";
 import useIsBrowser from "@docusaurus/useIsBrowser";
-import { Language, languageSet } from "@theme/ApiExplorer/CodeSnippets";
+import { Language } from "@theme/ApiExplorer/CodeSnippets";
 import clsx from "clsx";
 
 export interface Props {
@@ -23,16 +23,18 @@ export interface Props {
     [key: string]: React.Dispatch<any>;
   };
   currentLanguage: Language;
+  languageSet: Language[];
   includeVariant: boolean;
 }
 
-export interface TabListProps extends Props, TabProps {
+export interface CodeTabsProps extends Props, TabProps {
   includeSample?: boolean;
 }
 
 function TabList({
   action,
   currentLanguage,
+  languageSet,
   includeVariant,
   includeSample,
   className,
@@ -40,7 +42,7 @@ function TabList({
   selectedValue,
   selectValue,
   tabValues,
-}: TabListProps & ReturnType<typeof useTabs>) {
+}: CodeTabsProps & ReturnType<typeof useTabs>) {
   const tabRefs: (HTMLLIElement | null)[] = [];
   const { blockElementScrollPositionUntilNextRender } =
     useScrollPositionBlocker();
@@ -68,15 +70,18 @@ function TabList({
         )[0];
         newLanguage.variant = newTabValue;
         action.setSelectedVariant(newTabValue.toLowerCase());
+      } else if (currentLanguage && includeSample) {
+        newLanguage = languageSet.filter(
+          (lang: Language) => lang.language === currentLanguage
+        )[0];
+        newLanguage.sample = newTabValue;
+        action.setSelectedSample(newTabValue);
       } else {
         newLanguage = languageSet.filter(
           (lang: Language) => lang.language === newTabValue
         )[0];
         action.setSelectedVariant(newLanguage.variant.toLowerCase());
-      }
-      if (currentLanguage && includeSample) {
-        newLanguage.sample = newTabValue;
-        action.setSelectedSample(newTabValue.toLowerCase());
+        action.setSelectedSample(newLanguage.sample);
       }
       action.setLanguage(newLanguage);
     }
@@ -151,7 +156,7 @@ function TabContent({
   lazy,
   children,
   selectedValue,
-}: TabProps & ReturnType<typeof useTabs>): React.JSX.Element | null {
+}: CodeTabsProps & ReturnType<typeof useTabs>): React.JSX.Element | null {
   const childTabs = (Array.isArray(children) ? children : [children]).filter(
     Boolean
   ) as ReactElement<TabItemProps>[];
@@ -177,7 +182,7 @@ function TabContent({
   );
 }
 
-function TabsComponent(props: TabProps & Props): React.JSX.Element {
+function TabsComponent(props: CodeTabsProps & Props): React.JSX.Element {
   const tabs = useTabs(props);
   const { className } = props;
 
@@ -191,7 +196,9 @@ function TabsComponent(props: TabProps & Props): React.JSX.Element {
   );
 }
 
-export default function CodeTabs(props: TabProps & Props): React.JSX.Element {
+export default function CodeTabs(
+  props: CodeTabsProps & Props
+): React.JSX.Element {
   const isBrowser = useIsBrowser();
   return (
     <TabsComponent

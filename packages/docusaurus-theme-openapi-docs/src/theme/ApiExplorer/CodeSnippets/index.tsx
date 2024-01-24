@@ -17,7 +17,10 @@ import { useTypedSelector } from "@theme/ApiItem/hooks";
 import merge from "lodash/merge";
 
 import { CodeSample, Language } from "./code-snippets-types";
-import { mergeCodeSampleLanguage } from "./languages";
+import {
+  getCodeSampleSourceFromLanguage,
+  mergeCodeSampleLanguage,
+} from "./languages";
 
 export const languageSet: Language[] = [
   {
@@ -198,20 +201,13 @@ function CodeSnippets({ postman, codeSamples }: Props) {
     return defaultLang[0] ?? mergedLangs[0];
   });
   const [codeText, setCodeText] = useState<string>("");
-  const [codeSampleCodeText, setCodeSampleCodeText] = useState<string>("");
+  const [codeSampleCodeText, setCodeSampleCodeText] = useState<
+    string | (() => string)
+  >(() => getCodeSampleSourceFromLanguage(language));
 
   useEffect(() => {
-    // initial active language is custom code sample
-    if (
-      language &&
-      language.sample &&
-      language.samples &&
-      language.samplesSources
-    ) {
-      const sampleIndex = language.samples.findIndex(
-        (smp) => smp === language.sample
-      );
-      setCodeSampleCodeText(language.samplesSources[sampleIndex]);
+    if (language && !!language.sample) {
+      setCodeSampleCodeText(getCodeSampleSourceFromLanguage(language));
     }
 
     if (language && !!language.options) {
@@ -344,7 +340,9 @@ function CodeSnippets({ postman, codeSamples }: Props) {
         action={{
           setLanguage: setLanguage,
           setSelectedVariant: setSelectedVariant,
+          setSelectedSample: setSelectedSample,
         }}
+        languageSet={mergedLangs}
         lazy
       >
         {mergedLangs.map((lang) => {
@@ -367,6 +365,7 @@ function CodeSnippets({ postman, codeSamples }: Props) {
                   includeSample={true}
                   currentLanguage={lang.language}
                   defaultValue={selectedSample}
+                  languageSet={mergedLangs}
                   lazy
                 >
                   {lang.samples.map((sample, index) => {
@@ -406,6 +405,7 @@ function CodeSnippets({ postman, codeSamples }: Props) {
                 includeVariant={true}
                 currentLanguage={lang.language}
                 defaultValue={selectedVariant}
+                languageSet={mergedLangs}
                 lazy
               >
                 {lang.variants.map((variant, index) => {
