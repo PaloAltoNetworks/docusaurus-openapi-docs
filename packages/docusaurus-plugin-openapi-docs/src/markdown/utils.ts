@@ -9,16 +9,27 @@ export type Children = string | undefined | (string | string[] | undefined)[];
 
 export type Props = Record<string, any> & { children?: Children };
 
-export function create(tag: string, props: Props): string {
+export type Options = { inline?: boolean };
+
+export function create(
+  tag: string,
+  props: Props,
+  options: Options = {}
+): string {
   const { children, ...rest } = props;
 
   let propString = "";
   for (const [key, value] of Object.entries(rest)) {
     propString += `\n  ${key}={${JSON.stringify(value)}}`;
   }
-  propString += propString ? "\n" : "";
-
   let indentedChildren = render(children).replace(/^/gm, "  ");
+
+  if (options.inline) {
+    propString += `\n  children={${JSON.stringify(children)}}`;
+    indentedChildren = "";
+  }
+
+  propString += propString ? "\n" : "";
   indentedChildren += indentedChildren ? "\n" : "";
   return `<${tag}${propString}>\n${indentedChildren}</${tag}>`;
 }
