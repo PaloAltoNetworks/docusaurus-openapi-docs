@@ -167,11 +167,16 @@ export function createAuthentication(securitySchemes: SecuritySchemeObject) {
 
   return create("div", {
     children: [
-      create("h2", {
-        children: "Authentication",
-        id: "authentication",
-        style: { marginBottom: "1rem" },
-      }),
+      create(
+        "Heading",
+        {
+          children: "Authentication",
+          id: "authentication",
+          as: "h2",
+          className: "openapi-tabs__heading",
+        },
+        { inline: true }
+      ),
       create("SchemaTabs", {
         className: "openapi-tabs__security-schemes",
         children: Object.entries(securitySchemes).map(
