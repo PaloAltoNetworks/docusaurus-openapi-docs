@@ -1,0 +1,305 @@
+:root {
+  --bash-background-color: transparent;
+  --bash-border-radius: none;
+  --code-tab-logo-width: 24px;
+  --code-tab-logo-height: 24px;
+}
+
+[data-theme="dark"] {
+  --bash-background-color: lightgrey;
+  --bash-border-radius: 20px;
+}
+
+.openapi-tabs__code-container {
+  margin-bottom: 1rem;
+
+  &:not(.openapi-tabs__code-container-inner) {
+    padding: 1rem;
+    background-color: var(--ifm-pre-background);
+    border-radius: var(--ifm-global-radius);
+    border: 1px solid var(--openapi-explorer-border-color);
+    box-shadow: 0 2px 3px hsla(222, 8%, 43%, 0.1),
+      0 8px 16px -10px hsla(222, 8%, 43%, 0.2);
+    transition: 300ms;
+
+    &:hover {
+      box-shadow: 0 0 0 2px rgba(38, 53, 61, 0.15),
+        0 2px 3px hsla(222, 8%, 43%, 0.15),
+        0 16px 16px -10px hsla(222, 8%, 43%, 0.2);
+    }
+  }
+
+  .openapi-tabs__code-item {
+    display: flex;
+    flex-direction: column-reverse;
+    flex: 0 0 80px;
+    align-items: center;
+    padding: 0.5rem 0 !important;
+    margin-top: 0 !important;
+    margin-right: 0.5rem;
+    border: 1px solid transparent;
+    transition: 300ms;
+
+    &:not(.active):hover {
+      border: 1px solid var(--openapi-code-tab-border-color);
+    }
+
+    &:hover {
+      background-color: transparent;
+    }
+
+    span {
+      padding-top: 0.5rem;
+      color: var(--ifm-font-color-secondary);
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+  }
+}
+
+.openapi-tabs__code-list-container {
+  display: flex;
+  justify-content: flex-start;
+  padding: 0.25rem;
+  padding-bottom: 0.6rem;
+}
+
+.openapi-tabs__code-content {
+  margin-top: unset !important;
+}
+
+.openapi-explorer__code-block code {
+  max-height: 200px;
+  font-size: var(--openapi-explorer-font-size-code);
+  padding-top: var(--ifm-pre-padding);
+}
+
+body[class="ReactModal__Body--open"] {
+  .openapi-explorer__code-block code {
+    max-height: 600px;
+  }
+}
+
+.openapi-tabs__code-item--variant {
+  color: var(--ifm-color-secondary);
+
+  &.active {
+    border-color: var(--ifm-toc-border-color);
+  }
+}
+
+.openapi-tabs__code-item--variant > span {
+  padding-top: unset !important;
+  padding-left: 0.5rem !important;
+  padding-right: 0.5rem !important;
+}
+
+.openapi-tabs__code-item--sample {
+  color: var(--ifm-color-secondary);
+
+  &.active {
+    border-color: var(--ifm-toc-border-color);
+  }
+}
+
+.openapi-tabs__code-item--sample > span {
+  padding-top: unset !important;
+  padding-left: 0.5rem !important;
+  padding-right: 0.5rem !important;
+}
+
+.openapi-tabs__code-item--python {
+  color: var(--ifm-color-success);
+
+  &::after {
+    content: "";
+    width: var(--code-tab-logo-width);
+    height: var(--code-tab-logo-height);
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg")
+      no-repeat;
+    margin-block: auto;
+  }
+
+  &.active {
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-python);
+    border-color: var(--openapi-code-tab-border-color-python);
+  }
+}
+
+.openapi-tabs__code-item--go {
+  color: var(--ifm-color-info);
+
+  &::after {
+    content: "";
+    width: var(--code-tab-logo-width);
+    height: var(--code-tab-logo-height);
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/go/go-original-wordmark.svg")
+      no-repeat;
+    margin-block: auto;
+  }
+
+  &.active {
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-go);
+    border-color: var(--openapi-code-tab-border-color-go);
+  }
+}
+
+.openapi-tabs__code-item--javascript {
+  color: var(--ifm-color-warning);
+
+  &::after {
+    content: "";
+    width: var(--code-tab-logo-width);
+    height: var(--code-tab-logo-height);
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg")
+      no-repeat;
+    margin-block: auto;
+  }
+
+  &.active {
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-js);
+    border-color: var(--openapi-code-tab-border-color-js);
+  }
+}
+
+.openapi-tabs__code-item--bash {
+  color: var(--ifm-color-danger);
+
+  &::after {
+    content: "";
+    width: var(--code-tab-logo-width);
+    height: var(--code-tab-logo-height);
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/bash/bash-plain.svg")
+      no-repeat;
+    margin-block: auto;
+    background-color: var(--bash-background-color);
+    border-radius: var(--bash-border-radius);
+  }
+
+  &.active {
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-bash);
+    border-color: var(--ifm-color-danger);
+  }
+}
+
+.openapi-tabs__code-item--ruby {
+  color: var(--ifm-color-danger);
+
+  &::after {
+    content: "";
+    width: var(--code-tab-logo-width);
+    height: var(--code-tab-logo-height);
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/ruby/ruby-plain.svg")
+      no-repeat;
+    margin-block: auto;
+  }
+
+  &.active {
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-ruby);
+    border-color: var(--openapi-code-tab-border-color-ruby);
+  }
+}
+
+.openapi-tabs__code-item--csharp {
+  color: var(--ifm-color-gray-500);
+
+  &::after {
+    content: "";
+    width: var(--code-tab-logo-width);
+    height: var(--code-tab-logo-height);
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/csharp/csharp-original.svg")
+      no-repeat;
+    margin-block: auto;
+  }
+
+  &.active {
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-csharp);
+    border-color: var(--openapi-code-tab-border-color-csharp);
+  }
+}
+
+.openapi-tabs__code-item--nodejs {
+  color: var(--ifm-color-success);
+
+  &::after {
+    content: "";
+    width: var(--code-tab-logo-width);
+    height: var(--code-tab-logo-height);
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/nodejs/nodejs-original.svg")
+      no-repeat;
+    margin-block: auto;
+  }
+
+  &.active {
+    box-shadow: 0 0 0 3px var(--opeanpi-code-tab-shadow-color-nodejs);
+    border-color: var(--openapi-code-tab-border-color-nodejs);
+  }
+}
+
+.openapi-tabs__code-item--php {
+  color: var(--ifm-color-gray-500);
+
+  &::after {
+    content: "";
+    width: var(--code-tab-logo-width);
+    height: var(--code-tab-logo-height);
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/php/php-original.svg")
+      no-repeat;
+    margin-block: auto;
+  }
+
+  &.active {
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-php);
+    border-color: var(--openapi-code-tab-border-color-php);
+  }
+}
+
+.openapi-tabs__code-item--java {
+  color: var(--ifm-color-warning);
+
+  &::after {
+    content: "";
+    width: var(--code-tab-logo-width);
+    height: var(--code-tab-logo-height);
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg")
+      no-repeat;
+    margin-block: auto;
+  }
+
+  &.active {
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-java);
+    border-color: var(--openapi-code-tab-border-color-java);
+  }
+}
+
+.openapi-tabs__code-item--powershell {
+  color: var(--ifm-color-info);
+
+  &::after {
+    content: "";
+    width: var(--code-tab-logo-width);
+    height: var(--code-tab-logo-height);
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/windows8/windows8-original.svg")
+      no-repeat;
+    margin-block: auto;
+  }
+
+  &.active {
+    box-shadow: 0 0 0 3px var(--opeanpi-code-tab-shadow-color-powershell);
+    border-color: var(--openapi-code-tab-border-color-powershell);
+  }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 996px) {
+  .openapi-tabs__code-list {
+    justify-content: space-around;
+  }
+}
+
+.ReactModal__Body--open {
+  overflow: hidden !important;
+}
+
+.openapi-modal--open {
+  background-color: rgba(0, 0, 0, 0.7) !important;
+}

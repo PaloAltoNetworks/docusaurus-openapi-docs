@@ -5,7 +5,7 @@ cypress/screenshots
 # Dist
 build
 dist
-lib
+# lib # Temporarily disabled to see what changes applies
 lib-next
 
 # Dependencies
