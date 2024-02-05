@@ -9,6 +9,12 @@
   margin-bottom: var(--ifm-leading);
 }
 
+.openapi-tabs__response-header {
+  &.openapi-tabs__heading {
+    margin-bottom: 0;
+  }
+}
+
 .openapi-tabs__response-code-item {
   border: 1px solid transparent;
   margin-top: 0 !important;
