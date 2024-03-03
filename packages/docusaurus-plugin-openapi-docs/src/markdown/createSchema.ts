@@ -71,6 +71,19 @@ function createAnyOneOf(schema: SchemaObject): any {
           const label = anyOneSchema.title
             ? anyOneSchema.title
             : `MOD${index + 1}`;
+
+          // Handle resolved circular schema
+          if (
+            typeof anyOneSchema === "object" &&
+            Object.keys(anyOneSchema).length === 0
+          ) {
+            return create("TabItem", {
+              label: label,
+              value: `${index}-item-properties`,
+              children: [],
+            });
+          }
+
           const anyOneChildren = [];
 
           if (anyOneSchema.properties !== undefined) {
