@@ -239,6 +239,7 @@ const config = {
             downloadUrl:
               "https://raw.githubusercontent.com/PaloAltoNetworks/docusaurus-openapi-docs/main/demo/examples/petstore.yaml",
             hideSendButton: false,
+            showSchemas: true,
           },
           cos: {
             specPath: "examples/openapi-cos.json",
