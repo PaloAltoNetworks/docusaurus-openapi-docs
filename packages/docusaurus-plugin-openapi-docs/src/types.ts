@@ -10,6 +10,7 @@ import type Request from "@paloaltonetworks/postman-collection";
 import {
   InfoObject,
   OperationObject,
+  SchemaObject,
   SecuritySchemeObject,
   TagObject,
 } from "./openapi/types";
@@ -44,12 +45,14 @@ export interface APIOptions {
   };
   proxy?: string;
   markdownGenerators?: MarkdownGenerator;
+  showSchemas?: boolean;
 }
 
 export interface MarkdownGenerator {
   createApiPageMD?: (pageData: ApiPageMetadata) => string;
   createInfoPageMD?: (pageData: InfoPageMetadata) => string;
   createTagPageMD?: (pageData: TagPageMetadata) => string;
+  createSchemaPageMD?: (pageData: SchemaPageMetadata) => string;
 }
 
 export interface SidebarOptions {
@@ -72,7 +75,11 @@ export interface LoadedContent {
   // loadedDocs: DocPageMetadata[]; TODO: cleanup
 }
 
-export type ApiMetadata = ApiPageMetadata | InfoPageMetadata | TagPageMetadata;
+export type ApiMetadata =
+  | ApiPageMetadata
+  | InfoPageMetadata
+  | TagPageMetadata
+  | SchemaPageMetadata;
 
 export interface ApiMetadataBase {
   sidebar?: string;
@@ -128,6 +135,12 @@ export interface InfoPageMetadata extends ApiMetadataBase {
 export interface TagPageMetadata extends ApiMetadataBase {
   type: "tag";
   tag: TagObject;
+  markdown?: string;
+}
+
+export interface SchemaPageMetadata extends ApiMetadataBase {
+  type: "schema";
+  schema: SchemaObject;
   markdown?: string;
 }
 

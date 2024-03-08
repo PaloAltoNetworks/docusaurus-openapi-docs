@@ -24,6 +24,7 @@ import {
   APIOptions,
   ApiPageMetadata,
   InfoPageMetadata,
+  SchemaPageMetadata,
   SidebarOptions,
   TagPageMetadata,
 } from "../types";
@@ -409,6 +410,46 @@ function createItems(
     }
   }
 
+  if (options?.showSchemas === true) {
+    // Gather schemas
+    for (let [schema, schemaObject] of Object.entries(
+      openapiData?.components?.schemas ?? {}
+    )) {
+      const baseIdSpaces =
+        schemaObject?.title?.replace(" ", "-").toLowerCase() ?? "";
+      const baseId = kebabCase(baseIdSpaces);
+
+      const schemaDescription = schemaObject.description;
+      let splitDescription: any;
+      if (schemaDescription) {
+        splitDescription = schemaDescription.match(/[^\r\n]+/g);
+      }
+
+      const schemaPage: PartialPage<SchemaPageMetadata> = {
+        type: "schema",
+        id: baseId,
+        infoId: infoId ?? "",
+        unversionedId: baseId,
+        title: schemaObject.title
+          ? schemaObject.title.replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
+          : schema,
+        description: schemaObject.description
+          ? schemaObject.description.replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
+          : "",
+        frontMatter: {
+          description: splitDescription
+            ? splitDescription[0]
+                .replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
+                .replace(/\s+$/, "")
+            : "",
+        },
+        schema: schemaObject,
+      };
+
+      items.push(schemaPage);
+    }
+  }
+
   if (sidebarOptions?.categoryLinkSource === "tag") {
     // Get global tags
     const tags: TagObject[] = openapiData.tags ?? [];
@@ -471,7 +512,11 @@ function bindCollectionToApiItems(
       .getPath({ unresolved: true }) // unresolved returns "/:variableName" instead of "/<type>"
       .replace(/(?<![a-z0-9-_]+):([a-z0-9-_]+)/gi, "{$1}"); // replace "/:variableName" with "/{variableName}"
     const apiItem = items.find((item) => {
-      if (item.type === "info" || item.type === "tag") {
+      if (
+        item.type === "info" ||
+        item.type === "tag" ||
+        item.type === "schema"
+      ) {
         return false;
       }
       return item.api.path === path && item.api.method === method;
