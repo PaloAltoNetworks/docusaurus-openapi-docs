@@ -9,10 +9,15 @@ import { clean, create } from "./utils";
 
 export function createHeading(heading: string) {
   return [
-    create("h1", {
-      className: "openapi__heading",
-      children: clean(heading),
-    }),
+    create(
+      "Heading",
+      {
+        children: clean(heading),
+        as: "h1",
+        className: "openapi__heading",
+      },
+      { inline: true }
+    ),
     `\n\n`,
   ];
 }

@@ -43,10 +43,16 @@ export function createCallbacks({ callbacks }: Props) {
       create("div", {
         className: "openapi__divider",
       }),
-      create("h2", {
-        children: "Callbacks",
-        id: "callbacks",
-      }),
+      create(
+        "Heading",
+        {
+          children: "Callbacks",
+          id: "callbacks",
+          as: "h2",
+          className: "openapi-tabs__heading",
+        },
+        { inline: true }
+      ),
       create("OperationTabs", {
         className: "openapi-tabs__operation",
         children: callbacksNames.flatMap((name) => {

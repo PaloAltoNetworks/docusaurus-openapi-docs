@@ -114,7 +114,11 @@ function TabList({
 
   return (
     <div className="openapi-tabs__response-header-section">
-      <Heading as="h2" id={id} className="openapi-tabs__response-header">
+      <Heading
+        as="h2"
+        id={id}
+        className="openapi-tabs__heading openapi-tabs__response-header"
+      >
         {label}
       </Heading>
       <div className="openapi-tabs__response-container">

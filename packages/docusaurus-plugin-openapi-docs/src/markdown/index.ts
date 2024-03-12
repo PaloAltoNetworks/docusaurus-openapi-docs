@@ -71,6 +71,7 @@ export function createApiPageMD({
     `import SchemaItem from "@theme/SchemaItem";\n`,
     `import SchemaTabs from "@theme/SchemaTabs";\n`,
     `import Markdown from "@theme/Markdown";\n`,
+    `import Heading from "@theme/Heading";\n`,
     `import OperationTabs from "@theme/OperationTabs";\n`,
     `import TabItem from "@theme/TabItem";\n\n`,
     createHeading(title),
@@ -111,6 +112,7 @@ export function createInfoPageMD({
 }: InfoPageMetadata) {
   return render([
     `import ApiLogo from "@theme/ApiLogo";\n`,
+    `import Heading from "@theme/Heading";\n`,
     `import SchemaTabs from "@theme/SchemaTabs";\n`,
     `import TabItem from "@theme/TabItem";\n`,
     `import Export from "@theme/ApiExplorer/Export";\n\n`,

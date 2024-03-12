@@ -10,7 +10,9 @@
 }
 
 .openapi-tabs__response-header {
-  margin-bottom: 0;
+  &.openapi-tabs__heading {
+    margin-bottom: 0;
+  }
 }
 
 .openapi-tabs__response-code-item {

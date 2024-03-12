@@ -5,6 +5,20 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import { create } from "./utils";
+
 export function createRequestHeader(header: string) {
-  return `## ${header}\n\n`;
+  return [
+    create(
+      "Heading",
+      {
+        children: header,
+        id: header.replace(" ", "-").toLowerCase(),
+        as: "h2",
+        className: "openapi-tabs__heading",
+      },
+      { inline: true }
+    ),
+    `\n\n`,
+  ];
 }
