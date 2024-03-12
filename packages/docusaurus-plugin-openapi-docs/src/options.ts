@@ -8,7 +8,7 @@
 import { Joi } from "@docusaurus/utils-validation";
 
 const sidebarOptions = Joi.object({
-  groupPathsBy: Joi.string().valid("tag"),
+  groupPathsBy: Joi.string().valid("tag", "tagGroup"),
   categoryLinkSource: Joi.string().valid("tag", "info", "auto"),
   customProps: Joi.object(),
   sidebarCollapsible: Joi.boolean(),

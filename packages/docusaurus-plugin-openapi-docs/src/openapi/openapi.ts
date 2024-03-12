@@ -29,7 +29,7 @@ import {
   TagPageMetadata,
 } from "../types";
 import { sampleRequestFromSchema } from "./createRequestExample";
-import { OpenApiObject, TagObject } from "./types";
+import { OpenApiObject, TagGroupObject, TagObject } from "./types";
 import { loadAndResolveSpec } from "./utils/loadAndResolveSpec";
 
 /**
@@ -579,7 +579,7 @@ export async function processOpenapiFiles(
   files: OpenApiFiles[],
   options: APIOptions,
   sidebarOptions: SidebarOptions
-): Promise<[ApiMetadata[], TagObject[][]]> {
+): Promise<[ApiMetadata[], TagObject[][], TagGroupObject[]]> {
   const promises = files.map(async (file) => {
     if (file.data !== undefined) {
       const processedFile = await processOpenapiFile(
@@ -591,7 +591,8 @@ export async function processOpenapiFiles(
         ...item,
       }));
       const tags = processedFile[1];
-      return [itemsObjectsArray, tags];
+      const tagGroups = processedFile[2];
+      return [itemsObjectsArray, tags, tagGroups];
     }
     console.warn(
       chalk.yellow(
@@ -610,6 +611,7 @@ export async function processOpenapiFiles(
       // Remove undefined items due to transient parsing errors
       return x !== undefined;
     });
+
   const tags = metadata
     .map(function (x) {
       return x[1];
@@ -618,14 +620,29 @@ export async function processOpenapiFiles(
       // Remove undefined tags due to transient parsing errors
       return x !== undefined;
     });
-  return [items as ApiMetadata[], tags as TagObject[][]];
+
+  const tagGroups = metadata
+    .map(function (x) {
+      return x[2];
+    })
+    .flat()
+    .filter(function (x) {
+      // Remove undefined tags due to transient parsing errors
+      return x !== undefined;
+    });
+
+  return [
+    items as ApiMetadata[],
+    tags as TagObject[][],
+    tagGroups as TagGroupObject[],
+  ];
 }
 
 export async function processOpenapiFile(
   openapiData: OpenApiObject,
   options: APIOptions,
   sidebarOptions: SidebarOptions
-): Promise<[ApiMetadata[], TagObject[]]> {
+): Promise<[ApiMetadata[], TagObject[], TagGroupObject[]]> {
   const postmanCollection = await createPostmanCollection(openapiData);
   const items = createItems(openapiData, options, sidebarOptions);
 
@@ -635,7 +652,13 @@ export async function processOpenapiFile(
   if (openapiData.tags !== undefined) {
     tags = openapiData.tags;
   }
-  return [items, tags];
+
+  let tagGroups: TagGroupObject[] = [];
+  if (openapiData["x-tagGroups"] !== undefined) {
+    tagGroups = openapiData["x-tagGroups"];
+  }
+
+  return [items, tags, tagGroups];
 }
 
 // order for picking items as a display name of tags

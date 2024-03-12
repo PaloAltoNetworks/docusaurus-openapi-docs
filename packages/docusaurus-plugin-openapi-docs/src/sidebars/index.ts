@@ -18,7 +18,7 @@ import clsx from "clsx";
 import { kebabCase } from "lodash";
 import uniq from "lodash/uniq";
 
-import { TagObject } from "../openapi/types";
+import { TagGroupObject, TagObject } from "../openapi/types";
 import type {
   SidebarOptions,
   APIOptions,
@@ -241,11 +241,56 @@ export default function generateSidebarSlice(
   options: APIOptions,
   api: ApiMetadata[],
   tags: TagObject[][],
-  docPath: string
+  docPath: string,
+  tagGroups?: TagGroupObject[]
 ) {
   let sidebarSlice: ProcessedSidebar = [];
 
-  if (sidebarOptions.groupPathsBy === "tag") {
+  if (sidebarOptions.groupPathsBy === "tagGroup") {
+    // eslint-disable-next-line array-callback-return
+    tagGroups?.map((tagGroup) => {
+      //filter tags only included in group
+      tags.filter((tag) => {
+        return tag.filter((t) => {
+          return tagGroup.tags.includes(t);
+        });
+      });
+
+      let { label } = options;
+
+      let linkConfig = {
+        type: "generated-index" as "generated-index",
+        title: tagGroup.name,
+        slug: label
+          ? posixPath(
+              path.join(
+                "/category",
+                docPath,
+                kebabCase(label),
+                kebabCase(tagGroup.name)
+              )
+            )
+          : posixPath(
+              path.join("/category", docPath, kebabCase(tagGroup.name))
+            ),
+      } as SidebarItemCategoryLinkConfig;
+
+      sidebarSlice.push({
+        type: "category" as const,
+        label: tagGroup.name,
+        link: linkConfig,
+        collapsible: true,
+        collapsed: true,
+        items: groupByTags(
+          api as ApiPageMetadata[],
+          sidebarOptions,
+          options,
+          tags,
+          docPath
+        ),
+      });
+    });
+  } else if (sidebarOptions.groupPathsBy === "tag") {
     sidebarSlice = groupByTags(
       api as ApiPageMetadata[],
       sidebarOptions,
