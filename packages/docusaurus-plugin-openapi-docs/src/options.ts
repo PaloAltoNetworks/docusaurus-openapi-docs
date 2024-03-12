@@ -37,6 +37,7 @@ export const OptionsSchema = Joi.object({
         showExtensions: Joi.boolean(),
         sidebarOptions: sidebarOptions,
         markdownGenerators: markdownGenerators,
+        showSchemas: Joi.boolean(),
         version: Joi.string().when("versions", {
           is: Joi.exist(),
           then: Joi.required(),

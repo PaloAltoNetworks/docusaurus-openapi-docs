@@ -14,11 +14,25 @@ import { Globby, posixPath } from "@docusaurus/utils";
 import chalk from "chalk";
 import { render } from "mustache";
 
-import { createApiPageMD, createInfoPageMD, createTagPageMD } from "./markdown";
+import {
+  createApiPageMD,
+  createInfoPageMD,
+  createSchemaPageMD,
+  createTagPageMD,
+} from "./markdown";
 import { readOpenapiFiles, processOpenapiFiles } from "./openapi";
 import { OptionsSchema } from "./options";
 import generateSidebarSlice from "./sidebars";
-import type { PluginOptions, LoadedContent, APIOptions } from "./types";
+import type {
+  PluginOptions,
+  LoadedContent,
+  APIOptions,
+  ApiMetadata,
+  ApiPageMetadata,
+  InfoPageMetadata,
+  TagPageMetadata,
+  SchemaPageMetadata,
+} from "./types";
 
 export function isURL(str: string): boolean {
   return /^(https?:)\/\//m.test(str);
@@ -244,12 +258,43 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
 \`\`\`
       `;
 
+      const schemaMdTemplate = `---
+id: {{{id}}}
+title: "{{{title}}}"
+description: "{{{frontMatter.description}}}"
+sidebar_label: "{{{title}}}"
+hide_title: true
+schema: true
+custom_edit_url: null
+---
+
+{{{markdown}}}
+            `;
+
       const apiPageGenerator =
         markdownGenerators?.createApiPageMD ?? createApiPageMD;
       const infoPageGenerator =
         markdownGenerators?.createInfoPageMD ?? createInfoPageMD;
       const tagPageGenerator =
         markdownGenerators?.createTagPageMD ?? createTagPageMD;
+      const schemaPageGenerator =
+        markdownGenerators?.createSchemaPageMD ?? createSchemaPageMD;
+
+      const pageGeneratorByType: {
+        [key in ApiMetadata["type"]]: (
+          pageData: {
+            api: ApiPageMetadata;
+            info: InfoPageMetadata;
+            tag: TagPageMetadata;
+            schema: SchemaPageMetadata;
+          }[key]
+        ) => string;
+      } = {
+        api: apiPageGenerator,
+        info: infoPageGenerator,
+        tag: tagPageGenerator,
+        schema: schemaPageGenerator,
+      };
 
       loadedApi.map(async (item) => {
         if (item.type === "info") {
@@ -257,12 +302,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
             item.downloadUrl = downloadUrl;
           }
         }
-        const markdown =
-          item.type === "api"
-            ? apiPageGenerator(item)
-            : item.type === "info"
-            ? infoPageGenerator(item)
-            : tagPageGenerator(item);
+        const markdown = pageGeneratorByType[item.type](item as any);
         item.markdown = markdown;
         if (item.type === "api") {
           // opportunity to compress JSON
@@ -363,6 +403,49 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
             }
           }
         }
+
+        if (item.type === "schema") {
+          if (!fs.existsSync(`${outputDir}/schemas/${item.id}.schema.mdx`)) {
+            if (!fs.existsSync(`${outputDir}/schemas`)) {
+              try {
+                fs.mkdirSync(`${outputDir}/schemas`, { recursive: true });
+                console.log(
+                  chalk.green(`Successfully created "${outputDir}/schemas"`)
+                );
+              } catch (err) {
+                console.error(
+                  chalk.red(`Failed to create "${outputDir}/schemas"`),
+                  chalk.yellow(err)
+                );
+              }
+            }
+            try {
+              // kebabCase(arg) returns 0-length string when arg is undefined
+              if (item.id.length === 0) {
+                throw Error("Schema must have title defined");
+              }
+              // eslint-disable-next-line testing-library/render-result-naming-convention
+              const schemaView = render(schemaMdTemplate, item);
+              fs.writeFileSync(
+                `${outputDir}/schemas/${item.id}.schema.mdx`,
+                schemaView,
+                "utf8"
+              );
+              console.log(
+                chalk.green(
+                  `Successfully created "${outputDir}/${item.id}.schema.mdx"`
+                )
+              );
+            } catch (err) {
+              console.error(
+                chalk.red(
+                  `Failed to write "${outputDir}/${item.id}.schema.mdx"`
+                ),
+                chalk.yellow(err)
+              );
+            }
+          }
+        }
         return;
       });
 
@@ -380,6 +463,10 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
       cwd: path.resolve(apiDir),
       deep: 1,
     });
+    const schemaMdxFiles = await Globby(["*.schema.mdx"], {
+      cwd: path.resolve(apiDir, "schemas"),
+      deep: 1,
+    });
     const sidebarFile = await Globby(["sidebar.js"], {
       cwd: path.resolve(apiDir),
       deep: 1,
@@ -393,6 +480,21 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
           );
         } else {
           console.log(chalk.green(`Cleanup succeeded for "${apiDir}/${mdx}"`));
+        }
+      })
+    );
+
+    schemaMdxFiles.map((mdx) =>
+      fs.unlink(`${apiDir}/schemas/${mdx}`, (err) => {
+        if (err) {
+          console.error(
+            chalk.red(`Cleanup failed for "${apiDir}/schemas/${mdx}"`),
+            chalk.yellow(err)
+          );
+        } else {
+          console.log(
+            chalk.green(`Cleanup succeeded for "${apiDir}/schemas/${mdx}"`)
+          );
         }
       })
     );
