@@ -7,11 +7,11 @@
 
 // @ts-nocheck
 
+import { RedocNormalizedOptions } from "./RedocNormalizedOptions";
 import { OpenAPIRef, OpenAPISchema, OpenAPISpec, Referenced } from "../types";
 import { isArray, isBoolean } from "../utils/helpers";
 import { JsonPointer } from "../utils/JsonPointer";
 import { getDefinitionName, isNamedDefinition } from "../utils/openapi";
-import { RedocNormalizedOptions } from "./RedocNormalizedOptions";
 
 export type MergedOpenAPISchema = OpenAPISchema & { parentRefs?: string[] };
 

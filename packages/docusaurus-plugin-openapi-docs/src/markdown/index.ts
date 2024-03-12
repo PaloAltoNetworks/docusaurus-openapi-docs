@@ -37,7 +37,6 @@ import { createTermsOfService } from "./createTermsOfService";
 import { createVendorExtensions } from "./createVendorExtensions";
 import { createVersionBadge } from "./createVersionBadge";
 import { create, greaterThan, lessThan, render } from "./utils";
-
 interface RequestBodyProps {
   title: string;
   body: {

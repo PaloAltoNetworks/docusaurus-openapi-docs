@@ -7,6 +7,7 @@
 
 import path from "path";
 
+import { ProcessedSidebarItem } from "@docusaurus/plugin-content-docs/lib/sidebars/types";
 import {
   ProcessedSidebar,
   SidebarItemCategory,
@@ -26,7 +27,6 @@ import type {
   ApiMetadata,
   SchemaPageMetadata,
 } from "../types";
-import { ProcessedSidebarItem } from "@docusaurus/plugin-content-docs/lib/sidebars/types";
 
 function isApiItem(item: ApiMetadata): item is ApiMetadata {
   return item.type === "api";

@@ -6,8 +6,8 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { version } from "../lerna.json";
 import { getOutput } from "./utils/get-output";
+import { version } from "../lerna.json";
 
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will
