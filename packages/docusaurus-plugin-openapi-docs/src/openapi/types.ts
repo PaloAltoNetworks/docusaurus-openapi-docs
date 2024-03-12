@@ -314,7 +314,7 @@ export interface TagObject {
 
 export interface TagGroupObject {
   name: string;
-  tags: TagObject[];
+  tags: string[];
 }
 
 export interface ReferenceObject {

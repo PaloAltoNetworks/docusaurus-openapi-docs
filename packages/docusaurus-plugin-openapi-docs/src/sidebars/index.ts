@@ -26,6 +26,7 @@ import type {
   ApiMetadata,
   SchemaPageMetadata,
 } from "../types";
+import { ProcessedSidebarItem } from "@docusaurus/plugin-content-docs/lib/sidebars/types";
 
 function isApiItem(item: ApiMetadata): item is ApiMetadata {
   return item.type === "api";
@@ -86,7 +87,7 @@ function groupByTags(
       apiTags.push(tag.name!);
     }
   });
-  apiTags = uniq(apiTags.concat(operationTags));
+  // apiTags = uniq(apiTags.concat(operationTags));
 
   const basePath = docPath
     ? outputDir.split(docPath!)[1].replace(/^\/+/g, "")
@@ -247,48 +248,30 @@ export default function generateSidebarSlice(
   let sidebarSlice: ProcessedSidebar = [];
 
   if (sidebarOptions.groupPathsBy === "tagGroup") {
-    // eslint-disable-next-line array-callback-return
-    tagGroups?.map((tagGroup) => {
+    tagGroups?.forEach((tagGroup) => {
       //filter tags only included in group
-      tags.filter((tag) => {
-        return tag.filter((t) => {
-          return tagGroup.tags.includes(t);
-        });
+      const filteredTags: TagObject[] = [];
+      tags[0].forEach((tag) => {
+        if (tagGroup.tags.includes(tag.name as string)) {
+          filteredTags.push(tag);
+        }
       });
 
-      let { label } = options;
-
-      let linkConfig = {
-        type: "generated-index" as "generated-index",
-        title: tagGroup.name,
-        slug: label
-          ? posixPath(
-              path.join(
-                "/category",
-                docPath,
-                kebabCase(label),
-                kebabCase(tagGroup.name)
-              )
-            )
-          : posixPath(
-              path.join("/category", docPath, kebabCase(tagGroup.name))
-            ),
-      } as SidebarItemCategoryLinkConfig;
-
-      sidebarSlice.push({
+      const groupCategory = {
         type: "category" as const,
         label: tagGroup.name,
-        link: linkConfig,
         collapsible: true,
         collapsed: true,
         items: groupByTags(
           api as ApiPageMetadata[],
           sidebarOptions,
           options,
-          tags,
+          [filteredTags],
           docPath
         ),
-      });
+      } as ProcessedSidebarItem;
+
+      sidebarSlice.push(groupCategory);
     });
   } else if (sidebarOptions.groupPathsBy === "tag") {
     sidebarSlice = groupByTags(
@@ -299,5 +282,6 @@ export default function generateSidebarSlice(
       docPath
     );
   }
+
   return sidebarSlice;
 }
