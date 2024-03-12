@@ -7,14 +7,14 @@
 
 import format from "xml-formatter";
 
+import { sampleResponseFromSchema } from "../openapi/createResponseExample";
+import { ApiItem } from "../types";
 import { createDescription } from "./createDescription";
 import { createDetails } from "./createDetails";
 import { createDetailsSummary } from "./createDetailsSummary";
 import { createResponseSchema } from "./createResponseSchema";
 import { create } from "./utils";
 import { guard } from "./utils";
-import { sampleResponseFromSchema } from "../openapi/createResponseExample";
-import { ApiItem } from "../types";
 
 export default function json2xml(o: any, tab: any) {
   var toXml = function (v: any, name: string, ind: any) {

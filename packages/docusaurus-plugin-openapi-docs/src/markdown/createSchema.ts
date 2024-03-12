@@ -7,6 +7,7 @@
 
 import clsx from "clsx";
 
+import { SchemaObject } from "../openapi/types";
 import {
   createClosingArrayBracket,
   createOpeningArrayBracket,
@@ -16,7 +17,6 @@ import { createDetails } from "./createDetails";
 import { createDetailsSummary } from "./createDetailsSummary";
 import { getQualifierMessage, getSchemaName } from "./schema";
 import { create, guard } from "./utils";
-import { SchemaObject } from "../openapi/types";
 
 const jsonSchemaMergeAllOf = require("json-schema-merge-allof");
 

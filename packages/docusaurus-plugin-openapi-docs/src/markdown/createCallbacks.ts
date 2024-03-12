@@ -5,13 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import { MediaTypeObject } from "../openapi/types";
+import { ApiItem } from "../types";
 import { createDescription } from "./createDescription";
 import { createMethodEndpoint } from "./createMethodEndpoint";
 import { createRequestBodyDetails } from "./createRequestBodyDetails";
 import { createStatusCodes } from "./createStatusCodes";
 import { create } from "./utils";
-import { MediaTypeObject } from "../openapi/types";
-import { ApiItem } from "../types";
 
 interface Props {
   callbacks: ApiItem["callbacks"];

@@ -5,9 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import { OAuthFlowObject, SecuritySchemeObject } from "../openapi/types";
 import { createDescription } from "./createDescription";
 import { create, guard } from "./utils";
-import { OAuthFlowObject, SecuritySchemeObject } from "../openapi/types";
 
 export function createAuthentication(securitySchemes: SecuritySchemeObject) {
   if (!securitySchemes || !Object.keys(securitySchemes).length) return "";
