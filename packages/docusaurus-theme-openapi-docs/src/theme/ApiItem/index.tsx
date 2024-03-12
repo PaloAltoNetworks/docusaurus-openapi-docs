@@ -42,13 +42,17 @@ interface ApiFrontMatter extends DocFrontMatter {
   readonly api?: ApiItemType;
 }
 
-// @ts-ignore
-export default function ApiItem(props: Props): React.JSX.Element {
-  const docHtmlClassName = `docs-doc-id-${props.content.metadata.id}`;
+interface SchemaFrontMatter extends DocFrontMatter {
+  readonly schema?: boolean;
+}
+
+export default function ApiItem(props: Props): JSX.Element {
+  const docHtmlClassName = `docs-doc-id-${props.content.metadata.unversionedId}`;
   const MDXComponent = props.content;
   const { frontMatter } = MDXComponent;
   const { info_path: infoPath } = frontMatter as DocFrontMatter;
   let { api } = frontMatter as ApiFrontMatter;
+  const { schema } = frontMatter as SchemaFrontMatter;
   // decompress and parse
   if (api) {
     api = JSON.parse(
@@ -154,6 +158,21 @@ export default function ApiItem(props: Props): React.JSX.Element {
                 </div>
               </div>
             </Provider>
+          </DocItemLayout>
+        </HtmlClassNameProvider>
+      </DocProvider>
+    );
+  } else if (schema) {
+    return (
+      <DocProvider content={props.content}>
+        <HtmlClassNameProvider className={docHtmlClassName}>
+          <DocItemMetadata />
+          <DocItemLayout>
+            <div className={clsx("row", "theme-api-markdown")}>
+              <div className="col col--12">
+                <MDXComponent />
+              </div>
+            </div>
           </DocItemLayout>
         </HtmlClassNameProvider>
       </DocProvider>
