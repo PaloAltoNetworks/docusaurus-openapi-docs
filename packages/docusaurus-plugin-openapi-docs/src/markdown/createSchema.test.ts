@@ -7,8 +7,8 @@
 
 import * as prettier from "prettier";
 
-import { SchemaObject } from "../openapi/types";
 import { createNodes } from "./createSchema";
+import { SchemaObject } from "../openapi/types";
 
 describe("createNodes", () => {
   it("should create readable MODs for oneOf primitive properties", () => {

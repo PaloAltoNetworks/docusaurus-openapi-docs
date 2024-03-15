@@ -5,8 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { MediaTypeObject } from "../openapi/types";
 import { createRequestSchema } from "./createRequestSchema";
+import { MediaTypeObject } from "../openapi/types";
 
 interface Props {
   title: string;
