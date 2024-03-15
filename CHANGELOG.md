@@ -1,3 +1,21 @@
+## 2.1.0 (Mar 15, 2024)
+
+High level enhancements
+
+- Adds support for generating sidebar using x-tagGroup
+- Adds support for generating schemas
+- Improved x-codeSamples support
+
+Other enhancements and bug fixes
+
+- Upgrade dependencies ([#741](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/741))
+- update compatibility matrix ([#739](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/739))
+- feat: implement x-tagGroup feature ([#737](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/737))
+- feat: Implement schema pages behind a config option `showSchemas` ([#736](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/736))
+- fix: Guard only undefined and empty strings ([#725](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/725))
+- Conditional display of header Request ([#719](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/719))
+- Fix x-codeSamples load when switching language tabs ([#707](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/707))
+
 ## 2.0.4 (Jan 18, 2024)
 
 High level enhancements
