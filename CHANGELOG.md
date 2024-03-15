@@ -1,3 +1,19 @@
+## 3.0.0-beta.6 (Mar 15, 2024)
+
+High level enhancements
+
+- Improve x-codeSamples support
+- Add support for generating schemas
+- Add support for using x-tagGroup to generate sidebar
+
+Other enhancements and bug fixes
+
+- upgrade prettier
+- V2 feature parity ([#742](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/742))
+- upgrade to docusaurus 3.1.1 ([#740](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/740))
+- fix: markdown pages heading creation ([#716](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/716))
+- Fix x-codeSamples load when switching language tabs in V3 ([#706](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/706))
+
 ## 3.0.0-beta.5 (Jan 18, 2024)
 
 High level enhancements
