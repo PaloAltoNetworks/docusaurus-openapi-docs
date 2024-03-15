@@ -7,6 +7,7 @@
 
 import path from "path";
 
+import { ProcessedSidebarItem } from "@docusaurus/plugin-content-docs/lib/sidebars/types";
 import {
   ProcessedSidebar,
   SidebarItemCategory,
@@ -18,7 +19,7 @@ import clsx from "clsx";
 import { kebabCase } from "lodash";
 import uniq from "lodash/uniq";
 
-import { TagObject } from "../openapi/types";
+import { TagGroupObject, TagObject } from "../openapi/types";
 import type {
   SidebarOptions,
   APIOptions,
@@ -80,7 +81,7 @@ function groupByTags(
       apiTags.push(tag.name!);
     }
   });
-  apiTags = uniq(apiTags.concat(operationTags));
+  // apiTags = uniq(apiTags.concat(operationTags));
 
   const basePath = docPath
     ? outputDir.split(docPath!)[1].replace(/^\/+/g, "")
@@ -215,11 +216,38 @@ export default function generateSidebarSlice(
   options: APIOptions,
   api: ApiMetadata[],
   tags: TagObject[][],
-  docPath: string
+  docPath: string,
+  tagGroups?: TagGroupObject[]
 ) {
   let sidebarSlice: ProcessedSidebar = [];
 
-  if (sidebarOptions.groupPathsBy === "tag") {
+  if (sidebarOptions.groupPathsBy === "tagGroup") {
+    tagGroups?.forEach((tagGroup) => {
+      //filter tags only included in group
+      const filteredTags: TagObject[] = [];
+      tags[0].forEach((tag) => {
+        if (tagGroup.tags.includes(tag.name as string)) {
+          filteredTags.push(tag);
+        }
+      });
+
+      const groupCategory = {
+        type: "category" as const,
+        label: tagGroup.name,
+        collapsible: true,
+        collapsed: true,
+        items: groupByTags(
+          api as ApiPageMetadata[],
+          sidebarOptions,
+          options,
+          [filteredTags],
+          docPath
+        ),
+      } as ProcessedSidebarItem;
+
+      sidebarSlice.push(groupCategory);
+    });
+  } else if (sidebarOptions.groupPathsBy === "tag") {
     sidebarSlice = groupByTags(
       api as ApiPageMetadata[],
       sidebarOptions,

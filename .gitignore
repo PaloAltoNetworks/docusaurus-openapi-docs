@@ -140,3 +140,4 @@ demo/**/*.tag.mdx
 demo/**/sidebar.ts
 demo/**/versions.json
 
+.idea

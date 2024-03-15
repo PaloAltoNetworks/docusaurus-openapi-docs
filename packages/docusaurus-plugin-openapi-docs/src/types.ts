@@ -131,6 +131,19 @@ export interface TagPageMetadata extends ApiMetadataBase {
   markdown?: string;
 }
 
+export interface SchemaPageMetadata extends ApiMetadataBase {
+  type: "schema";
+  schema: SchemaObject;
+  markdown?: string;
+}
+
+export interface TagGroupPageMetadata extends ApiMetadataBase {
+  type: "tagGroup";
+  name: string;
+  tags: TagObject[];
+  markdown?: string;
+}
+
 export type ApiInfo = InfoObject;
 
 export interface ApiNavLink {

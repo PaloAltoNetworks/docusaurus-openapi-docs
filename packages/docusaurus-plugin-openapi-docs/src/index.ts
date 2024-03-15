@@ -118,7 +118,7 @@ export default function pluginOpenAPIDocs(
 
     try {
       const openapiFiles = await readOpenapiFiles(contentPath);
-      const [loadedApi, tags] = await processOpenapiFiles(
+      const [loadedApi, tags, tagGroups] = await processOpenapiFiles(
         openapiFiles,
         options,
         sidebarOptions!
@@ -142,7 +142,8 @@ export default function pluginOpenAPIDocs(
           options,
           loadedApi,
           tags,
-          docPath
+          docPath,
+          tagGroups
         );
 
         let sidebarSliceTemplate = `import type { SidebarsConfig } from "@docusaurus/plugin-content-docs";\n\n`;
