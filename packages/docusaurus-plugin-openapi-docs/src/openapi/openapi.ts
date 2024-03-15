@@ -18,6 +18,9 @@ import kebabCase from "lodash/kebabCase";
 import unionBy from "lodash/unionBy";
 import uniq from "lodash/uniq";
 
+import { sampleRequestFromSchema } from "./createRequestExample";
+import { OpenApiObject, TagGroupObject, TagObject } from "./types";
+import { loadAndResolveSpec } from "./utils/loadAndResolveSpec";
 import { isURL } from "../index";
 import {
   ApiMetadata,
@@ -28,9 +31,6 @@ import {
   SidebarOptions,
   TagPageMetadata,
 } from "../types";
-import { sampleRequestFromSchema } from "./createRequestExample";
-import { OpenApiObject, TagGroupObject, TagObject } from "./types";
-import { loadAndResolveSpec } from "./utils/loadAndResolveSpec";
 
 /**
  * Convenience function for converting raw JSON to a Postman Collection object.

@@ -5,18 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import {
-  ContactObject,
-  LicenseObject,
-  MediaTypeObject,
-  SecuritySchemeObject,
-} from "../openapi/types";
-import {
-  ApiPageMetadata,
-  InfoPageMetadata,
-  SchemaPageMetadata,
-  TagPageMetadata,
-} from "../types";
 import { createAuthentication } from "./createAuthentication";
 import { createAuthorization } from "./createAuthorization";
 import { createCallbacks } from "./createCallbacks";
@@ -37,6 +25,18 @@ import { createTermsOfService } from "./createTermsOfService";
 import { createVendorExtensions } from "./createVendorExtensions";
 import { createVersionBadge } from "./createVersionBadge";
 import { create, greaterThan, lessThan, render } from "./utils";
+import {
+  ContactObject,
+  LicenseObject,
+  MediaTypeObject,
+  SecuritySchemeObject,
+} from "../openapi/types";
+import {
+  ApiPageMetadata,
+  InfoPageMetadata,
+  SchemaPageMetadata,
+  TagPageMetadata,
+} from "../types";
 
 interface RequestBodyProps {
   title: string;
