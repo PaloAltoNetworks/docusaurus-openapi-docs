@@ -11,3 +11,32 @@ paths:
       responses:
         200:
           description: OK
+
+tags:
+  - name: tag1
+    description: Everything about your Pets
+    x-displayName: Tag 1
+  - name: tag2
+    description: Tag 2 description
+    x-displayName: Tag 2
+  - name: tag3
+    description: Tag 3 description
+    x-displayName: Tag 3
+  - name: tag4
+    description: Tag 4 description
+    x-displayName: Tag 4
+
+x-tagGroups:
+  - name: Tag 1 & 2
+    tags:
+      - tag1
+      - tag2
+  - name: Trinity
+    tags:
+      - tag1
+      - tag2
+      - tag3
+  - name: Last Two
+    tags:
+      - tag3
+      - tag4

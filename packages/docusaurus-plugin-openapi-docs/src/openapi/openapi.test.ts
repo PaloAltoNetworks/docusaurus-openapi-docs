@@ -28,6 +28,9 @@ describe("openapi", () => {
       const yaml = results.find((x) => x.source.endsWith("openapi.yaml"));
       expect(yaml).toBeTruthy();
       expect(yaml?.sourceDirName).toBe(".");
+
+      expect(yaml?.data.tags).toBeDefined();
+      expect(yaml?.data["x-tagGroups"]).toBeDefined();
     });
   });
 });

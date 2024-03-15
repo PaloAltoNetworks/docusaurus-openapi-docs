@@ -100,6 +100,16 @@ const sidebars = {
         },
       ],
     },
+    {
+      type: "category",
+      label: "Restaurant",
+      link: {
+        type: "generated-index",
+        title: "Restaurant API",
+        slug: "/category/restaurant-api",
+      },
+      items: require("./docs/restaurant/sidebar.js"),
+    },
   ],
   "petstore-2.0.0": [
     {

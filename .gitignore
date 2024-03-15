@@ -141,3 +141,4 @@ demo/**/*.schema.mdx
 demo/**/sidebar.js
 demo/**/versions.json
 
+.idea
