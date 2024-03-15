@@ -13,8 +13,8 @@ import chalk from "chalk";
 // @ts-ignore
 import { convertObj } from "swagger2openapi";
 
-import { OpenApiObject } from "../types";
 import { OpenAPIParser } from "./services/OpenAPIParser";
+import { OpenApiObject } from "../types";
 
 function serializer(replacer: any, cycleReplacer: any) {
   var stack: any = [],

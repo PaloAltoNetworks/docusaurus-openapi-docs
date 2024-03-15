@@ -10,10 +10,10 @@ import { execSync } from "child_process";
 import fs from "fs";
 import path from "path";
 
-import { version } from "../lerna.json";
 import { createDryRun } from "./utils/dry-run";
 import { getOutput } from "./utils/get-output";
 import { printBanner } from "./utils/print-utils";
+import { version } from "../lerna.json";
 
 const ORG = "PaloAltoNetworks";
 const REPO = "docusaurus-openapi-docs";

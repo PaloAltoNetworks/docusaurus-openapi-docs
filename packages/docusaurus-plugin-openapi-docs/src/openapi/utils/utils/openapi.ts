@@ -9,6 +9,13 @@
 
 import { dirname } from "path";
 
+import {
+  isNumeric,
+  removeQueryString,
+  resolveUrl,
+  isArray,
+  isBoolean,
+} from "./helpers";
 import { OpenAPIParser } from "../services/OpenAPIParser";
 import {
   OpenAPIEncoding,
@@ -21,13 +28,6 @@ import {
   OpenAPIServer,
   Referenced,
 } from "../types";
-import {
-  isNumeric,
-  removeQueryString,
-  resolveUrl,
-  isArray,
-  isBoolean,
-} from "./helpers";
 
 function isWildcardStatusCode(
   statusCode: string | number

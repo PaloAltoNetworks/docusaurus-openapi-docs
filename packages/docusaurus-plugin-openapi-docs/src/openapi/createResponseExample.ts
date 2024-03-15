@@ -8,8 +8,8 @@
 import chalk from "chalk";
 import merge from "lodash/merge";
 
-import { mergeAllOf } from "../markdown/createSchema";
 import { SchemaObject } from "./types";
+import { mergeAllOf } from "../markdown/createSchema";
 
 interface OASTypeToTypeMap {
   string: string;
