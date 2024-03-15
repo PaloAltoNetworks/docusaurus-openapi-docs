@@ -10,6 +10,7 @@ import type Request from "@paloaltonetworks/postman-collection";
 import {
   InfoObject,
   OperationObject,
+  SchemaObject,
   SecuritySchemeObject,
   TagObject,
 } from "./openapi/types";

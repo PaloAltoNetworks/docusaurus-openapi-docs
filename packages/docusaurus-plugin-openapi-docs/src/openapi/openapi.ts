@@ -28,10 +28,7 @@ import {
   TagPageMetadata,
 } from "../types";
 import { sampleRequestFromSchema } from "./createRequestExample";
-import { sampleRequestFromSchema } from "./createRequestExample";
-import { OpenApiObject, TagObject } from "./types";
 import { OpenApiObject, TagGroupObject, TagObject } from "./types";
-import { loadAndResolveSpec } from "./utils/loadAndResolveSpec";
 import { loadAndResolveSpec } from "./utils/loadAndResolveSpec";
 
 /**
