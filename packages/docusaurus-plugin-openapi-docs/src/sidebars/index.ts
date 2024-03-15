@@ -7,6 +7,7 @@
 
 import path from "path";
 
+import { ProcessedSidebarItem } from "@docusaurus/plugin-content-docs/lib/sidebars/types";
 import {
   ProcessedSidebar,
   SidebarItemCategory,
@@ -18,12 +19,13 @@ import clsx from "clsx";
 import { kebabCase } from "lodash";
 import uniq from "lodash/uniq";
 
-import { TagObject } from "../openapi/types";
+import { TagGroupObject, TagObject } from "../openapi/types";
 import type {
   SidebarOptions,
   APIOptions,
   ApiPageMetadata,
   ApiMetadata,
+  SchemaPageMetadata,
 } from "../types";
 
 function isApiItem(item: ApiMetadata): item is ApiMetadata {
@@ -32,6 +34,10 @@ function isApiItem(item: ApiMetadata): item is ApiMetadata {
 
 function isInfoItem(item: ApiMetadata): item is ApiMetadata {
   return item.type === "info";
+}
+
+function isSchemaItem(item: ApiMetadata): item is ApiMetadata {
+  return item.type === "schema";
 }
 
 function groupByTags(
@@ -55,6 +61,7 @@ function groupByTags(
 
   const apiItems = items.filter(isApiItem);
   const infoItems = items.filter(isInfoItem);
+  const schemaItems = items.filter(isSchemaItem);
   const intros = infoItems.map((item: any) => {
     return {
       id: item.id,
@@ -80,28 +87,35 @@ function groupByTags(
       apiTags.push(tag.name!);
     }
   });
-  apiTags = uniq(apiTags.concat(operationTags));
+  // apiTags = uniq(apiTags.concat(operationTags));
 
   const basePath = docPath
     ? outputDir.split(docPath!)[1].replace(/^\/+/g, "")
     : outputDir.slice(outputDir.indexOf("/", 1)).replace(/^\/+/g, "");
-  function createDocItem(item: ApiPageMetadata): SidebarItemDoc {
+  function createDocItem(
+    item: ApiPageMetadata | SchemaPageMetadata
+  ): SidebarItemDoc {
     const sidebar_label = item.frontMatter.sidebar_label;
     const title = item.title;
-    const id = item.id;
+    const id = item.type === "schema" ? `schemas/${item.id}` : item.id;
+    const className =
+      item.type === "api"
+        ? clsx(
+            {
+              "menu__list-item--deprecated": item.api.deprecated,
+              "api-method": !!item.api.method,
+            },
+            item.api.method
+          )
+        : clsx({
+            "menu__list-item--deprecated": item.schema.deprecated,
+          });
     return {
       type: "doc" as const,
-      id:
-        basePath === "" || undefined ? `${item.id}` : `${basePath}/${item.id}`,
+      id: basePath === "" || undefined ? `${id}` : `${basePath}/${id}`,
       label: (sidebar_label as string) ?? title ?? id,
       customProps: customProps,
-      className: clsx(
-        {
-          "menu__list-item--deprecated": item.api.deprecated,
-          "api-method": !!item.api.method,
-        },
-        item.api.method
-      ),
+      className: className ? className : undefined,
     };
   }
 
@@ -201,13 +215,26 @@ function groupByTags(
     ];
   }
 
+  let schemas: SidebarItemCategory[] = [];
+  if (schemaItems.length > 0) {
+    schemas = [
+      {
+        type: "category" as const,
+        label: "Schemas",
+        collapsible: sidebarCollapsible!,
+        collapsed: sidebarCollapsed!,
+        items: schemaItems.map(createDocItem),
+      },
+    ];
+  }
+
   // Shift root intro doc to top of sidebar
   // TODO: Add input validation for categoryLinkSource options
   if (rootIntroDoc && categoryLinkSource !== "info") {
     tagged.unshift(rootIntroDoc as any);
   }
 
-  return [...tagged, ...untagged];
+  return [...tagged, ...untagged, ...schemas];
 }
 
 export default function generateSidebarSlice(
@@ -215,11 +242,38 @@ export default function generateSidebarSlice(
   options: APIOptions,
   api: ApiMetadata[],
   tags: TagObject[][],
-  docPath: string
+  docPath: string,
+  tagGroups?: TagGroupObject[]
 ) {
   let sidebarSlice: ProcessedSidebar = [];
 
-  if (sidebarOptions.groupPathsBy === "tag") {
+  if (sidebarOptions.groupPathsBy === "tagGroup") {
+    tagGroups?.forEach((tagGroup) => {
+      //filter tags only included in group
+      const filteredTags: TagObject[] = [];
+      tags[0].forEach((tag) => {
+        if (tagGroup.tags.includes(tag.name as string)) {
+          filteredTags.push(tag);
+        }
+      });
+
+      const groupCategory = {
+        type: "category" as const,
+        label: tagGroup.name,
+        collapsible: true,
+        collapsed: true,
+        items: groupByTags(
+          api as ApiPageMetadata[],
+          sidebarOptions,
+          options,
+          [filteredTags],
+          docPath
+        ),
+      } as ProcessedSidebarItem;
+
+      sidebarSlice.push(groupCategory);
+    });
+  } else if (sidebarOptions.groupPathsBy === "tag") {
     sidebarSlice = groupByTags(
       api as ApiPageMetadata[],
       sidebarOptions,

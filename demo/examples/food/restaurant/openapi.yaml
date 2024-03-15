@@ -1,0 +1,70 @@
+openapi: 3.0.3
+info:
+  title: Restaurant Example
+  version: 1.0.0
+  description: Sample description.
+paths:
+  /menu:
+    get:
+      tags:
+        - tag1
+      summary: Get Menu
+      description: Froyo's the best!
+      responses:
+        200:
+          description: OK
+  /products:
+    get:
+      tags:
+        - tag1
+        - tag2
+      summary: List All Products
+      description: Froyo's the best!
+      responses:
+        200:
+          description: OK
+  /drinks:
+    get:
+      tags:
+        - tag1
+        - tag2
+      summary: List All Drinks
+      description: Froyo's the best!
+      responses:
+        200:
+          description: OK
+  /pay:
+    post:
+      tags:
+        - tag3
+      summary: Make Payment
+      description: Froyo's the best!
+      responses:
+        200:
+          description: OK
+
+tags:
+  - name: tag1
+    description: Everything about your restaurant
+    x-displayName: Tag 1
+  - name: tag2
+    description: Tag 2 description
+    x-displayName: Tag 2
+  - name: tag3
+    description: Tag 3 description
+    x-displayName: Tag 3
+
+x-tagGroups:
+  - name: Tag 1 & 2
+    tags:
+      - tag1
+      - tag2
+  - name: Trinity
+    tags:
+      - tag1
+      - tag2
+      - tag3
+  - name: Last Two
+    tags:
+      - tag2
+      - tag3

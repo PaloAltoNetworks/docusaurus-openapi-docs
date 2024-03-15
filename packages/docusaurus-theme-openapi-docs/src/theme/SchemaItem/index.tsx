@@ -90,14 +90,11 @@ export default function SchemaItem({
     </div>
   ));
 
-  const renderDefaultValue = guard(
-    typeof defaultValue === "boolean" ? defaultValue.toString() : defaultValue,
-    (value) => (
-      <div className="">
-        <ReactMarkdown children={`**Default value:** \`${value}\``} />
-      </div>
-    )
-  );
+  const renderDefaultValue = guard(defaultValue, (value) => (
+    <div className="">
+      <ReactMarkdown children={`**Default value:** \`${value}\``} />
+    </div>
+  ));
 
   const schemaContent = (
     <div>

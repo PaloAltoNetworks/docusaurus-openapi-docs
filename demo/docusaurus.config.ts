@@ -243,6 +243,7 @@ const config: Config = {
             downloadUrl:
               "https://raw.githubusercontent.com/PaloAltoNetworks/docusaurus-openapi-docs/main/demo/examples/petstore.yaml",
             hideSendButton: false,
+            showSchemas: true,
           } satisfies OpenApiPlugin.Options,
           cos: {
             specPath: "examples/openapi-cos.json",
@@ -258,6 +259,13 @@ const config: Config = {
           yogurt: {
             specPath: "examples/food/yogurtstore/openapi.yaml",
             outputDir: "docs/food/yogurtstore",
+          } satisfies OpenApiPlugin.Options,
+          restaurant: {
+            specPath: "examples/food/restaurant/openapi.yaml",
+            outputDir: "docs/restaurant",
+            sidebarOptions: {
+              groupPathsBy: "tagGroup",
+            },
           } satisfies OpenApiPlugin.Options,
         } satisfies Plugin.PluginOptions,
       },

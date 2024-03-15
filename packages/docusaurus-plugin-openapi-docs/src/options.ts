@@ -8,7 +8,7 @@
 import { Joi } from "@docusaurus/utils-validation";
 
 const sidebarOptions = Joi.object({
-  groupPathsBy: Joi.string().valid("tag"),
+  groupPathsBy: Joi.string().valid("tag", "tagGroup"),
   categoryLinkSource: Joi.string().valid("tag", "info", "auto"),
   customProps: Joi.object(),
   sidebarCollapsible: Joi.boolean(),
@@ -37,6 +37,7 @@ export const OptionsSchema = Joi.object({
         showExtensions: Joi.boolean(),
         sidebarOptions: sidebarOptions,
         markdownGenerators: markdownGenerators,
+        showSchemas: Joi.boolean(),
         version: Joi.string().when("versions", {
           is: Joi.exist(),
           then: Joi.required(),

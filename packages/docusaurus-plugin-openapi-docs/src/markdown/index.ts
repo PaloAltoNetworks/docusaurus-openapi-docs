@@ -19,18 +19,24 @@ import { createMethodEndpoint } from "./createMethodEndpoint";
 import { createParamsDetails } from "./createParamsDetails";
 import { createRequestBodyDetails } from "./createRequestBodyDetails";
 import { createRequestHeader } from "./createRequestHeader";
+import { createNodes } from "./createSchema";
 import { createStatusCodes } from "./createStatusCodes";
 import { createTermsOfService } from "./createTermsOfService";
 import { createVendorExtensions } from "./createVendorExtensions";
 import { createVersionBadge } from "./createVersionBadge";
-import { render } from "./utils";
+import { create, greaterThan, lessThan, render } from "./utils";
 import {
   ContactObject,
   LicenseObject,
   MediaTypeObject,
   SecuritySchemeObject,
 } from "../openapi/types";
-import { ApiPageMetadata, InfoPageMetadata, TagPageMetadata } from "../types";
+import {
+  ApiPageMetadata,
+  InfoPageMetadata,
+  SchemaPageMetadata,
+  TagPageMetadata,
+} from "../types";
 
 interface RequestBodyProps {
   title: string;
@@ -82,7 +88,7 @@ export function createApiPageMD({
       : undefined,
     createDeprecationNotice({ deprecated, description: deprecatedDescription }),
     createDescription(description),
-    createRequestHeader("Request"),
+    requestBody || parameters ? createRequestHeader("Request") : undefined,
     createParamsDetails({ parameters, type: "path" }),
     createParamsDetails({ parameters, type: "query" }),
     createParamsDetails({ parameters, type: "header" }),
@@ -131,4 +137,20 @@ export function createInfoPageMD({
 
 export function createTagPageMD({ tag: { description } }: TagPageMetadata) {
   return render([createDescription(description)]);
+}
+
+export function createSchemaPageMD({ schema }: SchemaPageMetadata) {
+  const { title = "", description } = schema;
+  return render([
+    `import DiscriminatorTabs from "@theme/DiscriminatorTabs";\n`,
+    `import SchemaItem from "@theme/SchemaItem";\n`,
+    `import SchemaTabs from "@theme/SchemaTabs";\n`,
+    `import Heading from "@theme/Heading";\n`,
+    `import TabItem from "@theme/TabItem";\n\n`,
+    createHeading(title.replace(lessThan, "&lt;").replace(greaterThan, "&gt;")),
+    createDescription(description),
+    create("ul", {
+      children: createNodes(schema, "response"),
+    }),
+  ]);
 }
