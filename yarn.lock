@@ -151,16 +151,14 @@
     "@jridgewell/gen-mapping" "^0.3.5"
     "@jridgewell/trace-mapping" "^0.3.24"
 
-"@apidevtools/json-schema-ref-parser@^10.1.0":
-  version "10.1.0"
-  resolved "https://registry.yarnpkg.com/@apidevtools/json-schema-ref-parser/-/json-schema-ref-parser-10.1.0.tgz#bf54494039a56fa7f77fed17dc6f01dfde50f64c"
-  integrity sha512-3e+viyMuXdrcK8v5pvP+SDoAQ77FH6OyRmuK48SZKmdHJRFm87RsSs8qm6kP39a/pOPURByJw+OXzQIqcfmKtA==
+"@apidevtools/json-schema-ref-parser@^11.5.4":
+  version "11.5.4"
+  resolved "https://registry.yarnpkg.com/@apidevtools/json-schema-ref-parser/-/json-schema-ref-parser-11.5.4.tgz#6a90caf2140834025cf72651280c46084de187ae"
+  integrity sha512-o2fsypTGU0WxRxbax8zQoHiIB4dyrkwYfcm8TxZ+bx9pCzcWZbQtiMqpgBvWA/nJ2TrGjK5adCLfTH8wUeU/Wg==
   dependencies:
     "@jsdevtools/ono" "^7.1.3"
-    "@types/json-schema" "^7.0.11"
-    "@types/lodash.clonedeep" "^4.5.7"
+    "@types/json-schema" "^7.0.15"
     js-yaml "^4.1.0"
-    lodash.clonedeep "^4.5.0"
 
 "@babel/code-frame@7.12.11":
   version "7.12.11"
@@ -3221,18 +3219,18 @@
     require-from-string "^2.0.2"
     uri-js "^4.2.2"
 
-"@redocly/config@^0.1.1":
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/@redocly/config/-/config-0.1.3.tgz#af9a0fdb0dd65c31bca58dc86f3c841d62383096"
-  integrity sha512-DjgGwhyolxDLO7hP1V8h6qQUUTkqN7P/xG2OMgsABJ1Pr40GG32+cqx9oBbKX9iN+JXh6kVUZgBMcPPB1fbyLA==
+"@redocly/config@^0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@redocly/config/-/config-0.1.4.tgz#ffb27ff0a4194c12995597eecb464e29800f5589"
+  integrity sha512-OEdCW1HRpFiZaZNrXQq8LoBxX3APijZaa/Xyoc6r44LnyAPWkjQqvPoBxE7IRqSvMihf8bl+ZRc1gtc1KuFLHw==
 
-"@redocly/openapi-core@^1.0.0-beta.125":
-  version "1.10.4"
-  resolved "https://registry.yarnpkg.com/@redocly/openapi-core/-/openapi-core-1.10.4.tgz#fb1c3ba0eaa7d76b3e4d76d711b9eac6aebc1069"
-  integrity sha512-GzvAuoVtHk75q/HqaRNqRUTZWYKpZ16HCOWIrx2txAvZrMoWCUNRVsELY91W/ilH/Cepj6t/Nh+bpJ7o/mcN/g==
+"@redocly/openapi-core@^1.10.5":
+  version "1.10.5"
+  resolved "https://registry.yarnpkg.com/@redocly/openapi-core/-/openapi-core-1.10.5.tgz#1575fb15bc31da34afa39fbaa4603a45e9bd7cb7"
+  integrity sha512-RaVwWLbGuzQxK6ezbvPGnz4rtVMTo5DOrxyII/sKJiTexBHplZzUVqrpU6aeRckl3iY9xe9+w07c/kDiLEeWRQ==
   dependencies:
     "@redocly/ajv" "^8.11.0"
-    "@redocly/config" "^0.1.1"
+    "@redocly/config" "^0.1.4"
     colorette "^1.2.0"
     js-levenshtein "^1.1.6"
     js-yaml "^4.1.0"
@@ -3725,7 +3723,7 @@
   resolved "https://registry.yarnpkg.com/@types/json-pointer/-/json-pointer-1.0.34.tgz#a08d4cbd1e49dc2635b60f5f6bf97c8cc142cab2"
   integrity sha512-JRnWcxzXSaLei98xgw1B7vAeBVOrkyw0+Rt9j1QoJrczE78OpHsyQC8GNbuhw+/2vxxDe58QvWnngS86CoIbRg==
 
-"@types/json-schema@*", "@types/json-schema@^7.0.11", "@types/json-schema@^7.0.12", "@types/json-schema@^7.0.4", "@types/json-schema@^7.0.5", "@types/json-schema@^7.0.7", "@types/json-schema@^7.0.8", "@types/json-schema@^7.0.9":
+"@types/json-schema@*", "@types/json-schema@^7.0.12", "@types/json-schema@^7.0.15", "@types/json-schema@^7.0.4", "@types/json-schema@^7.0.5", "@types/json-schema@^7.0.7", "@types/json-schema@^7.0.8", "@types/json-schema@^7.0.9":
   version "7.0.15"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.15.tgz#596a1747233694d50f6ad8a7869fcb6f56cf5841"
   integrity sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==
@@ -3735,14 +3733,7 @@
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
 
-"@types/lodash.clonedeep@^4.5.7":
-  version "4.5.9"
-  resolved "https://registry.yarnpkg.com/@types/lodash.clonedeep/-/lodash.clonedeep-4.5.9.tgz#ea48276c7cc18d080e00bb56cf965bcceb3f0fc1"
-  integrity sha512-19429mWC+FyaAhOLzsS8kZUsI+/GmBAQ0HFiCPsKGU+7pBXOQWhyrY6xNNDwUSX8SMZMJvuFVMF9O5dQOlQK9Q==
-  dependencies:
-    "@types/lodash" "*"
-
-"@types/lodash@*", "@types/lodash@^4.14.176":
+"@types/lodash@^4.14.176":
   version "4.17.0"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.17.0.tgz#d774355e41f372d5350a4d0714abb48194a489c3"
   integrity sha512-t7dhREVv6dbNj0q17X12j7yDG4bD/DHYX7o5/DbDxobP0HnGPgpRz2Ej77aL7TZT3DSw13fqUTj8J4mMnqa7WA==
@@ -10751,11 +10742,6 @@ locate-path@^7.1.0:
   integrity sha512-gvVijfZvn7R+2qyPX8mAuKcFGDf6Nc61GdvGafQsHL0sBIxfKzA+usWn4GFC/bk+QdwPUD4kWFJLhElipq+0VA==
   dependencies:
     p-locate "^6.0.0"
-
-lodash.clonedeep@^4.5.0:
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
-  integrity sha512-H5ZhCF25riFd9uB5UCkVKo61m3S/xZk1x4wA6yp/L3RFP6Z/eHH1ymQcGLo7J3GMPfm0V/7m1tryHuGVxpqEBQ==
 
 lodash.debounce@^4.0.8:
   version "4.0.8"
