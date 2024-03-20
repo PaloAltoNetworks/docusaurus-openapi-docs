@@ -1,3 +1,14 @@
+## 2.1.1 (Mar 20, 2024)
+
+High level enhancements
+
+- Improved support for OpenAPI 3.1
+
+Other enhancements and bug fixes
+
+- [bugfix] Ensure 0 and false are guarded correctly and add deprecated support to params ([#754](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/754))
+- upgrade openapi parsers ([#748](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/748))
+
 ## 2.1.0 (Mar 15, 2024)
 
 High level enhancements
