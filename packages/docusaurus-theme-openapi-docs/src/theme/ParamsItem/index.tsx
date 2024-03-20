@@ -12,17 +12,6 @@ import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
 /* eslint-disable import/no-extraneous-dependencies*/
 import clsx from "clsx";
-import { createDescription } from "docusaurus-theme-openapi-docs/lib/markdown/createDescription";
-/* eslint-disable import/no-extraneous-dependencies*/
-import {
-  getQualifierMessage,
-  getSchemaName,
-} from "docusaurus-theme-openapi-docs/lib/markdown/schema";
-/* eslint-disable import/no-extraneous-dependencies*/
-import {
-  guard,
-  toString,
-} from "docusaurus-theme-openapi-docs/lib/markdown/utils";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
@@ -48,6 +37,7 @@ export interface Props {
     examples: Map<ExampleObject>;
     name: string;
     required: boolean;
+    deprecated: boolean;
     schema: any;
   };
 }
