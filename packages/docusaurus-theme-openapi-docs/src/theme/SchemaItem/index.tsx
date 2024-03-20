@@ -111,7 +111,7 @@ export default function SchemaItem({
           <span className="openapi-schema__divider"></span>
         )}
         {renderNullable}
-        {!deprecated && renderRequired}
+        {renderRequired}
         {renderDeprecated}
       </span>
       {renderQualifierMessage}

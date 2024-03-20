@@ -26,11 +26,11 @@ export function guard<T>(
   value: T | undefined | string,
   cb: (value: T) => Children
 ): string {
-  if (value === undefined || value === "") {
-    return "";
+  if (!!value || value === 0) {
+    const children = cb(value as T);
+    return render(children);
   }
-  const children = cb(value as T);
-  return render(children);
+  return "";
 }
 
 export function render(children: Children): string {
