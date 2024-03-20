@@ -11,6 +11,7 @@ import CodeBlock from "@theme/CodeBlock";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
 /* eslint-disable import/no-extraneous-dependencies*/
+import clsx from "clsx";
 import { createDescription } from "docusaurus-theme-openapi-docs/lib/markdown/createDescription";
 /* eslint-disable import/no-extraneous-dependencies*/
 import {
@@ -125,12 +126,18 @@ function ParamsItem({
   return (
     <div className="openapi-params__list-item">
       <span className="openapi-schema__container">
-        <strong className="openapi-schema__property">{name}</strong>
+        <strong
+          className={clsx("openapi-schema__property", {
+            "openapi-schema__strikethrough": deprecated,
+          })}
+        >
+          {name}
+        </strong>
         {renderSchemaName}
         {(required || deprecated) && (
           <span className="openapi-schema__divider"></span>
         )}
-        {!deprecated && renderSchemaRequired}
+        {renderSchemaRequired}
         {renderDeprecated}
       </span>
       {renderSchema}
