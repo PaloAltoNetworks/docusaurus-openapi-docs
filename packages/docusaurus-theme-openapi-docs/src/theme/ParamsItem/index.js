@@ -11,6 +11,7 @@ import CodeBlock from "@theme/CodeBlock";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
 /* eslint-disable import/no-extraneous-dependencies*/
+import clsx from "clsx";
 import { createDescription } from "docusaurus-theme-openapi-docs/lib/markdown/createDescription";
 /* eslint-disable import/no-extraneous-dependencies*/
 import {
@@ -26,8 +27,10 @@ import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
 function ParamsItem({
-  param: { description, example, examples, name, required, schema },
+  param: { description, example, examples, name, required, schema, deprecated },
 }) {
+  console.log(name, required);
+
   if (!schema || !schema?.type) {
     schema = { type: "any" };
   }
@@ -38,6 +41,10 @@ function ParamsItem({
 
   const renderSchemaRequired = guard(required, () => (
     <span className="openapi-schema__required">required</span>
+  ));
+
+  const renderDeprecated = guard(deprecated, () => (
+    <span className="openapi-schema__deprecated">deprecated</span>
   ));
 
   const renderSchema = guard(getQualifierMessage(schema), (message) => (
@@ -119,10 +126,19 @@ function ParamsItem({
   return (
     <div className="openapi-params__list-item">
       <span className="openapi-schema__container">
-        <strong className="openapi-schema__property">{name}</strong>
+        <strong
+          className={clsx("openapi-schema__property", {
+            "openapi-schema__strikethrough": deprecated,
+          })}
+        >
+          {name}
+        </strong>
         {renderSchemaName}
-        {required && <span className="openapi-schema__divider"></span>}
+        {(required || deprecated) && (
+          <span className="openapi-schema__divider"></span>
+        )}
         {renderSchemaRequired}
+        {renderDeprecated}
       </span>
       {renderSchema}
       {renderDefaultValue}

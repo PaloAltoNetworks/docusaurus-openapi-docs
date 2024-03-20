@@ -22,6 +22,11 @@ describe("guard", () => {
     expect(actual).toBe("");
   });
 
+  it("should guard false booleans", () => {
+    const actual = guard(false, (value) => `${value}`);
+    expect(actual).toBe("");
+  });
+
   it("should not guard strings", () => {
     const actual = guard("hello", (value) => value);
     expect(actual).toBe("hello");
@@ -37,10 +42,6 @@ describe("guard", () => {
     expect(actual).toBe("0");
   });
 
-  it("should not guard false booleans", () => {
-    const actual = guard(false, (value) => `${value}`);
-    expect(actual).toBe("false");
-  });
   it("should not guard true booleans", () => {
     const actual = guard(true, (value) => `${value}`);
     expect(actual).toBe("true");
