@@ -24,7 +24,7 @@ export function guard<T>(
   value: T | undefined,
   cb: (value: T) => Children
 ): string {
-  if (!!value) {
+  if (!!value || value === 0) {
     const children = cb(value);
     return render(children);
   }
