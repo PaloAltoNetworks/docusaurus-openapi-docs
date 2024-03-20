@@ -1,3 +1,15 @@
+## 3.0.0-beta.7 (Mar 20, 2024)
+
+High level enhancements
+
+- Improve OpenAPI 3.1 support
+
+Other enhancements and bug fixes
+
+- fix import/eslint errors
+- [bugfix] Ensure 0 and false are guarded correctly and add deprecated support to params ([#754](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/754))
+- Upgrade OpenAPI parsers ([#749](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/749))
+
 ## 3.0.0-beta.6 (Mar 15, 2024)
 
 High level enhancements
