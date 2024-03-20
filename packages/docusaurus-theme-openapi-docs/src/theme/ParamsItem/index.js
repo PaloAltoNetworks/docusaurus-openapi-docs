@@ -29,8 +29,6 @@ import rehypeRaw from "rehype-raw";
 function ParamsItem({
   param: { description, example, examples, name, required, schema, deprecated },
 }) {
-  console.log(name, required);
-
   if (!schema || !schema?.type) {
     schema = { type: "any" };
   }
