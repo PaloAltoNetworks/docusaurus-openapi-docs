@@ -26,8 +26,10 @@ import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
 function ParamsItem({
-  param: { description, example, examples, name, required, schema },
+  param: { description, example, examples, name, required, schema, deprecated },
 }) {
+  console.log(name, required);
+
   if (!schema || !schema?.type) {
     schema = { type: "any" };
   }
@@ -38,6 +40,10 @@ function ParamsItem({
 
   const renderSchemaRequired = guard(required, () => (
     <span className="openapi-schema__required">required</span>
+  ));
+
+  const renderDeprecated = guard(deprecated, () => (
+    <span className="openapi-schema__deprecated">deprecated</span>
   ));
 
   const renderSchema = guard(getQualifierMessage(schema), (message) => (
@@ -121,8 +127,11 @@ function ParamsItem({
       <span className="openapi-schema__container">
         <strong className="openapi-schema__property">{name}</strong>
         {renderSchemaName}
-        {required && <span className="openapi-schema__divider"></span>}
-        {renderSchemaRequired}
+        {(required || deprecated) && (
+          <span className="openapi-schema__divider"></span>
+        )}
+        {!deprecated && renderSchemaRequired}
+        {renderDeprecated}
       </span>
       {renderSchema}
       {renderDefaultValue}
