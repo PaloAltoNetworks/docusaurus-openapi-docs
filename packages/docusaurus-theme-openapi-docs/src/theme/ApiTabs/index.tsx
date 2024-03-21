@@ -89,11 +89,13 @@ function TabList({
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
       for (let entry of entries) {
-        if (entry.target.clientWidth < entry.target.scrollWidth) {
-          setShowTabArrows(true);
-        } else {
-          setShowTabArrows(false);
-        }
+        requestAnimationFrame(() => {
+          if (entry.target.clientWidth < entry.target.scrollWidth) {
+            setShowTabArrows(true);
+          } else {
+            setShowTabArrows(false);
+          }
+        });
       }
     });
 
@@ -159,8 +161,8 @@ function TabList({
                 parseInt(value) >= 400
                   ? "danger"
                   : parseInt(value) >= 200 && parseInt(value) < 300
-                    ? "success"
-                    : "info",
+                  ? "success"
+                  : "info",
                 {
                   active: selectedValue === value,
                 }
