@@ -1,3 +1,16 @@
+## 2.1.2 (Mar 21, 2024)
+
+High level enhancements
+
+- Various bug fixes
+
+Other enhancements and bug fixes
+
+- Fix allOf schema qualifier and type ([#766](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/766))
+- Ensure qualifiers are rendered for polymorphic/primitive properties ([#765](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/765))
+- uncomment line preventing grouping by operation tags ([#764](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/764))
+- ensure resize observer is calculated once per frame to avoid loops ([#763](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/763))
+
 ## 2.1.1 (Mar 20, 2024)
 
 High level enhancements
