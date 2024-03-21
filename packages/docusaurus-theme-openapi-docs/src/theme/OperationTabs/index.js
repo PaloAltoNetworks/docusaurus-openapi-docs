@@ -60,11 +60,13 @@ function TabList({ className, block, selectedValue, selectValue, tabValues }) {
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
       for (let entry of entries) {
-        if (entry.target.offsetWidth < entry.target.scrollWidth) {
-          setShowTabArrows(true);
-        } else {
-          setShowTabArrows(false);
-        }
+        requestAnimationFrame(() => {
+          if (entry.target.offsetWidth < entry.target.scrollWidth) {
+            setShowTabArrows(true);
+          } else {
+            setShowTabArrows(false);
+          }
+        });
       }
     });
 
