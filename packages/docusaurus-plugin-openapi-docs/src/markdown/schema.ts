@@ -40,6 +40,10 @@ function prettyName(schema: SchemaObject, circular?: boolean) {
     // return schema.type;
   }
 
+  if (schema.title && schema.type) {
+    return `${schema.title} (${schema.type})`;
+  }
+
   return schema.title ?? schema.type;
 }
 
