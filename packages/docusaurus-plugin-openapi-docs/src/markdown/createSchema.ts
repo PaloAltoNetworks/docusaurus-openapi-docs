@@ -624,7 +624,6 @@ function createEdges({
     }: { mergedSchemas: SchemaObject; required: string[] | boolean } =
       mergeAllOf(schema.allOf);
     const mergedSchemaName = getSchemaName(mergedSchemas);
-
     if (
       mergedSchemas.oneOf !== undefined ||
       mergedSchemas.anyOf !== undefined
@@ -685,8 +684,8 @@ function createEdges({
       collapsible: false,
       name,
       required: Array.isArray(required) ? required.includes(name) : required,
-      schemaName: schemaName,
-      qualifierMessage: getQualifierMessage(schema),
+      schemaName: mergedSchemaName,
+      qualifierMessage: getQualifierMessage(mergedSchemas),
       schema: mergedSchemas,
     });
   }
