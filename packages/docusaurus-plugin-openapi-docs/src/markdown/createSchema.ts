@@ -817,9 +817,18 @@ export function createNodes(
       style: {
         marginTop: ".5rem",
         marginBottom: ".5rem",
-        marginLeft: "1rem",
       },
-      children: createDescription(schema.type),
+      children: [
+        createDescription(schema.type),
+        guard(getQualifierMessage(schema), (message) =>
+          create("div", {
+            style: {
+              paddingTop: "1rem",
+            },
+            children: createDescription(message),
+          })
+        ),
+      ],
     });
   }
 
@@ -829,9 +838,18 @@ export function createNodes(
       style: {
         marginTop: ".5rem",
         marginBottom: ".5rem",
-        marginLeft: "1rem",
       },
-      children: [createDescription(schema)],
+      children: [
+        createDescription(schema),
+        guard(getQualifierMessage(schema), (message) =>
+          create("div", {
+            style: {
+              paddingTop: "1rem",
+            },
+            children: createDescription(message),
+          })
+        ),
+      ],
     });
   }
 
