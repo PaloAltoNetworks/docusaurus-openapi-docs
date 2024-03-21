@@ -87,7 +87,7 @@ function groupByTags(
       apiTags.push(tag.name!);
     }
   });
-  // apiTags = uniq(apiTags.concat(operationTags));
+  apiTags = uniq(apiTags.concat(operationTags));
 
   const basePath = docPath
     ? outputDir.split(docPath!)[1].replace(/^\/+/g, "")
