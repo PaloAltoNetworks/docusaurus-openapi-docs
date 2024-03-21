@@ -35,13 +35,7 @@ Array [
               Array [
             </div>
           </li>
-          <div
-            style={{
-              marginTop: \\".5rem\\",
-              marginBottom: \\".5rem\\",
-              marginLeft: \\"1rem\\",
-            }}
-          >
+          <div style={{ marginTop: \\".5rem\\", marginBottom: \\".5rem\\" }}>
             string
           </div>
           <li>
@@ -57,35 +51,17 @@ Array [
           </li>
         </TabItem>
         <TabItem label={\\"MOD3\\"} value={\\"2-item-properties\\"}>
-          <div
-            style={{
-              marginTop: \\".5rem\\",
-              marginBottom: \\".5rem\\",
-              marginLeft: \\"1rem\\",
-            }}
-          >
+          <div style={{ marginTop: \\".5rem\\", marginBottom: \\".5rem\\" }}>
             boolean
           </div>
         </TabItem>
         <TabItem label={\\"MOD4\\"} value={\\"3-item-properties\\"}>
-          <div
-            style={{
-              marginTop: \\".5rem\\",
-              marginBottom: \\".5rem\\",
-              marginLeft: \\"1rem\\",
-            }}
-          >
+          <div style={{ marginTop: \\".5rem\\", marginBottom: \\".5rem\\" }}>
             number
           </div>
         </TabItem>
         <TabItem label={\\"MOD5\\"} value={\\"4-item-properties\\"}>
-          <div
-            style={{
-              marginTop: \\".5rem\\",
-              marginBottom: \\".5rem\\",
-              marginLeft: \\"1rem\\",
-            }}
-          >
+          <div style={{ marginTop: \\".5rem\\", marginBottom: \\".5rem\\" }}>
             string
           </div>
         </TabItem>
