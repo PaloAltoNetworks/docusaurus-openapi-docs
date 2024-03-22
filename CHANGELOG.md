@@ -1,3 +1,13 @@
+## 2.1.3 (Mar 22, 2024)
+
+High level enhancements
+
+- bugfix
+
+Other enhancements and bug fixes
+
+- ensure correct eval of required properties with allOf ([#771](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/771))
+
 ## 2.1.2 (Mar 21, 2024)
 
 High level enhancements
