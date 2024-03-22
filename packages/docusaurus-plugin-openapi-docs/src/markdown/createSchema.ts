@@ -44,7 +44,7 @@ export function mergeAllOf(allOf: SchemaObject[]) {
     ignoreAdditionalProperties: true,
   });
 
-  const required = allOf.reduce((acc, cur) => {
+  const mergedRequired = allOf.reduce((acc, cur) => {
     if (Array.isArray(cur.required)) {
       const next = [...acc, ...cur.required];
       return next;
@@ -52,7 +52,7 @@ export function mergeAllOf(allOf: SchemaObject[]) {
     return acc;
   }, [] as any);
 
-  return { mergedSchemas, required };
+  return { mergedSchemas, mergedRequired };
 }
 
 /**
@@ -260,9 +260,8 @@ function createItems(schema: SchemaObject) {
     // TODO: figure out if and how we should pass merged required array
     const {
       mergedSchemas,
-    }: { mergedSchemas: SchemaObject; required: string[] } = mergeAllOf(
-      schema.items?.allOf
-    );
+    }: { mergedSchemas: SchemaObject; mergedRequired: string[] | boolean } =
+      mergeAllOf(schema.items?.allOf);
 
     // Handles combo anyOf/oneOf + properties
     if (
@@ -596,7 +595,6 @@ function createEdges({
   discriminator,
 }: EdgeProps): any {
   const schemaName = getSchemaName(schema);
-
   if (discriminator !== undefined && discriminator.propertyName === name) {
     return createPropertyDiscriminator(
       name,
@@ -618,11 +616,9 @@ function createEdges({
   }
 
   if (schema.allOf !== undefined) {
-    const {
-      mergedSchemas,
-      required,
-    }: { mergedSchemas: SchemaObject; required: string[] | boolean } =
-      mergeAllOf(schema.allOf);
+    const { mergedSchemas }: { mergedSchemas: SchemaObject } = mergeAllOf(
+      schema.allOf
+    );
     const mergedSchemaName = getSchemaName(mergedSchemas);
     if (
       mergedSchemas.oneOf !== undefined ||
