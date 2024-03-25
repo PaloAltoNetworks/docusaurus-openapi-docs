@@ -41,6 +41,7 @@ export function isURL(str: string): boolean {
 
 export function getDocsPluginConfig(
   presetsPlugins: any[],
+  plugin: string,
   pluginId: string
 ): Object | undefined {
   // eslint-disable-next-line array-callback-return
@@ -52,10 +53,7 @@ export function getDocsPluginConfig(
       }
 
       // Search plugin-content-docs instances
-      if (
-        typeof data[0] === "string" &&
-        data[0] === "@docusaurus/plugin-content-docs"
-      ) {
+      if (typeof data[0] === "string" && data[0] === plugin) {
         const configPluginId = data[1].id ? data[1].id : "default";
         if (configPluginId === pluginId) {
           return data[1];
@@ -71,7 +69,7 @@ export function getDocsPluginConfig(
     }
 
     // Search plugin-content-docs instances
-    if (filteredConfig[0] === "@docusaurus/plugin-content-docs") {
+    if (filteredConfig[0] === plugin) {
       const configPluginId = filteredConfig[1].id
         ? filteredConfig[1].id
         : "default";
@@ -95,14 +93,22 @@ export default function pluginOpenAPIDocs(
   context: LoadContext,
   options: PluginOptions
 ): Plugin<LoadedContent> {
-  const { config, docsPluginId } = options;
+  const {
+    config,
+    docsPlugin = "@docusaurus/plugin-content-docs",
+    docsPluginId,
+  } = options;
   const { siteDir, siteConfig } = context;
 
   // Get routeBasePath and path from plugin-content-docs or preset
   const presets: any = siteConfig.presets;
   const plugins: any = siteConfig.plugins;
   const presetsPlugins = presets.concat(plugins);
-  let docData: any = getDocsPluginConfig(presetsPlugins, docsPluginId);
+  let docData: any = getDocsPluginConfig(
+    presetsPlugins,
+    docsPlugin,
+    docsPluginId
+  );
   let docRouteBasePath = docData ? docData.routeBasePath : undefined;
   let docPath = docData ? (docData.path ? docData.path : "docs") : undefined;
 
@@ -121,7 +127,7 @@ export default function pluginOpenAPIDocs(
 
     // Override docPath if pluginId provided
     if (pluginId) {
-      docData = getDocsPluginConfig(presetsPlugins, pluginId);
+      docData = getDocsPluginConfig(presetsPlugins, docsPlugin, pluginId);
       docRouteBasePath = docData ? docData.routeBasePath : undefined;
       docPath = docData ? (docData.path ? docData.path : "docs") : undefined;
     }
