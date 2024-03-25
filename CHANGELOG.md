@@ -1,3 +1,14 @@
+## 3.0.0-beta.10 (Mar 25, 2024)
+
+High level enhancements
+
+- Various bugfixes
+
+Other enhancements and bug fixes
+
+- use inline to remove p tag ([#779](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/779))
+- upgrade lerna to 8.1.2 ([#778](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/778))
+
 ## 3.0.0-beta.9 (Mar 22, 2024)
 
 High level enhancements
