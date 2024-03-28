@@ -146,10 +146,11 @@ Here is an example of properly configuring `docusaurus.config.js` file for `docu
 
 The `docusaurus-plugin-openapi-docs` plugin can be configured with the following options:
 
-| Name           | Type     | Default | Description                                                                                                                                          |
-| -------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `id`           | `string` | `null`  | A unique plugin ID.                                                                                                                                  |
-| `docsPluginId` | `string` | `null`  | The ID associated with the `plugin-content-docs` or `preset` instance used to render the OpenAPI docs (e.g. "your-plugin-id", "classic", "default"). |
+| Name           | Type     | Default                           | Description                                                                                                                                                   |
+| -------------- | -------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`           | `string` | `null`                            | A unique plugin ID.                                                                                                                                           |
+| `docsPlugin`   | `string` | `@docusaurus/plugin-content-docs` | The plugin used to render the OpenAPI docs (ignored if the plugin instance referenced by `docsPluginId` is a `preset`).                                       |
+| `docsPluginId` | `string` | `null`                            | The plugin ID associated with the `preset` or configured `docsPlugin` instance used to render the OpenAPI docs (e.g. "your-plugin-id", "classic", "default"). |
 
 ### config
 
