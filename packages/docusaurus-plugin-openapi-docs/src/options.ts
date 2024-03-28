@@ -23,6 +23,7 @@ const markdownGenerators = Joi.object({
 
 export const OptionsSchema = Joi.object({
   id: Joi.string().required(),
+  docsPlugin: Joi.string(),
   docsPluginId: Joi.string().required(),
   config: Joi.object()
     .pattern(

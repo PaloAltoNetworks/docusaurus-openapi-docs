@@ -23,6 +23,7 @@ export type {
 } from "@docusaurus/plugin-content-docs-types";
 export interface PluginOptions {
   id?: string;
+  docsPlugin?: string;
   docsPluginId: string;
   config: {
     [key: string]: APIOptions;
