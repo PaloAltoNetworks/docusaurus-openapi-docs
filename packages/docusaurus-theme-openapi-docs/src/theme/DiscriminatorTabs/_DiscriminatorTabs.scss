@@ -59,6 +59,7 @@
   overflow-y: hidden;
   overflow-x: scroll;
   scroll-behavior: smooth;
+  scrollbar-width: none;
 }
 
 .openapi-tabs__discriminator-list-container::-webkit-scrollbar {
