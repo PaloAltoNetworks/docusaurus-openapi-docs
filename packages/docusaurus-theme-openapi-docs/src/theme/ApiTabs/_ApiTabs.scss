@@ -87,6 +87,7 @@
   overflow-y: hidden;
   overflow-x: scroll;
   scroll-behavior: smooth;
+  scrollbar-width: none;
 }
 
 .openapi-tabs__response-list-container::-webkit-scrollbar {
