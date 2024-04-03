@@ -317,6 +317,7 @@ function CodeSnippets({ postman, codeSamples }: Props) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(function onSelectedSampleUpdate() {
     if (
+      language &&
       language.samples &&
       language.samplesSources &&
       selectedSample &&
