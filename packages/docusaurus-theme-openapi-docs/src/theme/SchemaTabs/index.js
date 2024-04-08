@@ -74,11 +74,13 @@ function TabList({ className, block, selectedValue, selectValue, tabValues }) {
     };
   }, []);
 
-  const handleRightClick = () => {
+  const handleRightClick = (e) => {
+    e.preventDefault();
     tabItemListContainerRef.current.scrollLeft += 90;
   };
 
-  const handleLeftClick = () => {
+  const handleLeftClick = (e) => {
+    e.preventDefault();
     tabItemListContainerRef.current.scrollLeft -= 90;
   };
 

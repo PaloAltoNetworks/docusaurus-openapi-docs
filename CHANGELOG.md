@@ -1,3 +1,5 @@
+- preventing to send form onClick left/right arrows in SchemaTabs component
+
 ## 2.1.3 (Mar 22, 2024)
 
 High level enhancements
