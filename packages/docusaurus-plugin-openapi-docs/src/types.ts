@@ -47,6 +47,7 @@ export interface APIOptions {
   proxy?: string;
   markdownGenerators?: MarkdownGenerator;
   showSchemas?: boolean;
+  disableCompression?: boolean;
 }
 
 export interface MarkdownGenerator {
