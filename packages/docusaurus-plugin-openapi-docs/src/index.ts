@@ -320,7 +320,7 @@ custom_edit_url: null
           // const deserialize = (s: any) => {
           //   return zlib.inflateSync(Buffer.from(s, "base64")).toString();
           // };
-          disableCompression
+          disableCompression === true
             ? (item.json = JSON.stringify(item.api))
             : (item.json = zlib
                 .deflateSync(JSON.stringify(item.api))
