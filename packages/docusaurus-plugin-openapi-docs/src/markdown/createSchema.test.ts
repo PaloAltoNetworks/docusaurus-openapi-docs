@@ -55,4 +55,91 @@ describe("createNodes", () => {
       )
     ).toMatchSnapshot();
   });
+
+  describe("additionalProperties", () => {
+    it.each([
+      [
+        {
+          allOf: [
+            {
+              oneOf: [
+                {
+                  type: "object",
+                  properties: {
+                    type: {
+                      type: "string",
+                      enum: ["nose"],
+                    },
+                  },
+                  required: ["type"],
+                },
+                {
+                  type: "object",
+                  properties: {
+                    type: {
+                      type: "string",
+                      enum: ["mouth"],
+                    },
+                  },
+                  required: ["type"],
+                },
+                {
+                  type: "object",
+                  properties: {
+                    type: {
+                      type: "string",
+                      enum: ["eyes"],
+                    },
+                    default: {
+                      type: "string",
+                    },
+                  },
+                  required: ["type"],
+                },
+              ],
+            },
+            {
+              type: "object",
+              properties: {
+                description: {
+                  type: "string",
+                  description: "Description of the body part.",
+                },
+              },
+              required: ["description"],
+            },
+          ],
+        },
+      ],
+      [
+        {
+          type: "array",
+          items: { type: "object", properties: { a: "string", b: "number" } },
+        },
+      ],
+      [{ type: "string" }],
+      [{ type: "number" }],
+      [{ type: "integer" }],
+      [{ type: "boolean" }],
+      [false],
+      [true],
+      [{}],
+    ] as [SchemaObject["additionalProperties"]][])(
+      "should handle additionalProperties: %p",
+      async (additionalProperties) => {
+        const schema: SchemaObject = {
+          type: "object",
+          additionalProperties,
+        };
+
+        expect(
+          await Promise.all(
+            createNodes(schema, "request").map(
+              async (md: any) => await prettier.format(md, { parser: "babel" })
+            )
+          )
+        ).toMatchSnapshot();
+      }
+    );
+  });
 });
