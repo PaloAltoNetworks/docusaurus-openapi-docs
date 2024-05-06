@@ -11,6 +11,7 @@ import React, {
   useEffect,
   useState,
   ReactElement,
+  LegacyRef,
 } from "react";
 
 import {
@@ -99,14 +100,18 @@ function TabList({
     };
   }, []);
 
-  const handleRightClick = (e) => {
+  const handleRightClick = (e: any) => {
     e.preventDefault();
-    tabItemListContainerRef.current.scrollLeft += 90;
+    if (tabItemListContainerRef.current) {
+      tabItemListContainerRef.current.scrollLeft += 90;
+    }
   };
 
-  const handleLeftClick = (e) => {
+  const handleLeftClick = (e: any) => {
     e.preventDefault();
-    tabItemListContainerRef.current.scrollLeft -= 90;
+    if (tabItemListContainerRef.current) {
+      tabItemListContainerRef.current.scrollLeft -= 90;
+    }
   };
 
   return (
@@ -118,7 +123,7 @@ function TabList({
         />
       )}
       <ul
-        ref={tabItemListContainerRef}
+        ref={tabItemListContainerRef as LegacyRef<HTMLUListElement>}
         role="tablist"
         aria-orientation="horizontal"
         className={clsx(
