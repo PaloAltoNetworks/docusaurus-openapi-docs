@@ -476,11 +476,7 @@ custom_edit_url: null
       cwd: path.resolve(apiDir),
       deep: 1,
     });
-    const schemaMdxFiles = await Globby(["*.schema.mdx"], {
-      cwd: path.resolve(apiDir, "schemas"),
-      deep: 1,
-    });
-    const sidebarFile = await Globby(["sidebar.js"], {
+    const sidebarFile = await Globby(["sidebar.js", "sidebar.ts"], {
       cwd: path.resolve(apiDir),
       deep: 1,
     });
@@ -497,20 +493,17 @@ custom_edit_url: null
       })
     );
 
-    schemaMdxFiles.map((mdx) =>
-      fs.unlink(`${apiDir}/schemas/${mdx}`, (err) => {
-        if (err) {
-          console.error(
-            chalk.red(`Cleanup failed for "${apiDir}/schemas/${mdx}"`),
-            chalk.yellow(err)
-          );
-        } else {
-          console.log(
-            chalk.green(`Cleanup succeeded for "${apiDir}/schemas/${mdx}"`)
-          );
-        }
-      })
-    );
+    try {
+      fs.rmSync(`${apiDir}/schemas`, { recursive: true });
+      console.log(chalk.green(`Cleanup succeeded for "${apiDir}/schemas"`));
+    } catch (err: any) {
+      if (err.code !== "ENOENT") {
+        console.error(
+          chalk.red(`Cleanup failed for "${apiDir}/schemas"`),
+          chalk.yellow(err)
+        );
+      }
+    }
 
     sidebarFile.map((sidebar) =>
       fs.unlink(`${apiDir}/${sidebar}`, (err) => {
