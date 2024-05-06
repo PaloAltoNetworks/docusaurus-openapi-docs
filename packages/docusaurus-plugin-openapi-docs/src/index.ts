@@ -119,6 +119,7 @@ export default function pluginOpenAPIDocs(
       markdownGenerators,
       downloadUrl,
       sidebarOptions,
+      disableCompression,
     } = options;
 
     // Remove trailing slash before proceeding
@@ -319,9 +320,11 @@ custom_edit_url: null
           // const deserialize = (s: any) => {
           //   return zlib.inflateSync(Buffer.from(s, "base64")).toString();
           // };
-          item.json = zlib
-            .deflateSync(JSON.stringify(item.api))
-            .toString("base64");
+          disableCompression === true
+            ? (item.json = JSON.stringify(item.api))
+            : (item.json = zlib
+                .deflateSync(JSON.stringify(item.api))
+                .toString("base64"));
           let infoBasePath = `${outputDir}/${item.infoId}`;
           if (docRouteBasePath) {
             infoBasePath = `${docRouteBasePath}/${outputDir

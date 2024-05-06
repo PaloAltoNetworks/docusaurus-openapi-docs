@@ -240,6 +240,7 @@ const config = {
               "https://raw.githubusercontent.com/PaloAltoNetworks/docusaurus-openapi-docs/main/demo/examples/petstore.yaml",
             hideSendButton: false,
             showSchemas: true,
+            disableCompression: true,
           },
           cos: {
             specPath: "examples/openapi-cos.json",
