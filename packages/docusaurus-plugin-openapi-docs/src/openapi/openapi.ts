@@ -132,6 +132,9 @@ function createItems(
     const { $ref, description, parameters, servers, summary, ...rest } =
       pathObject;
     for (let [method, operationObject] of Object.entries({ ...rest })) {
+      // Lets assume the operationObject is an object or continue. 
+      if(typeof operationObject !== 'object') continue; 
+      
       const title =
         operationObject.summary ??
         operationObject.operationId ??
