@@ -1,5 +1,5 @@
 {
-  "private": false,
+  "private": true,
   "name": "@port-labs/docusaurus-openapi-docs",
   "version": "0.0.1",
   "workspaces": {
