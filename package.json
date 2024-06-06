@@ -1,6 +1,7 @@
 {
-  "private": true,
-  "name": "root",
+  "private": false,
+  "name": "@port-labs/docusaurus-openapi-docs",
+  "version": "0.0.1",
   "workspaces": {
     "packages": [
       "packages/*",
