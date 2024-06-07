@@ -23,8 +23,6 @@ jobs:
         with:
           node-version: "*"
           registry-url: "https://registry.npmjs.org"
-      - name: test
-        run: yarn install --frozen-lockfile
       - name: Release
         run: npx ts-node --transpile-only scripts/publish.ts
         env:
