@@ -25,6 +25,7 @@ import type {
   APIOptions,
   ApiPageMetadata,
   ApiMetadata,
+  InfoPageMetadata,
   SchemaPageMetadata,
 } from "../types";
 
@@ -41,7 +42,7 @@ function isSchemaItem(item: ApiMetadata): item is ApiMetadata {
 }
 
 function groupByTags(
-  items: ApiPageMetadata[],
+  items: ApiMetadata[],
   sidebarOptions: SidebarOptions,
   options: APIOptions,
   tags: TagObject[][],
@@ -59,9 +60,9 @@ function groupByTags(
     categoryLinkSource,
   } = sidebarOptions;
 
-  const apiItems = items.filter(isApiItem);
-  const infoItems = items.filter(isInfoItem);
-  const schemaItems = items.filter(isSchemaItem);
+  const apiItems = items.filter(isApiItem) as ApiPageMetadata[];
+  const infoItems = items.filter(isInfoItem) as InfoPageMetadata[];
+  const schemaItems = items.filter(isSchemaItem) as SchemaPageMetadata[];
   const intros = infoItems.map((item: any) => {
     return {
       id: item.id,
@@ -263,7 +264,7 @@ export default function generateSidebarSlice(
         collapsible: true,
         collapsed: true,
         items: groupByTags(
-          api as ApiPageMetadata[],
+          api,
           sidebarOptions,
           options,
           [filteredTags],
@@ -274,13 +275,7 @@ export default function generateSidebarSlice(
       sidebarSlice.push(groupCategory);
     });
   } else if (sidebarOptions.groupPathsBy === "tag") {
-    sidebarSlice = groupByTags(
-      api as ApiPageMetadata[],
-      sidebarOptions,
-      options,
-      tags,
-      docPath
-    );
+    sidebarSlice = groupByTags(api, sidebarOptions, options, tags, docPath);
   }
 
   return sidebarSlice;
