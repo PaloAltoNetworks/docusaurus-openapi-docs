@@ -108,9 +108,12 @@ function groupByTags(
             },
             item.api.method
           )
-        : clsx({
-            "menu__list-item--deprecated": item.schema.deprecated,
-          });
+        : clsx(
+            {
+              "menu__list-item--deprecated": item.schema.deprecated,
+            },
+            "schema"
+          );
     return {
       type: "doc" as const,
       id: basePath === "" || undefined ? `${id}` : `${basePath}/${id}`,
