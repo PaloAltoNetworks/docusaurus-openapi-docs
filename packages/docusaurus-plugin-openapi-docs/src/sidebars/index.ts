@@ -237,7 +237,9 @@ function groupByTags(
         label: "Schemas",
         collapsible: sidebarCollapsible!,
         collapsed: sidebarCollapsed!,
-        items: schemaItems.map(createDocItem),
+        items: schemaItems
+          .filter(({ schema }) => !schema["x-tags"])
+          .map(createDocItem),
       },
     ];
   }
