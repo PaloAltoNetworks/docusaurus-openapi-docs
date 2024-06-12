@@ -18,13 +18,15 @@ The demo site uses the following CSS to add coloured labels to each request incl
 
 ```css
 /* API Menu Items */
-.api-method > .menu__link {
+.api-method > .menu__link,
+.schema > .menu__link {
   align-items: center;
   justify-content: start;
 }
 
-.api-method > .menu__link::before {
-  width: 50px;
+.api-method > .menu__link::before,
+.schema > .menu__link::before {
+  width: 55px;
   height: 20px;
   font-size: 12px;
   line-height: 20px;
@@ -68,6 +70,16 @@ The demo site uses the following CSS to add coloured labels to each request incl
   content: "head";
   background-color: var(--ifm-color-secondary-darkest);
 }
+
+.event > .menu__link::before {
+  content: "event";
+  background-color: var(--ifm-color-secondary-darkest);
+}
+
+.schema > .menu__link::before {
+  content: "schema";
+  background-color: var(--ifm-color-secondary-darkest);
+}
 ```
 
 ## Alternative Styling
@@ -76,13 +88,15 @@ In [this issue](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issu
 
 ```css
 /* Sidebar Method labels */
-.api-method > .menu__link {
+.api-method > .menu__link,
+.schema > .menu__link {
   align-items: center;
   justify-content: start;
 }
 
-.api-method > .menu__link::before {
-  width: 50px;
+.api-method > .menu__link::before,
+.schema > .menu__link::before {
+  width: 55px;
   height: 20px;
   font-size: 12px;
   line-height: 20px;
@@ -133,6 +147,20 @@ In [this issue](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issu
 
 .head > .menu__link::before {
   content: "head";
+  background-color: var(--ifm-color-secondary-contrast-background);
+  color: var(--ifm-color-secondary-contrast-foreground);
+  border-color: var(--ifm-color-secondary-dark);
+}
+
+.event > .menu__link::before {
+  content: "event";
+  background-color: var(--ifm-color-secondary-contrast-background);
+  color: var(--ifm-color-secondary-contrast-foreground);
+  border-color: var(--ifm-color-secondary-dark);
+}
+
+.schema > .menu__link::before {
+  content: "schema";
   background-color: var(--ifm-color-secondary-contrast-background);
   color: var(--ifm-color-secondary-contrast-foreground);
   border-color: var(--ifm-color-secondary-dark);
