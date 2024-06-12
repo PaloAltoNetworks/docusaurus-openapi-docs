@@ -48,7 +48,7 @@ function groupByTags(
   tags: TagObject[][],
   docPath: string
 ): ProcessedSidebar {
-  let { outputDir, label } = options;
+  let { outputDir, label, showSchemas } = options;
 
   // Remove trailing slash before proceeding
   outputDir = outputDir.replace(/\/$/, "");
@@ -184,15 +184,20 @@ function groupByTags(
         } as SidebarItemCategoryLinkConfig;
       }
 
+      const taggedApiItems = apiItems.filter(
+        (item) => !!item.api.tags?.includes(tag)
+      );
+      const taggedSchemaItems = schemaItems.filter(
+        (item) => !!item.schema["x-tags"]?.includes(tag)
+      );
+
       return {
         type: "category" as const,
         label: tagObject?.["x-displayName"] ?? tag,
         link: linkConfig,
         collapsible: sidebarCollapsible,
         collapsed: sidebarCollapsed,
-        items: apiItems
-          .filter((item) => !!item.api.tags?.includes(tag))
-          .map(createDocItem),
+        items: [...taggedSchemaItems, ...taggedApiItems].map(createDocItem),
       };
     })
     .filter((item) => item.items.length > 0); // Filter out any categories with no items.
@@ -217,7 +222,7 @@ function groupByTags(
   }
 
   let schemas: SidebarItemCategory[] = [];
-  if (schemaItems.length > 0) {
+  if (showSchemas && schemaItems.length > 0) {
     schemas = [
       {
         type: "category" as const,
