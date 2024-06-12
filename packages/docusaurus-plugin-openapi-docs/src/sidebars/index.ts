@@ -78,17 +78,22 @@ function groupByTags(
       .flatMap((item) => item.api.tags)
       .filter((item): item is string => !!item)
   );
+  const schemaTags = uniq(
+    schemaItems
+      .flatMap((item) => item.schema["x-tags"])
+      .filter((item): item is string => !!item)
+  );
 
-  // Combine globally defined tags with operation tags
-  // Only include global tag if referenced in operation tags
+  // Combine globally defined tags with operation and schema tags
+  // Only include global tag if referenced in operation/schema tags
   let apiTags: string[] = [];
   tags.flat().forEach((tag) => {
     // Should we also check x-displayName?
-    if (operationTags.includes(tag.name!)) {
+    if (operationTags.includes(tag.name!) || schemaTags.includes(tag.name!)) {
       apiTags.push(tag.name!);
     }
   });
-  apiTags = uniq(apiTags.concat(operationTags));
+  apiTags = uniq(apiTags.concat(operationTags, schemaTags));
 
   const basePath = docPath
     ? outputDir.split(docPath!)[1].replace(/^\/+/g, "")
