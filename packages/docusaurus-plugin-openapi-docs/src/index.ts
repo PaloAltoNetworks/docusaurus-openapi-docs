@@ -477,7 +477,7 @@ custom_edit_url: null
       cwd: path.resolve(apiDir, "schemas"),
       deep: 1,
     });
-    const sidebarFile = await Globby(["sidebar.js"], {
+    const sidebarFile = await Globby(["sidebar.{js,ts}"], {
       cwd: path.resolve(apiDir),
       deep: 1,
     });
