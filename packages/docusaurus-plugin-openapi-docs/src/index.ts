@@ -567,7 +567,7 @@ custom_edit_url: null
   }
 
   return {
-    name: `docusaurus-plugin-openapi-docs`,
+    name: `@port-labs/docusaurus-plugin-openapi-docs`,
 
     extendCli(cli): void {
       cli

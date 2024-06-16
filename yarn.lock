@@ -6751,12 +6751,66 @@ doctrine@^3.0.0:
   dependencies:
     esutils "^2.0.2"
 
+docusaurus-plugin-openapi-docs@^2.1.3:
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/docusaurus-plugin-openapi-docs/-/docusaurus-plugin-openapi-docs-2.1.3.tgz#5d7247243f5888a2869462e56fb94ec9358845fc"
+  integrity sha512-RAwsZiR0foz6jqyasskysod1+0o/VO9iL2pq9KRIS4WuOAlHZ/o8ZQ0hdOBjtH93XNcHJaasf8HyBwGleSNNpw==
+  dependencies:
+    "@apidevtools/json-schema-ref-parser" "^11.5.4"
+    "@docusaurus/plugin-content-docs" ">=2.4.1 <=2.4.3"
+    "@docusaurus/utils" ">=2.4.1 <=2.4.3"
+    "@docusaurus/utils-validation" ">=2.4.1 <=2.4.3"
+    "@paloaltonetworks/openapi-to-postmanv2" "3.1.0-hotfix.1"
+    "@paloaltonetworks/postman-collection" "^4.1.0"
+    "@redocly/openapi-core" "^1.10.5"
+    chalk "^4.1.2"
+    clsx "^1.1.1"
+    fs-extra "^9.0.1"
+    json-pointer "^0.6.2"
+    json-schema-merge-allof "^0.8.1"
+    lodash "^4.17.20"
+    mustache "^4.2.0"
+    slugify "^1.6.5"
+    swagger2openapi "^7.0.8"
+    xml-formatter "^2.6.1"
+
 docusaurus-plugin-sass@^0.2.3:
   version "0.2.5"
   resolved "https://registry.yarnpkg.com/docusaurus-plugin-sass/-/docusaurus-plugin-sass-0.2.5.tgz#6bfb8a227ac6265be685dcbc24ba1989e27b8005"
   integrity sha512-Z+D0fLFUKcFpM+bqSUmqKIU+vO+YF1xoEQh5hoFreg2eMf722+siwXDD+sqtwU8E4MvVpuvsQfaHwODNlxJAEg==
   dependencies:
     sass-loader "^10.1.1"
+
+docusaurus-theme-openapi-docs@^2.1.3:
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/docusaurus-theme-openapi-docs/-/docusaurus-theme-openapi-docs-2.1.3.tgz#5e2a814735417c407e3d214116f53587f54c3661"
+  integrity sha512-VAlvdT4TeKg89z6UakNbI6LHzl2hjZlm2kFySLc1F4Ek9sdorAoUBa+uoxjxhGaFnAIGCrSk3/mzSsdGvIAuCw==
+  dependencies:
+    "@docusaurus/theme-common" ">=2.4.1 <=2.4.3"
+    "@hookform/error-message" "^2.0.1"
+    "@paloaltonetworks/postman-code-generators" "1.1.15-patch.2"
+    "@paloaltonetworks/postman-collection" "^4.1.0"
+    "@reduxjs/toolkit" "^1.7.1"
+    clsx "^1.1.1"
+    copy-text-to-clipboard "^3.1.0"
+    crypto-js "^4.1.1"
+    docusaurus-plugin-openapi-docs "^2.1.3"
+    docusaurus-plugin-sass "^0.2.3"
+    file-saver "^2.0.5"
+    lodash "^4.17.20"
+    node-polyfill-webpack-plugin "^2.0.1"
+    prism-react-renderer "^1.3.5"
+    react-hook-form "^7.43.8"
+    react-live "^4.0.0"
+    react-magic-dropzone "^1.0.1"
+    react-markdown "^8.0.1"
+    react-modal "^3.15.1"
+    react-redux "^7.2.0"
+    rehype-raw "^6.1.1"
+    sass "^1.58.1"
+    sass-loader "^13.3.2"
+    webpack "^5.61.0"
+    xml-formatter "^2.6.1"
 
 dom-accessibility-api@^0.5.6, dom-accessibility-api@^0.5.9:
   version "0.5.16"
@@ -6893,9 +6947,9 @@ ee-first@1.1.1:
   integrity sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==
 
 ejs@^3.1.7:
-  version "3.1.9"
-  resolved "https://registry.yarnpkg.com/ejs/-/ejs-3.1.9.tgz#03c9e8777fe12686a9effcef22303ca3d8eeb361"
-  integrity sha512-rC+QVNMJWv+MtPgkt0y+0rVEIdbtxVADApW9JXrUVlzHetgcyczP/E7DJmWJ4fJCZF2cPcBk0laWO9ZHMG3DmQ==
+  version "3.1.10"
+  resolved "https://registry.yarnpkg.com/ejs/-/ejs-3.1.10.tgz#69ab8358b14e896f80cc39e62087b88500c3ac3b"
+  integrity sha512-UeJmFfOrAQS8OJWPZ4qtgHyWExa088/MtK5UEyoJGFH67cDEXkZSviOiKRCZ4Xij0zxI3JECgYs3oKx+AizQBA==
   dependencies:
     jake "^10.8.5"
 

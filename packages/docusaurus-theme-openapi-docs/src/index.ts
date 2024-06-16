@@ -13,7 +13,7 @@ const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 
 export default function docusaurusThemeOpenAPI(): Plugin<void> {
   return {
-    name: "docusaurus-theme-openapi",
+    name: "@port-labs/docusaurus-theme-openapi",
 
     getClientModules() {
       const modules = [
