@@ -31,6 +31,10 @@ describe("openapi", () => {
 
       expect(yaml?.data.tags).toBeDefined();
       expect(yaml?.data["x-tagGroups"]).toBeDefined();
+
+      expect(
+        yaml?.data.components?.schemas?.HelloString["x-tags"]
+      ).toBeDefined();
     });
   });
 });

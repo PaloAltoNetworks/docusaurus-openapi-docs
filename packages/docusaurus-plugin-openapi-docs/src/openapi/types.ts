@@ -352,6 +352,7 @@ export type SchemaObject = Omit<
   externalDocs?: ExternalDocumentationObject;
   example?: any;
   deprecated?: boolean;
+  "x-tags"?: string[];
 };
 
 export type SchemaObjectWithRef = Omit<

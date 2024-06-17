@@ -13,6 +13,7 @@ import { SchemaObject } from "../openapi/types";
 describe("createNodes", () => {
   it("should create readable MODs for oneOf primitive properties", async () => {
     const schema: SchemaObject = {
+      "x-tags": ["clown"],
       type: "object",
       properties: {
         oneOfProperty: {

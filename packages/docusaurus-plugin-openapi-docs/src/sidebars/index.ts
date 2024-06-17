@@ -25,6 +25,7 @@ import type {
   APIOptions,
   ApiPageMetadata,
   ApiMetadata,
+  InfoPageMetadata,
   SchemaPageMetadata,
 } from "../types";
 
@@ -41,13 +42,13 @@ function isSchemaItem(item: ApiMetadata): item is ApiMetadata {
 }
 
 function groupByTags(
-  items: ApiPageMetadata[],
+  items: ApiMetadata[],
   sidebarOptions: SidebarOptions,
   options: APIOptions,
   tags: TagObject[][],
   docPath: string
 ): ProcessedSidebar {
-  let { outputDir, label } = options;
+  let { outputDir, label, showSchemas } = options;
 
   // Remove trailing slash before proceeding
   outputDir = outputDir.replace(/\/$/, "");
@@ -59,9 +60,9 @@ function groupByTags(
     categoryLinkSource,
   } = sidebarOptions;
 
-  const apiItems = items.filter(isApiItem);
-  const infoItems = items.filter(isInfoItem);
-  const schemaItems = items.filter(isSchemaItem);
+  const apiItems = items.filter(isApiItem) as ApiPageMetadata[];
+  const infoItems = items.filter(isInfoItem) as InfoPageMetadata[];
+  const schemaItems = items.filter(isSchemaItem) as SchemaPageMetadata[];
   const intros = infoItems.map((item: any) => {
     return {
       id: item.id,
@@ -77,17 +78,22 @@ function groupByTags(
       .flatMap((item) => item.api.tags)
       .filter((item): item is string => !!item)
   );
+  const schemaTags = uniq(
+    schemaItems
+      .flatMap((item) => item.schema["x-tags"])
+      .filter((item): item is string => !!item)
+  );
 
-  // Combine globally defined tags with operation tags
-  // Only include global tag if referenced in operation tags
+  // Combine globally defined tags with operation and schema tags
+  // Only include global tag if referenced in operation/schema tags
   let apiTags: string[] = [];
   tags.flat().forEach((tag) => {
     // Should we also check x-displayName?
-    if (operationTags.includes(tag.name!)) {
+    if (operationTags.includes(tag.name!) || schemaTags.includes(tag.name!)) {
       apiTags.push(tag.name!);
     }
   });
-  apiTags = uniq(apiTags.concat(operationTags));
+  apiTags = uniq(apiTags.concat(operationTags, schemaTags));
 
   const basePath = docPath
     ? outputDir.split(docPath!)[1].replace(/^\/+/g, "")
@@ -107,9 +113,12 @@ function groupByTags(
             },
             item.api.method
           )
-        : clsx({
-            "menu__list-item--deprecated": item.schema.deprecated,
-          });
+        : clsx(
+            {
+              "menu__list-item--deprecated": item.schema.deprecated,
+            },
+            "schema"
+          );
     return {
       type: "doc" as const,
       id: basePath === "" || undefined ? `${id}` : `${basePath}/${id}`,
@@ -183,15 +192,20 @@ function groupByTags(
         } as SidebarItemCategoryLinkConfig;
       }
 
+      const taggedApiItems = apiItems.filter(
+        (item) => !!item.api.tags?.includes(tag)
+      );
+      const taggedSchemaItems = schemaItems.filter(
+        (item) => !!item.schema["x-tags"]?.includes(tag)
+      );
+
       return {
         type: "category" as const,
         label: tagObject?.["x-displayName"] ?? tag,
         link: linkConfig,
         collapsible: sidebarCollapsible,
         collapsed: sidebarCollapsed,
-        items: apiItems
-          .filter((item) => !!item.api.tags?.includes(tag))
-          .map(createDocItem),
+        items: [...taggedSchemaItems, ...taggedApiItems].map(createDocItem),
       };
     })
     .filter((item) => item.items.length > 0); // Filter out any categories with no items.
@@ -216,14 +230,16 @@ function groupByTags(
   }
 
   let schemas: SidebarItemCategory[] = [];
-  if (schemaItems.length > 0) {
+  if (showSchemas && schemaItems.length > 0) {
     schemas = [
       {
         type: "category" as const,
         label: "Schemas",
         collapsible: sidebarCollapsible!,
         collapsed: sidebarCollapsed!,
-        items: schemaItems.map(createDocItem),
+        items: schemaItems
+          .filter(({ schema }) => !schema["x-tags"])
+          .map(createDocItem),
       },
     ];
   }
@@ -263,7 +279,7 @@ export default function generateSidebarSlice(
         collapsible: true,
         collapsed: true,
         items: groupByTags(
-          api as ApiPageMetadata[],
+          api,
           sidebarOptions,
           options,
           [filteredTags],
@@ -274,13 +290,7 @@ export default function generateSidebarSlice(
       sidebarSlice.push(groupCategory);
     });
   } else if (sidebarOptions.groupPathsBy === "tag") {
-    sidebarSlice = groupByTags(
-      api as ApiPageMetadata[],
-      sidebarOptions,
-      options,
-      tags,
-      docPath
-    );
+    sidebarSlice = groupByTags(api, sidebarOptions, options, tags, docPath);
   }
 
   return sidebarSlice;

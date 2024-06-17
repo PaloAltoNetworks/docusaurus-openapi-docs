@@ -40,3 +40,10 @@ x-tagGroups:
     tags:
       - tag3
       - tag4
+
+components:
+  schemas:
+    HelloString:
+      x-tags:
+        - tag1
+      type: string
