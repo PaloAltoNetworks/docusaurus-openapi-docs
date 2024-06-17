@@ -188,7 +188,7 @@ export default function ApiItem(props: Props): JSX.Element {
         <DocItemMetadata />
         <DocItemLayout>
           <div className="row">
-            <div className="col col--12">
+            <div className="col col--12 markdown">
               <MDXComponent />
             </div>
           </div>
