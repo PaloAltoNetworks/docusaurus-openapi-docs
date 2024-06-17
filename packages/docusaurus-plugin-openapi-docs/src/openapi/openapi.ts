@@ -410,43 +410,53 @@ function createItems(
     }
   }
 
-  if (options?.showSchemas === true) {
+  if (
+    options?.showSchemas === true ||
+    Object.entries(openapiData?.components?.schemas ?? {})
+      .flatMap(([_, s]) => s["x-tags"])
+      .filter((item) => !!item).length > 0
+  ) {
     // Gather schemas
     for (let [schema, schemaObject] of Object.entries(
       openapiData?.components?.schemas ?? {}
     )) {
-      const baseIdSpaces =
-        schemaObject?.title?.replace(" ", "-").toLowerCase() ?? "";
-      const baseId = kebabCase(baseIdSpaces);
+      if (options?.showSchemas === true || schemaObject["x-tags"]) {
+        const baseIdSpaces =
+          schemaObject?.title?.replace(" ", "-").toLowerCase() ?? "";
+        const baseId = kebabCase(baseIdSpaces);
 
-      const schemaDescription = schemaObject.description;
-      let splitDescription: any;
-      if (schemaDescription) {
-        splitDescription = schemaDescription.match(/[^\r\n]+/g);
-      }
+        const schemaDescription = schemaObject.description;
+        let splitDescription: any;
+        if (schemaDescription) {
+          splitDescription = schemaDescription.match(/[^\r\n]+/g);
+        }
 
-      const schemaPage: PartialPage<SchemaPageMetadata> = {
-        type: "schema",
-        id: baseId,
-        infoId: infoId ?? "",
-        unversionedId: baseId,
-        title: schemaObject.title
-          ? schemaObject.title.replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
-          : schema,
-        description: schemaObject.description
-          ? schemaObject.description.replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
-          : "",
-        frontMatter: {
-          description: splitDescription
-            ? splitDescription[0]
-                .replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
-                .replace(/\s+$/, "")
+        const schemaPage: PartialPage<SchemaPageMetadata> = {
+          type: "schema",
+          id: baseId,
+          infoId: infoId ?? "",
+          unversionedId: baseId,
+          title: schemaObject.title
+            ? schemaObject.title.replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
+            : schema,
+          description: schemaObject.description
+            ? schemaObject.description.replace(
+                /((?:^|[^\\])(?:\\{2})*)"/g,
+                "$1'"
+              )
             : "",
-        },
-        schema: schemaObject,
-      };
+          frontMatter: {
+            description: splitDescription
+              ? splitDescription[0]
+                  .replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
+                  .replace(/\s+$/, "")
+              : "",
+          },
+          schema: schemaObject,
+        };
 
-      items.push(schemaPage);
+        items.push(schemaPage);
+      }
     }
   }
 

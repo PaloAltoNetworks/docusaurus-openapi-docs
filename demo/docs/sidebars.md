@@ -66,3 +66,9 @@ The OpenAPI Docs plugin can leverage this feature in a number of ways, including
 - Using the `generated-index` feature to create an index of all paths/endpoints available under a tag.
 - Setting the `tag` description of an OpenAPI specification as the content that displays when a category is clicked.
 - Setting the `info` section of an OpenAPI specification as the page that displays when a category is clicked (reserved primarily for micro-specs).
+
+### Grouping Schemas by `x-tags`
+
+The OpenAPI plugin provides out-of-the-box support for grouping schema objects into tags alongside path objects grouped by that same tag.
+
+What this means is that when the `groupPathsBy` sidebar option is set to `tag`, any `x-tag`ged schema objects will be gathered together with the tagged paths in that sidebar category. In the event that `showSchemas` is not configured, and `x-tags` is found on a schema object, the schema **will be included** in the relevant tag's category sidebar.

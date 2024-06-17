@@ -37,13 +37,15 @@ a:any-link:hover {
 }
 
 /* Sidebar Method labels */
-.api-method > .menu__link {
+.api-method > .menu__link,
+.schema > .menu__link {
   align-items: center;
   justify-content: start;
 }
 
-.api-method > .menu__link::before {
-  width: 50px;
+.api-method > .menu__link::before,
+.schema > .menu__link::before {
+  width: 55px;
   height: 20px;
   font-size: 12px;
   line-height: 20px;
@@ -90,6 +92,11 @@ a:any-link:hover {
 
 .event > .menu__link::before {
   content: "event";
+  background-color: var(--ifm-color-secondary-darkest);
+}
+
+.schema > .menu__link::before {
+  content: "schema";
   background-color: var(--ifm-color-secondary-darkest);
 }
 
