@@ -61,7 +61,7 @@ export const lessThan =
 export const greaterThan =
   /(?<!(button|code|details|summary|hr|br|span|strong|small|table|thead|tbody|td|tr|th|h1|h2|h3|h4|h5|h6|title|p|em|b|i|u|strike|bold|a|li|ol|ul|img|svg|div|center|\/|\s|"|'))>/gu;
 export const codeFence = /`{1,3}[\s\S]*?`{1,3}/g;
-export const curlyBrackets = /([{|}])/g;
+export const curlyBrackets = /([{}])/g;
 export const codeBlock = /(^```.*[\s\S]*?```$|`[^`].+?`)/gm;
 
 export function clean(value: string | undefined): string {
