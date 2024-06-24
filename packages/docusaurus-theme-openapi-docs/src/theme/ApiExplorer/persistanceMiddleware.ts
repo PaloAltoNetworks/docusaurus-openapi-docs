@@ -19,6 +19,7 @@ import { createStorage, hashArray } from "./storage-utils";
 export function createPersistanceMiddleware(options: ThemeConfig["api"]) {
   const persistanceMiddleware: Middleware<{}, RootState, AppDispatch> =
     (storeAPI) => (next) => (action) => {
+      console.log(action);
       const result = next(action);
 
       const state = storeAPI.getState();
@@ -45,13 +46,13 @@ export function createPersistanceMiddleware(options: ThemeConfig["api"]) {
       }
 
       // TODO: determine way to rehydrate without flashing
-      // if (action.type === "contentType/setContentType") {
-      //   storage.setItem("contentType", action.payload);
-      // }
+      if (action.type === "contentType/setContentType") {
+        storage.setItem("contentType", action.payload);
+      }
 
-      // if (action.type === "accept/setAccept") {
-      //   storage.setItem("accept", action.payload);
-      // }
+      if (action.type === "accept/setAccept") {
+        storage.setItem("accept", action.payload);
+      }
 
       if (action.type === "server/setServer") {
         storage.setItem("server", action.payload);

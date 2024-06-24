@@ -21,7 +21,7 @@ import {
 } from "@docusaurus/theme-common/internal";
 import { TabItemProps } from "@docusaurus/theme-common/lib/utils/tabsUtils";
 import useIsBrowser from "@docusaurus/useIsBrowser";
-import setAccept from "@theme/ApiExplorer/Accept/slice";
+import { setAccept } from "@theme/ApiExplorer/Accept/slice";
 import { setContentType } from "@theme/ApiExplorer/ContentType/slice";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import { RootState } from "@theme/ApiItem/store";
