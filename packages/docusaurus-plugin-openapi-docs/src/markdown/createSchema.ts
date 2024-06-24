@@ -594,6 +594,18 @@ function createEdges({
   required,
   discriminator,
 }: EdgeProps): any {
+  if (SCHEMA_TYPE === "request") {
+    if (schema.readOnly && schema.readOnly === true) {
+      return undefined;
+    }
+  }
+
+  if (SCHEMA_TYPE === "response") {
+    if (schema.writeOnly && schema.writeOnly === true) {
+      return undefined;
+    }
+  }
+
   const schemaName = getSchemaName(schema);
   if (discriminator !== undefined && discriminator.propertyName === name) {
     return createPropertyDiscriminator(
@@ -619,6 +631,19 @@ function createEdges({
     const { mergedSchemas }: { mergedSchemas: SchemaObject } = mergeAllOf(
       schema.allOf
     );
+
+    if (SCHEMA_TYPE === "request") {
+      if (mergedSchemas.readOnly && mergedSchemas.readOnly === true) {
+        return undefined;
+      }
+    }
+
+    if (SCHEMA_TYPE === "response") {
+      if (mergedSchemas.writeOnly && mergedSchemas.writeOnly === true) {
+        return undefined;
+      }
+    }
+
     const mergedSchemaName = getSchemaName(mergedSchemas);
     if (
       mergedSchemas.oneOf !== undefined ||
@@ -662,18 +687,6 @@ function createEdges({
         required,
         schema.nullable
       );
-    }
-
-    if (SCHEMA_TYPE === "request") {
-      if (mergedSchemas.readOnly && mergedSchemas.readOnly === true) {
-        return undefined;
-      }
-    }
-
-    if (SCHEMA_TYPE === "response") {
-      if (mergedSchemas.writeOnly && mergedSchemas.writeOnly === true) {
-        return undefined;
-      }
     }
 
     return create("SchemaItem", {
@@ -727,18 +740,6 @@ function createEdges({
     );
   }
 
-  if (SCHEMA_TYPE === "request") {
-    if (schema.readOnly && schema.readOnly === true) {
-      return undefined;
-    }
-  }
-
-  if (SCHEMA_TYPE === "response") {
-    if (schema.writeOnly && schema.writeOnly === true) {
-      return undefined;
-    }
-  }
-
   // primitives and array of non-objects
   return create("SchemaItem", {
     collapsible: false,
@@ -758,6 +759,17 @@ export function createNodes(
   schemaType: "request" | "response"
 ): any {
   SCHEMA_TYPE = schemaType;
+  if (SCHEMA_TYPE === "request") {
+    if (schema.readOnly && schema.readOnly === true) {
+      return undefined;
+    }
+  }
+
+  if (SCHEMA_TYPE === "response") {
+    if (schema.writeOnly && schema.writeOnly === true) {
+      return undefined;
+    }
+  }
   const nodes = [];
   // if (schema.discriminator !== undefined) {
   //   return createDiscriminator(schema);
