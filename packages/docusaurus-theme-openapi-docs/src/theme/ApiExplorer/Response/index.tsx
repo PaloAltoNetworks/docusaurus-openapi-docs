@@ -88,7 +88,10 @@ function Response({ item }: { item: NonNullable<ApiItem> }) {
       </div>
       <div
         style={{
-          backgroundColor: prismTheme.plain.backgroundColor,
+          backgroundColor:
+            code && prettyResponse !== "Fetching..."
+              ? prismTheme.plain.backgroundColor
+              : "transparent",
           paddingLeft: "1rem",
           paddingTop: "1rem",
           ...((prettyResponse === "Fetching..." || !code) && {
