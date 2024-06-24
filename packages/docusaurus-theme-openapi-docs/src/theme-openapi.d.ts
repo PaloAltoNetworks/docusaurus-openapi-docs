@@ -74,6 +74,7 @@ declare module "@theme/ApiExplorer/Accept" {
 }
 
 declare module "@theme/ApiExplorer/Accept/slice" {
+  export { setAccept };
   export default accept as Reducer<State, AnyAction>;
 }
 
