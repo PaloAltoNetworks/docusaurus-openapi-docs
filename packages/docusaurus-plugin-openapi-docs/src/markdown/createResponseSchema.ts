@@ -60,12 +60,6 @@ export function createResponseSchema({ title, body, ...rest }: Props) {
           return undefined;
         }
 
-        if (firstBody?.properties !== undefined) {
-          if (Object.keys(firstBody?.properties).length === 0) {
-            return undefined;
-          }
-        }
-
         return create("TabItem", {
           label: `${mimeType}`,
           value: `${mimeType}`,

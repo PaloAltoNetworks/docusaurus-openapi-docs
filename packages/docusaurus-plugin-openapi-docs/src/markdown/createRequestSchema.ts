@@ -108,12 +108,6 @@ export function createRequestSchema({ title, body, ...rest }: Props) {
     return undefined;
   }
 
-  // we don't show the table if there is no properties to show
-  if (firstBody.properties !== undefined) {
-    if (Object.keys(firstBody.properties).length === 0) {
-      return undefined;
-    }
-  }
   return create("MimeTabs", {
     className: "openapi-tabs__mime",
     children: [

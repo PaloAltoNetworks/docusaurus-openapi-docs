@@ -129,6 +129,16 @@ function createAnyOneOf(schema: SchemaObject): any {
  */
 function createProperties(schema: SchemaObject) {
   const discriminator = schema.discriminator;
+  if (Object.keys(schema.properties!).length === 0) {
+    return create("SchemaItem", {
+      collapsible: false,
+      name: "",
+      required: false,
+      schemaName: "object",
+      qualifierMessage: undefined,
+      schema: {},
+    });
+  }
   return Object.entries(schema.properties!).map(([key, val]) => {
     return createEdges({
       name: key,
