@@ -43,6 +43,17 @@ paths:
         200:
           description: OK
 
+components:
+  schemas:
+    Payment:
+      type: object
+      properties:
+        amount:
+          type: number
+        method:
+          type: string
+          enum: [cash, card, check]
+
 tags:
   - name: tag1
     description: Everything about your restaurant
