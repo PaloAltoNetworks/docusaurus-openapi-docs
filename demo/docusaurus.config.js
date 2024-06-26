@@ -263,6 +263,7 @@ const config = {
             sidebarOptions: {
               groupPathsBy: "tagGroup",
             },
+            showSchemas: true,
           },
         },
       },
