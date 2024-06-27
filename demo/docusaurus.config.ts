@@ -266,6 +266,7 @@ const config: Config = {
             sidebarOptions: {
               groupPathsBy: "tagGroup",
             },
+            showSchemas: true,
           } satisfies OpenApiPlugin.Options,
         } satisfies Plugin.PluginOptions,
       },

@@ -267,6 +267,7 @@ export default function generateSidebarSlice(
   let sidebarSlice: ProcessedSidebar = [];
 
   if (sidebarOptions.groupPathsBy === "tagGroup") {
+    let schemasGroup: ProcessedSidebar = [];
     tagGroups?.forEach((tagGroup) => {
       //filter tags only included in group
       const filteredTags: TagObject[] = [];
@@ -288,10 +289,24 @@ export default function generateSidebarSlice(
           [filteredTags],
           docPath
         ),
-      } as ProcessedSidebarItem;
+      };
 
-      sidebarSlice.push(groupCategory);
+      if (options.showSchemas) {
+        // For the first tagGroup, save the generated "Schemas" category for later.
+        if (schemasGroup.length === 0) {
+          schemasGroup = groupCategory.items?.filter(
+            (item) => item.type === "category" && item.label === "Schemas"
+          );
+        }
+        // Remove the "Schemas" category from every `groupCategory`.
+        groupCategory.items = groupCategory.items.filter((item) =>
+          "label" in item ? item.label !== "Schemas" : true
+        );
+      }
+      sidebarSlice.push(groupCategory as ProcessedSidebarItem);
     });
+    // Add `schemasGroup` to the end of the sidebar.
+    sidebarSlice.push(...schemasGroup);
   } else if (sidebarOptions.groupPathsBy === "tag") {
     sidebarSlice = groupByTags(api, sidebarOptions, options, tags, docPath);
   }
