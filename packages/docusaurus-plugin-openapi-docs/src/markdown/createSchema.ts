@@ -6,6 +6,7 @@
  * ========================================================================== */
 
 import clsx from "clsx";
+import isEmpty from "lodash/isEmpty";
 
 import {
   createClosingArrayBracket,
@@ -156,27 +157,29 @@ function createProperties(schema: SchemaObject) {
  */
 function createAdditionalProperties(schema: SchemaObject) {
   const additionalProperties = schema.additionalProperties;
-  const type: string | unknown = additionalProperties?.type;
+  if (!additionalProperties) return [];
+
   // Handle free-form objects
-  if (String(additionalProperties) === "true" && schema.type === "object") {
+  if (additionalProperties === true || isEmpty(additionalProperties)) {
     return create("SchemaItem", {
       name: "property name*",
       required: false,
       schemaName: "any",
-      qualifierMessage: getQualifierMessage(schema.additionalProperties),
+      qualifierMessage: getQualifierMessage(schema),
       schema: schema,
       collapsible: false,
       discriminator: false,
     });
   }
+
+  // objects, arrays, complex schemas
   if (
-    (type === "object" || type === "array") &&
-    (additionalProperties?.properties ||
-      additionalProperties?.items ||
-      additionalProperties?.allOf ||
-      additionalProperties?.additionalProperties ||
-      additionalProperties?.oneOf ||
-      additionalProperties?.anyOf)
+    additionalProperties.properties ||
+    additionalProperties.items ||
+    additionalProperties.allOf ||
+    additionalProperties.additionalProperties ||
+    additionalProperties.oneOf ||
+    additionalProperties.anyOf
   ) {
     const title = additionalProperties.title as string;
     const schemaName = getSchemaName(additionalProperties);
@@ -190,52 +193,27 @@ function createAdditionalProperties(schema: SchemaObject) {
     );
   }
 
+  // primitive types
   if (
-    (schema.additionalProperties?.type as string) === "string" ||
-    (schema.additionalProperties?.type as string) === "object" ||
-    (schema.additionalProperties?.type as string) === "boolean" ||
-    (schema.additionalProperties?.type as string) === "integer" ||
-    (schema.additionalProperties?.type as string) === "number"
+    additionalProperties.type === "string" ||
+    additionalProperties.type === "boolean" ||
+    additionalProperties.type === "integer" ||
+    additionalProperties.type === "number"
   ) {
-    const additionalProperties =
-      schema.additionalProperties?.additionalProperties;
-    if (additionalProperties !== undefined) {
-      const type = schema.additionalProperties?.additionalProperties?.type;
-      const schemaName = getSchemaName(
-        schema.additionalProperties?.additionalProperties!
-      );
-      return create("SchemaItem", {
-        name: "property name*",
-        required: false,
-        schemaName: schemaName ?? type,
-        qualifierMessage:
-          schema.additionalProperties ??
-          getQualifierMessage(schema.additionalProperties),
-        schema: schema,
-        collapsible: false,
-        discriminator: false,
-      });
-    }
-    const schemaName = getSchemaName(schema.additionalProperties!);
+    const schemaName = getSchemaName(additionalProperties);
     return create("SchemaItem", {
       name: "property name*",
       required: false,
       schemaName: schemaName,
       qualifierMessage: getQualifierMessage(schema),
-      schema: schema.additionalProperties,
+      schema: additionalProperties,
       collapsible: false,
       discriminator: false,
     });
   }
-  return Object.entries(schema.additionalProperties!).map(([key, val]) =>
-    createEdges({
-      name: key,
-      schema: val,
-      required: Array.isArray(schema.required)
-        ? schema.required.includes(key)
-        : false,
-    })
-  );
+
+  // unknown
+  return [];
 }
 
 /**
@@ -792,7 +770,13 @@ export function createNodes(
   if (schema.allOf !== undefined) {
     const { mergedSchemas } = mergeAllOf(schema.allOf);
 
-    // allOf seems to always result in properties
+    if (
+      mergedSchemas.oneOf !== undefined ||
+      mergedSchemas.anyOf !== undefined
+    ) {
+      nodes.push(createAnyOneOf(mergedSchemas));
+    }
+
     if (mergedSchemas.properties !== undefined) {
       nodes.push(createProperties(mergedSchemas));
     }

@@ -1,5 +1,226 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`createNodes additionalProperties should handle additionalProperties: {"allOf": [Array]} 1`] = `
+Array [
+  "<SchemaItem collapsible={true} className={\\"schemaItem\\"}>
+  <details style={{}} className={\\"openapi-markdown__details\\"}>
+    <summary style={{}}>
+      <span className={\\"openapi-schema__container\\"}>
+        <strong className={\\"openapi-schema__property\\"}>property name*</strong>
+        <span className={\\"openapi-schema__name\\"}>object</span>
+      </span>
+    </summary>
+    <div style={{ marginLeft: \\"1rem\\" }}>
+      <div>
+        <span className={\\"badge badge--info\\"}>oneOf</span>
+        <SchemaTabs>
+          <TabItem label={\\"MOD1\\"} value={\\"0-item-properties\\"}>
+            <SchemaItem
+              collapsible={false}
+              name={\\"type\\"}
+              required={true}
+              schemaName={\\"string\\"}
+              qualifierMessage={\\"**Possible values:** [\`nose\`]\\"}
+              schema={{ type: \\"string\\", enum: [\\"nose\\"] }}
+            ></SchemaItem>
+          </TabItem>
+          <TabItem label={\\"MOD2\\"} value={\\"1-item-properties\\"}>
+            <SchemaItem
+              collapsible={false}
+              name={\\"type\\"}
+              required={true}
+              schemaName={\\"string\\"}
+              qualifierMessage={\\"**Possible values:** [\`mouth\`]\\"}
+              schema={{ type: \\"string\\", enum: [\\"mouth\\"] }}
+            ></SchemaItem>
+          </TabItem>
+          <TabItem label={\\"MOD3\\"} value={\\"2-item-properties\\"}>
+            <SchemaItem
+              collapsible={false}
+              name={\\"type\\"}
+              required={true}
+              schemaName={\\"string\\"}
+              qualifierMessage={\\"**Possible values:** [\`eyes\`]\\"}
+              schema={{ type: \\"string\\", enum: [\\"eyes\\"] }}
+            ></SchemaItem>
+            <SchemaItem
+              collapsible={false}
+              name={\\"default\\"}
+              required={false}
+              schemaName={\\"string\\"}
+              qualifierMessage={undefined}
+              schema={{ type: \\"string\\" }}
+            ></SchemaItem>
+          </TabItem>
+        </SchemaTabs>
+      </div>
+      <SchemaItem
+        collapsible={false}
+        name={\\"description\\"}
+        required={true}
+        schemaName={\\"string\\"}
+        qualifierMessage={undefined}
+        schema={{
+          type: \\"string\\",
+          description: \\"Description of the body part.\\",
+        }}
+      ></SchemaItem>
+    </div>
+  </details>
+</SchemaItem>;
+",
+]
+`;
+
+exports[`createNodes additionalProperties should handle additionalProperties: {"items": [Object], "type": "array"} 1`] = `
+Array [
+  "<SchemaItem collapsible={true} className={\\"schemaItem\\"}>
+  <details style={{}} className={\\"openapi-markdown__details\\"}>
+    <summary style={{}}>
+      <span className={\\"openapi-schema__container\\"}>
+        <strong className={\\"openapi-schema__property\\"}>property name*</strong>
+        <span className={\\"openapi-schema__name\\"}>object[]</span>
+      </span>
+    </summary>
+    <div style={{ marginLeft: \\"1rem\\" }}>
+      <li>
+        <div
+          style={{
+            fontSize: \\"var(--ifm-code-font-size)\\",
+            opacity: \\"0.6\\",
+            marginLeft: \\"-.5rem\\",
+            paddingBottom: \\".5rem\\",
+          }}
+        >
+          Array [
+        </div>
+      </li>
+      <SchemaItem
+        collapsible={false}
+        name={\\"a\\"}
+        required={false}
+        schemaName={\\"\\"}
+        qualifierMessage={undefined}
+        schema={\\"string\\"}
+      ></SchemaItem>
+      <SchemaItem
+        collapsible={false}
+        name={\\"b\\"}
+        required={false}
+        schemaName={\\"\\"}
+        qualifierMessage={undefined}
+        schema={\\"number\\"}
+      ></SchemaItem>
+      <li>
+        <div
+          style={{
+            fontSize: \\"var(--ifm-code-font-size)\\",
+            opacity: \\"0.6\\",
+            marginLeft: \\"-.5rem\\",
+          }}
+        >
+          ]
+        </div>
+      </li>
+    </div>
+  </details>
+</SchemaItem>;
+",
+]
+`;
+
+exports[`createNodes additionalProperties should handle additionalProperties: {"type": "boolean"} 1`] = `
+Array [
+  "<SchemaItem
+  name={\\"property name*\\"}
+  required={false}
+  schemaName={\\"boolean\\"}
+  qualifierMessage={undefined}
+  schema={{ type: \\"boolean\\" }}
+  collapsible={false}
+  discriminator={false}
+></SchemaItem>;
+",
+]
+`;
+
+exports[`createNodes additionalProperties should handle additionalProperties: {"type": "integer"} 1`] = `
+Array [
+  "<SchemaItem
+  name={\\"property name*\\"}
+  required={false}
+  schemaName={\\"integer\\"}
+  qualifierMessage={undefined}
+  schema={{ type: \\"integer\\" }}
+  collapsible={false}
+  discriminator={false}
+></SchemaItem>;
+",
+]
+`;
+
+exports[`createNodes additionalProperties should handle additionalProperties: {"type": "number"} 1`] = `
+Array [
+  "<SchemaItem
+  name={\\"property name*\\"}
+  required={false}
+  schemaName={\\"number\\"}
+  qualifierMessage={undefined}
+  schema={{ type: \\"number\\" }}
+  collapsible={false}
+  discriminator={false}
+></SchemaItem>;
+",
+]
+`;
+
+exports[`createNodes additionalProperties should handle additionalProperties: {"type": "string"} 1`] = `
+Array [
+  "<SchemaItem
+  name={\\"property name*\\"}
+  required={false}
+  schemaName={\\"string\\"}
+  qualifierMessage={undefined}
+  schema={{ type: \\"string\\" }}
+  collapsible={false}
+  discriminator={false}
+></SchemaItem>;
+",
+]
+`;
+
+exports[`createNodes additionalProperties should handle additionalProperties: {} 1`] = `
+Array [
+  "<SchemaItem
+  name={\\"property name*\\"}
+  required={false}
+  schemaName={\\"any\\"}
+  qualifierMessage={undefined}
+  schema={{ type: \\"object\\", additionalProperties: {} }}
+  collapsible={false}
+  discriminator={false}
+></SchemaItem>;
+",
+]
+`;
+
+exports[`createNodes additionalProperties should handle additionalProperties: false 1`] = `Array []`;
+
+exports[`createNodes additionalProperties should handle additionalProperties: true 1`] = `
+Array [
+  "<SchemaItem
+  name={\\"property name*\\"}
+  required={false}
+  schemaName={\\"any\\"}
+  qualifierMessage={undefined}
+  schema={{ type: \\"object\\", additionalProperties: true }}
+  collapsible={false}
+  discriminator={false}
+></SchemaItem>;
+",
+]
+`;
+
 exports[`createNodes should create readable MODs for oneOf primitive properties 1`] = `
 Array [
   "<SchemaItem collapsible={true} className={\\"schemaItem\\"}>
