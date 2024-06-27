@@ -93,7 +93,10 @@ function groupByTags(
       apiTags.push(tag.name!);
     }
   });
-  apiTags = uniq(apiTags.concat(operationTags, schemaTags));
+
+  if (sidebarOptions.groupPathsBy !== "tagGroup") {
+    apiTags = uniq(apiTags.concat(operationTags, schemaTags));
+  }
 
   const basePath = docPath
     ? outputDir.split(docPath!)[1].replace(/^\/+/g, "")
