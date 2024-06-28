@@ -686,6 +686,7 @@ custom_edit_url: null
           delete parentConfig.version;
           delete parentConfig.label;
           delete parentConfig.baseUrl;
+          delete parentConfig.downloadUrl;
 
           // TODO: handle when no versions are defined by version command is passed
           if (versionId === "all") {
