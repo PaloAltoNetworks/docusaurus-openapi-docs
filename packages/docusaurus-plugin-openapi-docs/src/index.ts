@@ -531,6 +531,7 @@ custom_edit_url: null
         version: version,
         label: metadata.label,
         baseUrl: metadata.baseUrl,
+        downloadUrl: metadata.downloadUrl,
       });
     }
 

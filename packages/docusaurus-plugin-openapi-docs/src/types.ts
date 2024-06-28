@@ -70,6 +70,7 @@ export interface APIVersionOptions {
   outputDir: string;
   label: string;
   baseUrl: string;
+  downloadUrl?: string;
 }
 
 export interface LoadedContent {
