@@ -218,12 +218,16 @@ const config = {
             version: "2.0.0", // Current version
             label: "v2.0.0", // Current version label
             baseUrl: "/petstore_versioned/swagger-petstore-yaml", // Leading slash is important
+            downloadUrl:
+              "https://raw.githubusercontent.com/PaloAltoNetworks/docusaurus-openapi-docs/main/demo/examples/petstore.yaml",
             versions: {
               "1.0.0": {
                 specPath: "examples/petstore-1.0.0.yaml",
                 outputDir: "docs/petstore_versioned/1.0.0", // No trailing slash
                 label: "v1.0.0",
                 baseUrl: "/petstore_versioned/1.0.0/swagger-petstore-yaml", // Leading slash is important
+                downloadUrl:
+                  "https://redocly.com/_spec/docs/openapi/petstore.json",
               },
             },
           },
