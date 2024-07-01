@@ -6,4 +6,4 @@
  * ========================================================================== */
 
 // TODO: Remove this when https://github.com/facebook/docusaurus/issues/6087 is resolved.
-declare module "@paloaltonetworks/postman-code-generators";
+declare module "postman-code-generators";
