@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import type Request from "@paloaltonetworks/postman-collection";
+import type Request from "postman-collection";
 
 import {
   InfoObject,

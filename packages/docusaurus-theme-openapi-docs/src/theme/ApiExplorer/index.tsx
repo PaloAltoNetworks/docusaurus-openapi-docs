@@ -7,11 +7,11 @@
 
 import React from "react";
 
-import sdk from "@paloaltonetworks/postman-collection";
 import CodeSnippets from "@theme/ApiExplorer/CodeSnippets";
 import Request from "@theme/ApiExplorer/Request";
 import Response from "@theme/ApiExplorer/Response";
 import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
+import sdk from "postman-collection";
 
 function ApiExplorer({
   item,

@@ -8,15 +8,15 @@
 import path from "path";
 
 import { Globby, GlobExcludeDefault, posixPath } from "@docusaurus/utils";
-import Converter from "@paloaltonetworks/openapi-to-postmanv2";
-import sdk from "@paloaltonetworks/postman-collection";
-import Collection from "@paloaltonetworks/postman-collection";
 import chalk from "chalk";
 import fs from "fs-extra";
 import cloneDeep from "lodash/cloneDeep";
 import kebabCase from "lodash/kebabCase";
 import unionBy from "lodash/unionBy";
 import uniq from "lodash/uniq";
+import Converter from "openapi-to-postmanv2";
+import Collection from "postman-collection";
+import sdk from "postman-collection";
 
 import { sampleRequestFromSchema } from "./createRequestExample";
 import { OpenApiObject, TagGroupObject, TagObject } from "./types";
