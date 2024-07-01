@@ -5,6 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-declare module "@paloaltonetworks/postman-collection" {
+declare module "postman-collection" {
   export default any;
 }

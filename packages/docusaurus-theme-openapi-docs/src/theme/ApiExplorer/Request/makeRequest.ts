@@ -5,8 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import sdk from "@paloaltonetworks/postman-collection";
 import { Body } from "@theme/ApiExplorer/Body/slice";
+import sdk from "postman-collection";
 
 function fetchWithtimeout(
   url: string,
