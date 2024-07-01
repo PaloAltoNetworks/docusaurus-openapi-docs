@@ -5,7 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import sdk from "@paloaltonetworks/postman-collection";
 import { AuthState, Scheme } from "@theme/ApiExplorer/Authorization/slice";
 import { Body, Content } from "@theme/ApiExplorer/Body/slice";
 import {
@@ -13,6 +12,7 @@ import {
   ServerObject,
 } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import cloneDeep from "lodash/cloneDeep";
+import sdk from "postman-collection";
 
 type Param = {
   value?: string | string[];
