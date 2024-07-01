@@ -59,6 +59,7 @@ export const OptionsSchema = Joi.object({
             outputDir: Joi.string().required(),
             label: Joi.string().required(),
             baseUrl: Joi.string().required(),
+            downloadUrl: Joi.string(),
           })
         ),
       })
