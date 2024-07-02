@@ -21,7 +21,7 @@ import sdk from "postman-collection";
 import { sampleRequestFromSchema } from "./createRequestExample";
 import { OpenApiObject, TagGroupObject, TagObject } from "./types";
 import { loadAndResolveSpec } from "./utils/loadAndResolveSpec";
-import { isUrlOrPath } from "../index";
+import { isURL } from "../index";
 import {
   ApiMetadata,
   APIOptions,
@@ -547,7 +547,7 @@ interface OpenApiFiles {
 export async function readOpenapiFiles(
   openapiPath: string
 ): Promise<OpenApiFiles[]> {
-  if (!isUrlOrPath(openapiPath)) {
+  if (!isURL(openapiPath)) {
     const stat = await fs.lstat(openapiPath);
     if (stat.isDirectory()) {
       // TODO: Add config for inlcude/ignore

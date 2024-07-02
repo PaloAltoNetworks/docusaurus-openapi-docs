@@ -35,8 +35,8 @@ import type {
   SchemaPageMetadata,
 } from "./types";
 
-export function isUrlOrPath(str: string): boolean {
-  return /^(https?:\/\/|\/[\w-]+).*$/i.test(str);
+export function isURL(str: string): boolean {
+  return /^(https?:)\/\//m.test(str);
 }
 
 export function getDocsPluginConfig(
@@ -133,7 +133,7 @@ export default function pluginOpenAPIDocs(
       docPath = docData ? (docData.path ? docData.path : "docs") : undefined;
     }
 
-    const contentPath = isUrlOrPath(specPath)
+    const contentPath = isURL(specPath)
       ? specPath
       : path.resolve(siteDir, specPath);
 
@@ -312,7 +312,7 @@ custom_edit_url: null
 
       loadedApi.map(async (item) => {
         if (item.type === "info") {
-          if (downloadUrl && isUrlOrPath(downloadUrl)) {
+          if (downloadUrl) {
             item.downloadUrl = downloadUrl;
           }
         }
