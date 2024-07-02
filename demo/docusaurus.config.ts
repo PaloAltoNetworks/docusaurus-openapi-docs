@@ -241,8 +241,7 @@ const config: Config = {
               categoryLinkSource: "tag",
             },
             template: "api.mustache", // Customize API MDX with mustache template
-            downloadUrl:
-              "https://raw.githubusercontent.com/PaloAltoNetworks/docusaurus-openapi-docs/main/demo/examples/petstore.yaml",
+            downloadUrl: "/petstore.yaml",
             hideSendButton: false,
             showSchemas: true,
           } satisfies OpenApiPlugin.Options,
