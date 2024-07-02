@@ -189,6 +189,8 @@ function CodeSnippets({ postman, codeSamples }: Props) {
     codeSamples
   );
 
+  console.log("merged", mergedLangs);
+
   // Read defaultLang from localStorage
   const defaultLang: Language[] = mergedLangs.filter(
     (lang) =>
