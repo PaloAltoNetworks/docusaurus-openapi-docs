@@ -153,7 +153,7 @@ const config: Config = {
         highlight: "python",
         language: "python",
         logoClass: "python",
-        variant: "requests",
+        variants: ["requests"],
       },
       {
         highlight: "go",
@@ -164,7 +164,6 @@ const config: Config = {
         highlight: "javascript",
         language: "nodejs",
         logoClass: "nodejs",
-        variant: "axios",
       },
       {
         highlight: "ruby",
