@@ -5,6 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+/* ============================================================================
+ * Copyright (c) Palo Alto Networks
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ * ========================================================================== */
+
 import React, { useState, useEffect } from "react";
 
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
@@ -12,13 +19,13 @@ import ApiCodeBlock from "@theme/ApiExplorer/ApiCodeBlock";
 import buildPostmanRequest from "@theme/ApiExplorer/buildPostmanRequest";
 import CodeTabs from "@theme/ApiExplorer/CodeTabs";
 import { useTypedSelector } from "@theme/ApiItem/hooks";
-import merge from "lodash/merge";
 import codegen from "postman-code-generators";
 import sdk from "postman-collection";
 
 import { CodeSample, Language } from "./code-snippets-types";
 import {
   getCodeSampleSourceFromLanguage,
+  mergeArraysbyLanguage,
   mergeCodeSampleLanguage,
 } from "./languages";
 
@@ -149,8 +156,6 @@ function CodeTab({ children, hidden, className }: any): JSX.Element {
 }
 
 function CodeSnippets({ postman, codeSamples }: Props) {
-  // TODO: match theme for vscode.
-
   const { siteConfig } = useDocusaurusContext();
 
   const contentType = useTypedSelector((state: any) => state.contentType.value);
@@ -167,23 +172,24 @@ function CodeSnippets({ postman, codeSamples }: Props) {
 
   // User-defined languages array
   // Can override languageSet, change order of langs, override options and variants
-  const langs = [
-    ...((siteConfig?.themeConfig?.languageTabs as Language[] | undefined) ??
-      languageSet),
-  ];
+  const userDefinedLanguageSet = siteConfig?.themeConfig?.languageTabs as
+    | Language[]
+    | undefined;
 
   // Filter languageSet by user-defined langs
   const filteredLanguageSet = languageSet.filter((ls) => {
-    return langs.some((lang) => {
+    return userDefinedLanguageSet?.some((lang) => {
       return lang.language === ls.language;
     });
   });
 
   // Merge user-defined langs into languageSet
   const mergedLangs = mergeCodeSampleLanguage(
-    merge(filteredLanguageSet, langs),
+    mergeArraysbyLanguage(userDefinedLanguageSet, filteredLanguageSet),
     codeSamples
   );
+
+  console.log("merged", mergedLangs);
 
   // Read defaultLang from localStorage
   const defaultLang: Language[] = mergedLangs.filter(

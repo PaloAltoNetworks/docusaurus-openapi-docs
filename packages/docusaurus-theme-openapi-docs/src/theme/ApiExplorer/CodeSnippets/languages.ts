@@ -5,6 +5,11 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import find from "lodash/find";
+import isArray from "lodash/isArray";
+import mergeWith from "lodash/mergeWith";
+import unionBy from "lodash/unionBy";
+
 import { CodeSample, Language } from "./code-snippets-types";
 
 export function mergeCodeSampleLanguage(
@@ -35,6 +40,23 @@ export function mergeCodeSampleLanguage(
     return language;
   });
 }
+
+export const mergeArraysbyLanguage = (arr1: any, arr2: any) => {
+  const mergedArray = unionBy(arr1, arr2, "language");
+
+  return mergedArray.map((item: any) => {
+    const matchingItems = [
+      find(arr1, ["language", item["language"]]),
+      find(arr2, ["language", item["language"]]),
+    ];
+    return mergeWith({}, ...matchingItems, (objValue: any) => {
+      if (isArray(objValue)) {
+        return objValue;
+      }
+      return undefined;
+    });
+  });
+};
 
 export function getCodeSampleSourceFromLanguage(language: Language) {
   if (
