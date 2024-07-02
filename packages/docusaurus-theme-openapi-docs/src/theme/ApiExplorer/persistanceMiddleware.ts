@@ -19,7 +19,6 @@ import { createStorage, hashArray } from "./storage-utils";
 export function createPersistanceMiddleware(options: ThemeConfig["api"]) {
   const persistanceMiddleware: Middleware<{}, RootState, AppDispatch> =
     (storeAPI) => (next) => (action) => {
-      console.log(action);
       const result = next(action);
 
       const state = storeAPI.getState();
