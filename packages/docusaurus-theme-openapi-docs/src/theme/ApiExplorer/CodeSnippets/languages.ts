@@ -49,9 +49,9 @@ export const mergeArraysbyLanguage = (arr1: any, arr2: any) => {
       find(arr1, ["language", item["language"]]),
       find(arr2, ["language", item["language"]]),
     ];
-    return mergeWith({}, ...matchingItems, (objValue: any, srcValue: any) => {
+    return mergeWith({}, ...matchingItems, (objValue: any) => {
       if (isArray(objValue)) {
-        return objValue.concat(srcValue);
+        return objValue;
       }
       return undefined;
     });
