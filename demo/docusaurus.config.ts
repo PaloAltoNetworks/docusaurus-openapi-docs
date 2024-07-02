@@ -145,15 +145,19 @@ const config: Config = {
     },
     languageTabs: [
       {
+        highlight: "python",
+        language: "python",
+        logoClass: "python",
+      },
+      {
         highlight: "bash",
         language: "curl",
         logoClass: "bash",
       },
       {
-        highlight: "python",
-        language: "python",
-        logoClass: "python",
-        variants: ["requests"],
+        highlight: "csharp",
+        language: "csharp",
+        logoClass: "csharp",
       },
       {
         highlight: "go",
@@ -169,12 +173,6 @@ const config: Config = {
         highlight: "ruby",
         language: "ruby",
         logoClass: "ruby",
-      },
-      {
-        highlight: "csharp",
-        language: "csharp",
-        logoClass: "csharp",
-        variant: "httpclient",
       },
       {
         highlight: "php",
