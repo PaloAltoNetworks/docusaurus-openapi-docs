@@ -140,15 +140,19 @@ const config = {
       },
       languageTabs: [
         {
+          highlight: "python",
+          language: "python",
+          logoClass: "python",
+        },
+        {
           highlight: "bash",
           language: "curl",
           logoClass: "bash",
         },
         {
-          highlight: "python",
-          language: "python",
-          logoClass: "python",
-          variant: "requests",
+          highlight: "csharp",
+          language: "csharp",
+          logoClass: "csharp",
         },
         {
           highlight: "go",
@@ -159,18 +163,11 @@ const config = {
           highlight: "javascript",
           language: "nodejs",
           logoClass: "nodejs",
-          variant: "axios",
         },
         {
           highlight: "ruby",
           language: "ruby",
           logoClass: "ruby",
-        },
-        {
-          highlight: "csharp",
-          language: "csharp",
-          logoClass: "csharp",
-          variant: "httpclient",
         },
         {
           highlight: "php",
