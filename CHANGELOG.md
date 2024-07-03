@@ -1,4 +1,31 @@
-- preventing to send form onClick left/right arrows in SchemaTabs component
+## 2.2.0 (Jul 3, 2024)
+
+High level enhancements
+
+- Improved support for customizing code snippets
+- Switched back to canonical postman depdendencies
+- Improved support for OpenAPI readOnly/writeOnly
+- Added support for OpenAPI `x-tags`
+
+Other enhancements and bug fixes
+
+- fix typo in attribute ([#864](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/864))
+- uncomment version dropdown styles ([#863](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/863))
+- revert to canonical postman libraries ([#861](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/861))
+- Fix tagGroup display when showSchemas is configured ([#851](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/851))
+- check to avoid tagGroup config before concat operation, api, schemas ([#854](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/854))
+- support empty object schema type ([#849](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/849))
+- ensure readOnly/writeOnly are evaluated first ([#848](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/848))
+- fix: markdown table within the description attribute cannot be rendered correctly ([#831](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/831))
+- Implement the `x-tags` extension for schema objects ([#837](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/837))
+- fix col row padding footer&pagination ([#810](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/810))
+- Update index.tsx ([#839](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/839))
+- Fix clean-api-docs not deleting sidebar.ts ([#829](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/829))
+- Add option to disable frontmatter api prop compression ([#800](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/800))
+- preventing to send form onClick left/right arrows in SchemaTabs component ([#796](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/796))
+- changed theme and plugin to headings ([#786](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/786))
+- Allow custom plugin to render ([#784](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/784))
+- Remove scrollbar width for Tab components ([#785](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/785))
 
 ## 2.1.3 (Mar 22, 2024)
 
