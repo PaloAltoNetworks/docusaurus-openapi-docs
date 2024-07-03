@@ -173,7 +173,7 @@ function CodeSnippets({ postman, codeSamples }: Props) {
   // User-defined languages array
   // Can override languageSet, change order of langs, override options and variants
   const userDefinedLanguageSet =
-    (siteConfig?.themeConfig?.languageTabs as Language[] | undefined) ||
+    (siteConfig?.themeConfig?.languageTabs as Language[] | undefined) ??
     languageSet;
 
   // Filter languageSet by user-defined langs
