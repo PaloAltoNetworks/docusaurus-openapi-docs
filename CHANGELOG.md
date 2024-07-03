@@ -1,3 +1,13 @@
+## 3.0.1 (Jul 3, 2024)
+
+High level enhancements
+
+- Fixed regression bug
+
+Other enhancements and bug fixes
+
+- Fall back to languageSet if no languageTabs provided ([#871](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/871))
+
 ## 3.0.0 (Jul 3, 2024)
 
 First official v3 release!
