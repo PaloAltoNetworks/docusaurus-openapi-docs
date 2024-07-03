@@ -198,7 +198,7 @@ const config: Config = {
     },
     announcementBar: {
       id: "announcementBar_1",
-      content: "Beta preview that adds support for Docusaurus v3.0.0",
+      content: "First stable release for Docusaurus v3 now available!",
     },
   } satisfies Preset.ThemeConfig,
 
