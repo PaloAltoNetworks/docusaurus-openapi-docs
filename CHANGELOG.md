@@ -1,3 +1,41 @@
+## 3.0.0 (Jul 3, 2024)
+
+First official v3 release!
+
+- Added support for Docusaurus v3.0.1 - v3.4.0 (and hopefully beyond)
+- Complete feature parity with v2.2.0 including bug fixes
+
+Other enhancements and bug fixes
+
+- Support absolute or relative downloadUrl ([#865](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/865))
+- fix typo in attribute ([#864](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/864))
+- uncomment version dropdown styles ([#863](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/863))
+- Support flexible code snippet ordering and options ([#862](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/862))
+- migrate back to canonical postman deps ([#860](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/860))
+- Support custom downloadUrl for versions ([#859](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/859))
+- [V3] Fix tagGroup display when showSchemas is configured ([#852](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/852))
+- check to avoid tagGroup config before concat operation, api, schemas ([#853](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/853))
+- handle various additionalProperties cases ([#803](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/803))
+- cleanup legacy ApiDemoPanel component
+- cleanup legacy docusaurus config
+- upgrade to docusaurus 3.4.0 ([#850](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/850))
+- support empty object schema type ([#849](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/849))
+- ensure readOnly/writeOnly are evaluated first ([#848](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/848))
+- transparent bg color when showing placeholder ([#847](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/847))
+- Bug/set accept ([#846](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/846))
+- Implement the `x-tags` extension for schema objects ([#837](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/837))
+- fix col row padding footer&pagination ([#810](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/810))
+- Update index.tsx ([#839](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/839))
+- fix: markdown table within the description attribute cannot be rendered correctly ([#831](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/831))
+- upgrade demo to docusaurus 3.3.2 ([#822](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/822))
+- add missing types and cast ref to LegacyRef ([#818](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/818))
+- Add option to disable frontmatter api prop compression ([#800](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/800))
+- preventing to send form onClick left/right arrows in SchemaTabs component ([#796](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/796))
+- Ensure sidebars.ts and schemas are properly cleaned ([#817](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/817))
+- changed theme and plugin to headings ([#786](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/786))
+- Allow custom plugin to render ([#784](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/784))
+- Remove scrollbar width for Tab components ([#785](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/785))
+
 ## 3.0.0-beta.10 (Mar 25, 2024)
 
 High level enhancements

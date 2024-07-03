@@ -6,7 +6,7 @@
 
 <div align="center">
 
-OpenAPI plugin for generating API reference docs in Docusaurus v2.
+OpenAPI plugin for generating API reference docs in Docusaurus v3.
 
 <img src="https://img.shields.io/badge/dynamic/json?style=for-the-badge&logo=meta&color=blueviolet&label=Docusaurus&query=dependencies%5B%22%40docusaurus%2Fcore%22%5D&url=https%3A%2F%2Fraw.githubusercontent.com%2FPaloAltoNetworks%2Fdocusaurus-openapi-docs%2Fmain%2Fdemo%2Fpackage.json" />
 <br/><br/>
@@ -28,11 +28,11 @@ OpenAPI plugin for generating API reference docs in Docusaurus v2.
 
 ## Overview
 
-The `docusaurus-plugin-openapi-docs` package extends the Docusaurus CLI with commands for generating MDX using the OpenAPI specification as the source. The resulting MDX is fully compatible with [plugin-content-docs](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-docs) and can be used to render beautiful reference API docs by setting `docItemComponent` to `@theme/ApiItem`, a custom component included in the `docusaurus-theme-openapi-docs` theme.
+The `docusaurus-plugin-openapi-docs` package extends the Docusaurus CLI with commands for generating MDX using the OpenAPI specification as the source. The resulting MDX is fully compatible with [plugin-content-docs](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-docs) and can be used to render beautiful reference API docs when combined with the `docusaurus-theme-openapi-docs` theme.
 
 Key Features:
 
-- **Compatible:** Works with Swagger 2.0 and OpenAPI 3.0.
+- **Compatible:** Works with Swagger 2.0 and OpenAPI 3.x.
 - **Fast:** Convert large OpenAPI specs into MDX docs in seconds. 🔥
 - **Stylish:** Based on the same [Infima styling framework](https://infima.dev/) that powers the Docusaurus UI.
 - **Flexible:** Supports single, multi and _even micro_ OpenAPI specs.
@@ -41,16 +41,16 @@ Key Features:
 
 | Docusaurus OpenAPI Docs | Docusaurus      |
 | ----------------------- | --------------- |
-| 3.0.0-beta.x (beta)     | `3.0.1 - 3.1.1` |
-| 2.0.x (current)         | `2.4.1 - 2.4.3` |
+| 3.0.0 (current)         | `3.0.1 - 3.4.0` |
+| 2.2.0 (legacy)          | `2.4.1 - 2.4.3` |
 | 1.7.3 (legacy)          | `2.0.1 - 2.2.0` |
 
 ## Bootstrapping from Template (new Docusaurus site)
 
-Run the following to bootstrap a Docsaurus v2 site (classic theme) with `docusaurus-openapi-docs`:
+Run the following to bootstrap a Docsaurus v3 site (classic theme) with `docusaurus-openapi-docs`:
 
 ```bash
-npx create-docusaurus@2.4.3 my-website --package-manager yarn
+npx create-docusaurus@3.4.0 my-website --package-manager yarn
 ```
 
 > When prompted to select a template choose `Git repository`.
@@ -61,57 +61,59 @@ Template Repository URL:
 https://github.com/PaloAltoNetworks/docusaurus-template-openapi-docs.git
 ```
 
-> When asked how the template repo should be cloned choose "copy" (unless you know better).
+> When asked how the template repo should be cloned choose "copy".
 
 ```bash
 cd my-website
 yarn start
 ```
 
+If all goes well, you should be greeted by a brand new Docusaurus site that includes API reference docs for the ubiquitous Petstore API!
+
 ## Installation (existing Docusaurus site)
 
-Plugin:
+> Both the plugin and theme are currently designed to pair with a specific Docusaurus release. The Docusaurus badge in the `README.md` and at the top of this page will always reflect the current compatible versions.
+
+### Plugin
 
 ```bash
 yarn add docusaurus-plugin-openapi-docs
 ```
 
-Theme:
+### Theme
 
 ```bash
 yarn add docusaurus-theme-openapi-docs
 ```
 
-## Configuring `docusaurus.config.js` (Plugin and theme usage)
+## Configuring `docusaurus.config.ts` (Plugin and theme usage)
 
-Here is an example of properly configuring `docusaurus.config.js` file for `docusaurus-plugin-openapi-docs` and `docusaurus-theme-openapi-docs` usage.
+Here is an example of properly configuring `docusaurus.config.ts` for `docusaurus-plugin-openapi-docs` and `docusaurus-theme-openapi-docs` usage.
 
-```js
-// docusaurus.config.js
+> Note: Instructions may differ slightly for sites that haven't migrated to typescript.
+
+```typescript
+// docusaurus.config.ts
+// note that parts of the complete config were left out for brevity
+import type * as Preset from "@docusaurus/preset-classic";
+import type { Config } from "@docusaurus/types";
+import type * as Plugin from "@docusaurus/types/src/plugin";
+import type * as OpenApiPlugin from "docusaurus-plugin-openapi-docs";
 
 {
   presets: [
     [
       "classic",
-      /** @type {import('@docusaurus/preset-classic').Options} */
-      ({
+      {
         docs: {
-          sidebarPath: require.resolve("./sidebars.js"),
-          editUrl:
-            "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
-          docLayoutComponent: "@theme/DocPage",
-          docItemComponent: "@theme/ApiItem" // derived from docusaurus-theme-openapi-docs
-        },
-        blog: {
-          showReadingTime: true,
-          editUrl:
-            "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/"
+          sidebarPath: "./sidebars.ts",
+          docItemComponent: "@theme/ApiItem", // Derived from docusaurus-theme-openapi
         },
         theme: {
-          customCss: require.resolve("./src/css/custom.css")
-        }
-      })
-    ]
+          customCss: "./src/css/custom.css",
+        },
+      } satisfies Preset.Options,
+    ],
   ],
 
   plugins: [
@@ -119,19 +121,15 @@ Here is an example of properly configuring `docusaurus.config.js` file for `docu
       'docusaurus-plugin-openapi-docs',
       {
         id: "api", // plugin id
-        docsPluginId: "classic", // id of plugin-content-docs or preset for rendering docs
+        docsPluginId: "classic", // configured for preset-classic
         config: {
-          petstore: { // the <id> referenced when running CLI commands
-            specPath: "examples/petstore.yaml", // path to OpenAPI spec, URLs supported
-            outputDir: "api/petstore", // output directory for generated files
-            sidebarOptions: { // optional, instructs plugin to generate sidebar.js
-              groupPathsBy: "tag", // group sidebar items by operation "tag"
+          petstore: {
+            specPath: "examples/petstore.yaml",
+            outputDir: "docs/petstore",
+            sidebarOptions: {
+              groupPathsBy: "tag",
             },
-          },
-          burgers: {
-            specPath: "examples/food/burgers/openapi.yaml",
-            outputDir: "api/food/burgers",
-          }
+          } satisfies OpenApiPlugin.Options,
         }
       },
     ]
@@ -226,11 +224,12 @@ Commands:
   write-translations [options] [siteDir]                   Extract required translations of your site.
   write-heading-ids [options] [siteDir] [files...]         Generate heading ids in Markdown content.
   docs:version <version>                                   Tag a new docs version
-  gen-api-docs <id>                                        Generates OpenAPI docs in MDX file format and sidebar.js (if enabled).
-  gen-api-docs:version <id:version>                        Generates versioned OpenAPI docs in MDX file format, versions.js and sidebar.js (if enabled).
-  clean-api-docs <id>                                      Clears the generated OpenAPI docs MDX files and sidebar.js (if enabled).
-  clean-api-docs:version <id:version>                      Clears the versioned, generated OpenAPI docs MDX files, versions.json and sidebar.js (if
+  gen-api-docs [options] <id>                              Generates OpenAPI docs in MDX file format and sidebar.ts (if enabled).
+  gen-api-docs:version [options] <id:version>              Generates versioned OpenAPI docs in MDX file format, versions.js and sidebar.ts (if
                                                            enabled).
+  clean-api-docs [options] <id>                            Clears the generated OpenAPI docs MDX files and sidebar.ts (if enabled).
+  clean-api-docs:version [options] <id:version>            Clears the versioned, generated OpenAPI docs MDX files, versions.json and sidebar.ts
+                                                           (if enabled)
 ```
 
 ### Generating OpenAPI Docs
@@ -252,10 +251,10 @@ yarn docusaurus gen-api-docs <id>
 Example:
 
 ```bash
-yarn docusaurus gen-api-docs burgers
+yarn docusaurus gen-api-docs petstore
 ```
 
-> The example above will only generate API docs relative to `burgers`.
+> The example above will only generate API docs relative to `petstore`.
 
 ### Cleaning API Docs
 
@@ -274,7 +273,7 @@ yarn docusaurus clean-api-docs <id>
 Example:
 
 ```bash
-yarn docusaurus clean-api-docs burgers
+yarn docusaurus clean-api-docs petstore
 ```
 
 > The example above will remove all API docs relative to `burgers`.

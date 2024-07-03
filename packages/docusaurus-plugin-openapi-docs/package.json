@@ -1,7 +1,7 @@
 {
   "name": "docusaurus-plugin-openapi-docs",
   "description": "OpenAPI plugin for Docusaurus.",
-  "version": "3.0.0-beta.10",
+  "version": "3.0.0",
   "license": "MIT",
   "keywords": [
     "openapi",
@@ -41,8 +41,6 @@
     "@docusaurus/plugin-content-docs": "^3.0.1",
     "@docusaurus/utils": "^3.0.1",
     "@docusaurus/utils-validation": "^3.0.1",
-    "openapi-to-postmanv2": "^4.21.0",
-    "postman-collection": "^4.4.0",
     "@redocly/openapi-core": "^1.10.5",
     "chalk": "^4.1.2",
     "clsx": "^1.1.1",
@@ -52,6 +50,8 @@
     "json5": "^2.2.3",
     "lodash": "^4.17.20",
     "mustache": "^4.2.0",
+    "openapi-to-postmanv2": "^4.21.0",
+    "postman-collection": "^4.4.0",
     "slugify": "^1.6.5",
     "swagger2openapi": "^7.0.8",
     "xml-formatter": "^2.6.1"
