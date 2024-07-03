@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - v3.0.0
+      - v2.0.0
     types:
       - opened
       - synchronize

@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main, v3.0.0]
+    branches: [main, v3.0.0, v2.0.0]
 
 env:
   FORCE_COLOR: true
