@@ -312,7 +312,7 @@ custom_edit_url: null
 
       loadedApi.map(async (item) => {
         if (item.type === "info") {
-          if (downloadUrl && isURL(downloadUrl)) {
+          if (downloadUrl) {
             item.downloadUrl = downloadUrl;
           }
         }
