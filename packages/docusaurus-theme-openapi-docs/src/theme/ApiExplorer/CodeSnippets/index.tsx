@@ -172,9 +172,9 @@ function CodeSnippets({ postman, codeSamples }: Props) {
 
   // User-defined languages array
   // Can override languageSet, change order of langs, override options and variants
-  const userDefinedLanguageSet = siteConfig?.themeConfig?.languageTabs as
-    | Language[]
-    | undefined;
+  const userDefinedLanguageSet =
+    (siteConfig?.themeConfig?.languageTabs as Language[] | undefined) ??
+    languageSet;
 
   // Filter languageSet by user-defined langs
   const filteredLanguageSet = languageSet.filter((ls) => {
@@ -188,8 +188,6 @@ function CodeSnippets({ postman, codeSamples }: Props) {
     mergeArraysbyLanguage(userDefinedLanguageSet, filteredLanguageSet),
     codeSamples
   );
-
-  console.log("merged", mergedLangs);
 
   // Read defaultLang from localStorage
   const defaultLang: Language[] = mergedLangs.filter(
