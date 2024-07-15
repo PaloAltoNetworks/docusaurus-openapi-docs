@@ -107,6 +107,18 @@ function groupByTags(
     const sidebar_label = item.frontMatter.sidebar_label;
     const title = item.title;
     const id = item.type === "schema" ? `schemas/${item.id}` : item.id;
+    interface classChecks  {
+      [key: string]: string;
+    }
+
+    let classNameConfig: classChecks = {}
+
+    if(customProps !== undefined) {
+        for (const [key, value] of Object.entries(customProps['additionalClassChecks'] as Object)) {
+          classNameConfig[key] = new Function('item', `return ${value}`)(item) as string; // Type assertion for the return value
+      }
+    }
+
     const className =
       item.type === "api"
         ? clsx(
@@ -114,6 +126,7 @@ function groupByTags(
               "menu__list-item--deprecated": item.api.deprecated,
               "api-method": !!item.api.method,
             },
+            classNameConfig,
             item.api.method
           )
         : clsx(
