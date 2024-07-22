@@ -92,6 +92,7 @@ function createAnyOneOf(schema: SchemaObject): any {
             anyOneSchema.type === "string" ||
             anyOneSchema.type === "number" ||
             anyOneSchema.type === "integer" ||
+            anyOneSchema.type === "object" ||
             anyOneSchema.type === "boolean"
           ) {
             anyOneChildren.push(createNodes(anyOneSchema, SCHEMA_TYPE));
