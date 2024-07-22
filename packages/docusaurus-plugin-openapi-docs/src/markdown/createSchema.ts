@@ -66,6 +66,7 @@ function createAnyOneOf(schema: SchemaObject): any {
       create("span", {
         className: "badge badge--info",
         children: type,
+        style: { marginBottom: "1rem" },
       }),
       create("SchemaTabs", {
         children: schema[type]!.map((anyOneSchema, index) => {
@@ -615,7 +616,7 @@ function createEdges({
   }
 
   if (schema.oneOf !== undefined || schema.anyOf !== undefined) {
-    return createAnyOneOfProperty(
+    return createDetailsNode(
       name,
       schemaName,
       schema,
