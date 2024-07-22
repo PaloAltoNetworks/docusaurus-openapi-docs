@@ -21,6 +21,9 @@ Array [
             qualifierMessage={undefined}
             schema={{ type: \\"number\\" }}
           ></SchemaItem>
+          <div style={{ marginTop: \\".5rem\\", marginBottom: \\".5rem\\" }}>
+            object
+          </div>
         </TabItem>
         <TabItem label={\\"MOD2\\"} value={\\"1-item-properties\\"}>
           <li>
