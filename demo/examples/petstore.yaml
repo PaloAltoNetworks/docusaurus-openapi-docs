@@ -115,6 +115,17 @@ paths:
       description: Add new pet to the store inventory.
       operationId: addPet
       responses:
+        "200":
+          description: All good
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    oneOf:
+                      - type: string
+                      - type: object
         "405":
           description: Invalid input
       security:
