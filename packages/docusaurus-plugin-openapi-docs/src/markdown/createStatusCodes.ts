@@ -127,8 +127,9 @@ export function createResponseExamples(
           value: `${exampleName}`,
           children: [
             guard(exampleValue.summary, (summary) => [
-              create("Markdown", {
-                children: ` ${summary}`,
+              create("div", {
+                children: `${summary}`,
+                className: "openapi-example__summary",
               }),
             ]),
             create("ResponseSamples", {
@@ -143,8 +144,9 @@ export function createResponseExamples(
         value: `${exampleName}`,
         children: [
           guard(exampleValue.summary, (summary) => [
-            create("Markdown", {
-              children: ` ${summary}`,
+            create("div", {
+              children: `${summary}`,
+              className: "openapi-example__summary",
             }),
           ]),
           create("ResponseSamples", {
@@ -171,8 +173,9 @@ export function createResponseExample(responseExample: any, mimeType: string) {
       value: `Example`,
       children: [
         guard(responseExample.summary, (summary) => [
-          create("Markdown", {
-            children: ` ${summary}`,
+          create("div", {
+            children: `${summary}`,
+            className: "openapi-example__summary",
           }),
         ]),
         create("ResponseSamples", {
@@ -187,8 +190,9 @@ export function createResponseExample(responseExample: any, mimeType: string) {
     value: `Example`,
     children: [
       guard(responseExample.summary, (summary) => [
-        create("Markdown", {
-          children: ` ${summary}`,
+        create("div", {
+          children: `${summary}`,
+          className: "openapi-example__summary",
         }),
       ]),
       create("ResponseSamples", {
