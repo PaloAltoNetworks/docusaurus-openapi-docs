@@ -75,6 +75,16 @@ function createAnyOneOf(schema: SchemaObject): any {
             : `MOD${index + 1}`;
           const anyOneChildren = [];
 
+          if (anyOneSchema.description) {
+            anyOneChildren.push(
+              create("div", {
+                style: { marginTop: ".5rem", marginBottom: ".5rem" },
+                className: "openapi-schema__summary",
+                children: createDescription(anyOneSchema.description),
+              })
+            );
+          }
+
           if (
             anyOneSchema.type === "object" &&
             !anyOneSchema.properties &&
