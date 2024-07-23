@@ -536,6 +536,18 @@ custom_edit_url: null
       });
     }
 
+    if (!fs.existsSync(outputDir)) {
+      try {
+        fs.mkdirSync(outputDir, { recursive: true });
+        console.log(chalk.green(`Successfully created "${outputDir}"`));
+      } catch (err) {
+        console.error(
+          chalk.red(`Failed to create "${outputDir}"`),
+          chalk.yellow(err)
+        );
+      }
+    }
+
     const versionsJson = JSON.stringify(versionsArray, null, 2);
     try {
       fs.writeFileSync(`${outputDir}/versions.json`, versionsJson, "utf8");
