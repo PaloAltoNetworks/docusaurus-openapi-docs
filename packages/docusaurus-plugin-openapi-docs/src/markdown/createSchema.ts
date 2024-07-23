@@ -66,6 +66,7 @@ function createAnyOneOf(schema: SchemaObject): any {
       create("span", {
         className: "badge badge--info",
         children: type,
+        style: { marginBottom: "1rem" },
       }),
       create("SchemaTabs", {
         children: schema[type]!.map((anyOneSchema, index) => {
@@ -73,6 +74,15 @@ function createAnyOneOf(schema: SchemaObject): any {
             ? anyOneSchema.title
             : `MOD${index + 1}`;
           const anyOneChildren = [];
+
+          if (
+            anyOneSchema.type === "object" &&
+            !anyOneSchema.properties &&
+            !anyOneSchema.allOf &&
+            !anyOneSchema.items
+          ) {
+            anyOneChildren.push(createNodes(anyOneSchema, SCHEMA_TYPE));
+          }
 
           if (anyOneSchema.properties !== undefined) {
             anyOneChildren.push(createProperties(anyOneSchema));
@@ -415,79 +425,79 @@ function createDetailsNode(
 /**
  * For handling anyOf/oneOf properties.
  */
-function createAnyOneOfProperty(
-  name: string,
-  schemaName: string,
-  schema: SchemaObject,
-  required: string[] | boolean,
-  nullable: boolean | unknown
-): any {
-  return create("SchemaItem", {
-    collapsible: true,
-    className: "schemaItem",
-    children: [
-      createDetails({
-        className: "openapi-markdown__details",
-        children: [
-          createDetailsSummary({
-            children: [
-              create("strong", { children: name }),
-              create("span", {
-                style: { opacity: "0.6" },
-                children: ` ${schemaName}`,
-              }),
-              guard(
-                (schema.nullable && schema.nullable === true) ||
-                  (nullable && nullable === true),
-                () => [
-                  create("strong", {
-                    style: {
-                      fontSize: "var(--ifm-code-font-size)",
-                      color: "var(--openapi-nullable)",
-                    },
-                    children: " nullable",
-                  }),
-                ]
-              ),
-              guard(
-                Array.isArray(required)
-                  ? required.includes(name)
-                  : required === true,
-                () => [
-                  create("strong", {
-                    style: {
-                      fontSize: "var(--ifm-code-font-size)",
-                      color: "var(--openapi-required)",
-                    },
-                    children: " required",
-                  }),
-                ]
-              ),
-            ],
-          }),
-          create("div", {
-            style: { marginLeft: "1rem" },
-            children: [
-              guard(getQualifierMessage(schema), (message) =>
-                create("div", {
-                  style: { marginTop: ".5rem", marginBottom: ".5rem" },
-                  children: createDescription(message),
-                })
-              ),
-              guard(schema.description, (description) =>
-                create("div", {
-                  style: { marginTop: ".5rem", marginBottom: ".5rem" },
-                  children: createDescription(description),
-                })
-              ),
-            ],
-          }),
-          createAnyOneOf(schema),
-        ],
-      }),
-    ],
-  });
-}
+// function createAnyOneOfProperty(
+//   name: string,
+//   schemaName: string,
+//   schema: SchemaObject,
+//   required: string[] | boolean,
+//   nullable: boolean | unknown
+// ): any {
+//   return create("SchemaItem", {
+//     collapsible: true,
+//     className: "schemaItem",
+//     children: [
+//       createDetails({
+//         className: "openapi-markdown__details",
+//         children: [
+//           createDetailsSummary({
+//             children: [
+//               create("strong", { children: name }),
+//               create("span", {
+//                 style: { opacity: "0.6" },
+//                 children: ` ${schemaName}`,
+//               }),
+//               guard(
+//                 (schema.nullable && schema.nullable === true) ||
+//                   (nullable && nullable === true),
+//                 () => [
+//                   create("strong", {
+//                     style: {
+//                       fontSize: "var(--ifm-code-font-size)",
+//                       color: "var(--openapi-nullable)",
+//                     },
+//                     children: " nullable",
+//                   }),
+//                 ]
+//               ),
+//               guard(
+//                 Array.isArray(required)
+//                   ? required.includes(name)
+//                   : required === true,
+//                 () => [
+//                   create("strong", {
+//                     style: {
+//                       fontSize: "var(--ifm-code-font-size)",
+//                       color: "var(--openapi-required)",
+//                     },
+//                     children: " required",
+//                   }),
+//                 ]
+//               ),
+//             ],
+//           }),
+//           create("div", {
+//             style: { marginLeft: "1rem" },
+//             children: [
+//               guard(getQualifierMessage(schema), (message) =>
+//                 create("div", {
+//                   style: { marginTop: ".5rem", marginBottom: ".5rem" },
+//                   children: createDescription(message),
+//                 })
+//               ),
+//               guard(schema.description, (description) =>
+//                 create("div", {
+//                   style: { marginTop: ".5rem", marginBottom: ".5rem" },
+//                   children: createDescription(description),
+//                 })
+//               ),
+//             ],
+//           }),
+//           createAnyOneOf(schema),
+//         ],
+//       }),
+//     ],
+//   });
+// }
 
 /**
  * For handling discriminators that map to a same-level property (like 'petType').
@@ -606,7 +616,7 @@ function createEdges({
   }
 
   if (schema.oneOf !== undefined || schema.anyOf !== undefined) {
-    return createAnyOneOfProperty(
+    return createDetailsNode(
       name,
       schemaName,
       schema,

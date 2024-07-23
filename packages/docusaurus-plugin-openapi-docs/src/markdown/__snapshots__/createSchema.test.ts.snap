@@ -12,7 +12,9 @@ Array [
     </summary>
     <div style={{ marginLeft: \\"1rem\\" }}>
       <div>
-        <span className={\\"badge badge--info\\"}>oneOf</span>
+        <span className={\\"badge badge--info\\"} style={{ marginBottom: \\"1rem\\" }}>
+          oneOf
+        </span>
         <SchemaTabs>
           <TabItem label={\\"MOD1\\"} value={\\"0-item-properties\\"}>
             <SchemaItem
@@ -226,67 +228,72 @@ Array [
   "<SchemaItem collapsible={true} className={\\"schemaItem\\"}>
   <details style={{}} className={\\"openapi-markdown__details\\"}>
     <summary style={{}}>
-      <strong>oneOfProperty</strong>
-      <span style={{ opacity: \\"0.6\\" }}>object</span>
+      <span className={\\"openapi-schema__container\\"}>
+        <strong className={\\"openapi-schema__property\\"}>oneOfProperty</strong>
+        <span className={\\"openapi-schema__name\\"}>object</span>
+      </span>
     </summary>
-    <div style={{ marginLeft: \\"1rem\\" }}></div>
-    <div>
-      <span className={\\"badge badge--info\\"}>oneOf</span>
-      <SchemaTabs>
-        <TabItem label={\\"MOD1\\"} value={\\"0-item-properties\\"}>
-          <SchemaItem
-            collapsible={false}
-            name={\\"noseLength\\"}
-            required={true}
-            schemaName={\\"number\\"}
-            qualifierMessage={undefined}
-            schema={{ type: \\"number\\" }}
-          ></SchemaItem>
-        </TabItem>
-        <TabItem label={\\"MOD2\\"} value={\\"1-item-properties\\"}>
-          <li>
-            <div
-              style={{
-                fontSize: \\"var(--ifm-code-font-size)\\",
-                opacity: \\"0.6\\",
-                marginLeft: \\"-.5rem\\",
-                paddingBottom: \\".5rem\\",
-              }}
-            >
-              Array [
+    <div style={{ marginLeft: \\"1rem\\" }}>
+      <div>
+        <span className={\\"badge badge--info\\"} style={{ marginBottom: \\"1rem\\" }}>
+          oneOf
+        </span>
+        <SchemaTabs>
+          <TabItem label={\\"MOD1\\"} value={\\"0-item-properties\\"}>
+            <SchemaItem
+              collapsible={false}
+              name={\\"noseLength\\"}
+              required={true}
+              schemaName={\\"number\\"}
+              qualifierMessage={undefined}
+              schema={{ type: \\"number\\" }}
+            ></SchemaItem>
+          </TabItem>
+          <TabItem label={\\"MOD2\\"} value={\\"1-item-properties\\"}>
+            <li>
+              <div
+                style={{
+                  fontSize: \\"var(--ifm-code-font-size)\\",
+                  opacity: \\"0.6\\",
+                  marginLeft: \\"-.5rem\\",
+                  paddingBottom: \\".5rem\\",
+                }}
+              >
+                Array [
+              </div>
+            </li>
+            <div style={{ marginTop: \\".5rem\\", marginBottom: \\".5rem\\" }}>
+              string
             </div>
-          </li>
-          <div style={{ marginTop: \\".5rem\\", marginBottom: \\".5rem\\" }}>
-            string
-          </div>
-          <li>
-            <div
-              style={{
-                fontSize: \\"var(--ifm-code-font-size)\\",
-                opacity: \\"0.6\\",
-                marginLeft: \\"-.5rem\\",
-              }}
-            >
-              ]
+            <li>
+              <div
+                style={{
+                  fontSize: \\"var(--ifm-code-font-size)\\",
+                  opacity: \\"0.6\\",
+                  marginLeft: \\"-.5rem\\",
+                }}
+              >
+                ]
+              </div>
+            </li>
+          </TabItem>
+          <TabItem label={\\"MOD3\\"} value={\\"2-item-properties\\"}>
+            <div style={{ marginTop: \\".5rem\\", marginBottom: \\".5rem\\" }}>
+              boolean
             </div>
-          </li>
-        </TabItem>
-        <TabItem label={\\"MOD3\\"} value={\\"2-item-properties\\"}>
-          <div style={{ marginTop: \\".5rem\\", marginBottom: \\".5rem\\" }}>
-            boolean
-          </div>
-        </TabItem>
-        <TabItem label={\\"MOD4\\"} value={\\"3-item-properties\\"}>
-          <div style={{ marginTop: \\".5rem\\", marginBottom: \\".5rem\\" }}>
-            number
-          </div>
-        </TabItem>
-        <TabItem label={\\"MOD5\\"} value={\\"4-item-properties\\"}>
-          <div style={{ marginTop: \\".5rem\\", marginBottom: \\".5rem\\" }}>
-            string
-          </div>
-        </TabItem>
-      </SchemaTabs>
+          </TabItem>
+          <TabItem label={\\"MOD4\\"} value={\\"3-item-properties\\"}>
+            <div style={{ marginTop: \\".5rem\\", marginBottom: \\".5rem\\" }}>
+              number
+            </div>
+          </TabItem>
+          <TabItem label={\\"MOD5\\"} value={\\"4-item-properties\\"}>
+            <div style={{ marginTop: \\".5rem\\", marginBottom: \\".5rem\\" }}>
+              string
+            </div>
+          </TabItem>
+        </SchemaTabs>
+      </div>
     </div>
   </details>
 </SchemaItem>;
