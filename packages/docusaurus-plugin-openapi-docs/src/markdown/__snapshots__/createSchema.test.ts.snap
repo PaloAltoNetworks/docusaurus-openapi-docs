@@ -240,6 +240,9 @@ Array [
         </span>
         <SchemaTabs>
           <TabItem label={\\"MOD1\\"} value={\\"0-item-properties\\"}>
+            <div style={{ marginTop: \\".5rem\\", marginBottom: \\".5rem\\" }}>
+              Clown's nose length
+            </div>
             <SchemaItem
               collapsible={false}
               name={\\"noseLength\\"}
@@ -250,6 +253,9 @@ Array [
             ></SchemaItem>
           </TabItem>
           <TabItem label={\\"MOD2\\"} value={\\"1-item-properties\\"}>
+            <div style={{ marginTop: \\".5rem\\", marginBottom: \\".5rem\\" }}>
+              Array of strings
+            </div>
             <li>
               <div
                 style={{
