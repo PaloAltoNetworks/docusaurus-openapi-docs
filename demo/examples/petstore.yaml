@@ -1056,6 +1056,7 @@ components:
         name: Order
     Pet:
       type: object
+      description: A pet
       required:
         - name
         - photoUrls
@@ -1122,6 +1123,7 @@ components:
         name: Pet
     Tag:
       type: object
+      description: A pet tag
       properties:
         id:
           description: Tag ID
