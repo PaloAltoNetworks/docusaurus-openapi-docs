@@ -30,8 +30,8 @@ const primitives: Primitives = {
   string: {
     default: () => "string",
     email: () => "user@example.com",
-    date: () => new Date().toISOString().substring(0, 10),
-    "date-time": () => new Date().toISOString(),
+    date: () => "2024-07-29",
+    "date-time": () => "2024-07-29T15:51:28.071Z",
     uuid: () => "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     hostname: () => "example.com",
     ipv4: () => "198.51.100.42",
