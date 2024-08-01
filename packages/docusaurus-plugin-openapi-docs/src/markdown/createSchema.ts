@@ -26,8 +26,8 @@ let SCHEMA_TYPE: "request" | "response";
 /**
  * Returns a merged representation of allOf array of schemas.
  */
-export function mergeAllOf(allOf: SchemaObject[]) {
-  const mergedSchemas = jsonSchemaMergeAllOf(allOf, {
+export function mergeAllOf(allOf: SchemaObject[], parentSchema: SchemaObject) {
+  const mergeResult = jsonSchemaMergeAllOf(allOf, {
     resolvers: {
       readOnly: function () {
         return true;
@@ -52,6 +52,14 @@ export function mergeAllOf(allOf: SchemaObject[]) {
     }
     return acc;
   }, [] as any);
+
+  const mergedSchemas: SchemaObject = {
+    ...mergeResult,
+    properties: {
+      ...mergeResult?.properties,
+      ...parentSchema?.properties,
+    },
+  };
 
   return { mergedSchemas, mergedRequired };
 }
@@ -269,7 +277,7 @@ function createItems(schema: SchemaObject) {
     const {
       mergedSchemas,
     }: { mergedSchemas: SchemaObject; mergedRequired: string[] | boolean } =
-      mergeAllOf(schema.items?.allOf);
+      mergeAllOf(schema.items?.allOf, schema);
 
     // Handles combo anyOf/oneOf + properties
     if (
@@ -637,7 +645,8 @@ function createEdges({
 
   if (schema.allOf !== undefined) {
     const { mergedSchemas }: { mergedSchemas: SchemaObject } = mergeAllOf(
-      schema.allOf
+      schema.allOf,
+      schema
     );
 
     if (SCHEMA_TYPE === "request") {
@@ -788,7 +797,7 @@ export function createNodes(
   }
 
   if (schema.allOf !== undefined) {
-    const { mergedSchemas } = mergeAllOf(schema.allOf);
+    const { mergedSchemas } = mergeAllOf(schema.allOf, schema);
 
     if (
       mergedSchemas.oneOf !== undefined ||

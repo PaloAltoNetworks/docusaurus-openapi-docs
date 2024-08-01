@@ -7,7 +7,7 @@
 
 import * as prettier from "prettier";
 
-import { createNodes } from "./createSchema";
+import { createNodes, mergeAllOf } from "./createSchema";
 import { SchemaObject } from "../openapi/types";
 
 describe("createNodes", () => {
@@ -142,5 +142,56 @@ describe("createNodes", () => {
         ).toMatchSnapshot();
       }
     );
+  });
+});
+
+describe("mergeAllOf", () => {
+  it("merges the parent schema properties into the allOf properties", () => {
+    const schema: SchemaObject = {
+      allOf: [
+        {
+          type: "object",
+          properties: {
+            allOfProp1: {
+              type: "string",
+            },
+            allOfProp2: {
+              type: "string",
+            },
+          },
+        },
+      ],
+      properties: {
+        parentProp1: {
+          type: "string",
+        },
+        parentProp2: {
+          type: "string",
+        },
+      },
+    };
+
+    const { mergedSchemas } = mergeAllOf(
+      schema.allOf as SchemaObject[],
+      schema as SchemaObject
+    );
+
+    expect(mergedSchemas).toStrictEqual({
+      type: "object",
+      properties: {
+        allOfProp1: {
+          type: "string",
+        },
+        allOfProp2: {
+          type: "string",
+        },
+        parentProp1: {
+          type: "string",
+        },
+        parentProp2: {
+          type: "string",
+        },
+      },
+    });
   });
 });

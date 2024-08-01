@@ -67,7 +67,8 @@ function sampleResponseFromProp(name: string, prop: any, obj: any): any {
     obj[name] = sampleResponseFromSchema(prop.anyOf[0]);
   } else if (prop.allOf) {
     const { mergedSchemas }: { mergedSchemas: SchemaObject } = mergeAllOf(
-      prop.allOf
+      prop.allOf,
+      prop
     );
     sampleResponseFromProp(name, mergedSchemas, obj);
   } else {
@@ -87,8 +88,10 @@ export const sampleResponseFromSchema = (schema: SchemaObject = {}): any => {
     }
 
     if (allOf) {
-      const { mergedSchemas }: { mergedSchemas: SchemaObject } =
-        mergeAllOf(allOf);
+      const { mergedSchemas }: { mergedSchemas: SchemaObject } = mergeAllOf(
+        allOf,
+        schemaCopy
+      );
       if (mergedSchemas.properties) {
         for (const [key, value] of Object.entries(mergedSchemas.properties)) {
           if (
