@@ -93,6 +93,221 @@ describe("createNodes", () => {
         )
       ).toMatchSnapshot();
     });
+
+    it("should correctly merge nested properties from multiple allOf schemas", async () => {
+      const schema: SchemaObject = {
+        allOf: [
+          {
+            type: "object",
+            properties: {
+              outerProp1: {
+                type: "object",
+                properties: {
+                  innerProp1: {
+                    type: "string",
+                  },
+                },
+              },
+            },
+          },
+          {
+            type: "object",
+            properties: {
+              outerProp2: {
+                type: "object",
+                properties: {
+                  innerProp2: {
+                    type: "number",
+                  },
+                },
+              },
+            },
+          },
+        ],
+      };
+
+      expect(
+        await Promise.all(
+          createNodes(schema, "response").map(
+            async (md: any) => await prettier.format(md, { parser: "babel" })
+          )
+        )
+      ).toMatchSnapshot();
+    });
+
+    it("should correctly handle shared required properties across allOf schemas", async () => {
+      const schema: SchemaObject = {
+        allOf: [
+          {
+            type: "object",
+            properties: {
+              sharedProp: {
+                type: "string",
+              },
+            },
+            required: ["sharedProp"],
+          },
+          {
+            type: "object",
+            properties: {
+              anotherProp: {
+                type: "number",
+              },
+            },
+            required: ["anotherProp"],
+          },
+        ],
+      };
+
+      expect(
+        await Promise.all(
+          createNodes(schema, "response").map(
+            async (md: any) => await prettier.format(md, { parser: "babel" })
+          )
+        )
+      ).toMatchSnapshot();
+    });
+
+    // Could not resolve values for path:"properties.conflictingProp.type". They are probably incompatible. Values:
+    // "string"
+    // "number"
+    // it("should handle conflicting properties in allOf schemas", async () => {
+    //   const schema: SchemaObject = {
+    //     allOf: [
+    //       {
+    //         type: "object",
+    //         properties: {
+    //           conflictingProp: {
+    //             type: "string",
+    //           },
+    //         },
+    //       },
+    //       {
+    //         type: "object",
+    //         properties: {
+    //           conflictingProp: {
+    //             type: "number",
+    //           },
+    //         },
+    //       },
+    //     ],
+    //   };
+
+    //   expect(
+    //     await Promise.all(
+    //       createNodes(schema, "response").map(
+    //         async (md: any) => await prettier.format(md, { parser: "babel" })
+    //       )
+    //     )
+    //   ).toMatchSnapshot();
+    // });
+
+    // Could not resolve values for path:"type". They are probably incompatible. Values:
+    // "object"
+    // "array"
+    // it("should handle mixed data types in allOf schemas", async () => {
+    //   const schema: SchemaObject = {
+    //     allOf: [
+    //       {
+    //         type: "object",
+    //         properties: {
+    //           mixedTypeProp1: {
+    //             type: "string",
+    //           },
+    //         },
+    //       },
+    //       {
+    //         type: "array",
+    //         items: {
+    //           type: "number",
+    //         },
+    //       },
+    //     ],
+    //   };
+
+    //   expect(
+    //     await Promise.all(
+    //       createNodes(schema, "response").map(
+    //         async (md: any) => await prettier.format(md, { parser: "babel" })
+    //       )
+    //     )
+    //   ).toMatchSnapshot();
+    // });
+
+    it("should correctly deep merge properties in allOf schemas", async () => {
+      const schema: SchemaObject = {
+        allOf: [
+          {
+            type: "object",
+            properties: {
+              deepProp: {
+                type: "object",
+                properties: {
+                  innerProp1: {
+                    type: "string",
+                  },
+                },
+              },
+            },
+          },
+          {
+            type: "object",
+            properties: {
+              deepProp: {
+                type: "object",
+                properties: {
+                  innerProp2: {
+                    type: "number",
+                  },
+                },
+              },
+            },
+          },
+        ],
+      };
+
+      expect(
+        await Promise.all(
+          createNodes(schema, "response").map(
+            async (md: any) => await prettier.format(md, { parser: "babel" })
+          )
+        )
+      ).toMatchSnapshot();
+    });
+
+    // it("should handle discriminator with allOf schemas", async () => {
+    //   const schema: SchemaObject = {
+    //     allOf: [
+    //       {
+    //         type: "object",
+    //         discriminator: {
+    //           propertyName: "type",
+    //         },
+    //         properties: {
+    //           type: {
+    //             type: "string",
+    //           },
+    //         },
+    //       },
+    //       {
+    //         type: "object",
+    //         properties: {
+    //           specificProp: {
+    //             type: "string",
+    //           },
+    //         },
+    //       },
+    //     ],
+    //   };
+
+    //   expect(
+    //     await Promise.all(
+    //       createNodes(schema, "response").map(
+    //         async (md: any) => await prettier.format(md, { parser: "babel" })
+    //       )
+    //     )
+    //   ).toMatchSnapshot();
+    // });
   });
 
   describe("additionalProperties", () => {
