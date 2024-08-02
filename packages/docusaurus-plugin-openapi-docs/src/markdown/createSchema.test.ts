@@ -11,50 +11,88 @@ import { createNodes } from "./createSchema";
 import { SchemaObject } from "../openapi/types";
 
 describe("createNodes", () => {
-  it("should create readable MODs for oneOf primitive properties", async () => {
-    const schema: SchemaObject = {
-      "x-tags": ["clown"],
-      type: "object",
-      properties: {
-        oneOfProperty: {
-          oneOf: [
-            {
-              type: "object",
-              properties: {
-                noseLength: {
-                  type: "number",
+  describe("oneOf", () => {
+    it("should create readable MODs for oneOf primitive properties", async () => {
+      const schema: SchemaObject = {
+        "x-tags": ["clown"],
+        type: "object",
+        properties: {
+          oneOfProperty: {
+            oneOf: [
+              {
+                type: "object",
+                properties: {
+                  noseLength: {
+                    type: "number",
+                  },
                 },
+                required: ["noseLength"],
+                description: "Clown's nose length",
               },
-              required: ["noseLength"],
-              description: "Clown's nose length",
-            },
-            {
-              type: "array",
-              items: {
+              {
+                type: "array",
+                items: {
+                  type: "string",
+                },
+                description: "Array of strings",
+              },
+              {
+                type: "boolean",
+              },
+              {
+                type: "number",
+              },
+              {
                 type: "string",
               },
-              description: "Array of strings",
-            },
-            {
-              type: "boolean",
-            },
-            {
-              type: "number",
-            },
-            {
-              type: "string",
-            },
-          ],
+            ],
+          },
         },
-      },
-    };
-    expect(
-      await Promise.all(
-        createNodes(schema, "request").map(
-          async (md: any) => await prettier.format(md, { parser: "babel" })
+      };
+      expect(
+        await Promise.all(
+          createNodes(schema, "request").map(
+            async (md: any) => await prettier.format(md, { parser: "babel" })
+          )
         )
-      )
-    ).toMatchSnapshot();
+      ).toMatchSnapshot();
+    });
+  });
+
+  describe("allOf", () => {
+    it("should render same-level properties with allOf", async () => {
+      const schema: SchemaObject = {
+        allOf: [
+          {
+            type: "object",
+            properties: {
+              allOfProp1: {
+                type: "string",
+              },
+              allOfProp2: {
+                type: "string",
+              },
+            },
+          },
+        ],
+        properties: {
+          parentProp1: {
+            type: "string",
+          },
+          parentProp2: {
+            type: "string",
+          },
+        },
+      };
+
+      expect(
+        await Promise.all(
+          createNodes(schema, "response").map(
+            async (md: any) => await prettier.format(md, { parser: "babel" })
+          )
+        )
+      ).toMatchSnapshot();
+    });
   });
 
   describe("additionalProperties", () => {

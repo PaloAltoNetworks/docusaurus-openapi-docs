@@ -223,7 +223,48 @@ Array [
 ]
 `;
 
-exports[`createNodes should create readable MODs for oneOf primitive properties 1`] = `
+exports[`createNodes allOf should render same-level properties with allOf 1`] = `
+Array [
+  "<SchemaItem
+  collapsible={false}
+  name={\\"parentProp1\\"}
+  required={false}
+  schemaName={\\"string\\"}
+  qualifierMessage={undefined}
+  schema={{ type: \\"string\\" }}
+></SchemaItem>;
+",
+  "<SchemaItem
+  collapsible={false}
+  name={\\"parentProp2\\"}
+  required={false}
+  schemaName={\\"string\\"}
+  qualifierMessage={undefined}
+  schema={{ type: \\"string\\" }}
+></SchemaItem>;
+",
+  "<SchemaItem
+  collapsible={false}
+  name={\\"allOfProp1\\"}
+  required={false}
+  schemaName={\\"string\\"}
+  qualifierMessage={undefined}
+  schema={{ type: \\"string\\" }}
+></SchemaItem>;
+",
+  "<SchemaItem
+  collapsible={false}
+  name={\\"allOfProp2\\"}
+  required={false}
+  schemaName={\\"string\\"}
+  qualifierMessage={undefined}
+  schema={{ type: \\"string\\" }}
+></SchemaItem>;
+",
+]
+`;
+
+exports[`createNodes oneOf should create readable MODs for oneOf primitive properties 1`] = `
 Array [
   "<SchemaItem collapsible={true} className={\\"schemaItem\\"}>
   <details style={{}} className={\\"openapi-markdown__details\\"}>
