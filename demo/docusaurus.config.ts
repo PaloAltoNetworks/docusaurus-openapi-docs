@@ -71,6 +71,10 @@ const config: Config = {
               label: "Petstore (versioned)",
               to: "/category/petstore-versioned-api",
             },
+            {
+              label: "Tests",
+              to: "/category/tests",
+            },
           ],
         },
         {
@@ -266,6 +270,16 @@ const config: Config = {
             sidebarOptions: {
               groupPathsBy: "tagGroup",
             },
+            showSchemas: true,
+          } satisfies OpenApiPlugin.Options,
+          tests: {
+            specPath: "examples/tests",
+            outputDir: "docs/tests",
+            sidebarOptions: {
+              groupPathsBy: "tag",
+              categoryLinkSource: "info",
+            },
+            hideSendButton: true,
             showSchemas: true,
           } satisfies OpenApiPlugin.Options,
         } satisfies Plugin.PluginOptions,
