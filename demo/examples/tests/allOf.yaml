@@ -3,6 +3,9 @@ info:
   title: AllOf Variations API
   description: Demonstrates various allOf schema combinations.
   version: 1.0.0
+tags:
+  - name: allOf
+    description: allOf tests
 paths:
   /multiple-allof-nested:
     get:
