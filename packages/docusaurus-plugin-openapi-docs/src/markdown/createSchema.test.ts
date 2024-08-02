@@ -171,6 +171,7 @@ describe("createNodes", () => {
     // Could not resolve values for path:"properties.conflictingProp.type". They are probably incompatible. Values:
     // "string"
     // "number"
+    // eslint-disable-next-line jest/no-commented-out-tests
     // it("should handle conflicting properties in allOf schemas", async () => {
     //   const schema: SchemaObject = {
     //     allOf: [
@@ -205,6 +206,7 @@ describe("createNodes", () => {
     // Could not resolve values for path:"type". They are probably incompatible. Values:
     // "object"
     // "array"
+    // eslint-disable-next-line jest/no-commented-out-tests
     // it("should handle mixed data types in allOf schemas", async () => {
     //   const schema: SchemaObject = {
     //     allOf: [
@@ -275,6 +277,7 @@ describe("createNodes", () => {
       ).toMatchSnapshot();
     });
 
+    // eslint-disable-next-line jest/no-commented-out-tests
     // it("should handle discriminator with allOf schemas", async () => {
     //   const schema: SchemaObject = {
     //     allOf: [
