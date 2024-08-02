@@ -162,6 +162,20 @@ const sidebars = {
       items: require("./docs/petstore_versioned/1.0.0/sidebar.js"),
     },
   ],
+
+  tests: [
+    {
+      type: "category",
+      label: "Tests",
+      link: {
+        type: "generated-index",
+        title: "Tests",
+        description: "Various OpenAPI test cases",
+        slug: "/category/tests",
+      },
+      items: require("./docs/tests/sidebar.js"),
+    },
+  ],
 };
 
 module.exports = sidebars;

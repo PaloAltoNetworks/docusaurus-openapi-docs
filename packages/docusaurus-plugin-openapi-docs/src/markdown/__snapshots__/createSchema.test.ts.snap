@@ -1,6 +1,151 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`createNodes should create readable MODs for oneOf primitive properties 1`] = `
+exports[`createNodes allOf should correctly deep merge properties in allOf schemas 1`] = `
+Array [
+  "<SchemaItem collapsible={true} className={\\"schemaItem\\"}>
+  <details style={{}} className={\\"openapi-markdown__details\\"}>
+    <summary style={{}}>
+      <span className={\\"openapi-schema__container\\"}>
+        <strong className={\\"openapi-schema__property\\"}>deepProp</strong>
+        <span className={\\"openapi-schema__name\\"}> object</span>
+      </span>
+    </summary>
+    <div style={{ marginLeft: \\"1rem\\" }}>
+      <SchemaItem
+        collapsible={false}
+        name={\\"innerProp1\\"}
+        required={false}
+        schemaName={\\"string\\"}
+        qualifierMessage={undefined}
+        schema={{ type: \\"string\\" }}
+      ></SchemaItem>
+      <SchemaItem
+        collapsible={false}
+        name={\\"innerProp2\\"}
+        required={false}
+        schemaName={\\"number\\"}
+        qualifierMessage={undefined}
+        schema={{ type: \\"number\\" }}
+      ></SchemaItem>
+    </div>
+  </details>
+</SchemaItem>;
+",
+]
+`;
+
+exports[`createNodes allOf should correctly handle shared required properties across allOf schemas 1`] = `
+Array [
+  "<SchemaItem
+  collapsible={false}
+  name={\\"sharedProp\\"}
+  required={true}
+  schemaName={\\"string\\"}
+  qualifierMessage={undefined}
+  schema={{ type: \\"string\\" }}
+></SchemaItem>;
+",
+  "<SchemaItem
+  collapsible={false}
+  name={\\"anotherProp\\"}
+  required={true}
+  schemaName={\\"number\\"}
+  qualifierMessage={undefined}
+  schema={{ type: \\"number\\" }}
+></SchemaItem>;
+",
+]
+`;
+
+exports[`createNodes allOf should correctly merge nested properties from multiple allOf schemas 1`] = `
+Array [
+  "<SchemaItem collapsible={true} className={\\"schemaItem\\"}>
+  <details style={{}} className={\\"openapi-markdown__details\\"}>
+    <summary style={{}}>
+      <span className={\\"openapi-schema__container\\"}>
+        <strong className={\\"openapi-schema__property\\"}>outerProp1</strong>
+        <span className={\\"openapi-schema__name\\"}> object</span>
+      </span>
+    </summary>
+    <div style={{ marginLeft: \\"1rem\\" }}>
+      <SchemaItem
+        collapsible={false}
+        name={\\"innerProp1\\"}
+        required={false}
+        schemaName={\\"string\\"}
+        qualifierMessage={undefined}
+        schema={{ type: \\"string\\" }}
+      ></SchemaItem>
+    </div>
+  </details>
+</SchemaItem>;
+",
+  "<SchemaItem collapsible={true} className={\\"schemaItem\\"}>
+  <details style={{}} className={\\"openapi-markdown__details\\"}>
+    <summary style={{}}>
+      <span className={\\"openapi-schema__container\\"}>
+        <strong className={\\"openapi-schema__property\\"}>outerProp2</strong>
+        <span className={\\"openapi-schema__name\\"}> object</span>
+      </span>
+    </summary>
+    <div style={{ marginLeft: \\"1rem\\" }}>
+      <SchemaItem
+        collapsible={false}
+        name={\\"innerProp2\\"}
+        required={false}
+        schemaName={\\"number\\"}
+        qualifierMessage={undefined}
+        schema={{ type: \\"number\\" }}
+      ></SchemaItem>
+    </div>
+  </details>
+</SchemaItem>;
+",
+]
+`;
+
+exports[`createNodes allOf should render same-level properties with allOf 1`] = `
+Array [
+  "<SchemaItem
+  collapsible={false}
+  name={\\"parentProp1\\"}
+  required={false}
+  schemaName={\\"string\\"}
+  qualifierMessage={undefined}
+  schema={{ type: \\"string\\" }}
+></SchemaItem>;
+",
+  "<SchemaItem
+  collapsible={false}
+  name={\\"parentProp2\\"}
+  required={false}
+  schemaName={\\"string\\"}
+  qualifierMessage={undefined}
+  schema={{ type: \\"string\\" }}
+></SchemaItem>;
+",
+  "<SchemaItem
+  collapsible={false}
+  name={\\"allOfProp1\\"}
+  required={false}
+  schemaName={\\"string\\"}
+  qualifierMessage={undefined}
+  schema={{ type: \\"string\\" }}
+></SchemaItem>;
+",
+  "<SchemaItem
+  collapsible={false}
+  name={\\"allOfProp2\\"}
+  required={false}
+  schemaName={\\"string\\"}
+  qualifierMessage={undefined}
+  schema={{ type: \\"string\\" }}
+></SchemaItem>;
+",
+]
+`;
+
+exports[`createNodes oneOf should create readable MODs for oneOf primitive properties 1`] = `
 Array [
   "<SchemaItem collapsible={true} className={\\"schemaItem\\"}>
   <details style={{}} className={\\"openapi-markdown__details\\"}>

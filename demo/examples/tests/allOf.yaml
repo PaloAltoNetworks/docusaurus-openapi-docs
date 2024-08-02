@@ -1,0 +1,282 @@
+openapi: 3.0.1
+info:
+  title: AllOf Variations API
+  description: Demonstrates various allOf schema combinations.
+  version: 1.0.0
+tags:
+  - name: allOf
+    description: allOf tests
+paths:
+  /multiple-allof-nested:
+    get:
+      tags:
+        - allOf
+      summary: Multiple allOf with Nested Properties
+      description: |
+        Schema:
+        ```yaml
+        allOf:
+          - type: object
+            properties:
+              outerProp1:
+                type: object
+                properties:
+                  innerProp1:
+                    type: string
+          - type: object
+            properties:
+              outerProp2:
+                type: object
+                properties:
+                  innerProp2:
+                    type: number
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      outerProp1:
+                        type: object
+                        properties:
+                          innerProp1:
+                            type: string
+                  - type: object
+                    properties:
+                      outerProp2:
+                        type: object
+                        properties:
+                          innerProp2:
+                            type: number
+
+  /allof-shared-required:
+    get:
+      tags:
+        - allOf
+      summary: allOf with Shared Required Properties
+      description: |
+        Schema:
+        ```yaml
+        allOf:
+          - type: object
+            properties:
+              sharedProp:
+                type: string
+            required: [sharedProp]
+          - type: object
+            properties:
+              anotherProp:
+                type: number
+            required: [anotherProp]
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      sharedProp:
+                        type: string
+                    required: [sharedProp]
+                  - type: object
+                    properties:
+                      anotherProp:
+                        type: number
+                    required: [anotherProp]
+
+  # /allof-conflicting-properties:
+  #   get:
+  #     tags:
+  #       - allOf
+  #     summary: allOf with Conflicting Properties
+  #     description: |
+  #       Schema:
+  #       ```yaml
+  #       allOf:
+  #         - type: object
+  #           properties:
+  #             conflictingProp:
+  #               type: string
+  #         - type: object
+  #           properties:
+  #             conflictingProp:
+  #               type: number
+  #       ```
+  #     responses:
+  #       '200':
+  #         description: Successful response
+  #         content:
+  #           application/json:
+  #             schema:
+  #               allOf:
+  #                 - type: object
+  #                   properties:
+  #                     conflictingProp:
+  #                       type: string
+  #                 - type: object
+  #                   properties:
+  #                     conflictingProp:
+  #                       type: number
+
+  # /allof-mixed-data-types:
+  #   get:
+  #     tags:
+  #       - allOf
+  #     summary: allOf with Mixed Data Types
+  #     description: |
+  #       Schema:
+  #       ```yaml
+  #       allOf:
+  #         - type: object
+  #           properties:
+  #             mixedTypeProp1:
+  #               type: string
+  #         - type: array
+  #           items:
+  #             type: number
+  #       ```
+  #     responses:
+  #       '200':
+  #         description: Successful response
+  #         content:
+  #           application/json:
+  #             schema:
+  #               allOf:
+  #                 - type: object
+  #                   properties:
+  #                     mixedTypeProp1:
+  #                       type: string
+  #                 - type: array
+  #                   items:
+  #                     type: number
+
+  /allof-deep-merging:
+    get:
+      tags:
+        - allOf
+      summary: allOf with Deep Merging
+      description: |
+        Schema:
+        ```yaml
+        allOf:
+          - type: object
+            properties:
+              deepProp:
+                type: object
+                properties:
+                  innerProp1:
+                    type: string
+          - type: object
+            properties:
+              deepProp:
+                type: object
+                properties:
+                  innerProp2:
+                    type: number
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      deepProp:
+                        type: object
+                        properties:
+                          innerProp1:
+                            type: string
+                  - type: object
+                    properties:
+                      deepProp:
+                        type: object
+                        properties:
+                          innerProp2:
+                            type: number
+
+  # /allof-discriminator:
+  #   get:
+  #     tags:
+  #       - allOf
+  #     summary: allOf with Discriminator
+  #     description: |
+  #       Schema:
+  #       ```yaml
+  #       allOf:
+  #         - type: object
+  #           discriminator:
+  #             propertyName: type
+  #           properties:
+  #             type:
+  #               type: string
+  #         - type: object
+  #           properties:
+  #             specificProp:
+  #               type: string
+  #       ```
+  #     responses:
+  #       "200":
+  #         description: Successful response
+  #         content:
+  #           application/json:
+  #             schema:
+  #               allOf:
+  #                 - type: object
+  #                   discriminator:
+  #                     propertyName: type
+  #                   properties:
+  #                     type:
+  #                       type: string
+  #                 - type: object
+  #                   properties:
+  #                     specificProp:
+  #                       type: string
+
+  /allof-same-level-properties:
+    get:
+      tags:
+        - allOf
+      summary: allOf with Same-Level Properties
+      description: |
+        Schema:
+        ```yaml
+        allOf:
+          - type: object
+            properties:
+              allOfProp1:
+                type: string
+              allOfProp2:
+                type: string
+        properties:
+          parentProp1:
+            type: string
+          parentProp2:
+            type: string
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      allOfProp1:
+                        type: string
+                      allOfProp2:
+                        type: string
+                properties:
+                  parentProp1:
+                    type: string
+                  parentProp2:
+                    type: string
