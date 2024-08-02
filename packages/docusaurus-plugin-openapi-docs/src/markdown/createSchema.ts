@@ -615,6 +615,7 @@ function createEdges({
   }
 
   const schemaName = getSchemaName(schema);
+
   if (discriminator !== undefined && discriminator.propertyName === name) {
     return createPropertyDiscriminator(
       name,
@@ -626,6 +627,47 @@ function createEdges({
   }
 
   if (schema.oneOf !== undefined || schema.anyOf !== undefined) {
+    return createDetailsNode(
+      name,
+      schemaName,
+      schema,
+      required,
+      schema.nullable
+    );
+  }
+
+  if (schema.properties !== undefined) {
+    return createDetailsNode(
+      name,
+      schemaName,
+      schema,
+      required,
+      schema.nullable
+    );
+  }
+
+  if (schema.additionalProperties !== undefined) {
+    return createDetailsNode(
+      name,
+      schemaName,
+      schema,
+      required,
+      schema.nullable
+    );
+  }
+
+  // array of objects
+  if (schema.items?.properties !== undefined) {
+    return createDetailsNode(
+      name,
+      schemaName,
+      schema,
+      required,
+      schema.nullable
+    );
+  }
+
+  if (schema.items?.anyOf !== undefined || schema.items?.oneOf !== undefined) {
     return createDetailsNode(
       name,
       schemaName,
@@ -707,47 +749,6 @@ function createEdges({
     });
   }
 
-  if (schema.properties !== undefined) {
-    return createDetailsNode(
-      name,
-      schemaName,
-      schema,
-      required,
-      schema.nullable
-    );
-  }
-
-  if (schema.additionalProperties !== undefined) {
-    return createDetailsNode(
-      name,
-      schemaName,
-      schema,
-      required,
-      schema.nullable
-    );
-  }
-
-  // array of objects
-  if (schema.items?.properties !== undefined) {
-    return createDetailsNode(
-      name,
-      schemaName,
-      schema,
-      required,
-      schema.nullable
-    );
-  }
-
-  if (schema.items?.anyOf !== undefined || schema.items?.oneOf !== undefined) {
-    return createDetailsNode(
-      name,
-      schemaName,
-      schema,
-      required,
-      schema.nullable
-    );
-  }
-
   // primitives and array of non-objects
   return create("SchemaItem", {
     collapsible: false,
@@ -787,6 +788,19 @@ export function createNodes(
     nodes.push(createAnyOneOf(schema));
   }
 
+  if (schema.properties !== undefined) {
+    nodes.push(createProperties(schema));
+  }
+
+  if (schema.additionalProperties !== undefined) {
+    nodes.push(createAdditionalProperties(schema));
+  }
+
+  // TODO: figure out how to handle array of objects
+  if (schema.items !== undefined) {
+    nodes.push(createItems(schema));
+  }
+
   if (schema.allOf !== undefined) {
     const { mergedSchemas } = mergeAllOf(schema.allOf);
 
@@ -800,19 +814,6 @@ export function createNodes(
     if (mergedSchemas.properties !== undefined) {
       nodes.push(createProperties(mergedSchemas));
     }
-  }
-
-  if (schema.properties !== undefined) {
-    nodes.push(createProperties(schema));
-  }
-
-  if (schema.additionalProperties !== undefined) {
-    nodes.push(createAdditionalProperties(schema));
-  }
-
-  // TODO: figure out how to handle array of objects
-  if (schema.items !== undefined) {
-    nodes.push(createItems(schema));
   }
 
   if (nodes.length && nodes.length > 0) {
