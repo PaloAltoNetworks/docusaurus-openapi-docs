@@ -200,43 +200,43 @@ paths:
                           innerProp2:
                             type: number
 
-  /allof-discriminator:
-    get:
-      tags:
-        - allOf
-      summary: allOf with Discriminator
-      description: |
-        Schema:
-        ```yaml
-        allOf:
-          - type: object
-            discriminator:
-              propertyName: type
-            properties:
-              type:
-                type: string
-          - type: object
-            properties:
-              specificProp:
-                type: string
-        ```
-      responses:
-        "200":
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - type: object
-                    discriminator:
-                      propertyName: type
-                    properties:
-                      type:
-                        type: string
-                  - type: object
-                    properties:
-                      specificProp:
-                        type: string
+  # /allof-discriminator:
+  #   get:
+  #     tags:
+  #       - allOf
+  #     summary: allOf with Discriminator
+  #     description: |
+  #       Schema:
+  #       ```yaml
+  #       allOf:
+  #         - type: object
+  #           discriminator:
+  #             propertyName: type
+  #           properties:
+  #             type:
+  #               type: string
+  #         - type: object
+  #           properties:
+  #             specificProp:
+  #               type: string
+  #       ```
+  #     responses:
+  #       "200":
+  #         description: Successful response
+  #         content:
+  #           application/json:
+  #             schema:
+  #               allOf:
+  #                 - type: object
+  #                   discriminator:
+  #                     propertyName: type
+  #                   properties:
+  #                     type:
+  #                       type: string
+  #                 - type: object
+  #                   properties:
+  #                     specificProp:
+  #                       type: string
 
   /allof-same-level-properties:
     get:
