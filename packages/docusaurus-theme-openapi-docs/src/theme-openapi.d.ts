@@ -232,7 +232,7 @@ declare module "@theme/ApiExplorer/persistanceMiddleware" {
 }
 
 declare module "@theme/ApiExplorer/Request" {
-  import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
+  // import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 
   export interface RequestProps {
     item: NonNullable;
@@ -241,7 +241,7 @@ declare module "@theme/ApiExplorer/Request" {
 }
 
 declare module "@theme/ApiExplorer/Response" {
-  import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
+  // import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 
   export interface ResponseProps {
     item: ApiItem;
