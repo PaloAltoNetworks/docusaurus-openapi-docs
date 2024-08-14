@@ -1,3 +1,18 @@
+## 2.2.2 (Aug 14, 2024)
+
+High level enhancements
+
+- Various bug fixes and support for allOf, anyOf, oneOf.
+
+Other enhancements and bug fixes
+
+- Ensure same-level properties and allOf are rendered ([#904](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/904))
+- statically set generated date and date-time example value ([#901](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/901))
+- Fix support for example summaries ([#898](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/898))
+- Support anyOf/oneOf schema descriptions ([#897](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/897))
+- Check if the outputDir exists before attempting to create the versions.json file ([#892](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/892))
+- Add object primitive support to createAnyOneOf ([#895](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/895))
+
 ## 2.2.1 (Jul 3, 2024)
 
 High level enhancements
