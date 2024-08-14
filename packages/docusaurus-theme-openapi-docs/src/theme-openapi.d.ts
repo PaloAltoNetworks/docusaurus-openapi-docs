@@ -11,11 +11,11 @@
 
 declare module "@docusaurus/plugin-content-docs-types" {
   // Makes all properties visible when hovering over the type
-  type Expand<T extends Record<string, unknown>> = { [P in keyof T]: T[P] };
+  type Expand<T extends Record> = { [P in keyof T]: T[P] };
 
   export type SidebarItemBase = {
     className?: string;
-    customProps?: Record<string, unknown>;
+    customProps?: Record;
   };
 
   export type SidebarItemLink = SidebarItemBase & {
@@ -32,11 +32,7 @@ declare module "@docusaurus/plugin-content-docs-types" {
     collapsible: boolean;
   };
 
-  export type PropSidebarItemCategory = Expand<
-    SidebarItemCategoryBase & {
-      items: PropSidebarItem[];
-    }
-  >;
+  export type PropSidebarItemCategory = Expand;
 
   export type PropSidebarItem = SidebarItemLink | PropSidebarItemCategory;
   export type PropSidebar = PropSidebarItem[];
@@ -46,15 +42,11 @@ declare module "@docusaurus/plugin-content-docs-types" {
 }
 
 declare module "docusaurus-theme-openapi-docs" {
-  export type ThemeConfig = Partial<import("./types").ThemeConfig>;
+  export type ThemeConfig = Partial;
 }
 
 declare module "@theme/ApiItem/hooks" {
   export { useTypedDispatch, useTypedSelector };
-}
-
-declare module "@theme/ApiItem/Layout" {
-  export default function Layout(props: any): JSX.Element;
 }
 
 declare module "@theme/ApiItem/store" {
@@ -75,7 +67,7 @@ declare module "@theme/ApiExplorer/Accept" {
 
 declare module "@theme/ApiExplorer/Accept/slice" {
   export { setAccept };
-  export default accept as Reducer<State, AnyAction>;
+  export default accept as Reducer;
 }
 
 declare module "@theme/ApiExplorer/Authorization" {
@@ -84,7 +76,7 @@ declare module "@theme/ApiExplorer/Authorization" {
 
 declare module "@theme/ApiExplorer/Authorization/slice" {
   export { AuthState, Scheme, setAuthData, setSelectedAuth, createAuth };
-  export default auth as Reducer<State, AnyAction>;
+  export default auth as Reducer;
 }
 
 declare module "@theme/ApiExplorer/Body" {
@@ -102,7 +94,7 @@ declare module "@theme/ApiExplorer/Body/slice" {
 
   export { Body, Content, State };
   export function setStringRawBody(any, any?): any;
-  export default body as Reducer<State, AnyAction>;
+  export default body as Reducer;
 }
 
 declare module "@theme/ApiExplorer/buildPostmanRequest" {
@@ -121,7 +113,7 @@ declare module "@theme/ApiExplorer/ContentType" {
 
 declare module "@theme/ApiExplorer/ContentType/slice" {
   export { setContentType };
-  export default contentType as Reducer<State, AnyAction>;
+  export default contentType as Reducer;
 }
 
 declare module "@theme/ApiExplorer/CodeSnippets" {
@@ -232,7 +224,7 @@ declare module "@theme/ApiExplorer/ParamOptions/ParamFormItems/ParamTextFormItem
 declare module "@theme/ApiExplorer/ParamOptions/slice" {
   export type { Param };
   export const setParam;
-  export default params as Reducer<State, AnyAction>;
+  export default params as Reducer;
 }
 
 declare module "@theme/ApiExplorer/persistanceMiddleware" {
@@ -243,7 +235,7 @@ declare module "@theme/ApiExplorer/Request" {
   import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 
   export interface RequestProps {
-    item: NonNullable<ApiItem>;
+    item: NonNullable;
   }
   export default function Request(props: RequestProps): JSX.Element;
 }
@@ -252,7 +244,7 @@ declare module "@theme/ApiExplorer/Response" {
   import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 
   export interface ResponseProps {
-    item: NonNullable<ApiItem>;
+    item: ApiItem;
   }
 
   export default function Response(props: ResponseProps): JSX.Element;
@@ -260,7 +252,7 @@ declare module "@theme/ApiExplorer/Response" {
 
 declare module "@theme/ApiExplorer/Response/slice" {
   export { setResponse, setCode, setHeaders, clearCode, clearHeaders };
-  export default response as Reducer<State, AnyAction>;
+  export default response as Reducer;
 }
 
 declare module "@theme/ApiExplorer/SecuritySchemes" {
@@ -276,7 +268,7 @@ declare module "@theme/ApiExplorer/ApiCodeBlock" {
 }
 
 declare module "@theme/ApiExplorer/Server/slice" {
-  export default server as Reducer<State, AnyAction>;
+  export default server as Reducer;
 }
 
 declare module "@theme/ApiExplorer/storage-utils" {
