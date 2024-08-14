@@ -72,7 +72,7 @@ declare module "@docusaurus/theme-common/internal" {
   };
 
   export function useCodeWordWrap(): {
-    readonly codeBlockRef: RefObject<HTMLPreElement>;
+    readonly codeBlockRef: RefObject;
     readonly isEnabled: boolean;
     readonly isCodeScrollable: boolean;
     readonly toggle: () => void;

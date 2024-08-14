@@ -11,14 +11,15 @@ import React from "react";
 
 import BrowserOnly from "@docusaurus/BrowserOnly";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
+// @ts-ignore
+import { DocProvider } from "@docusaurus/plugin-content-docs/client";
 import { HtmlClassNameProvider } from "@docusaurus/theme-common";
-import { DocProvider } from "@docusaurus/theme-common/internal";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import useIsBrowser from "@docusaurus/useIsBrowser";
 import { createAuth } from "@theme/ApiExplorer/Authorization/slice";
 import { createPersistanceMiddleware } from "@theme/ApiExplorer/persistanceMiddleware";
-import DocItemLayout from "@theme/ApiItem/Layout";
 import type { Props } from "@theme/DocItem";
+import DocItemLayout from "@theme/DocItem/Layout";
 import DocItemMetadata from "@theme/DocItem/Metadata";
 import clsx from "clsx";
 import { ServerObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
@@ -46,7 +47,6 @@ interface SchemaFrontMatter extends DocFrontMatter {
   readonly schema?: boolean;
 }
 
-// @ts-ignore
 export default function ApiItem(props: Props): JSX.Element {
   const docHtmlClassName = `docs-doc-id-${props.content.metadata.id}`;
   const MDXComponent = props.content;
