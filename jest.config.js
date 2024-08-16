@@ -12,4 +12,8 @@ module.exports = {
     "<rootDir>/packages/docusaurus-plugin-openapi-docs/src",
     "<rootDir>/packages/docusaurus-theme-openapi-docs/src",
   ],
+  moduleNameMapper: {
+    "^neotraverse/legacy$":
+      "<rootDir>/node_modules/neotraverse/dist/legacy/legacy.cjs",
+  },
 };
