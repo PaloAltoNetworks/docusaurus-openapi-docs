@@ -1,3 +1,15 @@
+## 4.0.0 (Aug 20, 2024)
+
+High level enhancements
+
+- Introduce support for Docusaurus 3.5.0+
+
+> Note that this breaks backward compatibility and users will need to update their Docusaurus installation to 3.5.0 or later to use this version of the plugin.
+
+Other enhancements and bug fixes
+
+- Introduce support for Docusaurus 3.5.0+ ([#919](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/919))
+
 ## 3.0.2 (Aug 14, 2024)
 
 High level enhancements

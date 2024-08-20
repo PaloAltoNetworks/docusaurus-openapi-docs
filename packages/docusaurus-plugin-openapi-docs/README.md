@@ -41,16 +41,17 @@ Key Features:
 
 | Docusaurus OpenAPI Docs | Docusaurus      |
 | ----------------------- | --------------- |
-| 3.0.2 (current)         | `3.0.1 - 3.4.0` |
+| 4.0.0 (current)         | `3.5.0 - 3.5.2` |
+| 3.0.2 (legacy)          | `3.0.1 - 3.4.0` |
 | 2.2.1 (legacy)          | `2.4.1 - 2.4.3` |
-| 1.7.3 (legacy)          | `2.0.1 - 2.2.0` |
+| 1.7.3 (end-of-support)  | `2.0.1 - 2.2.0` |
 
 ## Bootstrapping from Template (new Docusaurus site)
 
 Run the following to bootstrap a Docsaurus v3 site (classic theme) with `docusaurus-openapi-docs`:
 
 ```bash
-npx create-docusaurus@3.4.0 my-website --package-manager yarn
+npx create-docusaurus@3.5.2my-website --package-manager yarn
 ```
 
 > When prompted to select a template choose `Git repository`.
