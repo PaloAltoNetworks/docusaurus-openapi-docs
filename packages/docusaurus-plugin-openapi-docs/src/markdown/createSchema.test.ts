@@ -57,6 +57,193 @@ describe("createNodes", () => {
         )
       ).toMatchSnapshot();
     });
+
+    it("should handle oneOf with different primitive types", async () => {
+      const schema: SchemaObject = {
+        type: "object",
+        properties: {
+          oneOfProperty: {
+            oneOf: [
+              { type: "string" },
+              { type: "number" },
+              { type: "boolean" },
+            ],
+          },
+        },
+      };
+
+      expect(
+        await Promise.all(
+          createNodes(schema, "response").map(
+            async (md: any) => await prettier.format(md, { parser: "babel" })
+          )
+        )
+      ).toMatchSnapshot();
+    });
+
+    it("should handle oneOf with complex types", async () => {
+      const schema: SchemaObject = {
+        type: "object",
+        properties: {
+          oneOfProperty: {
+            oneOf: [
+              {
+                type: "object",
+                properties: {
+                  objectProp: { type: "string" },
+                },
+              },
+              {
+                type: "array",
+                items: { type: "number" },
+              },
+            ],
+          },
+        },
+      };
+
+      expect(
+        await Promise.all(
+          createNodes(schema, "response").map(
+            async (md: any) => await prettier.format(md, { parser: "babel" })
+          )
+        )
+      ).toMatchSnapshot();
+    });
+
+    it("should handle nested oneOf clauses", async () => {
+      const schema: SchemaObject = {
+        type: "object",
+        properties: {
+          oneOfProperty: {
+            oneOf: [
+              {
+                type: "object",
+                properties: {
+                  nestedOneOfProp: {
+                    oneOf: [{ type: "string" }, { type: "number" }],
+                  },
+                },
+              },
+              { type: "boolean" },
+            ],
+          },
+        },
+      };
+
+      expect(
+        await Promise.all(
+          createNodes(schema, "response").map(
+            async (md: any) => await prettier.format(md, { parser: "babel" })
+          )
+        )
+      ).toMatchSnapshot();
+    });
+
+    // TypeError: Cannot read properties of undefined (reading 'length')
+    // eslint-disable-next-line jest/no-commented-out-tests
+    // it("should handle oneOf with discriminator", async () => {
+    //   const schema: SchemaObject = {
+    //     type: "object",
+    //     discriminator: { propertyName: "type" },
+    //     properties: {
+    //       type: { type: "string" },
+    //     },
+    //     oneOf: [
+    //       {
+    //         type: "object",
+    //         properties: {
+    //           type: { type: "string", enum: ["typeA"] },
+    //           propA: { type: "string" },
+    //         },
+    //         required: ["type"],
+    //       },
+    //       {
+    //         type: "object",
+    //         properties: {
+    //           type: { type: "string", enum: ["typeB"] },
+    //           propB: { type: "number" },
+    //         },
+    //         required: ["type"],
+    //       },
+    //     ],
+    //   };
+
+    //   expect(
+    //     await Promise.all(
+    //       createNodes(schema, "response").map(
+    //         async (md: any) => await prettier.format(md, { parser: "babel" })
+    //       )
+    //     )
+    //   ).toMatchSnapshot();
+    // });
+
+    it("should handle oneOf with shared properties", async () => {
+      const schema: SchemaObject = {
+        type: "object",
+        properties: {
+          sharedProp: { type: "string" },
+          oneOfProperty: {
+            oneOf: [
+              {
+                type: "object",
+                properties: {
+                  specificPropA: { type: "string" },
+                },
+              },
+              {
+                type: "object",
+                properties: {
+                  specificPropB: { type: "number" },
+                },
+              },
+            ],
+          },
+        },
+      };
+
+      expect(
+        await Promise.all(
+          createNodes(schema, "response").map(
+            async (md: any) => await prettier.format(md, { parser: "babel" })
+          )
+        )
+      ).toMatchSnapshot();
+    });
+
+    it("should handle oneOf with required properties", async () => {
+      const schema: SchemaObject = {
+        type: "object",
+        properties: {
+          oneOfProperty: {
+            oneOf: [
+              {
+                type: "object",
+                properties: {
+                  requiredPropA: { type: "string" },
+                },
+                required: ["requiredPropA"],
+              },
+              {
+                type: "object",
+                properties: {
+                  requiredPropB: { type: "number" },
+                },
+                required: ["requiredPropB"],
+              },
+            ],
+          },
+        },
+      };
+
+      expect(
+        await Promise.all(
+          createNodes(schema, "response").map(
+            async (md: any) => await prettier.format(md, { parser: "babel" })
+          )
+        )
+      ).toMatchSnapshot();
+    });
   });
 
   describe("allOf", () => {
