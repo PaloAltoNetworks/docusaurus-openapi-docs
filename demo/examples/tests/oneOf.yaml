@@ -1,0 +1,264 @@
+openapi: 3.0.1
+info:
+  title: OneOf Variations API
+  description: Demonstrates various oneOf schema combinations.
+  version: 1.0.0
+tags:
+  - name: oneOf
+    description: oneOf tests
+paths:
+  /oneof-primitive-types:
+    get:
+      tags:
+        - oneOf
+      summary: oneOf with Primitive Types
+      description: |
+        Schema:
+        ```yaml
+        type: object
+        properties:
+          oneOfProperty:
+            oneOf:
+              - type: string
+              - type: number
+              - type: boolean
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  oneOfProperty:
+                    oneOf:
+                      - type: string
+                      - type: number
+                      - type: boolean
+
+  /oneof-complex-types:
+    get:
+      tags:
+        - oneOf
+      summary: oneOf with Complex Types
+      description: |
+        Schema:
+        ```yaml
+        type: object
+        properties:
+          oneOfProperty:
+            oneOf:
+              - type: object
+                properties:
+                  objectProp:
+                    type: string
+              - type: array
+                items:
+                  type: number
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  oneOfProperty:
+                    oneOf:
+                      - type: object
+                        properties:
+                          objectProp:
+                            type: string
+                      - type: array
+                        items:
+                          type: number
+
+  /oneof-nested:
+    get:
+      tags:
+        - oneOf
+      summary: oneOf with Nested oneOf
+      description: |
+        Schema:
+        ```yaml
+        type: object
+        properties:
+          oneOfProperty:
+            oneOf:
+              - type: object
+                properties:
+                  nestedOneOfProp:
+                    oneOf:
+                      - type: string
+                      - type: number
+              - type: boolean
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  oneOfProperty:
+                    oneOf:
+                      - type: object
+                        properties:
+                          nestedOneOfProp:
+                            oneOf:
+                              - type: string
+                              - type: number
+                      - type: boolean
+
+  # /oneof-discriminator:
+  #   get:
+  #     tags:
+  #       - oneOf
+  #     summary: oneOf with Discriminator
+  #     description: |
+  #       Schema:
+  #       ```yaml
+  #       type: object
+  #       discriminator:
+  #         propertyName: type
+  #       properties:
+  #         type:
+  #           type: string
+  #       oneOf:
+  #         - type: object
+  #           properties:
+  #             type:
+  #               type: string
+  #               enum: ["typeA"]
+  #             propA:
+  #               type: string
+  #           required: ["type"]
+  #         - type: object
+  #           properties:
+  #             type:
+  #               type: string
+  #               enum: ["typeB"]
+  #             propB:
+  #               type: number
+  #           required: ["type"]
+  #       ```
+  #     responses:
+  #       '200':
+  #         description: Successful response
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               discriminator:
+  #                 propertyName: type
+  #               properties:
+  #                 type:
+  #                   type: string
+  #               oneOf:
+  #                 - type: object
+  #                   properties:
+  #                     type:
+  #                       type: string
+  #                       enum: ["typeA"]
+  #                     propA:
+  #                       type: string
+  #                   required: ["type"]
+  #                 - type: object
+  #                   properties:
+  #                     type:
+  #                       type: string
+  #                       enum: ["typeB"]
+  #                     propB:
+  #                       type: number
+  #                   required: ["type"]
+
+  /oneof-shared-properties:
+    get:
+      tags:
+        - oneOf
+      summary: oneOf with Shared Properties
+      description: |
+        Schema:
+        ```yaml
+        type: object
+        properties:
+          sharedProp:
+            type: string
+          oneOfProperty:
+            oneOf:
+              - type: object
+                properties:
+                  specificPropA:
+                    type: string
+              - type: object
+                properties:
+                  specificPropB:
+                    type: number
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sharedProp:
+                    type: string
+                  oneOfProperty:
+                    oneOf:
+                      - type: object
+                        properties:
+                          specificPropA:
+                            type: string
+                      - type: object
+                        properties:
+                          specificPropB:
+                            type: number
+
+  /oneof-required-properties:
+    get:
+      tags:
+        - oneOf
+      summary: oneOf with Required Properties
+      description: |
+        Schema:
+        ```yaml
+        type: object
+        properties:
+          oneOfProperty:
+            oneOf:
+              - type: object
+                properties:
+                  requiredPropA:
+                    type: string
+                required: ["requiredPropA"]
+              - type: object
+                properties:
+                  requiredPropB:
+                    type: number
+                required: ["requiredPropB"]
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  oneOfProperty:
+                    oneOf:
+                      - type: object
+                        properties:
+                          requiredPropA:
+                            type: string
+                        required: ["requiredPropA"]
+                      - type: object
+                        properties:
+                          requiredPropB:
+                            type: number
+                        required: ["requiredPropB"]
