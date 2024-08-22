@@ -1,3 +1,9 @@
+## 2.2.3 (Aug 22, 2024)
+
+Other enhancements and bug fixes
+
+- handle discriminators with no mapping as simply property
+
 ## 2.2.2 (Aug 14, 2024)
 
 High level enhancements
