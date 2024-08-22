@@ -1,3 +1,17 @@
+## 4.0.1 (Aug 22, 2024)
+
+High level enhancements
+
+- Improved support for rendering discriminator properties
+
+Other enhancements and bug fixes
+
+- Merge pull request #927 from PaloAltoNetworks/discriminator-no-mapping
+- add test cases for discriminator
+- add discriminator test spec
+- handle discriminators with no mapping as simply property
+- Add additional oneOf tests ([#924](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/924))
+
 ## 4.0.0 (Aug 20, 2024)
 
 High level enhancements
