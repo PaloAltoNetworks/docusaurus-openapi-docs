@@ -535,8 +535,9 @@ function createPropertyDiscriminator(
     return undefined;
   }
 
+  // render as a simple property if there's no mapping
   if (discriminator.mapping === undefined) {
-    return undefined;
+    return createEdges({ name, schema, required });
   }
 
   return create("div", {
