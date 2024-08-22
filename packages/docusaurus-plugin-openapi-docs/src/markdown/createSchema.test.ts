@@ -500,6 +500,428 @@ describe("createNodes", () => {
     // });
   });
 
+  describe("discriminator", () => {
+    it("should handle basic discriminator with oneOf", async () => {
+      const schema: SchemaObject = {
+        type: "object",
+        discriminator: { propertyName: "type" },
+        properties: {
+          type: { type: "string" },
+        },
+        oneOf: [
+          {
+            type: "object",
+            properties: {
+              type: { type: "string", enum: ["typeA"] },
+              propA: { type: "string" },
+            },
+            required: ["type"],
+          },
+          {
+            type: "object",
+            properties: {
+              type: { type: "string", enum: ["typeB"] },
+              propB: { type: "number" },
+            },
+            required: ["type"],
+          },
+        ],
+      };
+
+      expect(
+        await Promise.all(
+          createNodes(schema, "response").map(
+            async (md: any) => await prettier.format(md, { parser: "babel" })
+          )
+        )
+      ).toMatchSnapshot();
+    });
+
+    it("should handle discriminator with shared properties", async () => {
+      const schema: SchemaObject = {
+        type: "object",
+        discriminator: { propertyName: "type" },
+        properties: {
+          type: { type: "string" },
+          sharedProp: { type: "string" },
+        },
+        oneOf: [
+          {
+            type: "object",
+            properties: {
+              type: { type: "string", enum: ["typeA"] },
+              propA: { type: "string" },
+            },
+            required: ["type"],
+          },
+          {
+            type: "object",
+            properties: {
+              type: { type: "string", enum: ["typeB"] },
+              propB: { type: "number" },
+            },
+            required: ["type"],
+          },
+        ],
+      };
+
+      expect(
+        await Promise.all(
+          createNodes(schema, "response").map(
+            async (md: any) => await prettier.format(md, { parser: "babel" })
+          )
+        )
+      ).toMatchSnapshot();
+    });
+
+    it("should handle discriminator with nested schemas", async () => {
+      const schema: SchemaObject = {
+        type: "object",
+        discriminator: { propertyName: "type" },
+        properties: {
+          type: { type: "string" },
+        },
+        oneOf: [
+          {
+            type: "object",
+            properties: {
+              type: { type: "string", enum: ["typeA"] },
+              nestedA: {
+                type: "object",
+                properties: {
+                  propA1: { type: "string" },
+                  propA2: { type: "number" },
+                },
+              },
+            },
+            required: ["type"],
+          },
+          {
+            type: "object",
+            properties: {
+              type: { type: "string", enum: ["typeB"] },
+              nestedB: {
+                type: "object",
+                properties: {
+                  propB1: { type: "string" },
+                  propB2: { type: "boolean" },
+                },
+              },
+            },
+            required: ["type"],
+          },
+        ],
+      };
+
+      expect(
+        await Promise.all(
+          createNodes(schema, "response").map(
+            async (md: any) => await prettier.format(md, { parser: "babel" })
+          )
+        )
+      ).toMatchSnapshot();
+    });
+
+    it("should handle discriminator with additional properties", async () => {
+      const schema: SchemaObject = {
+        type: "object",
+        discriminator: { propertyName: "type" },
+        properties: {
+          type: { type: "string" },
+        },
+        oneOf: [
+          {
+            type: "object",
+            properties: {
+              type: { type: "string", enum: ["typeA"] },
+              propA: { type: "string" },
+            },
+            additionalProperties: false,
+            required: ["type"],
+          },
+          {
+            type: "object",
+            properties: {
+              type: { type: "string", enum: ["typeB"] },
+              propB: { type: "number" },
+            },
+            additionalProperties: true,
+            required: ["type"],
+          },
+        ],
+      };
+
+      expect(
+        await Promise.all(
+          createNodes(schema, "response").map(
+            async (md: any) => await prettier.format(md, { parser: "babel" })
+          )
+        )
+      ).toMatchSnapshot();
+    });
+
+    it("should handle discriminator with allOf", async () => {
+      const schema: SchemaObject = {
+        type: "object",
+        discriminator: { propertyName: "type" },
+        properties: {
+          type: { type: "string" },
+        },
+        allOf: [
+          {
+            oneOf: [
+              {
+                type: "object",
+                properties: {
+                  type: { type: "string", enum: ["typeA"] },
+                  propA: { type: "string" },
+                },
+                required: ["type"],
+              },
+              {
+                type: "object",
+                properties: {
+                  type: { type: "string", enum: ["typeB"] },
+                  propB: { type: "number" },
+                },
+                required: ["type"],
+              },
+            ],
+          },
+          {
+            type: "object",
+            properties: {
+              sharedProp: { type: "string" },
+            },
+          },
+        ],
+      };
+
+      expect(
+        await Promise.all(
+          createNodes(schema, "response").map(
+            async (md: any) => await prettier.format(md, { parser: "babel" })
+          )
+        )
+      ).toMatchSnapshot();
+    });
+
+    it("should handle discriminator with required properties", async () => {
+      const schema: SchemaObject = {
+        type: "object",
+        discriminator: { propertyName: "type" },
+        properties: {
+          type: { type: "string" },
+        },
+        oneOf: [
+          {
+            type: "object",
+            properties: {
+              type: { type: "string", enum: ["typeA"] },
+              propA: { type: "string" },
+            },
+            required: ["type", "propA"],
+          },
+          {
+            type: "object",
+            properties: {
+              type: { type: "string", enum: ["typeB"] },
+              propB: { type: "number" },
+            },
+            required: ["type", "propB"],
+          },
+        ],
+      };
+
+      expect(
+        await Promise.all(
+          createNodes(schema, "response").map(
+            async (md: any) => await prettier.format(md, { parser: "babel" })
+          )
+        )
+      ).toMatchSnapshot();
+    });
+
+    it("should handle basic discriminator with mapping", async () => {
+      const schema: SchemaObject = {
+        type: "object",
+        discriminator: {
+          propertyName: "type",
+          mapping: {
+            typeA: "#/definitions/TypeA",
+            typeB: "#/definitions/TypeB",
+          },
+        },
+        properties: {
+          type: { type: "string" },
+        },
+        oneOf: [
+          {
+            type: "object",
+            properties: {
+              type: { type: "string", enum: ["typeA"] },
+              propA: { type: "string" },
+            },
+            required: ["type"],
+          },
+          {
+            type: "object",
+            properties: {
+              type: { type: "string", enum: ["typeB"] },
+              propB: { type: "number" },
+            },
+            required: ["type"],
+          },
+        ],
+      };
+
+      expect(
+        await Promise.all(
+          createNodes(schema, "response").map(
+            async (md: any) => await prettier.format(md, { parser: "babel" })
+          )
+        )
+      ).toMatchSnapshot();
+    });
+
+    it("should handle discriminator with shared properties and mapping", async () => {
+      const schema: SchemaObject = {
+        type: "object",
+        discriminator: {
+          propertyName: "type",
+          mapping: {
+            typeA: "#/definitions/TypeA",
+            typeB: "#/definitions/TypeB",
+          },
+        },
+        properties: {
+          type: { type: "string" },
+          sharedProp: { type: "string" },
+        },
+        oneOf: [
+          {
+            type: "object",
+            properties: {
+              type: { type: "string", enum: ["typeA"] },
+              propA: { type: "string" },
+            },
+            required: ["type"],
+          },
+          {
+            type: "object",
+            properties: {
+              type: { type: "string", enum: ["typeB"] },
+              propB: { type: "number" },
+            },
+            required: ["type"],
+          },
+        ],
+      };
+
+      expect(
+        await Promise.all(
+          createNodes(schema, "response").map(
+            async (md: any) => await prettier.format(md, { parser: "babel" })
+          )
+        )
+      ).toMatchSnapshot();
+    });
+
+    it("should handle discriminator with allOf and mapping", async () => {
+      const schema: SchemaObject = {
+        type: "object",
+        discriminator: {
+          propertyName: "type",
+          mapping: {
+            typeA: "#/definitions/TypeA",
+            typeB: "#/definitions/TypeB",
+          },
+        },
+        properties: {
+          type: { type: "string" },
+        },
+        allOf: [
+          {
+            oneOf: [
+              {
+                type: "object",
+                properties: {
+                  type: { type: "string", enum: ["typeA"] },
+                  propA: { type: "string" },
+                },
+                required: ["type"],
+              },
+              {
+                type: "object",
+                properties: {
+                  type: { type: "string", enum: ["typeB"] },
+                  propB: { type: "number" },
+                },
+                required: ["type"],
+              },
+            ],
+          },
+          {
+            type: "object",
+            properties: {
+              sharedProp: { type: "string" },
+            },
+          },
+        ],
+      };
+
+      expect(
+        await Promise.all(
+          createNodes(schema, "response").map(
+            async (md: any) => await prettier.format(md, { parser: "babel" })
+          )
+        )
+      ).toMatchSnapshot();
+    });
+
+    it("should handle discriminator with required properties and mapping", async () => {
+      const schema: SchemaObject = {
+        type: "object",
+        discriminator: {
+          propertyName: "type",
+          mapping: {
+            typeA: "#/definitions/TypeA",
+            typeB: "#/definitions/TypeB",
+          },
+        },
+        properties: {
+          type: { type: "string" },
+        },
+        oneOf: [
+          {
+            type: "object",
+            properties: {
+              type: { type: "string", enum: ["typeA"] },
+              propA: { type: "string" },
+            },
+            required: ["type", "propA"],
+          },
+          {
+            type: "object",
+            properties: {
+              type: { type: "string", enum: ["typeB"] },
+              propB: { type: "number" },
+            },
+            required: ["type", "propB"],
+          },
+        ],
+      };
+
+      expect(
+        await Promise.all(
+          createNodes(schema, "response").map(
+            async (md: any) => await prettier.format(md, { parser: "babel" })
+          )
+        )
+      ).toMatchSnapshot();
+    });
+  });
+
   describe("additionalProperties", () => {
     it.each([
       [

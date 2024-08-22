@@ -1,0 +1,487 @@
+openapi: 3.0.1
+info:
+  title: Discriminator Variations API
+  description: Demonstrates various discriminator schema combinations with and without mappings.
+  version: 1.0.0
+tags:
+  - name: discriminator
+    description: discriminator tests
+paths:
+  /discriminator-basic:
+    get:
+      tags:
+        - discriminator
+      summary: Basic Discriminator without Mapping
+      description: |
+        Schema:
+        ```yaml
+        type: object
+        discriminator: 
+          propertyName: type
+        properties:
+          type:
+            type: string
+        oneOf:
+          - $ref: '#/components/schemas/TypeA'
+          - $ref: '#/components/schemas/TypeB'
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseBasic"
+
+  /discriminator-nested:
+    get:
+      tags:
+        - discriminator
+      summary: Discriminator with Nested Schemas without Mapping
+      description: |
+        Schema:
+        ```yaml
+        type: object
+        discriminator: 
+          propertyName: type
+        properties:
+          type:
+            type: string
+        oneOf:
+          - $ref: '#/components/schemas/NestedTypeA'
+          - $ref: '#/components/schemas/NestedTypeB'
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseNested"
+
+  /discriminator-shared:
+    get:
+      tags:
+        - discriminator
+      summary: Discriminator with Shared Properties without Mapping
+      description: |
+        Schema:
+        ```yaml
+        type: object
+        discriminator: 
+          propertyName: type
+        properties:
+          type:
+            type: string
+          sharedProp:
+            type: string
+        oneOf:
+          - $ref: '#/components/schemas/TypeA'
+          - $ref: '#/components/schemas/TypeB'
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseShared"
+
+  /discriminator-allof:
+    get:
+      tags:
+        - discriminator
+      summary: Discriminator with AllOf without Mapping
+      description: |
+        Schema:
+        ```yaml
+        type: object
+        discriminator: 
+          propertyName: type
+        properties:
+          type:
+            type: string
+        allOf:
+          - oneOf:
+              - $ref: '#/components/schemas/TypeA'
+              - $ref: '#/components/schemas/TypeB'
+          - type: object
+            properties:
+              sharedProp:
+                type: string
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseAllOf"
+
+  /discriminator-required:
+    get:
+      tags:
+        - discriminator
+      summary: Discriminator with Required Properties without Mapping
+      description: |
+        Schema:
+        ```yaml
+        type: object
+        discriminator: 
+          propertyName: type
+        properties:
+          type:
+            type: string
+        oneOf:
+          - $ref: '#/components/schemas/TypeA'
+          - $ref: '#/components/schemas/TypeB'
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseRequired"
+
+  /discriminator-basic-mapping:
+    get:
+      tags:
+        - discriminator
+      summary: Basic Discriminator with Mapping
+      description: |
+        Schema:
+        ```yaml
+        type: object
+        discriminator: 
+          propertyName: type
+          mapping:
+            typeA: "#/components/schemas/TypeA"
+            typeB: "#/components/schemas/TypeB"
+        properties:
+          type:
+            type: string
+        oneOf:
+          - $ref: '#/components/schemas/TypeA'
+          - $ref: '#/components/schemas/TypeB'
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseBasicMapping"
+
+  /discriminator-nested-mapping:
+    get:
+      tags:
+        - discriminator
+      summary: Discriminator with Nested Schemas and Mapping
+      description: |
+        Schema:
+        ```yaml
+        type: object
+        discriminator: 
+          propertyName: type
+          mapping:
+            nestedTypeA: "#/components/schemas/NestedTypeA"
+            nestedTypeB: "#/components/schemas/NestedTypeB"
+        properties:
+          type:
+            type: string
+        oneOf:
+          - $ref: '#/components/schemas/NestedTypeA'
+          - $ref: '#/components/schemas/NestedTypeB'
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseNestedMapping"
+
+  /discriminator-shared-mapping:
+    get:
+      tags:
+        - discriminator
+      summary: Discriminator with Shared Properties and Mapping
+      description: |
+        Schema:
+        ```yaml
+        type: object
+        discriminator: 
+          propertyName: type
+          mapping:
+            typeA: "#/components/schemas/TypeA"
+            typeB: "#/components/schemas/TypeB"
+        properties:
+          type:
+            type: string
+          sharedProp:
+            type: string
+        oneOf:
+          - $ref: '#/components/schemas/TypeA'
+          - $ref: '#/components/schemas/TypeB'
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseSharedMapping"
+
+  /discriminator-allof-mapping:
+    get:
+      tags:
+        - discriminator
+      summary: Discriminator with AllOf and Mapping
+      description: |
+        Schema:
+        ```yaml
+        type: object
+        discriminator: 
+          propertyName: type
+          mapping:
+            typeA: "#/components/schemas/TypeA"
+            typeB: "#/components/schemas/TypeB"
+        properties:
+          type:
+            type: string
+        allOf:
+          - oneOf:
+              - $ref: '#/components/schemas/TypeA'
+              - $ref: '#/components/schemas/TypeB'
+          - type: object
+            properties:
+              sharedProp:
+                type: string
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseAllOfMapping"
+
+  /discriminator-required-mapping:
+    get:
+      tags:
+        - discriminator
+      summary: Discriminator with Required Properties and Mapping
+      description: |
+        Schema:
+        ```yaml
+        type: object
+        discriminator: 
+          propertyName: type
+          mapping:
+            typeA: "#/components/schemas/TypeA"
+            typeB: "#/components/schemas/TypeB"
+        properties:
+          type:
+            type: string
+        oneOf:
+          - $ref: '#/components/schemas/TypeA'
+          - $ref: '#/components/schemas/TypeB'
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseRequiredMapping"
+components:
+  schemas:
+    BaseBasic:
+      type: object
+      discriminator:
+        propertyName: type
+      properties:
+        type:
+          type: string
+      oneOf:
+        - $ref: "#/components/schemas/TypeA"
+        - $ref: "#/components/schemas/TypeB"
+
+    BaseNested:
+      type: object
+      discriminator:
+        propertyName: type
+      properties:
+        type:
+          type: string
+      oneOf:
+        - $ref: "#/components/schemas/NestedTypeA"
+        - $ref: "#/components/schemas/NestedTypeB"
+
+    BaseShared:
+      type: object
+      discriminator:
+        propertyName: type
+      properties:
+        type:
+          type: string
+        sharedProp:
+          type: string
+      oneOf:
+        - $ref: "#/components/schemas/TypeA"
+        - $ref: "#/components/schemas/TypeB"
+
+    BaseAllOf:
+      type: object
+      discriminator:
+        propertyName: type
+      properties:
+        type: string
+      allOf:
+        - oneOf:
+            - $ref: "#/components/schemas/TypeA"
+            - $ref: "#/components/schemas/TypeB"
+        - type: object
+          properties:
+            sharedProp:
+              type: string
+
+    BaseRequired:
+      type: object
+      discriminator:
+        propertyName: type
+      properties:
+        type: string
+      oneOf:
+        - $ref: "#/components/schemas/TypeA"
+        - $ref: "#/components/schemas/TypeB"
+
+    BaseBasicMapping:
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          typeA: "#/components/schemas/TypeA"
+          typeB: "#/components/schemas/TypeB"
+      properties:
+        type:
+          type: string
+      oneOf:
+        - $ref: "#/components/schemas/TypeA"
+        - $ref: "#/components/schemas/TypeB"
+
+    BaseNestedMapping:
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          nestedTypeA: "#/components/schemas/NestedTypeA"
+          nestedTypeB: "#/components/schemas/NestedTypeB"
+      properties:
+        type:
+          type: string
+      oneOf:
+        - $ref: "#/components/schemas/NestedTypeA"
+        - $ref: "#/components/schemas/NestedTypeB"
+
+    BaseSharedMapping:
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          typeA: "#/components/schemas/TypeA"
+          typeB: "#/components/schemas/TypeB"
+      properties:
+        type:
+          type: string
+        sharedProp:
+          type: string
+      oneOf:
+        - $ref: "#/components/schemas/TypeA"
+        - $ref: "#/components/schemas/TypeB"
+
+    BaseAllOfMapping:
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          typeA: "#/components/schemas/TypeA"
+          typeB: "#/components/schemas/TypeB"
+      properties:
+        type: string
+      allOf:
+        - oneOf:
+            - $ref: "#/components/schemas/TypeA"
+            - $ref: "#/components/schemas/TypeB"
+        - type: object
+          properties:
+            sharedProp:
+              type: string
+
+    BaseRequiredMapping:
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          typeA: "#/components/schemas/TypeA"
+          typeB: "#/components/schemas/TypeB"
+      properties:
+        type: string
+      oneOf:
+        - $ref: "#/components/schemas/TypeA"
+        - $ref: "#/components/schemas/TypeB"
+
+    TypeA:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: ["typeA"]
+        propA:
+          type: string
+      required:
+        - type
+
+    TypeB:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: ["typeB"]
+        propB:
+          type: number
+      required:
+        - type
+
+    NestedTypeA:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: ["nestedTypeA"]
+        nestedA:
+          type: object
+          properties:
+            propA1:
+              type: string
+            propA2:
+              type: number
+      required:
+        - type
+
+    NestedTypeB:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: ["nestedTypeB"]
+        nestedB:
+          type: object
+          properties:
+            propB1:
+              type: string
+            propB2:
+              type: boolean
+      required:
+        - type
