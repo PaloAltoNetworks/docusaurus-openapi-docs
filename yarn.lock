@@ -1444,7 +1444,7 @@
     utility-types "^3.10.0"
     webpack "^5.88.1"
 
-"@docusaurus/plugin-content-docs@3.5.2", "@docusaurus/plugin-content-docs@^3.0.1":
+"@docusaurus/plugin-content-docs@3.5.2", "@docusaurus/plugin-content-docs@^3.5.0":
   version "3.5.2"
   resolved "https://registry.yarnpkg.com/@docusaurus/plugin-content-docs/-/plugin-content-docs-3.5.2.tgz#adcf6c0bd9a9818eb192ab831e0069ee62d31505"
   integrity sha512-Bt+OXn/CPtVqM3Di44vHjE7rPCEsRCB/DMo2qoOuozB9f7+lsdrHvD0QCHdBs0uhz6deYJDppAr2VgqybKPlVQ==
@@ -1589,7 +1589,7 @@
     tslib "^2.6.0"
     utility-types "^3.10.0"
 
-"@docusaurus/theme-common@3.5.2", "@docusaurus/theme-common@^3.0.1":
+"@docusaurus/theme-common@3.5.2", "@docusaurus/theme-common@^3.5.0":
   version "3.5.2"
   resolved "https://registry.yarnpkg.com/@docusaurus/theme-common/-/theme-common-3.5.2.tgz#b507ab869a1fba0be9c3c9d74f2f3d74c3ac78b2"
   integrity sha512-QXqlm9S6x9Ibwjs7I2yEDgsCocp708DrCrgHgKwg2n2AY0YQ6IjU0gAK35lHRLOvAoJUfCKpQAwUykB0R7+Eew==
@@ -1637,7 +1637,7 @@
     fs-extra "^11.1.1"
     tslib "^2.6.0"
 
-"@docusaurus/types@3.5.2", "@docusaurus/types@^3.0.1":
+"@docusaurus/types@3.5.2", "@docusaurus/types@^3.5.0":
   version "3.5.2"
   resolved "https://registry.yarnpkg.com/@docusaurus/types/-/types-3.5.2.tgz#058019dbeffbee2d412c3f72569e412a727f9608"
   integrity sha512-N6GntLXoLVUwkZw7zCxwy9QiuEXIcTVzA9AkmNw16oc0AP3SXLrMmDMMBIfgqwuKWa6Ox6epHol9kMtJqekACw==
@@ -1659,7 +1659,7 @@
   dependencies:
     tslib "^2.6.0"
 
-"@docusaurus/utils-validation@3.5.2", "@docusaurus/utils-validation@^3.0.1":
+"@docusaurus/utils-validation@3.5.2", "@docusaurus/utils-validation@^3.5.0":
   version "3.5.2"
   resolved "https://registry.yarnpkg.com/@docusaurus/utils-validation/-/utils-validation-3.5.2.tgz#1b2b2f02082781cc8ce713d4c85e88d6d2fc4eb3"
   integrity sha512-m+Foq7augzXqB6HufdS139PFxDC5d5q2QKZy8q0qYYvGdI6nnlNsGH4cIGsgBnV7smz+mopl3g4asbSDvMV0jA==
@@ -1673,7 +1673,7 @@
     lodash "^4.17.21"
     tslib "^2.6.0"
 
-"@docusaurus/utils@3.5.2", "@docusaurus/utils@^3.0.1":
+"@docusaurus/utils@3.5.2", "@docusaurus/utils@^3.5.0":
   version "3.5.2"
   resolved "https://registry.yarnpkg.com/@docusaurus/utils/-/utils-3.5.2.tgz#17763130215f18d7269025903588ef7fb373e2cb"
   integrity sha512-33QvcNFh+Gv+C2dP9Y9xWEzMgf3JzrpL2nW9PopidiohS1nDcyknKRx2DWaFvyVTTYIkkABVSr073VTj/NITNA==
