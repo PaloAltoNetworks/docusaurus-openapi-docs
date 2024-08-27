@@ -27,8 +27,6 @@ declare module "@docusaurus/theme-common/internal" {
   export interface LineProps extends ILineProps {}
   export interface CodeBlockProps extends ICodeBlockProps {}
 
-  export function useDoc();
-
   export function usePrismTheme(): PrismTheme;
 
   export function sanitizeTabsChildren(children: TabProps["children"]);
