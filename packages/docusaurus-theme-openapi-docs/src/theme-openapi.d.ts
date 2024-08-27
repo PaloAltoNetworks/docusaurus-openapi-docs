@@ -54,6 +54,10 @@ declare module "@theme/ApiItem/hooks" {
 }
 
 declare module "@theme/ApiItem/Layout" {
+  export interface Props {
+    readonly children: JSX.Element;
+  }
+
   export default function Layout(props: any): JSX.Element;
 }
 
