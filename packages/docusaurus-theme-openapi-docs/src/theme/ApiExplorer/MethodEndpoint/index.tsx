@@ -35,13 +35,20 @@ function colorForMethod(method: string) {
 export interface Props {
   method: string;
   path: string;
+  context?: "endpoint" | "callback";
 }
 
-function MethodEndpoint({ method, path }: Props) {
+function MethodEndpoint({ method, path, context }: Props) {
+  const server = useTypedSelector((state: any) => state);
+
   let serverValue = useTypedSelector((state: any) => state.server.value);
   let serverUrlWithVariables = "";
 
   const renderServerUrl = () => {
+    if (context === "callback") {
+      return "";
+    }
+
     if (serverValue && serverValue.variables) {
       serverUrlWithVariables = serverValue.url.replace(/\/$/, "");
 

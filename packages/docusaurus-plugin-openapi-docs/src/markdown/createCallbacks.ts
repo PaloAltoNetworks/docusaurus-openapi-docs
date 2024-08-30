@@ -5,8 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import { createCallbackMethodEndpoint } from "./createCallbackMethodEndpoint";
 import { createDescription } from "./createDescription";
-import { createMethodEndpoint } from "./createMethodEndpoint";
 import { createRequestBodyDetails } from "./createRequestBodyDetails";
 import { createStatusCodes } from "./createStatusCodes";
 import { create } from "./utils";
@@ -78,7 +78,7 @@ export function createCallbacks({ callbacks }: Props) {
                 label: `${method.toUpperCase()} ${name}`,
                 value: `${method}-${name}`,
                 children: [
-                  createMethodEndpoint(method, path),
+                  createCallbackMethodEndpoint(method, path),
                   // TODO: add `deprecation notice` when markdown support is added
                   createDescription(description),
                   createRequestBodyDetails({
