@@ -229,6 +229,7 @@ function CodeSnippets({ postman, codeSamples }: Props) {
 
   return (
     <>
+      {/* Outer language tabs */}
       <CodeTabs
         groupId="code-samples"
         action={{
@@ -237,6 +238,7 @@ function CodeSnippets({ postman, codeSamples }: Props) {
           setSelectedSample: setSelectedSample,
         }}
         languageSet={mergedLangs}
+        defaultValue={defaultLang[0].language}
         lazy
       >
         {mergedLangs.map((lang) => {
@@ -249,6 +251,7 @@ function CodeSnippets({ postman, codeSamples }: Props) {
                 className: `openapi-tabs__code-item--${lang.logoClass}`,
               }}
             >
+              {/* Inner x-codeSamples tabs */}
               {lang.samples && (
                 <CodeTabs
                   className="openapi-tabs__code-container-inner"
@@ -290,6 +293,7 @@ function CodeSnippets({ postman, codeSamples }: Props) {
                 </CodeTabs>
               )}
 
+              {/* Inner generated code snippets */}
               <CodeTabs
                 className="openapi-tabs__code-container-inner"
                 action={{
