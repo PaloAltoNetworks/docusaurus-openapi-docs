@@ -42,6 +42,10 @@ const sidebars: SidebarsConfig = {
       id: "versioning",
     },
     {
+      type: "doc",
+      id: "advanced",
+    },
+    {
       type: "category",
       label: "Customization",
       link: {

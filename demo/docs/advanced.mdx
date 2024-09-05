@@ -1,0 +1,58 @@
+---
+id: advanced
+hide_title: true
+sidebar_label: Advanced
+title: Advanced
+---
+
+```mdx-code-block
+import PetSchema from './petstore/schemas/pet.schema.mdx';
+import BrowserWindow from '@site/src/components/BrowserWindow';
+```
+
+## Importing MDX
+
+:::tip
+For more background see the [official documentation](https://docusaurus.io/docs/markdown-features/react#importing-markdown) for importing MDX on docusaurus.io
+:::
+
+Let's say you're working on supporting documentation for your API and you want to reference a particular schema. With Docusaurus, you can import generated `*.schema.mdx` files and use them as components!
+
+### Standalone Schema
+
+```mdx title="Standalone Schema"
+import PetSchema from './petstore/schemas/pet.schema.mdx';
+
+<PetSchema />
+```
+
+```mdx-code-block
+
+<PetSchema />
+
+```
+
+### Schema in BrowserWindow
+
+:::tip
+The `BrowserWindow` component implemented by [docusaurus.io](https://github.com/facebook/docusaurus/tree/main/website/src/components/BrowserWindow) was adapted for this example. Aside from visually framing a schema it also supports passing custom styles to the schema component itself.
+:::
+
+```mdx title="Schema wrapped in BrowserWindow component"
+import PetSchema from './petstore/schemas/pet.schema.mdx';
+import BrowserWindow from '@site/src/components/BrowserWindow';
+
+<BrowserWindow bodyStyle={{height: 350, overflow: "auto", fontSize: "80%"}} url="https://docusaurus-openapi.tryingpan.dev/advanced#schema-inside-browserwindow">
+
+<PetSchema />
+
+</BrowserWindow>
+```
+
+```mdx-code-block
+<BrowserWindow bodyStyle={{height: 350, overflow: "auto", fontSize: "80%"}} url="https://docusaurus-openapi.tryingpan.dev/advanced#schema-inside-browserwindow">
+
+<PetSchema />
+
+</BrowserWindow>
+```
