@@ -80,7 +80,7 @@ function TabList({
         newLanguage = languageSet.filter(
           (lang: Language) => lang.language === newTabValue
         )[0];
-        action.setSelectedVariant(newLanguage.variant.toLowerCase());
+        action.setSelectedVariant(newLanguage.variants[0].toLowerCase());
         action.setSelectedSample(newLanguage.sample);
       }
       action.setLanguage(newLanguage);
