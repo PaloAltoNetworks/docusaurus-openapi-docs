@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React, { cloneElement, ReactElement } from "react";
+import React, { cloneElement, ReactElement, useEffect, useRef } from "react";
 
 import {
   sanitizeTabsChildren,
@@ -43,9 +43,22 @@ function TabList({
   selectValue,
   tabValues,
 }: CodeTabsProps & ReturnType<typeof useTabs>) {
-  const tabRefs: (HTMLLIElement | null)[] = [];
+  const tabRefs = useRef<(HTMLLIElement | null)[]>([]);
   const { blockElementScrollPositionUntilNextRender } =
     useScrollPositionBlocker();
+
+  useEffect(() => {
+    const activeTab = tabRefs.current.find(
+      (tab) => tab?.getAttribute("aria-selected") === "true"
+    );
+    if (activeTab) {
+      activeTab.scrollIntoView({
+        behavior: "auto",
+        block: "center",
+        inline: "start",
+      });
+    }
+  }, []);
 
   const handleTabChange = (
     event:
@@ -54,7 +67,7 @@ function TabList({
       | React.KeyboardEvent<HTMLLIElement>
   ) => {
     const newTab = event.currentTarget;
-    const newTabIndex = tabRefs.indexOf(newTab);
+    const newTabIndex = tabRefs.current.indexOf(newTab);
     const newTabValue = tabValues[newTabIndex]!.value;
 
     if (newTabValue !== selectedValue) {
@@ -96,13 +109,15 @@ function TabList({
         break;
       }
       case "ArrowRight": {
-        const nextTab = tabRefs.indexOf(event.currentTarget) + 1;
-        focusElement = tabRefs[nextTab] ?? tabRefs[0]!;
+        const nextTab = tabRefs.current.indexOf(event.currentTarget) + 1;
+        focusElement = tabRefs.current[nextTab] ?? tabRefs.current[0]!;
         break;
       }
       case "ArrowLeft": {
-        const prevTab = tabRefs.indexOf(event.currentTarget) - 1;
-        focusElement = tabRefs[prevTab] ?? tabRefs[tabRefs.length - 1]!;
+        const prevTab = tabRefs.current.indexOf(event.currentTarget) - 1;
+        focusElement =
+          tabRefs.current[prevTab] ??
+          tabRefs.current[tabRefs.current.length - 1]!;
         break;
       }
       default:
@@ -132,7 +147,7 @@ function TabList({
           tabIndex={selectedValue === value ? 0 : -1}
           aria-selected={selectedValue === value}
           key={value}
-          ref={(tabControl) => tabRefs.push(tabControl)}
+          ref={(tabControl) => tabRefs.current.push(tabControl)}
           onKeyDown={handleKeydown}
           onClick={handleTabChange}
           {...attributes}
