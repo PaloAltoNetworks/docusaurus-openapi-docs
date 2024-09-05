@@ -59,6 +59,70 @@ describe("createNodes", () => {
     });
   });
 
+  describe("anyOf", () => {
+    it("should render primitives within anyOf", async () => {
+      const schema: SchemaObject = {
+        type: "object",
+        properties: {
+          oneOfProperty: {
+            anyOf: [
+              {
+                type: "integer",
+              },
+              {
+                type: "boolean",
+              },
+            ],
+            title: "One of int or bool",
+          },
+        },
+      };
+
+      expect(
+        await Promise.all(
+          createNodes(schema, "response").map(
+            async (md: any) => await prettier.format(md, { parser: "babel" })
+          )
+        )
+      ).toMatchSnapshot();
+    });
+
+    it("should render oneOf within anyOf", async () => {
+      const schema: SchemaObject = {
+        type: "object",
+        properties: {
+          oneOfProperty: {
+            anyOf: [
+              {
+                oneOf: [
+                  {
+                    type: "integer",
+                  },
+                  {
+                    type: "boolean",
+                  },
+                ],
+                title: "An int or a bool",
+              },
+              {
+                type: "string",
+              },
+            ],
+            title: "One of int or bool, or a string",
+          },
+        },
+      };
+
+      expect(
+        await Promise.all(
+          createNodes(schema, "response").map(
+            async (md: any) => await prettier.format(md, { parser: "babel" })
+          )
+        )
+      ).toMatchSnapshot();
+    });
+  });
+
   describe("allOf", () => {
     it("should render same-level properties with allOf", async () => {
       const schema: SchemaObject = {
