@@ -146,3 +146,19 @@ div[class^="announcementBar_"] {
   );
   font-weight: bold;
 }
+
+.openapi-tabs__code-item--python {
+  color: var(--ifm-color-success);
+}
+.openapi-tabs__code-item--python::after {
+  content: "";
+  width: var(--code-tab-logo-width);
+  height: var(--code-tab-logo-height);
+  background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-plain.svg")
+    no-repeat;
+  margin-block: auto;
+}
+.openapi-tabs__code-item--python.active {
+  box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-python);
+  border-color: var(--openapi-code-tab-border-color-python);
+}
