@@ -146,6 +146,24 @@ body[class="ReactModal__Body--open"] {
   }
 }
 
+.openapi-tabs__code-item--dart {
+  color: var(--ifm-color-info);
+
+  &::after {
+    content: "";
+    width: var(--code-tab-logo-width);
+    height: var(--code-tab-logo-height);
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/dart/dart-original.svg")
+      no-repeat;
+    margin-block: auto;
+  }
+
+  &.active {
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-dart);
+    border-color: var(--openapi-code-tab-border-color-dart);
+  }
+}
+
 .openapi-tabs__code-item--javascript {
   color: var(--ifm-color-warning);
 
@@ -164,7 +182,7 @@ body[class="ReactModal__Body--open"] {
   }
 }
 
-.openapi-tabs__code-item--bash {
+.openapi-tabs__code-item--curl {
   color: var(--ifm-color-danger);
 
   &::after {
@@ -179,7 +197,7 @@ body[class="ReactModal__Body--open"] {
   }
 
   &.active {
-    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-bash);
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-curl);
     border-color: var(--ifm-color-danger);
   }
 }
@@ -220,6 +238,96 @@ body[class="ReactModal__Body--open"] {
   }
 }
 
+.openapi-tabs__code-item--r {
+  color: var(--ifm-color-gray-500);
+
+  &::after {
+    content: "";
+    width: var(--code-tab-logo-width);
+    height: var(--code-tab-logo-height);
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/r/r-original.svg")
+      no-repeat;
+    margin-block: auto;
+  }
+
+  &.active {
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-r);
+    border-color: var(--openapi-code-tab-border-color-r);
+  }
+}
+
+.openapi-tabs__code-item--swift {
+  color: var(--ifm-color-danger);
+
+  &::after {
+    content: "";
+    width: var(--code-tab-logo-width);
+    height: var(--code-tab-logo-height);
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/swift/swift-original.svg")
+      no-repeat;
+    margin-block: auto;
+  }
+
+  &.active {
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-swift);
+    border-color: var(--openapi-code-tab-border-color-swift);
+  }
+}
+
+.openapi-tabs__code-item--c {
+  color: var(--ifm-color-info);
+
+  &::after {
+    content: "";
+    width: var(--code-tab-logo-width);
+    height: var(--code-tab-logo-height);
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-original.svg")
+      no-repeat;
+    margin-block: auto;
+  }
+
+  &.active {
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-c);
+    border-color: var(--openapi-code-tab-border-color-c);
+  }
+}
+
+.openapi-tabs__code-item--objective-c {
+  color: var(--ifm-color-info);
+
+  &::after {
+    content: "";
+    width: var(--code-tab-logo-width);
+    height: var(--code-tab-logo-height);
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/objectivec/objectivec-plain.svg")
+      no-repeat;
+    margin-block: auto;
+  }
+
+  &.active {
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-objective-c);
+    border-color: var(--openapi-code-tab-border-color-objective-c);
+  }
+}
+
+.openapi-tabs__code-item--ocaml {
+  color: var(--ifm-color-warning);
+
+  &::after {
+    content: "";
+    width: var(--code-tab-logo-width);
+    height: var(--code-tab-logo-height);
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/ocaml/ocaml-original.svg")
+      no-repeat;
+    margin-block: auto;
+  }
+
+  &.active {
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-objective-ocaml);
+    border-color: var(--openapi-code-tab-border-color-objective-ocaml);
+  }
+}
+
 .openapi-tabs__code-item--nodejs {
   color: var(--ifm-color-success);
 
@@ -253,6 +361,42 @@ body[class="ReactModal__Body--open"] {
   &.active {
     box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-php);
     border-color: var(--openapi-code-tab-border-color-php);
+  }
+}
+
+.openapi-tabs__code-item--kotlin {
+  color: var(--ifm-color-gray-500);
+
+  &::after {
+    content: "";
+    width: var(--code-tab-logo-width);
+    height: var(--code-tab-logo-height);
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/kotlin/kotlin-original.svg")
+      no-repeat;
+    margin-block: auto;
+  }
+
+  &.active {
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-kotlin);
+    border-color: var(--openapi-code-tab-border-color-kotlin);
+  }
+}
+
+.openapi-tabs__code-item--rust {
+  color: var(--ifm-color-gray-500);
+
+  &::after {
+    content: "";
+    width: var(--code-tab-logo-width);
+    height: var(--code-tab-logo-height);
+    background: url("https://raw.githubusercontent.com/devicons/devicon/master/icons/rust/rust-original.svg")
+      no-repeat;
+    margin-block: auto;
+  }
+
+  &.active {
+    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-rust);
+    border-color: var(--openapi-code-tab-border-color-rust);
   }
 }
 
