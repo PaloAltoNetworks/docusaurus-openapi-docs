@@ -1,0 +1,63 @@
+openapi: 3.0.1
+info:
+  title: AnyOf Variations API
+  description: Demonstrates various anyOf combinations.
+  version: 1.0.0
+tags:
+  - name: anyOf
+    description: anyOf tests
+paths:
+  /anyof-primitives:
+    get:
+      tags:
+        - anyOf
+      summary: anyOf with primitives
+      description: |
+        Schema:
+        ```yaml
+        anyOf:
+          - type: string
+          - type: integer
+          - type: boolean
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - type: string
+                  - type: integer
+                  - type: boolean
+
+  /anyof-oneof:
+    get:
+      tags:
+        - anyOf
+      summary: anyOf with oneOf
+      description: |
+        Schema:
+        ```yaml
+        anyOf:
+          - oneOf:
+            - type: string
+            - type: integer
+          - type: boolean
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - oneOf:
+                      - type: string
+                        title: A string
+                      - type: integer
+                        title: An integer
+                    title: A string or integer
+                  - type: boolean
+                    title: A boolean
+                title: A string or integer, or a boolean
