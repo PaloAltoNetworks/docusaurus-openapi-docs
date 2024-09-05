@@ -104,6 +104,11 @@ function createAnyOneOf(schema: SchemaObject): any {
             delete anyOneSchema.allOf;
           }
 
+          if (anyOneSchema.oneOf !== undefined) {
+            anyOneChildren.push(createNodes(anyOneSchema, SCHEMA_TYPE));
+            delete anyOneSchema.oneOf;
+          }
+
           if (anyOneSchema.items !== undefined) {
             anyOneChildren.push(createItems(anyOneSchema));
             delete anyOneSchema.items;

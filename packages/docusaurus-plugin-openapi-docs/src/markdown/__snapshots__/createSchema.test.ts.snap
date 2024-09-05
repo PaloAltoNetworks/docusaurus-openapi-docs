@@ -368,6 +368,93 @@ Array [
 ]
 `;
 
+exports[`createNodes anyOf should render oneOf within anyOf 1`] = `
+Array [
+  "<SchemaItem collapsible={true} className={\\"schemaItem\\"}>
+  <details style={{}} className={\\"openapi-markdown__details\\"}>
+    <summary style={{}}>
+      <span className={\\"openapi-schema__container\\"}>
+        <strong className={\\"openapi-schema__property\\"}>oneOfProperty</strong>
+        <span className={\\"openapi-schema__name\\"}>object</span>
+      </span>
+    </summary>
+    <div style={{ marginLeft: \\"1rem\\" }}>
+      <div>
+        <span className={\\"badge badge--info\\"} style={{ marginBottom: \\"1rem\\" }}>
+          anyOf
+        </span>
+        <SchemaTabs>
+          <TabItem label={\\"An int or a bool\\"} value={\\"0-item-properties\\"}>
+            <div>
+              <span
+                className={\\"badge badge--info\\"}
+                style={{ marginBottom: \\"1rem\\" }}
+              >
+                oneOf
+              </span>
+              <SchemaTabs>
+                <TabItem label={\\"MOD1\\"} value={\\"0-item-properties\\"}>
+                  <div style={{ marginTop: \\".5rem\\", marginBottom: \\".5rem\\" }}>
+                    integer
+                  </div>
+                </TabItem>
+                <TabItem label={\\"MOD2\\"} value={\\"1-item-properties\\"}>
+                  <div style={{ marginTop: \\".5rem\\", marginBottom: \\".5rem\\" }}>
+                    boolean
+                  </div>
+                </TabItem>
+              </SchemaTabs>
+            </div>
+          </TabItem>
+          <TabItem label={\\"MOD2\\"} value={\\"1-item-properties\\"}>
+            <div style={{ marginTop: \\".5rem\\", marginBottom: \\".5rem\\" }}>
+              string
+            </div>
+          </TabItem>
+        </SchemaTabs>
+      </div>
+    </div>
+  </details>
+</SchemaItem>;
+",
+]
+`;
+
+exports[`createNodes anyOf should render primitives within anyOf 1`] = `
+Array [
+  "<SchemaItem collapsible={true} className={\\"schemaItem\\"}>
+  <details style={{}} className={\\"openapi-markdown__details\\"}>
+    <summary style={{}}>
+      <span className={\\"openapi-schema__container\\"}>
+        <strong className={\\"openapi-schema__property\\"}>oneOfProperty</strong>
+        <span className={\\"openapi-schema__name\\"}>object</span>
+      </span>
+    </summary>
+    <div style={{ marginLeft: \\"1rem\\" }}>
+      <div>
+        <span className={\\"badge badge--info\\"} style={{ marginBottom: \\"1rem\\" }}>
+          anyOf
+        </span>
+        <SchemaTabs>
+          <TabItem label={\\"MOD1\\"} value={\\"0-item-properties\\"}>
+            <div style={{ marginTop: \\".5rem\\", marginBottom: \\".5rem\\" }}>
+              integer
+            </div>
+          </TabItem>
+          <TabItem label={\\"MOD2\\"} value={\\"1-item-properties\\"}>
+            <div style={{ marginTop: \\".5rem\\", marginBottom: \\".5rem\\" }}>
+              boolean
+            </div>
+          </TabItem>
+        </SchemaTabs>
+      </div>
+    </div>
+  </details>
+</SchemaItem>;
+",
+]
+`;
+
 exports[`createNodes discriminator should handle basic discriminator with mapping 1`] = `
 Array [
   "<div>
