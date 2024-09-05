@@ -238,7 +238,7 @@ function CodeSnippets({ postman, codeSamples }: Props) {
           setSelectedSample: setSelectedSample,
         }}
         languageSet={mergedLangs}
-        defaultValue={defaultLang[0].language}
+        defaultValue={defaultLang[0]?.language ?? mergedLangs[0].language}
         lazy
       >
         {mergedLangs.map((lang) => {
