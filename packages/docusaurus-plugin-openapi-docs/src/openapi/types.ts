@@ -197,6 +197,7 @@ export interface ParameterObject {
   param?: Object;
   // ignoring stylings: matrix, label, form, simple, spaceDelimited,
   // pipeDelimited and deepObject
+  "x-enumDescriptions": Record<string, string>;
 }
 
 export interface ParameterObjectWithRef {
@@ -353,6 +354,7 @@ export type SchemaObject = Omit<
   example?: any;
   deprecated?: boolean;
   "x-tags"?: string[];
+  "x-enumDescriptions"?: Record<string, string>;
 };
 
 export type SchemaObjectWithRef = Omit<

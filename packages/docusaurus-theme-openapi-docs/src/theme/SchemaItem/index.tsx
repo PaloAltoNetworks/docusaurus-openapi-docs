@@ -11,6 +11,7 @@ import CodeBlock from "@theme/CodeBlock";
 import clsx from "clsx";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
+import remarkGfm from "remark-gfm";
 
 import { createDescription } from "../../markdown/createDescription";
 import { guard } from "../../markdown/utils";
@@ -27,22 +28,52 @@ export interface Props {
   discriminator: boolean;
 }
 
-export default function SchemaItem({
-  children: collapsibleSchemaContent,
-  collapsible,
-  name,
-  qualifierMessage,
-  required,
-  schemaName,
-  schema,
-}: Props) {
+const transformEnumDescriptions = (
+  enumDescriptions?: Record<string, string>
+) => {
+  if (enumDescriptions) {
+    return Object.entries(enumDescriptions);
+  }
+
+  return [];
+};
+
+const getEnumDescriptionMarkdown = (enumDescriptions?: [string, string][]) => {
+  if (enumDescriptions?.length) {
+    return `| Enum | Description |
+| ---- | ----- |
+${enumDescriptions
+  .map((desc) => {
+    return `| ${desc[0]} | ${desc[1]} | `.replaceAll("\n", "<br/>");
+  })
+  .join("\n")}
+    `;
+  }
+
+  return "";
+};
+
+export default function SchemaItem(props: Props) {
+  const {
+    children: collapsibleSchemaContent,
+    collapsible,
+    name,
+    qualifierMessage,
+    required,
+    schemaName,
+    schema,
+  } = props;
+  console.log({ props });
   let deprecated;
   let schemaDescription;
   let defaultValue;
   let nullable;
+  let enumDescriptions: [string, string][] = [];
+
   if (schema) {
     deprecated = schema.deprecated;
     schemaDescription = schema.description;
+    enumDescriptions = transformEnumDescriptions(schema["x-enumDescriptions"]);
     defaultValue = schema.default;
     nullable = schema.nullable;
   }
@@ -59,6 +90,19 @@ export default function SchemaItem({
   const renderNullable = guard(nullable, () => (
     <span className="openapi-schema__nullable">nullable</span>
   ));
+
+  const renderEnumDescriptions = guard(
+    getEnumDescriptionMarkdown(enumDescriptions),
+    (value) => {
+      return (
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          rehypePlugins={[rehypeRaw]}
+          children={value}
+        />
+      );
+    }
+  );
 
   const renderSchemaDescription = guard(schemaDescription, (description) => (
     <div>
@@ -117,6 +161,7 @@ export default function SchemaItem({
       {renderQualifierMessage}
       {renderDefaultValue}
       {renderSchemaDescription}
+      {renderEnumDescriptions}
       {collapsibleSchemaContent ?? collapsibleSchemaContent}
     </div>
   );

@@ -43,12 +43,17 @@ export function createParamsDetails({ parameters, type }: Props) {
       create("div", {
         children: [
           create("ul", {
-            children: params.map((param) =>
-              create("ParamsItem", {
+            children: params.map((param) => {
+              return create("ParamsItem", {
                 className: "paramsItem",
-                param: param,
-              })
-            ),
+                param: {
+                  ...param,
+                  enumDescriptions: Object.entries(
+                    param?.schema?.items?.["x-enumDescriptions"] ?? {}
+                  ),
+                },
+              });
+            }),
           }),
         ],
       }),
