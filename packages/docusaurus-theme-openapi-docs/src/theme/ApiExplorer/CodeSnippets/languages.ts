@@ -6,7 +6,6 @@
  * ========================================================================== */
 
 import find from "lodash/find";
-import isArray from "lodash/isArray";
 import mergeWith from "lodash/mergeWith";
 import unionBy from "lodash/unionBy";
 import codegen from "postman-code-generators";
