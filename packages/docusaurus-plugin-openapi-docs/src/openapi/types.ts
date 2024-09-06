@@ -197,7 +197,7 @@ export interface ParameterObject {
   param?: Object;
   // ignoring stylings: matrix, label, form, simple, spaceDelimited,
   // pipeDelimited and deepObject
-  "x-enumDescriptions": Record<string, string>;
+  "x-enumDescriptions"?: Record<string, string>;
 }
 
 export interface ParameterObjectWithRef {
