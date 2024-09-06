@@ -63,7 +63,6 @@ export default function SchemaItem(props: Props) {
     schemaName,
     schema,
   } = props;
-  console.log({ props });
   let deprecated;
   let schemaDescription;
   let defaultValue;
