@@ -8,16 +8,83 @@ description: Styling tweaks for docusaurus-openapi-docs.
 
 ## Overview
 
-The Docusaurus OpenAPI docs plugin comes with Infima based styling as standard. In the demos on this site you'll see some features which are not included in the default styling including the request method labels before each request. To add these to your site you can use one of the two options outlined below.
+In the API demos on this site, you'll see some features which are not included in the default Docusaurus styling including the operation method sidebar badges. To add these to your site you can use one of the two options outlined below.
 
 The method labels are pure CSS and as a result there are few, if any, limits on how you style / present these on your site.
 
-## Demo Styling
+## Method Badge Styles
 
-The demo site uses the following CSS to add coloured labels to each request including the name of the method. Adding this to your site's custom CSS will replicate exactly the demo-site's label aesthetic using your site's variables.
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BrowserWindow from '@site/src/components/BrowserWindow';
+```
 
-```css
-/* API Menu Items */
+<Tabs>
+<TabItem value="demo" label="Demo Styles">
+
+These are the styles implemented on this very demo site.
+
+<BrowserWindow bodyStyle={{height: 250, overflow: "auto"}} url="https://docusaurus-openapi.tryingpan.dev/customization/styling#method-badge-styles">
+
+  <ul
+    className="menu__list"
+  >
+    <li className="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item schema">
+      <a className="menu__link" tabIndex="0" href="#">
+        Cat
+      </a>
+    </li>
+    <li className="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item api-method post">
+      <a className="menu__link" tabIndex="0" href="#">
+        Add a new pet to the store
+      </a>
+    </li>
+    <li className="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item api-method put">
+      <a className="menu__link" tabIndex="0" href="#">
+        Update an existing pet
+      </a>
+    </li>
+    <li className="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item api-method get">
+      <a className="menu__link" tabIndex="0" href="#">
+        Find pet by ID
+      </a>
+    </li>
+    <li className="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item api-method post">
+      <a className="menu__link" tabIndex="0" href="#">
+        Updates a pet in the store with form data
+      </a>
+    </li>
+    <li className="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item api-method delete">
+      <a className="menu__link" tabIndex="0" href="#">
+        Deletes a pet
+      </a>
+    </li>
+    <li className="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item api-method post">
+      <a className="menu__link" tabIndex="0" href="#">
+        uploads an image
+      </a>
+    </li>
+    <li className="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item api-method get">
+      <a className="menu__link" tabIndex="0" href="#">
+        Finds Pets by status
+      </a>
+    </li>
+    <li className="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item menu__list-item--deprecated api-method get">
+      <a className="menu__link" tabIndex="0" href="#">
+        Finds Pets by tags
+      </a>
+    </li>
+    <li className="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item api-method event">
+      <a className="menu__link" tabIndex="0" href="#">
+        New pet
+      </a>
+    </li>
+  </ul>
+
+</BrowserWindow>
+
+```css title="Demo Styles"
 .api-method > .menu__link,
 .schema > .menu__link {
   align-items: center;
@@ -82,12 +149,71 @@ The demo site uses the following CSS to add coloured labels to each request incl
 }
 ```
 
-## Alternative Styling
+</TabItem>
+<TabItem value="contrast" label="High Contrast">
 
 In [this issue](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/249) community member [@ThomasHeartman](https://github.com/thomasheartman) shared some alternative CSS with better contrast and some other stylistic tweaks to the method labels. The CSS to replicate this is below:
 
-```css
-/* Sidebar Method labels */
+<BrowserWindow bodyStyle={{height: 250, overflow: "auto"}} url="https://docusaurus-openapi.tryingpan.dev/customization/styling#method-badge-styles">
+
+  <ul
+    className="menu__list"
+  >
+    <li className="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item schema-contrast">
+      <a className="menu__link" tabIndex="0" href="#">
+        Cat
+      </a>
+    </li>
+    <li className="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item api-method-contrast post-contrast">
+      <a className="menu__link" tabIndex="0" href="#">
+        Add a new pet to the store
+      </a>
+    </li>
+    <li className="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item api-method-contrast put-contrast">
+      <a className="menu__link" tabIndex="0" href="#">
+        Update an existing pet
+      </a>
+    </li>
+    <li className="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item api-method-contrast get-contrast">
+      <a className="menu__link" tabIndex="0" href="#">
+        Find pet by ID
+      </a>
+    </li>
+    <li className="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item api-method-contrast post-contrast">
+      <a className="menu__link" tabIndex="0" href="#">
+        Updates a pet in the store with form data
+      </a>
+    </li>
+    <li className="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item api-method-contrast delete-contrast">
+      <a className="menu__link" tabIndex="0" href="#">
+        Deletes a pet
+      </a>
+    </li>
+    <li className="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item api-method-contrast post-contrast">
+      <a className="menu__link" tabIndex="0" href="#">
+        uploads an image
+      </a>
+    </li>
+    <li className="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item api-method-contrast get-contrast">
+      <a className="menu__link" tabIndex="0" href="#">
+        Finds Pets by status
+      </a>
+    </li>
+    <li className="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item menu__list-item--deprecated api-method-contrast get-contrast">
+      <a className="menu__link" tabIndex="0" href="#">
+        Finds Pets by tags
+      </a>
+    </li>
+    <li className="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item api-method-contrast event-contrast">
+      <a className="menu__link" tabIndex="0" href="#">
+        New pet
+      </a>
+    </li>
+  </ul>
+
+</BrowserWindow>
+
+```css title="High Contrast"
 .api-method > .menu__link,
 .schema > .menu__link {
   align-items: center;
@@ -166,3 +292,132 @@ In [this issue](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issu
   border-color: var(--ifm-color-secondary-dark);
 }
 ```
+
+
+</TabItem>
+<TabItem value="simple" label="Simple">
+
+These styles are more similar to the ones found on https://pan.dev.
+
+<BrowserWindow bodyStyle={{height: 250, overflow: "auto"}} url="https://docusaurus-openapi.tryingpan.dev/customization/styling#method-badge-styles">
+
+  <ul
+    className="menu__list"
+  >
+    <li className="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item api-method-simple schema-simple">
+      <a className="menu__link" tabIndex="0" href="#">
+        Cat
+      </a>
+    </li>
+    <li className="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item api-method-simple post-simple">
+      <a className="menu__link" tabIndex="0" href="#">
+        Add a new pet to the store
+      </a>
+    </li>
+    <li className="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item api-method-simple put-simple">
+      <a className="menu__link" tabIndex="0" href="#">
+        Update an existing pet
+      </a>
+    </li>
+    <li className="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item api-method-simple get-simple">
+      <a className="menu__link" tabIndex="0" href="#">
+        Find pet by ID
+      </a>
+    </li>
+    <li className="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item api-method-simple post-simple">
+      <a className="menu__link" tabIndex="0" href="#">
+        Updates a pet in the store with form data
+      </a>
+    </li>
+    <li className="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item api-method-simple delete-simple">
+      <a className="menu__link" tabIndex="0" href="#">
+        Deletes a pet
+      </a>
+    </li>
+    <li className="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item api-method-simple post-simple">
+      <a className="menu__link" tabIndex="0" href="#">
+        uploads an image
+      </a>
+    </li>
+    <li className="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item api-method-simple get-simple">
+      <a className="menu__link" tabIndex="0" href="#">
+        Finds Pets by status
+      </a>
+    </li>
+    <li className="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item menu__list-item--deprecated api-method-simple get-simple">
+      <a className="menu__link" tabIndex="0" href="#">
+        Finds Pets by tags
+      </a>
+    </li>
+    <li className="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item api-method-simple event-simple">
+      <a className="menu__link" tabIndex="0" href="#">
+        New pet
+      </a>
+    </li>
+  </ul>
+
+</BrowserWindow>
+
+```css title="Simple"
+.api-method > .menu__link {
+  align-items: center;
+  justify-content: start;
+}
+.api-method > .menu__link::before {
+  width: 55px;
+  height: 20px;
+  font-size: 12px;
+  line-height: 20px;
+  text-transform: uppercase;
+  font-weight: 600;
+  border-radius: 0.25rem;
+  align-content: start;
+  margin-right: var(--ifm-spacing-horizontal);
+  text-align: right;
+  flex-shrink: 0;
+  border-color: transparent;
+}
+
+.get > .menu__link::before {
+  content: "get";
+  color: var(--ifm-color-info);
+}
+
+.post > .menu__link::before {
+  content: "post";
+  color: var(--ifm-color-success);
+}
+
+.delete > .menu__link::before {
+  content: "del";
+  color: var(--ifm-color-danger);
+}
+
+.put > .menu__link::before {
+  content: "put";
+  color: var(--ifm-color-warning);
+}
+
+.patch > .menu__link::before {
+  content: "patch";
+  color: var(--ifm-color-warning);
+}
+
+.head > .menu__link::before {
+  content: "head";
+  color: var(--ifm-color-secondary-contrast-foreground);
+}
+
+.event > .menu__link::before {
+  content: "event";
+  color: var(--ifm-color-secondary-contrast-foreground);
+}
+
+.schema > .menu__link::before {
+  content: "schema";
+  color: var(--ifm-color-secondary-contrast-foreground);
+}
+```
+
+</TabItem>
+</Tabs>
