@@ -46,7 +46,7 @@ export interface Props {
 
 const getEnumDescriptionMarkdown = (enumDescriptions?: [string, string][]) => {
   if (enumDescriptions?.length) {
-    return `| Enum | Description |
+    return `| Enum Value | Description |
 | ---- | ----- |
 ${enumDescriptions
   .map((desc) => {
