@@ -65,7 +65,7 @@ export default function SchemaItem(props: Props) {
   } = props;
   let deprecated;
   let schemaDescription;
-  let defaultValue;
+  let defaultValue: string | undefined;
   let nullable;
   let enumDescriptions: [string, string][] = [];
 
@@ -133,11 +133,33 @@ export default function SchemaItem(props: Props) {
     </div>
   ));
 
-  const renderDefaultValue = guard(defaultValue, (value) => (
-    <div className="">
-      <ReactMarkdown children={`**Default value:** \`${value}\``} />
-    </div>
-  ));
+  function renderDefaultValue() {
+    if (defaultValue !== undefined) {
+      if (typeof defaultValue === "string") {
+        return (
+          <div>
+            <strong>
+              Default value:{" "}
+              <span>
+                <code>{defaultValue}</code>
+              </span>
+            </strong>
+          </div>
+        );
+      }
+      return (
+        <div>
+          <strong>
+            Default value:{" "}
+            <span>
+              <code>{JSON.stringify(defaultValue)}</code>
+            </span>
+          </strong>
+        </div>
+      );
+    }
+    return undefined;
+  }
 
   const schemaContent = (
     <div>
@@ -158,7 +180,7 @@ export default function SchemaItem(props: Props) {
         {renderDeprecated}
       </span>
       {renderQualifierMessage}
-      {renderDefaultValue}
+      {renderDefaultValue()}
       {renderSchemaDescription}
       {renderEnumDescriptions}
       {collapsibleSchemaContent ?? collapsibleSchemaContent}
