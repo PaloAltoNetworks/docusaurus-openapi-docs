@@ -21,6 +21,7 @@ export interface OpenApiObject {
   tags?: TagObject[];
   externalDocs?: ExternalDocumentationObject;
   swagger?: string;
+  webhooks?: PathsObject;
   "x-webhooks"?: PathsObject;
   "x-tagGroups"?: TagGroupObject[];
 }

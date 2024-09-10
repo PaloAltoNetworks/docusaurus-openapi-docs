@@ -269,7 +269,7 @@ function createItems(
 
   // Gather x-webhooks endpoints
   for (let [path, pathObject] of Object.entries(
-    openapiData["x-webhooks"] ?? {}
+    openapiData["x-webhooks"] ?? openapiData["webhooks"] ?? {}
   )) {
     path = "webhook";
     const { $ref, description, parameters, servers, summary, ...rest } =

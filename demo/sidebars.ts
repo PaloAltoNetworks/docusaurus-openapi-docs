@@ -19,6 +19,7 @@ import {
 import petstoreSidebar from "./docs/petstore/sidebar";
 import petstoreVersionedSidebar from "./docs/petstore_versioned/sidebar";
 import petstoreVersionSidebar from "./docs/petstore_versioned/1.0.0/sidebar";
+import petstoreSidebar31 from "./docs/petstore31/sidebar";
 
 import cloudObjectStorageSidebar from "./docs/cos/sidebar";
 
@@ -71,6 +72,18 @@ const sidebars: SidebarsConfig = {
         slug: "/category/petstore-api",
       },
       items: petstoreSidebar,
+    },
+    {
+      type: "category",
+      label: "Petstore 3.1",
+      link: {
+        type: "generated-index",
+        title: "Petstore API",
+        description:
+          "This is a sample server Petstore server in OpenAPI 3.1. You can find out more about Swagger at http://swagger.io or on irc.freenode.net, #swagger. For this sample, you can use the api key special-key to test the authorization filters.",
+        slug: "/category/petstore-31-api",
+      },
+      items: petstoreSidebar31,
     },
     {
       type: "category",
