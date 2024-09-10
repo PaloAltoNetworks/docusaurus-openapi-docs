@@ -76,6 +76,24 @@ function ParamsItem({ param, ...rest }: Props) {
     schema = { type: "any" };
   }
 
+  let defaultValue: string | undefined;
+
+  if (
+    schema && schema.items
+      ? schema.items.default
+      : schema
+        ? schema.default
+        : undefined
+  ) {
+  }
+
+  if (schema) {
+    if (schema.items) {
+      defaultValue = schema.items.default;
+    }
+    defaultValue = schema.default;
+  }
+
   const renderSchemaName = guard(schema, (schema) => (
     <span className="openapi-schema__type"> {getSchemaName(schema)}</span>
   ));
@@ -131,18 +149,29 @@ function ParamsItem({ param, ...rest }: Props) {
     }
   );
 
-  const renderDefaultValue = guard(
-    schema && schema.items
-      ? schema.items.default
-      : schema
-        ? schema.default
-        : undefined,
-    (value) => (
-      <div>
-        <ReactMarkdown children={`**Default value:** \`${value}\``} />
-      </div>
-    )
-  );
+  function renderDefaultValue() {
+    if (defaultValue !== undefined) {
+      if (typeof defaultValue === "string") {
+        return (
+          <div>
+            <strong>Default value: </strong>
+            <span>
+              <code>{defaultValue}</code>
+            </span>
+          </div>
+        );
+      }
+      return (
+        <div>
+          <strong>Default value: </strong>
+          <span>
+            <code>{JSON.stringify(defaultValue)}</code>
+          </span>
+        </div>
+      );
+    }
+    return undefined;
+  }
 
   const renderExample = guard(toString(example), (example) => (
     <div>
@@ -196,7 +225,7 @@ function ParamsItem({ param, ...rest }: Props) {
         {renderDeprecated}
       </span>
       {renderSchema}
-      {renderDefaultValue}
+      {renderDefaultValue()}
       {renderDescription}
       {renderEnumDescriptions}
       {renderExample}

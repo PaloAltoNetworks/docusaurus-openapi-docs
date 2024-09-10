@@ -138,23 +138,19 @@ export default function SchemaItem(props: Props) {
       if (typeof defaultValue === "string") {
         return (
           <div>
-            <strong>
-              Default value:{" "}
-              <span>
-                <code>{defaultValue}</code>
-              </span>
-            </strong>
+            <strong>Default value: </strong>
+            <span>
+              <code>{defaultValue}</code>
+            </span>
           </div>
         );
       }
       return (
         <div>
-          <strong>
-            Default value:{" "}
-            <span>
-              <code>{JSON.stringify(defaultValue)}</code>
-            </span>
-          </strong>
+          <strong>Default value: </strong>
+          <span>
+            <code>{JSON.stringify(defaultValue)}</code>
+          </span>
         </div>
       );
     }
