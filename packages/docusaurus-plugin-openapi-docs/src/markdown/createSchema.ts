@@ -416,16 +416,16 @@ function createDetailsNode(
           create("div", {
             style: { marginLeft: "1rem" },
             children: [
-              guard(getQualifierMessage(schema), (message) =>
-                create("div", {
-                  style: { marginTop: ".5rem", marginBottom: ".5rem" },
-                  children: createDescription(message),
-                })
-              ),
               guard(schema.description, (description) =>
                 create("div", {
                   style: { marginTop: ".5rem", marginBottom: ".5rem" },
                   children: createDescription(description),
+                })
+              ),
+              guard(getQualifierMessage(schema), (message) =>
+                create("div", {
+                  style: { marginTop: ".5rem", marginBottom: ".5rem" },
+                  children: createDescription(message),
                 })
               ),
               createNodes(schema, SCHEMA_TYPE),
@@ -559,20 +559,20 @@ function createPropertyDiscriminator(
             ]),
           ],
         }),
-        guard(getQualifierMessage(discriminator), (message) =>
-          create("div", {
-            style: {
-              paddingLeft: "1rem",
-            },
-            children: createDescription(message),
-          })
-        ),
         guard(schema.description, (description) =>
           create("div", {
             style: {
               paddingLeft: "1rem",
             },
             children: createDescription(description),
+          })
+        ),
+        guard(getQualifierMessage(discriminator), (message) =>
+          create("div", {
+            style: {
+              paddingLeft: "1rem",
+            },
+            children: createDescription(message),
           })
         ),
         create("DiscriminatorTabs", {
