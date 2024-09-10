@@ -71,27 +71,17 @@ function ParamsItem({ param, ...rest }: Props) {
   } = param;
 
   let schema = param.schema;
+  let defaultValue: string | undefined;
 
   if (!schema || !schema?.type) {
     schema = { type: "any" };
   }
-
-  let defaultValue: string | undefined;
-
-  if (
-    schema && schema.items
-      ? schema.items.default
-      : schema
-        ? schema.default
-        : undefined
-  ) {
-  }
-
   if (schema) {
     if (schema.items) {
       defaultValue = schema.items.default;
+    } else {
+      defaultValue = schema.default;
     }
-    defaultValue = schema.default;
   }
 
   const renderSchemaName = guard(schema, (schema) => (
