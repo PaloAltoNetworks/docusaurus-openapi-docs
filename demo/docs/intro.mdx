@@ -197,7 +197,7 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 | `label`              | `string`  | `null`  | _Optional:_ Version label used when generating version selector dropdown menu.                                                                  |
 | `baseUrl`            | `string`  | `null`  | _Optional:_ Version base URL used when generating version selector dropdown menu.                                                               |
 | `versions`           | `object`  | `null`  | _Optional:_ Set of options for versioning configuration. See below for a list of supported options.                                             |
-| `markdownGenerators` | `object`  | `null`  | _Optional:_ Customize MDX content with a set of options for specifying markdown generator functions. See below for a list of supported options. |
+| `markdownGenerators` | `object`  | `null`  | _Optional:_ Customize MDX content with a set of options for specifying markdown generator functions. See [markdownGenerators](#markdowngenerators) for a list of supported options. |
 | `showSchemas`        | `boolean` | `null`  | _Optional:_ If set to `true`, generates schema pages and adds them to the sidebar.                                                              |
 
 `sidebarOptions` can be configured with the following options:
@@ -233,6 +233,24 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 | `createInfoPageMD`   | `function` | `null`  | _Optional:_ Returns a string of the raw markdown body for info pages.<br/><br/>**Function type:** `(pageData: InfoPageMetadata) => string`     |
 | `createTagPageMD`    | `function` | `null`  | _Optional:_ Returns a string of the raw markdown body for tag pages.<br/><br/>**Function type:** `(pageData: TagPageMetadata) => string`       |
 | `createSchemaPageMD` | `function` | `null`  | _Optional:_ Returns a string of the raw markdown body for schema pages.<br/><br/>**Function type:** `(pageData: SchemaPageMetadata) => string` |
+
+Example:
+
+```javascript
+petstore31: {
+  specPath: "examples/petstore-3.1.yaml",
+  proxy: "https://cors.pan.dev",
+  outputDir: "docs/petstore31",
+  sidebarOptions: {
+    groupPathsBy: "tag",
+    categoryLinkSource: "tag",
+  },
+  downloadUrl: "/petstore-3.1.yaml",
+  hideSendButton: false,
+  showSchemas: true,
+  markdownGenerators: { createApiPageMD: myCustomApiMdGenerator }, // customize MDX with markdown generator
+} satisfies OpenApiPlugin.Options,
+```
 
 ## CLI Usage
 

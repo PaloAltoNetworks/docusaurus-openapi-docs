@@ -4,6 +4,7 @@ import type * as Plugin from "@docusaurus/types/src/plugin";
 import type * as OpenApiPlugin from "docusaurus-plugin-openapi-docs";
 
 import { DOCUSAURUS_VERSION } from "@docusaurus/utils";
+import { myCustomApiMdGenerator } from "./customMdGenerators";
 
 const config: Config = {
   title: "Docusaurus OpenAPI Docs",
@@ -305,10 +306,10 @@ const config: Config = {
               groupPathsBy: "tag",
               categoryLinkSource: "tag",
             },
-            template: "api.mustache", // Customize API MDX with mustache template
             downloadUrl: "/petstore-3.1.yaml",
             hideSendButton: false,
             showSchemas: true,
+            markdownGenerators: { createApiPageMD: myCustomApiMdGenerator }, // customize MDX with markdown generator
           } satisfies OpenApiPlugin.Options,
           cos: {
             specPath: "examples/openapi-cos.json",
