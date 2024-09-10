@@ -270,6 +270,7 @@ export class OpenAPIParser {
       const {
         type,
         enum: enumProperty,
+        "x-enumDescription": enumDescription,
         properties,
         items,
         required,

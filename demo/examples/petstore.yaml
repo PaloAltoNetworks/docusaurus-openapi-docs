@@ -351,6 +351,10 @@ paths:
                 - available
                 - pending
                 - sold
+              x-enumDescriptions:
+                available: When the pet is available
+                pending: When the pet is being sold
+                sold: When the pet has been sold
               default: available
       responses:
         "200":
@@ -1114,6 +1118,15 @@ components:
             - available
             - pending
             - sold
+          x-enumDescriptions:
+            available: When the pet is available
+            pending: When the pet is being sold
+            sold: |
+              When the pet has been sold.
+
+              These descriptions can contain line
+
+              breaks and also [links](https://docusaurus.io/)
         petType:
           description: Type of a pet
           type: string

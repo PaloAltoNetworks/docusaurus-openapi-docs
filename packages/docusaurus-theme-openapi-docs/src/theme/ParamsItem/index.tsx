@@ -14,6 +14,7 @@ import TabItem from "@theme/TabItem";
 import clsx from "clsx";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
+import remarkGfm from "remark-gfm";
 
 import { createDescription } from "../../markdown/createDescription";
 import { getQualifierMessage, getSchemaName } from "../../markdown/schema";
@@ -39,12 +40,38 @@ export interface Props {
     required: boolean;
     deprecated: boolean;
     schema: any;
+    enumDescriptions?: [string, string][];
   };
 }
 
-function ParamsItem({
-  param: { description, example, examples, name, required, schema, deprecated },
-}: Props) {
+const getEnumDescriptionMarkdown = (enumDescriptions?: [string, string][]) => {
+  if (enumDescriptions?.length) {
+    return `| Enum Value | Description |
+| ---- | ----- |
+${enumDescriptions
+  .map((desc) => {
+    return `| ${desc[0]} | ${desc[1]} | `.replaceAll("\n", "<br/>");
+  })
+  .join("\n")}
+    `;
+  }
+
+  return "";
+};
+
+function ParamsItem({ param, ...rest }: Props) {
+  const {
+    description,
+    example,
+    examples,
+    name,
+    required,
+    deprecated,
+    enumDescriptions,
+  } = param;
+
+  let schema = param.schema;
+
   if (!schema || !schema?.type) {
     schema = { type: "any" };
   }
@@ -90,6 +117,19 @@ function ParamsItem({
       />
     </div>
   ));
+
+  const renderEnumDescriptions = guard(
+    getEnumDescriptionMarkdown(enumDescriptions),
+    (value) => {
+      return (
+        <ReactMarkdown
+          rehypePlugins={[rehypeRaw]}
+          remarkPlugins={[remarkGfm]}
+          children={value}
+        />
+      );
+    }
+  );
 
   const renderDefaultValue = guard(
     schema && schema.items
@@ -158,6 +198,7 @@ function ParamsItem({
       {renderSchema}
       {renderDefaultValue}
       {renderDescription}
+      {renderEnumDescriptions}
       {renderExample}
       {renderExamples}
     </div>
