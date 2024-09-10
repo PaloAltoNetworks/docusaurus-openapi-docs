@@ -23,8 +23,9 @@ export function createDeprecationNotice({
   return guard(deprecated, () =>
     createAdmonition({
       children:
-        clean(description) ??
-        "This endpoint has been deprecated and may be replaced or removed in future versions of the API.",
+        description && description.length > 0
+          ? clean(description)
+          : "This endpoint has been deprecated and may be replaced or removed in future versions of the API.",
     })
   );
 }
