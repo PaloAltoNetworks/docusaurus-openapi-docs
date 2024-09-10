@@ -215,9 +215,9 @@ function ParamsItem({ param, ...rest }: Props) {
         {renderDeprecated}
       </span>
       {renderSchema}
-      {renderDefaultValue()}
       {renderDescription}
       {renderEnumDescriptions}
+      {renderDefaultValue()}
       {renderExample}
       {renderExamples}
     </div>
