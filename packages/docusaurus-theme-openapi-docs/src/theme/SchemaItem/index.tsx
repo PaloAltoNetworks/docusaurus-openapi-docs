@@ -175,9 +175,9 @@ export default function SchemaItem(props: Props) {
         {renderRequired}
         {renderDeprecated}
       </span>
-      {renderQualifierMessage}
       {renderSchemaDescription}
       {renderEnumDescriptions}
+      {renderQualifierMessage}
       {renderDefaultValue()}
       {collapsibleSchemaContent ?? collapsibleSchemaContent}
     </div>
