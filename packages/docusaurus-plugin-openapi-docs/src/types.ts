@@ -5,6 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import { SidebarItemDoc } from "@docusaurus/plugin-content-docs/src/sidebars/types";
 import type Request from "postman-collection";
 
 import {
@@ -57,12 +58,18 @@ export interface MarkdownGenerator {
   createSchemaPageMD?: (pageData: SchemaPageMetadata) => string;
 }
 
+export type ApiDocItemGenerator = (
+  item: ApiPageMetadata | SchemaPageMetadata,
+  context: { sidebarOptions: SidebarOptions; basePath: string }
+) => SidebarItemDoc;
+
 export interface SidebarOptions {
   groupPathsBy?: string;
   categoryLinkSource?: "info" | "tag" | "auto";
   customProps?: { [key: string]: unknown };
   sidebarCollapsible?: boolean;
   sidebarCollapsed?: boolean;
+  createDocItem?: ApiDocItemGenerator;
 }
 
 export interface APIVersionOptions {

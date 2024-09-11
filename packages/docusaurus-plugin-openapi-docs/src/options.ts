@@ -13,6 +13,7 @@ const sidebarOptions = Joi.object({
   customProps: Joi.object(),
   sidebarCollapsible: Joi.boolean(),
   sidebarCollapsed: Joi.boolean(),
+  createDocItem: Joi.function(),
 });
 
 const markdownGenerators = Joi.object({
