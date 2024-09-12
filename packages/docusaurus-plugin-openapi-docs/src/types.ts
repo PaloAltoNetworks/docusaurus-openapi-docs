@@ -63,13 +63,17 @@ export type ApiDocItemGenerator = (
   context: { sidebarOptions: SidebarOptions; basePath: string }
 ) => SidebarItemDoc;
 
+export interface SidebarGenerators {
+  createDocItem?: ApiDocItemGenerator;
+}
+
 export interface SidebarOptions {
   groupPathsBy?: string;
   categoryLinkSource?: "info" | "tag" | "auto";
   customProps?: { [key: string]: unknown };
   sidebarCollapsible?: boolean;
   sidebarCollapsed?: boolean;
-  createDocItem?: ApiDocItemGenerator;
+  sidebarGenerators?: SidebarGenerators;
 }
 
 export interface APIVersionOptions {

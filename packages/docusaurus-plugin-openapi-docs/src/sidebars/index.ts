@@ -133,7 +133,8 @@ function groupByTags(
     sidebarOptions,
     basePath,
   };
-  const createDocItemFn = sidebarOptions.createDocItem ?? createDocItem;
+  const createDocItemFn =
+    sidebarOptions.sidebarGenerators?.createDocItem ?? createDocItem;
 
   let rootIntroDoc = undefined;
   if (infoItems.length === 1) {
