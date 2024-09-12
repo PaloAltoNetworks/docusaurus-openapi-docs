@@ -100,6 +100,10 @@ a:any-link:hover {
   background-color: var(--ifm-color-secondary-darkest);
 }
 
+.menu__list-item--deprecated > .menu__link,
+.menu__list-item--deprecated > .menu__link:hover {
+  text-decoration: line-through;
+}
 /* Sidebar Method labels High Contrast */
 .api-method-contrast > .menu__link,
 .schema-contrast > .menu__link {
