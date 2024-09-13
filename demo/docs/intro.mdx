@@ -209,6 +209,7 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 | `sidebarCollapsible` | `boolean` | `true`  | Whether sidebar categories are collapsible by default.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | `sidebarCollapsed`   | `boolean` | `true`  | Whether sidebar categories are collapsed by default.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | `customProps`        | `object`  | `null`  | Additional props for customizing a sidebar item.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| `sidebarGenerators`  | `object`  | `null`  | Optional: Customize sidebar rendering with callback functions.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 
 > You may optionally configure a `sidebarOptions`. In doing so, an individual `sidebar.js` slice with the configured options will be generated within the respective `outputDir`.
 
@@ -251,6 +252,14 @@ petstore31: {
   markdownGenerators: { createApiPageMD: myCustomApiMdGenerator }, // customize MDX with markdown generator
 } satisfies OpenApiPlugin.Options,
 ```
+
+### sidebarGenerators
+
+`sidebarGenerators` can be configured with the following options:
+
+| Name            | Type       | Default | Description                                                                                                                                                                                                                                      |
+| --------------- | ---------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `createDocItem` | `function` | `null`  | Optional: Returns a `SidebarItemDoc` object containing metadata for a sidebar item.<br/><br/>**Function type:** `(item: ApiPageMetadata \| SchemaPageMetadata, context: { sidebarOptions: SidebarOptions; basePath: string }) => SidebarItemDoc` |
 
 ## CLI Usage
 
