@@ -12,7 +12,6 @@ import {
   ProcessedSidebar,
   SidebarItemCategory,
   SidebarItemCategoryLinkConfig,
-  SidebarItemDoc,
 } from "@docusaurus/plugin-content-docs/src/sidebars/types";
 import { posixPath } from "@docusaurus/utils";
 import clsx from "clsx";
@@ -27,6 +26,7 @@ import type {
   ApiMetadata,
   InfoPageMetadata,
   SchemaPageMetadata,
+  ApiDocItemGenerator,
 } from "../types";
 
 function isApiItem(item: ApiMetadata): item is ApiMetadata {
@@ -41,6 +41,37 @@ function isSchemaItem(item: ApiMetadata): item is ApiMetadata {
   return item.type === "schema";
 }
 
+const createDocItem: ApiDocItemGenerator = (
+  item,
+  { sidebarOptions: { customProps }, basePath }
+) => {
+  const sidebar_label = item.frontMatter.sidebar_label;
+  const title = item.title;
+  const id = item.type === "schema" ? `schemas/${item.id}` : item.id;
+  const className =
+    item.type === "api"
+      ? clsx(
+          {
+            "menu__list-item--deprecated": item.api.deprecated,
+            "api-method": !!item.api.method,
+          },
+          item.api.method
+        )
+      : clsx(
+          {
+            "menu__list-item--deprecated": item.schema.deprecated,
+          },
+          "schema"
+        );
+  return {
+    type: "doc" as const,
+    id: basePath === "" || undefined ? `${id}` : `${basePath}/${id}`,
+    label: (sidebar_label as string) ?? title ?? id,
+    customProps: customProps,
+    className: className ? className : undefined,
+  };
+};
+
 function groupByTags(
   items: ApiMetadata[],
   sidebarOptions: SidebarOptions,
@@ -53,12 +84,8 @@ function groupByTags(
   // Remove trailing slash before proceeding
   outputDir = outputDir.replace(/\/$/, "");
 
-  const {
-    sidebarCollapsed,
-    sidebarCollapsible,
-    customProps,
-    categoryLinkSource,
-  } = sidebarOptions;
+  const { sidebarCollapsed, sidebarCollapsible, categoryLinkSource } =
+    sidebarOptions;
 
   const apiItems = items.filter(isApiItem) as ApiPageMetadata[];
   const infoItems = items.filter(isInfoItem) as InfoPageMetadata[];
@@ -101,35 +128,13 @@ function groupByTags(
   const basePath = docPath
     ? outputDir.split(docPath!)[1].replace(/^\/+/g, "")
     : outputDir.slice(outputDir.indexOf("/", 1)).replace(/^\/+/g, "");
-  function createDocItem(
-    item: ApiPageMetadata | SchemaPageMetadata
-  ): SidebarItemDoc {
-    const sidebar_label = item.frontMatter.sidebar_label;
-    const title = item.title;
-    const id = item.type === "schema" ? `schemas/${item.id}` : item.id;
-    const className =
-      item.type === "api"
-        ? clsx(
-            {
-              "menu__list-item--deprecated": item.api.deprecated,
-              "api-method": !!item.api.method,
-            },
-            item.api.method
-          )
-        : clsx(
-            {
-              "menu__list-item--deprecated": item.schema.deprecated,
-            },
-            "schema"
-          );
-    return {
-      type: "doc" as const,
-      id: basePath === "" || undefined ? `${id}` : `${basePath}/${id}`,
-      label: (sidebar_label as string) ?? title ?? id,
-      customProps: customProps,
-      className: className ? className : undefined,
-    };
-  }
+
+  const createDocItemFnContext = {
+    sidebarOptions,
+    basePath,
+  };
+  const createDocItemFn =
+    sidebarOptions.sidebarGenerators?.createDocItem ?? createDocItem;
 
   let rootIntroDoc = undefined;
   if (infoItems.length === 1) {
@@ -208,7 +213,9 @@ function groupByTags(
         link: linkConfig,
         collapsible: sidebarCollapsible,
         collapsed: sidebarCollapsed,
-        items: [...taggedSchemaItems, ...taggedApiItems].map(createDocItem),
+        items: [...taggedSchemaItems, ...taggedApiItems].map((item) =>
+          createDocItemFn(item, createDocItemFnContext)
+        ),
       };
     })
     .filter((item) => item.items.length > 0); // Filter out any categories with no items.
@@ -216,7 +223,7 @@ function groupByTags(
   // Handle items with no tag
   const untaggedItems = apiItems
     .filter(({ api }) => api.tags === undefined || api.tags.length === 0)
-    .map(createDocItem);
+    .map((item) => createDocItemFn(item, createDocItemFnContext));
   let untagged: SidebarItemCategory[] = [];
   if (untaggedItems.length > 0) {
     untagged = [
@@ -227,7 +234,7 @@ function groupByTags(
         collapsed: sidebarCollapsed!,
         items: apiItems
           .filter(({ api }) => api.tags === undefined || api.tags.length === 0)
-          .map(createDocItem),
+          .map((item) => createDocItemFn(item, createDocItemFnContext)),
       },
     ];
   }
@@ -242,7 +249,7 @@ function groupByTags(
         collapsed: sidebarCollapsed!,
         items: schemaItems
           .filter(({ schema }) => !schema["x-tags"])
-          .map(createDocItem),
+          .map((item) => createDocItemFn(item, createDocItemFnContext)),
       },
     ];
   }

@@ -7,12 +7,17 @@
 
 import { Joi } from "@docusaurus/utils-validation";
 
+const sidebarGenerators = Joi.object({
+  createDocItem: Joi.function(),
+});
+
 const sidebarOptions = Joi.object({
   groupPathsBy: Joi.string().valid("tag", "tagGroup"),
   categoryLinkSource: Joi.string().valid("tag", "info", "auto"),
   customProps: Joi.object(),
   sidebarCollapsible: Joi.boolean(),
   sidebarCollapsed: Joi.boolean(),
+  sidebarGenerators: sidebarGenerators,
 });
 
 const markdownGenerators = Joi.object({
