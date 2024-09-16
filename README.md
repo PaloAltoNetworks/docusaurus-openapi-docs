@@ -20,7 +20,7 @@ OpenAPI plugin for generating API reference docs in Docusaurus v3.
 
 <p align="center">
 
-<img src="https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/assets/9343811/d4e75f15-7daf-48d2-a772-a0c49aa25d26" width="900" />
+<img src="https://github.com/user-attachments/assets/607846ac-621e-438f-a9d5-d44bab6734d2" width="900" />
 
 </p>
 
