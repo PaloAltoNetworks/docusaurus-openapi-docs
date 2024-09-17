@@ -80,6 +80,7 @@ function ParamOptions() {
       {optionalParams.length > 0 && (
         <>
           <button
+            type="button"
             className="openapi-explorer__show-more-btn"
             onClick={() => setShowOptional((prev) => !prev)}
           >
