@@ -7,10 +7,13 @@
 
 import { ReactNode } from "react";
 
-export type Children = ReactNode | string | undefined | (string | undefined)[];
+/** @deprecated use ReactNode from React instead */
+export type Children = ReactNode;
 
-export type Props = Record<string, any> & { children?: Children };
+/** @deprecated use Props from docusaurus-plugin-openapi-docs/src/markdown/utils instead */
+export type Props = Record<string, any> & { children?: ReactNode };
 
+/** @deprecated use create() from docusaurus-plugin-openapi-docs/src/markdown/utils instead */
 export function create(tag: string, props: Props): string {
   const { children, ...rest } = props;
 
@@ -22,9 +25,10 @@ export function create(tag: string, props: Props): string {
   return `<${tag}${propString}>${render(children)}</${tag}>`;
 }
 
+/** @deprecated use guard() from docusaurus-plugin-openapi-docs/src/markdown/utils instead */
 export function guard<T>(
   value: T | undefined | string,
-  cb: (value: T) => Children
+  cb: (value: T) => ReactNode
 ): string {
   if (!!value || value === 0) {
     const children = cb(value as T);
@@ -33,11 +37,11 @@ export function guard<T>(
   return "";
 }
 
-export function render(children: Children): string {
+export function render(children: ReactNode): string {
   if (Array.isArray(children)) {
     return children.filter((c) => c !== undefined).join("");
   }
-  return (children as string) ?? "";
+  return `${children ?? ""}`;
 }
 
 export function toString(value: any): string | undefined {

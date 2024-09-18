@@ -5,9 +5,12 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-export type Children = string | undefined | (string | string[] | undefined)[];
+import { type ReactNode } from "react";
 
-export type Props = Record<string, any> & { children?: Children };
+/** @deprecated use ReactNode from React instead */
+export type Children = ReactNode;
+
+export type Props = Record<string, any> & { children?: ReactNode };
 
 export type Options = { inline?: boolean };
 
@@ -36,7 +39,7 @@ export function create(
 
 export function guard<T>(
   value: T | undefined,
-  cb: (value: T) => Children
+  cb: (value: T) => ReactNode
 ): string {
   if (!!value || value === 0) {
     const children = cb(value);
@@ -45,14 +48,14 @@ export function guard<T>(
   return "";
 }
 
-export function render(children: Children): string {
+export function render(children: ReactNode): string {
   if (Array.isArray(children)) {
     const filteredChildren = children.filter((c) => c !== undefined);
     return filteredChildren
       .map((i: any) => (Array.isArray(i) ? i.join("") : i))
       .join("");
   }
-  return children ?? "";
+  return `${children ?? ""}`;
 }
 
 // Regex to selectively URL-encode '>' and '<' chars
