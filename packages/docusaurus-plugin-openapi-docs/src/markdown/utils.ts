@@ -56,7 +56,7 @@ export function render(children: Children): string {
       .map((i: any) => (Array.isArray(i) ? i.join("") : i))
       .join("");
   }
-  return `${children ?? ""}`;
+  return children ?? "";
 }
 
 // Regex to selectively URL-encode '>' and '<' chars
