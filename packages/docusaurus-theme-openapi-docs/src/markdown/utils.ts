@@ -10,10 +10,8 @@ import { ReactNode } from "react";
 /** @deprecated use ReactNode from React instead */
 export type Children = ReactNode;
 
-/** @deprecated use Props from docusaurus-plugin-openapi-docs/src/markdown/utils instead */
 export type Props = Record<string, any> & { children?: ReactNode };
 
-/** @deprecated use create() from docusaurus-plugin-openapi-docs/src/markdown/utils instead */
 export function create(tag: string, props: Props): string {
   const { children, ...rest } = props;
 
@@ -25,11 +23,10 @@ export function create(tag: string, props: Props): string {
   return `<${tag}${propString}>${render(children)}</${tag}>`;
 }
 
-/** @deprecated use guard() from docusaurus-plugin-openapi-docs/src/markdown/utils instead */
 export function guard<T>(
   value: T | undefined | string,
   cb: (value: T) => ReactNode
-): string {
+) {
   if (!!value || value === 0) {
     const children = cb(value as T);
     return render(children);
@@ -37,11 +34,11 @@ export function guard<T>(
   return "";
 }
 
-export function render(children: ReactNode): string {
+export function render(children: ReactNode) {
   if (Array.isArray(children)) {
     return children.filter((c) => c !== undefined).join("");
   }
-  return `${children ?? ""}`;
+  return children;
 }
 
 export function toString(value: any): string | undefined {
