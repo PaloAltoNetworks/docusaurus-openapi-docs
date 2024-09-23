@@ -38,7 +38,7 @@ export function render(children: ReactNode) {
   if (Array.isArray(children)) {
     return children.filter((c) => c !== undefined).join("");
   }
-  return children;
+  return children ?? "";
 }
 
 export function toString(value: any): string | undefined {
