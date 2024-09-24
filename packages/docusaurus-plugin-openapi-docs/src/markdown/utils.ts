@@ -5,6 +5,10 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+/**
+ * Children in the plugin does not accept DOM elements, when compared with Children in the theme.
+ * It is designed for rendering HTML a strings.
+ */
 export type Children = string | undefined | (string | string[] | undefined)[];
 
 export type Props = Record<string, any> & { children?: Children };
