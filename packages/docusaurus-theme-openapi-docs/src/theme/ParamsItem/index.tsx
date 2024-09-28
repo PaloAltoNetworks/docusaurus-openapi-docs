@@ -32,6 +32,7 @@ export interface ExampleObject {
 }
 
 export interface Props {
+  className: string;
   param: {
     description: string;
     example: any;
