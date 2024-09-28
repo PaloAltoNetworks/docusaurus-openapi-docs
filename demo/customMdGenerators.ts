@@ -48,6 +48,7 @@ export function myCustomApiMdGenerator({
     `import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";\n`,
     `import SecuritySchemes from "@theme/ApiExplorer/SecuritySchemes";\n`,
     `import MimeTabs from "@theme/MimeTabs";\n`,
+    `import ParamsItem from "@theme/ParamsDetails";\n`,
     `import ParamsItem from "@theme/ParamsItem";\n`,
     `import ResponseSamples from "@theme/ResponseSamples";\n`,
     `import SchemaItem from "@theme/SchemaItem";\n`,
