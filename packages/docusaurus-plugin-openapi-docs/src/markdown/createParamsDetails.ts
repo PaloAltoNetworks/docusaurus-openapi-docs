@@ -10,14 +10,12 @@ import { ApiItem } from "../types";
 
 interface Props {
   parameters: ApiItem["parameters"];
-  type: "path" | "query" | "header" | "cookie";
 }
 
-export function createParamsDetails({ parameters, type }: Props) {
+export function createParamsDetails({ parameters }: Props) {
   return [
     create("ParamsDetails", {
       parameters: parameters,
-      type: type,
     }),
     "\n\n",
   ];

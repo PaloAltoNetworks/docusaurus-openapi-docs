@@ -89,10 +89,7 @@ export function createApiPageMD({
     createDeprecationNotice({ deprecated, description: deprecatedDescription }),
     createDescription(description),
     requestBody || parameters ? createRequestHeader("Request") : undefined,
-    createParamsDetails({ parameters, type: "path" }),
-    createParamsDetails({ parameters, type: "query" }),
-    createParamsDetails({ parameters, type: "header" }),
-    createParamsDetails({ parameters, type: "cookie" }),
+    createParamsDetails({ parameters }),
     createRequestBodyDetails({
       title: "Body",
       body: requestBody,

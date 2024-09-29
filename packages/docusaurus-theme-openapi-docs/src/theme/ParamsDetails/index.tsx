@@ -10,44 +10,55 @@ import React from "react";
 import Details from "@theme/Details";
 import ParamsItem from "@theme/ParamsItem";
 
-const ParamsDetails = ({ parameters, type }: any) => {
-  const params = parameters?.filter((param: any) => param?.in === type);
-
-  if (!params || params.length === 0) {
-    return null;
-  }
-
-  const summaryElement = (
-    <summary>
-      <h3 className="openapi-markdown__details-summary-header-params">{`${type.charAt(0).toUpperCase() + type.slice(1)} Parameters`}</h3>
-    </summary>
-  );
+const ParamsDetails = ({ parameters }: { parameters: any[] }) => {
+  const types = ["path", "query", "header", "cookie"];
 
   return (
-    <Details
-      className="openapi-markdown__details"
-      style={{ marginBottom: "1rem" }}
-      data-collapsed={false}
-      open={true}
-      summary={summaryElement}
-    >
-      <div>
-        <ul>
-          {params.map((param: any, index: any) => (
-            <ParamsItem
-              key={index}
-              className="paramsItem"
-              param={{
-                ...param,
-                enumDescriptions: Object.entries(
-                  param?.schema?.items?.["x-enumDescriptions"] ?? {}
-                ),
-              }}
-            />
-          ))}
-        </ul>
-      </div>
-    </Details>
+    <>
+      {types.map((type) => {
+        const params = parameters?.filter((param: any) => param?.in === type);
+
+        if (!params || params.length === 0) {
+          return null;
+        }
+
+        const summaryElement = (
+          <summary>
+            <h3 className="openapi-markdown__details-summary-header-params">
+              {`${type.charAt(0).toUpperCase() + type.slice(1)} Parameters`}
+            </h3>
+          </summary>
+        );
+
+        return (
+          <Details
+            key={type}
+            className="openapi-markdown__details"
+            style={{ marginBottom: "1rem" }}
+            data-collapsed={false}
+            open={true}
+            summary={summaryElement}
+          >
+            <div>
+              <ul>
+                {params.map((param: any, index: number) => (
+                  <ParamsItem
+                    key={index}
+                    className="paramsItem"
+                    param={{
+                      ...param,
+                      enumDescriptions: Object.entries(
+                        param?.schema?.items?.["x-enumDescriptions"] ?? {}
+                      ),
+                    }}
+                  />
+                ))}
+              </ul>
+            </div>
+          </Details>
+        );
+      })}
+    </>
   );
 };
 
