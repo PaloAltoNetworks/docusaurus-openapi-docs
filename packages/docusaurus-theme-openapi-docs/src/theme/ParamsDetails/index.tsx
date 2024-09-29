@@ -7,6 +7,7 @@
 
 import React from "react";
 
+import Details from "@theme/Details";
 import ParamsItem from "@theme/ParamsItem"; // Adjust the import path as needed
 
 const ParamsDetails = ({ parameters, type }: any) => {
@@ -16,18 +17,20 @@ const ParamsDetails = ({ parameters, type }: any) => {
     return null;
   }
 
+  const summaryElement = (
+    <summary>
+      <h3 className="openapi-markdown__details-summary-header-params">{`${type.charAt(0).toUpperCase() + type.slice(1)} Parameters`}</h3>
+    </summary>
+  );
+
   return (
-    <details
+    <Details
       className="openapi-markdown__details"
+      style={{ marginBottom: "1rem" }}
       data-collapsed={false}
       open={true}
-      style={{ marginBottom: "1rem" }}
+      summary={summaryElement}
     >
-      <summary>
-        <h3 className="openapi-markdown__details-summary-header-params">
-          {`${type.charAt(0).toUpperCase() + type.slice(1)} Parameters`}
-        </h3>
-      </summary>
       <div>
         <ul>
           {params.map((param: any, index: any) => (
@@ -44,7 +47,7 @@ const ParamsDetails = ({ parameters, type }: any) => {
           ))}
         </ul>
       </div>
-    </details>
+    </Details>
   );
 };
 
