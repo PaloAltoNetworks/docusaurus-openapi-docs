@@ -8,7 +8,7 @@
 import React from "react";
 
 import Details from "@theme/Details";
-import ParamsItem from "@theme/ParamsItem"; // Adjust the import path as needed
+import ParamsItem from "@theme/ParamsItem";
 
 const ParamsDetails = ({ parameters, type }: any) => {
   const params = parameters?.filter((param: any) => param?.in === type);
