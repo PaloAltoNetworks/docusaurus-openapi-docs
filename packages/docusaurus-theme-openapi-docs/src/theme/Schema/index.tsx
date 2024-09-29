@@ -23,6 +23,7 @@ import {
 } from "docusaurus-plugin-openapi-docs/lib/markdown/schema";
 import isEmpty from "lodash/isEmpty";
 
+// eslint-disable-next-line import/no-extraneous-dependencies
 const jsonSchemaMergeAllOf = require("json-schema-merge-allof");
 
 const mergeAllOf = (allOf: any) => {
