@@ -238,6 +238,7 @@ export interface MediaTypeObject {
   example?: any;
   examples?: Map<ExampleObject>;
   encoding?: Map<EncodingObject>;
+  type?: any;
 }
 
 export interface MediaTypeObjectWithRef {
