@@ -60,12 +60,16 @@ const RequestSchema: React.FC<Props> = ({ title, body, style }) => {
                 style={style}
                 summary={
                   <>
-                    <h3 className="openapi-markdown__details-summary-header-body">
-                      {title}
-                    </h3>
-                    {body.required === true && (
-                      <span className="openapi-schema__required">required</span>
-                    )}
+                    <summary>
+                      <h3 className="openapi-markdown__details-summary-header-body">
+                        {title}
+                        {body.required === true && (
+                          <span className="openapi-schema__required">
+                            required
+                          </span>
+                        )}
+                      </h3>
+                    </summary>
                   </>
                 }
               >
@@ -106,15 +110,19 @@ const RequestSchema: React.FC<Props> = ({ title, body, style }) => {
           style={style}
           summary={
             <>
-              <h3 className="openapi-markdown__details-summary-header-body">
-                {title}
-              </h3>
-              {firstBody.type === "array" && (
-                <span style={{ opacity: "0.6" }}> array</span>
-              )}
-              {body.required && (
-                <strong className="openapi-schema__required">required</strong>
-              )}
+              <summary>
+                <h3 className="openapi-markdown__details-summary-header-body">
+                  {title}
+                  {firstBody.type === "array" && (
+                    <span style={{ opacity: "0.6" }}> array</span>
+                  )}
+                  {body.required && (
+                    <strong className="openapi-schema__required">
+                      required
+                    </strong>
+                  )}
+                </h3>
+              </summary>
             </>
           }
         >

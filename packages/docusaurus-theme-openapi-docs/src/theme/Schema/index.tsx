@@ -241,13 +241,17 @@ const AdditionalProperties = ({ schema, schemaType }: any) => {
       <Details
         className="openapi-markdown__details"
         summary={
-          <span className="openapi-schema__container">
-            <strong className="openapi-schema__property">property name*</strong>
-            <span className="openapi-schema__name"> {title}</span>
-            {required && (
-              <span className="openapi-schema__required">required</span>
-            )}
-          </span>
+          <summary>
+            <span className="openapi-schema__container">
+              <strong className="openapi-schema__property">
+                property name*
+              </strong>
+              <span className="openapi-schema__name"> {title}</span>
+              {required && (
+                <span className="openapi-schema__required">required</span>
+              )}
+            </span>
+          </summary>
         }
       >
         <div style={{ marginLeft: "1rem" }}>
@@ -379,24 +383,26 @@ const Edge = ({ name, schema, required, discriminator, schemaType }: any) => {
 };
 
 const Summary = ({ name, schemaName, required, nullable, deprecated }: any) => (
-  <span className="openapi-schema__container">
-    <strong
-      className={clsx("openapi-schema__property", {
-        "openapi-schema__strikethrough": deprecated,
-      })}
-    >
-      {name}
-    </strong>
-    <span className="openapi-schema__name"> {schemaName}</span>
-    {(required || nullable || deprecated) && (
-      <span className="openapi-schema__divider" />
-    )}
-    {nullable && <span className="openapi-schema__nullable">nullable</span>}
-    {required && <span className="openapi-schema__required">required</span>}
-    {deprecated && (
-      <span className="openapi-schema__deprecated">deprecated</span>
-    )}
-  </span>
+  <summary>
+    <span className="openapi-schema__container">
+      <strong
+        className={clsx("openapi-schema__property", {
+          "openapi-schema__strikethrough": deprecated,
+        })}
+      >
+        {name}
+      </strong>
+      <span className="openapi-schema__name"> {schemaName}</span>
+      {(required || nullable || deprecated) && (
+        <span className="openapi-schema__divider" />
+      )}
+      {nullable && <span className="openapi-schema__nullable">nullable</span>}
+      {required && <span className="openapi-schema__required">required</span>}
+      {deprecated && (
+        <span className="openapi-schema__deprecated">deprecated</span>
+      )}
+    </span>
+  </summary>
 );
 
 const SchemaComponent: React.FC<{
