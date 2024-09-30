@@ -13,10 +13,6 @@ import SchemaItem from "@theme/SchemaItem";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
 import clsx from "clsx";
-import {
-  createClosingArrayBracket,
-  createOpeningArrayBracket,
-} from "docusaurus-plugin-openapi-docs/lib/markdown/createArrayBracket";
 import { createDescription } from "docusaurus-plugin-openapi-docs/lib/markdown/createDescription";
 import {
   getQualifierMessage,
