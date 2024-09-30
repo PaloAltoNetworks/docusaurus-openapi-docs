@@ -7,6 +7,7 @@
 
 import React from "react";
 
+import { ClosingArrayBracket, OpeningArrayBracket } from "@theme/ArrayBrackets";
 import Details from "@theme/Details";
 import SchemaItem from "@theme/SchemaItem";
 import SchemaTabs from "@theme/SchemaTabs";
@@ -299,9 +300,9 @@ const Items = ({ schema, schemaType }: any) => {
   if (schema.items?.properties) {
     return (
       <>
-        {createOpeningArrayBracket()}
+        <OpeningArrayBracket />
         <Properties schema={schema.items} schemaType={schemaType} />
-        {createClosingArrayBracket()}
+        <ClosingArrayBracket />
       </>
     );
   }

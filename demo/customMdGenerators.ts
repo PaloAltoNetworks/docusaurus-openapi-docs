@@ -44,6 +44,7 @@ export function myCustomApiMdGenerator({
 }: ApiPageMetadata) {
   return render([
     `import ApiTabs from "@theme/ApiTabs";\n`,
+    `import ArrayBrackets from "@theme/ArrayBrackets";\n`,
     `import DiscriminatorTabs from "@theme/DiscriminatorTabs";\n`,
     `import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";\n`,
     `import SecuritySchemes from "@theme/ApiExplorer/SecuritySchemes";\n`,
