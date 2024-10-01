@@ -9,18 +9,13 @@ import React from "react";
 
 import Details from "@theme/Details";
 import MimeTabs from "@theme/MimeTabs"; // Assume these components exist
-import {
-  ExampleFromSchema,
-  ResponseExample,
-  ResponseExamples,
-} from "@theme/ResponseExamples";
+import { ExampleFromSchema } from "@theme/ResponseExamples";
 import ResponseSamples from "@theme/ResponseSamples";
 import SchemaComponent from "@theme/Schema";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
 import { createDescription } from "docusaurus-plugin-openapi-docs/lib/markdown/createDescription";
 import { MediaTypeObject } from "docusaurus-plugin-openapi-docs/lib/openapi/types";
-import { first } from "lodash";
 
 interface Props {
   style?: React.CSSProperties;
