@@ -52,6 +52,7 @@ export function myCustomApiMdGenerator({
     `import ParamsDetails from "@theme/ParamsDetails";\n`,
     `import ParamsItem from "@theme/ParamsItem";\n`,
     `import RequestSchema from "@theme/RequestSchema";\n`,
+    `import ResponseSchema from "@theme/ResponseSchema";\n`,
     `import ResponseSamples from "@theme/ResponseSamples";\n`,
     `import Schema from "@theme/Schema";\n`,
     `import SchemaItem from "@theme/SchemaItem";\n`,
