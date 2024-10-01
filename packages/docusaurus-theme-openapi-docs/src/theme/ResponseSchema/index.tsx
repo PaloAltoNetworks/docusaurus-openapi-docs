@@ -9,11 +9,18 @@ import React from "react";
 
 import Details from "@theme/Details";
 import MimeTabs from "@theme/MimeTabs"; // Assume these components exist
+import {
+  ExampleFromSchema,
+  ResponseExample,
+  ResponseExamples,
+} from "@theme/ResponseExamples";
+import ResponseSamples from "@theme/ResponseSamples";
 import SchemaComponent from "@theme/Schema";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
 import { createDescription } from "docusaurus-plugin-openapi-docs/lib/markdown/createDescription";
 import { MediaTypeObject } from "docusaurus-plugin-openapi-docs/lib/openapi/types";
+import { first } from "lodash";
 
 interface Props {
   style?: React.CSSProperties;
@@ -56,53 +63,129 @@ const ResponseSchema: React.FC<Props> = ({ title, body, style }): any => {
           ) {
             return undefined;
           }
+          let language: string;
+          if (mimeType.endsWith("json")) language = "json";
+          if (mimeType.endsWith("xml")) language = "xml";
 
-          return (
-            // @ts-ignore
-            <TabItem key={mimeType} label={mimeType} value={mimeType}>
-              <SchemaTabs className="openapi-tabs__schema">
-                {/* @ts-ignore */}
-                <TabItem key={title} label={title} value={title}>
-                  <Details
-                    className="openapi-markdown__details response"
-                    data-collapsed={false}
-                    open={true}
-                    style={style}
-                    summary={
-                      <>
-                        <summary>
-                          <strong className="openapi-markdown__details-summary-response">
-                            {title}
-                            {body.required === true && (
-                              <span className="openapi-schema__required">
-                                required
-                              </span>
-                            )}
-                          </strong>
-                        </summary>
-                      </>
-                    }
+          let examples;
+          if (responseExamples) {
+            examples = Object.entries(responseExamples!).map(
+              ([exampleName, exampleValue]: any) => {
+                const isObject = typeof exampleValue.value === "object";
+                const responseExample = isObject
+                  ? JSON.stringify(exampleValue.value, null, 2)
+                  : exampleValue.value;
+
+                return (
+                  //@ts-ignore
+                  <TabItem
+                    label={exampleName}
+                    value={exampleName}
+                    key={exampleName}
                   >
-                    <div style={{ textAlign: "left", marginLeft: "1rem" }}>
-                      {body.description && (
-                        <div
-                          style={{ marginTop: "1rem", marginBottom: "1rem" }}
-                        >
-                          {createDescription(body.description)}
-                        </div>
-                      )}
+                    {exampleValue.summary && (
+                      <div className="openapi-example__summary">
+                        {exampleValue.summary}
+                      </div>
+                    )}
+                    <ResponseSamples
+                      responseExample={responseExample}
+                      language={language}
+                    />
+                  </TabItem>
+                );
+              }
+            );
+          }
+
+          let example;
+          if (responseExample) {
+            const isObject = typeof responseExample === "object";
+            const exampleContent = isObject
+              ? JSON.stringify(responseExample, null, 2)
+              : responseExample;
+            example = () => {
+              return (
+                // @ts-ignore
+                <TabItem label="Example" value="Example">
+                  {responseExample.summary && (
+                    <div className="openapi-example__summary">
+                      {responseExample.summary}
                     </div>
-                    <ul style={{ marginLeft: "1rem" }}>
-                      <SchemaComponent
-                        schema={firstBody}
-                        schemaType="request"
-                      />
-                    </ul>
-                  </Details>
+                  )}
+                  <ResponseSamples
+                    responseExample={exampleContent}
+                    language={language}
+                  />
                 </TabItem>
-              </SchemaTabs>
-            </TabItem>
-          );
+              );
+            };
+          }
+
+          if (firstBody) {
+            return (
+              // @ts-ignore
+              <TabItem key={mimeType} label={mimeType} value={mimeType}>
+                <SchemaTabs className="openapi-tabs__schema">
+                  {/* @ts-ignore */}
+                  <TabItem key={title} label={title} value={title}>
+                    <Details
+                      className="openapi-markdown__details response"
+                      data-collapsed={false}
+                      open={true}
+                      style={style}
+                      summary={
+                        <>
+                          <summary>
+                            <strong className="openapi-markdown__details-summary-response">
+                              {title}
+                              {body.required === true && (
+                                <span className="openapi-schema__required">
+                                  required
+                                </span>
+                              )}
+                            </strong>
+                          </summary>
+                        </>
+                      }
+                    >
+                      <div style={{ textAlign: "left", marginLeft: "1rem" }}>
+                        {body.description && (
+                          <div
+                            style={{ marginTop: "1rem", marginBottom: "1rem" }}
+                          >
+                            {createDescription(body.description)}
+                          </div>
+                        )}
+                      </div>
+                      <ul style={{ marginLeft: "1rem" }}>
+                        <SchemaComponent
+                          schema={firstBody}
+                          schemaType="request"
+                        />
+                      </ul>
+                    </Details>
+                  </TabItem>
+                  {firstBody && (
+                    // @ts-ignore
+                    <TabItem
+                      label="Example (from schema)"
+                      value="Example (from schema)"
+                    >
+                      <ExampleFromSchema
+                        schema={firstBody}
+                        mimeType={mimeType}
+                      />
+                    </TabItem>
+                  )}
+                  {examples && examples}
+
+                  {example && example()}
+                </SchemaTabs>
+              </TabItem>
+            );
+          }
+          return undefined;
         })}
       </MimeTabs>
     );
