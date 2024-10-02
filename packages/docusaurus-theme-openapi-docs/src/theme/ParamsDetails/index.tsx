@@ -5,9 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import Details from "@theme/Details";
 import ParamsItem from "@theme/ParamsItem";
 
@@ -15,7 +14,7 @@ interface Props {
   parameters: any[];
 }
 
-const ParamsDetailsComponent: React.FC<Props> = ({ parameters }) => {
+const ParamsDetails: React.FC<Props> = ({ parameters }) => {
   const types = ["path", "query", "header", "cookie"];
 
   return (
@@ -62,23 +61,6 @@ const ParamsDetailsComponent: React.FC<Props> = ({ parameters }) => {
         );
       })}
     </>
-  );
-};
-
-const ParamsDetails: React.FC<Props> = (props) => {
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    if (ExecutionEnvironment.canUseDOM) {
-      setIsClient(true);
-    }
-  }, []);
-
-  // Render the component only if it's client-side
-  return isClient ? (
-    <ParamsDetailsComponent {...props} />
-  ) : (
-    <div>Loading...</div>
   );
 };
 

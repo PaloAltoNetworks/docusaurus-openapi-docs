@@ -5,9 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import Details from "@theme/Details";
 import MimeTabs from "@theme/MimeTabs"; // Assume these components exist
 import SchemaComponent from "@theme/Schema";
@@ -27,7 +26,7 @@ interface Props {
   };
 }
 
-const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
+const RequestSchema: React.FC<Props> = ({ title, body, style }) => {
   if (
     body === undefined ||
     body.content === undefined ||
@@ -140,23 +139,6 @@ const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
         </Details>
       </TabItem>
     </MimeTabs>
-  );
-};
-
-const RequestSchema: React.FC<Props> = (props) => {
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    if (ExecutionEnvironment.canUseDOM) {
-      setIsClient(true);
-    }
-  }, []);
-
-  // Render the component only if it's client-side
-  return isClient ? (
-    <RequestSchemaComponent {...props} />
-  ) : (
-    <div>Loading...</div>
   );
 };
 
