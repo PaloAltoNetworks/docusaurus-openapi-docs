@@ -17,15 +17,15 @@ import { createDescription } from "../../markdown/createDescription";
 import { guard } from "../../markdown/utils";
 
 export interface Props {
-  children: ReactNode;
-  collapsible: boolean;
-  name: string;
-  qualifierMessage: string | undefined;
-  required: boolean;
-  schemaName: string;
+  children?: ReactNode;
+  collapsible?: boolean;
+  name?: string;
+  qualifierMessage?: string | undefined;
+  required?: boolean;
+  schemaName?: string;
   // TODO should probably be typed
-  schema: any;
-  discriminator: boolean;
+  schema?: any;
+  discriminator?: boolean;
 }
 
 const transformEnumDescriptions = (
