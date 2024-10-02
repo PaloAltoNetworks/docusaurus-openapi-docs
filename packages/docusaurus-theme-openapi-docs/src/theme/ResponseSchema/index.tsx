@@ -9,7 +9,11 @@ import React from "react";
 
 import Details from "@theme/Details";
 import MimeTabs from "@theme/MimeTabs"; // Assume these components exist
-import { ExampleFromSchema } from "@theme/ResponseExamples";
+import {
+  ExampleFromSchema,
+  ResponseExample,
+  ResponseExamples,
+} from "@theme/ResponseExamples";
 import ResponseSamples from "@theme/ResponseSamples";
 import SchemaComponent from "@theme/Schema";
 import SchemaTabs from "@theme/SchemaTabs";
@@ -58,64 +62,6 @@ const ResponseSchema: React.FC<Props> = ({ title, body, style }): any => {
           ) {
             return undefined;
           }
-          let language: string;
-          if (mimeType.endsWith("json")) language = "json";
-          if (mimeType.endsWith("xml")) language = "xml";
-
-          let examples;
-          if (responseExamples) {
-            examples = Object.entries(responseExamples!).map(
-              ([exampleName, exampleValue]: any) => {
-                const isObject = typeof exampleValue.value === "object";
-                const responseExample = isObject
-                  ? JSON.stringify(exampleValue.value, null, 2)
-                  : exampleValue.value;
-
-                return (
-                  //@ts-ignore
-                  <TabItem
-                    label={exampleName}
-                    value={exampleName}
-                    key={exampleName}
-                  >
-                    {exampleValue.summary && (
-                      <div className="openapi-example__summary">
-                        {exampleValue.summary}
-                      </div>
-                    )}
-                    <ResponseSamples
-                      responseExample={responseExample}
-                      language={language}
-                    />
-                  </TabItem>
-                );
-              }
-            );
-          }
-
-          let example;
-          if (responseExample) {
-            const isObject = typeof responseExample === "object";
-            const exampleContent = isObject
-              ? JSON.stringify(responseExample, null, 2)
-              : responseExample;
-            example = () => {
-              return (
-                // @ts-ignore
-                <TabItem label="Example" value="Example">
-                  {responseExample.summary && (
-                    <div className="openapi-example__summary">
-                      {responseExample.summary}
-                    </div>
-                  )}
-                  <ResponseSamples
-                    responseExample={exampleContent}
-                    language={language}
-                  />
-                </TabItem>
-              );
-            };
-          }
 
           if (firstBody) {
             return (
@@ -161,21 +107,17 @@ const ResponseSchema: React.FC<Props> = ({ title, body, style }): any => {
                       </ul>
                     </Details>
                   </TabItem>
-                  {firstBody && (
-                    // @ts-ignore
-                    <TabItem
-                      label="Example (from schema)"
-                      value="Example (from schema)"
-                    >
-                      <ExampleFromSchema
-                        schema={firstBody}
-                        mimeType={mimeType}
-                      />
-                    </TabItem>
-                  )}
-                  {examples && examples}
+                  {firstBody &&
+                    ExampleFromSchema({
+                      schema: firstBody,
+                      mimeType: mimeType,
+                    })}
 
-                  {example && example()}
+                  {responseExamples &&
+                    ResponseExamples({ responseExamples, mimeType })}
+
+                  {responseExample &&
+                    ResponseExample({ responseExample, mimeType })}
                 </SchemaTabs>
               </TabItem>
             );

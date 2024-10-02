@@ -13,6 +13,7 @@ import ResponseSamples from "@theme/ResponseSamples";
 import TabItem from "@theme/TabItem";
 import { createDescription } from "docusaurus-plugin-openapi-docs/lib/markdown/createDescription";
 import { sampleResponseFromSchema } from "docusaurus-plugin-openapi-docs/lib/openapi/createResponseExample";
+import { ReactElement } from "react-markdown/lib/react-markdown";
 import format from "xml-formatter";
 
 // Utility function
@@ -166,12 +167,13 @@ export const ResponseHeaders: React.FC<{
 export const ResponseExamples: React.FC<{
   responseExamples: any;
   mimeType: string;
-}> = ({ responseExamples, mimeType }) => {
+}> = ({ responseExamples, mimeType }): any => {
   let language = "shell";
   if (mimeType.endsWith("json")) language = "json";
   if (mimeType.endsWith("xml")) language = "xml";
 
-  const tabItems = Object.entries(responseExamples).map(
+  // Map response examples to an array of TabItem elements
+  const examplesArray = Object.entries(responseExamples).map(
     ([exampleName, exampleValue]: any) => {
       const isObject = typeof exampleValue.value === "object";
       const responseExample = isObject
@@ -179,7 +181,7 @@ export const ResponseExamples: React.FC<{
         : exampleValue.value;
 
       return (
-        //@ts-ignore
+        // @ts-ignore
         <TabItem label={exampleName} value={exampleName} key={exampleName}>
           {exampleValue.summary && (
             <div className="openapi-example__summary">
@@ -195,7 +197,7 @@ export const ResponseExamples: React.FC<{
     }
   );
 
-  return <>{sanitizeTabsChildren(tabItems)}</>;
+  return examplesArray;
 };
 
 export const ResponseExample: React.FC<{
@@ -262,7 +264,12 @@ export const ExampleFromSchema: React.FC<{ schema: any; mimeType: string }> = ({
           xmlExample = json2xml(responseExampleObject, "");
         }
       }
-      return <ResponseSamples responseExample={xmlExample} language="xml" />;
+      return (
+        // @ts-ignore
+        <TabItem label="Example (generated)" value="Example (generated)">
+          <ResponseSamples responseExample={xmlExample} language="xml" />
+        </TabItem>
+      );
     }
   }
 
@@ -271,10 +278,13 @@ export const ExampleFromSchema: React.FC<{ schema: any; mimeType: string }> = ({
     typeof responseExample === "string"
   ) {
     return (
-      <ResponseSamples
-        responseExample={JSON.stringify(responseExample, null, 2)}
-        language="json"
-      />
+      // @ts-ignore
+      <TabItem label="Example (generated)" value="Example (generated)">
+        <ResponseSamples
+          responseExample={JSON.stringify(responseExample, null, 2)}
+          language="json"
+        />
+      </TabItem>
     );
   }
 
