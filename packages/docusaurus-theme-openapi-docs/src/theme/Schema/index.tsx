@@ -9,6 +9,7 @@ import React from "react";
 
 import { ClosingArrayBracket, OpeningArrayBracket } from "@theme/ArrayBrackets";
 import Details from "@theme/Details";
+import DiscriminatorTabs from "@theme/DiscriminatorTabs";
 import SchemaItem from "@theme/SchemaItem";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
@@ -18,7 +19,10 @@ import {
   getQualifierMessage,
   getSchemaName,
 } from "docusaurus-plugin-openapi-docs/lib/markdown/schema";
+import { SchemaObject } from "docusaurus-plugin-openapi-docs/lib/openapi/types";
 import isEmpty from "lodash/isEmpty";
+import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 const jsonSchemaMergeAllOf = require("json-schema-merge-allof");
@@ -145,8 +149,87 @@ const Properties = ({ schema, schemaType }: any) => {
   );
 };
 
+interface DetailsNodeProps {
+  name: string;
+  schemaName: string;
+  schema: SchemaObject;
+  required: boolean | string[];
+  nullable: boolean;
+  schemaType: "request" | "response";
+}
+
+const DetailsNode: React.FC<DetailsNodeProps> = ({
+  name,
+  schemaName,
+  schema,
+  required,
+  nullable,
+  schemaType,
+}) => {
+  return (
+    <SchemaItem collapsible={true}>
+      <Details
+        className="openapi-markdown__details"
+        summary={
+          <summary>
+            <span className="openapi-schema__container">
+              <strong
+                className={clsx("openapi-schema__property", {
+                  "openapi-schema__strikethrough": schema.deprecated,
+                })}
+              >
+                {name}
+              </strong>
+              <span className="openapi-schema__name"> {schemaName}</span>
+              {(Array.isArray(required)
+                ? required.includes(name)
+                : required === true) ||
+              schema.deprecated ||
+              nullable ? (
+                <span className="openapi-schema__divider" />
+              ) : null}
+              {nullable && (
+                <span className="openapi-schema__nullable">nullable</span>
+              )}
+              {Array.isArray(required) ? (
+                required.includes(name)
+              ) : required === true ? (
+                <span className="openapi-schema__required">required</span>
+              ) : null}
+              {schema.deprecated && (
+                <span className="openapi-schema__deprecated">deprecated</span>
+              )}
+            </span>
+          </summary>
+        }
+      >
+        <div style={{ marginLeft: "1rem" }}>
+          {schema.description && (
+            <div style={{ marginTop: ".5rem", marginBottom: ".5rem" }}>
+              <ReactMarkdown
+                children={createDescription(schema.description)}
+                rehypePlugins={[rehypeRaw]}
+              />
+            </div>
+          )}
+          {getQualifierMessage(schema) && (
+            <div style={{ marginTop: ".5rem", marginBottom: ".5rem" }}>
+              <ReactMarkdown
+                children={createDescription(getQualifierMessage(schema))}
+                rehypePlugins={[rehypeRaw]}
+              />
+            </div>
+          )}
+          <SchemaComponent schema={schema} schemaType={schemaType} />
+        </div>
+      </Details>
+    </SchemaItem>
+  );
+};
+
 const PropertyDiscriminator = ({
   name,
+  schemaName,
   schema,
   discriminator,
   required,
@@ -155,7 +238,9 @@ const PropertyDiscriminator = ({
     return null;
   }
 
-  const schemaName = getSchemaName(schema);
+  if (discriminator.mapping === undefined) {
+    return <Edge name={name} schema={schema} required={required} />;
+  }
 
   return (
     <div className="openapi-discriminator__item openapi-schema__list-item">
@@ -173,15 +258,21 @@ const PropertyDiscriminator = ({
         </span>
         {schema.description && (
           <div style={{ paddingLeft: "1rem" }}>
-            {createDescription(schema.description)}
+            <ReactMarkdown
+              children={createDescription(schema.description)}
+              rehypePlugins={[rehypeRaw]}
+            />
           </div>
         )}
         {getQualifierMessage(discriminator) && (
           <div style={{ paddingLeft: "1rem" }}>
-            {createDescription(getQualifierMessage(discriminator))}
+            <ReactMarkdown
+              children={createDescription(getQualifierMessage(discriminator))}
+              rehypePlugins={[rehypeRaw]}
+            />
           </div>
         )}
-        <SchemaTabs className="openapi-tabs__discriminator">
+        <DiscriminatorTabs className="openapi-tabs__discriminator">
           {Object.keys(discriminator.mapping).map((key, index) => (
             // @ts-ignore
             <TabItem
@@ -195,7 +286,7 @@ const PropertyDiscriminator = ({
               />
             </TabItem>
           ))}
-        </SchemaTabs>
+        </DiscriminatorTabs>
       </div>
     </div>
   );
@@ -292,7 +383,11 @@ const AdditionalProperties = ({ schema, schemaType }: any) => {
   return null;
 };
 
-const Items = ({ schema, schemaType }: any) => {
+const Items: React.FC<{
+  schema: any;
+  schemaType: "request" | "response";
+}> = ({ schema, schemaType }) => {
+  // Handles case when schema.items has properties
   if (schema.items?.properties) {
     return (
       <>
@@ -302,8 +397,107 @@ const Items = ({ schema, schemaType }: any) => {
       </>
     );
   }
-  // Add other conditions for items here...
-  return null;
+
+  // Handles case when schema.items has additionalProperties
+  if (schema.items?.additionalProperties) {
+    return (
+      <>
+        <OpeningArrayBracket />
+        <AdditionalProperties schema={schema.items} />
+        <ClosingArrayBracket />
+      </>
+    );
+  }
+
+  // Handles case when schema.items has oneOf or anyOf
+  if (schema.items?.oneOf || schema.items?.anyOf) {
+    return (
+      <>
+        <OpeningArrayBracket />
+        <AnyOneOf schema={schema.items} />
+        <ClosingArrayBracket />
+      </>
+    );
+  }
+
+  // Handles case when schema.items has allOf
+  if (schema.items?.allOf) {
+    const { mergedSchemas } = mergeAllOf(schema.items.allOf);
+
+    // Handles combo anyOf/oneOf + properties
+    if (
+      (mergedSchemas.oneOf || mergedSchemas.anyOf) &&
+      mergedSchemas.properties
+    ) {
+      return (
+        <>
+          <OpeningArrayBracket />
+          <AnyOneOf schema={mergedSchemas} />
+          <Properties schema={mergedSchemas} schemaType={schemaType} />
+          <ClosingArrayBracket />
+        </>
+      );
+    }
+
+    // Handles only anyOf/oneOf
+    if (mergedSchemas.oneOf || mergedSchemas.anyOf) {
+      return (
+        <>
+          <OpeningArrayBracket />
+          <AnyOneOf schema={mergedSchemas} />
+          <ClosingArrayBracket />
+        </>
+      );
+    }
+
+    // Handles properties
+    if (mergedSchemas.properties) {
+      return (
+        <>
+          <OpeningArrayBracket />
+          <Properties schema={mergedSchemas} schemaType={schemaType} />
+          <ClosingArrayBracket />
+        </>
+      );
+    }
+  }
+
+  // Handles basic types (string, number, integer, boolean, object)
+  if (
+    schema.items?.type === "string" ||
+    schema.items?.type === "number" ||
+    schema.items?.type === "integer" ||
+    schema.items?.type === "boolean" ||
+    schema.items?.type === "object"
+  ) {
+    return (
+      <>
+        <OpeningArrayBracket />
+        <SchemaComponent schema={schema.items} schemaType={schemaType} />
+        <ClosingArrayBracket />
+      </>
+    );
+  }
+
+  // Handles fallback case (use createEdges logic)
+  return (
+    <>
+      <OpeningArrayBracket />
+      {Object.entries(schema.items || {}).map(([key, val]) => (
+        <Edge
+          key={key}
+          name={key}
+          schema={val}
+          required={
+            Array.isArray(schema.required)
+              ? schema.required.includes(key)
+              : false
+          }
+        />
+      ))}
+      <ClosingArrayBracket />
+    </>
+  );
 };
 
 const Edge = ({ name, schema, required, discriminator, schemaType }: any) => {
@@ -320,6 +514,7 @@ const Edge = ({ name, schema, required, discriminator, schemaType }: any) => {
     return (
       <PropertyDiscriminator
         name={name}
+        schemaName={schemaName}
         schema={schema}
         discriminator={discriminator}
         required={required}
@@ -336,32 +531,14 @@ const Edge = ({ name, schema, required, discriminator, schemaType }: any) => {
       (schema.items.properties || schema.items.anyOf || schema.items.oneOf))
   ) {
     return (
-      <Details
-        className="openapi-markdown__details"
-        summary={
-          <Summary
-            name={name}
-            schemaName={schemaName}
-            required={required}
-            nullable={schema.nullable}
-            deprecated={schema.deprecated}
-          />
-        }
-      >
-        <div style={{ marginLeft: "1rem" }}>
-          {schema.description && (
-            <div style={{ marginTop: ".5rem", marginBottom: ".5rem" }}>
-              {createDescription(schema.description)}
-            </div>
-          )}
-          {getQualifierMessage(schema) && (
-            <div style={{ marginTop: ".5rem", marginBottom: ".5rem" }}>
-              {createDescription(getQualifierMessage(schema))}
-            </div>
-          )}
-          <SchemaComponent schema={schema} schemaType={schemaType} />
-        </div>
-      </Details>
+      <DetailsNode
+        name={name}
+        schemaName={schemaName}
+        required={required}
+        nullable={schema.nullable}
+        schema={schema}
+        schemaType={schemaType}
+      />
     );
   }
 
@@ -378,29 +555,6 @@ const Edge = ({ name, schema, required, discriminator, schemaType }: any) => {
     />
   );
 };
-
-const Summary = ({ name, schemaName, required, nullable, deprecated }: any) => (
-  <summary>
-    <span className="openapi-schema__container">
-      <strong
-        className={clsx("openapi-schema__property", {
-          "openapi-schema__strikethrough": deprecated,
-        })}
-      >
-        {name}
-      </strong>
-      <span className="openapi-schema__name"> {schemaName}</span>
-      {(required || nullable || deprecated) && (
-        <span className="openapi-schema__divider" />
-      )}
-      {nullable && <span className="openapi-schema__nullable">nullable</span>}
-      {required && <span className="openapi-schema__required">required</span>}
-      {deprecated && (
-        <span className="openapi-schema__deprecated">deprecated</span>
-      )}
-    </span>
-  </summary>
-);
 
 const SchemaComponent: React.FC<{
   schema: any;
