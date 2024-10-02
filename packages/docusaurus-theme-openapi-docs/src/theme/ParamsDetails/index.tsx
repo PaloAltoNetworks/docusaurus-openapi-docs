@@ -44,22 +44,20 @@ const ParamsDetailsComponent: React.FC<Props> = ({ parameters }) => {
             open={true}
             summary={summaryElement}
           >
-            <div>
-              <ul>
-                {params.map((param: any, index: number) => (
-                  <ParamsItem
-                    key={index}
-                    className="paramsItem"
-                    param={{
-                      ...param,
-                      enumDescriptions: Object.entries(
-                        param?.schema?.items?.["x-enumDescriptions"] ?? {}
-                      ),
-                    }}
-                  />
-                ))}
-              </ul>
-            </div>
+            <ul>
+              {params.map((param: any, index: number) => (
+                <ParamsItem
+                  key={index}
+                  className="paramsItem"
+                  param={{
+                    ...param,
+                    enumDescriptions: Object.entries(
+                      param?.schema?.items?.["x-enumDescriptions"] ?? {}
+                    ),
+                  }}
+                />
+              ))}
+            </ul>
           </Details>
         );
       })}
