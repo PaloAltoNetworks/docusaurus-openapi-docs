@@ -7,13 +7,11 @@
 
 import React from "react";
 
-import { sanitizeTabsChildren } from "@docusaurus/theme-common/internal";
 import ParamsItem from "@theme/ParamsItem";
 import ResponseSamples from "@theme/ResponseSamples";
 import TabItem from "@theme/TabItem";
 import { createDescription } from "docusaurus-plugin-openapi-docs/lib/markdown/createDescription";
 import { sampleResponseFromSchema } from "docusaurus-plugin-openapi-docs/lib/openapi/createResponseExample";
-import { ReactElement } from "react-markdown/lib/react-markdown";
 import format from "xml-formatter";
 
 // Utility function
