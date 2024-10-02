@@ -82,6 +82,7 @@ export function createApiPageMD({
     `import Schema from "@theme/Schema";\n`,
     `import SchemaItem from "@theme/SchemaItem";\n`,
     `import SchemaTabs from "@theme/SchemaTabs";\n`,
+    `import StatusCodes from "@theme/StatusCodes";\n`,
     `import Heading from "@theme/Heading";\n`,
     `import OperationTabs from "@theme/OperationTabs";\n`,
     `import TabItem from "@theme/TabItem";\n\n`,
