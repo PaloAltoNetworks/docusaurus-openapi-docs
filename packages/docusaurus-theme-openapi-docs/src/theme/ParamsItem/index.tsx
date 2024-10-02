@@ -107,7 +107,7 @@ function ParamsItem({ param, ...rest }: Props) {
   ));
 
   const renderDescription = guard(description, (description) => (
-    <div>
+    <>
       <ReactMarkdown
         children={createDescription(description)}
         components={{
@@ -124,7 +124,7 @@ function ParamsItem({ param, ...rest }: Props) {
         }}
         rehypePlugins={[rehypeRaw]}
       />
-    </div>
+    </>
   ));
 
   const renderEnumDescriptions = guard(
