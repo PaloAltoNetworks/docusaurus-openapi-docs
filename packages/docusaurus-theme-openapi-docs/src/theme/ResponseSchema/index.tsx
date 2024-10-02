@@ -7,6 +7,7 @@
 
 import React from "react";
 
+import BrowserOnly from "@docusaurus/BrowserOnly";
 import Details from "@theme/Details";
 import MimeTabs from "@theme/MimeTabs"; // Assume these components exist
 import {
@@ -14,7 +15,6 @@ import {
   ResponseExample,
   ResponseExamples,
 } from "@theme/ResponseExamples";
-import ResponseSamples from "@theme/ResponseSamples";
 import SchemaComponent from "@theme/Schema";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
@@ -33,7 +33,11 @@ interface Props {
   };
 }
 
-const ResponseSchema: React.FC<Props> = ({ title, body, style }): any => {
+const ResponseSchemaComponent: React.FC<Props> = ({
+  title,
+  body,
+  style,
+}): any => {
   if (
     body === undefined ||
     body.content === undefined ||
@@ -129,5 +133,11 @@ const ResponseSchema: React.FC<Props> = ({ title, body, style }): any => {
   }
   return undefined;
 };
+
+const ResponseSchema: React.FC<Props> = (props) => (
+  <BrowserOnly fallback={<div>Loading...</div>}>
+    {() => <ResponseSchemaComponent {...props} />}
+  </BrowserOnly>
+);
 
 export default ResponseSchema;

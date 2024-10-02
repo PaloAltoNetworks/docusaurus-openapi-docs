@@ -7,6 +7,7 @@
 
 import React from "react";
 
+import BrowserOnly from "@docusaurus/BrowserOnly";
 import Details from "@theme/Details";
 import MimeTabs from "@theme/MimeTabs"; // Assume these components exist
 import SchemaComponent from "@theme/Schema";
@@ -26,7 +27,7 @@ interface Props {
   };
 }
 
-const RequestSchema: React.FC<Props> = ({ title, body, style }) => {
+const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
   if (
     body === undefined ||
     body.content === undefined ||
@@ -141,5 +142,11 @@ const RequestSchema: React.FC<Props> = ({ title, body, style }) => {
     </MimeTabs>
   );
 };
+
+const RequestSchema: React.FC<Props> = (props) => (
+  <BrowserOnly fallback={<div>Loading...</div>}>
+    {() => <RequestSchemaComponent {...props} />}
+  </BrowserOnly>
+);
 
 export default RequestSchema;
