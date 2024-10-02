@@ -7,10 +7,15 @@
 
 import React from "react";
 
+import BrowserOnly from "@docusaurus/BrowserOnly";
 import Details from "@theme/Details";
 import ParamsItem from "@theme/ParamsItem";
 
-const ParamsDetails = ({ parameters }: { parameters: any[] }) => {
+interface Props {
+  parameters: any[];
+}
+
+const ParamsDetailsComponent: React.FC<Props> = ({ parameters }) => {
   const types = ["path", "query", "header", "cookie"];
 
   return (
@@ -61,5 +66,11 @@ const ParamsDetails = ({ parameters }: { parameters: any[] }) => {
     </>
   );
 };
+
+const ParamsDetails: React.FC<Props> = (props) => (
+  <BrowserOnly fallback={<div>Loading...</div>}>
+    {() => <ParamsDetailsComponent {...props} />}
+  </BrowserOnly>
+);
 
 export default ParamsDetails;
