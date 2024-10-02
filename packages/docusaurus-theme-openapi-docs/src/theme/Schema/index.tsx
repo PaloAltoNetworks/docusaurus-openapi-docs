@@ -584,8 +584,19 @@ const SchemaComponent: React.FC<{
   }
 
   if (schema.allOf) {
-    const { mergedSchemas } = mergeAllOf(schema.allOf);
-    return <SchemaComponent schema={mergedSchemas} schemaType={schemaType} />;
+    const { mergedSchemas }: { mergedSchemas: SchemaObject } = mergeAllOf(
+      schema.allOf
+    );
+    if (
+      mergedSchemas.oneOf !== undefined ||
+      mergedSchemas.anyOf !== undefined
+    ) {
+      return <AnyOneOf schema={mergedSchemas} schemaType={schemaType} />;
+    }
+
+    if (mergedSchemas.properties !== undefined) {
+      return <Properties schema={mergedSchemas} schemaType={schemaType} />;
+    }
   }
 
   if (schema.type) {
@@ -616,7 +627,7 @@ const SchemaComponent: React.FC<{
     );
   }
 
-  return null; // Replace "any" with null
+  return null;
 };
 
 export default SchemaComponent;
