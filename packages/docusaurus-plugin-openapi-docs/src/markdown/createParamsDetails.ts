@@ -49,7 +49,9 @@ export function createParamsDetails({ parameters, type }: Props) {
                 param: {
                   ...param,
                   enumDescriptions: Object.entries(
-                    param?.schema?.items?.["x-enumDescriptions"] ?? {}
+                    param?.schema?.["x-enumDescriptions"] ??
+                      param?.schema?.items?.["x-enumDescriptions"] ??
+                      {}
                   ),
                 },
               });

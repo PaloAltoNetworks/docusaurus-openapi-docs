@@ -1,0 +1,84 @@
+openapi: 3.0.1
+info:
+  title: Enum descriptions test
+  description: Demonstrates of enum descriptions.
+  version: 1.0.0
+tags:
+  - name: enumDescriptions
+    description: enumDescriptions tests
+paths:
+  /filter-one-status:
+    get:
+      tags:
+        - enumDescriptions
+      summary: Get entities by status
+      description: Get all entities or search by status
+      parameters:
+        - name: status
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - active
+              - inactive
+              - pending
+            x-enumDescriptions:
+              active: The entity is active
+              inactive: The entity is inactive
+              pending: The entity is pending approval
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EnumDescriptionsEntity"
+  /filter-multiple-status:
+    get:
+      tags:
+        - enumDescriptions
+      summary: Get entities by multiple status
+      description: Get all entities or search by multiple status
+      parameters:
+        - name: status
+          in: query
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - active
+                - inactive
+                - pending
+              x-enumDescriptions:
+                active: The entity is active
+                inactive: The entity is inactive
+                pending: The entity is pending approval
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EnumDescriptionsEntity"
+components:
+  schemas:
+    EnumDescriptionsEntity:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+            - pending
+          x-enumDescriptions:
+            active: The entity is active
+            inactive: The entity is inactive
+            pending: The entity is pending approval
