@@ -5,9 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-import BrowserOnly from "@docusaurus/BrowserOnly";
+import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import Details from "@theme/Details";
 import MimeTabs from "@theme/MimeTabs"; // Assume these components exist
 import SchemaComponent from "@theme/Schema";
@@ -143,10 +143,21 @@ const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
   );
 };
 
-const RequestSchema: React.FC<Props> = (props) => (
-  <BrowserOnly fallback={<div>Loading...</div>}>
-    {() => <RequestSchemaComponent {...props} />}
-  </BrowserOnly>
-);
+const RequestSchema: React.FC<Props> = (props) => {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    if (ExecutionEnvironment.canUseDOM) {
+      setIsClient(true);
+    }
+  }, []);
+
+  // Render the component only if it's client-side
+  return isClient ? (
+    <RequestSchemaComponent {...props} />
+  ) : (
+    <div>Loading...</div>
+  );
+};
 
 export default RequestSchema;

@@ -5,9 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-import BrowserOnly from "@docusaurus/BrowserOnly";
+import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import Details from "@theme/Details";
 import ParamsItem from "@theme/ParamsItem";
 
@@ -67,10 +67,21 @@ const ParamsDetailsComponent: React.FC<Props> = ({ parameters }) => {
   );
 };
 
-const ParamsDetails: React.FC<Props> = (props) => (
-  <BrowserOnly fallback={<div>Loading...</div>}>
-    {() => <ParamsDetailsComponent {...props} />}
-  </BrowserOnly>
-);
+const ParamsDetails: React.FC<Props> = (props) => {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    if (ExecutionEnvironment.canUseDOM) {
+      setIsClient(true);
+    }
+  }, []);
+
+  // Render the component only if it's client-side
+  return isClient ? (
+    <ParamsDetailsComponent {...props} />
+  ) : (
+    <div>Loading...</div>
+  );
+};
 
 export default ParamsDetails;
