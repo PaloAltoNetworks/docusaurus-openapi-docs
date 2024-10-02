@@ -44,8 +44,7 @@ const ResponseSchema: React.FC<Props> = ({ title, body, style }): any => {
 
   // Get all MIME types, including vendor-specific
   const mimeTypes = Object.keys(body.content);
-
-  if (mimeTypes && mimeTypes.length > 1) {
+  if (mimeTypes && mimeTypes.length) {
     return (
       <MimeTabs className="openapi-tabs__mime" schemaType="response">
         {mimeTypes.map((mimeType: any) => {
