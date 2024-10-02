@@ -522,14 +522,19 @@ const Edge = ({ name, schema, required, discriminator, schemaType }: any) => {
     );
   }
 
-  if (
-    schema.oneOf ||
-    schema.anyOf ||
-    schema.properties ||
-    schema.additionalProperties ||
-    (schema.items &&
-      (schema.items.properties || schema.items.anyOf || schema.items.oneOf))
-  ) {
+  if (schema.oneOf || schema.anyOf) {
+    return <AnyOneOf schema={schema} />;
+  }
+
+  if (schema.properties) {
+    return <Properties schema={schema} />;
+  }
+
+  if (schema.additionalProperties) {
+    return <AdditionalProperties schema={schema} />;
+  }
+
+  if (schema.items?.properties) {
     return (
       <DetailsNode
         name={name}
@@ -538,6 +543,84 @@ const Edge = ({ name, schema, required, discriminator, schemaType }: any) => {
         nullable={schema.nullable}
         schema={schema}
         schemaType={schemaType}
+      />
+    );
+  }
+
+  if (schema.items?.anyOf || schema.items?.oneOf) {
+    return (
+      <DetailsNode
+        name={name}
+        schemaName={schemaName}
+        required={required}
+        nullable={schema.nullable}
+        schema={schema}
+        schemaType={schemaType}
+      />
+    );
+  }
+
+  if (schema.allOf) {
+    const { mergedSchemas }: { mergedSchemas: SchemaObject } = mergeAllOf(
+      schema.allOf
+    );
+
+    if (
+      (schemaType === "request" && mergedSchemas.readOnly) ||
+      (schemaType === "response" && mergedSchemas.writeOnly)
+    ) {
+      return null;
+    }
+
+    const mergedSchemaName = getSchemaName(mergedSchemas);
+
+    if (mergedSchemas.oneOf || mergedSchemas.anyOf) {
+      return (
+        <DetailsNode
+          name={name}
+          schemaName={mergedSchemaName}
+          required={required}
+          nullable={schema.nullable}
+          schema={mergedSchemas}
+          schemaType={schemaType}
+        />
+      );
+    }
+
+    if (mergedSchemas.properties !== undefined) {
+      return (
+        <DetailsNode
+          name={name}
+          schemaName={mergedSchemaName}
+          required={required}
+          nullable={schema.nullable}
+          schema={mergedSchemas}
+          schemaType={schemaType}
+        />
+      );
+    }
+
+    if (mergedSchemas.items?.properties) {
+      <DetailsNode
+        name={name}
+        schemaName={mergedSchemaName}
+        required={required}
+        nullable={schema.nullable}
+        schema={mergedSchemas}
+        schemaType={schemaType}
+      />;
+    }
+
+    return (
+      <SchemaItem
+        collapsible={false}
+        name={name}
+        required={Array.isArray(required) ? required.includes(name) : required}
+        schemaName={mergedSchemaName}
+        qualifierMessage={getQualifierMessage(mergedSchemas)}
+        schema={mergedSchemas}
+        discriminator={false}
+        children={null}
       />
     );
   }
