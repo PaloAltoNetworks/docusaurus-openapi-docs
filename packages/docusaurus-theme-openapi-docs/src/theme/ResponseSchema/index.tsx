@@ -14,7 +14,7 @@ import {
   ResponseExample,
   ResponseExamples,
 } from "@theme/ResponseExamples";
-import SchemaComponent from "@theme/Schema";
+import SchemaNode from "@theme/Schema";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
 import { createDescription } from "docusaurus-plugin-openapi-docs/lib/markdown/createDescription";
@@ -98,10 +98,7 @@ const ResponseSchema: React.FC<Props> = ({ title, body, style }): any => {
                         )}
                       </div>
                       <ul style={{ marginLeft: "1rem" }}>
-                        <SchemaComponent
-                          schema={firstBody}
-                          schemaType="request"
-                        />
+                        <SchemaNode schema={firstBody} schemaType="request" />
                       </ul>
                     </Details>
                   </TabItem>

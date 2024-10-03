@@ -9,7 +9,7 @@ import React from "react";
 
 import Details from "@theme/Details";
 import MimeTabs from "@theme/MimeTabs"; // Assume these components exist
-import SchemaComponent from "@theme/Schema";
+import SchemaNode from "@theme/Schema";
 import TabItem from "@theme/TabItem";
 import { createDescription } from "docusaurus-plugin-openapi-docs/lib/markdown/createDescription";
 import { MediaTypeObject } from "docusaurus-plugin-openapi-docs/lib/openapi/types";
@@ -81,7 +81,7 @@ const RequestSchema: React.FC<Props> = ({ title, body, style }) => {
                   )}
                 </div>
                 <ul style={{ marginLeft: "1rem" }}>
-                  <SchemaComponent schema={firstBody} schemaType="request" />
+                  <SchemaNode schema={firstBody} schemaType="request" />
                 </ul>
               </Details>
             </TabItem>
@@ -134,7 +134,7 @@ const RequestSchema: React.FC<Props> = ({ title, body, style }) => {
             )}
           </div>
           <ul style={{ marginLeft: "1rem" }}>
-            <SchemaComponent schema={firstBody} schemaType="request" />
+            <SchemaNode schema={firstBody} schemaType="request" />
           </ul>
         </Details>
       </TabItem>

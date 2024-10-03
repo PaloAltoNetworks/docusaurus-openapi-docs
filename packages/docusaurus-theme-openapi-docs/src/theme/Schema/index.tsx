@@ -95,31 +95,19 @@ const AnyOneOf: React.FC<SchemaProps> = ({ schema, schemaType }) => {
                 !anyOneSchema.properties &&
                 !anyOneSchema.allOf &&
                 !anyOneSchema.items && (
-                  <SchemaComponent
-                    schema={anyOneSchema}
-                    schemaType={schemaType}
-                  />
+                  <SchemaNode schema={anyOneSchema} schemaType={schemaType} />
                 )}
               {anyOneSchema.properties && (
                 <Properties schema={anyOneSchema} schemaType={schemaType} />
               )}
               {anyOneSchema.allOf && (
-                <SchemaComponent
-                  schema={anyOneSchema}
-                  schemaType={schemaType}
-                />
+                <SchemaNode schema={anyOneSchema} schemaType={schemaType} />
               )}
               {anyOneSchema.oneOf && (
-                <SchemaComponent
-                  schema={anyOneSchema}
-                  schemaType={schemaType}
-                />
+                <SchemaNode schema={anyOneSchema} schemaType={schemaType} />
               )}
               {anyOneSchema.anyOf && (
-                <SchemaComponent
-                  schema={anyOneSchema}
-                  schemaType={schemaType}
-                />
+                <SchemaNode schema={anyOneSchema} schemaType={schemaType} />
               )}
               {anyOneSchema.items && (
                 <Items schema={anyOneSchema} schemaType={schemaType} />
@@ -128,10 +116,7 @@ const AnyOneOf: React.FC<SchemaProps> = ({ schema, schemaType }) => {
                 anyOneSchema.type === "number" ||
                 anyOneSchema.type === "integer" ||
                 anyOneSchema.type === "boolean") && (
-                <SchemaComponent
-                  schema={anyOneSchema}
-                  schemaType={schemaType}
-                />
+                <SchemaNode schema={anyOneSchema} schemaType={schemaType} />
               )}
             </TabItem>
           );
@@ -246,7 +231,7 @@ const DetailsNode: React.FC<DetailsNodeProps> = ({
               />
             </div>
           )}
-          <SchemaComponent schema={schema} schemaType={schemaType} />
+          <SchemaNode schema={schema} schemaType={schemaType} />
         </div>
       </Details>
     </SchemaItem>
@@ -306,7 +291,7 @@ const PropertyDiscriminator = ({
               label={key}
               value={`${index}-item-discriminator`}
             >
-              <SchemaComponent
+              <SchemaNode
                 schema={discriminator.mapping[key]}
                 schemaType={schema.type}
               />
@@ -374,10 +359,7 @@ const AdditionalProperties = ({ schema, schemaType }: any) => {
               {createDescription(additionalProperties.description)}
             </div>
           )}
-          <SchemaComponent
-            schema={additionalProperties}
-            schemaType={schemaType}
-          />
+          <SchemaNode schema={additionalProperties} schemaType={schemaType} />
         </div>
       </Details>
     );
@@ -499,7 +481,7 @@ const Items: React.FC<{
     return (
       <>
         <OpeningArrayBracket />
-        <SchemaComponent schema={schema.items} schemaType={schemaType} />
+        <SchemaNode schema={schema.items} schemaType={schemaType} />
         <ClosingArrayBracket />
       </>
     );
@@ -665,10 +647,7 @@ const Edge = ({ name, schema, required, discriminator, schemaType }: any) => {
   );
 };
 
-const SchemaComponent: React.FC<{
-  schema: any;
-  schemaType: "request" | "response";
-}> = ({ schema, schemaType }) => {
+const SchemaNode: React.FC<SchemaProps> = ({ schema, schemaType }) => {
   if (
     (schemaType === "request" && schema.readOnly) ||
     (schemaType === "response" && schema.writeOnly)
@@ -739,4 +718,4 @@ const SchemaComponent: React.FC<{
   return null;
 };
 
-export default SchemaComponent;
+export default SchemaNode;
