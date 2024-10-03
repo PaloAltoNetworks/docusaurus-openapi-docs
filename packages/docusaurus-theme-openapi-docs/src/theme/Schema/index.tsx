@@ -64,6 +64,54 @@ const Markdown: React.FC<MarkdownProps> = ({ text }) => {
   );
 };
 
+interface SummaryProps {
+  name: string;
+  schemaName: string | undefined;
+  schema: {
+    deprecated?: boolean;
+    nullable?: boolean;
+  };
+  required?: boolean | string[];
+}
+
+const Summary: React.FC<SummaryProps> = ({
+  name,
+  schemaName,
+  schema,
+  required,
+}) => {
+  const { deprecated, nullable } = schema;
+
+  const isRequired = Array.isArray(required)
+    ? required.includes(name)
+    : required === true;
+
+  return (
+    <summary>
+      <span className="openapi-schema__container">
+        <strong
+          className={clsx("openapi-schema__property", {
+            "openapi-schema__strikethrough": deprecated,
+          })}
+        >
+          {name}
+        </strong>
+        <span className="openapi-schema__name"> {schemaName}</span>
+        {(isRequired || deprecated || nullable) && (
+          <span className="openapi-schema__divider" />
+        )}
+        {nullable && <span className="openapi-schema__nullable">nullable</span>}
+        {isRequired && (
+          <span className="openapi-schema__required">required</span>
+        )}
+        {deprecated && (
+          <span className="openapi-schema__deprecated">deprecated</span>
+        )}
+      </span>
+    </summary>
+  );
+};
+
 // Common props interface
 interface SchemaProps {
   schema: SchemaObject;
@@ -199,10 +247,12 @@ const PropertyDiscriminator: React.FC<SchemaEdgeProps> = ({
             <span className="openapi-schema__required">required</span>
           )}
         </span>
-        {schema.description && <Markdown text={schema.description} />}
-        {getQualifierMessage(discriminator) && (
-          <Markdown text={getQualifierMessage(discriminator)} />
-        )}
+        <div style={{ marginLeft: "1rem" }}>
+          {schema.description && <Markdown text={schema.description} />}
+          {getQualifierMessage(discriminator) && (
+            <Markdown text={getQualifierMessage(discriminator)} />
+          )}
+        </div>
         <DiscriminatorTabs className="openapi-tabs__discriminator">
           {Object.keys(discriminator.mapping).map((key, index) => (
             // @ts-ignore
@@ -259,7 +309,7 @@ const AdditionalProperties: React.FC<SchemaProps> = ({
       additionalProperties.title || getSchemaName(additionalProperties);
     const required = schema.required || false;
     return (
-      <DetailsNode
+      <SchemaNodeDetails
         name="property name*"
         schemaName={title}
         required={required}
@@ -296,21 +346,11 @@ const AdditionalProperties: React.FC<SchemaProps> = ({
   return null;
 };
 
-interface DetailsNodeProps {
-  name: string;
-  schemaName: string;
-  schema: SchemaObject;
-  required: boolean | string[] | undefined;
-  nullable: boolean | undefined;
-  schemaType: "request" | "response";
-}
-
-const DetailsNode: React.FC<DetailsNodeProps> = ({
+const SchemaNodeDetails: React.FC<SchemaEdgeProps> = ({
   name,
   schemaName,
   schema,
   required,
-  nullable,
   schemaType,
 }) => {
   return (
@@ -318,54 +358,18 @@ const DetailsNode: React.FC<DetailsNodeProps> = ({
       <Details
         className="openapi-markdown__details"
         summary={
-          <summary>
-            <span className="openapi-schema__container">
-              <strong
-                className={clsx("openapi-schema__property", {
-                  "openapi-schema__strikethrough": schema.deprecated,
-                })}
-              >
-                {name}
-              </strong>
-              <span className="openapi-schema__name"> {schemaName}</span>
-              {(Array.isArray(required)
-                ? required.includes(name)
-                : required === true) ||
-              schema.deprecated ||
-              nullable ? (
-                <span className="openapi-schema__divider" />
-              ) : null}
-              {nullable && (
-                <span className="openapi-schema__nullable">nullable</span>
-              )}
-              {Array.isArray(required) ? (
-                required.includes(name)
-              ) : required === true ? (
-                <span className="openapi-schema__required">required</span>
-              ) : null}
-              {schema.deprecated && (
-                <span className="openapi-schema__deprecated">deprecated</span>
-              )}
-            </span>
-          </summary>
+          <Summary
+            name={name}
+            schemaName={schemaName}
+            schema={schema}
+            required={required}
+          />
         }
       >
         <div style={{ marginLeft: "1rem" }}>
-          {schema.description && (
-            <div style={{ marginTop: ".5rem", marginBottom: ".5rem" }}>
-              <ReactMarkdown
-                children={createDescription(schema.description)}
-                rehypePlugins={[rehypeRaw]}
-              />
-            </div>
-          )}
+          {schema.description && <Markdown text={schema.description} />}
           {getQualifierMessage(schema) && (
-            <div style={{ marginTop: ".5rem", marginBottom: ".5rem" }}>
-              <ReactMarkdown
-                children={createDescription(getQualifierMessage(schema))}
-                rehypePlugins={[rehypeRaw]}
-              />
-            </div>
+            <Markdown text={getQualifierMessage(schema)} />
           )}
           <SchemaNode schema={schema} schemaType={schemaType} />
         </div>
@@ -545,7 +549,7 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
 
   if (schema.items?.properties) {
     return (
-      <DetailsNode
+      <SchemaNodeDetails
         name={name}
         schemaName={schemaName}
         required={required}
@@ -558,7 +562,7 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
 
   if (schema.items?.anyOf || schema.items?.oneOf) {
     return (
-      <DetailsNode
+      <SchemaNodeDetails
         name={name}
         schemaName={schemaName}
         required={required}
@@ -585,7 +589,7 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
 
     if (mergedSchemas.oneOf || mergedSchemas.anyOf) {
       return (
-        <DetailsNode
+        <SchemaNodeDetails
           name={name}
           schemaName={mergedSchemaName}
           required={required}
@@ -598,7 +602,7 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
 
     if (mergedSchemas.properties !== undefined) {
       return (
-        <DetailsNode
+        <SchemaNodeDetails
           name={name}
           schemaName={mergedSchemaName}
           required={required}
@@ -610,7 +614,7 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
     }
 
     if (mergedSchemas.items?.properties) {
-      <DetailsNode
+      <SchemaNodeDetails
         name={name}
         schemaName={mergedSchemaName}
         required={required}
