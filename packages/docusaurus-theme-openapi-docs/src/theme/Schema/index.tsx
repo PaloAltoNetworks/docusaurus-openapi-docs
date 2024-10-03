@@ -142,20 +142,22 @@ const Properties: React.FC<SchemaProps> = ({ schema, schemaType }) => {
   }
   return (
     <>
-      {Object.entries(schema.properties as {}).map(([key, val]) => (
-        <Edge
-          key={key}
-          name={key}
-          schema={val}
-          required={
-            Array.isArray(schema.required)
-              ? schema.required.includes(key)
-              : false
-          }
-          discriminator={discriminator}
-          schemaType={schemaType}
-        />
-      ))}
+      {Object.entries(schema.properties as {}).map(
+        ([key, val]: [string, any]) => (
+          <SchemaEdge
+            key={key}
+            name={key}
+            schema={val}
+            required={
+              Array.isArray(schema.required)
+                ? schema.required.includes(key)
+                : false
+            }
+            discriminator={discriminator}
+            schemaType={schemaType}
+          />
+        )
+      )}
     </>
   );
 };
@@ -164,8 +166,8 @@ interface DetailsNodeProps {
   name: string;
   schemaName: string;
   schema: SchemaObject;
-  required: boolean | string[];
-  nullable: boolean;
+  required: boolean | string[] | undefined;
+  nullable: boolean | undefined;
   schemaType: "request" | "response";
 }
 
@@ -242,6 +244,7 @@ const PropertyDiscriminator = ({
   name,
   schemaName,
   schema,
+  schemaType,
   discriminator,
   required,
 }: any) => {
@@ -250,7 +253,15 @@ const PropertyDiscriminator = ({
   }
 
   if (discriminator.mapping === undefined) {
-    return <Edge name={name} schema={schema} required={required} />;
+    return (
+      <SchemaEdge
+        name={name}
+        schema={schema}
+        required={required}
+        schemaName={schemaName}
+        schemaType={schemaType}
+      />
+    );
   }
 
   return (
@@ -491,11 +502,12 @@ const Items: React.FC<{
   return (
     <>
       <OpeningArrayBracket />
-      {Object.entries(schema.items || {}).map(([key, val]) => (
-        <Edge
+      {Object.entries(schema.items || {}).map(([key, val]: [string, any]) => (
+        <SchemaEdge
           key={key}
           name={key}
           schema={val}
+          schemaType={schemaType}
           required={
             Array.isArray(schema.required)
               ? schema.required.includes(key)
@@ -508,7 +520,23 @@ const Items: React.FC<{
   );
 };
 
-const Edge = ({ name, schema, required, discriminator, schemaType }: any) => {
+interface SchemaEdgeProps {
+  name: string;
+  schemaName?: string;
+  schema: SchemaObject;
+  required?: boolean | string[];
+  nullable?: boolean | undefined;
+  discriminator?: any;
+  schemaType: "request" | "response";
+}
+
+const SchemaEdge: React.FC<SchemaEdgeProps> = ({
+  name,
+  schema,
+  required,
+  discriminator,
+  schemaType,
+}) => {
   if (
     (schemaType === "request" && schema.readOnly) ||
     (schemaType === "response" && schema.writeOnly)
@@ -524,6 +552,7 @@ const Edge = ({ name, schema, required, discriminator, schemaType }: any) => {
         name={name}
         schemaName={schemaName}
         schema={schema}
+        schemaType={schemaType}
         discriminator={discriminator}
         required={required}
       />
