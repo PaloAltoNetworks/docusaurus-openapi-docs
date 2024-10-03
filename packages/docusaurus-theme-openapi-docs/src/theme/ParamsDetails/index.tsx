@@ -51,7 +51,9 @@ const ParamsDetails: React.FC<Props> = ({ parameters }) => {
                   param={{
                     ...param,
                     enumDescriptions: Object.entries(
-                      param?.schema?.items?.["x-enumDescriptions"] ?? {}
+                      param?.schema?.["x-enumDescriptions"] ??
+                        param?.schema?.items?.["x-enumDescriptions"] ??
+                        {}
                     ),
                   }}
                 />
