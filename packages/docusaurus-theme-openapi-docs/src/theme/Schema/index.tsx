@@ -20,7 +20,6 @@ import {
   getSchemaName,
 } from "docusaurus-plugin-openapi-docs/lib/markdown/schema";
 import { SchemaObject } from "docusaurus-plugin-openapi-docs/lib/openapi/types";
-import { SchemaObjectWithRef } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import isEmpty from "lodash/isEmpty";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
