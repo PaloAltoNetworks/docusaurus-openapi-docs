@@ -223,6 +223,79 @@ const PropertyDiscriminator: React.FC<SchemaEdgeProps> = ({
   );
 };
 
+const AdditionalProperties: React.FC<SchemaProps> = ({
+  schema,
+  schemaType,
+}) => {
+  const additionalProperties = schema.additionalProperties;
+
+  if (!additionalProperties) return null;
+
+  // Handle free-form objects
+  if (additionalProperties === true || isEmpty(additionalProperties)) {
+    return (
+      <SchemaItem
+        name="property name*"
+        required={false}
+        schemaName="any"
+        qualifierMessage={getQualifierMessage(schema)}
+        schema={schema}
+        collapsible={false}
+        discriminator={false}
+      />
+    );
+  }
+
+  // Handle objects, arrays, complex schemas
+  if (
+    additionalProperties.properties ||
+    additionalProperties.items ||
+    additionalProperties.allOf ||
+    additionalProperties.additionalProperties ||
+    additionalProperties.oneOf ||
+    additionalProperties.anyOf
+  ) {
+    const title =
+      additionalProperties.title || getSchemaName(additionalProperties);
+    const required = schema.required || false;
+    return (
+      <DetailsNode
+        name="property name*"
+        schemaName={title}
+        required={required}
+        nullable={schema.nullable}
+        schema={additionalProperties}
+        schemaType={schemaType}
+      />
+    );
+  }
+
+  // Handle primitive types
+  if (
+    additionalProperties.type === "string" ||
+    additionalProperties.type === "boolean" ||
+    additionalProperties.type === "integer" ||
+    additionalProperties.type === "number"
+  ) {
+    const schemaName = getSchemaName(additionalProperties);
+    return (
+      <SchemaItem
+        name="property name*"
+        required={false}
+        schemaName={schemaName}
+        qualifierMessage={getQualifierMessage(schema)}
+        schema={additionalProperties}
+        collapsible={false}
+        discriminator={false}
+        children={null}
+      />
+    );
+  }
+
+  // Unknown type
+  return null;
+};
+
 interface DetailsNodeProps {
   name: string;
   schemaName: string;
@@ -301,94 +374,6 @@ const DetailsNode: React.FC<DetailsNodeProps> = ({
   );
 };
 
-const AdditionalProperties = ({ schema, schemaType }: any) => {
-  const additionalProperties = schema.additionalProperties;
-
-  if (!additionalProperties) return null;
-
-  // Handle free-form objects
-  if (additionalProperties === true || isEmpty(additionalProperties)) {
-    return (
-      <SchemaItem
-        name="property name*"
-        required={false}
-        schemaName="any"
-        qualifierMessage={getQualifierMessage(schema)}
-        schema={schema}
-        collapsible={false}
-        discriminator={false}
-        children={null}
-      />
-    );
-  }
-
-  // Handle objects, arrays, complex schemas
-  if (
-    additionalProperties.properties ||
-    additionalProperties.items ||
-    additionalProperties.allOf ||
-    additionalProperties.additionalProperties ||
-    additionalProperties.oneOf ||
-    additionalProperties.anyOf
-  ) {
-    const title =
-      additionalProperties.title || getSchemaName(additionalProperties);
-    const required = schema.required || false;
-    return (
-      <Details
-        className="openapi-markdown__details"
-        summary={
-          <summary>
-            <span className="openapi-schema__container">
-              <strong className="openapi-schema__property">
-                property name*
-              </strong>
-              <span className="openapi-schema__name"> {title}</span>
-              {required && (
-                <span className="openapi-schema__required">required</span>
-              )}
-            </span>
-          </summary>
-        }
-      >
-        <div style={{ marginLeft: "1rem" }}>
-          {additionalProperties.description && (
-            <div style={{ marginTop: ".5rem", marginBottom: ".5rem" }}>
-              {createDescription(additionalProperties.description)}
-            </div>
-          )}
-          <SchemaNode schema={additionalProperties} schemaType={schemaType} />
-        </div>
-      </Details>
-    );
-  }
-
-  // Handle primitive types
-  if (
-    additionalProperties.type === "string" ||
-    additionalProperties.type === "boolean" ||
-    additionalProperties.type === "integer" ||
-    additionalProperties.type === "number"
-  ) {
-    const schemaName = getSchemaName(additionalProperties);
-    return (
-      <SchemaItem
-        name="property name*"
-        required={false}
-        schemaName={schemaName}
-        qualifierMessage={getQualifierMessage(schema)}
-        schema={additionalProperties}
-        collapsible={false}
-        discriminator={false}
-        children={null}
-      />
-    );
-  }
-
-  // Unknown type
-  return null;
-};
-
 const Items: React.FC<{
   schema: any;
   schemaType: "request" | "response";
@@ -409,7 +394,7 @@ const Items: React.FC<{
     return (
       <>
         <OpeningArrayBracket />
-        <AdditionalProperties schema={schema.items} />
+        <AdditionalProperties schema={schema.items} schemaType={schemaType} />
         <ClosingArrayBracket />
       </>
     );
@@ -555,7 +540,7 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
   }
 
   if (schema.additionalProperties) {
-    return <AdditionalProperties schema={schema} />;
+    return <AdditionalProperties schema={schema} schemaType={schemaType} />;
   }
 
   if (schema.items?.properties) {
