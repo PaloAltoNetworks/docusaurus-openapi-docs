@@ -20,6 +20,7 @@ import {
   getSchemaName,
 } from "docusaurus-plugin-openapi-docs/lib/markdown/schema";
 import { SchemaObject } from "docusaurus-plugin-openapi-docs/lib/openapi/types";
+import { SchemaObjectWithRef } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import isEmpty from "lodash/isEmpty";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -48,15 +49,37 @@ const mergeAllOf = (allOf: any) => {
   return { mergedSchemas, mergedRequired };
 };
 
-const AnyOneOf = ({ schema, schemaType }: any) => {
+interface MarkdownProps {
+  text: string;
+}
+
+// Renders string as markdown, useful for descriptions and qualifiers
+const Markdown: React.FC<MarkdownProps> = ({ text }) => {
+  return (
+    <div style={{ marginTop: ".5rem", marginBottom: ".5rem" }}>
+      <ReactMarkdown
+        children={createDescription(text)}
+        rehypePlugins={[rehypeRaw]}
+      />
+    </div>
+  );
+};
+
+// Common props interface
+interface SchemaProps {
+  schema: SchemaObject;
+  schemaType: "request" | "response";
+}
+
+const AnyOneOf: React.FC<SchemaProps> = ({ schema, schemaType }) => {
   const type = schema.oneOf ? "oneOf" : "anyOf";
   return (
-    <div>
+    <>
       <span className="badge badge--info" style={{ marginBottom: "1rem" }}>
         {type}
       </span>
       <SchemaTabs>
-        {schema[type].map((anyOneSchema: any, index: number) => {
+        {schema[type]?.map((anyOneSchema: any, index: number) => {
           const label = anyOneSchema.title || `MOD${index + 1}`;
           return (
             // @ts-ignore
@@ -66,9 +89,7 @@ const AnyOneOf = ({ schema, schemaType }: any) => {
               value={`${index}-item-properties`}
             >
               {anyOneSchema.description && (
-                <div style={{ marginTop: ".5rem", marginBottom: ".5rem" }}>
-                  {createDescription(anyOneSchema.description)}
-                </div>
+                <Markdown text={anyOneSchema.description} />
               )}
               {anyOneSchema.type === "object" &&
                 !anyOneSchema.properties &&
@@ -94,6 +115,12 @@ const AnyOneOf = ({ schema, schemaType }: any) => {
                   schemaType={schemaType}
                 />
               )}
+              {anyOneSchema.anyOf && (
+                <SchemaComponent
+                  schema={anyOneSchema}
+                  schemaType={schemaType}
+                />
+              )}
               {anyOneSchema.items && (
                 <Items schema={anyOneSchema} schemaType={schemaType} />
               )}
@@ -110,7 +137,7 @@ const AnyOneOf = ({ schema, schemaType }: any) => {
           );
         })}
       </SchemaTabs>
-    </div>
+    </>
   );
 };
 
