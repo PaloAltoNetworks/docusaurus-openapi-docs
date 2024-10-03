@@ -49,7 +49,7 @@ const mergeAllOf = (allOf: any) => {
 };
 
 interface MarkdownProps {
-  text: string;
+  text: string | undefined;
 }
 
 // Renders string as markdown, useful for descriptions and qualifiers
@@ -161,6 +161,68 @@ const Properties: React.FC<SchemaProps> = ({ schema, schemaType }) => {
   );
 };
 
+const PropertyDiscriminator: React.FC<SchemaEdgeProps> = ({
+  name,
+  schemaName,
+  schema,
+  schemaType,
+  discriminator,
+  required,
+}) => {
+  if (!schema) {
+    return null;
+  }
+
+  if (discriminator.mapping === undefined) {
+    return (
+      <SchemaEdge
+        name={name}
+        schema={schema}
+        required={required}
+        schemaName={schemaName}
+        schemaType={schemaType}
+      />
+    );
+  }
+
+  return (
+    <div className="openapi-discriminator__item openapi-schema__list-item">
+      <div>
+        <span className="openapi-schema__container">
+          <strong className="openapi-discriminator__name openapi-schema__property">
+            {name}
+          </strong>
+          {schemaName && (
+            <span className="openapi-schema__name"> {schemaName}</span>
+          )}
+          {required && (
+            <span className="openapi-schema__required">required</span>
+          )}
+        </span>
+        {schema.description && <Markdown text={schema.description} />}
+        {getQualifierMessage(discriminator) && (
+          <Markdown text={getQualifierMessage(discriminator)} />
+        )}
+        <DiscriminatorTabs className="openapi-tabs__discriminator">
+          {Object.keys(discriminator.mapping).map((key, index) => (
+            // @ts-ignore
+            <TabItem
+              key={index}
+              label={key}
+              value={`${index}-item-discriminator`}
+            >
+              <SchemaNode
+                schema={discriminator.mapping[key]}
+                schemaType={schemaType}
+              />
+            </TabItem>
+          ))}
+        </DiscriminatorTabs>
+      </div>
+    </div>
+  );
+};
+
 interface DetailsNodeProps {
   name: string;
   schemaName: string;
@@ -236,80 +298,6 @@ const DetailsNode: React.FC<DetailsNodeProps> = ({
         </div>
       </Details>
     </SchemaItem>
-  );
-};
-
-const PropertyDiscriminator = ({
-  name,
-  schemaName,
-  schema,
-  schemaType,
-  discriminator,
-  required,
-}: any) => {
-  if (!schema) {
-    return null;
-  }
-
-  if (discriminator.mapping === undefined) {
-    return (
-      <SchemaEdge
-        name={name}
-        schema={schema}
-        required={required}
-        schemaName={schemaName}
-        schemaType={schemaType}
-      />
-    );
-  }
-
-  return (
-    <div className="openapi-discriminator__item openapi-schema__list-item">
-      <div>
-        <span className="openapi-schema__container">
-          <strong className="openapi-discriminator__name openapi-schema__property">
-            {name}
-          </strong>
-          {schemaName && (
-            <span className="openapi-schema__name"> {schemaName}</span>
-          )}
-          {required && (
-            <span className="openapi-schema__required">required</span>
-          )}
-        </span>
-        {schema.description && (
-          <div style={{ paddingLeft: "1rem" }}>
-            <ReactMarkdown
-              children={createDescription(schema.description)}
-              rehypePlugins={[rehypeRaw]}
-            />
-          </div>
-        )}
-        {getQualifierMessage(discriminator) && (
-          <div style={{ paddingLeft: "1rem" }}>
-            <ReactMarkdown
-              children={createDescription(getQualifierMessage(discriminator))}
-              rehypePlugins={[rehypeRaw]}
-            />
-          </div>
-        )}
-        <DiscriminatorTabs className="openapi-tabs__discriminator">
-          {Object.keys(discriminator.mapping).map((key, index) => (
-            // @ts-ignore
-            <TabItem
-              key={index}
-              label={key}
-              value={`${index}-item-discriminator`}
-            >
-              <SchemaNode
-                schema={discriminator.mapping[key]}
-                schemaType={schema.type}
-              />
-            </TabItem>
-          ))}
-        </DiscriminatorTabs>
-      </div>
-    </div>
   );
 };
 
