@@ -141,8 +141,9 @@ const AnyOneOf: React.FC<SchemaProps> = ({ schema, schemaType }) => {
   );
 };
 
-const Properties = ({ schema, schemaType }: any) => {
-  if (Object.keys(schema.properties).length === 0) {
+const Properties: React.FC<SchemaProps> = ({ schema, schemaType }) => {
+  const discriminator = schema.discriminator;
+  if (Object.keys(schema.properties as {}).length === 0) {
     return (
       <SchemaItem
         collapsible={false}
@@ -151,14 +152,12 @@ const Properties = ({ schema, schemaType }: any) => {
         schemaName="object"
         qualifierMessage={undefined}
         schema={{}}
-        discriminator={false}
-        children={null}
       />
     );
   }
   return (
     <>
-      {Object.entries(schema.properties).map(([key, val]) => (
+      {Object.entries(schema.properties as {}).map(([key, val]) => (
         <Edge
           key={key}
           name={key}
@@ -168,7 +167,7 @@ const Properties = ({ schema, schemaType }: any) => {
               ? schema.required.includes(key)
               : false
           }
-          discriminator={schema.discriminator}
+          discriminator={discriminator}
           schemaType={schemaType}
         />
       ))}
@@ -441,7 +440,7 @@ const Items: React.FC<{
     return (
       <>
         <OpeningArrayBracket />
-        <AnyOneOf schema={schema.items} />
+        <AnyOneOf schema={schema.items} schemaType={schemaType} />
         <ClosingArrayBracket />
       </>
     );
@@ -459,7 +458,7 @@ const Items: React.FC<{
       return (
         <>
           <OpeningArrayBracket />
-          <AnyOneOf schema={mergedSchemas} />
+          <AnyOneOf schema={mergedSchemas} schemaType={schemaType} />
           <Properties schema={mergedSchemas} schemaType={schemaType} />
           <ClosingArrayBracket />
         </>
@@ -471,7 +470,7 @@ const Items: React.FC<{
       return (
         <>
           <OpeningArrayBracket />
-          <AnyOneOf schema={mergedSchemas} />
+          <AnyOneOf schema={mergedSchemas} schemaType={schemaType} />
           <ClosingArrayBracket />
         </>
       );
@@ -550,11 +549,11 @@ const Edge = ({ name, schema, required, discriminator, schemaType }: any) => {
   }
 
   if (schema.oneOf || schema.anyOf) {
-    return <AnyOneOf schema={schema} />;
+    return <AnyOneOf schema={schema} schemaType={schemaType} />;
   }
 
   if (schema.properties) {
-    return <Properties schema={schema} />;
+    return <Properties schema={schema} schemaType={schemaType} />;
   }
 
   if (schema.additionalProperties) {
