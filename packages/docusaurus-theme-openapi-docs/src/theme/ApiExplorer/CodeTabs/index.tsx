@@ -44,6 +44,7 @@ function TabList({
   tabValues,
 }: CodeTabsProps & ReturnType<typeof useTabs>) {
   const tabRefs = useRef<(HTMLLIElement | null)[]>([]);
+  const tabsScrollContainerRef = useRef<any>();
   const { blockElementScrollPositionUntilNextRender } =
     useScrollPositionBlocker();
 
@@ -51,12 +52,26 @@ function TabList({
     const activeTab = tabRefs.current.find(
       (tab) => tab?.getAttribute("aria-selected") === "true"
     );
-    if (activeTab) {
-      activeTab.scrollIntoView({
-        behavior: "auto",
-        block: "center",
-        inline: "start",
-      });
+
+    if (activeTab && tabsScrollContainerRef.current) {
+      const container = tabsScrollContainerRef.current;
+      const containerRect = container.getBoundingClientRect();
+      const activeTabRect = activeTab.getBoundingClientRect();
+
+      // Calculate the distance to scroll to align active tab to the left
+      const glowOffset = 3;
+      const scrollOffset =
+        activeTabRect.left -
+        containerRect.left +
+        container.scrollLeft -
+        glowOffset;
+
+      // Check if the active tab is not already at the left position
+
+      if (Math.abs(scrollOffset - container.scrollLeft) > 4) {
+        // Adjust the scroll of the container
+        container.scrollLeft = scrollOffset;
+      }
     }
   }, []);
 
@@ -139,6 +154,7 @@ function TabList({
         },
         className
       )}
+      ref={tabsScrollContainerRef}
     >
       {tabValues.map(({ value, label, attributes }) => (
         <li
