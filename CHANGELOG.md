@@ -1,3 +1,93 @@
+## 4.1.0 (Oct 4, 2024)
+
+High level enhancements
+
+- Added support for rendering schema item example (#985)
+- Improved support for enum descriptions (#981 and #951)
+- Added support for `sidebarGenerators` (#963)
+- Added OpenAPI 3.1 webhooks support (#961)
+- Improved code snippets support(#945 and #984)
+
+Other enhancements and bug fixes
+
+- Merge pull request #985 from PaloAltoNetworks/edge-allof
+  - Combined merged schema with original to ensure no properties are lost
+  - Add support for rendering example to SchemaItem
+- Merge pull request #984 from PaloAltoNetworks/fix-code-snippet-scroll
+  - Adjust offset for glow effect around active tab
+  - Avoid scrolling if first item in scroll area
+  - Use scrollLeft to avoid scrolling entire page to active code tab
+- Merge pull request #981 from tuanpt-0634/support-schema-enum-descriptions
+  - Support enum descriptions in schema object
+- Merge pull request #971 from robbieaverill/children-reactnode
+  - Restore fallback to empty string when children is falsy
+  - Revert string casting in plugin utils
+  - Revert changes to plugin guard() and render() methods, they will not accept ReactNode
+  - Children interface is now ReactNode, theme utility methods are deprecated in favour of plugin methods
+- Merge pull request #969 from tuanpt-0634/fix_button_show_optional_parameters
+  - Fix change type of Show optional parameters button
+- Merge pull request #963 from robbieaverill/feature/custom-doc-item-generator
+  - Move createDocItem() into a `sidebarGenerators` object
+  - Add line-through style to deprecated sidebar items
+  - Add support for custom sidebar DocItem generators supporting customisation
+  - Add markdownGenerators example and update docs
+- Merge pull request #961 from PaloAltoNetworks/webhooks
+  - Add example OpenAPI 3.1 petstore
+  - Add support for OpenAPI 3.1 webhooks
+- Merge pull request #960 from PaloAltoNetworks/deprecation-notice
+  - Fix deprecation notice
+- Merge pull request #958 from PaloAltoNetworks/default-values
+  - Ensure description comes before qualifier and default value
+  - Render default value after description
+  - Fix defaultValue and cleanup unused code
+  - Update packages
+  - Apply changes to ParamsItem
+  - Render default value as string literal instead of markdown
+  - Fix curl logoClass
+- Merge pull request #957 from PaloAltoNetworks/security-schemes
+  - Apply border radius to summary
+- Merge pull request #951 from omonk/ollie.monk/x-enumDescriptions
+  - Add missing security schemes component
+  - Enum => Enum Value
+- Merge pull request #954 from Olexandr88/patch-1
+  - Update README
+- Merge pull request #952 from PaloAltoNetworks/language-options
+  - Remove unused import
+  - Update languageTabs and styling docs
+  - Remove log
+  - Fix type
+  - Use x-enumDescriptions in UI
+  - Merge user-defined languageTabs options
+- Merge pull request #949 from PaloAltoNetworks/method-endpoint
+  - Import hooks from theme
+- Merge pull request #945 from PaloAltoNetworks/language-tabs
+  - Add fallback in case language not already in localStorage
+  - Auto scroll to default language
+  - Use first variant in variants array as default
+  - Define defaultValue for language and add code comments to improve clarity
+  - Convert python styles to CSS
+  - Expand supported languages in demo
+  - Demonstrate overriding language tab styles
+  - Add additional language tab styles
+  - Add function for generating languageSet
+  - Add missing languages
+  - Add advanced topics
+  - Add BrowserWindow component
+  - Update workflows
+- Merge pull request #939 from omonk/context-aware-method-endpoint-render
+- Merge pull request #944 from robbieaverill/fix-oneof-within-anyof
+- Merge pull request #943 from PaloAltoNetworks/dependabot/github_actions/dot-github/workflows/actions/download-artifact-4.1.7
+  - Add example of oneOf within anyOf to "Tests" in demo
+  - Fix bug where oneOf within anyOf would not be rendered in request schemas
+  - Bump actions/download-artifact from 3 to 4.1.7 in /.github/workflows
+  - Fix linting
+  - Fix linting
+  - Do not render serverUrl on callbacks MethodEndpoint component
+- Merge pull request #937 from PaloAltoNetworks/layout-paginator
+  - Conditionally set col width for API doc layout
+- Merge pull request #931 from IanVS/docusaurus-35-version
+  - Update dependencies for docusaurus 3.5+
+
 ## 4.0.1 (Aug 22, 2024)
 
 High level enhancements
