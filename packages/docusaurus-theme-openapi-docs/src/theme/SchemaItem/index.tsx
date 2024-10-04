@@ -66,6 +66,7 @@ export default function SchemaItem(props: Props) {
   let deprecated;
   let schemaDescription;
   let defaultValue: string | undefined;
+  let example: string | undefined;
   let nullable;
   let enumDescriptions: [string, string][] = [];
 
@@ -74,6 +75,7 @@ export default function SchemaItem(props: Props) {
     schemaDescription = schema.description;
     enumDescriptions = transformEnumDescriptions(schema["x-enumDescriptions"]);
     defaultValue = schema.default;
+    example = schema.example;
     nullable = schema.nullable;
   }
 
@@ -157,6 +159,30 @@ export default function SchemaItem(props: Props) {
     return undefined;
   }
 
+  function renderExample() {
+    if (example !== undefined) {
+      if (typeof example === "string") {
+        return (
+          <div>
+            <strong>Example: </strong>
+            <span>
+              <code>{example}</code>
+            </span>
+          </div>
+        );
+      }
+      return (
+        <div>
+          <strong>Example: </strong>
+          <span>
+            <code>{JSON.stringify(example)}</code>
+          </span>
+        </div>
+      );
+    }
+    return undefined;
+  }
+
   const schemaContent = (
     <div>
       <span className="openapi-schema__container">
@@ -179,6 +205,7 @@ export default function SchemaItem(props: Props) {
       {renderEnumDescriptions}
       {renderQualifierMessage}
       {renderDefaultValue()}
+      {renderExample()}
       {collapsibleSchemaContent ?? collapsibleSchemaContent}
     </div>
   );

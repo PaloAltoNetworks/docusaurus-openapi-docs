@@ -687,50 +687,57 @@ function createEdges({
     const { mergedSchemas }: { mergedSchemas: SchemaObject } = mergeAllOf(
       schema.allOf
     );
+    delete schema.allOf;
+    const combinedSchemas = { ...schema, ...mergedSchemas };
 
     if (SCHEMA_TYPE === "request") {
-      if (mergedSchemas.readOnly && mergedSchemas.readOnly === true) {
+      if (combinedSchemas.readOnly && combinedSchemas.readOnly === true) {
         return undefined;
       }
     }
 
     if (SCHEMA_TYPE === "response") {
-      if (mergedSchemas.writeOnly && mergedSchemas.writeOnly === true) {
+      if (combinedSchemas.writeOnly && combinedSchemas.writeOnly === true) {
         return undefined;
       }
     }
 
-    const mergedSchemaName = getSchemaName(mergedSchemas);
+    const mergedSchemaName = getSchemaName(combinedSchemas);
+
+    if (name === "eventName") {
+      console.log(mergedSchemaName, combinedSchemas);
+    }
+
     if (
-      mergedSchemas.oneOf !== undefined ||
-      mergedSchemas.anyOf !== undefined
+      combinedSchemas.oneOf !== undefined ||
+      combinedSchemas.anyOf !== undefined
     ) {
       return createDetailsNode(
         name,
         mergedSchemaName,
-        mergedSchemas,
+        combinedSchemas,
         required,
-        schema.nullable
+        combinedSchemas.nullable
       );
     }
 
-    if (mergedSchemas.properties !== undefined) {
+    if (combinedSchemas.properties !== undefined) {
       return createDetailsNode(
         name,
         mergedSchemaName,
-        mergedSchemas,
+        combinedSchemas,
         required,
-        schema.nullable
+        combinedSchemas.nullable
       );
     }
 
-    if (mergedSchemas.additionalProperties !== undefined) {
+    if (combinedSchemas.additionalProperties !== undefined) {
       return createDetailsNode(
         name,
         mergedSchemaName,
-        mergedSchemas,
+        combinedSchemas,
         required,
-        schema.nullable
+        combinedSchemas.nullable
       );
     }
 
@@ -739,9 +746,9 @@ function createEdges({
       return createDetailsNode(
         name,
         mergedSchemaName,
-        mergedSchemas,
+        combinedSchemas,
         required,
-        schema.nullable
+        combinedSchemas.nullable
       );
     }
 
@@ -750,8 +757,8 @@ function createEdges({
       name,
       required: Array.isArray(required) ? required.includes(name) : required,
       schemaName: mergedSchemaName,
-      qualifierMessage: getQualifierMessage(mergedSchemas),
-      schema: mergedSchemas,
+      qualifierMessage: getQualifierMessage(combinedSchemas),
+      schema: combinedSchemas,
     });
   }
 
