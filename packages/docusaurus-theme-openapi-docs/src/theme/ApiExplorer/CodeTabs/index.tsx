@@ -62,8 +62,12 @@ function TabList({
       const scrollOffset =
         activeTabRect.left - containerRect.left + container.scrollLeft;
 
-      // Adjust the scroll of the container
-      container.scrollLeft = scrollOffset;
+      // Check if the active tab is not already at the left position
+
+      if (Math.abs(scrollOffset - container.scrollLeft) > 4) {
+        // Adjust the scroll of the container
+        container.scrollLeft = scrollOffset;
+      }
     }
   }, []);
 
