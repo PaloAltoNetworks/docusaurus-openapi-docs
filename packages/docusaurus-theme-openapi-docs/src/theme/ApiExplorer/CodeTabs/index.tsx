@@ -59,8 +59,12 @@ function TabList({
       const activeTabRect = activeTab.getBoundingClientRect();
 
       // Calculate the distance to scroll to align active tab to the left
+      const glowOffset = 3;
       const scrollOffset =
-        activeTabRect.left - containerRect.left + container.scrollLeft;
+        activeTabRect.left -
+        containerRect.left +
+        container.scrollLeft -
+        glowOffset;
 
       // Check if the active tab is not already at the left position
 
