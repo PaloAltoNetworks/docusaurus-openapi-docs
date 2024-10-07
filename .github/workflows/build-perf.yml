@@ -23,8 +23,7 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           build-script: build
           clean-script: clean
-          # pattern: "{demo/build/assets/js/*js,demo/build/assets/css/styles*css,demo/.docusaurus/globalData.json,demo/build/index.html,demo/build/docs/index.html,demo/build/docs/installation/index.html}"
-          pattern: '{demo/build/assets/js/main*js,demo/build/assets/js/runtime~main*js,demo/build/assets/css/styles*css,demo/.docusaurus/globalData.json,demo/.docusaurus/registry.js,demo/.docusaurus/routes.js,demo/.docusaurus/routesChunkNames.json,demo/.docusaurus/site-metadata.json,demo/.docusaurus/codeTranslations.json,demo/.docusaurus/i18n.json,demo/.docusaurus/docusaurus.config.mjs,demo/build/index.html,demo/build/petstore/**/*.html}'
+          pattern: "{demo/build/assets/js/main*js,demo/build/assets/js/runtime~main*js,demo/build/assets/css/styles*css,demo/.docusaurus/globalData.json,demo/.docusaurus/registry.js,demo/.docusaurus/routes.js,demo/.docusaurus/routesChunkNames.json,demo/.docusaurus/site-metadata.json,demo/.docusaurus/codeTranslations.json,demo/.docusaurus/i18n.json,demo/.docusaurus/docusaurus.config.mjs,demo/build/index.html,demo/build/petstore/**/*.html}"
           strip-hash: '\.([^;]\w{7})\.'
           minimum-change-threshold: 30
           compression: none
