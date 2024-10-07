@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React from "react";
+import React, { Suspense, useEffect, useState } from "react";
 
 import Details from "@theme/Details";
 import MimeTabs from "@theme/MimeTabs"; // Assume these components exist
@@ -26,7 +26,28 @@ interface Props {
   };
 }
 
-const RequestSchema: React.FC<Props> = ({ title, body, style }) => {
+const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsClient(true);
+    }
+  }, []);
+
+  if (!isClient) {
+    return (
+      <div className="openapi-explorer__loading-container">
+        <div className="openapi-response__lds-ring">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+    );
+  }
+
   if (
     body === undefined ||
     body.content === undefined ||
@@ -139,6 +160,17 @@ const RequestSchema: React.FC<Props> = ({ title, body, style }) => {
         </Details>
       </TabItem>
     </MimeTabs>
+  );
+};
+
+const RequestSchema: React.FC<Props> = (props) => {
+  const LazyComponent = React.lazy(() =>
+    Promise.resolve({ default: RequestSchemaComponent })
+  );
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LazyComponent {...props} />
+    </Suspense>
   );
 };
 

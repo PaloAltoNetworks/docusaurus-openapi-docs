@@ -40,7 +40,9 @@ const ResponseSchemaComponent: React.FC<Props> = ({
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setIsClient(true);
+    if (typeof window !== "undefined") {
+      setIsClient(true);
+    }
   }, []);
 
   if (!isClient) {
