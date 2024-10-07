@@ -128,6 +128,7 @@ const AnyOneOf: React.FC<SchemaProps> = ({ schema, schemaType }) => {
       <SchemaTabs>
         {schema[type]?.map((anyOneSchema: any, index: number) => {
           const label = anyOneSchema.title || `MOD${index + 1}`;
+          const schemaName = getSchemaName(anyOneSchema);
           return (
             // @ts-ignore
             <TabItem
@@ -135,16 +136,40 @@ const AnyOneOf: React.FC<SchemaProps> = ({ schema, schemaType }) => {
               label={label}
               value={`${index}-item-properties`}
             >
-              {anyOneSchema.description && (
-                <Markdown text={anyOneSchema.description} />
+              {/* Handle primitive types directly */}
+              {["string", "number", "integer", "boolean"].includes(
+                anyOneSchema.type
+              ) && (
+                <SchemaItem
+                  collapsible={false}
+                  name=""
+                  schemaName={schemaName}
+                  qualifierMessage={getQualifierMessage(anyOneSchema)}
+                  schema={anyOneSchema}
+                  discriminator={false}
+                  children={null}
+                />
               )}
+
+              {/* Handle empty object as a primitive type */}
               {anyOneSchema.type === "object" &&
                 !anyOneSchema.properties &&
                 !anyOneSchema.allOf &&
-                !anyOneSchema.items && (
-                  <SchemaNode schema={anyOneSchema} schemaType={schemaType} />
+                !anyOneSchema.oneOf &&
+                !anyOneSchema.anyOf && (
+                  <SchemaItem
+                    collapsible={false}
+                    name=""
+                    schemaName={schemaName}
+                    qualifierMessage={getQualifierMessage(anyOneSchema)}
+                    schema={anyOneSchema}
+                    discriminator={false}
+                    children={null}
+                  />
                 )}
-              {anyOneSchema.properties && (
+
+              {/* Handle actual object types with properties or nested schemas */}
+              {anyOneSchema.type === "object" && anyOneSchema.properties && (
                 <Properties schema={anyOneSchema} schemaType={schemaType} />
               )}
               {anyOneSchema.allOf && (
@@ -158,12 +183,6 @@ const AnyOneOf: React.FC<SchemaProps> = ({ schema, schemaType }) => {
               )}
               {anyOneSchema.items && (
                 <Items schema={anyOneSchema} schemaType={schemaType} />
-              )}
-              {(anyOneSchema.type === "string" ||
-                anyOneSchema.type === "number" ||
-                anyOneSchema.type === "integer" ||
-                anyOneSchema.type === "boolean") && (
-                <SchemaNode schema={anyOneSchema} schemaType={schemaType} />
               )}
             </TabItem>
           );
@@ -536,7 +555,17 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
   }
 
   if (schema.oneOf || schema.anyOf) {
-    return <AnyOneOf schema={schema} schemaType={schemaType} />;
+    // return <AnyOneOf schema={schema} schemaType={schemaType} />;
+    return (
+      <SchemaNodeDetails
+        name={name}
+        schemaName={schemaName}
+        schemaType={schemaType}
+        required={required}
+        schema={schema}
+        nullable={schema.nullable}
+      />
+    );
   }
 
   if (schema.properties) {
@@ -660,67 +689,44 @@ const SchemaNode: React.FC<SchemaProps> = ({ schema, schemaType }) => {
     return null;
   }
 
-  if (schema.oneOf || schema.anyOf) {
-    return <AnyOneOf schema={schema} schemaType={schemaType} />;
-  }
-
-  if (schema.properties) {
-    return <Properties schema={schema} schemaType={schemaType} />;
-  }
-
-  if (schema.additionalProperties) {
-    return <AdditionalProperties schema={schema} schemaType={schemaType} />;
-  }
-
-  if (schema.items) {
-    return <Items schema={schema} schemaType={schemaType} />;
-  }
-
   if (schema.allOf) {
     const { mergedSchemas }: { mergedSchemas: SchemaObject } = mergeAllOf(
       schema.allOf
     );
-    if (
-      mergedSchemas.oneOf !== undefined ||
-      mergedSchemas.anyOf !== undefined
-    ) {
-      return <AnyOneOf schema={mergedSchemas} schemaType={schemaType} />;
-    }
 
-    if (mergedSchemas.properties !== undefined) {
-      return <Properties schema={mergedSchemas} schemaType={schemaType} />;
-    }
-  }
+    const combinedSchemas = { ...schema, ...mergedSchemas };
 
-  if (schema.type) {
     return (
-      <div style={{ marginTop: ".5rem", marginBottom: ".5rem" }}>
-        {createDescription(schema.type)}
-        {getQualifierMessage(schema) && (
-          <div style={{ paddingTop: "1rem" }}>
-            {createDescription(getQualifierMessage(schema))}
-          </div>
+      <div>
+        {combinedSchemas.oneOf && (
+          <AnyOneOf schema={combinedSchemas} schemaType={schemaType} />
+        )}
+        {combinedSchemas.anyOf && (
+          <AnyOneOf schema={combinedSchemas} schemaType={schemaType} />
+        )}
+        {combinedSchemas.properties && (
+          <Properties schema={combinedSchemas} schemaType={schemaType} />
+        )}
+        {combinedSchemas.items && (
+          <Items schema={combinedSchemas} schemaType={schemaType} />
         )}
       </div>
     );
   }
 
-  if (typeof schema === "string") {
-    return (
-      <div style={{ marginTop: ".5rem", marginBottom: ".5rem" }}>
-        {createDescription(schema)}
-        {/* @ts-ignore */}
-        {getQualifierMessage(schema) && (
-          <div style={{ paddingTop: "1rem" }}>
-            {/* @ts-ignore */}
-            {createDescription(getQualifierMessage(schema))}
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  return null;
+  return (
+    <div>
+      {schema.oneOf && <AnyOneOf schema={schema} schemaType={schemaType} />}
+      {schema.anyOf && <AnyOneOf schema={schema} schemaType={schemaType} />}
+      {schema.properties && (
+        <Properties schema={schema} schemaType={schemaType} />
+      )}
+      {schema.additionalProperties && (
+        <AdditionalProperties schema={schema} schemaType={schemaType} />
+      )}
+      {schema.items && <Items schema={schema} schemaType={schemaType} />}
+    </div>
+  );
 };
 
 export default SchemaNode;
