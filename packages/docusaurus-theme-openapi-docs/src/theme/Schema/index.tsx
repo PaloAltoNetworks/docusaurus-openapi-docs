@@ -21,6 +21,7 @@ import {
 } from "docusaurus-plugin-openapi-docs/lib/markdown/schema";
 import { SchemaObject } from "docusaurus-plugin-openapi-docs/lib/openapi/types";
 import isEmpty from "lodash/isEmpty";
+import merge from "lodash/merge";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
@@ -569,11 +570,29 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
   }
 
   if (schema.properties) {
-    return <Properties schema={schema} schemaType={schemaType} />;
+    return (
+      <SchemaNodeDetails
+        name={name}
+        schemaName={schemaName}
+        schemaType={schemaType}
+        required={required}
+        schema={schema}
+        nullable={schema.nullable}
+      />
+    );
   }
 
   if (schema.additionalProperties) {
-    return <AdditionalProperties schema={schema} schemaType={schemaType} />;
+    return (
+      <SchemaNodeDetails
+        name={name}
+        schemaName={schemaName}
+        schemaType={schemaType}
+        required={required}
+        schema={schema}
+        nullable={schema.nullable}
+      />
+    );
   }
 
   if (schema.items?.properties) {
@@ -606,49 +625,52 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
     const { mergedSchemas }: { mergedSchemas: SchemaObject } = mergeAllOf(
       schema.allOf
     );
+    delete schema.allOf;
+
+    const combinedSchemas = merge(schema, mergedSchemas);
 
     if (
-      (schemaType === "request" && mergedSchemas.readOnly) ||
-      (schemaType === "response" && mergedSchemas.writeOnly)
+      (schemaType === "request" && combinedSchemas.readOnly) ||
+      (schemaType === "response" && combinedSchemas.writeOnly)
     ) {
       return null;
     }
 
-    const mergedSchemaName = getSchemaName(mergedSchemas);
+    const combinedSchemaName = getSchemaName(combinedSchemas);
 
-    if (mergedSchemas.oneOf || mergedSchemas.anyOf) {
+    if (combinedSchemas.oneOf || combinedSchemas.anyOf) {
       return (
         <SchemaNodeDetails
           name={name}
-          schemaName={mergedSchemaName}
+          schemaName={combinedSchemaName}
           required={required}
-          nullable={schema.nullable}
-          schema={mergedSchemas}
+          nullable={combinedSchemas.nullable}
+          schema={combinedSchemas}
           schemaType={schemaType}
         />
       );
     }
 
-    if (mergedSchemas.properties !== undefined) {
+    if (combinedSchemas.properties !== undefined) {
       return (
         <SchemaNodeDetails
           name={name}
-          schemaName={mergedSchemaName}
+          schemaName={combinedSchemaName}
           required={required}
-          nullable={schema.nullable}
-          schema={mergedSchemas}
+          nullable={combinedSchemas.nullable}
+          schema={combinedSchemas}
           schemaType={schemaType}
         />
       );
     }
 
-    if (mergedSchemas.items?.properties) {
+    if (combinedSchemas.items?.properties) {
       <SchemaNodeDetails
         name={name}
-        schemaName={mergedSchemaName}
+        schemaName={combinedSchemaName}
         required={required}
-        nullable={schema.nullable}
-        schema={mergedSchemas}
+        nullable={combinedSchemas.nullable}
+        schema={combinedSchemas}
         schemaType={schemaType}
       />;
     }
@@ -658,9 +680,9 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
         collapsible={false}
         name={name}
         required={Array.isArray(required) ? required.includes(name) : required}
-        schemaName={mergedSchemaName}
-        qualifierMessage={getQualifierMessage(mergedSchemas)}
-        schema={mergedSchemas}
+        schemaName={combinedSchemaName}
+        qualifierMessage={getQualifierMessage(combinedSchemas)}
+        schema={combinedSchemas}
         discriminator={false}
         children={null}
       />
@@ -693,8 +715,9 @@ const SchemaNode: React.FC<SchemaProps> = ({ schema, schemaType }) => {
     const { mergedSchemas }: { mergedSchemas: SchemaObject } = mergeAllOf(
       schema.allOf
     );
+    delete schema.allOf;
 
-    const combinedSchemas = { ...schema, ...mergedSchemas };
+    const combinedSchemas = merge(schema, mergedSchemas);
 
     return (
       <div>
