@@ -152,7 +152,18 @@ export default function ApiItem(props: Props): JSX.Element {
                   <MDXComponent />
                 </div>
                 <div className="col col--5 openapi-right-panel__container">
-                  <BrowserOnly fallback={<div>Loading...</div>}>
+                  <BrowserOnly
+                    fallback={
+                      <div className="openapi-explorer__loading-container">
+                        <div className="openapi-response__lds-ring">
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                        </div>
+                      </div>
+                    }
+                  >
                     {() => {
                       return <ApiExplorer item={api} infoPath={infoPath} />;
                     }}
