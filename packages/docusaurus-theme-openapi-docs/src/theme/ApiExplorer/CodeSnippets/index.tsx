@@ -180,7 +180,7 @@ function CodeSnippets({ postman, codeSamples }: Props) {
   ]);
   // no dependencies was intentionlly set for this particular hook. it's safe as long as if conditions are set
   useEffect(function onSelectedVariantUpdate() {
-    if (selectedVariant && selectedVariant !== language.variant) {
+    if (selectedVariant && selectedVariant !== language?.variant) {
       const postmanRequest = buildPostmanRequest(postman, {
         queryParams,
         pathParams,
@@ -211,6 +211,7 @@ function CodeSnippets({ postman, codeSamples }: Props) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(function onSelectedSampleUpdate() {
     if (
+      language &&
       language.samples &&
       language.samplesSources &&
       selectedSample &&
