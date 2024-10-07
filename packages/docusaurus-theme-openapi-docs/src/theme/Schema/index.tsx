@@ -129,7 +129,6 @@ const AnyOneOf: React.FC<SchemaProps> = ({ schema, schemaType }) => {
       <SchemaTabs>
         {schema[type]?.map((anyOneSchema: any, index: number) => {
           const label = anyOneSchema.title || `MOD${index + 1}`;
-          const schemaName = getSchemaName(anyOneSchema);
           return (
             // @ts-ignore
             <TabItem
@@ -143,8 +142,8 @@ const AnyOneOf: React.FC<SchemaProps> = ({ schema, schemaType }) => {
               ) && (
                 <SchemaItem
                   collapsible={false}
-                  name=""
-                  schemaName={schemaName}
+                  name={undefined}
+                  schemaName={anyOneSchema.type}
                   qualifierMessage={getQualifierMessage(anyOneSchema)}
                   schema={anyOneSchema}
                   discriminator={false}
@@ -160,8 +159,8 @@ const AnyOneOf: React.FC<SchemaProps> = ({ schema, schemaType }) => {
                 !anyOneSchema.anyOf && (
                   <SchemaItem
                     collapsible={false}
-                    name=""
-                    schemaName={schemaName}
+                    name={undefined}
+                    schemaName={anyOneSchema.type}
                     qualifierMessage={getQualifierMessage(anyOneSchema)}
                     schema={anyOneSchema}
                     discriminator={false}
