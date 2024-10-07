@@ -96,11 +96,13 @@ export default function SchemaItem(props: Props) {
     getEnumDescriptionMarkdown(enumDescriptions),
     (value) => {
       return (
-        <ReactMarkdown
-          remarkPlugins={[remarkGfm]}
-          rehypePlugins={[rehypeRaw]}
-          children={value}
-        />
+        <div style={{ marginTop: ".5rem" }}>
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            rehypePlugins={[rehypeRaw]}
+            children={value}
+          />
+        </div>
       );
     }
   );

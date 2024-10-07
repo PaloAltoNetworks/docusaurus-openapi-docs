@@ -131,11 +131,13 @@ function ParamsItem({ param, ...rest }: Props) {
     getEnumDescriptionMarkdown(enumDescriptions),
     (value) => {
       return (
-        <ReactMarkdown
-          rehypePlugins={[rehypeRaw]}
-          remarkPlugins={[remarkGfm]}
-          children={value}
-        />
+        <div style={{ marginTop: ".5rem" }}>
+          <ReactMarkdown
+            rehypePlugins={[rehypeRaw]}
+            remarkPlugins={[remarkGfm]}
+            children={value}
+          />
+        </div>
       );
     }
   );
