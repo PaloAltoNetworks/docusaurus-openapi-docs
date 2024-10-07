@@ -5,9 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 
-import BrowserOnly from "@docusaurus/BrowserOnly";
 import Details from "@theme/Details";
 import MimeTabs from "@theme/MimeTabs"; // Assume these components exist
 import {
@@ -38,6 +37,25 @@ const ResponseSchemaComponent: React.FC<Props> = ({
   body,
   style,
 }): any => {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return (
+      <div className="openapi-explorer__loading-container">
+        <div className="openapi-response__lds-ring">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+    );
+  }
+
   if (
     body === undefined ||
     body.content === undefined ||
@@ -131,30 +149,13 @@ const ResponseSchemaComponent: React.FC<Props> = ({
 };
 
 const ResponseSchema: React.FC<Props> = (props) => {
+  const LazyComponent = React.lazy(() =>
+    Promise.resolve({ default: ResponseSchemaComponent })
+  );
   return (
-    <BrowserOnly
-      fallback={
-        <div className="openapi-explorer__loading-container">
-          <div className="openapi-response__lds-ring">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-          </div>
-        </div>
-      }
-    >
-      {() => {
-        const LazyComponent = React.lazy(() =>
-          Promise.resolve({ default: ResponseSchemaComponent })
-        );
-        return (
-          <Suspense fallback={<div>Loading...</div>}>
-            <LazyComponent {...props} />
-          </Suspense>
-        );
-      }}
-    </BrowserOnly>
+    <Suspense fallback={<div>Loading...</div>}>
+      <LazyComponent {...props} />
+    </Suspense>
   );
 };
 
