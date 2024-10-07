@@ -264,7 +264,7 @@ export const ExampleFromSchema: React.FC<{ schema: any; mimeType: string }> = ({
       }
       return (
         // @ts-ignore
-        <TabItem label="Example (generated)" value="Example (generated)">
+        <TabItem label="Example (auto)" value="Example (auto)">
           <ResponseSamples responseExample={xmlExample} language="xml" />
         </TabItem>
       );
@@ -277,7 +277,7 @@ export const ExampleFromSchema: React.FC<{ schema: any; mimeType: string }> = ({
   ) {
     return (
       // @ts-ignore
-      <TabItem label="Example (generated)" value="Example (generated)">
+      <TabItem label="Example (auto)" value="Example (auto)">
         <ResponseSamples
           responseExample={JSON.stringify(responseExample, null, 2)}
           language="json"
