@@ -437,39 +437,42 @@ const Items: React.FC<{
   // Handles case when schema.items has allOf
   if (schema.items?.allOf) {
     const { mergedSchemas } = mergeAllOf(schema.items.allOf);
+    delete schema.items.allOf;
+
+    const combinedSchemas = merge(schema.items, mergedSchemas);
 
     // Handles combo anyOf/oneOf + properties
     if (
-      (mergedSchemas.oneOf || mergedSchemas.anyOf) &&
-      mergedSchemas.properties
+      (combinedSchemas.oneOf || combinedSchemas.anyOf) &&
+      combinedSchemas.properties
     ) {
       return (
         <>
           <OpeningArrayBracket />
-          <AnyOneOf schema={mergedSchemas} schemaType={schemaType} />
-          <Properties schema={mergedSchemas} schemaType={schemaType} />
+          <AnyOneOf schema={combinedSchemas} schemaType={schemaType} />
+          <Properties schema={combinedSchemas} schemaType={schemaType} />
           <ClosingArrayBracket />
         </>
       );
     }
 
     // Handles only anyOf/oneOf
-    if (mergedSchemas.oneOf || mergedSchemas.anyOf) {
+    if (combinedSchemas.oneOf || combinedSchemas.anyOf) {
       return (
         <>
           <OpeningArrayBracket />
-          <AnyOneOf schema={mergedSchemas} schemaType={schemaType} />
+          <AnyOneOf schema={combinedSchemas} schemaType={schemaType} />
           <ClosingArrayBracket />
         </>
       );
     }
 
     // Handles properties
-    if (mergedSchemas.properties) {
+    if (combinedSchemas.properties) {
       return (
         <>
           <OpeningArrayBracket />
-          <Properties schema={mergedSchemas} schemaType={schemaType} />
+          <Properties schema={combinedSchemas} schemaType={schemaType} />
           <ClosingArrayBracket />
         </>
       );
@@ -485,11 +488,19 @@ const Items: React.FC<{
     schema.items?.type === "object"
   ) {
     return (
-      <>
+      <div style={{ marginLeft: ".5rem" }}>
         <OpeningArrayBracket />
-        <SchemaNode schema={schema.items} schemaType={schemaType} />
+        <SchemaItem
+          collapsible={false}
+          name="" // No name for array items
+          schemaName={getSchemaName(schema.items)}
+          qualifierMessage={getQualifierMessage(schema.items)}
+          schema={schema.items}
+          discriminator={false}
+          children={null}
+        />
         <ClosingArrayBracket />
-      </>
+      </div>
     );
   }
 
