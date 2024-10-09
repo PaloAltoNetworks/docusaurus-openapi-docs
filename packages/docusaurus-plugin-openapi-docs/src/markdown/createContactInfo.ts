@@ -33,7 +33,7 @@ export function createContactInfo(contact: ContactObject) {
       }),
       guard(url, () =>
         create("span", {
-          children: ["URL: ", `[${url}](mailto:${url})`],
+          children: ["URL: ", `[${url}](${url})`],
         })
       ),
     ],
