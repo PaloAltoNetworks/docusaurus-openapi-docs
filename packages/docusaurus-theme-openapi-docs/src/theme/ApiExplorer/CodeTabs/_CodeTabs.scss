@@ -436,6 +436,56 @@ body[class="ReactModal__Body--open"] {
   }
 }
 
+.openapi-tabs__code-item--http {
+  color: var(--ifm-color-gray-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  &::after {
+    content: "";
+    display: inline-block;
+    width: 32px; /* Explicitly setting width to 32 pixels */
+    height: 32px; /* Explicitly setting height to 32 pixels */
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEyIDIyTDggMTZMMTIgMTBNMjAgMjJMMjQgMTZMIDIwIDEwIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4=");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; /* Center the SVG */
+    margin-top: 0.5rem;
+  }
+
+  &.active {
+    box-shadow: 0 0 0 3px var(--opeanpi-code-tab-shadow-color-http);
+    border-color: var(--openapi-code-tab-border-color-http);
+  }
+}
+
+.openapi-tabs__code-item--shell {
+  color: var(--ifm-color-gray-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  &::after {
+    content: "";
+    display: inline-block;
+    width: 32px; /* Explicitly setting width to 32 pixels */
+    height: 32px; /* Explicitly setting height to 32 pixels */
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEyIDIyTDggMTZMMTIgMTBNMjAgMjJMMjQgMTZMIDIwIDEwIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4=");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; /* Center the SVG */
+    margin-top: 0.5rem;
+  }
+
+  &.active {
+    box-shadow: 0 0 0 3px var(--opeanpi-code-tab-shadow-color-shell);
+    border-color: var(--openapi-code-tab-border-color-shell);
+  }
+}
+
 @media only screen and (min-width: 768px) and (max-width: 996px) {
   .openapi-tabs__code-list {
     justify-content: space-around;

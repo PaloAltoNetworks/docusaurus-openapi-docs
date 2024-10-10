@@ -81,6 +81,7 @@
   --openapi-explorer-padding-input: 0.5rem;
   --openapi-explorer-border-color: var(--ifm-toc-border-color);
   --openapi-explorer-caret-bg: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path></svg>');
+  --openapi-skeleton-background: var(--ifm-color-emphasis-100);
 }
 
 [data-theme="dark"] {
@@ -162,4 +163,44 @@
 
 .openapi-tabs__heading {
   margin-bottom: 1rem;
+}
+
+/* Loading Skeleton */
+@keyframes pulsing {
+  0% {
+    opacity: 1;
+    background-color: var(--ifm-color-emphasis-100);
+  }
+  50% {
+    opacity: 0.6;
+    background-color: var(--ifm-toc-border-color);
+  }
+  100% {
+    opacity: 1;
+    background-color: var(--ifm-color-emphasis-100);
+  }
+}
+
+.openapi-skeleton {
+  animation: pulsing 2s infinite ease-in-out;
+}
+
+/* Loading Skeleton */
+.openapi-skeleton {
+  border-radius: var(--ifm-pre-border-radius);
+  background-color: var(--openapi-skeleton-background);
+  max-width: 100%;
+  margin: 1rem auto;
+}
+
+.openapi-skeleton.sm {
+  height: 100px;
+}
+
+.openapi-skeleton.md {
+  height: 350px;
+}
+
+.openapi-skeleton.lg {
+  height: 96.5%;
 }

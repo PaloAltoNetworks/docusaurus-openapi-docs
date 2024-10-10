@@ -5,18 +5,14 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { create } from "./utils";
-import { ApiItem } from "../types";
+import React from "react";
 
 interface Props {
-  parameters: ApiItem["parameters"];
+  size?: "sm" | "md" | "lg";
 }
 
-export function createParamsDetails({ parameters }: Props) {
-  return [
-    create("ParamsDetails", {
-      parameters: parameters,
-    }),
-    "\n\n",
-  ];
-}
+const SkeletonLoader: React.FC<Props> = (props) => {
+  return <div className={`openapi-skeleton ${props.size ?? "md"}`}></div>;
+};
+
+export default SkeletonLoader;
