@@ -747,6 +747,31 @@ const SchemaNode: React.FC<SchemaProps> = ({ schema, schemaType }) => {
     );
   }
 
+  // Handle primitives
+  if (
+    schema.type &&
+    !schema.oneOf &&
+    !schema.anyOf &&
+    !schema.properties &&
+    !schema.allOf &&
+    !schema.items &&
+    !schema.additionalProperties
+  ) {
+    const schemaName = getSchemaName(schema);
+    return (
+      <SchemaItem
+        collapsible={false}
+        name={schema.type}
+        required={Boolean(schema.required)}
+        schemaName={schemaName}
+        qualifierMessage={getQualifierMessage(schema)}
+        schema={schema}
+        discriminator={false}
+        children={null}
+      />
+    );
+  }
+
   return (
     <div>
       {schema.oneOf && <AnyOneOf schema={schema} schemaType={schemaType} />}
