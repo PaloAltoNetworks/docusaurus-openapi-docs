@@ -85,7 +85,7 @@ export const sampleResponseFromSchema = (schema: SchemaObject = {}): any => {
     }
 
     if (allOf) {
-      const mergedSchemas = mergeAllOf(allOf) as SchemaObject;
+      const mergedSchemas = mergeAllOf(schemaCopy) as SchemaObject;
       if (mergedSchemas.properties) {
         for (const [key, value] of Object.entries(mergedSchemas.properties)) {
           if (
