@@ -13,6 +13,8 @@ import DiscriminatorTabs from "@theme/DiscriminatorTabs";
 import SchemaItem from "@theme/SchemaItem";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { merge } from "allof-merge";
 import clsx from "clsx";
 import { createDescription } from "docusaurus-plugin-openapi-docs/lib/markdown/createDescription";
 import {
@@ -21,32 +23,20 @@ import {
 } from "docusaurus-plugin-openapi-docs/lib/markdown/schema";
 import { SchemaObject } from "docusaurus-plugin-openapi-docs/lib/openapi/types";
 import isEmpty from "lodash/isEmpty";
-import merge from "lodash/merge";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
 // eslint-disable-next-line import/no-extraneous-dependencies
-const jsonSchemaMergeAllOf = require("json-schema-merge-allof");
+// const jsonSchemaMergeAllOf = require("json-schema-merge-allof");
 
 const mergeAllOf = (allOf: any) => {
-  const mergedSchemas = jsonSchemaMergeAllOf(allOf, {
-    resolvers: {
-      readOnly: () => true,
-      writeOnly: () => true,
-      example: () => true,
-      "x-examples": () => true,
-    },
-    ignoreAdditionalProperties: true,
-  });
+  const onMergeError = (msg: string) => {
+    console.warn(msg);
+  };
 
-  const mergedRequired = allOf.reduce((acc: any, cur: any) => {
-    if (Array.isArray(cur.required)) {
-      return [...acc, ...cur.required];
-    }
-    return acc;
-  }, []);
+  const mergedSchemas = merge(allOf, { onMergeError });
 
-  return { mergedSchemas, mergedRequired };
+  return mergedSchemas;
 };
 
 interface MarkdownProps {
@@ -436,43 +426,40 @@ const Items: React.FC<{
 
   // Handles case when schema.items has allOf
   if (schema.items?.allOf) {
-    const { mergedSchemas } = mergeAllOf(schema.items.allOf);
-    delete schema.items.allOf;
-
-    const combinedSchemas = merge(schema.items, mergedSchemas);
+    const mergedSchemas = mergeAllOf(schema.items) as SchemaObject;
 
     // Handles combo anyOf/oneOf + properties
     if (
-      (combinedSchemas.oneOf || combinedSchemas.anyOf) &&
-      combinedSchemas.properties
+      (mergedSchemas.oneOf || mergedSchemas.anyOf) &&
+      mergedSchemas.properties
     ) {
       return (
         <>
           <OpeningArrayBracket />
-          <AnyOneOf schema={combinedSchemas} schemaType={schemaType} />
-          <Properties schema={combinedSchemas} schemaType={schemaType} />
+          <AnyOneOf schema={mergedSchemas} schemaType={schemaType} />
+          <Properties schema={mergedSchemas} schemaType={schemaType} />
           <ClosingArrayBracket />
         </>
       );
     }
 
     // Handles only anyOf/oneOf
-    if (combinedSchemas.oneOf || combinedSchemas.anyOf) {
+    if (mergedSchemas.oneOf || mergedSchemas.anyOf) {
       return (
         <>
           <OpeningArrayBracket />
-          <AnyOneOf schema={combinedSchemas} schemaType={schemaType} />
+          <AnyOneOf schema={mergedSchemas} schemaType={schemaType} />
           <ClosingArrayBracket />
         </>
       );
     }
 
     // Handles properties
-    if (combinedSchemas.properties) {
+    if (mergedSchemas.properties) {
       return (
         <>
           <OpeningArrayBracket />
-          <Properties schema={combinedSchemas} schemaType={schemaType} />
+          <Properties schema={mergedSchemas} schemaType={schemaType} />
           <ClosingArrayBracket />
         </>
       );
@@ -632,55 +619,84 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
   }
 
   if (schema.allOf) {
-    const { mergedSchemas }: { mergedSchemas: SchemaObject } = mergeAllOf(
-      schema.allOf
-    );
-    delete schema.allOf;
-
-    const combinedSchemas = merge(schema, mergedSchemas);
+    // handle circular properties
+    if (
+      schema.allOf &&
+      schema.allOf.length &&
+      schema.allOf.length === 1 &&
+      typeof schema.allOf[0] === "string"
+    ) {
+      return (
+        <SchemaItem
+          collapsible={false}
+          name={name}
+          required={
+            Array.isArray(required) ? required.includes(name) : required
+          }
+          schemaName={schema.allOf[0]}
+          qualifierMessage={undefined}
+          schema={schema.allOf[0]}
+          discriminator={false}
+          children={null}
+        />
+      );
+    }
+    const mergedSchemas = mergeAllOf(schema) as SchemaObject;
 
     if (
-      (schemaType === "request" && combinedSchemas.readOnly) ||
-      (schemaType === "response" && combinedSchemas.writeOnly)
+      (schemaType === "request" && mergedSchemas.readOnly) ||
+      (schemaType === "response" && mergedSchemas.writeOnly)
     ) {
       return null;
     }
 
-    const combinedSchemaName = getSchemaName(combinedSchemas);
+    const mergedSchemaName = getSchemaName(mergedSchemas);
 
-    if (combinedSchemas.oneOf || combinedSchemas.anyOf) {
+    if (mergedSchemas.oneOf || mergedSchemas.anyOf) {
       return (
         <SchemaNodeDetails
           name={name}
-          schemaName={combinedSchemaName}
-          required={required}
-          nullable={combinedSchemas.nullable}
-          schema={combinedSchemas}
+          schemaName={mergedSchemaName}
+          required={
+            Array.isArray(mergedSchemas.required)
+              ? mergedSchemas.required.includes(name)
+              : mergedSchemas.required
+          }
+          nullable={mergedSchemas.nullable}
+          schema={mergedSchemas}
           schemaType={schemaType}
         />
       );
     }
 
-    if (combinedSchemas.properties !== undefined) {
+    if (mergedSchemas.properties !== undefined) {
       return (
         <SchemaNodeDetails
           name={name}
-          schemaName={combinedSchemaName}
-          required={required}
-          nullable={combinedSchemas.nullable}
-          schema={combinedSchemas}
+          schemaName={mergedSchemaName}
+          required={
+            Array.isArray(mergedSchemas.required)
+              ? mergedSchemas.required.includes(name)
+              : mergedSchemas.required
+          }
+          nullable={mergedSchemas.nullable}
+          schema={mergedSchemas}
           schemaType={schemaType}
         />
       );
     }
 
-    if (combinedSchemas.items?.properties) {
+    if (mergedSchemas.items?.properties) {
       <SchemaNodeDetails
         name={name}
-        schemaName={combinedSchemaName}
-        required={required}
-        nullable={combinedSchemas.nullable}
-        schema={combinedSchemas}
+        schemaName={mergedSchemaName}
+        required={
+          Array.isArray(mergedSchemas.required)
+            ? mergedSchemas.required.includes(name)
+            : mergedSchemas.required
+        }
+        nullable={mergedSchemas.nullable}
+        schema={mergedSchemas}
         schemaType={schemaType}
       />;
     }
@@ -690,9 +706,9 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
         collapsible={false}
         name={name}
         required={Array.isArray(required) ? required.includes(name) : required}
-        schemaName={combinedSchemaName}
-        qualifierMessage={getQualifierMessage(combinedSchemas)}
-        schema={combinedSchemas}
+        schemaName={mergedSchemaName}
+        qualifierMessage={getQualifierMessage(mergedSchemas)}
+        schema={mergedSchemas}
         discriminator={false}
         children={null}
       />
@@ -722,26 +738,28 @@ const SchemaNode: React.FC<SchemaProps> = ({ schema, schemaType }) => {
   }
 
   if (schema.allOf) {
-    const { mergedSchemas }: { mergedSchemas: SchemaObject } = mergeAllOf(
-      schema.allOf
-    );
-    delete schema.allOf;
+    const mergedSchemas = mergeAllOf(schema) as SchemaObject;
 
-    const combinedSchemas = merge(schema, mergedSchemas);
+    if (
+      (schemaType === "request" && mergedSchemas.readOnly) ||
+      (schemaType === "response" && mergedSchemas.writeOnly)
+    ) {
+      return null;
+    }
 
     return (
       <div>
-        {combinedSchemas.oneOf && (
-          <AnyOneOf schema={combinedSchemas} schemaType={schemaType} />
+        {mergedSchemas.oneOf && (
+          <AnyOneOf schema={mergedSchemas} schemaType={schemaType} />
         )}
-        {combinedSchemas.anyOf && (
-          <AnyOneOf schema={combinedSchemas} schemaType={schemaType} />
+        {mergedSchemas.anyOf && (
+          <AnyOneOf schema={mergedSchemas} schemaType={schemaType} />
         )}
-        {combinedSchemas.properties && (
-          <Properties schema={combinedSchemas} schemaType={schemaType} />
+        {mergedSchemas.properties && (
+          <Properties schema={mergedSchemas} schemaType={schemaType} />
         )}
-        {combinedSchemas.items && (
-          <Items schema={combinedSchemas} schemaType={schemaType} />
+        {mergedSchemas.items && (
+          <Items schema={mergedSchemas} schemaType={schemaType} />
         )}
       </div>
     );

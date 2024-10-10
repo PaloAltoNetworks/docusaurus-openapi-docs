@@ -39,6 +39,7 @@
     "@docusaurus/theme-common": "^3.5.0",
     "@hookform/error-message": "^2.0.1",
     "@reduxjs/toolkit": "^1.7.1",
+    "allof-merge": "^0.6.6",
     "clsx": "^1.1.1",
     "copy-text-to-clipboard": "^3.1.0",
     "crypto-js": "^4.1.1",

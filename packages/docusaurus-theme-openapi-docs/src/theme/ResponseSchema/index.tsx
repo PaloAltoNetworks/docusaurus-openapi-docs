@@ -104,7 +104,7 @@ const ResponseSchemaComponent: React.FC<Props> = ({
                         )}
                       </div>
                       <ul style={{ marginLeft: "1rem" }}>
-                        <SchemaNode schema={firstBody} schemaType="request" />
+                        <SchemaNode schema={firstBody} schemaType="response" />
                       </ul>
                     </Details>
                   </TabItem>

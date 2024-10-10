@@ -5,6 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { merge } from "allof-merge";
 import clsx from "clsx";
 import isEmpty from "lodash/isEmpty";
 
@@ -19,41 +21,18 @@ import { getQualifierMessage, getSchemaName } from "./schema";
 import { create, guard } from "./utils";
 import { SchemaObject } from "../openapi/types";
 
-const jsonSchemaMergeAllOf = require("json-schema-merge-allof");
-
 let SCHEMA_TYPE: "request" | "response";
 
 /**
  * Returns a merged representation of allOf array of schemas.
  */
-export function mergeAllOf(allOf: SchemaObject[]) {
-  const mergedSchemas = jsonSchemaMergeAllOf(allOf, {
-    resolvers: {
-      readOnly: function () {
-        return true;
-      },
-      writeOnly: function () {
-        return true;
-      },
-      example: function () {
-        return true;
-      },
-      "x-examples": function () {
-        return true;
-      },
-    },
-    ignoreAdditionalProperties: true,
-  });
+export function mergeAllOf(allOf: SchemaObject) {
+  const onMergeError = (msg: string) => {
+    console.warn(msg);
+  };
 
-  const mergedRequired = allOf.reduce((acc, cur) => {
-    if (Array.isArray(cur.required)) {
-      const next = [...acc, ...cur.required];
-      return next;
-    }
-    return acc;
-  }, [] as any);
-
-  return { mergedSchemas, mergedRequired };
+  const mergedSchemas = merge(allOf, { onMergeError });
+  return mergedSchemas;
 }
 
 /**
@@ -271,10 +250,7 @@ function createItems(schema: SchemaObject) {
 
   if (schema.items?.allOf !== undefined) {
     // TODO: figure out if and how we should pass merged required array
-    const {
-      mergedSchemas,
-    }: { mergedSchemas: SchemaObject; mergedRequired: string[] | boolean } =
-      mergeAllOf(schema.items?.allOf);
+    const mergedSchemas = mergeAllOf(schema.items) as SchemaObject;
 
     // Handles combo anyOf/oneOf + properties
     if (
@@ -684,60 +660,52 @@ function createEdges({
   }
 
   if (schema.allOf !== undefined) {
-    const { mergedSchemas }: { mergedSchemas: SchemaObject } = mergeAllOf(
-      schema.allOf
-    );
-    delete schema.allOf;
-    const combinedSchemas = { ...schema, ...mergedSchemas };
+    const mergedSchemas = mergeAllOf(schema) as SchemaObject;
 
     if (SCHEMA_TYPE === "request") {
-      if (combinedSchemas.readOnly && combinedSchemas.readOnly === true) {
+      if (mergedSchemas.readOnly && mergedSchemas.readOnly === true) {
         return undefined;
       }
     }
 
     if (SCHEMA_TYPE === "response") {
-      if (combinedSchemas.writeOnly && combinedSchemas.writeOnly === true) {
+      if (mergedSchemas.writeOnly && mergedSchemas.writeOnly === true) {
         return undefined;
       }
     }
 
-    const mergedSchemaName = getSchemaName(combinedSchemas);
-
-    if (name === "eventName") {
-      console.log(mergedSchemaName, combinedSchemas);
-    }
+    const mergedSchemaName = getSchemaName(mergedSchemas);
 
     if (
-      combinedSchemas.oneOf !== undefined ||
-      combinedSchemas.anyOf !== undefined
+      mergedSchemas.oneOf !== undefined ||
+      mergedSchemas.anyOf !== undefined
     ) {
       return createDetailsNode(
         name,
         mergedSchemaName,
-        combinedSchemas,
+        mergedSchemas,
         required,
-        combinedSchemas.nullable
+        mergedSchemas.nullable
       );
     }
 
-    if (combinedSchemas.properties !== undefined) {
+    if (mergedSchemas.properties !== undefined) {
       return createDetailsNode(
         name,
         mergedSchemaName,
-        combinedSchemas,
+        mergedSchemas,
         required,
-        combinedSchemas.nullable
+        mergedSchemas.nullable
       );
     }
 
-    if (combinedSchemas.additionalProperties !== undefined) {
+    if (mergedSchemas.additionalProperties !== undefined) {
       return createDetailsNode(
         name,
         mergedSchemaName,
-        combinedSchemas,
+        mergedSchemas,
         required,
-        combinedSchemas.nullable
+        mergedSchemas.nullable
       );
     }
 
@@ -746,9 +714,9 @@ function createEdges({
       return createDetailsNode(
         name,
         mergedSchemaName,
-        combinedSchemas,
+        mergedSchemas,
         required,
-        combinedSchemas.nullable
+        mergedSchemas.nullable
       );
     }
 
@@ -757,8 +725,8 @@ function createEdges({
       name,
       required: Array.isArray(required) ? required.includes(name) : required,
       schemaName: mergedSchemaName,
-      qualifierMessage: getQualifierMessage(combinedSchemas),
-      schema: combinedSchemas,
+      qualifierMessage: getQualifierMessage(mergedSchemas),
+      schema: mergedSchemas,
     });
   }
 
@@ -815,7 +783,7 @@ export function createNodes(
   }
 
   if (schema.allOf !== undefined) {
-    const { mergedSchemas } = mergeAllOf(schema.allOf);
+    const mergedSchemas = mergeAllOf(schema) as SchemaObject;
 
     if (
       mergedSchemas.oneOf !== undefined ||
