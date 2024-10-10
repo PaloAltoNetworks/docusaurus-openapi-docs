@@ -5,8 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense } from "react";
 
+import BrowserOnly from "@docusaurus/BrowserOnly";
 import Details from "@theme/Details";
 import MimeTabs from "@theme/MimeTabs"; // Assume these components exist
 import {
@@ -16,6 +17,7 @@ import {
 } from "@theme/ResponseExamples";
 import SchemaNode from "@theme/Schema";
 import SchemaTabs from "@theme/SchemaTabs";
+import SkeletonLoader from "@theme/SkeletonLoader";
 import TabItem from "@theme/TabItem";
 import { createDescription } from "docusaurus-plugin-openapi-docs/lib/markdown/createDescription";
 import { MediaTypeObject } from "docusaurus-plugin-openapi-docs/lib/openapi/types";
@@ -37,27 +39,6 @@ const ResponseSchemaComponent: React.FC<Props> = ({
   body,
   style,
 }): any => {
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setIsClient(true);
-    }
-  }, []);
-
-  if (!isClient) {
-    return (
-      <div className="openapi-explorer__loading-container">
-        <div className="openapi-response__lds-ring">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-      </div>
-    );
-  }
-
   if (
     body === undefined ||
     body.content === undefined ||
@@ -151,13 +132,19 @@ const ResponseSchemaComponent: React.FC<Props> = ({
 };
 
 const ResponseSchema: React.FC<Props> = (props) => {
-  const LazyComponent = React.lazy(() =>
-    Promise.resolve({ default: ResponseSchemaComponent })
-  );
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <LazyComponent {...props} />
-    </Suspense>
+    <BrowserOnly fallback={<SkeletonLoader size="md" />}>
+      {() => {
+        const LazyComponent = React.lazy(() =>
+          Promise.resolve({ default: ResponseSchemaComponent })
+        );
+        return (
+          <Suspense fallback={null}>
+            <LazyComponent {...props} />
+          </Suspense>
+        );
+      }}
+    </BrowserOnly>
   );
 };
 

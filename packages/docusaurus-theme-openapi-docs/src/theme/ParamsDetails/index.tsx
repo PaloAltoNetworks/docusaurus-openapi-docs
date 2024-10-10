@@ -5,37 +5,18 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense } from "react";
 
+import BrowserOnly from "@docusaurus/BrowserOnly";
 import Details from "@theme/Details";
 import ParamsItem from "@theme/ParamsItem";
+import SkeletonLoader from "@theme/SkeletonLoader";
 
 interface Props {
   parameters: any[];
 }
 
 const ParamsDetailsComponent: React.FC<Props> = ({ parameters }) => {
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setIsClient(true);
-    }
-  }, []);
-
-  if (!isClient) {
-    return (
-      <div className="openapi-explorer__loading-container">
-        <div className="openapi-response__lds-ring">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-      </div>
-    );
-  }
-
   const types = ["path", "query", "header", "cookie"];
 
   return (
@@ -88,13 +69,19 @@ const ParamsDetailsComponent: React.FC<Props> = ({ parameters }) => {
 };
 
 const ParamsDetails: React.FC<Props> = (props) => {
-  const LazyComponent = React.lazy(() =>
-    Promise.resolve({ default: ParamsDetailsComponent })
-  );
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <LazyComponent {...props} />
-    </Suspense>
+    <BrowserOnly fallback={<SkeletonLoader size="sm" />}>
+      {() => {
+        const LazyComponent = React.lazy(() =>
+          Promise.resolve({ default: ParamsDetailsComponent })
+        );
+        return (
+          <Suspense fallback={null}>
+            <LazyComponent {...props} />
+          </Suspense>
+        );
+      }}
+    </BrowserOnly>
   );
 };
 

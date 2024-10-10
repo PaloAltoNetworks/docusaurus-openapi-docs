@@ -7,9 +7,11 @@
 
 import React, { Suspense, useEffect, useState } from "react";
 
+import BrowserOnly from "@docusaurus/BrowserOnly";
 import Details from "@theme/Details";
 import MimeTabs from "@theme/MimeTabs"; // Assume these components exist
 import SchemaNode from "@theme/Schema";
+import SkeletonLoader from "@theme/SkeletonLoader";
 import TabItem from "@theme/TabItem";
 import { createDescription } from "docusaurus-plugin-openapi-docs/lib/markdown/createDescription";
 import { MediaTypeObject } from "docusaurus-plugin-openapi-docs/lib/openapi/types";
@@ -27,27 +29,6 @@ interface Props {
 }
 
 const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setIsClient(true);
-    }
-  }, []);
-
-  if (!isClient) {
-    return (
-      <div className="openapi-explorer__loading-container">
-        <div className="openapi-response__lds-ring">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-      </div>
-    );
-  }
-
   if (
     body === undefined ||
     body.content === undefined ||
@@ -164,13 +145,19 @@ const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
 };
 
 const RequestSchema: React.FC<Props> = (props) => {
-  const LazyComponent = React.lazy(() =>
-    Promise.resolve({ default: RequestSchemaComponent })
-  );
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <LazyComponent {...props} />
-    </Suspense>
+    <BrowserOnly fallback={<SkeletonLoader size="sm" />}>
+      {() => {
+        const LazyComponent = React.lazy(() =>
+          Promise.resolve({ default: RequestSchemaComponent })
+        );
+        return (
+          <Suspense fallback={null}>
+            <LazyComponent {...props} />
+          </Suspense>
+        );
+      }}
+    </BrowserOnly>
   );
 };
 
