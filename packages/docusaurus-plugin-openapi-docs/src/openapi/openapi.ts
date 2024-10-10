@@ -20,7 +20,6 @@ import sdk from "postman-collection";
 
 import { sampleRequestFromSchema } from "./createRequestExample";
 import { OpenApiObject, TagGroupObject, TagObject } from "./types";
-import { loadAndResolveSpec } from "./utils/loadAndResolveSpec";
 import { isURL } from "../index";
 import {
   ApiMetadata,
@@ -31,6 +30,7 @@ import {
   SidebarOptions,
   TagPageMetadata,
 } from "../types";
+import { loadAndResolveSpec } from "./utils/loadAndResolveSpec";
 
 /**
  * Convenience function for converting raw JSON to a Postman Collection object.
@@ -86,6 +86,7 @@ function createItems(
 ): ApiMetadata[] {
   // TODO: Find a better way to handle this
   let items: PartialPage<ApiMetadata>[] = [];
+
   const infoIdSpaces = openapiData.info.title.replace(" ", "-").toLowerCase();
   const infoId = kebabCase(infoIdSpaces);
 
@@ -227,6 +228,7 @@ function createItems(
         type: "api",
         id: baseId,
         infoId: infoId ?? "",
+        infoPath: infoId ?? "",
         unversionedId: baseId,
         title: title ? title.replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'") : "",
         description: operationObject.description
