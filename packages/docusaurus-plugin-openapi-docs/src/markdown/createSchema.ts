@@ -683,9 +683,9 @@ function createEdges({
     );
   }
 
-  if (schema.allOf !== undefined) {
+  if (schema.items?.allOf !== undefined) {
     const { mergedSchemas }: { mergedSchemas: SchemaObject } = mergeAllOf(
-      schema.allOf
+      schema.items?.allOf
     );
     delete schema.allOf;
     const combinedSchemas = { ...schema, ...mergedSchemas };
