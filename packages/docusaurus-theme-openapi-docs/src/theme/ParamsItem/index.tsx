@@ -32,6 +32,7 @@ export interface ExampleObject {
 }
 
 export interface Props {
+  className: string;
   param: {
     description: string;
     example: any;
@@ -106,7 +107,7 @@ function ParamsItem({ param, ...rest }: Props) {
   ));
 
   const renderDescription = guard(description, (description) => (
-    <div>
+    <>
       <ReactMarkdown
         children={createDescription(description)}
         components={{
@@ -123,18 +124,20 @@ function ParamsItem({ param, ...rest }: Props) {
         }}
         rehypePlugins={[rehypeRaw]}
       />
-    </div>
+    </>
   ));
 
   const renderEnumDescriptions = guard(
     getEnumDescriptionMarkdown(enumDescriptions),
     (value) => {
       return (
-        <ReactMarkdown
-          rehypePlugins={[rehypeRaw]}
-          remarkPlugins={[remarkGfm]}
-          children={value}
-        />
+        <div style={{ marginTop: ".5rem" }}>
+          <ReactMarkdown
+            rehypePlugins={[rehypeRaw]}
+            remarkPlugins={[remarkGfm]}
+            children={value}
+          />
+        </div>
       );
     }
   );

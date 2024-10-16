@@ -20,6 +20,7 @@ import { createPersistanceMiddleware } from "@theme/ApiExplorer/persistanceMiddl
 import DocItemLayout from "@theme/ApiItem/Layout";
 import type { Props } from "@theme/DocItem";
 import DocItemMetadata from "@theme/DocItem/Metadata";
+import SkeletonLoader from "@theme/SkeletonLoader";
 import clsx from "clsx";
 import { ServerObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
@@ -152,7 +153,7 @@ export default function ApiItem(props: Props): JSX.Element {
                   <MDXComponent />
                 </div>
                 <div className="col col--5 openapi-right-panel__container">
-                  <BrowserOnly fallback={<div>Loading...</div>}>
+                  <BrowserOnly fallback={<SkeletonLoader size="lg" />}>
                     {() => {
                       return <ApiExplorer item={api} infoPath={infoPath} />;
                     }}

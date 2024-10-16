@@ -1,4 +1,4 @@
-openapi: 3.0.1
+openapi: 3.1.0
 info:
   title: AllOf Variations API
   description: Demonstrates various allOf schema combinations.
@@ -91,72 +91,6 @@ paths:
                         type: number
                     required: [anotherProp]
 
-  # /allof-conflicting-properties:
-  #   get:
-  #     tags:
-  #       - allOf
-  #     summary: allOf with Conflicting Properties
-  #     description: |
-  #       Schema:
-  #       ```yaml
-  #       allOf:
-  #         - type: object
-  #           properties:
-  #             conflictingProp:
-  #               type: string
-  #         - type: object
-  #           properties:
-  #             conflictingProp:
-  #               type: number
-  #       ```
-  #     responses:
-  #       '200':
-  #         description: Successful response
-  #         content:
-  #           application/json:
-  #             schema:
-  #               allOf:
-  #                 - type: object
-  #                   properties:
-  #                     conflictingProp:
-  #                       type: string
-  #                 - type: object
-  #                   properties:
-  #                     conflictingProp:
-  #                       type: number
-
-  # /allof-mixed-data-types:
-  #   get:
-  #     tags:
-  #       - allOf
-  #     summary: allOf with Mixed Data Types
-  #     description: |
-  #       Schema:
-  #       ```yaml
-  #       allOf:
-  #         - type: object
-  #           properties:
-  #             mixedTypeProp1:
-  #               type: string
-  #         - type: array
-  #           items:
-  #             type: number
-  #       ```
-  #     responses:
-  #       '200':
-  #         description: Successful response
-  #         content:
-  #           application/json:
-  #             schema:
-  #               allOf:
-  #                 - type: object
-  #                   properties:
-  #                     mixedTypeProp1:
-  #                       type: string
-  #                 - type: array
-  #                   items:
-  #                     type: number
-
   /allof-deep-merging:
     get:
       tags:
@@ -203,44 +137,6 @@ paths:
                           innerProp2:
                             type: number
 
-  # /allof-discriminator:
-  #   get:
-  #     tags:
-  #       - allOf
-  #     summary: allOf with Discriminator
-  #     description: |
-  #       Schema:
-  #       ```yaml
-  #       allOf:
-  #         - type: object
-  #           discriminator:
-  #             propertyName: type
-  #           properties:
-  #             type:
-  #               type: string
-  #         - type: object
-  #           properties:
-  #             specificProp:
-  #               type: string
-  #       ```
-  #     responses:
-  #       "200":
-  #         description: Successful response
-  #         content:
-  #           application/json:
-  #             schema:
-  #               allOf:
-  #                 - type: object
-  #                   discriminator:
-  #                     propertyName: type
-  #                   properties:
-  #                     type:
-  #                       type: string
-  #                 - type: object
-  #                   properties:
-  #                     specificProp:
-  #                       type: string
-
   /allof-same-level-properties:
     get:
       tags:
@@ -280,3 +176,174 @@ paths:
                     type: string
                   parentProp2:
                     type: string
+
+  /allof-array-items:
+    get:
+      tags:
+        - allOf
+      summary: allOf with Array Items
+      description: |
+        A list of books demonstrating allOf with items as children.
+
+        Schema:
+        ```yaml
+        type: array
+        items:
+          $ref: '#/components/schemas/Book'
+        ```
+
+        Schema Components:
+        ```yaml
+        BookBase:
+          type: object
+          required:
+            - id
+            - title
+            - author
+          properties:
+            id:
+              type: integer
+              format: int64
+              description: Unique identifier for the book
+            title:
+              type: string
+              description: The title of the book
+            author:
+              type: string
+              description: The author of the book
+
+        AdditionalBookInfo:
+          type: object
+          properties:
+            publishedDate:
+              type: string
+              format: date
+              description: The date the book was published
+            genre:
+              type: string
+              description: The genre of the book
+            tags:
+              type: array
+              items:
+                type: string
+              description: Tags associated with the book
+
+        Book:
+          allOf:
+            - $ref: '#/components/schemas/BookBase'
+            - $ref: '#/components/schemas/AdditionalBookInfo'
+        ```
+      responses:
+        "200":
+          description: A list of books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Book"
+
+  /allof-nested:
+    get:
+      tags:
+        - allOf
+      summary: allOf with Nested allOf
+      description: |
+        An example demonstrating nested allOf within allOf.
+
+        Schema:
+        ```yaml
+        allOf:
+          - type: object
+            properties:
+              outerProp:
+                type: object
+                allOf:
+                  - type: object
+                    properties:
+                      innerProp1:
+                        type: string
+                  - type: object
+                    properties:
+                      innerProp2:
+                        type: number
+          - type: object
+            properties:
+              otherOuterProp:
+                type: string
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      outerProp:
+                        type: object
+                        allOf:
+                          - type: object
+                            properties:
+                              innerProp1:
+                                type: string
+                          - type: object
+                            properties:
+                              innerProp2:
+                                type: number
+                  - type: object
+                    properties:
+                      otherOuterProp:
+                        type: string
+
+components:
+  schemas:
+    # Your existing schemas are integrated here.
+    ExistingSchema1:
+      type: object
+      properties: ...
+
+    ExistingSchema2:
+      type: object
+      properties: ...
+
+    # New schemas for Books demonstration
+    BookBase:
+      type: object
+      required:
+        - id
+        - title
+        - author
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique identifier for the book
+        title:
+          type: string
+          description: The title of the book
+        author:
+          type: string
+          description: The author of the book
+
+    AdditionalBookInfo:
+      type: object
+      properties:
+        publishedDate:
+          type: string
+          format: date
+          description: The date the book was published
+        genre:
+          type: string
+          description: The genre of the book
+        tags:
+          type: array
+          items:
+            type: string
+          description: Tags associated with the book
+
+    Book:
+      allOf:
+        - $ref: "#/components/schemas/BookBase"
+        - $ref: "#/components/schemas/AdditionalBookInfo"

@@ -365,6 +365,24 @@ Array [
   schema={{ type: \\"string\\" }}
 ></SchemaItem>;
 ",
+  "<SchemaItem
+  collapsible={false}
+  name={\\"parentProp1\\"}
+  required={false}
+  schemaName={\\"string\\"}
+  qualifierMessage={undefined}
+  schema={{ type: \\"string\\" }}
+></SchemaItem>;
+",
+  "<SchemaItem
+  collapsible={false}
+  name={\\"parentProp2\\"}
+  required={false}
+  schemaName={\\"string\\"}
+  qualifierMessage={undefined}
+  schema={{ type: \\"string\\" }}
+></SchemaItem>;
+",
 ]
 `;
 
@@ -712,6 +730,15 @@ Array [
   schema={{ type: \\"string\\" }}
 ></SchemaItem>;
 ",
+  "<SchemaItem
+  collapsible={false}
+  name={\\"type\\"}
+  required={false}
+  schemaName={\\"string\\"}
+  qualifierMessage={undefined}
+  schema={{ type: \\"string\\" }}
+></SchemaItem>;
+",
 ]
 `;
 
@@ -797,6 +824,34 @@ Array [
   qualifierMessage={undefined}
   schema={{ type: \\"string\\" }}
 ></SchemaItem>;
+",
+  "<div className={\\"openapi-discriminator__item openapi-schema__list-item\\"}>
+  <div>
+    <span className={\\"openapi-schema__container\\"}>
+      <strong
+        className={\\"openapi-discriminator__name openapi-schema__property\\"}
+      >
+        type
+      </strong>
+      <span className={\\"openapi-schema__name\\"}>string</span>
+    </span>
+    <div style={{ paddingLeft: \\"1rem\\" }}>
+      **Possible values:** [\`typeA\`, \`typeB\`]
+    </div>
+    <DiscriminatorTabs className={\\"openapi-tabs__discriminator\\"}>
+      <TabItem label={\\"typeA\\"} value={\\"0-item-discriminator\\"}>
+        <div style={{ marginTop: \\".5rem\\", marginBottom: \\".5rem\\" }}>
+          #/definitions/TypeA
+        </div>
+      </TabItem>
+      <TabItem label={\\"typeB\\"} value={\\"1-item-discriminator\\"}>
+        <div style={{ marginTop: \\".5rem\\", marginBottom: \\".5rem\\" }}>
+          #/definitions/TypeB
+        </div>
+      </TabItem>
+    </DiscriminatorTabs>
+  </div>
+</div>;
 ",
 ]
 `;
