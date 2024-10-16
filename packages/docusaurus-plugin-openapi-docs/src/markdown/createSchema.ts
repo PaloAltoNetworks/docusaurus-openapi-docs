@@ -31,7 +31,7 @@ export function mergeAllOf(allOf: SchemaObject) {
     console.warn(msg);
   };
 
-  const mergedSchemas = merge(allOf, { onMergeError });
+  const mergedSchemas = merge(allOf, { onMergeError }) as SchemaObject;
   return mergedSchemas;
 }
 
@@ -660,11 +660,7 @@ function createEdges({
   }
 
   if (schema.items?.allOf !== undefined) {
-    const { mergedSchemas }: { mergedSchemas: SchemaObject } = mergeAllOf(
-      schema.items?.allOf
-    );
-    delete schema.allOf;
-    const combinedSchemas = { ...schema, ...mergedSchemas };
+    const mergedSchemas = mergeAllOf(schema.items);
 
     if (SCHEMA_TYPE === "request") {
       if (mergedSchemas.readOnly && mergedSchemas.readOnly === true) {
