@@ -5,6 +5,15 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import "@testing-library/cypress/add-commands";
-// eslint-disable-next-line import/no-extraneous-dependencies
-import "cypress-plugin-snapshots/commands";
+declare namespace Cypress {
+  interface Chainable<Subject = any> {
+    /**
+     * Custom command to match snapshot
+     * @example cy.document().toMatchSnapshot()
+     */
+    toMatchSnapshot(
+      name: string,
+      options?: SnapshotOptions
+    ): Chainable<Subject>;
+  }
+}
