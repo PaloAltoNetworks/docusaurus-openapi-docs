@@ -659,8 +659,12 @@ function createEdges({
     );
   }
 
-  if (schema.allOf !== undefined) {
-    const mergedSchemas = mergeAllOf(schema) as SchemaObject;
+  if (schema.items?.allOf !== undefined) {
+    const { mergedSchemas }: { mergedSchemas: SchemaObject } = mergeAllOf(
+      schema.items?.allOf
+    );
+    delete schema.allOf;
+    const combinedSchemas = { ...schema, ...mergedSchemas };
 
     if (SCHEMA_TYPE === "request") {
       if (mergedSchemas.readOnly && mergedSchemas.readOnly === true) {
