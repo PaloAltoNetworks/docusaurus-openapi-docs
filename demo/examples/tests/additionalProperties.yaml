@@ -1,0 +1,163 @@
+openapi: 3.1.0
+info:
+  title: AdditionalProperties Variations API
+  description: Demonstrates various usages of additionalProperties.
+  version: 1.0.0
+tags:
+  - name: additionalProperties
+    description: additionalProperties tests
+
+paths:
+  /with-typed-additional:
+    get:
+      tags:
+        - additionalProperties
+      summary: Object with typed additionalProperties
+      description: |
+        This endpoint returns an object where additional properties are restricted to a specific type.
+
+        Schema:
+        ```yaml
+        type: object
+        properties:
+          fixedProp:
+            type: string
+        additionalProperties:
+          type: string
+        example:
+          fixedProp: "fixedValue"
+          dynamicProp: "dynamicValue"
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fixedProp:
+                    type: string
+                additionalProperties:
+                  type: string
+                example:
+                  fixedProp: "fixedValue"
+                  dynamicProp: "dynamicValue"
+
+  /with-schema-additional:
+    get:
+      tags:
+        - additionalProperties
+      summary: Object with schema-defined additionalProperties
+      description: |
+        This endpoint returns an object where additional properties follow a specific schema.
+
+        Schema:
+        ```yaml
+        type: object
+        properties:
+          fixedProp:
+            type: string
+        additionalProperties:
+          $ref: "#/components/schemas/NestedAdditionalProperty"
+        example:
+          fixedProp: "fixedValue"
+          dynamicProp:
+            type: "exampleType"
+            value: 42
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fixedProp:
+                    type: string
+                additionalProperties:
+                  $ref: "#/components/schemas/NestedAdditionalProperty"
+                example:
+                  fixedProp: "fixedValue"
+                  dynamicProp:
+                    type: "exampleType"
+                    value: 42
+
+  /with-bool-additional:
+    get:
+      tags:
+        - additionalProperties
+      summary: Object with boolean additionalProperties
+      description: |
+        This endpoint returns an object where additional properties are either allowed or not.
+
+        Schema:
+        ```yaml
+        type: object
+        properties:
+          fixedProp:
+            type: string
+        additionalProperties: true
+        example:
+          fixedProp: "fixedValue"
+          dynamicProp1: 123
+          dynamicProp2: "dynamicValue"
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fixedProp:
+                    type: string
+                additionalProperties: true
+                example:
+                  fixedProp: "fixedValue"
+                  dynamicProp1: 123
+                  dynamicProp2: "dynamicValue"
+
+  /without-additional-properties:
+    get:
+      tags:
+        - additionalProperties
+      summary: Object without any additionalProperties
+      description: |
+        This endpoint returns an object where no additional properties are allowed.
+
+        Schema:
+        ```yaml
+        type: object
+        properties:
+          fixedProp:
+            type: string
+        additionalProperties: false
+        example:
+          fixedProp: "fixedValue"
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fixedProp:
+                    type: string
+                additionalProperties: false
+                example:
+                  fixedProp: "fixedValue"
+
+components:
+  schemas:
+    NestedAdditionalProperty:
+      type: object
+      properties:
+        type:
+          type: string
+        value:
+          type: integer

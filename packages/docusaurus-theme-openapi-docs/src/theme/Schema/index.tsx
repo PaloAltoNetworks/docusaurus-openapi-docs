@@ -334,7 +334,8 @@ const AdditionalProperties: React.FC<SchemaProps> = ({
     additionalProperties.type === "string" ||
     additionalProperties.type === "boolean" ||
     additionalProperties.type === "integer" ||
-    additionalProperties.type === "number"
+    additionalProperties.type === "number" ||
+    additionalProperties.type === "object"
   ) {
     const schemaName = getSchemaName(additionalProperties);
     return (
