@@ -279,6 +279,7 @@ description: "{{{frontMatter.description}}}"
 sidebar_label: "{{{title}}}"
 hide_title: true
 schema: true
+sample: {{{frontMatter.sample}}}
 custom_edit_url: null
 ---
 
