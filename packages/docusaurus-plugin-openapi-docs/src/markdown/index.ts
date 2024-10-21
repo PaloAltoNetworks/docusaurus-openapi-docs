@@ -19,7 +19,6 @@ import { createMethodEndpoint } from "./createMethodEndpoint";
 import { createParamsDetails } from "./createParamsDetails";
 import { createRequestBodyDetails } from "./createRequestBodyDetails";
 import { createRequestHeader } from "./createRequestHeader";
-import { createNodes } from "./createSchema";
 import { createStatusCodes } from "./createStatusCodes";
 import { createTermsOfService } from "./createTermsOfService";
 import { createVendorExtensions } from "./createVendorExtensions";
