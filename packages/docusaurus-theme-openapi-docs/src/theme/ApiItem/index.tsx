@@ -18,6 +18,7 @@ import useIsBrowser from "@docusaurus/useIsBrowser";
 import { createAuth } from "@theme/ApiExplorer/Authorization/slice";
 import { createPersistanceMiddleware } from "@theme/ApiExplorer/persistanceMiddleware";
 import DocItemLayout from "@theme/ApiItem/Layout";
+import CodeBlock from "@theme/CodeBlock";
 import type { Props } from "@theme/DocItem";
 import DocItemMetadata from "@theme/DocItem/Metadata";
 import SkeletonLoader from "@theme/SkeletonLoader";
@@ -47,6 +48,10 @@ interface SchemaFrontMatter extends DocFrontMatter {
   readonly schema?: boolean;
 }
 
+interface SampleFrontMatter extends DocFrontMatter {
+  readonly sample?: any;
+}
+
 // @ts-ignore
 export default function ApiItem(props: Props): JSX.Element {
   const docHtmlClassName = `docs-doc-id-${props.content.metadata.id}`;
@@ -55,6 +60,7 @@ export default function ApiItem(props: Props): JSX.Element {
   const { info_path: infoPath } = frontMatter as DocFrontMatter;
   let { api } = frontMatter as ApiFrontMatter;
   const { schema } = frontMatter as SchemaFrontMatter;
+  const { sample } = frontMatter as SampleFrontMatter;
   // decompress and parse
   if (api) {
     try {
@@ -172,8 +178,19 @@ export default function ApiItem(props: Props): JSX.Element {
           <DocItemMetadata />
           <DocItemLayout>
             <div className={clsx("row", "theme-api-markdown")}>
-              <div className="col col--12">
+              <div className="col col--7 openapi-left-panel__container">
                 <MDXComponent />
+              </div>
+              <div className="col col--5 openapi-right-panel__container">
+                <BrowserOnly fallback={<SkeletonLoader size="lg" />}>
+                  {() => {
+                    return (
+                      <CodeBlock language="json" title={`${frontMatter.title}`}>
+                        {JSON.stringify(sample, null, 2)}
+                      </CodeBlock>
+                    );
+                  }}
+                </BrowserOnly>
               </div>
             </div>
           </DocItemLayout>
