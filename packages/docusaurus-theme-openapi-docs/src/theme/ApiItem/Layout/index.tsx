@@ -52,6 +52,7 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
   const { metadata } = useDoc();
   const { frontMatter } = useDoc();
   const api = frontMatter.api;
+  const schema = frontMatter.schema;
   return (
     <div className="row">
       <div className={clsx("col", !docTOC.hidden && styles.docItemCol)}>
@@ -64,13 +65,15 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
             {docTOC.mobile}
             <DocItemContent>{children}</DocItemContent>
             <div className="row">
-              <div className={clsx("col", api ? "col--7" : "col--12")}>
+              <div
+                className={clsx("col", api || schema ? "col--7" : "col--12")}
+              >
                 <DocItemFooter />
               </div>
             </div>
           </article>
           <div className="row">
-            <div className={clsx("col", api ? "col--7" : "col--12")}>
+            <div className={clsx("col", api || schema ? "col--7" : "col--12")}>
               <DocItemPaginator />
             </div>
           </div>
