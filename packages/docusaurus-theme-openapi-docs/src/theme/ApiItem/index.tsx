@@ -15,6 +15,7 @@ import { DocProvider } from "@docusaurus/plugin-content-docs/client";
 import { HtmlClassNameProvider } from "@docusaurus/theme-common";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import useIsBrowser from "@docusaurus/useIsBrowser";
+import ApiCodeBlock from "@theme/ApiExplorer/ApiCodeBlock";
 import { createAuth } from "@theme/ApiExplorer/Authorization/slice";
 import { createPersistanceMiddleware } from "@theme/ApiExplorer/persistanceMiddleware";
 import DocItemLayout from "@theme/ApiItem/Layout";
@@ -182,15 +183,10 @@ export default function ApiItem(props: Props): JSX.Element {
                 <MDXComponent />
               </div>
               <div className="col col--5 openapi-right-panel__container">
-                <BrowserOnly fallback={<SkeletonLoader size="lg" />}>
-                  {() => {
-                    return (
-                      <CodeBlock language="json" title={`${frontMatter.title}`}>
-                        {JSON.stringify(sample, null, 2)}
-                      </CodeBlock>
-                    );
-                  }}
-                </BrowserOnly>
+                {/* @ts-ignore */}
+                <ApiCodeBlock language="json" title={`${frontMatter.title}`}>
+                  {JSON.stringify(sample, null, 2)}
+                </ApiCodeBlock>
               </div>
             </div>
           </DocItemLayout>
