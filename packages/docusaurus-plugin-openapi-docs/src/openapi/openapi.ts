@@ -30,6 +30,7 @@ import {
   SidebarOptions,
   TagPageMetadata,
 } from "../types";
+import { sampleResponseFromSchema } from "./createResponseExample";
 import { loadAndResolveSpec } from "./utils/loadAndResolveSpec";
 
 /**
@@ -451,6 +452,7 @@ function createItems(
                   .replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
                   .replace(/\s+$/, "")
               : "",
+            sample: JSON.stringify(sampleResponseFromSchema(schemaObject)),
           },
           schema: schemaObject,
         };

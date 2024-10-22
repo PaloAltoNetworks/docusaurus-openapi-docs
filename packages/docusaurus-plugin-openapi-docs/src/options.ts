@@ -24,6 +24,7 @@ const markdownGenerators = Joi.object({
   createApiPageMD: Joi.function(),
   createInfoPageMD: Joi.function(),
   createTagPageMD: Joi.function(),
+  createSchemaPageMD: Joi.function(),
 });
 
 export const OptionsSchema = Joi.object({
