@@ -59,8 +59,8 @@
     "react-redux": "^7.2.0",
     "rehype-raw": "^6.1.1",
     "remark-gfm": "3.0.1",
-    "sass": "^1.58.1",
-    "sass-loader": "^13.3.2",
+    "sass": "^1.80.4",
+    "sass-loader": "^16.0.2",
     "webpack": "^5.61.0",
     "xml-formatter": "^2.6.1"
   },
