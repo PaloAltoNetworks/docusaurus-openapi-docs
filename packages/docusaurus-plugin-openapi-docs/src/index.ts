@@ -278,7 +278,11 @@ title: "{{{title}}}"
 description: "{{{frontMatter.description}}}"
 sidebar_label: "{{{title}}}"
 hide_title: true
+{{#schema}}
+hide_table_of_contents: true
+{{/schema}}
 schema: true
+sample: {{{frontMatter.sample}}}
 custom_edit_url: null
 ---
 

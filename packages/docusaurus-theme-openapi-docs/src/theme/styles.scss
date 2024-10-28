@@ -93,16 +93,16 @@
   height: 100%;
 }
 
-@media (min-width: 997px) {
-  .docItemCol {
-    max-width: 75% !important;
-  }
+// @media (min-width: 997px) {
+//   .docItemCol {
+//     max-width: 75% !important;
+//   }
 
-  /* Prevent hydration FOUC, as the mobile TOC needs to be server-rendered */
-  .tocMobile {
-    display: none;
-  }
-}
+//   /* Prevent hydration FOUC, as the mobile TOC needs to be server-rendered */
+//   .tocMobile {
+//     display: none;
+//   }
+// }
 
 /* Begin OpenAPI theme styles */
 // [data-theme="dark"] {
@@ -159,6 +159,12 @@
 
 .openapi-left-panel__container {
   border-right: thin solid var(--ifm-toc-border-color);
+}
+
+@media (max-width: 997px) {
+  .schema {
+    margin-bottom: 1rem;
+  }
 }
 
 .openapi-tabs__heading {
