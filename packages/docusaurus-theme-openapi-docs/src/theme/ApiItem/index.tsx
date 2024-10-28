@@ -178,7 +178,7 @@ export default function ApiItem(props: Props): JSX.Element {
           <DocItemMetadata />
           <DocItemLayout>
             <div className={clsx("row", "theme-api-markdown")}>
-              <div className="col col--7 openapi-left-panel__container">
+              <div className="col col--7 openapi-left-panel__container schema">
                 <MDXComponent />
               </div>
               <div className="col col--5 openapi-right-panel__container">

@@ -161,6 +161,12 @@
   border-right: thin solid var(--ifm-toc-border-color);
 }
 
+@media (max-width: 997px) {
+  .schema {
+    margin-bottom: 1rem;
+  }
+}
+
 .openapi-tabs__heading {
   margin-bottom: 1rem;
 }
