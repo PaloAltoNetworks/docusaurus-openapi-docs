@@ -184,6 +184,20 @@ const AnyOneOf: React.FC<SchemaProps> = ({ schema, schemaType }) => {
 
 const Properties: React.FC<SchemaProps> = ({ schema, schemaType }) => {
   const discriminator = schema.discriminator;
+  if (discriminator && !discriminator.mapping) {
+    const anyOneOf = schema.oneOf ?? schema.anyOf ?? {};
+    const inferredMapping = {} as any;
+    Object.entries(anyOneOf).map(([_, anyOneSchema]: [string, any]) => {
+      // ensure discriminated property only renders once
+      if (
+        schema.properties![discriminator.propertyName] &&
+        anyOneSchema.properties[discriminator.propertyName]
+      )
+        delete anyOneSchema.properties[discriminator.propertyName];
+      return (inferredMapping[anyOneSchema.title] = anyOneSchema);
+    });
+    discriminator["mapping"] = inferredMapping;
+  }
   if (Object.keys(schema.properties as {}).length === 0) {
     return (
       <SchemaItem
@@ -196,6 +210,7 @@ const Properties: React.FC<SchemaProps> = ({ schema, schemaType }) => {
       />
     );
   }
+
   return (
     <>
       {Object.entries(schema.properties as {}).map(
@@ -230,55 +245,143 @@ const PropertyDiscriminator: React.FC<SchemaEdgeProps> = ({
     return null;
   }
 
-  if (discriminator.mapping === undefined) {
-    return (
-      <SchemaEdge
-        name={name}
-        schema={schema}
-        required={required}
-        schemaName={schemaName}
-        schemaType={schemaType}
-      />
-    );
-  }
-
   return (
-    <div className="openapi-discriminator__item openapi-schema__list-item">
-      <div>
-        <span className="openapi-schema__container">
-          <strong className="openapi-discriminator__name openapi-schema__property">
-            {name}
-          </strong>
-          {schemaName && (
-            <span className="openapi-schema__name"> {schemaName}</span>
-          )}
-          {required && (
-            <span className="openapi-schema__required">required</span>
-          )}
-        </span>
-        <div style={{ marginLeft: "1rem" }}>
-          {schema.description && <Markdown text={schema.description} />}
-          {getQualifierMessage(discriminator) && (
-            <Markdown text={getQualifierMessage(discriminator)} />
-          )}
+    <>
+      <div className="openapi-discriminator__item openapi-schema__list-item">
+        <div>
+          <span className="openapi-schema__container">
+            <strong className="openapi-discriminator__name openapi-schema__property">
+              {name}
+            </strong>
+            {schemaName && (
+              <span className="openapi-schema__name"> {schemaName}</span>
+            )}
+            {required && <span className="openapi-schema__divider"></span>}
+            {required && (
+              <span className="openapi-schema__required">required</span>
+            )}
+          </span>
+          <div style={{ marginLeft: "1rem" }}>
+            {schema.description && <Markdown text={schema.description} />}
+            {getQualifierMessage(discriminator) && (
+              <Markdown text={getQualifierMessage(discriminator)} />
+            )}
+          </div>
+          <DiscriminatorTabs className="openapi-tabs__discriminator">
+            {Object.keys(discriminator.mapping).map((key, index) => (
+              // @ts-ignore
+              <TabItem
+                key={index}
+                label={key}
+                value={`${index}-item-discriminator`}
+              >
+                <SchemaNode
+                  schema={discriminator.mapping[key]}
+                  schemaType={schemaType}
+                />
+              </TabItem>
+            ))}
+          </DiscriminatorTabs>
         </div>
-        <DiscriminatorTabs className="openapi-tabs__discriminator">
-          {Object.keys(discriminator.mapping).map((key, index) => (
-            // @ts-ignore
-            <TabItem
-              key={index}
-              label={key}
-              value={`${index}-item-discriminator`}
-            >
-              <SchemaNode
-                schema={discriminator.mapping[key]}
+      </div>
+      {schema.properties &&
+        Object.entries(schema.properties as {}).map(
+          ([key, val]: [string, any]) =>
+            key !== discriminator.propertyName && (
+              <SchemaEdge
+                key={key}
+                name={key}
+                schema={val}
+                required={
+                  Array.isArray(schema.required)
+                    ? schema.required.includes(key)
+                    : false
+                }
+                discriminator={false}
                 schemaType={schemaType}
               />
-            </TabItem>
-          ))}
-        </DiscriminatorTabs>
-      </div>
-    </div>
+            )
+        )}
+    </>
+  );
+};
+
+interface DiscriminatorNodeProps {
+  discriminator: any;
+  schema: SchemaObject;
+  schemaType: "request" | "response";
+}
+
+const DiscriminatorNode: React.FC<DiscriminatorNodeProps> = ({
+  discriminator,
+  schema,
+  schemaType,
+}) => {
+  let discriminatedSchemas: any = {};
+  let inferredMapping: any = {};
+
+  const discriminatorProperty = schema.properties![discriminator.propertyName];
+
+  if (schema.allOf) {
+    const mergedSchemas = mergeAllOf(schema) as SchemaObject;
+    if (mergedSchemas.oneOf || mergedSchemas.anyOf) {
+      discriminatedSchemas = mergedSchemas.oneOf || mergedSchemas.anyOf;
+    }
+  } else if (schema.oneOf || schema.anyOf) {
+    discriminatedSchemas = schema.oneOf || schema.anyOf;
+  }
+
+  // Handle case where no mapping is defined
+  if (!discriminator.mapping) {
+    Object.entries(discriminatedSchemas).forEach(
+      ([_, subschema]: [string, any], index) => {
+        inferredMapping[subschema.title ?? `PROP${index}`] = subschema;
+      }
+    );
+    discriminator.mapping = inferredMapping;
+  }
+
+  // Merge sub schema discriminator property with parent
+  Object.keys(discriminator.mapping).forEach((key) => {
+    const subSchema = discriminator.mapping[key];
+
+    // Handle discriminated schema with allOf
+    let mergedSubSchema = {} as SchemaObject;
+    if (subSchema.allOf) {
+      mergedSubSchema = mergeAllOf(subSchema) as SchemaObject;
+    }
+
+    const subProperties = subSchema.properties || mergedSubSchema.properties;
+    if (subProperties[discriminator.propertyName]) {
+      schema.properties![discriminator.propertyName] = {
+        ...schema.properties![discriminator.propertyName],
+        ...subProperties[discriminator.propertyName],
+      };
+      if (subSchema.required && !schema.required) {
+        schema.required = subSchema.required;
+      }
+      // Avoid duplicating property
+      delete subProperties[discriminator.propertyName];
+    }
+  });
+
+  const name = discriminator.propertyName;
+  const schemaName = getSchemaName(discriminatorProperty);
+
+  // Default case for discriminator without oneOf/anyOf/allOf
+  return (
+    <PropertyDiscriminator
+      name={name}
+      schemaName={schemaName}
+      schema={schema}
+      schemaType={schemaType}
+      discriminator={discriminator}
+      required={
+        Array.isArray(schema.required)
+          ? schema.required.includes(name)
+          : schema.required
+      }
+    />
   );
 };
 
@@ -738,6 +841,18 @@ const SchemaNode: React.FC<SchemaProps> = ({ schema, schemaType }) => {
     return null;
   }
 
+  if (schema.discriminator) {
+    const { discriminator } = schema;
+    return (
+      <DiscriminatorNode
+        discriminator={discriminator}
+        schema={schema}
+        schemaType={schemaType}
+      />
+    );
+  }
+
+  // Handle allOf, oneOf, anyOf without discriminators
   if (schema.allOf) {
     const mergedSchemas = mergeAllOf(schema) as SchemaObject;
 
@@ -764,6 +879,10 @@ const SchemaNode: React.FC<SchemaProps> = ({ schema, schemaType }) => {
         )}
       </div>
     );
+  }
+
+  if (schema.oneOf || schema.anyOf) {
+    return <AnyOneOf schema={schema} schemaType={schemaType} />;
   }
 
   // Handle primitives

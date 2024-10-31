@@ -2331,9 +2331,9 @@ exports[`Schema Snapshots > should match the snapshot for one-of-with-shared-pro
 
 exports[`Schema Snapshots > should match the snapshot for additionalbookinfo #0`] = `
 <div class="row theme-api-markdown">
-  <div class="col col--12">
+  <div class="col col--7 openapi-left-panel__container schema">
     <h1 class="openapi__heading">AdditionalBookInfo</h1>
-    <ul>
+    <div>
       <div class="openapi-schema__list-item">
         <div>
           <span class="openapi-schema__container"
@@ -2361,110 +2361,126 @@ exports[`Schema Snapshots > should match the snapshot for additionalbookinfo #0`
           <div><p>Tags associated with the book</p></div>
         </div>
       </div>
-    </ul>
+    </div>
+  </div>
+  <div class="col col--5 openapi-right-panel__container">
+    <div
+      class="language-json codeBlockContainer_mQmQ theme-code-block"
+      style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"
+    >
+      <div class="codeBlockTitle_x_ju">AdditionalBookInfo</div>
+      <div class="codeBlockContent_D5yF">
+        <pre
+          tabindex="0"
+          class="prism-code language-json codeBlock_RMoD thin-scrollbar"
+          style="color:#bfc7d5;background-color:#292d3e"
+        ><code class="codeBlockLines_AclH"><span class="token-line" style="color:#bfc7d5"><span class="token punctuation" style="color:rgb(199, 146, 234)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"publishedDate"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"2024-07-29"</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"genre"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"string"</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"tags"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(199, 146, 234)">[</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">    </span><span class="token string" style="color:rgb(195, 232, 141)">"string"</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token punctuation" style="color:rgb(199, 146, 234)">]</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain"></span><span class="token punctuation" style="color:rgb(199, 146, 234)">}</span><br></span></code></pre>
+        <div class="buttonGroup_aaMX">
+          <button
+            type="button"
+            aria-label="Copy code to clipboard"
+            title="Copy"
+            class="clean-btn"
+          >
+            <span class="copyButtonIcons_z5j7" aria-hidden="true"
+              ><svg viewBox="0 0 24 24" class="copyButtonIcon_FoOz">
+                <path
+                  fill="currentColor"
+                  d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"
+                ></path></svg
+              ><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_L0B6">
+                <path
+                  fill="currentColor"
+                  d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+                ></path></svg
+            ></span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;
 
 exports[`Schema Snapshots > should match the snapshot for baseallof #0`] = `
 <div class="row theme-api-markdown">
-  <div class="col col--12">
+  <div class="col col--7 openapi-left-panel__container schema">
     <h1 class="openapi__heading">BaseAllOf</h1>
-    <ul>
-      <div class="openapi-schema__list-item">
-        <div>
-          <span class="openapi-schema__container"
-            ><strong class="openapi-schema__property">type</strong
-            ><span class="openapi-schema__name"> </span
-          ></span>
-        </div>
-      </div>
-      <div>
-        <span class="badge badge--info" style="margin-bottom:1rem"
-          ><p>oneOf</p></span
-        >
-        <div class="openapi-tabs__schema-container">
-          <div class="openapi-tabs__schema-tabs-container">
-            <ul
-              role="tablist"
-              aria-orientation="horizontal"
-              class="openapi-tabs__schema-list-container tabs"
+    <div>
+      <span class="badge badge--info" style="margin-bottom:1rem">oneOf</span>
+      <div class="openapi-tabs__schema-container">
+        <div class="openapi-tabs__schema-tabs-container">
+          <ul
+            role="tablist"
+            aria-orientation="horizontal"
+            class="openapi-tabs__schema-list-container tabs"
+          >
+            <li
+              role="tab"
+              tabindex="0"
+              aria-selected="true"
+              class="tabs__item openapi-tabs__schema-item active"
             >
-              <li
-                role="tab"
-                tabindex="0"
-                aria-selected="true"
-                class="tabs__item openapi-tabs__schema-item active"
-              >
-                <span class="openapi-tabs__schema-label">TypeA</span>
-              </li>
-              <li
-                role="tab"
-                tabindex="-1"
-                aria-selected="false"
-                class="tabs__item openapi-tabs__schema-item"
-              >
-                <span class="openapi-tabs__schema-label">TypeB</span>
-              </li>
-            </ul>
-          </div>
-          <div class="margin-top--md">
-            <div role="tabpanel" class="tabItem_wHwb">
-              <div class="openapi-schema__list-item">
+              <span class="openapi-tabs__schema-label">TypeA</span>
+            </li>
+            <li
+              role="tab"
+              tabindex="-1"
+              aria-selected="false"
+              class="tabs__item openapi-tabs__schema-item"
+            >
+              <span class="openapi-tabs__schema-label">TypeB</span>
+            </li>
+          </ul>
+        </div>
+        <div class="margin-top--md">
+          <div role="tabpanel" class="tabItem_wHwb">
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">type</strong
+                  ><span class="openapi-schema__name"> <!-- -->string</span
+                  ><span class="openapi-schema__divider"></span
+                  ><span class="openapi-schema__required">required</span></span
+                >
                 <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">type</strong
-                    ><span class="openapi-schema__name"> <!-- -->string</span
-                    ><span class="openapi-schema__divider"></span
-                    ><span class="openapi-schema__required"
-                      >required</span
-                    ></span
-                  >
-                  <div>
-                    <p>
-                      <strong>Possible values:</strong> [<code>typeA</code>]
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="openapi-schema__list-item">
-                <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">propA</strong
-                    ><span class="openapi-schema__name">
-                      <!-- -->string</span
-                    ></span
-                  >
+                  <p><strong>Possible values:</strong> [<code>typeA</code>]</p>
                 </div>
               </div>
             </div>
-            <div role="tabpanel" class="tabItem_wHwb" hidden="">
-              <div class="openapi-schema__list-item">
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">propA</strong
+                  ><span class="openapi-schema__name">
+                    <!-- -->string</span
+                  ></span
+                >
+              </div>
+            </div>
+          </div>
+          <div role="tabpanel" class="tabItem_wHwb" hidden="">
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">type</strong
+                  ><span class="openapi-schema__name"> <!-- -->string</span
+                  ><span class="openapi-schema__divider"></span
+                  ><span class="openapi-schema__required">required</span></span
+                >
                 <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">type</strong
-                    ><span class="openapi-schema__name"> <!-- -->string</span
-                    ><span class="openapi-schema__divider"></span
-                    ><span class="openapi-schema__required"
-                      >required</span
-                    ></span
-                  >
-                  <div>
-                    <p>
-                      <strong>Possible values:</strong> [<code>typeB</code>]
-                    </p>
-                  </div>
+                  <p><strong>Possible values:</strong> [<code>typeB</code>]</p>
                 </div>
               </div>
-              <div class="openapi-schema__list-item">
-                <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">propB</strong
-                    ><span class="openapi-schema__name">
-                      <!-- -->number</span
-                    ></span
-                  >
-                </div>
+            </div>
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">propB</strong
+                  ><span class="openapi-schema__name">
+                    <!-- -->number</span
+                  ></span
+                >
               </div>
             </div>
           </div>
@@ -2486,210 +2502,126 @@ exports[`Schema Snapshots > should match the snapshot for baseallof #0`] = `
           ></span>
         </div>
       </div>
-    </ul>
+    </div>
+  </div>
+  <div class="col col--5 openapi-right-panel__container">
+    <div
+      class="language-json codeBlockContainer_mQmQ theme-code-block"
+      style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"
+    >
+      <div class="codeBlockTitle_x_ju">BaseAllOf</div>
+      <div class="codeBlockContent_D5yF">
+        <pre
+          tabindex="0"
+          class="prism-code language-json codeBlock_RMoD thin-scrollbar"
+          style="color:#bfc7d5;background-color:#292d3e"
+        ><code class="codeBlockLines_AclH"><span class="token-line" style="color:#bfc7d5"><span class="token punctuation" style="color:rgb(199, 146, 234)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"type"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"typeA"</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"sharedProp"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"string"</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"propA"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"string"</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain"></span><span class="token punctuation" style="color:rgb(199, 146, 234)">}</span><br></span></code></pre>
+        <div class="buttonGroup_aaMX">
+          <button
+            type="button"
+            aria-label="Copy code to clipboard"
+            title="Copy"
+            class="clean-btn"
+          >
+            <span class="copyButtonIcons_z5j7" aria-hidden="true"
+              ><svg viewBox="0 0 24 24" class="copyButtonIcon_FoOz">
+                <path
+                  fill="currentColor"
+                  d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"
+                ></path></svg
+              ><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_L0B6">
+                <path
+                  fill="currentColor"
+                  d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+                ></path></svg
+            ></span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;
 
 exports[`Schema Snapshots > should match the snapshot for baseallofmapping #0`] = `
 <div class="row theme-api-markdown">
-  <div class="col col--12">
+  <div class="col col--7 openapi-left-panel__container schema">
     <h1 class="openapi__heading">BaseAllOfMapping</h1>
-    <ul>
-      <div class="openapi-discriminator__item openapi-schema__list-item">
-        <div>
-          <span class="openapi-schema__container"
-            ><strong
-              class="openapi-discriminator__name openapi-schema__property"
-              ><p>type</p></strong
-            ><span class="openapi-schema__name"><p>string</p></span></span
+    <div>
+      <span class="badge badge--info" style="margin-bottom:1rem">oneOf</span>
+      <div class="openapi-tabs__schema-container">
+        <div class="openapi-tabs__schema-tabs-container">
+          <ul
+            role="tablist"
+            aria-orientation="horizontal"
+            class="openapi-tabs__schema-list-container tabs"
           >
-          <div style="padding-left:1rem">
-            <p>
-              <strong>Possible values:</strong> [<code>typeA</code>,
-              <code>typeB</code>]
-            </p>
-          </div>
-          <div class="openapi-tabs__container">
-            <div class="openapi-tabs__discriminator-top-section">
-              <div class="openapi-tabs__discriminator-container">
-                <ul
-                  role="tablist"
-                  aria-orientation="horizontal"
-                  class="openapi-tabs__discriminator-list-container tabs openapi-tabs__discriminator"
-                >
-                  <li
-                    role="tab"
-                    tabindex="0"
-                    aria-selected="true"
-                    class="tabs__item openapi-tabs__discriminator-item active"
-                  >
-                    <span class="openapi-tabs__discriminator-tab-label"
-                      >typeA</span
-                    >
-                  </li>
-                  <li
-                    role="tab"
-                    tabindex="-1"
-                    aria-selected="false"
-                    class="tabs__item openapi-tabs__discriminator-item"
-                  >
-                    <span class="openapi-tabs__discriminator-tab-label"
-                      >typeB</span
-                    >
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="margin-top--md">
-              <div role="tabpanel" class="tabItem_wHwb">
-                <div class="openapi-schema__list-item">
-                  <div>
-                    <span class="openapi-schema__container"
-                      ><strong class="openapi-schema__property">type</strong
-                      ><span class="openapi-schema__name"> <!-- -->string</span
-                      ><span class="openapi-schema__divider"></span
-                      ><span class="openapi-schema__required"
-                        >required</span
-                      ></span
-                    >
-                    <div>
-                      <p>
-                        <strong>Possible values:</strong> [<code>typeA</code>]
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div class="openapi-schema__list-item">
-                  <div>
-                    <span class="openapi-schema__container"
-                      ><strong class="openapi-schema__property">propA</strong
-                      ><span class="openapi-schema__name">
-                        <!-- -->string</span
-                      ></span
-                    >
-                  </div>
-                </div>
-              </div>
-              <div role="tabpanel" class="tabItem_wHwb" hidden="">
-                <div class="openapi-schema__list-item">
-                  <div>
-                    <span class="openapi-schema__container"
-                      ><strong class="openapi-schema__property">type</strong
-                      ><span class="openapi-schema__name"> <!-- -->string</span
-                      ><span class="openapi-schema__divider"></span
-                      ><span class="openapi-schema__required"
-                        >required</span
-                      ></span
-                    >
-                    <div>
-                      <p>
-                        <strong>Possible values:</strong> [<code>typeB</code>]
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div class="openapi-schema__list-item">
-                  <div>
-                    <span class="openapi-schema__container"
-                      ><strong class="openapi-schema__property">propB</strong
-                      ><span class="openapi-schema__name">
-                        <!-- -->number</span
-                      ></span
-                    >
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <span class="badge badge--info" style="margin-bottom:1rem"
-          ><p>oneOf</p></span
-        >
-        <div class="openapi-tabs__schema-container">
-          <div class="openapi-tabs__schema-tabs-container">
-            <ul
-              role="tablist"
-              aria-orientation="horizontal"
-              class="openapi-tabs__schema-list-container tabs"
+            <li
+              role="tab"
+              tabindex="0"
+              aria-selected="true"
+              class="tabs__item openapi-tabs__schema-item active"
             >
-              <li
-                role="tab"
-                tabindex="0"
-                aria-selected="true"
-                class="tabs__item openapi-tabs__schema-item active"
-              >
-                <span class="openapi-tabs__schema-label">TypeA</span>
-              </li>
-              <li
-                role="tab"
-                tabindex="-1"
-                aria-selected="false"
-                class="tabs__item openapi-tabs__schema-item"
-              >
-                <span class="openapi-tabs__schema-label">TypeB</span>
-              </li>
-            </ul>
-          </div>
-          <div class="margin-top--md">
-            <div role="tabpanel" class="tabItem_wHwb">
-              <div class="openapi-schema__list-item">
+              <span class="openapi-tabs__schema-label">TypeA</span>
+            </li>
+            <li
+              role="tab"
+              tabindex="-1"
+              aria-selected="false"
+              class="tabs__item openapi-tabs__schema-item"
+            >
+              <span class="openapi-tabs__schema-label">TypeB</span>
+            </li>
+          </ul>
+        </div>
+        <div class="margin-top--md">
+          <div role="tabpanel" class="tabItem_wHwb">
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">type</strong
+                  ><span class="openapi-schema__name"> <!-- -->string</span
+                  ><span class="openapi-schema__divider"></span
+                  ><span class="openapi-schema__required">required</span></span
+                >
                 <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">type</strong
-                    ><span class="openapi-schema__name"> <!-- -->string</span
-                    ><span class="openapi-schema__divider"></span
-                    ><span class="openapi-schema__required"
-                      >required</span
-                    ></span
-                  >
-                  <div>
-                    <p>
-                      <strong>Possible values:</strong> [<code>typeA</code>]
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="openapi-schema__list-item">
-                <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">propA</strong
-                    ><span class="openapi-schema__name">
-                      <!-- -->string</span
-                    ></span
-                  >
+                  <p><strong>Possible values:</strong> [<code>typeA</code>]</p>
                 </div>
               </div>
             </div>
-            <div role="tabpanel" class="tabItem_wHwb" hidden="">
-              <div class="openapi-schema__list-item">
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">propA</strong
+                  ><span class="openapi-schema__name">
+                    <!-- -->string</span
+                  ></span
+                >
+              </div>
+            </div>
+          </div>
+          <div role="tabpanel" class="tabItem_wHwb" hidden="">
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">type</strong
+                  ><span class="openapi-schema__name"> <!-- -->string</span
+                  ><span class="openapi-schema__divider"></span
+                  ><span class="openapi-schema__required">required</span></span
+                >
                 <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">type</strong
-                    ><span class="openapi-schema__name"> <!-- -->string</span
-                    ><span class="openapi-schema__divider"></span
-                    ><span class="openapi-schema__required"
-                      >required</span
-                    ></span
-                  >
-                  <div>
-                    <p>
-                      <strong>Possible values:</strong> [<code>typeB</code>]
-                    </p>
-                  </div>
+                  <p><strong>Possible values:</strong> [<code>typeB</code>]</p>
                 </div>
               </div>
-              <div class="openapi-schema__list-item">
-                <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">propB</strong
-                    ><span class="openapi-schema__name">
-                      <!-- -->number</span
-                    ></span
-                  >
-                </div>
+            </div>
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">propB</strong
+                  ><span class="openapi-schema__name">
+                    <!-- -->number</span
+                  ></span
+                >
               </div>
             </div>
           </div>
@@ -2708,14 +2640,16 @@ exports[`Schema Snapshots > should match the snapshot for baseallofmapping #0`] 
           <span class="openapi-schema__container"
             ><strong
               class="openapi-discriminator__name openapi-schema__property"
-              ><p>type</p></strong
-            ><span class="openapi-schema__name"><p>string</p></span></span
+              >type</strong
+            ></span
           >
-          <div style="padding-left:1rem">
-            <p>
-              <strong>Possible values:</strong> [<code>typeA</code>,
-              <code>typeB</code>]
-            </p>
+          <div style="margin-left:1rem">
+            <div style="margin-top:.5rem;margin-bottom:.5rem">
+              <p>
+                <strong>Possible values:</strong> [<code>typeA</code>,
+                <code>typeB</code>]
+              </p>
+            </div>
           </div>
           <div class="openapi-tabs__container">
             <div class="openapi-tabs__discriminator-top-section">
@@ -2750,60 +2684,66 @@ exports[`Schema Snapshots > should match the snapshot for baseallofmapping #0`] 
             </div>
             <div class="margin-top--md">
               <div role="tabpanel" class="tabItem_wHwb">
-                <div class="openapi-schema__list-item">
-                  <div>
-                    <span class="openapi-schema__container"
-                      ><strong class="openapi-schema__property">type</strong
-                      ><span class="openapi-schema__name"> <!-- -->string</span
-                      ><span class="openapi-schema__divider"></span
-                      ><span class="openapi-schema__required"
-                        >required</span
-                      ></span
-                    >
+                <div>
+                  <div class="openapi-schema__list-item">
                     <div>
-                      <p>
-                        <strong>Possible values:</strong> [<code>typeA</code>]
-                      </p>
+                      <span class="openapi-schema__container"
+                        ><strong class="openapi-schema__property">type</strong
+                        ><span class="openapi-schema__name">
+                          <!-- -->string</span
+                        ><span class="openapi-schema__divider"></span
+                        ><span class="openapi-schema__required"
+                          >required</span
+                        ></span
+                      >
+                      <div>
+                        <p>
+                          <strong>Possible values:</strong> [<code>typeA</code>]
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="openapi-schema__list-item">
-                  <div>
-                    <span class="openapi-schema__container"
-                      ><strong class="openapi-schema__property">propA</strong
-                      ><span class="openapi-schema__name">
-                        <!-- -->string</span
-                      ></span
-                    >
+                  <div class="openapi-schema__list-item">
+                    <div>
+                      <span class="openapi-schema__container"
+                        ><strong class="openapi-schema__property">propA</strong
+                        ><span class="openapi-schema__name">
+                          <!-- -->string</span
+                        ></span
+                      >
+                    </div>
                   </div>
                 </div>
               </div>
               <div role="tabpanel" class="tabItem_wHwb" hidden="">
-                <div class="openapi-schema__list-item">
-                  <div>
-                    <span class="openapi-schema__container"
-                      ><strong class="openapi-schema__property">type</strong
-                      ><span class="openapi-schema__name"> <!-- -->string</span
-                      ><span class="openapi-schema__divider"></span
-                      ><span class="openapi-schema__required"
-                        >required</span
-                      ></span
-                    >
+                <div>
+                  <div class="openapi-schema__list-item">
                     <div>
-                      <p>
-                        <strong>Possible values:</strong> [<code>typeB</code>]
-                      </p>
+                      <span class="openapi-schema__container"
+                        ><strong class="openapi-schema__property">type</strong
+                        ><span class="openapi-schema__name">
+                          <!-- -->string</span
+                        ><span class="openapi-schema__divider"></span
+                        ><span class="openapi-schema__required"
+                          >required</span
+                        ></span
+                      >
+                      <div>
+                        <p>
+                          <strong>Possible values:</strong> [<code>typeB</code>]
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="openapi-schema__list-item">
-                  <div>
-                    <span class="openapi-schema__container"
-                      ><strong class="openapi-schema__property">propB</strong
-                      ><span class="openapi-schema__name">
-                        <!-- -->number</span
-                      ></span
-                    >
+                  <div class="openapi-schema__list-item">
+                    <div>
+                      <span class="openapi-schema__container"
+                        ><strong class="openapi-schema__property">propB</strong
+                        ><span class="openapi-schema__name">
+                          <!-- -->number</span
+                        ></span
+                      >
+                    </div>
                   </div>
                 </div>
               </div>
@@ -2811,102 +2751,126 @@ exports[`Schema Snapshots > should match the snapshot for baseallofmapping #0`] 
           </div>
         </div>
       </div>
-    </ul>
+    </div>
+  </div>
+  <div class="col col--5 openapi-right-panel__container">
+    <div
+      class="language-json codeBlockContainer_mQmQ theme-code-block"
+      style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"
+    >
+      <div class="codeBlockTitle_x_ju">BaseAllOfMapping</div>
+      <div class="codeBlockContent_D5yF">
+        <pre
+          tabindex="0"
+          class="prism-code language-json codeBlock_RMoD thin-scrollbar"
+          style="color:#bfc7d5;background-color:#292d3e"
+        ><code class="codeBlockLines_AclH"><span class="token-line" style="color:#bfc7d5"><span class="token punctuation" style="color:rgb(199, 146, 234)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"type"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"typeA"</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"sharedProp"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"string"</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"propA"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"string"</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain"></span><span class="token punctuation" style="color:rgb(199, 146, 234)">}</span><br></span></code></pre>
+        <div class="buttonGroup_aaMX">
+          <button
+            type="button"
+            aria-label="Copy code to clipboard"
+            title="Copy"
+            class="clean-btn"
+          >
+            <span class="copyButtonIcons_z5j7" aria-hidden="true"
+              ><svg viewBox="0 0 24 24" class="copyButtonIcon_FoOz">
+                <path
+                  fill="currentColor"
+                  d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"
+                ></path></svg
+              ><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_L0B6">
+                <path
+                  fill="currentColor"
+                  d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+                ></path></svg
+            ></span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;
 
 exports[`Schema Snapshots > should match the snapshot for basebasic #0`] = `
 <div class="row theme-api-markdown">
-  <div class="col col--12">
+  <div class="col col--7 openapi-left-panel__container schema">
     <h1 class="openapi__heading">BaseBasic</h1>
-    <ul>
-      <div>
-        <span class="badge badge--info" style="margin-bottom:1rem"
-          ><p>oneOf</p></span
-        >
-        <div class="openapi-tabs__schema-container">
-          <div class="openapi-tabs__schema-tabs-container">
-            <ul
-              role="tablist"
-              aria-orientation="horizontal"
-              class="openapi-tabs__schema-list-container tabs"
+    <div>
+      <span class="badge badge--info" style="margin-bottom:1rem">oneOf</span>
+      <div class="openapi-tabs__schema-container">
+        <div class="openapi-tabs__schema-tabs-container">
+          <ul
+            role="tablist"
+            aria-orientation="horizontal"
+            class="openapi-tabs__schema-list-container tabs"
+          >
+            <li
+              role="tab"
+              tabindex="0"
+              aria-selected="true"
+              class="tabs__item openapi-tabs__schema-item active"
             >
-              <li
-                role="tab"
-                tabindex="0"
-                aria-selected="true"
-                class="tabs__item openapi-tabs__schema-item active"
-              >
-                <span class="openapi-tabs__schema-label">TypeA</span>
-              </li>
-              <li
-                role="tab"
-                tabindex="-1"
-                aria-selected="false"
-                class="tabs__item openapi-tabs__schema-item"
-              >
-                <span class="openapi-tabs__schema-label">TypeB</span>
-              </li>
-            </ul>
-          </div>
-          <div class="margin-top--md">
-            <div role="tabpanel" class="tabItem_wHwb">
-              <div class="openapi-schema__list-item">
+              <span class="openapi-tabs__schema-label">TypeA</span>
+            </li>
+            <li
+              role="tab"
+              tabindex="-1"
+              aria-selected="false"
+              class="tabs__item openapi-tabs__schema-item"
+            >
+              <span class="openapi-tabs__schema-label">TypeB</span>
+            </li>
+          </ul>
+        </div>
+        <div class="margin-top--md">
+          <div role="tabpanel" class="tabItem_wHwb">
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">type</strong
+                  ><span class="openapi-schema__name"> <!-- -->string</span
+                  ><span class="openapi-schema__divider"></span
+                  ><span class="openapi-schema__required">required</span></span
+                >
                 <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">type</strong
-                    ><span class="openapi-schema__name"> <!-- -->string</span
-                    ><span class="openapi-schema__divider"></span
-                    ><span class="openapi-schema__required"
-                      >required</span
-                    ></span
-                  >
-                  <div>
-                    <p>
-                      <strong>Possible values:</strong> [<code>typeA</code>]
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="openapi-schema__list-item">
-                <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">propA</strong
-                    ><span class="openapi-schema__name">
-                      <!-- -->string</span
-                    ></span
-                  >
+                  <p><strong>Possible values:</strong> [<code>typeA</code>]</p>
                 </div>
               </div>
             </div>
-            <div role="tabpanel" class="tabItem_wHwb" hidden="">
-              <div class="openapi-schema__list-item">
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">propA</strong
+                  ><span class="openapi-schema__name">
+                    <!-- -->string</span
+                  ></span
+                >
+              </div>
+            </div>
+          </div>
+          <div role="tabpanel" class="tabItem_wHwb" hidden="">
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">type</strong
+                  ><span class="openapi-schema__name"> <!-- -->string</span
+                  ><span class="openapi-schema__divider"></span
+                  ><span class="openapi-schema__required">required</span></span
+                >
                 <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">type</strong
-                    ><span class="openapi-schema__name"> <!-- -->string</span
-                    ><span class="openapi-schema__divider"></span
-                    ><span class="openapi-schema__required"
-                      >required</span
-                    ></span
-                  >
-                  <div>
-                    <p>
-                      <strong>Possible values:</strong> [<code>typeB</code>]
-                    </p>
-                  </div>
+                  <p><strong>Possible values:</strong> [<code>typeB</code>]</p>
                 </div>
               </div>
-              <div class="openapi-schema__list-item">
-                <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">propB</strong
-                    ><span class="openapi-schema__name">
-                      <!-- -->number</span
-                    ></span
-                  >
-                </div>
+            </div>
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">propB</strong
+                  ><span class="openapi-schema__name">
+                    <!-- -->number</span
+                  ></span
+                >
               </div>
             </div>
           </div>
@@ -2920,102 +2884,126 @@ exports[`Schema Snapshots > should match the snapshot for basebasic #0`] = `
           >
         </div>
       </div>
-    </ul>
+    </div>
+  </div>
+  <div class="col col--5 openapi-right-panel__container">
+    <div
+      class="language-json codeBlockContainer_mQmQ theme-code-block"
+      style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"
+    >
+      <div class="codeBlockTitle_x_ju">BaseBasic</div>
+      <div class="codeBlockContent_D5yF">
+        <pre
+          tabindex="0"
+          class="prism-code language-json codeBlock_RMoD thin-scrollbar"
+          style="color:#bfc7d5;background-color:#292d3e"
+        ><code class="codeBlockLines_AclH"><span class="token-line" style="color:#bfc7d5"><span class="token punctuation" style="color:rgb(199, 146, 234)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"type"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"typeA"</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"propA"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"string"</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain"></span><span class="token punctuation" style="color:rgb(199, 146, 234)">}</span><br></span></code></pre>
+        <div class="buttonGroup_aaMX">
+          <button
+            type="button"
+            aria-label="Copy code to clipboard"
+            title="Copy"
+            class="clean-btn"
+          >
+            <span class="copyButtonIcons_z5j7" aria-hidden="true"
+              ><svg viewBox="0 0 24 24" class="copyButtonIcon_FoOz">
+                <path
+                  fill="currentColor"
+                  d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"
+                ></path></svg
+              ><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_L0B6">
+                <path
+                  fill="currentColor"
+                  d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+                ></path></svg
+            ></span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;
 
 exports[`Schema Snapshots > should match the snapshot for basebasicmapping #0`] = `
 <div class="row theme-api-markdown">
-  <div class="col col--12">
+  <div class="col col--7 openapi-left-panel__container schema">
     <h1 class="openapi__heading">BaseBasicMapping</h1>
-    <ul>
-      <div>
-        <span class="badge badge--info" style="margin-bottom:1rem"
-          ><p>oneOf</p></span
-        >
-        <div class="openapi-tabs__schema-container">
-          <div class="openapi-tabs__schema-tabs-container">
-            <ul
-              role="tablist"
-              aria-orientation="horizontal"
-              class="openapi-tabs__schema-list-container tabs"
+    <div>
+      <span class="badge badge--info" style="margin-bottom:1rem">oneOf</span>
+      <div class="openapi-tabs__schema-container">
+        <div class="openapi-tabs__schema-tabs-container">
+          <ul
+            role="tablist"
+            aria-orientation="horizontal"
+            class="openapi-tabs__schema-list-container tabs"
+          >
+            <li
+              role="tab"
+              tabindex="0"
+              aria-selected="true"
+              class="tabs__item openapi-tabs__schema-item active"
             >
-              <li
-                role="tab"
-                tabindex="0"
-                aria-selected="true"
-                class="tabs__item openapi-tabs__schema-item active"
-              >
-                <span class="openapi-tabs__schema-label">TypeA</span>
-              </li>
-              <li
-                role="tab"
-                tabindex="-1"
-                aria-selected="false"
-                class="tabs__item openapi-tabs__schema-item"
-              >
-                <span class="openapi-tabs__schema-label">TypeB</span>
-              </li>
-            </ul>
-          </div>
-          <div class="margin-top--md">
-            <div role="tabpanel" class="tabItem_wHwb">
-              <div class="openapi-schema__list-item">
+              <span class="openapi-tabs__schema-label">TypeA</span>
+            </li>
+            <li
+              role="tab"
+              tabindex="-1"
+              aria-selected="false"
+              class="tabs__item openapi-tabs__schema-item"
+            >
+              <span class="openapi-tabs__schema-label">TypeB</span>
+            </li>
+          </ul>
+        </div>
+        <div class="margin-top--md">
+          <div role="tabpanel" class="tabItem_wHwb">
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">type</strong
+                  ><span class="openapi-schema__name"> <!-- -->string</span
+                  ><span class="openapi-schema__divider"></span
+                  ><span class="openapi-schema__required">required</span></span
+                >
                 <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">type</strong
-                    ><span class="openapi-schema__name"> <!-- -->string</span
-                    ><span class="openapi-schema__divider"></span
-                    ><span class="openapi-schema__required"
-                      >required</span
-                    ></span
-                  >
-                  <div>
-                    <p>
-                      <strong>Possible values:</strong> [<code>typeA</code>]
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="openapi-schema__list-item">
-                <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">propA</strong
-                    ><span class="openapi-schema__name">
-                      <!-- -->string</span
-                    ></span
-                  >
+                  <p><strong>Possible values:</strong> [<code>typeA</code>]</p>
                 </div>
               </div>
             </div>
-            <div role="tabpanel" class="tabItem_wHwb" hidden="">
-              <div class="openapi-schema__list-item">
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">propA</strong
+                  ><span class="openapi-schema__name">
+                    <!-- -->string</span
+                  ></span
+                >
+              </div>
+            </div>
+          </div>
+          <div role="tabpanel" class="tabItem_wHwb" hidden="">
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">type</strong
+                  ><span class="openapi-schema__name"> <!-- -->string</span
+                  ><span class="openapi-schema__divider"></span
+                  ><span class="openapi-schema__required">required</span></span
+                >
                 <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">type</strong
-                    ><span class="openapi-schema__name"> <!-- -->string</span
-                    ><span class="openapi-schema__divider"></span
-                    ><span class="openapi-schema__required"
-                      >required</span
-                    ></span
-                  >
-                  <div>
-                    <p>
-                      <strong>Possible values:</strong> [<code>typeB</code>]
-                    </p>
-                  </div>
+                  <p><strong>Possible values:</strong> [<code>typeB</code>]</p>
                 </div>
               </div>
-              <div class="openapi-schema__list-item">
-                <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">propB</strong
-                    ><span class="openapi-schema__name">
-                      <!-- -->number</span
-                    ></span
-                  >
-                </div>
+            </div>
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">propB</strong
+                  ><span class="openapi-schema__name">
+                    <!-- -->number</span
+                  ></span
+                >
               </div>
             </div>
           </div>
@@ -3026,14 +3014,16 @@ exports[`Schema Snapshots > should match the snapshot for basebasicmapping #0`] 
           <span class="openapi-schema__container"
             ><strong
               class="openapi-discriminator__name openapi-schema__property"
-              ><p>type</p></strong
-            ><span class="openapi-schema__name"><p>string</p></span></span
+              >type</strong
+            ><span class="openapi-schema__name"> <!-- -->string</span></span
           >
-          <div style="padding-left:1rem">
-            <p>
-              <strong>Possible values:</strong> [<code>typeA</code>,
-              <code>typeB</code>]
-            </p>
+          <div style="margin-left:1rem">
+            <div style="margin-top:.5rem;margin-bottom:.5rem">
+              <p>
+                <strong>Possible values:</strong> [<code>typeA</code>,
+                <code>typeB</code>]
+              </p>
+            </div>
           </div>
           <div class="openapi-tabs__container">
             <div class="openapi-tabs__discriminator-top-section">
@@ -3068,60 +3058,66 @@ exports[`Schema Snapshots > should match the snapshot for basebasicmapping #0`] 
             </div>
             <div class="margin-top--md">
               <div role="tabpanel" class="tabItem_wHwb">
-                <div class="openapi-schema__list-item">
-                  <div>
-                    <span class="openapi-schema__container"
-                      ><strong class="openapi-schema__property">type</strong
-                      ><span class="openapi-schema__name"> <!-- -->string</span
-                      ><span class="openapi-schema__divider"></span
-                      ><span class="openapi-schema__required"
-                        >required</span
-                      ></span
-                    >
+                <div>
+                  <div class="openapi-schema__list-item">
                     <div>
-                      <p>
-                        <strong>Possible values:</strong> [<code>typeA</code>]
-                      </p>
+                      <span class="openapi-schema__container"
+                        ><strong class="openapi-schema__property">type</strong
+                        ><span class="openapi-schema__name">
+                          <!-- -->string</span
+                        ><span class="openapi-schema__divider"></span
+                        ><span class="openapi-schema__required"
+                          >required</span
+                        ></span
+                      >
+                      <div>
+                        <p>
+                          <strong>Possible values:</strong> [<code>typeA</code>]
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="openapi-schema__list-item">
-                  <div>
-                    <span class="openapi-schema__container"
-                      ><strong class="openapi-schema__property">propA</strong
-                      ><span class="openapi-schema__name">
-                        <!-- -->string</span
-                      ></span
-                    >
+                  <div class="openapi-schema__list-item">
+                    <div>
+                      <span class="openapi-schema__container"
+                        ><strong class="openapi-schema__property">propA</strong
+                        ><span class="openapi-schema__name">
+                          <!-- -->string</span
+                        ></span
+                      >
+                    </div>
                   </div>
                 </div>
               </div>
               <div role="tabpanel" class="tabItem_wHwb" hidden="">
-                <div class="openapi-schema__list-item">
-                  <div>
-                    <span class="openapi-schema__container"
-                      ><strong class="openapi-schema__property">type</strong
-                      ><span class="openapi-schema__name"> <!-- -->string</span
-                      ><span class="openapi-schema__divider"></span
-                      ><span class="openapi-schema__required"
-                        >required</span
-                      ></span
-                    >
+                <div>
+                  <div class="openapi-schema__list-item">
                     <div>
-                      <p>
-                        <strong>Possible values:</strong> [<code>typeB</code>]
-                      </p>
+                      <span class="openapi-schema__container"
+                        ><strong class="openapi-schema__property">type</strong
+                        ><span class="openapi-schema__name">
+                          <!-- -->string</span
+                        ><span class="openapi-schema__divider"></span
+                        ><span class="openapi-schema__required"
+                          >required</span
+                        ></span
+                      >
+                      <div>
+                        <p>
+                          <strong>Possible values:</strong> [<code>typeB</code>]
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="openapi-schema__list-item">
-                  <div>
-                    <span class="openapi-schema__container"
-                      ><strong class="openapi-schema__property">propB</strong
-                      ><span class="openapi-schema__name">
-                        <!-- -->number</span
-                      ></span
-                    >
+                  <div class="openapi-schema__list-item">
+                    <div>
+                      <span class="openapi-schema__container"
+                        ><strong class="openapi-schema__property">propB</strong
+                        ><span class="openapi-schema__name">
+                          <!-- -->number</span
+                        ></span
+                      >
+                    </div>
                   </div>
                 </div>
               </div>
@@ -3129,81 +3125,111 @@ exports[`Schema Snapshots > should match the snapshot for basebasicmapping #0`] 
           </div>
         </div>
       </div>
-    </ul>
+    </div>
+  </div>
+  <div class="col col--5 openapi-right-panel__container">
+    <div
+      class="language-json codeBlockContainer_mQmQ theme-code-block"
+      style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"
+    >
+      <div class="codeBlockTitle_x_ju">BaseBasicMapping</div>
+      <div class="codeBlockContent_D5yF">
+        <pre
+          tabindex="0"
+          class="prism-code language-json codeBlock_RMoD thin-scrollbar"
+          style="color:#bfc7d5;background-color:#292d3e"
+        ><code class="codeBlockLines_AclH"><span class="token-line" style="color:#bfc7d5"><span class="token punctuation" style="color:rgb(199, 146, 234)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"type"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"typeA"</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"propA"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"string"</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain"></span><span class="token punctuation" style="color:rgb(199, 146, 234)">}</span><br></span></code></pre>
+        <div class="buttonGroup_aaMX">
+          <button
+            type="button"
+            aria-label="Copy code to clipboard"
+            title="Copy"
+            class="clean-btn"
+          >
+            <span class="copyButtonIcons_z5j7" aria-hidden="true"
+              ><svg viewBox="0 0 24 24" class="copyButtonIcon_FoOz">
+                <path
+                  fill="currentColor"
+                  d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"
+                ></path></svg
+              ><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_L0B6">
+                <path
+                  fill="currentColor"
+                  d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+                ></path></svg
+            ></span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;
 
 exports[`Schema Snapshots > should match the snapshot for basenested #0`] = `
 <div class="row theme-api-markdown">
-  <div class="col col--12">
+  <div class="col col--7 openapi-left-panel__container schema">
     <h1 class="openapi__heading">BaseNested</h1>
-    <ul>
-      <div>
-        <span class="badge badge--info" style="margin-bottom:1rem"
-          ><p>oneOf</p></span
-        >
-        <div class="openapi-tabs__schema-container">
-          <div class="openapi-tabs__schema-tabs-container">
-            <ul
-              role="tablist"
-              aria-orientation="horizontal"
-              class="openapi-tabs__schema-list-container tabs"
+    <div>
+      <span class="badge badge--info" style="margin-bottom:1rem">oneOf</span>
+      <div class="openapi-tabs__schema-container">
+        <div class="openapi-tabs__schema-tabs-container">
+          <ul
+            role="tablist"
+            aria-orientation="horizontal"
+            class="openapi-tabs__schema-list-container tabs"
+          >
+            <li
+              role="tab"
+              tabindex="0"
+              aria-selected="true"
+              class="tabs__item openapi-tabs__schema-item active"
             >
-              <li
-                role="tab"
-                tabindex="0"
-                aria-selected="true"
-                class="tabs__item openapi-tabs__schema-item active"
-              >
-                <span class="openapi-tabs__schema-label">NestedTypeA</span>
-              </li>
-              <li
-                role="tab"
-                tabindex="-1"
-                aria-selected="false"
-                class="tabs__item openapi-tabs__schema-item"
-              >
-                <span class="openapi-tabs__schema-label">NestedTypeB</span>
-              </li>
-            </ul>
-          </div>
-          <div class="margin-top--md">
-            <div role="tabpanel" class="tabItem_wHwb">
-              <div class="openapi-schema__list-item">
+              <span class="openapi-tabs__schema-label">NestedTypeA</span>
+            </li>
+            <li
+              role="tab"
+              tabindex="-1"
+              aria-selected="false"
+              class="tabs__item openapi-tabs__schema-item"
+            >
+              <span class="openapi-tabs__schema-label">NestedTypeB</span>
+            </li>
+          </ul>
+        </div>
+        <div class="margin-top--md">
+          <div role="tabpanel" class="tabItem_wHwb">
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">type</strong
+                  ><span class="openapi-schema__name"> <!-- -->string</span
+                  ><span class="openapi-schema__divider"></span
+                  ><span class="openapi-schema__required">required</span></span
+                >
                 <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">type</strong
-                    ><span class="openapi-schema__name"> <!-- -->string</span
-                    ><span class="openapi-schema__divider"></span
-                    ><span class="openapi-schema__required"
-                      >required</span
-                    ></span
-                  >
-                  <div>
-                    <p>
-                      <strong>Possible values:</strong>
-                      [<code>nestedTypeA</code>]
-                    </p>
-                  </div>
+                  <p>
+                    <strong>Possible values:</strong> [<code>nestedTypeA</code>]
+                  </p>
                 </div>
               </div>
-              <div class="openapi-schema__list-item">
-                <details
-                  class="details_IpIu alert alert--info details_jERq openapi-markdown__details"
-                  data-collapsed="true"
-                  ><summary
-                    ><span class="openapi-schema__container"
-                      ><strong class="openapi-schema__property"
-                        ><p>nestedA</p></strong
-                      ><span class="openapi-schema__name"
-                        ><p>object</p></span
-                      ></span
-                    ></summary
-                  >
-                  <div>
-                    <div class="collapsibleContent_Fd2D">
-                      <div style="margin-left:1rem">
+            </div>
+            <div class="openapi-schema__list-item">
+              <details
+                class="details_IpIu alert alert--info details_jERq openapi-markdown__details"
+                data-collapsed="true"
+                ><summary
+                  ><span class="openapi-schema__container"
+                    ><strong class="openapi-schema__property">nestedA</strong
+                    ><span class="openapi-schema__name">
+                      <!-- -->object</span
+                    ></span
+                  ></summary
+                >
+                <div>
+                  <div class="collapsibleContent_Fd2D">
+                    <div style="margin-left:1rem">
+                      <div>
                         <div class="openapi-schema__list-item">
                           <div>
                             <span class="openapi-schema__container"
@@ -3228,45 +3254,43 @@ exports[`Schema Snapshots > should match the snapshot for basenested #0`] = `
                         </div>
                       </div>
                     </div>
-                  </div></details
-                >
-              </div>
-            </div>
-            <div role="tabpanel" class="tabItem_wHwb" hidden="">
-              <div class="openapi-schema__list-item">
-                <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">type</strong
-                    ><span class="openapi-schema__name"> <!-- -->string</span
-                    ><span class="openapi-schema__divider"></span
-                    ><span class="openapi-schema__required"
-                      >required</span
-                    ></span
-                  >
-                  <div>
-                    <p>
-                      <strong>Possible values:</strong>
-                      [<code>nestedTypeB</code>]
-                    </p>
                   </div>
+                </div></details
+              >
+            </div>
+          </div>
+          <div role="tabpanel" class="tabItem_wHwb" hidden="">
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">type</strong
+                  ><span class="openapi-schema__name"> <!-- -->string</span
+                  ><span class="openapi-schema__divider"></span
+                  ><span class="openapi-schema__required">required</span></span
+                >
+                <div>
+                  <p>
+                    <strong>Possible values:</strong> [<code>nestedTypeB</code>]
+                  </p>
                 </div>
               </div>
-              <div class="openapi-schema__list-item">
-                <details
-                  class="details_IpIu alert alert--info details_jERq openapi-markdown__details"
-                  data-collapsed="true"
-                  ><summary
-                    ><span class="openapi-schema__container"
-                      ><strong class="openapi-schema__property"
-                        ><p>nestedB</p></strong
-                      ><span class="openapi-schema__name"
-                        ><p>object</p></span
-                      ></span
-                    ></summary
-                  >
-                  <div>
-                    <div class="collapsibleContent_Fd2D">
-                      <div style="margin-left:1rem">
+            </div>
+            <div class="openapi-schema__list-item">
+              <details
+                class="details_IpIu alert alert--info details_jERq openapi-markdown__details"
+                data-collapsed="true"
+                ><summary
+                  ><span class="openapi-schema__container"
+                    ><strong class="openapi-schema__property">nestedB</strong
+                    ><span class="openapi-schema__name">
+                      <!-- -->object</span
+                    ></span
+                  ></summary
+                >
+                <div>
+                  <div class="collapsibleContent_Fd2D">
+                    <div style="margin-left:1rem">
+                      <div>
                         <div class="openapi-schema__list-item">
                           <div>
                             <span class="openapi-schema__container"
@@ -3291,9 +3315,9 @@ exports[`Schema Snapshots > should match the snapshot for basenested #0`] = `
                         </div>
                       </div>
                     </div>
-                  </div></details
-                >
-              </div>
+                  </div>
+                </div></details
+              >
             </div>
           </div>
         </div>
@@ -3306,81 +3330,111 @@ exports[`Schema Snapshots > should match the snapshot for basenested #0`] = `
           >
         </div>
       </div>
-    </ul>
+    </div>
+  </div>
+  <div class="col col--5 openapi-right-panel__container">
+    <div
+      class="language-json codeBlockContainer_mQmQ theme-code-block"
+      style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"
+    >
+      <div class="codeBlockTitle_x_ju">BaseNested</div>
+      <div class="codeBlockContent_D5yF">
+        <pre
+          tabindex="0"
+          class="prism-code language-json codeBlock_RMoD thin-scrollbar"
+          style="color:#bfc7d5;background-color:#292d3e"
+        ><code class="codeBlockLines_AclH"><span class="token-line" style="color:#bfc7d5"><span class="token punctuation" style="color:rgb(199, 146, 234)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"type"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"nestedTypeA"</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"nestedA"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(199, 146, 234)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">    </span><span class="token property">"propA1"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"string"</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">    </span><span class="token property">"propA2"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token number" style="color:rgb(247, 140, 108)">0</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token punctuation" style="color:rgb(199, 146, 234)">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain"></span><span class="token punctuation" style="color:rgb(199, 146, 234)">}</span><br></span></code></pre>
+        <div class="buttonGroup_aaMX">
+          <button
+            type="button"
+            aria-label="Copy code to clipboard"
+            title="Copy"
+            class="clean-btn"
+          >
+            <span class="copyButtonIcons_z5j7" aria-hidden="true"
+              ><svg viewBox="0 0 24 24" class="copyButtonIcon_FoOz">
+                <path
+                  fill="currentColor"
+                  d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"
+                ></path></svg
+              ><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_L0B6">
+                <path
+                  fill="currentColor"
+                  d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+                ></path></svg
+            ></span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;
 
 exports[`Schema Snapshots > should match the snapshot for basenestedmapping #0`] = `
 <div class="row theme-api-markdown">
-  <div class="col col--12">
+  <div class="col col--7 openapi-left-panel__container schema">
     <h1 class="openapi__heading">BaseNestedMapping</h1>
-    <ul>
-      <div>
-        <span class="badge badge--info" style="margin-bottom:1rem"
-          ><p>oneOf</p></span
-        >
-        <div class="openapi-tabs__schema-container">
-          <div class="openapi-tabs__schema-tabs-container">
-            <ul
-              role="tablist"
-              aria-orientation="horizontal"
-              class="openapi-tabs__schema-list-container tabs"
+    <div>
+      <span class="badge badge--info" style="margin-bottom:1rem">oneOf</span>
+      <div class="openapi-tabs__schema-container">
+        <div class="openapi-tabs__schema-tabs-container">
+          <ul
+            role="tablist"
+            aria-orientation="horizontal"
+            class="openapi-tabs__schema-list-container tabs"
+          >
+            <li
+              role="tab"
+              tabindex="0"
+              aria-selected="true"
+              class="tabs__item openapi-tabs__schema-item active"
             >
-              <li
-                role="tab"
-                tabindex="0"
-                aria-selected="true"
-                class="tabs__item openapi-tabs__schema-item active"
-              >
-                <span class="openapi-tabs__schema-label">NestedTypeA</span>
-              </li>
-              <li
-                role="tab"
-                tabindex="-1"
-                aria-selected="false"
-                class="tabs__item openapi-tabs__schema-item"
-              >
-                <span class="openapi-tabs__schema-label">NestedTypeB</span>
-              </li>
-            </ul>
-          </div>
-          <div class="margin-top--md">
-            <div role="tabpanel" class="tabItem_wHwb">
-              <div class="openapi-schema__list-item">
+              <span class="openapi-tabs__schema-label">NestedTypeA</span>
+            </li>
+            <li
+              role="tab"
+              tabindex="-1"
+              aria-selected="false"
+              class="tabs__item openapi-tabs__schema-item"
+            >
+              <span class="openapi-tabs__schema-label">NestedTypeB</span>
+            </li>
+          </ul>
+        </div>
+        <div class="margin-top--md">
+          <div role="tabpanel" class="tabItem_wHwb">
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">type</strong
+                  ><span class="openapi-schema__name"> <!-- -->string</span
+                  ><span class="openapi-schema__divider"></span
+                  ><span class="openapi-schema__required">required</span></span
+                >
                 <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">type</strong
-                    ><span class="openapi-schema__name"> <!-- -->string</span
-                    ><span class="openapi-schema__divider"></span
-                    ><span class="openapi-schema__required"
-                      >required</span
-                    ></span
-                  >
-                  <div>
-                    <p>
-                      <strong>Possible values:</strong>
-                      [<code>nestedTypeA</code>]
-                    </p>
-                  </div>
+                  <p>
+                    <strong>Possible values:</strong> [<code>nestedTypeA</code>]
+                  </p>
                 </div>
               </div>
-              <div class="openapi-schema__list-item">
-                <details
-                  class="details_IpIu alert alert--info details_jERq openapi-markdown__details"
-                  data-collapsed="true"
-                  ><summary
-                    ><span class="openapi-schema__container"
-                      ><strong class="openapi-schema__property"
-                        ><p>nestedA</p></strong
-                      ><span class="openapi-schema__name"
-                        ><p>object</p></span
-                      ></span
-                    ></summary
-                  >
-                  <div>
-                    <div class="collapsibleContent_Fd2D">
-                      <div style="margin-left:1rem">
+            </div>
+            <div class="openapi-schema__list-item">
+              <details
+                class="details_IpIu alert alert--info details_jERq openapi-markdown__details"
+                data-collapsed="true"
+                ><summary
+                  ><span class="openapi-schema__container"
+                    ><strong class="openapi-schema__property">nestedA</strong
+                    ><span class="openapi-schema__name">
+                      <!-- -->object</span
+                    ></span
+                  ></summary
+                >
+                <div>
+                  <div class="collapsibleContent_Fd2D">
+                    <div style="margin-left:1rem">
+                      <div>
                         <div class="openapi-schema__list-item">
                           <div>
                             <span class="openapi-schema__container"
@@ -3405,45 +3459,43 @@ exports[`Schema Snapshots > should match the snapshot for basenestedmapping #0`]
                         </div>
                       </div>
                     </div>
-                  </div></details
-                >
-              </div>
-            </div>
-            <div role="tabpanel" class="tabItem_wHwb" hidden="">
-              <div class="openapi-schema__list-item">
-                <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">type</strong
-                    ><span class="openapi-schema__name"> <!-- -->string</span
-                    ><span class="openapi-schema__divider"></span
-                    ><span class="openapi-schema__required"
-                      >required</span
-                    ></span
-                  >
-                  <div>
-                    <p>
-                      <strong>Possible values:</strong>
-                      [<code>nestedTypeB</code>]
-                    </p>
                   </div>
+                </div></details
+              >
+            </div>
+          </div>
+          <div role="tabpanel" class="tabItem_wHwb" hidden="">
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">type</strong
+                  ><span class="openapi-schema__name"> <!-- -->string</span
+                  ><span class="openapi-schema__divider"></span
+                  ><span class="openapi-schema__required">required</span></span
+                >
+                <div>
+                  <p>
+                    <strong>Possible values:</strong> [<code>nestedTypeB</code>]
+                  </p>
                 </div>
               </div>
-              <div class="openapi-schema__list-item">
-                <details
-                  class="details_IpIu alert alert--info details_jERq openapi-markdown__details"
-                  data-collapsed="true"
-                  ><summary
-                    ><span class="openapi-schema__container"
-                      ><strong class="openapi-schema__property"
-                        ><p>nestedB</p></strong
-                      ><span class="openapi-schema__name"
-                        ><p>object</p></span
-                      ></span
-                    ></summary
-                  >
-                  <div>
-                    <div class="collapsibleContent_Fd2D">
-                      <div style="margin-left:1rem">
+            </div>
+            <div class="openapi-schema__list-item">
+              <details
+                class="details_IpIu alert alert--info details_jERq openapi-markdown__details"
+                data-collapsed="true"
+                ><summary
+                  ><span class="openapi-schema__container"
+                    ><strong class="openapi-schema__property">nestedB</strong
+                    ><span class="openapi-schema__name">
+                      <!-- -->object</span
+                    ></span
+                  ></summary
+                >
+                <div>
+                  <div class="collapsibleContent_Fd2D">
+                    <div style="margin-left:1rem">
+                      <div>
                         <div class="openapi-schema__list-item">
                           <div>
                             <span class="openapi-schema__container"
@@ -3468,9 +3520,9 @@ exports[`Schema Snapshots > should match the snapshot for basenestedmapping #0`]
                         </div>
                       </div>
                     </div>
-                  </div></details
-                >
-              </div>
+                  </div>
+                </div></details
+              >
             </div>
           </div>
         </div>
@@ -3480,14 +3532,16 @@ exports[`Schema Snapshots > should match the snapshot for basenestedmapping #0`]
           <span class="openapi-schema__container"
             ><strong
               class="openapi-discriminator__name openapi-schema__property"
-              ><p>type</p></strong
-            ><span class="openapi-schema__name"><p>string</p></span></span
+              >type</strong
+            ><span class="openapi-schema__name"> <!-- -->string</span></span
           >
-          <div style="padding-left:1rem">
-            <p>
-              <strong>Possible values:</strong> [<code>nestedTypeA</code>,
-              <code>nestedTypeB</code>]
-            </p>
+          <div style="margin-left:1rem">
+            <div style="margin-top:.5rem;margin-bottom:.5rem">
+              <p>
+                <strong>Possible values:</strong> [<code>nestedTypeA</code>,
+                <code>nestedTypeB</code>]
+              </p>
+            </div>
           </div>
           <div class="openapi-tabs__container">
             <div class="openapi-tabs__discriminator-top-section">
@@ -3522,231 +3576,265 @@ exports[`Schema Snapshots > should match the snapshot for basenestedmapping #0`]
             </div>
             <div class="margin-top--md">
               <div role="tabpanel" class="tabItem_wHwb">
-                <div class="openapi-schema__list-item">
-                  <div>
-                    <span class="openapi-schema__container"
-                      ><strong class="openapi-schema__property">type</strong
-                      ><span class="openapi-schema__name"> <!-- -->string</span
-                      ><span class="openapi-schema__divider"></span
-                      ><span class="openapi-schema__required"
-                        >required</span
-                      ></span
-                    >
+                <div>
+                  <div class="openapi-schema__list-item">
                     <div>
-                      <p>
-                        <strong>Possible values:</strong>
-                        [<code>nestedTypeA</code>]
-                      </p>
+                      <span class="openapi-schema__container"
+                        ><strong class="openapi-schema__property">type</strong
+                        ><span class="openapi-schema__name">
+                          <!-- -->string</span
+                        ><span class="openapi-schema__divider"></span
+                        ><span class="openapi-schema__required"
+                          >required</span
+                        ></span
+                      >
+                      <div>
+                        <p>
+                          <strong>Possible values:</strong>
+                          [<code>nestedTypeA</code>]
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="openapi-schema__list-item">
-                  <details
-                    class="details_IpIu alert alert--info details_jERq openapi-markdown__details"
-                    data-collapsed="true"
-                    ><summary
-                      ><span class="openapi-schema__container"
-                        ><strong class="openapi-schema__property"
-                          ><p>nestedA</p></strong
-                        ><span class="openapi-schema__name"
-                          ><p>object</p></span
-                        ></span
-                      ></summary
-                    >
-                    <div>
-                      <div class="collapsibleContent_Fd2D">
-                        <div style="margin-left:1rem">
-                          <div class="openapi-schema__list-item">
+                  <div class="openapi-schema__list-item">
+                    <details
+                      class="details_IpIu alert alert--info details_jERq openapi-markdown__details"
+                      data-collapsed="true"
+                      ><summary
+                        ><span class="openapi-schema__container"
+                          ><strong class="openapi-schema__property"
+                            >nestedA</strong
+                          ><span class="openapi-schema__name">
+                            <!-- -->object</span
+                          ></span
+                        ></summary
+                      >
+                      <div>
+                        <div class="collapsibleContent_Fd2D">
+                          <div style="margin-left:1rem">
                             <div>
-                              <span class="openapi-schema__container"
-                                ><strong class="openapi-schema__property"
-                                  >propA1</strong
-                                ><span class="openapi-schema__name">
-                                  <!-- -->string</span
-                                ></span
-                              >
-                            </div>
-                          </div>
-                          <div class="openapi-schema__list-item">
-                            <div>
-                              <span class="openapi-schema__container"
-                                ><strong class="openapi-schema__property"
-                                  >propA2</strong
-                                ><span class="openapi-schema__name">
-                                  <!-- -->number</span
-                                ></span
-                              >
+                              <div class="openapi-schema__list-item">
+                                <div>
+                                  <span class="openapi-schema__container"
+                                    ><strong class="openapi-schema__property"
+                                      >propA1</strong
+                                    ><span class="openapi-schema__name">
+                                      <!-- -->string</span
+                                    ></span
+                                  >
+                                </div>
+                              </div>
+                              <div class="openapi-schema__list-item">
+                                <div>
+                                  <span class="openapi-schema__container"
+                                    ><strong class="openapi-schema__property"
+                                      >propA2</strong
+                                    ><span class="openapi-schema__name">
+                                      <!-- -->number</span
+                                    ></span
+                                  >
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </div></details
-                  >
+                      </div></details
+                    >
+                  </div>
                 </div>
               </div>
               <div role="tabpanel" class="tabItem_wHwb" hidden="">
-                <div class="openapi-schema__list-item">
-                  <div>
-                    <span class="openapi-schema__container"
-                      ><strong class="openapi-schema__property">type</strong
-                      ><span class="openapi-schema__name"> <!-- -->string</span
-                      ><span class="openapi-schema__divider"></span
-                      ><span class="openapi-schema__required"
-                        >required</span
-                      ></span
-                    >
+                <div>
+                  <div class="openapi-schema__list-item">
                     <div>
-                      <p>
-                        <strong>Possible values:</strong>
-                        [<code>nestedTypeB</code>]
-                      </p>
+                      <span class="openapi-schema__container"
+                        ><strong class="openapi-schema__property">type</strong
+                        ><span class="openapi-schema__name">
+                          <!-- -->string</span
+                        ><span class="openapi-schema__divider"></span
+                        ><span class="openapi-schema__required"
+                          >required</span
+                        ></span
+                      >
+                      <div>
+                        <p>
+                          <strong>Possible values:</strong>
+                          [<code>nestedTypeB</code>]
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="openapi-schema__list-item">
-                  <details
-                    class="details_IpIu alert alert--info details_jERq openapi-markdown__details"
-                    data-collapsed="true"
-                    ><summary
-                      ><span class="openapi-schema__container"
-                        ><strong class="openapi-schema__property"
-                          ><p>nestedB</p></strong
-                        ><span class="openapi-schema__name"
-                          ><p>object</p></span
-                        ></span
-                      ></summary
-                    >
-                    <div>
-                      <div class="collapsibleContent_Fd2D">
-                        <div style="margin-left:1rem">
-                          <div class="openapi-schema__list-item">
+                  <div class="openapi-schema__list-item">
+                    <details
+                      class="details_IpIu alert alert--info details_jERq openapi-markdown__details"
+                      data-collapsed="true"
+                      ><summary
+                        ><span class="openapi-schema__container"
+                          ><strong class="openapi-schema__property"
+                            >nestedB</strong
+                          ><span class="openapi-schema__name">
+                            <!-- -->object</span
+                          ></span
+                        ></summary
+                      >
+                      <div>
+                        <div class="collapsibleContent_Fd2D">
+                          <div style="margin-left:1rem">
                             <div>
-                              <span class="openapi-schema__container"
-                                ><strong class="openapi-schema__property"
-                                  >propB1</strong
-                                ><span class="openapi-schema__name">
-                                  <!-- -->string</span
-                                ></span
-                              >
-                            </div>
-                          </div>
-                          <div class="openapi-schema__list-item">
-                            <div>
-                              <span class="openapi-schema__container"
-                                ><strong class="openapi-schema__property"
-                                  >propB2</strong
-                                ><span class="openapi-schema__name">
-                                  <!-- -->boolean</span
-                                ></span
-                              >
+                              <div class="openapi-schema__list-item">
+                                <div>
+                                  <span class="openapi-schema__container"
+                                    ><strong class="openapi-schema__property"
+                                      >propB1</strong
+                                    ><span class="openapi-schema__name">
+                                      <!-- -->string</span
+                                    ></span
+                                  >
+                                </div>
+                              </div>
+                              <div class="openapi-schema__list-item">
+                                <div>
+                                  <span class="openapi-schema__container"
+                                    ><strong class="openapi-schema__property"
+                                      >propB2</strong
+                                    ><span class="openapi-schema__name">
+                                      <!-- -->boolean</span
+                                    ></span
+                                  >
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </div></details
-                  >
+                      </div></details
+                    >
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </ul>
+    </div>
+  </div>
+  <div class="col col--5 openapi-right-panel__container">
+    <div
+      class="language-json codeBlockContainer_mQmQ theme-code-block"
+      style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"
+    >
+      <div class="codeBlockTitle_x_ju">BaseNestedMapping</div>
+      <div class="codeBlockContent_D5yF">
+        <pre
+          tabindex="0"
+          class="prism-code language-json codeBlock_RMoD thin-scrollbar"
+          style="color:#bfc7d5;background-color:#292d3e"
+        ><code class="codeBlockLines_AclH"><span class="token-line" style="color:#bfc7d5"><span class="token punctuation" style="color:rgb(199, 146, 234)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"type"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"nestedTypeA"</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"nestedA"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(199, 146, 234)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">    </span><span class="token property">"propA1"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"string"</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">    </span><span class="token property">"propA2"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token number" style="color:rgb(247, 140, 108)">0</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token punctuation" style="color:rgb(199, 146, 234)">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain"></span><span class="token punctuation" style="color:rgb(199, 146, 234)">}</span><br></span></code></pre>
+        <div class="buttonGroup_aaMX">
+          <button
+            type="button"
+            aria-label="Copy code to clipboard"
+            title="Copy"
+            class="clean-btn"
+          >
+            <span class="copyButtonIcons_z5j7" aria-hidden="true"
+              ><svg viewBox="0 0 24 24" class="copyButtonIcon_FoOz">
+                <path
+                  fill="currentColor"
+                  d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"
+                ></path></svg
+              ><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_L0B6">
+                <path
+                  fill="currentColor"
+                  d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+                ></path></svg
+            ></span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;
 
 exports[`Schema Snapshots > should match the snapshot for baserequired #0`] = `
 <div class="row theme-api-markdown">
-  <div class="col col--12">
+  <div class="col col--7 openapi-left-panel__container schema">
     <h1 class="openapi__heading">BaseRequired</h1>
-    <ul>
-      <div>
-        <span class="badge badge--info" style="margin-bottom:1rem"
-          ><p>oneOf</p></span
-        >
-        <div class="openapi-tabs__schema-container">
-          <div class="openapi-tabs__schema-tabs-container">
-            <ul
-              role="tablist"
-              aria-orientation="horizontal"
-              class="openapi-tabs__schema-list-container tabs"
+    <div>
+      <span class="badge badge--info" style="margin-bottom:1rem">oneOf</span>
+      <div class="openapi-tabs__schema-container">
+        <div class="openapi-tabs__schema-tabs-container">
+          <ul
+            role="tablist"
+            aria-orientation="horizontal"
+            class="openapi-tabs__schema-list-container tabs"
+          >
+            <li
+              role="tab"
+              tabindex="0"
+              aria-selected="true"
+              class="tabs__item openapi-tabs__schema-item active"
             >
-              <li
-                role="tab"
-                tabindex="0"
-                aria-selected="true"
-                class="tabs__item openapi-tabs__schema-item active"
-              >
-                <span class="openapi-tabs__schema-label">TypeA</span>
-              </li>
-              <li
-                role="tab"
-                tabindex="-1"
-                aria-selected="false"
-                class="tabs__item openapi-tabs__schema-item"
-              >
-                <span class="openapi-tabs__schema-label">TypeB</span>
-              </li>
-            </ul>
-          </div>
-          <div class="margin-top--md">
-            <div role="tabpanel" class="tabItem_wHwb">
-              <div class="openapi-schema__list-item">
+              <span class="openapi-tabs__schema-label">TypeA</span>
+            </li>
+            <li
+              role="tab"
+              tabindex="-1"
+              aria-selected="false"
+              class="tabs__item openapi-tabs__schema-item"
+            >
+              <span class="openapi-tabs__schema-label">TypeB</span>
+            </li>
+          </ul>
+        </div>
+        <div class="margin-top--md">
+          <div role="tabpanel" class="tabItem_wHwb">
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">type</strong
+                  ><span class="openapi-schema__name"> <!-- -->string</span
+                  ><span class="openapi-schema__divider"></span
+                  ><span class="openapi-schema__required">required</span></span
+                >
                 <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">type</strong
-                    ><span class="openapi-schema__name"> <!-- -->string</span
-                    ><span class="openapi-schema__divider"></span
-                    ><span class="openapi-schema__required"
-                      >required</span
-                    ></span
-                  >
-                  <div>
-                    <p>
-                      <strong>Possible values:</strong> [<code>typeA</code>]
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="openapi-schema__list-item">
-                <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">propA</strong
-                    ><span class="openapi-schema__name">
-                      <!-- -->string</span
-                    ></span
-                  >
+                  <p><strong>Possible values:</strong> [<code>typeA</code>]</p>
                 </div>
               </div>
             </div>
-            <div role="tabpanel" class="tabItem_wHwb" hidden="">
-              <div class="openapi-schema__list-item">
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">propA</strong
+                  ><span class="openapi-schema__name">
+                    <!-- -->string</span
+                  ></span
+                >
+              </div>
+            </div>
+          </div>
+          <div role="tabpanel" class="tabItem_wHwb" hidden="">
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">type</strong
+                  ><span class="openapi-schema__name"> <!-- -->string</span
+                  ><span class="openapi-schema__divider"></span
+                  ><span class="openapi-schema__required">required</span></span
+                >
                 <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">type</strong
-                    ><span class="openapi-schema__name"> <!-- -->string</span
-                    ><span class="openapi-schema__divider"></span
-                    ><span class="openapi-schema__required"
-                      >required</span
-                    ></span
-                  >
-                  <div>
-                    <p>
-                      <strong>Possible values:</strong> [<code>typeB</code>]
-                    </p>
-                  </div>
+                  <p><strong>Possible values:</strong> [<code>typeB</code>]</p>
                 </div>
               </div>
-              <div class="openapi-schema__list-item">
-                <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">propB</strong
-                    ><span class="openapi-schema__name">
-                      <!-- -->number</span
-                    ></span
-                  >
-                </div>
+            </div>
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">propB</strong
+                  ><span class="openapi-schema__name">
+                    <!-- -->number</span
+                  ></span
+                >
               </div>
             </div>
           </div>
@@ -3760,102 +3848,126 @@ exports[`Schema Snapshots > should match the snapshot for baserequired #0`] = `
           ></span>
         </div>
       </div>
-    </ul>
+    </div>
+  </div>
+  <div class="col col--5 openapi-right-panel__container">
+    <div
+      class="language-json codeBlockContainer_mQmQ theme-code-block"
+      style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"
+    >
+      <div class="codeBlockTitle_x_ju">BaseRequired</div>
+      <div class="codeBlockContent_D5yF">
+        <pre
+          tabindex="0"
+          class="prism-code language-json codeBlock_RMoD thin-scrollbar"
+          style="color:#bfc7d5;background-color:#292d3e"
+        ><code class="codeBlockLines_AclH"><span class="token-line" style="color:#bfc7d5"><span class="token punctuation" style="color:rgb(199, 146, 234)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"type"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"typeA"</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"propA"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"string"</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain"></span><span class="token punctuation" style="color:rgb(199, 146, 234)">}</span><br></span></code></pre>
+        <div class="buttonGroup_aaMX">
+          <button
+            type="button"
+            aria-label="Copy code to clipboard"
+            title="Copy"
+            class="clean-btn"
+          >
+            <span class="copyButtonIcons_z5j7" aria-hidden="true"
+              ><svg viewBox="0 0 24 24" class="copyButtonIcon_FoOz">
+                <path
+                  fill="currentColor"
+                  d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"
+                ></path></svg
+              ><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_L0B6">
+                <path
+                  fill="currentColor"
+                  d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+                ></path></svg
+            ></span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;
 
 exports[`Schema Snapshots > should match the snapshot for baserequiredmapping #0`] = `
 <div class="row theme-api-markdown">
-  <div class="col col--12">
+  <div class="col col--7 openapi-left-panel__container schema">
     <h1 class="openapi__heading">BaseRequiredMapping</h1>
-    <ul>
-      <div>
-        <span class="badge badge--info" style="margin-bottom:1rem"
-          ><p>oneOf</p></span
-        >
-        <div class="openapi-tabs__schema-container">
-          <div class="openapi-tabs__schema-tabs-container">
-            <ul
-              role="tablist"
-              aria-orientation="horizontal"
-              class="openapi-tabs__schema-list-container tabs"
+    <div>
+      <span class="badge badge--info" style="margin-bottom:1rem">oneOf</span>
+      <div class="openapi-tabs__schema-container">
+        <div class="openapi-tabs__schema-tabs-container">
+          <ul
+            role="tablist"
+            aria-orientation="horizontal"
+            class="openapi-tabs__schema-list-container tabs"
+          >
+            <li
+              role="tab"
+              tabindex="0"
+              aria-selected="true"
+              class="tabs__item openapi-tabs__schema-item active"
             >
-              <li
-                role="tab"
-                tabindex="0"
-                aria-selected="true"
-                class="tabs__item openapi-tabs__schema-item active"
-              >
-                <span class="openapi-tabs__schema-label">TypeA</span>
-              </li>
-              <li
-                role="tab"
-                tabindex="-1"
-                aria-selected="false"
-                class="tabs__item openapi-tabs__schema-item"
-              >
-                <span class="openapi-tabs__schema-label">TypeB</span>
-              </li>
-            </ul>
-          </div>
-          <div class="margin-top--md">
-            <div role="tabpanel" class="tabItem_wHwb">
-              <div class="openapi-schema__list-item">
+              <span class="openapi-tabs__schema-label">TypeA</span>
+            </li>
+            <li
+              role="tab"
+              tabindex="-1"
+              aria-selected="false"
+              class="tabs__item openapi-tabs__schema-item"
+            >
+              <span class="openapi-tabs__schema-label">TypeB</span>
+            </li>
+          </ul>
+        </div>
+        <div class="margin-top--md">
+          <div role="tabpanel" class="tabItem_wHwb">
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">type</strong
+                  ><span class="openapi-schema__name"> <!-- -->string</span
+                  ><span class="openapi-schema__divider"></span
+                  ><span class="openapi-schema__required">required</span></span
+                >
                 <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">type</strong
-                    ><span class="openapi-schema__name"> <!-- -->string</span
-                    ><span class="openapi-schema__divider"></span
-                    ><span class="openapi-schema__required"
-                      >required</span
-                    ></span
-                  >
-                  <div>
-                    <p>
-                      <strong>Possible values:</strong> [<code>typeA</code>]
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="openapi-schema__list-item">
-                <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">propA</strong
-                    ><span class="openapi-schema__name">
-                      <!-- -->string</span
-                    ></span
-                  >
+                  <p><strong>Possible values:</strong> [<code>typeA</code>]</p>
                 </div>
               </div>
             </div>
-            <div role="tabpanel" class="tabItem_wHwb" hidden="">
-              <div class="openapi-schema__list-item">
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">propA</strong
+                  ><span class="openapi-schema__name">
+                    <!-- -->string</span
+                  ></span
+                >
+              </div>
+            </div>
+          </div>
+          <div role="tabpanel" class="tabItem_wHwb" hidden="">
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">type</strong
+                  ><span class="openapi-schema__name"> <!-- -->string</span
+                  ><span class="openapi-schema__divider"></span
+                  ><span class="openapi-schema__required">required</span></span
+                >
                 <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">type</strong
-                    ><span class="openapi-schema__name"> <!-- -->string</span
-                    ><span class="openapi-schema__divider"></span
-                    ><span class="openapi-schema__required"
-                      >required</span
-                    ></span
-                  >
-                  <div>
-                    <p>
-                      <strong>Possible values:</strong> [<code>typeB</code>]
-                    </p>
-                  </div>
+                  <p><strong>Possible values:</strong> [<code>typeB</code>]</p>
                 </div>
               </div>
-              <div class="openapi-schema__list-item">
-                <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">propB</strong
-                    ><span class="openapi-schema__name">
-                      <!-- -->number</span
-                    ></span
-                  >
-                </div>
+            </div>
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">propB</strong
+                  ><span class="openapi-schema__name">
+                    <!-- -->number</span
+                  ></span
+                >
               </div>
             </div>
           </div>
@@ -3866,14 +3978,16 @@ exports[`Schema Snapshots > should match the snapshot for baserequiredmapping #0
           <span class="openapi-schema__container"
             ><strong
               class="openapi-discriminator__name openapi-schema__property"
-              ><p>type</p></strong
-            ><span class="openapi-schema__name"><p>string</p></span></span
+              >type</strong
+            ></span
           >
-          <div style="padding-left:1rem">
-            <p>
-              <strong>Possible values:</strong> [<code>typeA</code>,
-              <code>typeB</code>]
-            </p>
+          <div style="margin-left:1rem">
+            <div style="margin-top:.5rem;margin-bottom:.5rem">
+              <p>
+                <strong>Possible values:</strong> [<code>typeA</code>,
+                <code>typeB</code>]
+              </p>
+            </div>
           </div>
           <div class="openapi-tabs__container">
             <div class="openapi-tabs__discriminator-top-section">
@@ -3908,60 +4022,66 @@ exports[`Schema Snapshots > should match the snapshot for baserequiredmapping #0
             </div>
             <div class="margin-top--md">
               <div role="tabpanel" class="tabItem_wHwb">
-                <div class="openapi-schema__list-item">
-                  <div>
-                    <span class="openapi-schema__container"
-                      ><strong class="openapi-schema__property">type</strong
-                      ><span class="openapi-schema__name"> <!-- -->string</span
-                      ><span class="openapi-schema__divider"></span
-                      ><span class="openapi-schema__required"
-                        >required</span
-                      ></span
-                    >
+                <div>
+                  <div class="openapi-schema__list-item">
                     <div>
-                      <p>
-                        <strong>Possible values:</strong> [<code>typeA</code>]
-                      </p>
+                      <span class="openapi-schema__container"
+                        ><strong class="openapi-schema__property">type</strong
+                        ><span class="openapi-schema__name">
+                          <!-- -->string</span
+                        ><span class="openapi-schema__divider"></span
+                        ><span class="openapi-schema__required"
+                          >required</span
+                        ></span
+                      >
+                      <div>
+                        <p>
+                          <strong>Possible values:</strong> [<code>typeA</code>]
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="openapi-schema__list-item">
-                  <div>
-                    <span class="openapi-schema__container"
-                      ><strong class="openapi-schema__property">propA</strong
-                      ><span class="openapi-schema__name">
-                        <!-- -->string</span
-                      ></span
-                    >
+                  <div class="openapi-schema__list-item">
+                    <div>
+                      <span class="openapi-schema__container"
+                        ><strong class="openapi-schema__property">propA</strong
+                        ><span class="openapi-schema__name">
+                          <!-- -->string</span
+                        ></span
+                      >
+                    </div>
                   </div>
                 </div>
               </div>
               <div role="tabpanel" class="tabItem_wHwb" hidden="">
-                <div class="openapi-schema__list-item">
-                  <div>
-                    <span class="openapi-schema__container"
-                      ><strong class="openapi-schema__property">type</strong
-                      ><span class="openapi-schema__name"> <!-- -->string</span
-                      ><span class="openapi-schema__divider"></span
-                      ><span class="openapi-schema__required"
-                        >required</span
-                      ></span
-                    >
+                <div>
+                  <div class="openapi-schema__list-item">
                     <div>
-                      <p>
-                        <strong>Possible values:</strong> [<code>typeB</code>]
-                      </p>
+                      <span class="openapi-schema__container"
+                        ><strong class="openapi-schema__property">type</strong
+                        ><span class="openapi-schema__name">
+                          <!-- -->string</span
+                        ><span class="openapi-schema__divider"></span
+                        ><span class="openapi-schema__required"
+                          >required</span
+                        ></span
+                      >
+                      <div>
+                        <p>
+                          <strong>Possible values:</strong> [<code>typeB</code>]
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="openapi-schema__list-item">
-                  <div>
-                    <span class="openapi-schema__container"
-                      ><strong class="openapi-schema__property">propB</strong
-                      ><span class="openapi-schema__name">
-                        <!-- -->number</span
-                      ></span
-                    >
+                  <div class="openapi-schema__list-item">
+                    <div>
+                      <span class="openapi-schema__container"
+                        ><strong class="openapi-schema__property">propB</strong
+                        ><span class="openapi-schema__name">
+                          <!-- -->number</span
+                        ></span
+                      >
+                    </div>
                   </div>
                 </div>
               </div>
@@ -3969,102 +4089,126 @@ exports[`Schema Snapshots > should match the snapshot for baserequiredmapping #0
           </div>
         </div>
       </div>
-    </ul>
+    </div>
+  </div>
+  <div class="col col--5 openapi-right-panel__container">
+    <div
+      class="language-json codeBlockContainer_mQmQ theme-code-block"
+      style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"
+    >
+      <div class="codeBlockTitle_x_ju">BaseRequiredMapping</div>
+      <div class="codeBlockContent_D5yF">
+        <pre
+          tabindex="0"
+          class="prism-code language-json codeBlock_RMoD thin-scrollbar"
+          style="color:#bfc7d5;background-color:#292d3e"
+        ><code class="codeBlockLines_AclH"><span class="token-line" style="color:#bfc7d5"><span class="token punctuation" style="color:rgb(199, 146, 234)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"type"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"typeA"</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"propA"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"string"</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain"></span><span class="token punctuation" style="color:rgb(199, 146, 234)">}</span><br></span></code></pre>
+        <div class="buttonGroup_aaMX">
+          <button
+            type="button"
+            aria-label="Copy code to clipboard"
+            title="Copy"
+            class="clean-btn"
+          >
+            <span class="copyButtonIcons_z5j7" aria-hidden="true"
+              ><svg viewBox="0 0 24 24" class="copyButtonIcon_FoOz">
+                <path
+                  fill="currentColor"
+                  d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"
+                ></path></svg
+              ><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_L0B6">
+                <path
+                  fill="currentColor"
+                  d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+                ></path></svg
+            ></span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;
 
 exports[`Schema Snapshots > should match the snapshot for baseshared #0`] = `
 <div class="row theme-api-markdown">
-  <div class="col col--12">
+  <div class="col col--7 openapi-left-panel__container schema">
     <h1 class="openapi__heading">BaseShared</h1>
-    <ul>
-      <div>
-        <span class="badge badge--info" style="margin-bottom:1rem"
-          ><p>oneOf</p></span
-        >
-        <div class="openapi-tabs__schema-container">
-          <div class="openapi-tabs__schema-tabs-container">
-            <ul
-              role="tablist"
-              aria-orientation="horizontal"
-              class="openapi-tabs__schema-list-container tabs"
+    <div>
+      <span class="badge badge--info" style="margin-bottom:1rem">oneOf</span>
+      <div class="openapi-tabs__schema-container">
+        <div class="openapi-tabs__schema-tabs-container">
+          <ul
+            role="tablist"
+            aria-orientation="horizontal"
+            class="openapi-tabs__schema-list-container tabs"
+          >
+            <li
+              role="tab"
+              tabindex="0"
+              aria-selected="true"
+              class="tabs__item openapi-tabs__schema-item active"
             >
-              <li
-                role="tab"
-                tabindex="0"
-                aria-selected="true"
-                class="tabs__item openapi-tabs__schema-item active"
-              >
-                <span class="openapi-tabs__schema-label">TypeA</span>
-              </li>
-              <li
-                role="tab"
-                tabindex="-1"
-                aria-selected="false"
-                class="tabs__item openapi-tabs__schema-item"
-              >
-                <span class="openapi-tabs__schema-label">TypeB</span>
-              </li>
-            </ul>
-          </div>
-          <div class="margin-top--md">
-            <div role="tabpanel" class="tabItem_wHwb">
-              <div class="openapi-schema__list-item">
+              <span class="openapi-tabs__schema-label">TypeA</span>
+            </li>
+            <li
+              role="tab"
+              tabindex="-1"
+              aria-selected="false"
+              class="tabs__item openapi-tabs__schema-item"
+            >
+              <span class="openapi-tabs__schema-label">TypeB</span>
+            </li>
+          </ul>
+        </div>
+        <div class="margin-top--md">
+          <div role="tabpanel" class="tabItem_wHwb">
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">type</strong
+                  ><span class="openapi-schema__name"> <!-- -->string</span
+                  ><span class="openapi-schema__divider"></span
+                  ><span class="openapi-schema__required">required</span></span
+                >
                 <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">type</strong
-                    ><span class="openapi-schema__name"> <!-- -->string</span
-                    ><span class="openapi-schema__divider"></span
-                    ><span class="openapi-schema__required"
-                      >required</span
-                    ></span
-                  >
-                  <div>
-                    <p>
-                      <strong>Possible values:</strong> [<code>typeA</code>]
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="openapi-schema__list-item">
-                <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">propA</strong
-                    ><span class="openapi-schema__name">
-                      <!-- -->string</span
-                    ></span
-                  >
+                  <p><strong>Possible values:</strong> [<code>typeA</code>]</p>
                 </div>
               </div>
             </div>
-            <div role="tabpanel" class="tabItem_wHwb" hidden="">
-              <div class="openapi-schema__list-item">
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">propA</strong
+                  ><span class="openapi-schema__name">
+                    <!-- -->string</span
+                  ></span
+                >
+              </div>
+            </div>
+          </div>
+          <div role="tabpanel" class="tabItem_wHwb" hidden="">
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">type</strong
+                  ><span class="openapi-schema__name"> <!-- -->string</span
+                  ><span class="openapi-schema__divider"></span
+                  ><span class="openapi-schema__required">required</span></span
+                >
                 <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">type</strong
-                    ><span class="openapi-schema__name"> <!-- -->string</span
-                    ><span class="openapi-schema__divider"></span
-                    ><span class="openapi-schema__required"
-                      >required</span
-                    ></span
-                  >
-                  <div>
-                    <p>
-                      <strong>Possible values:</strong> [<code>typeB</code>]
-                    </p>
-                  </div>
+                  <p><strong>Possible values:</strong> [<code>typeB</code>]</p>
                 </div>
               </div>
-              <div class="openapi-schema__list-item">
-                <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">propB</strong
-                    ><span class="openapi-schema__name">
-                      <!-- -->number</span
-                    ></span
-                  >
-                </div>
+            </div>
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">propB</strong
+                  ><span class="openapi-schema__name">
+                    <!-- -->number</span
+                  ></span
+                >
               </div>
             </div>
           </div>
@@ -4086,102 +4230,126 @@ exports[`Schema Snapshots > should match the snapshot for baseshared #0`] = `
           >
         </div>
       </div>
-    </ul>
+    </div>
+  </div>
+  <div class="col col--5 openapi-right-panel__container">
+    <div
+      class="language-json codeBlockContainer_mQmQ theme-code-block"
+      style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"
+    >
+      <div class="codeBlockTitle_x_ju">BaseShared</div>
+      <div class="codeBlockContent_D5yF">
+        <pre
+          tabindex="0"
+          class="prism-code language-json codeBlock_RMoD thin-scrollbar"
+          style="color:#bfc7d5;background-color:#292d3e"
+        ><code class="codeBlockLines_AclH"><span class="token-line" style="color:#bfc7d5"><span class="token punctuation" style="color:rgb(199, 146, 234)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"type"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"typeA"</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"sharedProp"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"string"</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"propA"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"string"</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain"></span><span class="token punctuation" style="color:rgb(199, 146, 234)">}</span><br></span></code></pre>
+        <div class="buttonGroup_aaMX">
+          <button
+            type="button"
+            aria-label="Copy code to clipboard"
+            title="Copy"
+            class="clean-btn"
+          >
+            <span class="copyButtonIcons_z5j7" aria-hidden="true"
+              ><svg viewBox="0 0 24 24" class="copyButtonIcon_FoOz">
+                <path
+                  fill="currentColor"
+                  d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"
+                ></path></svg
+              ><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_L0B6">
+                <path
+                  fill="currentColor"
+                  d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+                ></path></svg
+            ></span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;
 
 exports[`Schema Snapshots > should match the snapshot for basesharedmapping #0`] = `
 <div class="row theme-api-markdown">
-  <div class="col col--12">
+  <div class="col col--7 openapi-left-panel__container schema">
     <h1 class="openapi__heading">BaseSharedMapping</h1>
-    <ul>
-      <div>
-        <span class="badge badge--info" style="margin-bottom:1rem"
-          ><p>oneOf</p></span
-        >
-        <div class="openapi-tabs__schema-container">
-          <div class="openapi-tabs__schema-tabs-container">
-            <ul
-              role="tablist"
-              aria-orientation="horizontal"
-              class="openapi-tabs__schema-list-container tabs"
+    <div>
+      <span class="badge badge--info" style="margin-bottom:1rem">oneOf</span>
+      <div class="openapi-tabs__schema-container">
+        <div class="openapi-tabs__schema-tabs-container">
+          <ul
+            role="tablist"
+            aria-orientation="horizontal"
+            class="openapi-tabs__schema-list-container tabs"
+          >
+            <li
+              role="tab"
+              tabindex="0"
+              aria-selected="true"
+              class="tabs__item openapi-tabs__schema-item active"
             >
-              <li
-                role="tab"
-                tabindex="0"
-                aria-selected="true"
-                class="tabs__item openapi-tabs__schema-item active"
-              >
-                <span class="openapi-tabs__schema-label">TypeA</span>
-              </li>
-              <li
-                role="tab"
-                tabindex="-1"
-                aria-selected="false"
-                class="tabs__item openapi-tabs__schema-item"
-              >
-                <span class="openapi-tabs__schema-label">TypeB</span>
-              </li>
-            </ul>
-          </div>
-          <div class="margin-top--md">
-            <div role="tabpanel" class="tabItem_wHwb">
-              <div class="openapi-schema__list-item">
+              <span class="openapi-tabs__schema-label">TypeA</span>
+            </li>
+            <li
+              role="tab"
+              tabindex="-1"
+              aria-selected="false"
+              class="tabs__item openapi-tabs__schema-item"
+            >
+              <span class="openapi-tabs__schema-label">TypeB</span>
+            </li>
+          </ul>
+        </div>
+        <div class="margin-top--md">
+          <div role="tabpanel" class="tabItem_wHwb">
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">type</strong
+                  ><span class="openapi-schema__name"> <!-- -->string</span
+                  ><span class="openapi-schema__divider"></span
+                  ><span class="openapi-schema__required">required</span></span
+                >
                 <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">type</strong
-                    ><span class="openapi-schema__name"> <!-- -->string</span
-                    ><span class="openapi-schema__divider"></span
-                    ><span class="openapi-schema__required"
-                      >required</span
-                    ></span
-                  >
-                  <div>
-                    <p>
-                      <strong>Possible values:</strong> [<code>typeA</code>]
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="openapi-schema__list-item">
-                <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">propA</strong
-                    ><span class="openapi-schema__name">
-                      <!-- -->string</span
-                    ></span
-                  >
+                  <p><strong>Possible values:</strong> [<code>typeA</code>]</p>
                 </div>
               </div>
             </div>
-            <div role="tabpanel" class="tabItem_wHwb" hidden="">
-              <div class="openapi-schema__list-item">
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">propA</strong
+                  ><span class="openapi-schema__name">
+                    <!-- -->string</span
+                  ></span
+                >
+              </div>
+            </div>
+          </div>
+          <div role="tabpanel" class="tabItem_wHwb" hidden="">
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">type</strong
+                  ><span class="openapi-schema__name"> <!-- -->string</span
+                  ><span class="openapi-schema__divider"></span
+                  ><span class="openapi-schema__required">required</span></span
+                >
                 <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">type</strong
-                    ><span class="openapi-schema__name"> <!-- -->string</span
-                    ><span class="openapi-schema__divider"></span
-                    ><span class="openapi-schema__required"
-                      >required</span
-                    ></span
-                  >
-                  <div>
-                    <p>
-                      <strong>Possible values:</strong> [<code>typeB</code>]
-                    </p>
-                  </div>
+                  <p><strong>Possible values:</strong> [<code>typeB</code>]</p>
                 </div>
               </div>
-              <div class="openapi-schema__list-item">
-                <div>
-                  <span class="openapi-schema__container"
-                    ><strong class="openapi-schema__property">propB</strong
-                    ><span class="openapi-schema__name">
-                      <!-- -->number</span
-                    ></span
-                  >
-                </div>
+            </div>
+            <div class="openapi-schema__list-item">
+              <div>
+                <span class="openapi-schema__container"
+                  ><strong class="openapi-schema__property">propB</strong
+                  ><span class="openapi-schema__name">
+                    <!-- -->number</span
+                  ></span
+                >
               </div>
             </div>
           </div>
@@ -4192,14 +4360,16 @@ exports[`Schema Snapshots > should match the snapshot for basesharedmapping #0`]
           <span class="openapi-schema__container"
             ><strong
               class="openapi-discriminator__name openapi-schema__property"
-              ><p>type</p></strong
-            ><span class="openapi-schema__name"><p>string</p></span></span
+              >type</strong
+            ><span class="openapi-schema__name"> <!-- -->string</span></span
           >
-          <div style="padding-left:1rem">
-            <p>
-              <strong>Possible values:</strong> [<code>typeA</code>,
-              <code>typeB</code>]
-            </p>
+          <div style="margin-left:1rem">
+            <div style="margin-top:.5rem;margin-bottom:.5rem">
+              <p>
+                <strong>Possible values:</strong> [<code>typeA</code>,
+                <code>typeB</code>]
+              </p>
+            </div>
           </div>
           <div class="openapi-tabs__container">
             <div class="openapi-tabs__discriminator-top-section">
@@ -4234,60 +4404,66 @@ exports[`Schema Snapshots > should match the snapshot for basesharedmapping #0`]
             </div>
             <div class="margin-top--md">
               <div role="tabpanel" class="tabItem_wHwb">
-                <div class="openapi-schema__list-item">
-                  <div>
-                    <span class="openapi-schema__container"
-                      ><strong class="openapi-schema__property">type</strong
-                      ><span class="openapi-schema__name"> <!-- -->string</span
-                      ><span class="openapi-schema__divider"></span
-                      ><span class="openapi-schema__required"
-                        >required</span
-                      ></span
-                    >
+                <div>
+                  <div class="openapi-schema__list-item">
                     <div>
-                      <p>
-                        <strong>Possible values:</strong> [<code>typeA</code>]
-                      </p>
+                      <span class="openapi-schema__container"
+                        ><strong class="openapi-schema__property">type</strong
+                        ><span class="openapi-schema__name">
+                          <!-- -->string</span
+                        ><span class="openapi-schema__divider"></span
+                        ><span class="openapi-schema__required"
+                          >required</span
+                        ></span
+                      >
+                      <div>
+                        <p>
+                          <strong>Possible values:</strong> [<code>typeA</code>]
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="openapi-schema__list-item">
-                  <div>
-                    <span class="openapi-schema__container"
-                      ><strong class="openapi-schema__property">propA</strong
-                      ><span class="openapi-schema__name">
-                        <!-- -->string</span
-                      ></span
-                    >
+                  <div class="openapi-schema__list-item">
+                    <div>
+                      <span class="openapi-schema__container"
+                        ><strong class="openapi-schema__property">propA</strong
+                        ><span class="openapi-schema__name">
+                          <!-- -->string</span
+                        ></span
+                      >
+                    </div>
                   </div>
                 </div>
               </div>
               <div role="tabpanel" class="tabItem_wHwb" hidden="">
-                <div class="openapi-schema__list-item">
-                  <div>
-                    <span class="openapi-schema__container"
-                      ><strong class="openapi-schema__property">type</strong
-                      ><span class="openapi-schema__name"> <!-- -->string</span
-                      ><span class="openapi-schema__divider"></span
-                      ><span class="openapi-schema__required"
-                        >required</span
-                      ></span
-                    >
+                <div>
+                  <div class="openapi-schema__list-item">
                     <div>
-                      <p>
-                        <strong>Possible values:</strong> [<code>typeB</code>]
-                      </p>
+                      <span class="openapi-schema__container"
+                        ><strong class="openapi-schema__property">type</strong
+                        ><span class="openapi-schema__name">
+                          <!-- -->string</span
+                        ><span class="openapi-schema__divider"></span
+                        ><span class="openapi-schema__required"
+                          >required</span
+                        ></span
+                      >
+                      <div>
+                        <p>
+                          <strong>Possible values:</strong> [<code>typeB</code>]
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="openapi-schema__list-item">
-                  <div>
-                    <span class="openapi-schema__container"
-                      ><strong class="openapi-schema__property">propB</strong
-                      ><span class="openapi-schema__name">
-                        <!-- -->number</span
-                      ></span
-                    >
+                  <div class="openapi-schema__list-item">
+                    <div>
+                      <span class="openapi-schema__container"
+                        ><strong class="openapi-schema__property">propB</strong
+                        ><span class="openapi-schema__name">
+                          <!-- -->number</span
+                        ></span
+                      >
+                    </div>
                   </div>
                 </div>
               </div>
@@ -4303,16 +4479,52 @@ exports[`Schema Snapshots > should match the snapshot for basesharedmapping #0`]
           >
         </div>
       </div>
-    </ul>
+    </div>
+  </div>
+  <div class="col col--5 openapi-right-panel__container">
+    <div
+      class="language-json codeBlockContainer_mQmQ theme-code-block"
+      style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"
+    >
+      <div class="codeBlockTitle_x_ju">BaseSharedMapping</div>
+      <div class="codeBlockContent_D5yF">
+        <pre
+          tabindex="0"
+          class="prism-code language-json codeBlock_RMoD thin-scrollbar"
+          style="color:#bfc7d5;background-color:#292d3e"
+        ><code class="codeBlockLines_AclH"><span class="token-line" style="color:#bfc7d5"><span class="token punctuation" style="color:rgb(199, 146, 234)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"type"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"typeA"</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"sharedProp"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"string"</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"propA"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"string"</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain"></span><span class="token punctuation" style="color:rgb(199, 146, 234)">}</span><br></span></code></pre>
+        <div class="buttonGroup_aaMX">
+          <button
+            type="button"
+            aria-label="Copy code to clipboard"
+            title="Copy"
+            class="clean-btn"
+          >
+            <span class="copyButtonIcons_z5j7" aria-hidden="true"
+              ><svg viewBox="0 0 24 24" class="copyButtonIcon_FoOz">
+                <path
+                  fill="currentColor"
+                  d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"
+                ></path></svg
+              ><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_L0B6">
+                <path
+                  fill="currentColor"
+                  d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+                ></path></svg
+            ></span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;
 
 exports[`Schema Snapshots > should match the snapshot for book #0`] = `
 <div class="row theme-api-markdown">
-  <div class="col col--12">
+  <div class="col col--7 openapi-left-panel__container schema">
     <h1 class="openapi__heading">Book</h1>
-    <ul>
+    <div>
       <div class="openapi-schema__list-item">
         <div>
           <span class="openapi-schema__container"
@@ -4373,16 +4585,52 @@ exports[`Schema Snapshots > should match the snapshot for book #0`] = `
           <div><p>Tags associated with the book</p></div>
         </div>
       </div>
-    </ul>
+    </div>
+  </div>
+  <div class="col col--5 openapi-right-panel__container">
+    <div
+      class="language-json codeBlockContainer_mQmQ theme-code-block"
+      style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"
+    >
+      <div class="codeBlockTitle_x_ju">Book</div>
+      <div class="codeBlockContent_D5yF">
+        <pre
+          tabindex="0"
+          class="prism-code language-json codeBlock_RMoD thin-scrollbar"
+          style="color:#bfc7d5;background-color:#292d3e"
+        ><code class="codeBlockLines_AclH"><span class="token-line" style="color:#bfc7d5"><span class="token punctuation" style="color:rgb(199, 146, 234)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"id"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token number" style="color:rgb(247, 140, 108)">0</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"title"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"string"</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"author"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"string"</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"publishedDate"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"2024-07-29"</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"genre"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"string"</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"tags"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(199, 146, 234)">[</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">    </span><span class="token string" style="color:rgb(195, 232, 141)">"string"</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token punctuation" style="color:rgb(199, 146, 234)">]</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain"></span><span class="token punctuation" style="color:rgb(199, 146, 234)">}</span><br></span></code></pre>
+        <div class="buttonGroup_aaMX">
+          <button
+            type="button"
+            aria-label="Copy code to clipboard"
+            title="Copy"
+            class="clean-btn"
+          >
+            <span class="copyButtonIcons_z5j7" aria-hidden="true"
+              ><svg viewBox="0 0 24 24" class="copyButtonIcon_FoOz">
+                <path
+                  fill="currentColor"
+                  d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"
+                ></path></svg
+              ><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_L0B6">
+                <path
+                  fill="currentColor"
+                  d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+                ></path></svg
+            ></span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;
 
 exports[`Schema Snapshots > should match the snapshot for bookbase #0`] = `
 <div class="row theme-api-markdown">
-  <div class="col col--12">
+  <div class="col col--7 openapi-left-panel__container schema">
     <h1 class="openapi__heading">BookBase</h1>
-    <ul>
+    <div>
       <div class="openapi-schema__list-item">
         <div>
           <span class="openapi-schema__container"
@@ -4416,16 +4664,52 @@ exports[`Schema Snapshots > should match the snapshot for bookbase #0`] = `
           <div><p>The author of the book</p></div>
         </div>
       </div>
-    </ul>
+    </div>
+  </div>
+  <div class="col col--5 openapi-right-panel__container">
+    <div
+      class="language-json codeBlockContainer_mQmQ theme-code-block"
+      style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"
+    >
+      <div class="codeBlockTitle_x_ju">BookBase</div>
+      <div class="codeBlockContent_D5yF">
+        <pre
+          tabindex="0"
+          class="prism-code language-json codeBlock_RMoD thin-scrollbar"
+          style="color:#bfc7d5;background-color:#292d3e"
+        ><code class="codeBlockLines_AclH"><span class="token-line" style="color:#bfc7d5"><span class="token punctuation" style="color:rgb(199, 146, 234)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"id"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token number" style="color:rgb(247, 140, 108)">0</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"title"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"string"</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"author"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"string"</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain"></span><span class="token punctuation" style="color:rgb(199, 146, 234)">}</span><br></span></code></pre>
+        <div class="buttonGroup_aaMX">
+          <button
+            type="button"
+            aria-label="Copy code to clipboard"
+            title="Copy"
+            class="clean-btn"
+          >
+            <span class="copyButtonIcons_z5j7" aria-hidden="true"
+              ><svg viewBox="0 0 24 24" class="copyButtonIcon_FoOz">
+                <path
+                  fill="currentColor"
+                  d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"
+                ></path></svg
+              ><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_L0B6">
+                <path
+                  fill="currentColor"
+                  d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+                ></path></svg
+            ></span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;
 
 exports[`Schema Snapshots > should match the snapshot for enumdescriptionsentity #0`] = `
 <div class="row theme-api-markdown">
-  <div class="col col--12">
+  <div class="col col--7 openapi-left-panel__container schema">
     <h1 class="openapi__heading">EnumDescriptionsEntity</h1>
-    <ul>
+    <div>
       <div class="openapi-schema__list-item">
         <div>
           <span class="openapi-schema__container"
@@ -4480,16 +4764,52 @@ exports[`Schema Snapshots > should match the snapshot for enumdescriptionsentity
           </div>
         </div>
       </div>
-    </ul>
+    </div>
+  </div>
+  <div class="col col--5 openapi-right-panel__container">
+    <div
+      class="language-json codeBlockContainer_mQmQ theme-code-block"
+      style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"
+    >
+      <div class="codeBlockTitle_x_ju">EnumDescriptionsEntity</div>
+      <div class="codeBlockContent_D5yF">
+        <pre
+          tabindex="0"
+          class="prism-code language-json codeBlock_RMoD thin-scrollbar"
+          style="color:#bfc7d5;background-color:#292d3e"
+        ><code class="codeBlockLines_AclH"><span class="token-line" style="color:#bfc7d5"><span class="token punctuation" style="color:rgb(199, 146, 234)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"id"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"string"</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"name"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"string"</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"status"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"active"</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain"></span><span class="token punctuation" style="color:rgb(199, 146, 234)">}</span><br></span></code></pre>
+        <div class="buttonGroup_aaMX">
+          <button
+            type="button"
+            aria-label="Copy code to clipboard"
+            title="Copy"
+            class="clean-btn"
+          >
+            <span class="copyButtonIcons_z5j7" aria-hidden="true"
+              ><svg viewBox="0 0 24 24" class="copyButtonIcon_FoOz">
+                <path
+                  fill="currentColor"
+                  d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"
+                ></path></svg
+              ><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_L0B6">
+                <path
+                  fill="currentColor"
+                  d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+                ></path></svg
+            ></span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;
 
 exports[`Schema Snapshots > should match the snapshot for existingschema-1 #0`] = `
 <div class="row theme-api-markdown">
-  <div class="col col--12">
+  <div class="col col--7 openapi-left-panel__container schema">
     <h1 class="openapi__heading">ExistingSchema1</h1>
-    <ul>
+    <div>
       <div class="openapi-schema__list-item">
         <div>
           <span class="openapi-schema__container"
@@ -4514,16 +4834,52 @@ exports[`Schema Snapshots > should match the snapshot for existingschema-1 #0`] 
           ></span>
         </div>
       </div>
-    </ul>
+    </div>
+  </div>
+  <div class="col col--5 openapi-right-panel__container">
+    <div
+      class="language-json codeBlockContainer_mQmQ theme-code-block"
+      style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"
+    >
+      <div class="codeBlockTitle_x_ju">ExistingSchema1</div>
+      <div class="codeBlockContent_D5yF">
+        <pre
+          tabindex="0"
+          class="prism-code language-json codeBlock_RMoD thin-scrollbar"
+          style="color:#bfc7d5;background-color:#292d3e"
+        ><code class="codeBlockLines_AclH"><span class="token-line" style="color:#bfc7d5"><span class="token punctuation" style="color:rgb(199, 146, 234)">{</span><span class="token punctuation" style="color:rgb(199, 146, 234)">}</span><br></span></code></pre>
+        <div class="buttonGroup_aaMX">
+          <button
+            type="button"
+            aria-label="Copy code to clipboard"
+            title="Copy"
+            class="clean-btn"
+          >
+            <span class="copyButtonIcons_z5j7" aria-hidden="true"
+              ><svg viewBox="0 0 24 24" class="copyButtonIcon_FoOz">
+                <path
+                  fill="currentColor"
+                  d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"
+                ></path></svg
+              ><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_L0B6">
+                <path
+                  fill="currentColor"
+                  d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+                ></path></svg
+            ></span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;
 
 exports[`Schema Snapshots > should match the snapshot for existingschema-2 #0`] = `
 <div class="row theme-api-markdown">
-  <div class="col col--12">
+  <div class="col col--7 openapi-left-panel__container schema">
     <h1 class="openapi__heading">ExistingSchema2</h1>
-    <ul>
+    <div>
       <div class="openapi-schema__list-item">
         <div>
           <span class="openapi-schema__container"
@@ -4548,16 +4904,52 @@ exports[`Schema Snapshots > should match the snapshot for existingschema-2 #0`] 
           ></span>
         </div>
       </div>
-    </ul>
+    </div>
+  </div>
+  <div class="col col--5 openapi-right-panel__container">
+    <div
+      class="language-json codeBlockContainer_mQmQ theme-code-block"
+      style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"
+    >
+      <div class="codeBlockTitle_x_ju">ExistingSchema2</div>
+      <div class="codeBlockContent_D5yF">
+        <pre
+          tabindex="0"
+          class="prism-code language-json codeBlock_RMoD thin-scrollbar"
+          style="color:#bfc7d5;background-color:#292d3e"
+        ><code class="codeBlockLines_AclH"><span class="token-line" style="color:#bfc7d5"><span class="token punctuation" style="color:rgb(199, 146, 234)">{</span><span class="token punctuation" style="color:rgb(199, 146, 234)">}</span><br></span></code></pre>
+        <div class="buttonGroup_aaMX">
+          <button
+            type="button"
+            aria-label="Copy code to clipboard"
+            title="Copy"
+            class="clean-btn"
+          >
+            <span class="copyButtonIcons_z5j7" aria-hidden="true"
+              ><svg viewBox="0 0 24 24" class="copyButtonIcon_FoOz">
+                <path
+                  fill="currentColor"
+                  d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"
+                ></path></svg
+              ><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_L0B6">
+                <path
+                  fill="currentColor"
+                  d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+                ></path></svg
+            ></span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;
 
 exports[`Schema Snapshots > should match the snapshot for nestedtypea #0`] = `
 <div class="row theme-api-markdown">
-  <div class="col col--12">
+  <div class="col col--7 openapi-left-panel__container schema">
     <h1 class="openapi__heading">NestedTypeA</h1>
-    <ul>
+    <div>
       <div class="openapi-schema__list-item">
         <div>
           <span class="openapi-schema__container"
@@ -4577,31 +4969,33 @@ exports[`Schema Snapshots > should match the snapshot for nestedtypea #0`] = `
           data-collapsed="true"
           ><summary
             ><span class="openapi-schema__container"
-              ><strong class="openapi-schema__property"><p>nestedA</p></strong
-              ><span class="openapi-schema__name"><p>object</p></span></span
+              ><strong class="openapi-schema__property">nestedA</strong
+              ><span class="openapi-schema__name"> <!-- -->object</span></span
             ></summary
           >
           <div>
             <div class="collapsibleContent_Fd2D">
               <div style="margin-left:1rem">
-                <div class="openapi-schema__list-item">
-                  <div>
-                    <span class="openapi-schema__container"
-                      ><strong class="openapi-schema__property">propA1</strong
-                      ><span class="openapi-schema__name">
-                        <!-- -->string</span
-                      ></span
-                    >
+                <div>
+                  <div class="openapi-schema__list-item">
+                    <div>
+                      <span class="openapi-schema__container"
+                        ><strong class="openapi-schema__property">propA1</strong
+                        ><span class="openapi-schema__name">
+                          <!-- -->string</span
+                        ></span
+                      >
+                    </div>
                   </div>
-                </div>
-                <div class="openapi-schema__list-item">
-                  <div>
-                    <span class="openapi-schema__container"
-                      ><strong class="openapi-schema__property">propA2</strong
-                      ><span class="openapi-schema__name">
-                        <!-- -->number</span
-                      ></span
-                    >
+                  <div class="openapi-schema__list-item">
+                    <div>
+                      <span class="openapi-schema__container"
+                        ><strong class="openapi-schema__property">propA2</strong
+                        ><span class="openapi-schema__name">
+                          <!-- -->number</span
+                        ></span
+                      >
+                    </div>
                   </div>
                 </div>
               </div>
@@ -4609,16 +5003,52 @@ exports[`Schema Snapshots > should match the snapshot for nestedtypea #0`] = `
           </div></details
         >
       </div>
-    </ul>
+    </div>
+  </div>
+  <div class="col col--5 openapi-right-panel__container">
+    <div
+      class="language-json codeBlockContainer_mQmQ theme-code-block"
+      style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"
+    >
+      <div class="codeBlockTitle_x_ju">NestedTypeA</div>
+      <div class="codeBlockContent_D5yF">
+        <pre
+          tabindex="0"
+          class="prism-code language-json codeBlock_RMoD thin-scrollbar"
+          style="color:#bfc7d5;background-color:#292d3e"
+        ><code class="codeBlockLines_AclH"><span class="token-line" style="color:#bfc7d5"><span class="token punctuation" style="color:rgb(199, 146, 234)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"type"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"nestedTypeA"</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"nestedA"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(199, 146, 234)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">    </span><span class="token property">"propA1"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"string"</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">    </span><span class="token property">"propA2"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token number" style="color:rgb(247, 140, 108)">0</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token punctuation" style="color:rgb(199, 146, 234)">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain"></span><span class="token punctuation" style="color:rgb(199, 146, 234)">}</span><br></span></code></pre>
+        <div class="buttonGroup_aaMX">
+          <button
+            type="button"
+            aria-label="Copy code to clipboard"
+            title="Copy"
+            class="clean-btn"
+          >
+            <span class="copyButtonIcons_z5j7" aria-hidden="true"
+              ><svg viewBox="0 0 24 24" class="copyButtonIcon_FoOz">
+                <path
+                  fill="currentColor"
+                  d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"
+                ></path></svg
+              ><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_L0B6">
+                <path
+                  fill="currentColor"
+                  d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+                ></path></svg
+            ></span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;
 
 exports[`Schema Snapshots > should match the snapshot for nestedtypeb #0`] = `
 <div class="row theme-api-markdown">
-  <div class="col col--12">
+  <div class="col col--7 openapi-left-panel__container schema">
     <h1 class="openapi__heading">NestedTypeB</h1>
-    <ul>
+    <div>
       <div class="openapi-schema__list-item">
         <div>
           <span class="openapi-schema__container"
@@ -4638,31 +5068,33 @@ exports[`Schema Snapshots > should match the snapshot for nestedtypeb #0`] = `
           data-collapsed="true"
           ><summary
             ><span class="openapi-schema__container"
-              ><strong class="openapi-schema__property"><p>nestedB</p></strong
-              ><span class="openapi-schema__name"><p>object</p></span></span
+              ><strong class="openapi-schema__property">nestedB</strong
+              ><span class="openapi-schema__name"> <!-- -->object</span></span
             ></summary
           >
           <div>
             <div class="collapsibleContent_Fd2D">
               <div style="margin-left:1rem">
-                <div class="openapi-schema__list-item">
-                  <div>
-                    <span class="openapi-schema__container"
-                      ><strong class="openapi-schema__property">propB1</strong
-                      ><span class="openapi-schema__name">
-                        <!-- -->string</span
-                      ></span
-                    >
+                <div>
+                  <div class="openapi-schema__list-item">
+                    <div>
+                      <span class="openapi-schema__container"
+                        ><strong class="openapi-schema__property">propB1</strong
+                        ><span class="openapi-schema__name">
+                          <!-- -->string</span
+                        ></span
+                      >
+                    </div>
                   </div>
-                </div>
-                <div class="openapi-schema__list-item">
-                  <div>
-                    <span class="openapi-schema__container"
-                      ><strong class="openapi-schema__property">propB2</strong
-                      ><span class="openapi-schema__name">
-                        <!-- -->boolean</span
-                      ></span
-                    >
+                  <div class="openapi-schema__list-item">
+                    <div>
+                      <span class="openapi-schema__container"
+                        ><strong class="openapi-schema__property">propB2</strong
+                        ><span class="openapi-schema__name">
+                          <!-- -->boolean</span
+                        ></span
+                      >
+                    </div>
                   </div>
                 </div>
               </div>
@@ -4670,16 +5102,52 @@ exports[`Schema Snapshots > should match the snapshot for nestedtypeb #0`] = `
           </div></details
         >
       </div>
-    </ul>
+    </div>
+  </div>
+  <div class="col col--5 openapi-right-panel__container">
+    <div
+      class="language-json codeBlockContainer_mQmQ theme-code-block"
+      style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"
+    >
+      <div class="codeBlockTitle_x_ju">NestedTypeB</div>
+      <div class="codeBlockContent_D5yF">
+        <pre
+          tabindex="0"
+          class="prism-code language-json codeBlock_RMoD thin-scrollbar"
+          style="color:#bfc7d5;background-color:#292d3e"
+        ><code class="codeBlockLines_AclH"><span class="token-line" style="color:#bfc7d5"><span class="token punctuation" style="color:rgb(199, 146, 234)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"type"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"nestedTypeB"</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"nestedB"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(199, 146, 234)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">    </span><span class="token property">"propB1"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"string"</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">    </span><span class="token property">"propB2"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token boolean" style="color:rgb(255, 88, 116)">true</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token punctuation" style="color:rgb(199, 146, 234)">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain"></span><span class="token punctuation" style="color:rgb(199, 146, 234)">}</span><br></span></code></pre>
+        <div class="buttonGroup_aaMX">
+          <button
+            type="button"
+            aria-label="Copy code to clipboard"
+            title="Copy"
+            class="clean-btn"
+          >
+            <span class="copyButtonIcons_z5j7" aria-hidden="true"
+              ><svg viewBox="0 0 24 24" class="copyButtonIcon_FoOz">
+                <path
+                  fill="currentColor"
+                  d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"
+                ></path></svg
+              ><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_L0B6">
+                <path
+                  fill="currentColor"
+                  d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+                ></path></svg
+            ></span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;
 
 exports[`Schema Snapshots > should match the snapshot for typea #0`] = `
 <div class="row theme-api-markdown">
-  <div class="col col--12">
+  <div class="col col--7 openapi-left-panel__container schema">
     <h1 class="openapi__heading">TypeA</h1>
-    <ul>
+    <div>
       <div class="openapi-schema__list-item">
         <div>
           <span class="openapi-schema__container"
@@ -4701,16 +5169,52 @@ exports[`Schema Snapshots > should match the snapshot for typea #0`] = `
           >
         </div>
       </div>
-    </ul>
+    </div>
+  </div>
+  <div class="col col--5 openapi-right-panel__container">
+    <div
+      class="language-json codeBlockContainer_mQmQ theme-code-block"
+      style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"
+    >
+      <div class="codeBlockTitle_x_ju">TypeA</div>
+      <div class="codeBlockContent_D5yF">
+        <pre
+          tabindex="0"
+          class="prism-code language-json codeBlock_RMoD thin-scrollbar"
+          style="color:#bfc7d5;background-color:#292d3e"
+        ><code class="codeBlockLines_AclH"><span class="token-line" style="color:#bfc7d5"><span class="token punctuation" style="color:rgb(199, 146, 234)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"type"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"typeA"</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"propA"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"string"</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain"></span><span class="token punctuation" style="color:rgb(199, 146, 234)">}</span><br></span></code></pre>
+        <div class="buttonGroup_aaMX">
+          <button
+            type="button"
+            aria-label="Copy code to clipboard"
+            title="Copy"
+            class="clean-btn"
+          >
+            <span class="copyButtonIcons_z5j7" aria-hidden="true"
+              ><svg viewBox="0 0 24 24" class="copyButtonIcon_FoOz">
+                <path
+                  fill="currentColor"
+                  d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"
+                ></path></svg
+              ><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_L0B6">
+                <path
+                  fill="currentColor"
+                  d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+                ></path></svg
+            ></span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;
 
 exports[`Schema Snapshots > should match the snapshot for typeb #0`] = `
 <div class="row theme-api-markdown">
-  <div class="col col--12">
+  <div class="col col--7 openapi-left-panel__container schema">
     <h1 class="openapi__heading">TypeB</h1>
-    <ul>
+    <div>
       <div class="openapi-schema__list-item">
         <div>
           <span class="openapi-schema__container"
@@ -4732,7 +5236,43 @@ exports[`Schema Snapshots > should match the snapshot for typeb #0`] = `
           >
         </div>
       </div>
-    </ul>
+    </div>
+  </div>
+  <div class="col col--5 openapi-right-panel__container">
+    <div
+      class="language-json codeBlockContainer_mQmQ theme-code-block"
+      style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"
+    >
+      <div class="codeBlockTitle_x_ju">TypeB</div>
+      <div class="codeBlockContent_D5yF">
+        <pre
+          tabindex="0"
+          class="prism-code language-json codeBlock_RMoD thin-scrollbar"
+          style="color:#bfc7d5;background-color:#292d3e"
+        ><code class="codeBlockLines_AclH"><span class="token-line" style="color:#bfc7d5"><span class="token punctuation" style="color:rgb(199, 146, 234)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"type"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">"typeB"</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token property">"propB"</span><span class="token operator" style="color:rgb(137, 221, 255)">:</span><span class="token plain"> </span><span class="token number" style="color:rgb(247, 140, 108)">0</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain"></span><span class="token punctuation" style="color:rgb(199, 146, 234)">}</span><br></span></code></pre>
+        <div class="buttonGroup_aaMX">
+          <button
+            type="button"
+            aria-label="Copy code to clipboard"
+            title="Copy"
+            class="clean-btn"
+          >
+            <span class="copyButtonIcons_z5j7" aria-hidden="true"
+              ><svg viewBox="0 0 24 24" class="copyButtonIcon_FoOz">
+                <path
+                  fill="currentColor"
+                  d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"
+                ></path></svg
+              ><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_L0B6">
+                <path
+                  fill="currentColor"
+                  d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+                ></path></svg
+            ></span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;
