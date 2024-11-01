@@ -1,3 +1,108 @@
+## 4.2.0 (Nov 1, 2024)
+
+High level enhancements
+
+- Massive refactor of plugin and theme that dramatically optimizes and reduces generated MDX.
+- Added sample JSON code snippet component to schema pages.
+- Improvements to how allOf, additonalProperties and discriminators are processed/handled.
+
+Other enhancements and bug fixes
+
+### Features/Enhancements
+
+- **discriminators**
+  - Improve handling of discriminators ([#1009](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1009))
+- **schema**
+  - Migrate schema page to Schema component and refactor layout ([#1001](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1001))
+  - Refactor to use new theme components
+  - Add new RequestSchema and Schema components
+- **additional properties**
+  - Add additionalProperties examples to tests
+  - Support object as primitive additional properties
+  - Improve Items support for allOf and primitives
+- **allOf handling**
+  - Refactor items allOf to new pattern/library
+  - Extend allOf tests
+  - Migrate to allof-merge library to improve merging
+  - Improve handling of top-level primitives
+  - Improve support for allOf
+  - Avoid returning on first schema match and improve support for AnyOneOf
+- **UI/UX improvements**
+  - Implement skeleton loader component
+  - Try lazy loading on all
+  - Implement lazy loading without BrowserOnly
+  - Render loading spinner instead of text
+  - Add language tabs back
+  - Add default logo for http and shell
+  - Add margin top to enum descriptions
+  - Change label from generated to auto
+  - Add Summary component, cleanup PropertyDiscriminator and SchemaNodeDetails
+  - Rename Edge to SchemaEdge and fix props and types
+  - Rename SchemaComponent to SchemaNode
+  - Cleanup Properties and add missing props
+  - Port x-enumDescription fix from [#981](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/981)
+  - Add additional schema support to edge
+  - Support single mime type schemas
+  - Make props optional
+  - Add DetailsNode component and markdown rendering for description and qualifier
+  - Add StatusCodes component
+  - Use ExecutionEnvironment to avoid SSR
+  - Render ParamsDetails client-side
+  - Add response examples
+  - Add ResponseExamples component
+  - Import new ResponseSchema component
+  - Switch to new ResponseSchema component
+  - Add new ResponseSchema component
+  - Reduce params details to single component for all types
+  - Switch to docusaurus Details component
+  - Fix details summaries
+  - Add ParamsDetails to imports
+  - Refactor createParamsDetails to use component
+  - Add className to Props
+  - Add new ParamsDetails component
+
+### Bug Fixes
+
+- **allOf items**
+  - [Fix] All of items in array for API response ([#995](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/995))
+  - Fix linter errors
+  - Update test snapshot
+  - Fix create allof request/response samples
+- **empty language tabs**
+  - Fix bug in CodeSnippets component ([#988](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/988))
+- **contact info**
+  - Fix bug in createContactInfo.ts, protocol was set to mailto even though it was a URL ([#992](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/992))
+- **import names**
+  - Fix import name
+
+### Refactoring
+
+- **schema**
+  - Refactor create schema tests to cypress ([#997](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/997))
+  - Rename 'from schema' to 'generated' and cleanup examples
+- **imports**
+  - Remove unused imports
+  - Cleanup API doc template imports
+  - Update imports
+  - Remove unused imports
+  - Update imports
+- **code cleanup**
+  - Remove unused import
+  - Cleanup AdditionalProperties types and logic
+  - Cleanup PropertyDiscriminator and Markdown types
+  - Cleanup code comments
+  - Remove unnecessary div
+  - Revert CSR experiment
+  - Remove unnecessary div
+  - Remove code comment
+
+### Other
+
+- **internal**
+  - Migrate branch 'main' into params-details
+  - Update build-perf.yml
+  - Update build-perf.yml
+
 ## 4.1.0 (Oct 4, 2024)
 
 High level enhancements
