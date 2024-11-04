@@ -7,6 +7,10 @@ import { DOCUSAURUS_VERSION } from "@docusaurus/utils";
 import { myCustomApiMdGenerator } from "./customMdGenerators";
 
 const config: Config = {
+  future: {
+    experimental_faster: (process.env.DOCUSAURUS_FASTER ?? "true") === "true",
+  },
+
   title: "Docusaurus OpenAPI Docs",
   tagline: "OpenAPI plugin for generating API reference docs in Docusaurus v2",
   url: "https://docusaurus-openapi.tryingpan.dev",

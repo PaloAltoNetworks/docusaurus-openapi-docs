@@ -47,7 +47,7 @@
     "docusaurus-plugin-sass": "^0.2.3",
     "file-saver": "^2.0.5",
     "lodash": "^4.17.20",
-    "node-polyfill-webpack-plugin": "^2.0.1",
+    "node-polyfill-webpack-plugin": "^3.0.0",
     "postman-code-generators": "^1.10.1",
     "postman-collection": "^4.4.0",
     "prism-react-renderer": "^2.3.0",

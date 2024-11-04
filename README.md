@@ -6,7 +6,7 @@
 
 <div align="center">
 
-OpenAPI plugin for generating API reference docs in Docusaurus v3.
+OpenAPI plugin for generating API reference docs in Docusaurus v3 (compatible with [Docusaurus Faster](https://github.com/facebook/docusaurus/issues/10556).
 
 <img src="https://img.shields.io/badge/dynamic/json?style=for-the-badge&logo=meta&color=blueviolet&label=Docusaurus&query=dependencies%5B%22%40docusaurus%2Fcore%22%5D&url=https%3A%2F%2Fraw.githubusercontent.com%2FPaloAltoNetworks%2Fdocusaurus-openapi-docs%2Fmain%2Fdemo%2Fpackage.json" />
 <br/><br/>
