@@ -21,7 +21,6 @@ function remarkAdmonition() {
       if (children.length > 0 && children[0].type === "text") {
         const text = children[0].value;
         const match = text.match(/^:::(\w+)\s+(.*?)\s*:::$/);
-
         if (match) {
           const type = match[1];
           const content = match[2];
@@ -29,14 +28,14 @@ function remarkAdmonition() {
           const admonitionNode = {
             type: "admonition",
             data: {
-              hName: "div",
+              hName: "Admonition", // Tells ReactMarkdown to replace the node with Admonition component
               hProperties: {
-                className: `theme-admonition theme-admonition-${type} alert alert--${type}`,
+                type, // Passed as a prop to the Admonition component
               },
             },
             children: [
               {
-                type: "div",
+                type: "text",
                 value: content,
               },
             ],
@@ -48,6 +47,7 @@ function remarkAdmonition() {
     });
   };
 }
+
 function Markdown({ children }) {
   return (
     <div>
@@ -66,9 +66,18 @@ function Markdown({ children }) {
               <CodeBlock>{children}</CodeBlock>
             );
           },
+          // Render custom admonition nodes
           admonition: ({ node, ...props }) => {
-            const className = node.data.hProperties.className;
-            return <Admonition className={className} {...props} />;
+            const type = node?.data?.hProperties?.type || "note"; // Safely access the type
+            // Extract the text content from the children nodes
+            const content = node.children
+              .map((child) => (child.type === "text" ? child.value : ""))
+              .join(" ");
+            return (
+              <Admonition type={type} {...props}>
+                {content}
+              </Admonition>
+            );
           },
         }}
       />
