@@ -34,7 +34,7 @@ function remarkAdmonition() {
 
     for (const match of matches) {
       const type = match[1];
-      const title = match[2] ? match[2].trim() : undefined;
+      const title = match[2] ? match[2] : type;
       const content = match[3];
 
       const admonitionNode = {
