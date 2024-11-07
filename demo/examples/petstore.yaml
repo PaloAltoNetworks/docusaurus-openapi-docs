@@ -116,7 +116,16 @@ paths:
       operationId: addPet
       responses:
         "200":
-          description: All good
+          description: |
+            All good, here's some MDX:
+
+            :::info
+            TEsting !@#
+            :::
+
+            ```python
+            print("hello")
+            ```
           content:
             application/json:
               schema:

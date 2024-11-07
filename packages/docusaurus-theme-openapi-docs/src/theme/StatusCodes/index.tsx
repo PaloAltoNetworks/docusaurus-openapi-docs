@@ -9,6 +9,7 @@ import React from "react";
 
 import ApiTabs from "@theme/ApiTabs";
 import Details from "@theme/Details";
+import Markdown from "@theme/Markdown";
 import { ResponseHeaders } from "@theme/ResponseExamples";
 import ResponseSchema from "@theme/ResponseSchema";
 import TabItem from "@theme/TabItem";
@@ -39,7 +40,7 @@ const StatusCodes: React.FC<Props> = ({ label, id, responses }: any) => {
             <div>
               {response.description && (
                 <div style={{ marginTop: ".5rem", marginBottom: ".5rem" }}>
-                  {createDescription(response.description)}
+                  <Markdown>{response.description}</Markdown>
                 </div>
               )}
             </div>
