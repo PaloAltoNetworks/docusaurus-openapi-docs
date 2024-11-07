@@ -119,8 +119,18 @@ paths:
           description: |
             All good, here's some MDX:
 
-            :::info
-            TEsting !@#
+            :::note[MR SPOCK]
+
+            testing 123
+
+            :::
+
+            :::warning
+            testing 123
+            :::
+
+            :::danger
+            testing 123
             :::
 
             ```python
