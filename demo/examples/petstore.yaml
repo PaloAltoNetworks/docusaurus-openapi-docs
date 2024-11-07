@@ -119,18 +119,34 @@ paths:
           description: |
             All good, here's some MDX:
 
-            :::note[MR SPOCK]
+            :::note
 
-            testing 123
+            Some **content** with _Markdown_ `syntax`. Check [this `api`](#).
+
+            :::
+
+            :::tip
+
+            Some **content** with _Markdown_ `syntax`. Check [this `api`](#).
+
+            :::
+
+            :::info
+
+            Some **content** with _Markdown_ `syntax`. Check [this `api`](#).
 
             :::
 
             :::warning
-            testing 123
+
+            Some **content** with _Markdown_ `syntax`. Check [this `api`](#).
+
             :::
 
             :::danger
-            testing 123
+
+            Some **content** with _Markdown_ `syntax`. Check [this `api`](#).
+
             :::
 
             ```python
