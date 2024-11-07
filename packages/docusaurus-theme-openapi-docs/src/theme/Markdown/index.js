@@ -31,7 +31,7 @@ function remarkAdmonition() {
             data: {
               hName: "div",
               hProperties: {
-                className: `theme-admonition theme-admonition-${type} alert alert--success`,
+                className: `theme-admonition theme-admonition-${type} alert alert--${type}`,
               },
             },
             children: [
