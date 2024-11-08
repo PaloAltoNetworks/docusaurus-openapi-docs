@@ -268,6 +268,16 @@ yarn docusaurus gen-api-docs petstore
 
 > The example above will only generate API docs relative to `petstore`.
 
+If you have multiple versions of the same API, `gen-api-docs` only generates the latest. To generate all versions, use the `--all-versions` flag.
+
+Example:
+
+```bash
+yarn docusaurus gen-api-docs all --all-versions
+```
+
+> This will generate API docs for all versions of all the OpenAPI specification (OAS) files referenced in your `docusaurus-plugin-openapi-docs` config.
+
 ### Cleaning API Docs
 
 To clean/remove all API Docs, run the following command from the root directory of your project:
@@ -289,6 +299,16 @@ yarn docusaurus clean-api-docs petstore
 ```
 
 > The example above will remove all API docs relative to `burgers`.
+
+If you have multiple versions of the same API, `clean-api-docs` only cleans the latest. To clean all versions, use the `--all-versions` flag.
+
+Example:
+
+```bash
+yarn docusaurus clean-api-docs all --all-versions
+```
+
+> This will clean API docs for all versions of all the OpenAPI specification (OAS) files referenced in your `docusaurus-plugin-openapi-docs` config.
 
 ### Versioning OpenAPI docs
 
