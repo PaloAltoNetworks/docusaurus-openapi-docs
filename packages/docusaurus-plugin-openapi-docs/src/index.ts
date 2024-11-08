@@ -663,7 +663,6 @@ custom_edit_url: null
           const options = instance.opts();
           const pluginId = options.pluginId;
           const allVersions = options.allVersions;
-          console.log("allVersions", allVersions);
           const pluginInstances = getPluginInstances(plugins);
           let targetConfig: any;
           let targetDocsPluginId: any;

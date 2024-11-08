@@ -16,11 +16,8 @@
     "clean-api-docs": "docusaurus clean-api-docs",
     "gen-api-docs:version": "docusaurus gen-api-docs:version",
     "clean-api-docs:version": "docusaurus clean-api-docs:version",
-    "gen-all-old": "docusaurus gen-api-docs all && docusaurus gen-api-docs:version petstore_versioned:all",
     "gen-all": "docusaurus gen-api-docs all --all-versions",
-    "clean-all-old": "docusaurus clean-api-docs all && docusaurus clean-api-docs:version petstore_versioned:all",
     "clean-all": "docusaurus clean-api-docs all --all-versions",
-    "re-gen-old": "yarn clean-all && yarn gen-all",
     "re-gen": "yarn clean-all-versions && yarn gen-all-versions"
   },
   "dependencies": {
