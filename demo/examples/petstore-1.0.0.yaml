@@ -242,10 +242,14 @@ paths:
               properties:
                 name:
                   description: Updated name of the pet
-                  type: string
+                  type:
+                    - string
+                    - "null"
                 status:
                   description: Updated status of the pet
-                  type: string
+                  type:
+                    - string
+                    - "null"
     delete:
       tags:
         - pet
