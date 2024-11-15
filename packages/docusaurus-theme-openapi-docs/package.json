@@ -36,10 +36,10 @@
     "eslint-plugin-prettier": "^5.0.1",
     "docusaurus-plugin-openapi-docs": "^4.2.0",
     "@docusaurus/theme-common": "^3.5.0",
-    "@hookform/error-message": "^2.0.1",
     "docusaurus-plugin-sass": "^0.2.3"
   },
   "dependencies": {
+    "@hookform/error-message": "^2.0.1",
     "@reduxjs/toolkit": "^1.7.1",
     "allof-merge": "^0.6.6",
     "clsx": "^1.1.1",
@@ -69,7 +69,6 @@
     "react-dom": "^16.8.4 || ^17.0.0 || ^18.0.0",
     "docusaurus-plugin-openapi-docs": "^4.0.0",
     "@docusaurus/theme-common": "^3.5.0",
-    "@hookform/error-message": "^2.0.1",
     "docusaurus-plugin-sass": "^0.2.3"
   },
   "engines": {
