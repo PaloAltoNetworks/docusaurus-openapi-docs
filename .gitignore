@@ -142,3 +142,4 @@ demo/**/sidebar.ts
 demo/**/versions.json
 
 .idea
+.tool-versions

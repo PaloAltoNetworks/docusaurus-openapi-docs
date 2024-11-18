@@ -195,7 +195,9 @@ export default function SchemaItem(props: Props) {
         >
           {name}
         </strong>
-        <span className="openapi-schema__name"> {schemaName}</span>
+        <span className="openapi-schema__name">
+          {Array.isArray(schemaName) ? schemaName.join(" | ") : schemaName}
+        </span>
         {(nullable || required || deprecated) && (
           <span className="openapi-schema__divider"></span>
         )}
