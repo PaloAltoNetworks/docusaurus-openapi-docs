@@ -18,11 +18,13 @@ function remarkAdmonition() {
     const openingTagRegex = /^:::(\w+)(?:\[(.*?)\])?\s*$/;
     const closingTagRegex = /^:::\s*$/;
     const textOnlyAdmonition = /^:::(\w+)(?:\[(.*?)\])?\s*([\s\S]*?)\s*:::$/;
-    const newTree = [];
-    let buffer = [];
-    let inAdmonition = false;
-    let currentType = null;
-    let currentTitle = null;
+
+    const nodes = [];
+    let bufferedChildren = [];
+
+    let insideAdmonition = false;
+    let type = null;
+    let title = null;
 
     tree.children.forEach((node) => {
       if (
@@ -58,51 +60,53 @@ function remarkAdmonition() {
               },
             ],
           };
-          newTree.push(admonitionNode);
-          return;
-        }
-        if (openingMatch) {
-          currentType = openingMatch[1];
-          currentTitle = openingMatch[2] || currentType;
-          inAdmonition = true;
+          nodes.push(admonitionNode);
           return;
         }
 
-        if (closingMatch && inAdmonition) {
-          newTree.push({
+        if (openingMatch) {
+          type = openingMatch[1];
+          title = openingMatch[2] || type;
+          insideAdmonition = true;
+          return;
+        }
+
+        if (closingMatch && insideAdmonition) {
+          nodes.push({
             type: "admonition",
             data: {
               hName: "Admonition",
-              hProperties: { type: currentType, title: currentTitle },
+              hProperties: { type: type, title: title },
             },
-            children: buffer[0].children,
+            children: bufferedChildren[0].children,
           });
-          buffer = [];
-          inAdmonition = false;
-          currentType = null;
-          currentTitle = null;
+          bufferedChildren = [];
+          insideAdmonition = false;
+          type = null;
+          title = null;
           return;
         }
       }
 
-      if (inAdmonition) {
-        buffer.push(node);
+      if (insideAdmonition) {
+        bufferedChildren.push(node);
       } else {
-        newTree.push(node);
+        nodes.push(node);
       }
     });
 
-    if (buffer.length > 0 && currentType) {
-      newTree.push({
+    if (bufferedChildren.length > 0 && type) {
+      nodes.push({
         type: "admonition",
         data: {
           hName: "Admonition",
-          hProperties: { type: currentType, title: currentTitle },
+          hProperties: { type: type, title: title },
         },
-        children: buffer[0].children,
+        children: bufferedChildren[0].children,
       });
     }
-    tree.children = newTree;
+
+    tree.children = nodes;
   };
 }
 
