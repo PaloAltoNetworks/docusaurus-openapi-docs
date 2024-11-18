@@ -121,14 +121,12 @@ paths:
 
             :::note
 
-            Some **content** with _Markdown_ `syntax`. Check [this `api`](#).
+            Some content but no markdown is supported :(
 
             :::
 
             :::tip
-
-            Some **content** with _Markdown_ `syntax`. Check [this `api`](#).
-
+            A TIP with no leading or trailing spaces between delimiters.
             :::
 
             :::info
@@ -139,15 +137,17 @@ paths:
 
             :::warning
 
-            Some **content** with _Markdown_ `syntax`. Check [this `api`](#).
+            Some **content** with _Markdown_ `syntax`. Check [this `api`](#) which is not supported :( yet
 
             :::
 
             :::danger
 
-            Some **content** with _Markdown_ `syntax`. Check [this `api`](#).
+            Some plain text
 
             :::
+
+            A **code snippet**!
 
             ```python
             print("hello")
