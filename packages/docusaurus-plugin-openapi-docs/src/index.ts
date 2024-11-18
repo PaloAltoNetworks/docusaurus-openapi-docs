@@ -21,18 +21,18 @@ import {
   createSchemaPageMD,
   createTagPageMD,
 } from "./markdown";
-import { readOpenapiFiles, processOpenapiFiles } from "./openapi";
+import { processOpenapiFiles, readOpenapiFiles } from "./openapi";
 import { OptionsSchema } from "./options";
 import generateSidebarSlice from "./sidebars";
 import type {
-  PluginOptions,
-  LoadedContent,
-  APIOptions,
   ApiMetadata,
+  APIOptions,
   ApiPageMetadata,
   InfoPageMetadata,
-  TagPageMetadata,
+  LoadedContent,
+  PluginOptions,
   SchemaPageMetadata,
+  TagPageMetadata,
 } from "./types";
 
 export function isURL(str: string): boolean {
@@ -586,6 +586,66 @@ custom_edit_url: null
     }
   }
 
+  async function generateAllVersions(options: APIOptions, pluginId: any) {
+    const parentOptions = Object.assign({}, options);
+    const { versions } = parentOptions as any;
+
+    if (versions != null && Object.keys(versions).length > 0) {
+      const version = parentOptions.version as string;
+      const label = parentOptions.label as string;
+
+      const baseUrl = parentOptions.baseUrl as string;
+      let parentVersion = {} as any;
+
+      parentVersion[version] = { label: label, baseUrl: baseUrl };
+      const mergedVersions = Object.assign(parentVersion, versions);
+
+      // Prepare for merge
+      delete parentOptions.versions;
+      delete parentOptions.version;
+      delete parentOptions.label;
+      delete parentOptions.baseUrl;
+      delete parentOptions.downloadUrl;
+
+      await generateVersions(mergedVersions, parentOptions.outputDir);
+      Object.keys(versions).forEach(async (key) => {
+        if (key === "all") {
+          console.error(
+            chalk.red(
+              "Can't use id 'all' for OpenAPI docs versions configuration key."
+            )
+          );
+        }
+        const versionOptions = versions[key];
+        const mergedOptions = {
+          ...parentOptions,
+          ...versionOptions,
+        };
+        await generateApiDocs(mergedOptions, pluginId);
+      });
+    }
+  }
+
+  async function cleanAllVersions(options: APIOptions) {
+    const parentOptions = Object.assign({}, options);
+
+    const { versions } = parentOptions as any;
+
+    delete parentOptions.versions;
+
+    if (versions != null && Object.keys(versions).length > 0) {
+      await cleanVersions(parentOptions.outputDir);
+      Object.keys(versions).forEach(async (key) => {
+        const versionOptions = versions[key];
+        const mergedOptions = {
+          ...parentOptions,
+          ...versionOptions,
+        };
+        await cleanApiDocs(mergedOptions);
+      });
+    }
+  }
+
   return {
     name: `docusaurus-plugin-openapi-docs`,
 
@@ -598,9 +658,11 @@ custom_edit_url: null
         .usage("<id>")
         .arguments("<id>")
         .option("-p, --plugin-id <plugin>", "OpenAPI docs plugin ID.")
+        .option("--all-versions", "Generate all versions.")
         .action(async (id, instance) => {
           const options = instance.opts();
           const pluginId = options.pluginId;
+          const allVersions = options.allVersions;
           const pluginInstances = getPluginInstances(plugins);
           let targetConfig: any;
           let targetDocsPluginId: any;
@@ -637,6 +699,12 @@ custom_edit_url: null
             } else {
               Object.keys(targetConfig).forEach(async function (key) {
                 await generateApiDocs(targetConfig[key], targetDocsPluginId);
+                if (allVersions) {
+                  await generateAllVersions(
+                    targetConfig[key],
+                    targetDocsPluginId
+                  );
+                }
               });
             }
           } else if (!targetConfig[id]) {
@@ -645,6 +713,9 @@ custom_edit_url: null
             );
           } else {
             await generateApiDocs(targetConfig[id], targetDocsPluginId);
+            if (allVersions) {
+              await generateAllVersions(targetConfig[id], targetDocsPluginId);
+            }
           }
         });
 
@@ -748,9 +819,11 @@ custom_edit_url: null
         .usage("<id>")
         .arguments("<id>")
         .option("-p, --plugin-id <plugin>", "OpenAPI docs plugin ID.")
+        .option("--all-versions", "Clean all versions.")
         .action(async (id, instance) => {
           const options = instance.opts();
           const pluginId = options.pluginId;
+          const allVersions = options.allVersions;
           const pluginInstances = getPluginInstances(plugins);
           let targetConfig: any;
           if (pluginId) {
@@ -784,10 +857,16 @@ custom_edit_url: null
             } else {
               Object.keys(targetConfig).forEach(async function (key) {
                 await cleanApiDocs(targetConfig[key]);
+                if (allVersions) {
+                  await cleanAllVersions(targetConfig[key]);
+                }
               });
             }
           } else {
             await cleanApiDocs(targetConfig[id]);
+            if (allVersions) {
+              await cleanAllVersions(targetConfig[id]);
+            }
           }
         });
 
