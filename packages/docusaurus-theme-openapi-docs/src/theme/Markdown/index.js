@@ -11,100 +11,165 @@ import Admonition from "@theme/Admonition";
 import CodeBlock from "@theme/CodeBlock";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { visit } from "unist-util-visit";
+import remarkGfm from "remark-gfm";
 
 function remarkAdmonition() {
   return (tree) => {
-    const paragraphs = [];
-    let collectedText = "";
+    const openingTagRegex = /^:::(\w+)(?:\[(.*?)\])?\s*$/;
+    const closingTagRegex = /^:::\s*$/;
+    const textOnlyAdmonition = /^:::(\w+)(?:\[(.*?)\])?\s*([\s\S]*?)\s*:::$/;
+    const newTree = [];
+    let buffer = [];
+    let inAdmonition = false;
+    let currentType = null;
+    let currentTitle = null;
 
-    // Collect all 'paragraph' nodes
-    visit(tree, "paragraph", (node) => {
-      paragraphs.push(node);
-      collectedText +=
-        node.children.map((child) => child.value || "").join("\n") + "\n";
+    tree.children.forEach((node) => {
+      if (
+        node.type === "paragraph" &&
+        node.children.length === 1 &&
+        node.children[0].type === "text"
+      ) {
+        const text = node.children[0].value.trim();
+        const openingMatch = text.match(openingTagRegex);
+        const closingMatch = text.match(closingTagRegex);
+        const textOnlyAdmonitionMatch = text.match(textOnlyAdmonition);
+
+        if (textOnlyAdmonitionMatch) {
+          const type = textOnlyAdmonitionMatch[1];
+          const title = textOnlyAdmonitionMatch[2]
+            ? textOnlyAdmonitionMatch[2]?.trim()
+            : undefined;
+          const content = textOnlyAdmonitionMatch[3];
+
+          const admonitionNode = {
+            type: "admonition",
+            data: {
+              hName: "Admonition", // Tells ReactMarkdown to replace the node with Admonition component
+              hProperties: {
+                type, // Passed as a prop to the Admonition component
+                title,
+              },
+            },
+            children: [
+              {
+                type: "text",
+                value: content?.trim(), // Trim leading/trailing whitespace
+              },
+            ],
+          };
+          newTree.push(admonitionNode);
+          return;
+        }
+        if (openingMatch) {
+          currentType = openingMatch[1];
+          currentTitle = openingMatch[2] || currentType;
+          inAdmonition = true;
+          return;
+        }
+
+        if (closingMatch && inAdmonition) {
+          newTree.push({
+            type: "admonition",
+            data: {
+              hName: "Admonition",
+              hProperties: { type: currentType, title: currentTitle },
+            },
+            children: buffer[0].children,
+          });
+          buffer = [];
+          inAdmonition = false;
+          currentType = null;
+          currentTitle = null;
+          return;
+        }
+      }
+
+      if (inAdmonition) {
+        buffer.push(node);
+      } else {
+        newTree.push(node);
+      }
     });
 
-    const regex = /^\s*:::(\w+)(?:\[(.*?)\])?\s*([\s\S]*?)\s*:::\s*$/gm;
-    const matches = collectedText.matchAll(regex);
-
-    // Collect admonition nodes to insert
-    const admonitionNodes = [];
-
-    for (const match of matches) {
-      const type = match[1];
-      const title = match[2] ? match[2] : type;
-      const content = match[3];
-
-      const admonitionNode = {
+    if (buffer.length > 0 && currentType) {
+      newTree.push({
         type: "admonition",
         data: {
-          hName: "Admonition", // Tells ReactMarkdown to replace the node with Admonition component
-          hProperties: {
-            type, // Passed as a prop to the Admonition component
-            title,
-          },
+          hName: "Admonition",
+          hProperties: { type: currentType, title: currentTitle },
         },
-        children: [
-          {
-            type: "text",
-            value: content.trim(), // Trim leading/trailing whitespace
-          },
-        ],
-      };
-
-      admonitionNodes.push(admonitionNode);
+        children: buffer[0].children,
+      });
     }
+    tree.children = newTree;
+  };
+}
 
-    // Replace the original paragraph nodes if we found any admonition nodes
-    if (admonitionNodes.length > 0) {
-      const firstParagraphIndex = tree.children.findIndex(
-        (node) => node.type === "paragraph"
-      );
-      tree.children.splice(
-        firstParagraphIndex,
-        paragraphs.length,
-        ...admonitionNodes
-      );
+function convertAstToHtmlStr(ast) {
+  if (!ast || !Array.isArray(ast)) {
+    return "";
+  }
+
+  const convertNode = (node) => {
+    switch (node.type) {
+      case "text":
+        return node.value;
+      case "element":
+        const { tagName, properties, children } = node;
+
+        // Convert attributes to a string
+        const attrs = properties
+          ? Object.entries(properties)
+              .map(([key, value]) => `${key}="${value}"`)
+              .join(" ")
+          : "";
+
+        // Convert children to HTML
+        const childrenHtml = children ? children.map(convertNode).join("") : "";
+
+        return `<${tagName} ${attrs}>${childrenHtml}</${tagName}>`;
+      default:
+        return "";
     }
   };
+
+  return ast.map(convertNode).join("");
 }
 
 function Markdown({ children }) {
   return (
-    <div>
-      <ReactMarkdown
-        children={children}
-        rehypePlugins={[rehypeRaw]}
-        remarkPlugins={[remarkAdmonition]}
-        components={{
-          pre: "div",
-          code({ node, inline, className, children, ...props }) {
-            const match = /language-(\w+)/.exec(className || "");
-            if (inline) return <code>{children}</code>;
-            return !inline && match ? (
-              <CodeBlock className={className}>{children}</CodeBlock>
-            ) : (
-              <CodeBlock>{children}</CodeBlock>
-            );
-          },
-          // Render custom admonition nodes
-          admonition: ({ node, ...props }) => {
-            const type = node?.data?.hProperties?.type || "note";
-            const title = node?.data?.hProperties?.title;
-            const content = node.children
-              .map((child) => (child.type === "text" ? child.value : ""))
-              .join(" ");
-            return (
-              <Admonition type={type} title={title} {...props}>
-                {content}
-              </Admonition>
-            );
-          },
-        }}
-      />
-    </div>
+    <ReactMarkdown
+      rehypePlugins={[rehypeRaw]}
+      remarkPlugins={[remarkGfm, remarkAdmonition]}
+      components={{
+        pre: (props) => <div {...props} />,
+        code({ node, inline, className, children, ...props }) {
+          const match = /language-(\w+)/.exec(className || "");
+          return match ? (
+            <CodeBlock className={className} language={match[1]} {...props}>
+              {children}
+            </CodeBlock>
+          ) : (
+            <code className={className} {...props}>
+              {children}
+            </code>
+          );
+        },
+        admonition: ({ node, ...props }) => {
+          const type = node.data?.hProperties?.type || "note";
+          const title = node.data?.hProperties?.title || type;
+          const content = convertAstToHtmlStr(node.children);
+          return (
+            <Admonition type={type} title={title} {...props}>
+              <div dangerouslySetInnerHTML={{ __html: content }} />
+            </Admonition>
+          );
+        },
+      }}
+    >
+      {children}
+    </ReactMarkdown>
   );
 }
 
