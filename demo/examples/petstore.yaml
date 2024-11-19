@@ -133,6 +133,14 @@ paths:
 
             Some **content** with _Markdown_ `syntax`. Check [this `api`](#).
 
+            | Month    | Savings |
+            | -------- | ------- |
+            | January  | $250    |
+            | February | $80     |
+            | March    | $420    |
+
+            Hmm.....
+
             :::
 
             :::warning
@@ -145,6 +153,10 @@ paths:
 
             Some plain text
 
+            Some more plain text
+
+            And more
+
             :::
 
             A **code snippet**!
@@ -152,6 +164,14 @@ paths:
             ```python
             print("hello")
             ```
+
+            _And_ a table!
+
+            | Month    | Savings |
+            | -------- | ------- |
+            | January  | $250    |
+            | February | $80     |
+            | March    | $420    |
           content:
             application/json:
               schema:
