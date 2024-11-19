@@ -78,7 +78,7 @@ function remarkAdmonition() {
               hName: "Admonition",
               hProperties: { type: type, title: title },
             },
-            children: bufferedChildren[0].children,
+            children: bufferedChildren,
           });
           bufferedChildren = [];
           insideAdmonition = false;
@@ -102,10 +102,9 @@ function remarkAdmonition() {
           hName: "Admonition",
           hProperties: { type: type, title: title },
         },
-        children: bufferedChildren[0].children,
+        children: bufferedChildren,
       });
     }
-
     tree.children = nodes;
   };
 }
