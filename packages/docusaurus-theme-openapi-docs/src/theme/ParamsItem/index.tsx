@@ -7,16 +7,12 @@
 
 import React from "react";
 
-import CodeBlock from "@theme/CodeBlock";
+import Markdown from "@theme/Markdown";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
 /* eslint-disable import/no-extraneous-dependencies*/
 import clsx from "clsx";
-import ReactMarkdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
-import remarkGfm from "remark-gfm";
 
-import { createDescription } from "../../markdown/createDescription";
 import { getQualifierMessage, getSchemaName } from "../../markdown/schema";
 import { guard, toString } from "../../markdown/utils";
 
@@ -97,34 +93,12 @@ function ParamsItem({ param, ...rest }: Props) {
     <span className="openapi-schema__deprecated">deprecated</span>
   ));
 
-  const renderSchema = guard(getQualifierMessage(schema), (message) => (
-    <div>
-      <ReactMarkdown
-        children={createDescription(message)}
-        rehypePlugins={[rehypeRaw]}
-      />
-    </div>
+  const renderQualifier = guard(getQualifierMessage(schema), (qualifier) => (
+    <Markdown>{qualifier}</Markdown>
   ));
 
   const renderDescription = guard(description, (description) => (
-    <>
-      <ReactMarkdown
-        children={createDescription(description)}
-        components={{
-          pre: "div",
-          code({ node, inline, className, children, ...props }) {
-            const match = /language-(\w+)/.exec(className || "");
-            if (inline) return <code>{children}</code>;
-            return !inline && match ? (
-              <CodeBlock className={className}>{children}</CodeBlock>
-            ) : (
-              <CodeBlock>{children}</CodeBlock>
-            );
-          },
-        }}
-        rehypePlugins={[rehypeRaw]}
-      />
-    </>
+    <Markdown>{description}</Markdown>
   ));
 
   const renderEnumDescriptions = guard(
@@ -132,11 +106,7 @@ function ParamsItem({ param, ...rest }: Props) {
     (value) => {
       return (
         <div style={{ marginTop: ".5rem" }}>
-          <ReactMarkdown
-            rehypePlugins={[rehypeRaw]}
-            remarkPlugins={[remarkGfm]}
-            children={value}
-          />
+          <Markdown>{value}</Markdown>
         </div>
       );
     }
@@ -217,7 +187,7 @@ function ParamsItem({ param, ...rest }: Props) {
         {renderSchemaRequired}
         {renderDeprecated}
       </span>
-      {renderSchema}
+      {renderQualifier}
       {renderDescription}
       {renderEnumDescriptions}
       {renderDefaultValue()}
