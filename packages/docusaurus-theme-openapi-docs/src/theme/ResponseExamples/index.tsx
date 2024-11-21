@@ -7,7 +7,6 @@
 
 import React from "react";
 
-import ParamsItem from "@theme/ParamsItem";
 import ResponseSamples from "@theme/ResponseSamples";
 import TabItem from "@theme/TabItem";
 import { createDescription } from "docusaurus-plugin-openapi-docs/lib/markdown/createDescription";
@@ -84,47 +83,6 @@ interface Props {
   schema?: any;
   mimeType: string;
 }
-
-// React components
-export const ParamsDetails: React.FC<Props> = ({ parameters, type }) => {
-  const params = parameters?.filter((param) => param?.in === type);
-
-  if (!params || params.length === 0) {
-    return null;
-  }
-
-  return (
-    <details
-      className="openapi-markdown__details"
-      data-collapsed={false}
-      open={true}
-      style={{ marginBottom: "1rem" }}
-    >
-      <summary>
-        <h3 className="openapi-markdown__details-summary-header-params">
-          {`${type.charAt(0).toUpperCase() + type.slice(1)} Parameters`}
-        </h3>
-      </summary>
-      <div>
-        <ul>
-          {params.map((param, index) => (
-            <ParamsItem
-              key={index}
-              className="paramsItem"
-              // @ts-ignore
-              param={{
-                ...param,
-                enumDescriptions: Object.entries(
-                  param?.schema?.items?.["x-enumDescriptions"] ?? {}
-                ),
-              }}
-            />
-          ))}
-        </ul>
-      </div>
-    </details>
-  );
-};
 
 export const ResponseHeaders: React.FC<{
   responseHeaders?: Record<string, ResponseHeaderProps>;
