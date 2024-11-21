@@ -10,10 +10,9 @@ import React from "react";
 import ApiTabs from "@theme/ApiTabs";
 import Details from "@theme/Details";
 import Markdown from "@theme/Markdown";
-import { ResponseHeaders } from "@theme/ResponseExamples";
+import ResponseHeaders from "@theme/ResponseHeaders";
 import ResponseSchema from "@theme/ResponseSchema";
 import TabItem from "@theme/TabItem";
-import { createDescription } from "docusaurus-plugin-openapi-docs/lib/markdown/createDescription";
 import { ApiItem } from "docusaurus-plugin-openapi-docs/lib/types";
 
 interface Props {
