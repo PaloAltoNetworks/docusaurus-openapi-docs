@@ -7,9 +7,9 @@
 
 import React from "react";
 
+import Markdown from "@theme/Markdown";
 import ResponseSamples from "@theme/ResponseSamples";
 import TabItem from "@theme/TabItem";
-import { createDescription } from "docusaurus-plugin-openapi-docs/lib/markdown/createDescription";
 import { sampleResponseFromSchema } from "docusaurus-plugin-openapi-docs/lib/openapi/createResponseExample";
 import format from "xml-formatter";
 
@@ -50,50 +50,6 @@ export function json2xml(o: Record<string, any>, tab: string): string {
   return tab ? xml.replace(/\t/g, tab) : xml.replace(/\t|\n/g, "");
 }
 
-interface ResponseHeaderProps {
-  description?: string;
-  example?: string;
-  schema?: {
-    type?: string;
-  };
-}
-
-export const ResponseHeaders: React.FC<{
-  responseHeaders?: Record<string, ResponseHeaderProps>;
-}> = ({ responseHeaders }) => {
-  if (!responseHeaders) {
-    return null;
-  }
-
-  return (
-    <ul style={{ marginLeft: "1rem" }}>
-      {Object.entries(responseHeaders).map(([headerName, headerObj]) => {
-        const { description, example, schema } = headerObj;
-        const type = schema?.type ?? "any";
-
-        return (
-          <li className="schemaItem" key={headerName}>
-            <details>
-              <summary>
-                <strong>{headerName}</strong>
-                {type && <span style={{ opacity: "0.6" }}> {type}</span>}
-              </summary>
-              <div>
-                {description && (
-                  <div style={{ marginTop: ".5rem", marginBottom: ".5rem" }}>
-                    {example && `Example: ${example}`}
-                    {createDescription(description)}
-                  </div>
-                )}
-              </div>
-            </details>
-          </li>
-        );
-      })}
-    </ul>
-  );
-};
-
 interface ResponseExamplesProps {
   responseExamples: any;
   mimeType: string;
@@ -118,9 +74,9 @@ export const ResponseExamples: React.FC<ResponseExamplesProps> = ({
         // @ts-ignore
         <TabItem label={exampleName} value={exampleName} key={exampleName}>
           {exampleValue.summary && (
-            <div className="openapi-example__summary">
+            <Markdown className="openapi-example__summary">
               {exampleValue.summary}
-            </div>
+            </Markdown>
           )}
           <ResponseSamples
             responseExample={responseExample}
@@ -160,9 +116,9 @@ export const ResponseExample: React.FC<ResponseExampleProps> = ({
     // @ts-ignore
     <TabItem label="Example" value="Example">
       {responseExample.summary && (
-        <div className="openapi-example__summary">
+        <Markdown className="openapi-example__summary">
           {responseExample.summary}
-        </div>
+        </Markdown>
       )}
       <ResponseSamples responseExample={exampleContent} language={language} />
     </TabItem>
