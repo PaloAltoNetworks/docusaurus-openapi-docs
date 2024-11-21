@@ -20,7 +20,6 @@ import SchemaNode from "@theme/Schema";
 import SchemaTabs from "@theme/SchemaTabs";
 import SkeletonLoader from "@theme/SkeletonLoader";
 import TabItem from "@theme/TabItem";
-import { createDescription } from "docusaurus-plugin-openapi-docs/lib/markdown/createDescription";
 import { MediaTypeObject } from "docusaurus-plugin-openapi-docs/lib/openapi/types";
 
 interface Props {
