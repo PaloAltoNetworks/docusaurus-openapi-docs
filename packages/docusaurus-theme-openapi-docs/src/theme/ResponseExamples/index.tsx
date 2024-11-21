@@ -13,7 +13,6 @@ import { createDescription } from "docusaurus-plugin-openapi-docs/lib/markdown/c
 import { sampleResponseFromSchema } from "docusaurus-plugin-openapi-docs/lib/openapi/createResponseExample";
 import format from "xml-formatter";
 
-// Utility function
 export function json2xml(o: Record<string, any>, tab: string): string {
   const toXml = (v: any, name: string, ind: string): string => {
     let xml = "";
@@ -51,37 +50,12 @@ export function json2xml(o: Record<string, any>, tab: string): string {
   return tab ? xml.replace(/\t/g, tab) : xml.replace(/\t|\n/g, "");
 }
 
-interface ParameterProps {
-  in: string;
-  name: string;
-  schema?: {
-    type?: string;
-    items?: Record<string, any>;
-  };
-  enumDescriptions?: [string, string][];
-}
-
 interface ResponseHeaderProps {
   description?: string;
   example?: string;
   schema?: {
     type?: string;
   };
-}
-
-interface ResponseExampleProps {
-  value: any;
-  summary?: string;
-}
-
-interface Props {
-  parameters?: ParameterProps[];
-  type: string;
-  responseHeaders?: Record<string, ResponseHeaderProps>;
-  responseExamples?: Record<string, ResponseExampleProps>;
-  responseExample?: any;
-  schema?: any;
-  mimeType: string;
 }
 
 export const ResponseHeaders: React.FC<{
@@ -120,10 +94,14 @@ export const ResponseHeaders: React.FC<{
   );
 };
 
-export const ResponseExamples: React.FC<{
+interface ResponseExamplesProps {
   responseExamples: any;
   mimeType: string;
-}> = ({ responseExamples, mimeType }): any => {
+}
+export const ResponseExamples: React.FC<ResponseExamplesProps> = ({
+  responseExamples,
+  mimeType,
+}): any => {
   let language = "shell";
   if (mimeType.endsWith("json")) language = "json";
   if (mimeType.endsWith("xml")) language = "xml";
@@ -156,10 +134,15 @@ export const ResponseExamples: React.FC<{
   return examplesArray;
 };
 
-export const ResponseExample: React.FC<{
+interface ResponseExampleProps {
   responseExample: any;
   mimeType: string;
-}> = ({ responseExample, mimeType }) => {
+}
+
+export const ResponseExample: React.FC<ResponseExampleProps> = ({
+  responseExample,
+  mimeType,
+}) => {
   let language = "shell";
   if (mimeType.endsWith("json")) {
     language = "json";
@@ -186,7 +169,12 @@ export const ResponseExample: React.FC<{
   );
 };
 
-export const ExampleFromSchema: React.FC<{ schema: any; mimeType: string }> = ({
+interface ExampleFromSchemaProps {
+  schema: any;
+  mimeType: string;
+}
+
+export const ExampleFromSchema: React.FC<ExampleFromSchemaProps> = ({
   schema,
   mimeType,
 }) => {
