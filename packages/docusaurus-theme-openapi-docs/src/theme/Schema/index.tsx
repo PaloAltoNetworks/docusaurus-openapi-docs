@@ -10,21 +10,19 @@ import React from "react";
 import { ClosingArrayBracket, OpeningArrayBracket } from "@theme/ArrayBrackets";
 import Details from "@theme/Details";
 import DiscriminatorTabs from "@theme/DiscriminatorTabs";
+import Markdown from "@theme/Markdown";
 import SchemaItem from "@theme/SchemaItem";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { merge } from "allof-merge";
 import clsx from "clsx";
-import { createDescription } from "docusaurus-plugin-openapi-docs/lib/markdown/createDescription";
 import {
   getQualifierMessage,
   getSchemaName,
 } from "docusaurus-plugin-openapi-docs/lib/markdown/schema";
 import { SchemaObject } from "docusaurus-plugin-openapi-docs/lib/openapi/types";
 import isEmpty from "lodash/isEmpty";
-import ReactMarkdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 // const jsonSchemaMergeAllOf = require("json-schema-merge-allof");
@@ -44,13 +42,10 @@ interface MarkdownProps {
 }
 
 // Renders string as markdown, useful for descriptions and qualifiers
-const Markdown: React.FC<MarkdownProps> = ({ text }) => {
+const MarkdownWrapper: React.FC<MarkdownProps> = ({ text }) => {
   return (
     <div style={{ marginTop: ".5rem", marginBottom: ".5rem" }}>
-      <ReactMarkdown
-        children={createDescription(text)}
-        rehypePlugins={[rehypeRaw]}
-      />
+      <Markdown>{text}</Markdown>
     </div>
   );
 };
@@ -262,9 +257,11 @@ const PropertyDiscriminator: React.FC<SchemaEdgeProps> = ({
             )}
           </span>
           <div style={{ marginLeft: "1rem" }}>
-            {schema.description && <Markdown text={schema.description} />}
+            {schema.description && (
+              <MarkdownWrapper text={schema.description} />
+            )}
             {getQualifierMessage(discriminator) && (
-              <Markdown text={getQualifierMessage(discriminator)} />
+              <MarkdownWrapper text={getQualifierMessage(discriminator)} />
             )}
           </div>
           <DiscriminatorTabs className="openapi-tabs__discriminator">
@@ -480,9 +477,9 @@ const SchemaNodeDetails: React.FC<SchemaEdgeProps> = ({
         }
       >
         <div style={{ marginLeft: "1rem" }}>
-          {schema.description && <Markdown text={schema.description} />}
+          {schema.description && <MarkdownWrapper text={schema.description} />}
           {getQualifierMessage(schema) && (
-            <Markdown text={getQualifierMessage(schema)} />
+            <MarkdownWrapper text={getQualifierMessage(schema)} />
           )}
           <SchemaNode schema={schema} schemaType={schemaType} />
         </div>
