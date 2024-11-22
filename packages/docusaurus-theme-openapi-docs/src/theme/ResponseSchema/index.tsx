@@ -9,6 +9,7 @@ import React, { Suspense } from "react";
 
 import BrowserOnly from "@docusaurus/BrowserOnly";
 import Details from "@theme/Details";
+import Markdown from "@theme/Markdown";
 import MimeTabs from "@theme/MimeTabs"; // Assume these components exist
 import {
   ExampleFromSchema,
@@ -19,7 +20,6 @@ import SchemaNode from "@theme/Schema";
 import SchemaTabs from "@theme/SchemaTabs";
 import SkeletonLoader from "@theme/SkeletonLoader";
 import TabItem from "@theme/TabItem";
-import { createDescription } from "docusaurus-plugin-openapi-docs/lib/markdown/createDescription";
 import { MediaTypeObject } from "docusaurus-plugin-openapi-docs/lib/openapi/types";
 
 interface Props {
@@ -99,7 +99,7 @@ const ResponseSchemaComponent: React.FC<Props> = ({
                           <div
                             style={{ marginTop: "1rem", marginBottom: "1rem" }}
                           >
-                            {createDescription(body.description)}
+                            <Markdown>{body.description}</Markdown>
                           </div>
                         )}
                       </div>

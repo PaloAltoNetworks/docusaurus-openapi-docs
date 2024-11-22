@@ -116,7 +116,62 @@ paths:
       operationId: addPet
       responses:
         "200":
-          description: All good
+          description: |
+            All good, here's some MDX:
+
+            :::note
+
+            Some content but no markdown is supported :(
+
+            :::
+
+            :::tip
+            A TIP with no leading or trailing spaces between delimiters.
+            :::
+
+            :::info
+
+            Some **content** with _Markdown_ `syntax`. Check [this `api`](#).
+
+            | Month    | Savings |
+            | -------- | ------- |
+            | January  | $250    |
+            | February | $80     |
+            | March    | $420    |
+
+            Hmm.....
+
+            :::
+
+            :::warning
+
+            Some **content** with _Markdown_ `syntax`. Check [this `api`](#) which is not supported :( yet
+
+            :::
+
+            :::danger
+
+            Some plain text
+
+            Some more plain text
+
+            And more
+
+            :::
+
+            A **code snippet**!
+
+            ```python
+            print("hello")
+            ```
+
+            _And_ a table!
+
+            | Month    | Savings |
+            | -------- | ------- |
+            | January  | $250    |
+            | February | $80     |
+            | March    | $420    |
           content:
             application/json:
               schema:

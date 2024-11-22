@@ -7,14 +7,12 @@
 
 import React from "react";
 
-import ParamsItem from "@theme/ParamsItem";
+import Markdown from "@theme/Markdown";
 import ResponseSamples from "@theme/ResponseSamples";
 import TabItem from "@theme/TabItem";
-import { createDescription } from "docusaurus-plugin-openapi-docs/lib/markdown/createDescription";
 import { sampleResponseFromSchema } from "docusaurus-plugin-openapi-docs/lib/openapi/createResponseExample";
 import format from "xml-formatter";
 
-// Utility function
 export function json2xml(o: Record<string, any>, tab: string): string {
   const toXml = (v: any, name: string, ind: string): string => {
     let xml = "";
@@ -52,120 +50,14 @@ export function json2xml(o: Record<string, any>, tab: string): string {
   return tab ? xml.replace(/\t/g, tab) : xml.replace(/\t|\n/g, "");
 }
 
-interface ParameterProps {
-  in: string;
-  name: string;
-  schema?: {
-    type?: string;
-    items?: Record<string, any>;
-  };
-  enumDescriptions?: [string, string][];
-}
-
-interface ResponseHeaderProps {
-  description?: string;
-  example?: string;
-  schema?: {
-    type?: string;
-  };
-}
-
-interface ResponseExampleProps {
-  value: any;
-  summary?: string;
-}
-
-interface Props {
-  parameters?: ParameterProps[];
-  type: string;
-  responseHeaders?: Record<string, ResponseHeaderProps>;
-  responseExamples?: Record<string, ResponseExampleProps>;
-  responseExample?: any;
-  schema?: any;
-  mimeType: string;
-}
-
-// React components
-export const ParamsDetails: React.FC<Props> = ({ parameters, type }) => {
-  const params = parameters?.filter((param) => param?.in === type);
-
-  if (!params || params.length === 0) {
-    return null;
-  }
-
-  return (
-    <details
-      className="openapi-markdown__details"
-      data-collapsed={false}
-      open={true}
-      style={{ marginBottom: "1rem" }}
-    >
-      <summary>
-        <h3 className="openapi-markdown__details-summary-header-params">
-          {`${type.charAt(0).toUpperCase() + type.slice(1)} Parameters`}
-        </h3>
-      </summary>
-      <div>
-        <ul>
-          {params.map((param, index) => (
-            <ParamsItem
-              key={index}
-              className="paramsItem"
-              // @ts-ignore
-              param={{
-                ...param,
-                enumDescriptions: Object.entries(
-                  param?.schema?.items?.["x-enumDescriptions"] ?? {}
-                ),
-              }}
-            />
-          ))}
-        </ul>
-      </div>
-    </details>
-  );
-};
-
-export const ResponseHeaders: React.FC<{
-  responseHeaders?: Record<string, ResponseHeaderProps>;
-}> = ({ responseHeaders }) => {
-  if (!responseHeaders) {
-    return null;
-  }
-
-  return (
-    <ul style={{ marginLeft: "1rem" }}>
-      {Object.entries(responseHeaders).map(([headerName, headerObj]) => {
-        const { description, example, schema } = headerObj;
-        const type = schema?.type ?? "any";
-
-        return (
-          <li className="schemaItem" key={headerName}>
-            <details>
-              <summary>
-                <strong>{headerName}</strong>
-                {type && <span style={{ opacity: "0.6" }}> {type}</span>}
-              </summary>
-              <div>
-                {description && (
-                  <div style={{ marginTop: ".5rem", marginBottom: ".5rem" }}>
-                    {example && `Example: ${example}`}
-                    {createDescription(description)}
-                  </div>
-                )}
-              </div>
-            </details>
-          </li>
-        );
-      })}
-    </ul>
-  );
-};
-
-export const ResponseExamples: React.FC<{
+interface ResponseExamplesProps {
   responseExamples: any;
   mimeType: string;
-}> = ({ responseExamples, mimeType }): any => {
+}
+export const ResponseExamples: React.FC<ResponseExamplesProps> = ({
+  responseExamples,
+  mimeType,
+}): any => {
   let language = "shell";
   if (mimeType.endsWith("json")) language = "json";
   if (mimeType.endsWith("xml")) language = "xml";
@@ -182,9 +74,9 @@ export const ResponseExamples: React.FC<{
         // @ts-ignore
         <TabItem label={exampleName} value={exampleName} key={exampleName}>
           {exampleValue.summary && (
-            <div className="openapi-example__summary">
+            <Markdown className="openapi-example__summary">
               {exampleValue.summary}
-            </div>
+            </Markdown>
           )}
           <ResponseSamples
             responseExample={responseExample}
@@ -198,10 +90,15 @@ export const ResponseExamples: React.FC<{
   return examplesArray;
 };
 
-export const ResponseExample: React.FC<{
+interface ResponseExampleProps {
   responseExample: any;
   mimeType: string;
-}> = ({ responseExample, mimeType }) => {
+}
+
+export const ResponseExample: React.FC<ResponseExampleProps> = ({
+  responseExample,
+  mimeType,
+}) => {
   let language = "shell";
   if (mimeType.endsWith("json")) {
     language = "json";
@@ -219,16 +116,21 @@ export const ResponseExample: React.FC<{
     // @ts-ignore
     <TabItem label="Example" value="Example">
       {responseExample.summary && (
-        <div className="openapi-example__summary">
+        <Markdown className="openapi-example__summary">
           {responseExample.summary}
-        </div>
+        </Markdown>
       )}
       <ResponseSamples responseExample={exampleContent} language={language} />
     </TabItem>
   );
 };
 
-export const ExampleFromSchema: React.FC<{ schema: any; mimeType: string }> = ({
+interface ExampleFromSchemaProps {
+  schema: any;
+  mimeType: string;
+}
+
+export const ExampleFromSchema: React.FC<ExampleFromSchemaProps> = ({
   schema,
   mimeType,
 }) => {

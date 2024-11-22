@@ -7,13 +7,9 @@
 
 import React, { ReactNode } from "react";
 
-import CodeBlock from "@theme/CodeBlock";
+import Markdown from "@theme/Markdown";
 import clsx from "clsx";
-import ReactMarkdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
-import remarkGfm from "remark-gfm";
 
-import { createDescription } from "../../markdown/createDescription";
 import { guard } from "../../markdown/utils";
 
 export interface Props {
@@ -97,44 +93,22 @@ export default function SchemaItem(props: Props) {
     (value) => {
       return (
         <div style={{ marginTop: ".5rem" }}>
-          <ReactMarkdown
-            remarkPlugins={[remarkGfm]}
-            rehypePlugins={[rehypeRaw]}
-            children={value}
-          />
+          <Markdown>{value}</Markdown>
         </div>
       );
     }
   );
 
   const renderSchemaDescription = guard(schemaDescription, (description) => (
-    <div>
-      <ReactMarkdown
-        children={createDescription(description)}
-        components={{
-          pre: "div",
-          code({ node, inline, className, children, ...props }) {
-            const match = /language-(\w+)/.exec(className || "");
-            if (inline) return <code>{children}</code>;
-            return !inline && match ? (
-              <CodeBlock className={className}>{children}</CodeBlock>
-            ) : (
-              <CodeBlock>{children}</CodeBlock>
-            );
-          },
-        }}
-        rehypePlugins={[rehypeRaw]}
-      />
-    </div>
+    <>
+      <Markdown>{description}</Markdown>
+    </>
   ));
 
   const renderQualifierMessage = guard(qualifierMessage, (message) => (
-    <div>
-      <ReactMarkdown
-        children={createDescription(message)}
-        rehypePlugins={[rehypeRaw]}
-      />
-    </div>
+    <>
+      <Markdown>{message}</Markdown>
+    </>
   ));
 
   function renderDefaultValue() {
