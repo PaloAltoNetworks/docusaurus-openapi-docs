@@ -35,15 +35,15 @@ export function createAuthentication(securitySchemes: SecuritySchemeObject) {
             create("td", {
               children: [
                 guard(tokenUrl, () =>
-                  create("p", { children: `Token URL: ${tokenUrl}` })
+                  create("div", { children: `Token URL: ${tokenUrl}` })
                 ),
                 guard(authorizationUrl, () =>
-                  create("p", {
+                  create("div", {
                     children: `Authorization URL: ${authorizationUrl}`,
                   })
                 ),
                 guard(refreshUrl, () =>
-                  create("p", { children: `Refresh URL: ${refreshUrl}` })
+                  create("div", { children: `Refresh URL: ${refreshUrl}` })
                 ),
                 create("span", { children: "Scopes:" }),
                 create("ul", {
