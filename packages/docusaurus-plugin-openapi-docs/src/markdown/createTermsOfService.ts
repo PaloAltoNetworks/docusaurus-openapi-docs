@@ -23,7 +23,7 @@ export function createTermsOfService(termsOfService: string | undefined) {
       }),
       create("a", {
         href: `${termsOfService}`,
-        children: termsOfService,
+        children: `{'${termsOfService}'}`,
       }),
     ],
   });
