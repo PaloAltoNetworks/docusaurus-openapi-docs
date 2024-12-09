@@ -48,6 +48,7 @@ function Authorization() {
             <FormItem label="Bearer Token" key={a.key + "-bearer"}>
               <FormTextInput
                 placeholder="Bearer Token"
+                password
                 value={data[a.key].token ?? ""}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   const value = e.target.value;
@@ -69,6 +70,7 @@ function Authorization() {
             <FormItem label="Bearer Token" key={a.key + "-oauth2"}>
               <FormTextInput
                 placeholder="Bearer Token"
+                password
                 value={data[a.key].token ?? ""}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   const value = e.target.value;
@@ -130,6 +132,7 @@ function Authorization() {
             <FormItem label={`${a.key}`} key={a.key + "-apikey"}>
               <FormTextInput
                 placeholder={`${a.key}`}
+                password
                 value={data[a.key].apiKey ?? ""}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   const value = e.target.value;
