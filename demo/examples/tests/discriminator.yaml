@@ -233,6 +233,32 @@ paths:
               schema:
                 $ref: "#/components/schemas/BaseSharedMapping"
 
+  /discriminator-mapping-no-properties:
+    get:
+      tags:
+        - discriminator
+      summary: Discriminator with Mapping and No Shared Properties
+      description: |
+        Schema:
+        ```yaml
+        type: object
+        discriminator: 
+          propertyName: type
+          mapping:
+            typeA: "#/components/schemas/TypeA"
+            typeB: "#/components/schemas/TypeB"
+        oneOf:
+          - $ref: '#/components/schemas/TypeA'
+          - $ref: '#/components/schemas/TypeB'
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseSharedMappingNoProperties"
+
   /discriminator-allof-mapping:
     get:
       tags:
@@ -401,6 +427,17 @@ components:
         - $ref: "#/components/schemas/TypeA"
         - $ref: "#/components/schemas/TypeB"
 
+    BaseSharedMappingNoProperties:
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          typeA: "#/components/schemas/TypeA"
+          typeB: "#/components/schemas/TypeB"
+      oneOf:
+        - $ref: "#/components/schemas/TypeA"
+        - $ref: "#/components/schemas/TypeB"
+
     BaseAllOfMapping:
       type: object
       discriminator:
@@ -409,7 +446,8 @@ components:
           typeA: "#/components/schemas/TypeA"
           typeB: "#/components/schemas/TypeB"
       properties:
-        type: string
+        type:
+          type: string
       allOf:
         - oneOf:
             - $ref: "#/components/schemas/TypeA"

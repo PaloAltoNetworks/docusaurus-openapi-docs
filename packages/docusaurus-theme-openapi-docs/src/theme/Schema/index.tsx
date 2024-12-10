@@ -317,7 +317,10 @@ const DiscriminatorNode: React.FC<DiscriminatorNodeProps> = ({
   let discriminatedSchemas: any = {};
   let inferredMapping: any = {};
 
-  const discriminatorProperty = schema.properties![discriminator.propertyName];
+  // default to empty object if no parent-level properties exist
+  const discriminatorProperty = schema.properties
+    ? schema.properties![discriminator.propertyName]
+    : {};
 
   if (schema.allOf) {
     const mergedSchemas = mergeAllOf(schema) as SchemaObject;
@@ -350,21 +353,28 @@ const DiscriminatorNode: React.FC<DiscriminatorNodeProps> = ({
 
     const subProperties = subSchema.properties || mergedSubSchema.properties;
     if (subProperties[discriminator.propertyName]) {
-      schema.properties![discriminator.propertyName] = {
-        ...schema.properties![discriminator.propertyName],
-        ...subProperties[discriminator.propertyName],
-      };
-      if (subSchema.required && !schema.required) {
-        schema.required = subSchema.required;
+      if (schema.properties) {
+        schema.properties![discriminator.propertyName] = {
+          ...schema.properties![discriminator.propertyName],
+          ...subProperties[discriminator.propertyName],
+        };
+        if (subSchema.required && !schema.required) {
+          schema.required = subSchema.required;
+        }
+        // Avoid duplicating property
+        delete subProperties[discriminator.propertyName];
+      } else {
+        schema.properties = {};
+        schema.properties[discriminator.propertyName] =
+          subProperties[discriminator.propertyName];
+        // Avoid duplicating property
+        delete subProperties[discriminator.propertyName];
       }
-      // Avoid duplicating property
-      delete subProperties[discriminator.propertyName];
     }
   });
 
   const name = discriminator.propertyName;
   const schemaName = getSchemaName(discriminatorProperty);
-
   // Default case for discriminator without oneOf/anyOf/allOf
   return (
     <PropertyDiscriminator
