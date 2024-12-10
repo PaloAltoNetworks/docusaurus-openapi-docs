@@ -51,7 +51,7 @@ Key Features:
 Run the following to bootstrap a Docsaurus v3 site (classic theme) with `docusaurus-openapi-docs`:
 
 ```bash
-npx create-docusaurus@3.5.2 my-website --package-manager yarn
+npx create-docusaurus@3.6.3 my-website --package-manager yarn
 ```
 
 > When prompted to select a template choose `Git repository`.
