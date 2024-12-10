@@ -1,7 +1,7 @@
 {
   "name": "docusaurus-theme-openapi-docs",
   "description": "OpenAPI theme for Docusaurus.",
-  "version": "4.2.0",
+  "version": "4.3.0",
   "license": "MIT",
   "keywords": [
     "openapi",
@@ -28,15 +28,15 @@
     "watch": "concurrently --names \"lib,lib-next,tsc\" --kill-others \"yarn babel:lib --watch\" \"yarn babel:lib-next --watch\" \"yarn tsc --watch\""
   },
   "devDependencies": {
+    "@docusaurus/theme-common": "^3.5.0",
     "@docusaurus/types": "^3.5.0",
     "@types/crypto-js": "^4.1.0",
     "@types/file-saver": "^2.0.5",
     "@types/lodash": "^4.14.176",
     "concurrently": "^5.2.0",
-    "eslint-plugin-prettier": "^5.0.1",
-    "docusaurus-plugin-openapi-docs": "^4.2.0",
-    "@docusaurus/theme-common": "^3.5.0",
-    "docusaurus-plugin-sass": "^0.2.3"
+    "docusaurus-plugin-openapi-docs": "^4.3.0",
+    "docusaurus-plugin-sass": "^0.2.3",
+    "eslint-plugin-prettier": "^5.0.1"
   },
   "dependencies": {
     "@hookform/error-message": "^2.0.1",
@@ -66,11 +66,11 @@
     "xml-formatter": "^2.6.1"
   },
   "peerDependencies": {
-    "react": "^16.8.4 || ^17.0.0 || ^18.0.0",
-    "react-dom": "^16.8.4 || ^17.0.0 || ^18.0.0",
-    "docusaurus-plugin-openapi-docs": "^4.0.0",
     "@docusaurus/theme-common": "^3.5.0",
-    "docusaurus-plugin-sass": "^0.2.3"
+    "docusaurus-plugin-openapi-docs": "^4.0.0",
+    "docusaurus-plugin-sass": "^0.2.3",
+    "react": "^16.8.4 || ^17.0.0 || ^18.0.0",
+    "react-dom": "^16.8.4 || ^17.0.0 || ^18.0.0"
   },
   "engines": {
     "node": ">=14"

@@ -1,7 +1,7 @@
 {
   "name": "docusaurus-plugin-openapi-docs",
   "description": "OpenAPI plugin for Docusaurus.",
-  "version": "4.2.0",
+  "version": "4.3.0",
   "license": "MIT",
   "keywords": [
     "openapi",
@@ -28,16 +28,16 @@
     "watch": "tsc --watch"
   },
   "devDependencies": {
+    "@docusaurus/plugin-content-docs": "^3.5.0",
     "@docusaurus/types": "^3.5.0",
+    "@docusaurus/utils": "^3.5.0",
+    "@docusaurus/utils-validation": "^3.5.0",
     "@types/fs-extra": "^9.0.13",
     "@types/json-pointer": "^1.0.31",
     "@types/json-schema": "^7.0.9",
     "@types/lodash": "^4.14.176",
     "@types/mustache": "^4.1.2",
-    "eslint-plugin-prettier": "^5.0.1",
-    "@docusaurus/plugin-content-docs": "^3.5.0",
-    "@docusaurus/utils": "^3.5.0",
-    "@docusaurus/utils-validation": "^3.5.0"
+    "eslint-plugin-prettier": "^5.0.1"
   },
   "dependencies": {
     "@apidevtools/json-schema-ref-parser": "^11.5.4",
@@ -57,10 +57,10 @@
     "xml-formatter": "^2.6.1"
   },
   "peerDependencies": {
-    "react": "^16.8.4 || ^17.0.0 || ^18.0.0",
     "@docusaurus/plugin-content-docs": "^3.5.0",
     "@docusaurus/utils": "^3.5.0",
-    "@docusaurus/utils-validation": "^3.5.0"
+    "@docusaurus/utils-validation": "^3.5.0",
+    "react": "^16.8.4 || ^17.0.0 || ^18.0.0"
   },
   "engines": {
     "node": ">=14"

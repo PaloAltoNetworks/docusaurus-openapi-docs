@@ -1,3 +1,25 @@
+## 4.3.0 (Dec 10, 2024)
+
+High level enhancements
+
+- Added support for Docusaurus v3.6, which enables Docusaurus Faster for improved build and development performance ([#1003](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1003))
+
+Other enhancements and bug fixes
+
+### Features/Enhancements
+
+- Support discriminator with no parent/shared properties ([#1040](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1040))
+- Reintroduce password type to auth inputs ([#1039](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1039))
+- Address HTML minifier warnings caused by malformed MDX and HTML ([#1033](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1033))
+- Remove unused global selector and class name selector ([#1031](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1031))
+- Adjust top to better align response schema details marker ([#1029](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1029))
+- Add admonition support to descriptions/summaries ([#1016](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1016))
+- Added an --all-versions flag to gen-api-docs and clean-api-docs ([#1018](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1018))
+- fix: add back @hookform/error-message as a regular dep ([#1023](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1023))
+- fix: move dependencies to peer dependencies ([#1019](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1019))
+- Update version matrix
+- Support schemas with array of types ([#1017](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1017))
+
 ## 4.2.0 (Nov 1, 2024)
 
 High level enhancements
