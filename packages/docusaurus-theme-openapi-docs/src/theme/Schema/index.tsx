@@ -319,7 +319,7 @@ const DiscriminatorNode: React.FC<DiscriminatorNodeProps> = ({
 
   // default to empty object if no parent-level properties exist
   const discriminatorProperty = schema.properties
-    ? schema.properties![discriminator.propertyName]
+    ? (schema.properties![discriminator.propertyName] ?? {})
     : {};
 
   if (schema.allOf) {
@@ -339,6 +339,12 @@ const DiscriminatorNode: React.FC<DiscriminatorNodeProps> = ({
       }
     );
     discriminator.mapping = inferredMapping;
+  }
+
+  // handle invalid discriminator definition where no discriminated schemas are defined
+  if (Object.keys(discriminator.mapping).length === 0) {
+    delete schema.discriminator;
+    return <SchemaNode schema={schema} schemaType={schemaType} />;
   }
 
   // Merge sub schema discriminator property with parent
