@@ -5,13 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-/* ============================================================================
- * Copyright (c) Palo Alto Networks
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- * ========================================================================== */
-
 import React, { useState, useEffect } from "react";
 
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
@@ -59,6 +52,38 @@ function CodeSnippets({ postman, codeSamples }: Props) {
   const headerParams = useTypedSelector((state: any) => state.params.header);
 
   const auth = useTypedSelector((state: any) => state.auth);
+  const clonedAuth = JSON.parse(JSON.stringify(auth));
+
+  function scrubCredentials(obj: any) {
+    for (const key in obj) {
+      if (typeof obj[key] === "object" && obj[key] !== null) {
+        obj[key] = scrubCredentials(obj[key]);
+      } else {
+        obj[key] = `<${key}>`;
+      }
+    }
+
+    return obj;
+  }
+
+  // scrub credentials from code snippets
+  const cleanedAuth = {
+    ...clonedAuth,
+    data: scrubCredentials(clonedAuth.data),
+  };
+
+  // Create a Postman request object using cleanedAuth
+  const cleanedPostmanRequest = buildPostmanRequest(postman, {
+    queryParams,
+    pathParams,
+    cookieParams,
+    contentType,
+    accept,
+    headerParams,
+    body,
+    server,
+    auth: cleanedAuth,
+  });
 
   // User-defined languages array
   // Can override languageSet, change order of langs, override options and variants
@@ -105,21 +130,10 @@ function CodeSnippets({ postman, codeSamples }: Props) {
     }
 
     if (language && !!language.options) {
-      const postmanRequest = buildPostmanRequest(postman, {
-        queryParams,
-        pathParams,
-        cookieParams,
-        contentType,
-        accept,
-        headerParams,
-        body,
-        server,
-        auth,
-      });
       codegen.convert(
         language.language,
         language.variant,
-        postmanRequest,
+        cleanedPostmanRequest,
         language.options,
         (error: any, snippet: string) => {
           if (error) {
@@ -137,22 +151,10 @@ function CodeSnippets({ postman, codeSamples }: Props) {
       // This allows users to define only the minimal properties necessary in languageTabs
       // User-defined properties should override languageSet properties
       const mergedLanguage = { ...langSource[0], ...language };
-      const postmanRequest = buildPostmanRequest(postman, {
-        queryParams,
-        pathParams,
-        cookieParams,
-        contentType,
-        accept,
-        headerParams,
-        body,
-        server,
-        auth,
-      });
-
       codegen.convert(
         mergedLanguage.language,
         mergedLanguage.variant,
-        postmanRequest,
+        cleanedPostmanRequest,
         mergedLanguage.options,
         (error: any, snippet: string) => {
           if (error) {
@@ -175,27 +177,16 @@ function CodeSnippets({ postman, codeSamples }: Props) {
     postman,
     queryParams,
     server,
-    auth,
+    cleanedPostmanRequest,
     mergedLangs,
   ]);
-  // no dependencies was intentionlly set for this particular hook. it's safe as long as if conditions are set
+  // no dependencies was intentionally set for this particular hook. it's safe as long as if conditions are set
   useEffect(function onSelectedVariantUpdate() {
     if (selectedVariant && selectedVariant !== language?.variant) {
-      const postmanRequest = buildPostmanRequest(postman, {
-        queryParams,
-        pathParams,
-        cookieParams,
-        contentType,
-        accept,
-        headerParams,
-        body,
-        server,
-        auth,
-      });
       codegen.convert(
         language.language,
         selectedVariant,
-        postmanRequest,
+        cleanedPostmanRequest,
         language.options,
         (error: any, snippet: string) => {
           if (error) {
@@ -207,7 +198,7 @@ function CodeSnippets({ postman, codeSamples }: Props) {
     }
   });
 
-  // no dependencies was intentionlly set for this particular hook. it's safe as long as if conditions are set
+  // no dependencies was intentionally set for this particular hook. it's safe as long as if conditions are set
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(function onSelectedSampleUpdate() {
     if (
