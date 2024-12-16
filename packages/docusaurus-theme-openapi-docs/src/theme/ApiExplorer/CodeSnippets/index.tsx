@@ -54,7 +54,6 @@ function CodeSnippets({ postman, codeSamples }: Props) {
 
   const auth = useTypedSelector((state: any) => state.auth);
   const clonedAuth = cloneDeep(auth);
-  console.log(clonedAuth);
   let placeholder: string;
 
   function cleanCredentials(obj: any) {
