@@ -60,7 +60,10 @@ function CodeSnippets({ postman, codeSamples }: Props) {
     for (const key in obj) {
       if (typeof obj[key] === "object" && obj[key] !== null) {
         // use name as placeholder if exists
-        placeholder = clonedAuth?.options?.[key]?.[0]?.name;
+        const comboAuthId = Object.keys(obj).join(" and ");
+        const authOptions =
+          clonedAuth?.options?.[key] ?? clonedAuth?.options?.[comboAuthId];
+        placeholder = authOptions?.[0]?.name;
         obj[key] = cleanCredentials(obj[key]);
       } else {
         obj[key] = `<${placeholder ?? key}>`;
