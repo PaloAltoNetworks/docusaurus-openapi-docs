@@ -298,7 +298,7 @@ function buildPostmanRequest(
       if (apiKey === undefined) {
         otherHeaders.push({
           key: a.name,
-          value: "<API_KEY_VALUE>",
+          value: `<${a.name ?? a.type}>`,
         });
         continue;
       }

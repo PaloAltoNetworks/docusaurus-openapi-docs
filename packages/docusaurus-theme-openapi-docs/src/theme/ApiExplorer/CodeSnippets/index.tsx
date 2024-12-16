@@ -12,6 +12,7 @@ import ApiCodeBlock from "@theme/ApiExplorer/ApiCodeBlock";
 import buildPostmanRequest from "@theme/ApiExplorer/buildPostmanRequest";
 import CodeTabs from "@theme/ApiExplorer/CodeTabs";
 import { useTypedSelector } from "@theme/ApiItem/hooks";
+import cloneDeep from "lodash/cloneDeep";
 import codegen from "postman-code-generators";
 import sdk from "postman-collection";
 
@@ -52,14 +53,17 @@ function CodeSnippets({ postman, codeSamples }: Props) {
   const headerParams = useTypedSelector((state: any) => state.params.header);
 
   const auth = useTypedSelector((state: any) => state.auth);
-  const clonedAuth = JSON.parse(JSON.stringify(auth));
+  const clonedAuth = cloneDeep(auth);
+  let placeholder: string;
 
-  function scrubCredentials(obj: any) {
+  function cleanCredentials(obj: any) {
     for (const key in obj) {
       if (typeof obj[key] === "object" && obj[key] !== null) {
-        obj[key] = scrubCredentials(obj[key]);
+        // use name as placeholder if exists
+        placeholder = clonedAuth?.options?.[key]?.[0]?.name;
+        obj[key] = cleanCredentials(obj[key]);
       } else {
-        obj[key] = `<${key}>`;
+        obj[key] = `<${placeholder ?? key}>`;
       }
     }
 
@@ -69,7 +73,7 @@ function CodeSnippets({ postman, codeSamples }: Props) {
   // scrub credentials from code snippets
   const cleanedAuth = {
     ...clonedAuth,
-    data: scrubCredentials(clonedAuth.data),
+    data: cleanCredentials(clonedAuth.data),
   };
 
   // Create a Postman request object using cleanedAuth
