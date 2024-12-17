@@ -1,3 +1,14 @@
+## 4.3.1 (Dec 17, 2024)
+
+High level enhancements
+
+- Mask credentials in API Explorer generated code snippets.
+
+Other enhancements and bug fixes
+
+- Handle case where auth options are combined ([#1051](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1051))
+- Hide credentials from generated code snippets ([#1050](https://github.com/PaloAltoNetworks/
+
 ## 4.3.0 (Dec 10, 2024)
 
 High level enhancements

@@ -1,7 +1,7 @@
 {
   "name": "docusaurus-theme-openapi-docs",
   "description": "OpenAPI theme for Docusaurus.",
-  "version": "4.3.0",
+  "version": "4.3.1",
   "license": "MIT",
   "keywords": [
     "openapi",
@@ -34,7 +34,7 @@
     "@types/file-saver": "^2.0.5",
     "@types/lodash": "^4.14.176",
     "concurrently": "^5.2.0",
-    "docusaurus-plugin-openapi-docs": "^4.3.0",
+    "docusaurus-plugin-openapi-docs": "^4.3.1",
     "docusaurus-plugin-sass": "^0.2.3",
     "eslint-plugin-prettier": "^5.0.1"
   },
