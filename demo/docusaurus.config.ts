@@ -298,18 +298,6 @@ const config: Config = {
             hideSendButton: false,
             showSchemas: true,
           } satisfies OpenApiPlugin.Options,
-          sse: {
-            specPath: "examples/sse.yaml",
-            outputDir: "docs/sse",
-            sidebarOptions: {
-              groupPathsBy: "tag",
-              categoryLinkSource: "tag",
-            },
-            template: "api.mustache", // Customize API MDX with mustache template
-            downloadUrl: "/sse.yaml",
-            hideSendButton: false,
-            showSchemas: true,
-          } satisfies OpenApiPlugin.Options,
           petstore31: {
             specPath: "examples/petstore-3.1.yaml",
             proxy: "https://cors.pan.dev",
