@@ -178,7 +178,10 @@ export default function pluginOpenAPIDocs(
           ),
         });
 
-        if (!fs.existsSync(`${outputDir}/sidebar.ts`)) {
+        if (
+          !sidebarOptions?.nested &&
+          !fs.existsSync(`${outputDir}/sidebar.ts`)
+        ) {
           try {
             fs.writeFileSync(`${outputDir}/sidebar.ts`, view, "utf8");
             console.log(
