@@ -406,21 +406,26 @@ custom_edit_url: null
         }
 
         if (item.type === "tag") {
-          if (!fs.existsSync(`${outputDir}/${item.id}.tag.mdx`)) {
+          let tagOutputDir = sidebarOptions?.nested
+            ? `${outputDir}/${item.tag.name!}`
+            : outputDir;
+          if (!fs.existsSync(`${tagOutputDir}/${item.id}.tag.mdx`)) {
             try {
               fs.writeFileSync(
-                `${outputDir}/${item.id}.tag.mdx`,
+                `${tagOutputDir}/${item.id}.tag.mdx`,
                 tagUtils,
                 "utf8"
               );
               console.log(
                 chalk.green(
-                  `Successfully created "${outputDir}/${item.id}.tag.mdx"`
+                  `Successfully created "${tagOutputDir}/${item.id}.tag.mdx"`
                 )
               );
             } catch (err) {
               console.error(
-                chalk.red(`Failed to write "${outputDir}/${item.id}.tag.mdx"`),
+                chalk.red(
+                  `Failed to write "${tagOutputDir}/${item.id}.tag.mdx"`
+                ),
                 chalk.yellow(err)
               );
             }
