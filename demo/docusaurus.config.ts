@@ -302,20 +302,6 @@ const config: Config = {
             hideSendButton: false,
             showSchemas: true,
           } satisfies OpenApiPlugin.Options,
-          petstore_nested: {
-            specPath: "examples/petstore.yaml",
-            proxy: "https://cors.pan.dev",
-            outputDir: "docs/petstore_nested",
-            sidebarOptions: {
-              groupPathsBy: "tag",
-              categoryLinkSource: "tag",
-              nested: true,
-            },
-            template: "api.mustache", // Customize API MDX with mustache template
-            downloadUrl: "/petstore.yaml",
-            hideSendButton: false,
-            showSchemas: true,
-          } satisfies OpenApiPlugin.Options,
           petstore31: {
             specPath: "examples/petstore-3.1.yaml",
             proxy: "https://cors.pan.dev",
