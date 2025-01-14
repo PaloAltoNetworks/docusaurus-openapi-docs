@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React, { Suspense } from "react";
+import React from "react";
 
 import BrowserOnly from "@docusaurus/BrowserOnly";
 import Details from "@theme/Details";
