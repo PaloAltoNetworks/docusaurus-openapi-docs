@@ -65,7 +65,7 @@ export default function ApiItem(props: Props): JSX.Element {
   if (api) {
     try {
       api = JSON.parse(
-        zlib.inflateSync(Buffer.from(api as any, "base64")).toString()
+        zlib.inflateSync(Buffer.from(api as any, "base64") as any).toString()
       );
     } catch {}
   }

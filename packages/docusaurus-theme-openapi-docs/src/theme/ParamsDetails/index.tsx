@@ -72,14 +72,15 @@ const ParamsDetails: React.FC<Props> = (props) => {
   return (
     <BrowserOnly fallback={<SkeletonLoader size="sm" />}>
       {() => {
-        const LazyComponent = React.lazy(() =>
-          Promise.resolve({ default: ParamsDetailsComponent })
-        );
-        return (
-          <Suspense fallback={null}>
-            <LazyComponent {...props} />
-          </Suspense>
-        );
+        // const LazyComponent = React.lazy(() =>
+        //   Promise.resolve({ default: ParamsDetailsComponent })
+        // );
+        // return (
+        //   <Suspense fallback={null}>
+        //     <LazyComponent {...props} />
+        //   </Suspense>
+        // );
+        return <ParamsDetailsComponent {...props} />;
       }}
     </BrowserOnly>
   );

@@ -5,13 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React, { type CSSProperties, type ReactNode } from "react";
+import React, { type CSSProperties, type ReactNode, type JSX } from "react";
 import clsx from "clsx";
 
 import styles from "./styles.module.css";
 
 interface Props {
-  children: ReactNode;
+  children: JSX.Element;
   minHeight?: number;
   url: string;
   style?: CSSProperties;

@@ -154,7 +154,7 @@ function groupByTags(
       );
       const tagObject = tags.flat().find(
         (t) =>
-          tag === t.name ?? {
+          tag === t.name && {
             name: tag,
             description: `${tag} Index`,
           }
