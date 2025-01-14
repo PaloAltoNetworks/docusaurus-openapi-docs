@@ -148,14 +148,6 @@ const RequestSchema: React.FC<Props> = (props) => {
   return (
     <BrowserOnly fallback={<SkeletonLoader size="sm" />}>
       {() => {
-        // const LazyComponent = React.lazy(() =>
-        //   Promise.resolve({ default: RequestSchemaComponent })
-        // );
-        // return (
-        //   <Suspense fallback={null}>
-        //     <LazyComponent {...props} />
-        //   </Suspense>
-        // );
         return <RequestSchemaComponent {...props} />;
       }}
     </BrowserOnly>
