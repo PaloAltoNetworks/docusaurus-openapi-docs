@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React, { Suspense } from "react";
+import React from "react";
 
 import BrowserOnly from "@docusaurus/BrowserOnly";
 import Details from "@theme/Details";
@@ -72,14 +72,7 @@ const ParamsDetails: React.FC<Props> = (props) => {
   return (
     <BrowserOnly fallback={<SkeletonLoader size="sm" />}>
       {() => {
-        const LazyComponent = React.lazy(() =>
-          Promise.resolve({ default: ParamsDetailsComponent })
-        );
-        return (
-          <Suspense fallback={null}>
-            <LazyComponent {...props} />
-          </Suspense>
-        );
+        return <ParamsDetailsComponent {...props} />;
       }}
     </BrowserOnly>
   );

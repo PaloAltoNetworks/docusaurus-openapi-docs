@@ -44,7 +44,7 @@ function TabList({
   tabValues,
 }: CodeTabsProps & ReturnType<typeof useTabs>) {
   const tabRefs = useRef<(HTMLLIElement | null)[]>([]);
-  const tabsScrollContainerRef = useRef<any>();
+  const tabsScrollContainerRef = useRef<any>(null);
   const { blockElementScrollPositionUntilNextRender } =
     useScrollPositionBlocker();
 
@@ -163,7 +163,11 @@ function TabList({
           tabIndex={selectedValue === value ? 0 : -1}
           aria-selected={selectedValue === value}
           key={value}
-          ref={(tabControl) => tabRefs.current.push(tabControl)}
+          ref={(tabControl) => {
+            if (tabControl) {
+              tabRefs.current.push(tabControl);
+            }
+          }}
           onKeyDown={handleKeydown}
           onClick={handleTabChange}
           {...attributes}

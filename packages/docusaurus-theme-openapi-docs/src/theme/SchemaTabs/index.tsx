@@ -142,7 +142,9 @@ function TabList({
             tabIndex={selectedValue === value ? 0 : -1}
             aria-selected={selectedValue === value}
             key={value}
-            ref={(tabControl) => tabRefs.push(tabControl)}
+            ref={(tabControl) => {
+              tabRefs.push(tabControl);
+            }}
             onKeyDown={handleKeydown}
             onClick={handleTabChange}
             {...attributes}

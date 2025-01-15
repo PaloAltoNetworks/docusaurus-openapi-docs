@@ -21,16 +21,16 @@
     "re-gen": "yarn clean-all-versions && yarn gen-all-versions"
   },
   "dependencies": {
-    "@docusaurus/core": "3.6.3",
-    "@docusaurus/faster": "3.6.3",
-    "@docusaurus/plugin-google-gtag": "3.6.3",
-    "@docusaurus/preset-classic": "3.6.3",
+    "@docusaurus/core": "3.7.0",
+    "@docusaurus/faster": "3.7.0",
+    "@docusaurus/plugin-google-gtag": "3.7.0",
+    "@docusaurus/preset-classic": "3.7.0",
     "clsx": "^1.1.1",
     "docusaurus-plugin-openapi-docs": "^4.3.1",
     "docusaurus-theme-openapi-docs": "^4.3.1",
     "prism-react-renderer": "^2.3.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "browserslist": {
     "production": [
