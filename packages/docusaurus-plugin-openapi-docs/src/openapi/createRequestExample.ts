@@ -181,7 +181,7 @@ export const sampleRequestFromSchema = (schema: SchemaObject = {}): any => {
         return items?.oneOf.map((item: any) => sampleRequestFromSchema(item));
       }
 
-      return [sampleRequestFromSchema(items)];
+      return normalizeArray(sampleRequestFromSchema(items));
     }
 
     if (schemaCopy.enum) {
