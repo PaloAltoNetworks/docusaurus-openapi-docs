@@ -51,7 +51,7 @@ function App({
   ...props
 }: any): JSX.Element {
   const prismTheme = usePrismTheme();
-  const [code, setCode] = React.useState(children);
+  const [code, setCode] = React.useState(children.replace(/\n$/, ""));
 
   useEffect(() => {
     action(setStringRawBody(code));
@@ -76,7 +76,7 @@ function App({
       })}
     >
       <LiveProvider
-        code={children.replace(/\n$/, "")}
+        code={code}
         transformCode={transformCode ?? ((code) => `${code};`)}
         theme={prismTheme}
         language={language}
@@ -84,7 +84,9 @@ function App({
       >
         <Controller
           control={control}
-          rules={{ required: isRequired ? "This field is required" : false }}
+          rules={{
+            required: isRequired && !code ? "This field is required" : false,
+          }}
           name="requestBody"
           render={({ field: { onChange, name } }) => (
             <LiveComponent
