@@ -72,8 +72,12 @@ export default function SchemaItem(props: Props) {
     enumDescriptions = transformEnumDescriptions(schema["x-enumDescriptions"]);
     defaultValue = schema.default;
     example = schema.example;
-    nullable = schema.nullable;
+    nullable =
+      schema.nullable ||
+      (Array.isArray(schema.type) && schema.type.includes("null")); // support JSON Schema nullable
   }
+
+  console.log(schema);
 
   const renderRequired = guard(
     Array.isArray(required) ? required.includes(name) : required,
