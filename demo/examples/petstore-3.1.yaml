@@ -1077,7 +1077,9 @@ components:
             - $ref: "#/components/schemas/Category"
         name:
           description: The name given to a pet
-          type: string
+          type:
+            - string
+            - "null"
           example: Guru
         photoUrls:
           description: The list of URL to a cute photos featuring pet
