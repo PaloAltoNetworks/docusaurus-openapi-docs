@@ -77,8 +77,6 @@ export default function SchemaItem(props: Props) {
       (Array.isArray(schema.type) && schema.type.includes("null")); // support JSON Schema nullable
   }
 
-  console.log(schema);
-
   const renderRequired = guard(
     Array.isArray(required) ? required.includes(name) : required,
     () => <span className="openapi-schema__required">required</span>
