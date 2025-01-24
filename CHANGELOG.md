@@ -1,3 +1,18 @@
+## 4.3.2 (Jan 24, 2025)
+
+High level enhancements
+
+- Add support for JSON Schema `null` type
+- Improve handling of required fields in request bodies
+- Normalize response body arrays to improve consistency
+
+Other enhancements and bug fixes
+
+- add support for json schema null type ([#1068](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1068))
+- allow default body to satisfy required ([#1067](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1067))
+- normalize body array instead of returning literal ([#1066](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1066))
+- Upgrade demo and packages to support 3.7.0 ([#1064](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1064))
+
 ## 4.3.1 (Dec 17, 2024)
 
 High level enhancements
