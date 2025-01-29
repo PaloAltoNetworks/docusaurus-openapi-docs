@@ -56,7 +56,8 @@ export default function ParamArrayFormItem({ param }: ParamProps) {
 
   const showErrorMessage = errors?.paramArray?.message;
 
-  function handleAddItem() {
+  function handleAddItem(e: any) {
+    e.preventDefault(); // prevent form from submitting
     setItems((i) => [
       ...i,
       {
