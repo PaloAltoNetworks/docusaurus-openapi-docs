@@ -1,3 +1,15 @@
+## 4.3.3 (Jan 29, 2025)
+
+High level enhancements
+
+- Improve handling of params items in API Explorer
+- Fix react peer dependency in plugin
+
+Other enhancements and bug fixes
+
+- add react 19 to plugin peer dependencies ([#1074](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1074))
+- prevent default behavior on handleAddItem ([#1073](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1073))
+
 ## 4.3.2 (Jan 24, 2025)
 
 High level enhancements
