@@ -22,7 +22,10 @@ export interface ParamProps {
 function ArrayItem({
   param,
   onChange,
-}: ParamProps & { onChange(value?: string): any }) {
+  initialValue,
+}: ParamProps & { onChange(value?: string): any; initialValue?: string }) {
+  const [value, setValue] = useState(initialValue || "");
+
   if (param.schema?.items?.type === "boolean") {
     return (
       <FormSelect
@@ -38,7 +41,9 @@ function ArrayItem({
   return (
     <FormTextInput
       placeholder={param.description || param.name}
+      value={value}
       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+        setValue(e.target.value);
         onChange(e.target.value);
       }}
     />
@@ -76,8 +81,20 @@ export default function ParamArrayFormItem({ param }: ParamProps) {
         value: values.length > 0 ? values : undefined,
       })
     );
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items]);
+
+  useEffect(() => {
+    if (param.schema?.example?.length > 0) {
+      const examplesWithIds = param.schema.example.map((item: any) => ({
+        id: nanoid(),
+        value: item.toString(),
+      }));
+
+      setItems(examplesWithIds);
+    }
+  }, [param.schema.example, param.schema.length]);
 
   function handleDeleteItem(itemToDelete: { id: string }) {
     return () => {
@@ -112,6 +129,7 @@ export default function ParamArrayFormItem({ param }: ParamProps) {
                 <ArrayItem
                   param={param}
                   onChange={handleChangeItem(item, onChange)}
+                  initialValue={item.value}
                 />
                 <button
                   className="openapi-explorer__delete-btn"
