@@ -28,6 +28,17 @@ function setQueryParams(postman: sdk.Request, queryParams: Param[]) {
       }
 
       if (Array.isArray(param.value)) {
+        // Manual support for handling exploded query params
+        if (param.explode) {
+          let queryStringArr = [];
+
+          for (let i = 0; i < param.value.length; i++) {
+            queryStringArr.push(`${param.name}=${param.value[i]}`);
+          }
+
+          return queryStringArr.join("&");
+        }
+
         return new sdk.QueryParam({
           key: param.name,
           value: param.value.join(","),
