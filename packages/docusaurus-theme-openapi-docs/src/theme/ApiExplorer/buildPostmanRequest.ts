@@ -246,15 +246,63 @@ function setHeaders(
   other: { key: string; value: string }[]
 ) {
   postman.headers.clear();
+
   if (contentType) {
     postman.addHeader({ key: "Content-Type", value: contentType });
   }
+
   if (accept) {
     postman.addHeader({ key: "Accept", value: accept });
   }
+
   headerParams.forEach((param) => {
-    if (param.value && !Array.isArray(param.value)) {
-      postman.addHeader({ key: param.name, value: param.value });
+    if (param.value) {
+      const decodedValue = decodeURI(param.value as string);
+      const tryJson = () => {
+        try {
+          return JSON.parse(decodedValue);
+        } catch (e) {
+          return false;
+        }
+      };
+
+      const jsonResult = tryJson();
+      if (Array.isArray(param.value)) {
+        if (param.style === "simple") {
+          if (param.explode) {
+            // Each item in the array is a separate header
+            param.value.forEach((val) => {
+              postman.addHeader({ key: param.name, value: val });
+            });
+          } else {
+            // Array values are joined by commas
+            postman.addHeader({
+              key: param.name,
+              value: param.value.join(","),
+            });
+          }
+        }
+      } else if (typeof jsonResult === "object") {
+        if (param.style === "simple") {
+          if (param.explode) {
+            // Each key-value pair in the object is a separate header
+            Object.entries(jsonResult).forEach(([key, val]) => {
+              postman.addHeader({ key, value: val });
+            });
+          } else {
+            // Object is serialized as a single header with key-value pairs joined by commas
+            postman.addHeader({
+              key: param.name,
+              value: Object.entries(jsonResult)
+                .map(([key, val]) => `${key},${val}`)
+                .join(","),
+            });
+          }
+        }
+      } else {
+        // Handle scalar values
+        postman.addHeader({ key: param.name, value: param.value });
+      }
     }
   });
 
