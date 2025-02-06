@@ -126,13 +126,61 @@ function setQueryParams(postman: sdk.Request, queryParams: Param[]) {
   }
 }
 
-function setPathParams(postman: sdk.Request, queryParams: Param[]) {
-  const source = queryParams.map((param) => {
+function setPathParams(postman: sdk.Request, pathParams: Param[]) {
+  // Map through the path parameters
+  const source = pathParams.map((param) => {
+    if (!param.value) {
+      return undefined;
+    }
+
+    let serializedValue;
+
+    // Handle different styles
+    if (Array.isArray(param.value)) {
+      if (param.style === "label") {
+        serializedValue = `.${param.value.join(".")}`;
+      } else if (param.style === "matrix") {
+        serializedValue = `;${param.name}=${param.value.join(";")}`;
+      } else {
+        serializedValue = param.value.join(",");
+      }
+      return new sdk.Variable({
+        key: param.name,
+        value: serializedValue,
+      });
+    }
+
+    const decodedValue = decodeURI(param.value);
+    const tryJson = () => {
+      try {
+        return JSON.parse(decodedValue);
+      } catch (e) {
+        return false;
+      }
+    };
+
+    const jsonResult = tryJson();
+
+    if (typeof jsonResult === "object") {
+      if (param.style === "matrix") {
+        serializedValue = Object.entries(jsonResult)
+          .map(([key, val]) => `;${key}=${val}`)
+          .join("");
+      } else {
+        serializedValue = Object.entries(jsonResult)
+          .map(([key, val]) => `${key}=${val}`)
+          .join(",");
+      }
+    } else {
+      serializedValue = decodedValue || `:${param.name}`;
+    }
+
     return new sdk.Variable({
       key: param.name,
-      value: param.value || `:${param.name}`,
+      value: serializedValue,
     });
   });
+
   postman.url.variables.assimilate(source, false);
 }
 
