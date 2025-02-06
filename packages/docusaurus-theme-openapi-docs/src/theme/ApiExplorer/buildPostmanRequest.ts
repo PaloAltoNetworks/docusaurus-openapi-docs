@@ -271,7 +271,7 @@ function setHeaders(
         if (param.style === "simple") {
           if (param.explode) {
             // Each item in the array is a separate header
-            param.value.forEach((val) => {
+            jsonResult.forEach((val: any) => {
               postman.addHeader({ key: param.name, value: val });
             });
           } else {
@@ -287,7 +287,7 @@ function setHeaders(
           if (param.explode) {
             // Each key-value pair in the object is a separate header
             Object.entries(jsonResult).forEach(([key, val]) => {
-              postman.addHeader({ key, value: val });
+              postman.addHeader({ key: param.name, value: `${key}=${val}` });
             });
           } else {
             // Object is serialized as a single header with key-value pairs joined by commas
