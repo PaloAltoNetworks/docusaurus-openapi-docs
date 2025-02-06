@@ -187,18 +187,52 @@ function setPathParams(postman: sdk.Request, pathParams: Param[]) {
 function buildCookie(cookieParams: Param[]) {
   const cookies = cookieParams
     .map((param) => {
-      if (param.value && !Array.isArray(param.value)) {
-        return new sdk.Cookie({
-          // TODO: Is this right?
-          path: "",
-          domain: "",
-          key: param.name,
-          value: param.value,
-        });
+      if (param.value) {
+        const decodedValue = decodeURI(param.value as string);
+        const tryJson = () => {
+          try {
+            return JSON.parse(decodedValue);
+          } catch (e) {
+            return false;
+          }
+        };
+
+        const jsonResult = tryJson();
+        if (typeof jsonResult === "object") {
+          if (param.style === "form") {
+            // Handle form style
+            if (param.explode) {
+              // Serialize each key-value pair as a separate cookie
+              return Object.entries(jsonResult).map(
+                ([key, val]) =>
+                  new sdk.Cookie({
+                    key: key,
+                    value: val,
+                  })
+              );
+            } else {
+              // Serialize the object as a single cookie with key-value pairs joined by commas
+              return new sdk.Cookie({
+                key: param.name,
+                value: Object.entries(jsonResult)
+                  .map(([key, val]) => `${key},${val}`)
+                  .join(","),
+              });
+            }
+          }
+        } else {
+          // Handle scalar values
+          return new sdk.Cookie({
+            key: param.name,
+            value: param.value,
+          });
+        }
       }
       return undefined;
     })
-    .filter((item): item is sdk.Cookie => item !== undefined);
+    .flat() // Flatten the array in case of nested arrays from map
+    .filter((item) => item !== undefined);
+
   const list = new sdk.CookieList(null, cookies);
   return list.toString();
 }
