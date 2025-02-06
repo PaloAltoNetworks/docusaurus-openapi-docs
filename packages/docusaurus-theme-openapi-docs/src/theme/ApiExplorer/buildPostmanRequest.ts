@@ -27,27 +27,84 @@ function setQueryParams(postman: sdk.Request, queryParams: Param[]) {
         return undefined;
       }
 
+      // Handle array values
       if (Array.isArray(param.value)) {
-        // Manual support for handling exploded query params
-        if (param.explode) {
-          let queryStringArr = [];
-
-          for (let i = 0; i < param.value.length; i++) {
-            queryStringArr.push(`${param.name}=${param.value[i]}`);
-          }
-
-          return queryStringArr.join("&");
+        if (param.style === "spaceDelimited") {
+          return new sdk.QueryParam({
+            key: param.name,
+            value: param.value.join(" "),
+          });
+        } else if (param.style === "pipeDelimited") {
+          return new sdk.QueryParam({
+            key: param.name,
+            value: param.value.join("|"),
+          });
+        } else if (param.explode) {
+          return param.value.map(
+            (val) =>
+              new sdk.QueryParam({
+                key: param.name,
+                value: val,
+              })
+          );
+        } else {
+          return new sdk.QueryParam({
+            key: param.name,
+            value: param.value.join(","),
+          });
         }
+      }
 
+      const decodedValue = decodeURI(param.value);
+      const tryJson = () => {
+        try {
+          return JSON.parse(decodedValue);
+        } catch (e) {
+          return false;
+        }
+      };
+
+      const jsonResult = tryJson();
+
+      // Handle object values
+      if (jsonResult && typeof jsonResult === "object") {
+        if (param.style === "deepObject") {
+          return Object.entries(jsonResult).map(
+            ([key, val]) =>
+              new sdk.QueryParam({
+                key: `${param.name}[${key}]`,
+                value: val,
+              })
+          );
+        } else if (param.explode) {
+          return Object.entries(jsonResult).map(
+            ([key, val]) =>
+              new sdk.QueryParam({
+                key: key,
+                value: val,
+              })
+          );
+        } else {
+          return new sdk.QueryParam({
+            key: param.name,
+            value: Object.entries(jsonResult)
+              .map(([key, val]) => `${key},${val}`)
+              .join(","),
+          });
+        }
+      }
+
+      // Handle boolean values
+      if (typeof decodedValue === "boolean") {
         return new sdk.QueryParam({
           key: param.name,
-          value: param.value.join(","),
+          value: decodedValue ? "true" : "false",
         });
       }
 
       // Parameter allows empty value: "/hello?extended"
       if (param.allowEmptyValue) {
-        if (param.value === "true") {
+        if (decodedValue === "true") {
           return new sdk.QueryParam({
             key: param.name,
             value: null,
@@ -61,7 +118,8 @@ function setQueryParams(postman: sdk.Request, queryParams: Param[]) {
         value: param.value,
       });
     })
-    .filter((item): item is sdk.QueryParam => item !== undefined);
+    .flat() // Flatten the array in case of nested arrays from map
+    .filter((item) => item !== undefined);
 
   if (qp.length > 0) {
     postman.addQueryParams(qp);
