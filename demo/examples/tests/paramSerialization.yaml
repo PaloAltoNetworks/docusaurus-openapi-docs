@@ -63,7 +63,7 @@ paths:
         Example:
         ```
         {itemId} = [1, 2, 3]
-        Result: /items/.1,2,3
+        Result: /items/.1.2.3
         ```
       parameters:
         - name: itemId
@@ -79,7 +79,7 @@ paths:
         "200":
           description: Successful response
 
-  /products{productCode}:
+  /products/{productCode}:
     get:
       tags:
         - params
