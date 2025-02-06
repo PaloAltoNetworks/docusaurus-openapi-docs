@@ -311,3 +311,87 @@ paths:
       responses:
         "200":
           description: Successful response
+
+  /headers:
+    get:
+      tags:
+        - params
+      summary: Get with header parameters
+      description: |
+        Schema:
+        ```yaml
+        X-Custom-Header:
+          in: header
+          schema:
+            type: object
+            properties:
+              key1:
+                type: string
+              key2:
+                type: string
+          style: simple
+          explode: true
+        ```
+        Example:
+        ```
+        X-Custom-Header = {"key1": "value1", "key2": "value2"}
+        Result:
+        X-Custom-Header: key1=value1
+        X-Custom-Header: key2=value2
+        ```
+      parameters:
+        - name: X-Custom-Header
+          in: header
+          schema:
+            type: object
+            properties:
+              key1:
+                type: string
+              key2:
+                type: string
+          style: simple
+          explode: true
+      responses:
+        "200":
+          description: Successful response
+
+  /cookies:
+    get:
+      tags:
+        - params
+      summary: Get with cookie parameters
+      description: |
+        Schema:
+        ```yaml
+        userSettings:
+          in: cookie
+          schema:
+            type: object
+            properties:
+              theme:
+                type: string
+              language:
+                type: string
+          style: form
+          explode: false
+        ```
+        Example:
+        ```
+        userSettings = {"theme": "dark", "language": "en"}
+        Result: userSettings=theme,dark,language,en
+        ```
+      parameters:
+        - name: userSettings
+          in: cookie
+          schema:
+            type: object
+            properties:
+              theme:
+                type: string
+              language:
+                type: string
+          style: form
+          explode: false
+      responses:
+        "200":
+          description: Successful response
