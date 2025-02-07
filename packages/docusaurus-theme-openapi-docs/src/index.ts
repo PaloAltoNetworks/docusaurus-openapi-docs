@@ -9,8 +9,6 @@ import path from "path";
 
 import type { Plugin } from "@docusaurus/types";
 
-const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
-
 export default function docusaurusThemeOpenAPI(): Plugin<void> {
   return {
     name: "docusaurus-theme-openapi",
@@ -41,7 +39,11 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
       // Avoid conflicts with docusaurus-plugin-sass
       if (sassLoaderRule.length === 0) {
         return {
-          plugins: [new NodePolyfillPlugin()],
+          plugins: [
+            new utils.currentBundler.instance.ProvidePlugin({
+              process: require.resolve("process/browser"),
+            })
+          ],
           module: {
             rules: [
               {
@@ -60,7 +62,11 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
         };
       }
       return {
-        plugins: [new NodePolyfillPlugin()],
+        plugins: [
+          new utils.currentBundler.instance.ProvidePlugin({
+            process: require.resolve("process/browser"),
+          })
+        ],
       };
     },
   };

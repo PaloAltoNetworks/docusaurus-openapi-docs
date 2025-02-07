@@ -5,8 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import zlib from "zlib";
-
 import React from "react";
 
 import BrowserOnly from "@docusaurus/BrowserOnly";
@@ -23,13 +21,16 @@ import type { Props } from "@theme/DocItem";
 import DocItemMetadata from "@theme/DocItem/Metadata";
 import SkeletonLoader from "@theme/SkeletonLoader";
 import clsx from "clsx";
-import { ServerObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
-import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
+import {
+  ParameterObject,
+  ServerObject,
+} from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import type { ApiItem as ApiItemType } from "docusaurus-plugin-openapi-docs/src/types";
 import type {
   DocFrontMatter,
   ThemeConfig,
 } from "docusaurus-theme-openapi-docs/src/types";
+import { ungzip } from "pako";
 import { Provider } from "react-redux";
 
 import { createStoreWithoutState, createStoreWithState } from "./store";
@@ -52,6 +53,16 @@ interface SampleFrontMatter extends DocFrontMatter {
   readonly sample?: any;
 }
 
+function base64ToUint8Array(base64: string) {
+  const binary = atob(base64);
+  const len = binary.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return bytes;
+}
+
 // @ts-ignore
 export default function ApiItem(props: Props): JSX.Element {
   const docHtmlClassName = `docs-doc-id-${props.content.metadata.id}`;
@@ -65,7 +76,7 @@ export default function ApiItem(props: Props): JSX.Element {
   if (api) {
     try {
       api = JSON.parse(
-        zlib.inflateSync(Buffer.from(api as any, "base64") as any).toString()
+        new TextDecoder().decode(ungzip(base64ToUint8Array(api as any)))
       );
     } catch {}
   }
