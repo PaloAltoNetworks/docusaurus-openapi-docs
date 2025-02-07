@@ -27,16 +27,84 @@ function setQueryParams(postman: sdk.Request, queryParams: Param[]) {
         return undefined;
       }
 
+      // Handle array values
       if (Array.isArray(param.value)) {
+        if (param.style === "spaceDelimited") {
+          return new sdk.QueryParam({
+            key: param.name,
+            value: param.value.join(" "),
+          });
+        } else if (param.style === "pipeDelimited") {
+          return new sdk.QueryParam({
+            key: param.name,
+            value: param.value.join("|"),
+          });
+        } else if (param.explode) {
+          return param.value.map(
+            (val) =>
+              new sdk.QueryParam({
+                key: param.name,
+                value: val,
+              })
+          );
+        } else {
+          return new sdk.QueryParam({
+            key: param.name,
+            value: param.value.join(","),
+          });
+        }
+      }
+
+      const decodedValue = decodeURI(param.value);
+      const tryJson = () => {
+        try {
+          return JSON.parse(decodedValue);
+        } catch (e) {
+          return false;
+        }
+      };
+
+      const jsonResult = tryJson();
+
+      // Handle object values
+      if (jsonResult && typeof jsonResult === "object") {
+        if (param.style === "deepObject") {
+          return Object.entries(jsonResult).map(
+            ([key, val]) =>
+              new sdk.QueryParam({
+                key: `${param.name}[${key}]`,
+                value: val,
+              })
+          );
+        } else if (param.explode) {
+          return Object.entries(jsonResult).map(
+            ([key, val]) =>
+              new sdk.QueryParam({
+                key: key,
+                value: val,
+              })
+          );
+        } else {
+          return new sdk.QueryParam({
+            key: param.name,
+            value: Object.entries(jsonResult)
+              .map(([key, val]) => `${key},${val}`)
+              .join(","),
+          });
+        }
+      }
+
+      // Handle boolean values
+      if (typeof decodedValue === "boolean") {
         return new sdk.QueryParam({
           key: param.name,
-          value: param.value.join(","),
+          value: decodedValue ? "true" : "false",
         });
       }
 
       // Parameter allows empty value: "/hello?extended"
       if (param.allowEmptyValue) {
-        if (param.value === "true") {
+        if (decodedValue === "true") {
           return new sdk.QueryParam({
             key: param.name,
             value: null,
@@ -50,38 +118,121 @@ function setQueryParams(postman: sdk.Request, queryParams: Param[]) {
         value: param.value,
       });
     })
-    .filter((item): item is sdk.QueryParam => item !== undefined);
+    .flat() // Flatten the array in case of nested arrays from map
+    .filter((item) => item !== undefined);
 
   if (qp.length > 0) {
     postman.addQueryParams(qp);
   }
 }
 
-function setPathParams(postman: sdk.Request, queryParams: Param[]) {
-  const source = queryParams.map((param) => {
+function setPathParams(postman: sdk.Request, pathParams: Param[]) {
+  // Map through the path parameters
+  const source = pathParams.map((param) => {
+    if (!param.value) {
+      return undefined;
+    }
+
+    let serializedValue;
+
+    // Handle different styles
+    if (Array.isArray(param.value)) {
+      if (param.style === "label") {
+        serializedValue = `.${param.value.join(".")}`;
+      } else if (param.style === "matrix") {
+        serializedValue = `;${param.name}=${param.value.join(";")}`;
+      } else {
+        serializedValue = param.value.join(",");
+      }
+      return new sdk.Variable({
+        key: param.name,
+        value: serializedValue,
+      });
+    }
+
+    const decodedValue = decodeURI(param.value);
+    const tryJson = () => {
+      try {
+        return JSON.parse(decodedValue);
+      } catch (e) {
+        return false;
+      }
+    };
+
+    const jsonResult = tryJson();
+
+    if (typeof jsonResult === "object") {
+      if (param.style === "matrix") {
+        serializedValue = Object.entries(jsonResult)
+          .map(([key, val]) => `;${key}=${val}`)
+          .join("");
+      } else {
+        serializedValue = Object.entries(jsonResult)
+          .map(([key, val]) => `${key}=${val}`)
+          .join(",");
+      }
+    } else {
+      serializedValue = decodedValue || `:${param.name}`;
+    }
+
     return new sdk.Variable({
       key: param.name,
-      value: param.value || `:${param.name}`,
+      value: serializedValue,
     });
   });
+
   postman.url.variables.assimilate(source, false);
 }
 
 function buildCookie(cookieParams: Param[]) {
   const cookies = cookieParams
     .map((param) => {
-      if (param.value && !Array.isArray(param.value)) {
-        return new sdk.Cookie({
-          // TODO: Is this right?
-          path: "",
-          domain: "",
-          key: param.name,
-          value: param.value,
-        });
+      if (param.value) {
+        const decodedValue = decodeURI(param.value as string);
+        const tryJson = () => {
+          try {
+            return JSON.parse(decodedValue);
+          } catch (e) {
+            return false;
+          }
+        };
+
+        const jsonResult = tryJson();
+        if (typeof jsonResult === "object") {
+          if (param.style === "form") {
+            // Handle form style
+            if (param.explode) {
+              // Serialize each key-value pair as a separate cookie
+              return Object.entries(jsonResult).map(
+                ([key, val]) =>
+                  new sdk.Cookie({
+                    key: key,
+                    value: val,
+                  })
+              );
+            } else {
+              // Serialize the object as a single cookie with key-value pairs joined by commas
+              return new sdk.Cookie({
+                key: param.name,
+                value: Object.entries(jsonResult)
+                  .map(([key, val]) => `${key},${val}`)
+                  .join(","),
+              });
+            }
+          }
+        } else {
+          // Handle scalar values
+          return new sdk.Cookie({
+            key: param.name,
+            value: param.value,
+          });
+        }
       }
       return undefined;
     })
-    .filter((item): item is sdk.Cookie => item !== undefined);
+    .flat() // Flatten the array in case of nested arrays from map
+    .filter((item) => item !== undefined);
+
   const list = new sdk.CookieList(null, cookies);
   return list.toString();
 }
@@ -95,15 +246,63 @@ function setHeaders(
   other: { key: string; value: string }[]
 ) {
   postman.headers.clear();
+
   if (contentType) {
     postman.addHeader({ key: "Content-Type", value: contentType });
   }
+
   if (accept) {
     postman.addHeader({ key: "Accept", value: accept });
   }
+
   headerParams.forEach((param) => {
-    if (param.value && !Array.isArray(param.value)) {
-      postman.addHeader({ key: param.name, value: param.value });
+    if (param.value) {
+      const decodedValue = decodeURI(param.value as string);
+      const tryJson = () => {
+        try {
+          return JSON.parse(decodedValue);
+        } catch (e) {
+          return false;
+        }
+      };
+
+      const jsonResult = tryJson();
+      if (Array.isArray(param.value)) {
+        if (param.style === "simple") {
+          if (param.explode) {
+            // Each item in the array is a separate header
+            jsonResult.forEach((val: any) => {
+              postman.addHeader({ key: param.name, value: val });
+            });
+          } else {
+            // Array values are joined by commas
+            postman.addHeader({
+              key: param.name,
+              value: param.value.join(","),
+            });
+          }
+        }
+      } else if (typeof jsonResult === "object") {
+        if (param.style === "simple") {
+          if (param.explode) {
+            // Each key-value pair in the object is a separate header
+            Object.entries(jsonResult).forEach(([key, val]) => {
+              postman.addHeader({ key: param.name, value: `${key}=${val}` });
+            });
+          } else {
+            // Object is serialized as a single header with key-value pairs joined by commas
+            postman.addHeader({
+              key: param.name,
+              value: Object.entries(jsonResult)
+                .map(([key, val]) => `${key},${val}`)
+                .join(","),
+            });
+          }
+        }
+      } else {
+        // Handle scalar values
+        postman.addHeader({ key: param.name, value: param.value });
+      }
     }
   });
 

@@ -1,0 +1,397 @@
+openapi: 3.0.0
+info:
+  title: Parameter Serialization Demo API
+  version: 1.0.0
+  description: An API to demonstrate various parameter serialization options in OpenAPI 3.0
+
+tags:
+  - name: params
+    description: Parameter Serialization Tests
+
+paths:
+  /users/{userId}:
+    get:
+      tags:
+        - params
+      summary: Get user by ID
+      description: |
+        Schema:
+        ```yaml
+        userId:
+          in: path
+          required: true
+          schema:
+            type: integer
+          style: simple
+          explode: false
+        ```
+        Example:
+        ```
+        {userId} = 123
+        Result: /users/123
+        ```
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+          style: simple
+          explode: false
+      responses:
+        "200":
+          description: Successful response
+
+  /items/{itemId}:
+    get:
+      tags:
+        - params
+      summary: Get item by ID (label style)
+      description: |
+        Schema:
+        ```yaml
+        itemId:
+          in: path
+          required: true
+          schema:
+            type: array
+            items:
+              type: integer
+          style: label
+          explode: false
+        ```
+        Example:
+        ```
+        {itemId} = [1, 2, 3]
+        Result: /items/.1.2.3
+        ```
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          schema:
+            type: array
+            items:
+              type: integer
+          style: label
+          explode: false
+      responses:
+        "200":
+          description: Successful response
+
+  /products/{productCode}:
+    get:
+      tags:
+        - params
+      summary: Get product by code (matrix style)
+      description: |
+        Schema:
+        ```yaml
+        productCode:
+          in: path
+          required: true
+          schema:
+            type: object
+            properties:
+              category:
+                type: string
+              id:
+                type: integer
+          style: matrix
+          explode: true
+        ```
+        Example:
+        ```
+        {productCode} = {"category": "electronics", "id": 123}
+        Result: /products;category=electronics;id=123
+        ```
+      parameters:
+        - name: productCode
+          in: path
+          required: true
+          schema:
+            type: object
+            properties:
+              category:
+                type: string
+              id:
+                type: integer
+          style: matrix
+          explode: true
+      responses:
+        "200":
+          description: Successful response
+
+  /search:
+    get:
+      tags:
+        - params
+      summary: Search with various query parameter styles
+      description: |
+        Schema:
+        ```yaml
+        q:
+          in: query
+          schema:
+            type: string
+        tags:
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: true
+        filters:
+          in: query
+          schema:
+            type: object
+            properties:
+              minPrice:
+                type: number
+              maxPrice:
+                type: number
+          style: deepObject
+          explode: true
+        sort:
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          style: spaceDelimited
+          explode: false
+        fields:
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          style: pipeDelimited
+          explode: false
+        ```
+        Example:
+        ```
+        q = "openapi"
+        tags = ["api", "docs"]
+        filters = {"minPrice": 10, "maxPrice": 100}
+        sort = ["name", "price"]
+        fields = ["id", "name", "description"]
+        Result: /search?q=openapi&tags=api&tags=docs&filters[minPrice]=10&filters[maxPrice]=100&sort=name%20price&fields=id|name|description
+        ```
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+        - name: tags
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: true
+        - name: filters
+          in: query
+          schema:
+            type: object
+            properties:
+              minPrice:
+                type: number
+              maxPrice:
+                type: number
+          style: deepObject
+          explode: true
+        - name: sort
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          style: spaceDelimited
+          explode: false
+        - name: fields
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          style: pipeDelimited
+          explode: false
+      responses:
+        "200":
+          description: Successful response
+
+  /documents/{docId}:
+    get:
+      tags:
+        - params
+      summary: Get document with header parameter
+      description: |
+        Schema:
+        ```yaml
+        docId:
+          in: path
+          required: true
+          schema:
+            type: string
+        X-API-Version:
+          in: header
+          schema:
+            type: array
+            items:
+              type: string
+          style: simple
+          explode: false
+        ```
+        Example:
+        ```
+        {docId} = "doc123"
+        X-API-Version: ["v1", "v2"]
+        Result URL: /documents/doc123
+        Header: X-API-Version: v1,v2
+        ```
+      parameters:
+        - name: docId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: X-API-Version
+          in: header
+          schema:
+            type: array
+            items:
+              type: string
+          style: simple
+          explode: false
+      responses:
+        "200":
+          description: Successful response
+
+  /preferences:
+    get:
+      tags:
+        - params
+      summary: Get user preferences with cookie parameter
+      description: |
+        Schema:
+        ```yaml
+        userSettings:
+          in: cookie
+          schema:
+            type: object
+            properties:
+              theme:
+                type: string
+              language:
+                type: string
+          style: form
+          explode: true
+        ```
+        Example:
+        ```
+        userSettings = {"theme": "dark", "language": "en"}
+        Result URL: /preferences
+        Cookie: theme=dark; language=en
+        ```
+      parameters:
+        - name: userSettings
+          in: cookie
+          schema:
+            type: object
+            properties:
+              theme:
+                type: string
+              language:
+                type: string
+          style: form
+          explode: true
+      responses:
+        "200":
+          description: Successful response
+
+  /headers:
+    get:
+      tags:
+        - params
+      summary: Get with header parameters
+      description: |
+        Schema:
+        ```yaml
+        X-Custom-Header:
+          in: header
+          schema:
+            type: object
+            properties:
+              key1:
+                type: string
+              key2:
+                type: string
+          style: simple
+          explode: true
+        ```
+        Example:
+        ```
+        X-Custom-Header = {"key1": "value1", "key2": "value2"}
+        Result:
+        X-Custom-Header: key1=value1
+        X-Custom-Header: key2=value2
+        ```
+      parameters:
+        - name: X-Custom-Header
+          in: header
+          schema:
+            type: object
+            properties:
+              key1:
+                type: string
+              key2:
+                type: string
+          style: simple
+          explode: true
+      responses:
+        "200":
+          description: Successful response
+
+  /cookies:
+    get:
+      tags:
+        - params
+      summary: Get with cookie parameters
+      description: |
+        Schema:
+        ```yaml
+        userSettings:
+          in: cookie
+          schema:
+            type: object
+            properties:
+              theme:
+                type: string
+              language:
+                type: string
+          style: form
+          explode: false
+        ```
+        Example:
+        ```
+        userSettings = {"theme": "dark", "language": "en"}
+        Result: userSettings=theme,dark,language,en
+        ```
+      parameters:
+        - name: userSettings
+          in: cookie
+          schema:
+            type: object
+            properties:
+              theme:
+                type: string
+              language:
+                type: string
+          style: form
+          explode: false
+      responses:
+        "200":
+          description: Successful response
