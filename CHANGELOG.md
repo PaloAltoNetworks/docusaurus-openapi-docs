@@ -1,3 +1,14 @@
+## 4.3.4 (Feb 12, 2025)
+
+High level enhancements
+
+- Expands support for parameter serialization, including support for more parameter styles and encoding formats.
+
+Other enhancements and bug fixes
+
+- update intro doc
+- Expand support for parameter serialization ([#1078](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1078))
+
 ## 4.3.3 (Jan 29, 2025)
 
 High level enhancements
