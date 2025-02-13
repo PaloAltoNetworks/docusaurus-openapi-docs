@@ -33,6 +33,7 @@
     "@types/crypto-js": "^4.1.0",
     "@types/file-saver": "^2.0.5",
     "@types/lodash": "^4.14.176",
+    "@types/pako": "^2.0.3",
     "concurrently": "^5.2.0",
     "docusaurus-plugin-openapi-docs": "^4.3.3",
     "docusaurus-plugin-sass": "^0.2.3",
@@ -47,10 +48,11 @@
     "crypto-js": "^4.1.1",
     "file-saver": "^2.0.5",
     "lodash": "^4.17.20",
-    "node-polyfill-webpack-plugin": "^3.0.0",
+    "pako": "^2.1.0",
     "postman-code-generators": "^1.10.1",
     "postman-collection": "^4.4.0",
     "prism-react-renderer": "^2.3.0",
+    "process": "^0.11.10",
     "react-hook-form": "^7.43.8",
     "react-live": "^4.0.0",
     "react-magic-dropzone": "^1.0.1",
@@ -62,7 +64,6 @@
     "sass": "^1.80.4",
     "sass-loader": "^16.0.2",
     "unist-util-visit": "^5.0.0",
-    "webpack": "^5.61.0",
     "xml-formatter": "^2.6.1"
   },
   "peerDependencies": {
