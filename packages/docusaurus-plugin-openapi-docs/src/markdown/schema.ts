@@ -116,8 +116,8 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
   }
 
   if (
-    schema.minimum ||
-    schema.maximum ||
+    schema.minimum != null ||
+    schema.maximum != null ||
     typeof schema.exclusiveMinimum === "number" ||
     typeof schema.exclusiveMaximum === "number"
   ) {
@@ -126,16 +126,16 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
     let maximum;
     if (typeof schema.exclusiveMinimum === "number") {
       minimum = `\`> ${schema.exclusiveMinimum}\``;
-    } else if (schema.minimum && !schema.exclusiveMinimum) {
+    } else if (schema.minimum != null && !schema.exclusiveMinimum) {
       minimum = `\`>= ${schema.minimum}\``;
-    } else if (schema.minimum && schema.exclusiveMinimum === true) {
+    } else if (schema.minimum != null && schema.exclusiveMinimum === true) {
       minimum = `\`> ${schema.minimum}\``;
     }
     if (typeof schema.exclusiveMaximum === "number") {
       maximum = `\`< ${schema.exclusiveMaximum}\``;
-    } else if (schema.maximum && !schema.exclusiveMaximum) {
+    } else if (schema.maximum != null && !schema.exclusiveMaximum) {
       maximum = `\`<= ${schema.maximum}\``;
-    } else if (schema.maximum && schema.exclusiveMaximum === true) {
+    } else if (schema.maximum != null && schema.exclusiveMaximum === true) {
       maximum = `\`< ${schema.maximum}\``;
     }
 

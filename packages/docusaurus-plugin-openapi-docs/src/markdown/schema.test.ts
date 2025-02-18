@@ -124,6 +124,18 @@ describe("getQualifierMessage", () => {
     expect(actual).toBe(expected);
   });
 
+  it("should render 0 minimum and maximum", () => {
+    const expected = "**Possible values:** `>= 0` and `<= 40`";
+    const actual = getQualifierMessage({ minimum: 0, maximum: 40 });
+    expect(actual).toBe(expected);
+  });
+
+  it("should render minimum and 0 maximum", () => {
+    const expected = "**Possible values:** `>= -10` and `<= 0`";
+    const actual = getQualifierMessage({ minimum: -10, maximum: 0 });
+    expect(actual).toBe(expected);
+  });
+
   it("should render boolean exclusiveMinimum and maximum", () => {
     const expected = "**Possible values:** `> 1` and `<= 40`";
     const actual = getQualifierMessage({
