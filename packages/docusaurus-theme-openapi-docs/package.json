@@ -64,7 +64,9 @@
     "sass": "^1.80.4",
     "sass-loader": "^16.0.2",
     "unist-util-visit": "^5.0.0",
-    "xml-formatter": "^2.6.1"
+    "xml-formatter": "^2.6.1",
+    "buffer": "^6.0.3",
+    "url": "^0.11.1"
   },
   "peerDependencies": {
     "@docusaurus/theme-common": "^3.5.0",
