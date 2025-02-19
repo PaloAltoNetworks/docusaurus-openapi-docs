@@ -39,10 +39,18 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
       // Avoid conflicts with docusaurus-plugin-sass
       if (sassLoaderRule.length === 0) {
         return {
+          resolve: {
+            fallback: {
+              buffer: require.resolve("buffer/"),
+              url: require.resolve("url/"),
+            },
+          },
           plugins: [
             new utils.currentBundler.instance.ProvidePlugin({
               process: require.resolve("process/browser"),
-            })
+              Buffer: ["buffer", "Buffer"],
+              URL: ["url", "URL"],
+            }),
           ],
           module: {
             rules: [
@@ -62,10 +70,18 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
         };
       }
       return {
+        resolve: {
+          fallback: {
+            buffer: require.resolve("buffer/"),
+            url: require.resolve("url/"),
+          },
+        },
         plugins: [
           new utils.currentBundler.instance.ProvidePlugin({
             process: require.resolve("process/browser"),
-          })
+            Buffer: ["buffer", "Buffer"],
+            URL: ["url", "URL"],
+          }),
         ],
       };
     },
