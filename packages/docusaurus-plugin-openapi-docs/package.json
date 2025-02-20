@@ -1,7 +1,7 @@
 {
   "name": "docusaurus-plugin-openapi-docs",
   "description": "OpenAPI plugin for Docusaurus.",
-  "version": "4.3.4",
+  "version": "4.3.5",
   "license": "MIT",
   "keywords": [
     "openapi",

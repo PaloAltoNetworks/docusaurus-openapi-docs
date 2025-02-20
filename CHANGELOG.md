@@ -1,3 +1,15 @@
+## 4.3.5 (Feb 20, 2025)
+
+High level enhancements
+
+- Bug fixes
+
+Other enhancements and bug fixes
+
+- add missing buffer and url modules ([#1089](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1089))
+- correct check null/undefined for minimum and maximum ([#1087](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1087))
+- fix: remove node.js dependency in browser ([#1081](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1081))
+
 ## 4.3.4 (Feb 12, 2025)
 
 High level enhancements

@@ -1,7 +1,7 @@
 {
   "name": "docusaurus-theme-openapi-docs",
   "description": "OpenAPI theme for Docusaurus.",
-  "version": "4.3.4",
+  "version": "4.3.5",
   "license": "MIT",
   "keywords": [
     "openapi",
@@ -35,7 +35,7 @@
     "@types/lodash": "^4.14.176",
     "@types/pako": "^2.0.3",
     "concurrently": "^5.2.0",
-    "docusaurus-plugin-openapi-docs": "^4.3.3",
+    "docusaurus-plugin-openapi-docs": "^4.3.5",
     "docusaurus-plugin-sass": "^0.2.3",
     "eslint-plugin-prettier": "^5.0.1"
   },
@@ -43,6 +43,7 @@
     "@hookform/error-message": "^2.0.1",
     "@reduxjs/toolkit": "^1.7.1",
     "allof-merge": "^0.6.6",
+    "buffer": "^6.0.3",
     "clsx": "^1.1.1",
     "copy-text-to-clipboard": "^3.1.0",
     "crypto-js": "^4.1.1",
@@ -64,9 +65,8 @@
     "sass": "^1.80.4",
     "sass-loader": "^16.0.2",
     "unist-util-visit": "^5.0.0",
-    "xml-formatter": "^2.6.1",
-    "buffer": "^6.0.3",
-    "url": "^0.11.1"
+    "url": "^0.11.1",
+    "xml-formatter": "^2.6.1"
   },
   "peerDependencies": {
     "@docusaurus/theme-common": "^3.5.0",

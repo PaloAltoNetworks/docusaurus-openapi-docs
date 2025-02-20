@@ -1,6 +1,6 @@
 {
   "name": "demo",
-  "version": "4.3.4",
+  "version": "4.3.5",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
@@ -26,8 +26,8 @@
     "@docusaurus/plugin-google-gtag": "3.7.0",
     "@docusaurus/preset-classic": "3.7.0",
     "clsx": "^1.1.1",
-    "docusaurus-plugin-openapi-docs": "^4.3.3",
-    "docusaurus-theme-openapi-docs": "^4.3.4",
+    "docusaurus-plugin-openapi-docs": "^4.3.5",
+    "docusaurus-theme-openapi-docs": "^4.3.5",
     "prism-react-renderer": "^2.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
