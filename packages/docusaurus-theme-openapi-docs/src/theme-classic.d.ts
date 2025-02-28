@@ -21,7 +21,9 @@ declare module "@docusaurus/theme-common/internal" {
   import { Props as ILineProps } from "@theme/CodeBlock/Line";
   import { PrismTheme } from "prism-react-renderer";
 
-  export interface TabProps extends ITabsProps {}
+  export interface TabProps extends ITabsProps {
+    length?: number;
+  }
 
   export interface CopyButtonProps extends ICopyButtonProps {}
   export interface LineProps extends ILineProps {}
