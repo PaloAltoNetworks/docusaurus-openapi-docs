@@ -209,6 +209,9 @@ function TabsComponent(props: TabProps): React.JSX.Element {
 }
 export default function DiscriminatorTabs(props: TabProps): React.JSX.Element {
   const isBrowser = useIsBrowser();
+
+  if (!props.length) return <React.Fragment />;
+
   return (
     <TabsComponent
       // Remount tabs after hydration
