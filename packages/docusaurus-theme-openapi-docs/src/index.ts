@@ -42,14 +42,12 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
           resolve: {
             fallback: {
               buffer: require.resolve("buffer/"),
-              url: require.resolve("url/"),
             },
           },
           plugins: [
             new utils.currentBundler.instance.ProvidePlugin({
               process: require.resolve("process/browser"),
               Buffer: ["buffer", "Buffer"],
-              URL: ["url", "URL"],
             }),
           ],
           module: {
@@ -73,14 +71,12 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
         resolve: {
           fallback: {
             buffer: require.resolve("buffer/"),
-            url: require.resolve("url/"),
           },
         },
         plugins: [
           new utils.currentBundler.instance.ProvidePlugin({
             process: require.resolve("process/browser"),
             Buffer: ["buffer", "Buffer"],
-            URL: ["url", "URL"],
           }),
         ],
       };

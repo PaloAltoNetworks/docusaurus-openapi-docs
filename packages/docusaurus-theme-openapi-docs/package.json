@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@docusaurus/theme-common": "^3.5.0",
+    "@docusaurus/theme-classic": "^3.5.0",
     "@docusaurus/types": "^3.5.0",
     "@types/crypto-js": "^4.1.0",
     "@types/file-saver": "^2.0.5",
