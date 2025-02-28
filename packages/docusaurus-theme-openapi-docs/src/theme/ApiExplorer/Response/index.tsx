@@ -7,7 +7,6 @@
 
 import React from "react";
 
-// @ts-ignore
 import { useDoc } from "@docusaurus/plugin-content-docs/client";
 import { usePrismTheme } from "@docusaurus/theme-common";
 import ApiCodeBlock from "@theme/ApiExplorer/ApiCodeBlock";
