@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import FormTextInput from "@theme/ApiExplorer/FormTextInput";
 import { Param, setParam } from "@theme/ApiExplorer/ParamOptions/slice";
@@ -17,22 +17,41 @@ export interface ParamProps {
 
 export default function ParamTextFormItem({ param }: ParamProps) {
   const dispatch = useTypedDispatch();
+  const [inputValue, setInputValue] = useState("");
+
+  useEffect(() => {
+    if (param.schema?.default) {
+      setInputValue(param.schema.default);
+      dispatch(
+        setParam({
+          ...param,
+          value: param.schema.default,
+        })
+      );
+    }
+  }, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue =
+      param.in === "path" || param.in === "query"
+        ? e.target.value.replace(/\s/g, "%20")
+        : e.target.value;
+    setInputValue(newValue);
+    dispatch(
+      setParam({
+        ...param,
+        value: newValue,
+      })
+    );
+  };
+
   return (
     <FormTextInput
       isRequired={param.required}
       paramName={param.name}
       placeholder={param.description || param.name}
-      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-        dispatch(
-          setParam({
-            ...param,
-            value:
-              param.in === "path" || param.in === "query"
-                ? e.target.value.replace(/\s/g, "%20")
-                : e.target.value,
-          })
-        )
-      }
+      value={inputValue}
+      onChange={handleChange}
     />
   );
 }

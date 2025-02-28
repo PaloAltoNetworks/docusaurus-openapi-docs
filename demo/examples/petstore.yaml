@@ -93,6 +93,12 @@ x-tagGroups:
 paths:
   /pet:
     parameters:
+      - name: limit
+        in: query
+        required: true
+        schema:
+          type: integer
+          default: 10
       - name: Accept-Language
         in: header
         description: "The language you prefer for messages. Supported values are en-AU, en-CA, en-GB, en-US"
