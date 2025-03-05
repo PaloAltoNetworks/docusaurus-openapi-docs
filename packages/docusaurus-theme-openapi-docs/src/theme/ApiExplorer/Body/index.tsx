@@ -233,9 +233,18 @@ function Body({
     }
     if (examples) {
       for (const [key, example] of Object.entries(examples)) {
+        let body = example.value;
+        try {
+          // If the value is already valid JSON we shouldn't double encode the value
+          JSON.parse(example.value);
+        }
+        catch (e) {
+          body = JSON.stringify(example.value, null, 2);
+        }
+
         examplesBodies.push({
           label: key,
-          body: JSON.stringify(example.value, null, 2),
+          body,
           summary: example.summary,
         });
       }
