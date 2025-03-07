@@ -1,3 +1,16 @@
+## 4.3.6 (Mar 7, 2025)
+
+High level enhancements
+
+- downloadUrl option is now available to all API entities, previously only "info" pages ([#1094](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1094))
+
+Other enhancements and bug fixes
+
+- Remove URL plugin and fallback from webpack config ([#1098](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1098))
+- Don't double encode application/json requestBody examples ([#1100](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1100))
+- Return fragment for empty discriminator tab children ([#1099](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1099))
+- Check for body content length ([#1091](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1091))
+
 ## 4.3.5 (Feb 20, 2025)
 
 High level enhancements
