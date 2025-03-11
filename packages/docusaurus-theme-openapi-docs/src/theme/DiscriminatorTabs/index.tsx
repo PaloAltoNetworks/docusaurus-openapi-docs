@@ -210,7 +210,11 @@ function TabsComponent(props: TabProps): React.JSX.Element {
 export default function DiscriminatorTabs(props: TabProps): React.JSX.Element {
   const isBrowser = useIsBrowser();
 
-  if (!props.length) return <React.Fragment />;
+  if (
+    !props.children ||
+    (Array.isArray(props.children) && props.children.length === 0)
+  )
+    return <React.Fragment />;
 
   return (
     <TabsComponent
