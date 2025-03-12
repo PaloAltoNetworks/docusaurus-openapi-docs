@@ -1,3 +1,9 @@
+## 4.3.7 (Mar 12, 2025)
+
+Bug fixes
+
+- Fix check for empty children ([#1108](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1108))
+
 ## 4.3.6 (Mar 7, 2025)
 
 High level enhancements
