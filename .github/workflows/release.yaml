@@ -15,13 +15,13 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           fetch-depth: 0
       - run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@7c12f8017d5436eb855f1ed4399f037a36fbd9e8 # v2
         with:
           node-version: "*"
           registry-url: "https://registry.npmjs.org"
