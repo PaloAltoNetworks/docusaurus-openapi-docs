@@ -338,6 +338,14 @@ const config: Config = {
             },
             showSchemas: true,
           } satisfies OpenApiPlugin.Options,
+          httpbin: {
+            specPath: "examples/httpbin.yaml",
+            outputDir: "docs/httpbin",
+            sidebarOptions: {
+              groupPathsBy: "tag",
+            },
+            showSchemas: true,
+          } satisfies OpenApiPlugin.Options,
           tests: {
             specPath: "examples/tests",
             outputDir: "docs/tests",

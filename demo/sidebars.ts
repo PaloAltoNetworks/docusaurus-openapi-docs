@@ -135,6 +135,16 @@ const sidebars: SidebarsConfig = {
       },
       items: require("./docs/restaurant/sidebar.js"),
     },
+    {
+      type: "category",
+      label: "HTTPBin",
+      link: {
+        type: "generated-index",
+        title: "HTTPBin API",
+        slug: "/category/httpbin-api",
+      },
+      items: require("./docs/httpbin/sidebar.js"),
+    },
   ],
   "petstore-2.0.0": [
     {
