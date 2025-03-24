@@ -89,7 +89,7 @@ jobs:
             console.log('Combined: ' + combined);
             return combined
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
         with:
           fetch-depth: 0
 
@@ -122,7 +122,7 @@ jobs:
           APP_PEM: ${{ secrets.APP_PEM }}
           APP_ID: ${{ secrets.APP_ID }}
 
-      - uses: actions/github-script@v3
+      - uses: actions/github-script@ffc2c79a5b2490bd33e0a41c1de74b877714d736 # v3
         name: Create Combined Pull Request
         env:
           PRS_STRING: ${{ steps.fetch-branch-names.outputs.prs-string }}
