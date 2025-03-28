@@ -297,7 +297,10 @@ const config: Config = {
               groupPathsBy: "tag",
               categoryLinkSource: "tag",
             },
-            template: "api.mustache", // Customize API MDX with mustache template
+            template: "templates/api.mustache", // Customize API MDX with mustache template
+            infoTemplate: "templates/info.mustache",
+            tagTemplate: "templates/tag.mustache",
+            schemaTemplate: "templates/schema.mustache",
             downloadUrl: "/petstore.yaml",
             hideSendButton: false,
             showSchemas: true,
