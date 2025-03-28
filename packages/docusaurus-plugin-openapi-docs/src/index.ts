@@ -117,6 +117,9 @@ export default function pluginOpenAPIDocs(
       specPath,
       outputDir,
       template,
+      infoTemplate,
+      tagTemplate,
+      schemaTemplate,
       markdownGenerators,
       downloadUrl,
       sidebarOptions,
@@ -236,7 +239,9 @@ show_extensions: true
 {{{markdown}}}
       `;
 
-      const infoMdTemplate = `---
+      const infoMdTemplate = infoTemplate
+        ? fs.readFileSync(infoTemplate).toString()
+        : `---
 id: {{{id}}}
 title: "{{{title}}}"
 description: "{{{frontMatter.description}}}"
@@ -255,7 +260,9 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
 \`\`\`
       `;
 
-      const tagMdTemplate = `---
+      const tagMdTemplate = tagTemplate
+        ? fs.readFileSync(tagTemplate).toString()
+        : `---
 id: {{{id}}}
 title: "{{{frontMatter.description}}}"
 description: "{{{frontMatter.description}}}"
@@ -272,7 +279,9 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
 \`\`\`
       `;
 
-      const schemaMdTemplate = `---
+      const schemaMdTemplate = schemaTemplate
+        ? fs.readFileSync(schemaTemplate).toString()
+        : `---
 id: {{{id}}}
 title: "{{{title}}}"
 description: "{{{frontMatter.description}}}"

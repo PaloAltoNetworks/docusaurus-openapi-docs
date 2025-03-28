@@ -35,6 +35,9 @@ export interface APIOptions {
   specPath: string;
   outputDir: string;
   template?: string;
+  infoTemplate?: string;
+  tagTemplate?: string;
+  schemaTemplate?: string;
   downloadUrl?: string;
   hideSendButton?: boolean;
   showExtensions?: boolean;
