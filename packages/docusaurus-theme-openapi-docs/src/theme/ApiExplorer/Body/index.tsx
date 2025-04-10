@@ -237,8 +237,7 @@ function Body({
         try {
           // If the value is already valid JSON we shouldn't double encode the value
           JSON.parse(example.value);
-        }
-        catch (e) {
+        } catch (e) {
           body = JSON.stringify(example.value, null, 2);
         }
 

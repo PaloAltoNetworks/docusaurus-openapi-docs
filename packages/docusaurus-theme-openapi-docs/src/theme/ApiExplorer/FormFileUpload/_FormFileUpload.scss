@@ -13,7 +13,8 @@
 
   &:hover {
     border: 2px dashed var(--ifm-color-primary);
-    background: linear-gradient(
+    background:
+      linear-gradient(
         var(--openapi-dropzone-hover-shim),
         var(--openapi-dropzone-hover-shim)
       ),
@@ -38,7 +39,8 @@
   font-size: var(--ifm-code-font-size);
   border: 2px dashed var(--ifm-color-primary);
 
-  background: linear-gradient(
+  background:
+    linear-gradient(
       var(--openapi-dropzone-hover-shim),
       var(--openapi-dropzone-hover-shim)
     ),

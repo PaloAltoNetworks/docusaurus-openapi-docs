@@ -45,8 +45,8 @@
   line-height: 1.5;
 
   transition-property: color, background, border-color, box-shadow;
-  transition-duration: 100ms, 100ms, 100ms,
-    var(--ifm-button-transition-duration);
+  transition-duration:
+    100ms, 100ms, 100ms, var(--ifm-button-transition-duration);
   transition-timing-function: cubic-bezier(0.08, 0.52, 0.52, 1);
 
   -webkit-user-select: none;
@@ -85,8 +85,8 @@
   padding: 0.5rem 1rem;
   font-size: 12px;
   transition-property: color, background, border-color, box-shadow;
-  transition-duration: 100ms, 100ms, 100ms,
-    var(--ifm-button-transition-duration);
+  transition-duration:
+    100ms, 100ms, 100ms, var(--ifm-button-transition-duration);
   transition-timing-function: cubic-bezier(0.08, 0.52, 0.52, 1);
   user-select: none;
   white-space: nowrap;
