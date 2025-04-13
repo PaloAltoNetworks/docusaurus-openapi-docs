@@ -380,21 +380,14 @@ custom_edit_url: null
           }
         }
 
-        // TODO: determine if we actually want/need this
         if (item.type === "info") {
           if (!fs.existsSync(`${outputDir}/${item.id}.info.mdx`)) {
             try {
-              sidebarOptions?.categoryLinkSource === "info" // Only use utils template if set to "info"
-                ? fs.writeFileSync(
-                    `${outputDir}/${item.id}.info.mdx`,
-                    utils,
-                    "utf8"
-                  )
-                : fs.writeFileSync(
-                    `${outputDir}/${item.id}.info.mdx`,
-                    view,
-                    "utf8"
-                  );
+              fs.writeFileSync(
+                `${outputDir}/${item.id}.info.mdx`,
+                utils,
+                "utf8"
+              );
               console.log(
                 chalk.green(
                   `Successfully created "${outputDir}/${item.id}.info.mdx"`
