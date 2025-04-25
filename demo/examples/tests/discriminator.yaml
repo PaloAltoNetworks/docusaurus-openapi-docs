@@ -321,6 +321,35 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/BaseRequiredMapping"
+
+  /discriminator-empty-subschema:
+    get:
+      tags:
+        - discriminator
+      summary: Discriminator with Subschema Inheriting All Fields (No Extra Fields)
+      description: |
+        This schema reproduces a sub-schema that inherits all fields from the parent (via allOf) and does not define any new properties.
+        Schema:
+        ```yaml
+        type: object
+        discriminator: 
+          propertyName: type
+          mapping:
+            EmptyType: '#/components/schemas/EmptyType'
+        properties:
+          type:
+            type: string
+        oneOf:
+          - $ref: '#/components/schemas/EmptyType'
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseEmptySubschema"
+
 components:
   schemas:
     BaseBasic:
@@ -470,6 +499,18 @@ components:
         - $ref: "#/components/schemas/TypeA"
         - $ref: "#/components/schemas/TypeB"
 
+    BaseEmptySubschema:
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          EmptyType: "#/components/schemas/EmptyType"
+      properties:
+        type:
+          type: string
+      oneOf:
+        - $ref: "#/components/schemas/EmptyType"
+
     TypeA:
       type: object
       properties:
@@ -523,3 +564,8 @@ components:
               type: boolean
       required:
         - type
+
+    EmptyType:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/BaseEmptySubschema"
