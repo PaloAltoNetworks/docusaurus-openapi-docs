@@ -352,7 +352,8 @@ const DiscriminatorNode: React.FC<DiscriminatorNodeProps> = ({
     }
 
     const subProperties = subSchema.properties || mergedSubSchema.properties;
-    if (subProperties[discriminator.propertyName]) {
+    // Add a safeguard check to avoid referencing subProperties if it's undefined
+    if (subProperties && subProperties[discriminator.propertyName]) {
       if (schema.properties) {
         schema.properties![discriminator.propertyName] = {
           ...schema.properties![discriminator.propertyName],
