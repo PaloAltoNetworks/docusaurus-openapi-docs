@@ -70,9 +70,14 @@ function ParamsItem({ param, ...rest }: Props) {
   let schema = param.schema;
   let defaultValue: string | undefined;
 
-  if (!schema || !schema?.type) {
+  if (!schema) {
     schema = { type: "any" };
   }
+
+  if (!schema.type) {
+    schema.type = "any";
+  }
+
   if (schema) {
     if (schema.items) {
       defaultValue = schema.items.default;
