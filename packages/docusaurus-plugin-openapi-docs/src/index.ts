@@ -383,11 +383,17 @@ custom_edit_url: null
         if (item.type === "info") {
           if (!fs.existsSync(`${outputDir}/${item.id}.info.mdx`)) {
             try {
-              fs.writeFileSync(
-                `${outputDir}/${item.id}.info.mdx`,
-                utils,
-                "utf8"
-              );
+              sidebarOptions?.categoryLinkSource === "info" || infoTemplate // Only use utils template if set to "info" or if infoTemplate is set
+                ? fs.writeFileSync(
+                    `${outputDir}/${item.id}.info.mdx`,
+                    utils,
+                    "utf8"
+                  )
+                : fs.writeFileSync(
+                    `${outputDir}/${item.id}.info.mdx`,
+                    view,
+                    "utf8"
+                  );
               console.log(
                 chalk.green(
                   `Successfully created "${outputDir}/${item.id}.info.mdx"`
