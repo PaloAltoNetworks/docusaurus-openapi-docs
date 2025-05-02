@@ -1,3 +1,26 @@
+## 4.4.0 (May 2, 2025)
+
+High level enhancements
+
+- Extend template support to info, tag and schema docs
+- Add support for Server-Sent Events (SSE) to API Explorer
+- Various bug fixes
+
+Other enhancements and bug fixes
+
+- conditionally apply info template ([#1137](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1137))
+- Fixes for enums with no type and anyof/oneof schemas ([#1136](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1136))
+- fix: add discriminator empty subschema and safeguard check in DiscriminatorNode ([#1133](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1133))
+- feat: add support to info, and tag, and schema custom tamplates ([#1122](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1122))
+- Pin GitHub Actions ([#1131](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1131))
+- fix linter errors
+- Pin github actions ([#1124](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1124))
+- Update deploy-preview.yml
+- Update deploy-live.yml
+- Pin github actions ([#1118](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1118))
+- add httpbin.org spec to examples ([#1117](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1117))
+- Add support for Server-Sent Events (SSE) in API Explorer and configuration ([#1041](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1041))
+
 ## 4.3.7 (Mar 12, 2025)
 
 Bug fixes

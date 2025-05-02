@@ -6,7 +6,7 @@
 
 <div align="center">
 
-OpenAPI plugin for generating API reference docs in Docusaurus v3 (compatible with [Docusaurus Faster](https://github.com/facebook/docusaurus/issues/10556).
+OpenAPI plugin for generating API reference docs in Docusaurus v3 (compatible with [Docusaurus Faster](https://github.com/facebook/docusaurus/issues/10556)).
 
 <img src="https://img.shields.io/badge/dynamic/json?style=for-the-badge&logo=meta&color=blueviolet&label=Docusaurus&query=dependencies%5B%22%40docusaurus%2Fcore%22%5D&url=https%3A%2F%2Fraw.githubusercontent.com%2FPaloAltoNetworks%2Fdocusaurus-openapi-docs%2Fmain%2Fdemo%2Fpackage.json" />
 <br/><br/>
@@ -155,22 +155,25 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 
 `config` can be configured with the following options:
 
-| Name                 | Type      | Default | Description                                                                                                                                     |
-| -------------------- | --------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `specPath`           | `string`  | `null`  | Designated URL or path to the source of an OpenAPI specification file or directory of multiple OpenAPI specification files.                     |
-| `ouputDir`           | `string`  | `null`  | Desired output path for generated MDX and sidebar files.                                                                                        |
-| `proxy`              | `string`  | `null`  | _Optional:_ Proxy URL to prepend to base URL when performing API requests from browser.                                                         |
-| `template`           | `string`  | `null`  | _Optional:_ Customize MDX content with a desired template.                                                                                      |
-| `downloadUrl`        | `string`  | `null`  | _Optional:_ Designated URL for downloading OpenAPI specification. (requires `info` section/doc)                                                 |
-| `hideSendButton`     | `boolean` | `null`  | _Optional:_ If set to `true`, hides the "Send API Request" button in API demo panel                                                             |
-| `showExtensions`     | `boolean` | `null`  | _Optional:_ If set to `true`, renders operation-level vendor-extensions in description.                                                         |
-| `sidebarOptions`     | `object`  | `null`  | _Optional:_ Set of options for sidebar configuration. See below for a list of supported options.                                                |
-| `version`            | `string`  | `null`  | _Optional:_ Version assigned to single or micro-spec API specified in `specPath`.                                                               |
-| `label`              | `string`  | `null`  | _Optional:_ Version label used when generating version selector dropdown menu.                                                                  |
-| `baseUrl`            | `string`  | `null`  | _Optional:_ Version base URL used when generating version selector dropdown menu.                                                               |
-| `versions`           | `object`  | `null`  | _Optional:_ Set of options for versioning configuration. See below for a list of supported options.                                             |
-| `markdownGenerators` | `object`  | `null`  | _Optional:_ Customize MDX content with a set of options for specifying markdown generator functions. See below for a list of supported options. |
-| `showSchemas`        | `boolean` | `null`  | _Optional:_ If set to `true`, generates schema pages and adds them to the sidebar.                                                              |
+| Name                 | Type      | Default | Description                                                                                                                 |
+| -------------------- | --------- | ------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `specPath`           | `string`  | `null`  | Designated URL or path to the source of an OpenAPI specification file or directory of multiple OpenAPI specification files. |
+| `outputDir`          | `string`  | `null`  | Desired output path for generated MDX and sidebar files.                                                                    |
+| `proxy`              | `string`  | `null`  | _Optional:_ Proxy URL to prepend to base URL when performing API requests from browser.                                     |
+| `template`           | `string`  | `null`  | _Optional:_ Customize MDX content with a desired template.                                                                  |
+| `infoTemplate`       | `string`  | `null`  | _Optional:_ Customize MDX content for **info** pages only.                                                                  |
+| `tagTemplate`        | `string`  | `null`  | _Optional:_ Customize MDX content for **tag** pages only.                                                                   |
+| `schemaTemplate`     | `string`  | `null`  | _Optional:_ Customize MDX content for **schema** pages only.                                                                |
+| `downloadUrl`        | `string`  | `null`  | _Optional:_ Designated URL for downloading OpenAPI specification. (requires `info` section/doc)                             |
+| `hideSendButton`     | `boolean` | `null`  | _Optional:_ If set to `true`, hides the “Send API Request” button in the API demo panel.                                    |
+| `showExtensions`     | `boolean` | `null`  | _Optional:_ If set to `true`, renders operation‑level vendor‑extensions in descriptions.                                    |
+| `sidebarOptions`     | `object`  | `null`  | _Optional:_ Set of options for sidebar configuration. See below for a list of supported options.                            |
+| `version`            | `string`  | `null`  | _Optional:_ Version assigned to a single or micro‑spec API specified in `specPath`.                                         |
+| `label`              | `string`  | `null`  | _Optional:_ Version label used when generating the version‑selector dropdown menu.                                          |
+| `baseUrl`            | `string`  | `null`  | _Optional:_ Base URL for versioned docs in the version‑selector dropdown.                                                   |
+| `versions`           | `object`  | `null`  | _Optional:_ Options for versioning configuration. See below for a list of supported options.                                |
+| `markdownGenerators` | `object`  | `null`  | _Optional:_ Customize MDX content via generator functions. See below for a list of supported options.                       |
+| `showSchemas`        | `boolean` | `null`  | _Optional:_ If set to `true`, generates standalone schema pages and adds them to the sidebar.                               |
 
 ### sidebarOptions
 
