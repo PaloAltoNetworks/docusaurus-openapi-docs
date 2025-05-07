@@ -1,0 +1,93 @@
+openapi: 3.1.1
+info:
+  title: Const
+  description: Demonstrates various const.
+  version: 1.0.0
+tags:
+  - name: const
+    description: const tests
+paths:
+  /const:
+    get:
+      tags:
+        - const
+      summary: const with primitives
+      description: |
+        Schema:
+        ```yaml
+        type: object
+        properties:
+          type:
+            type: string
+            const: example
+            title: Example
+            description: |
+              This is an example
+          quality:
+            type: string
+            oneOf:
+              - const: good
+                title: Good
+                description: |
+                  This is a good example
+              - const: bad
+                title: Bad
+                description: |
+                  This is a bad example
+          tags:
+            type: array
+            items:
+              anyOf:
+                - const: dog
+                  title: Dog
+                  description: |
+                    This is a dog
+                - const: cat
+                  title: Cat
+                  description: |
+                    This is a cat
+        required:
+          - type
+          - quality
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    const: constExample
+                    title: Const Example
+                    description: |
+                      Const example description
+                  quality:
+                    type: string
+                    oneOf:
+                      - const: good
+                        title: Good
+                        description: |
+                          This is a good example
+                      - const: bad
+                        title: Bad
+                        description: |
+                          This is a bad example
+                  tags:
+                    type: array
+                    items:
+                      type: string
+                      anyOf:
+                        - const: dog
+                          title: Dog
+                          description: |
+                            This is a dog
+                        - const: cat
+                          title: Cat
+                          description: |
+                            This is a cat
+                required:
+                  - type
+                  - quality

@@ -122,9 +122,10 @@ const AnyOneOf: React.FC<SchemaProps> = ({ schema, schemaType }) => {
               value={`${index}-item-properties`}
             >
               {/* Handle primitive types directly */}
-              {["string", "number", "integer", "boolean"].includes(
+              {(["string", "number", "integer", "boolean"].includes(
                 anyOneSchema.type
-              ) && (
+              ) ||
+                anyOneSchema.const) && (
                 <SchemaItem
                   collapsible={false}
                   name={undefined}
