@@ -6,6 +6,18 @@ declare module "@theme/Details" {
   const Details: React.FC<any>;
   export default Details;
 }
+declare module "@docusaurus/theme-common/internal" {
+  import * as React from "react";
+  export interface TabListProps {
+    label: string;
+    id: string;
+    children?: React.ReactNode;
+    [key: string]: any;
+  }
+  export const sanitizeTabsChildren: (children: any) => any;
+  export const useTabs: () => any;
+  export type TabProps = any;
+}
 declare module "@theme/Markdown" {
   const Markdown: React.FC<any>;
   export default Markdown;
@@ -19,6 +31,12 @@ declare module "@theme/ResponseSchema" {
   export default ResponseSchema;
 }
 declare module "@theme/TabItem" {
-  const TabItem: React.FC<any>;
+  import * as React from "react";
+  interface TabItemProps {
+    value: string;
+    label: string;
+    children?: React.ReactNode;
+  }
+  const TabItem: React.FC<TabItemProps>;
   export default TabItem;
 }
