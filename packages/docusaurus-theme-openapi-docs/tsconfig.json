@@ -1,6 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "types": ["jest", "@testing-library/jest-dom"],
     "lib": ["ESNext", "DOM"],
     "rootDir": "src",
     "module": "CommonJS",
@@ -12,5 +13,5 @@
       "@theme/*": ["./src/theme/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "setupTests.d.ts", "src/theme-modules.d.ts"]
 }

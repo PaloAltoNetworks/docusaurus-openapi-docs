@@ -7,11 +7,17 @@
 
 import React from "react";
 
+// @ts-ignore
 import ApiTabs from "@theme/ApiTabs";
+// @ts-ignore
 import Details from "@theme/Details";
+// @ts-ignore
 import Markdown from "@theme/Markdown";
+// @ts-ignore
 import ResponseHeaders from "@theme/ResponseHeaders";
+// @ts-ignore
 import ResponseSchema from "@theme/ResponseSchema";
+// @ts-ignore
 import TabItem from "@theme/TabItem";
 import { ApiItem } from "docusaurus-plugin-openapi-docs/lib/types";
 
