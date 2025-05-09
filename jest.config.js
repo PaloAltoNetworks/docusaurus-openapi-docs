@@ -7,6 +7,7 @@
 
 module.exports = {
   setupFilesAfterEnv: [
+    "<rootDir>/setupTests.ts",
     "<rootDir>/packages/docusaurus-theme-openapi-docs/jest.setup.js",
   ],
   preset: "ts-jest",

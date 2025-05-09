@@ -1,11 +1,4 @@
 /// <reference types="@testing-library/jest-dom" />
-// Mock ResizeObserver for Jest environment
-global.ResizeObserver = class {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-};
-
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import ApiTabs from "./index";

@@ -14,7 +14,6 @@ import React, {
   ReactElement,
 } from "react";
 
-// @ts-ignore
 import {
   sanitizeTabsChildren,
   TabProps,
