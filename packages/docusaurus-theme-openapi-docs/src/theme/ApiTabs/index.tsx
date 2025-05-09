@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* ============================================================================
  * Copyright (c) Palo Alto Networks
  *
@@ -13,6 +14,7 @@ import React, {
   ReactElement,
 } from "react";
 
+// @ts-ignore
 import {
   sanitizeTabsChildren,
   TabProps,

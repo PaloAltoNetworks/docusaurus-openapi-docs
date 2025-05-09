@@ -13,5 +13,10 @@
       "@theme/*": ["./src/theme/*"]
     }
   },
-  "include": ["src", "setupTests.d.ts", "src/theme-modules.d.ts"]
+  "include": [
+    "src",
+    "setupTests.d.ts",
+    "src/theme-modules.d.ts",
+    "src/global.d.ts"
+  ]
 }
