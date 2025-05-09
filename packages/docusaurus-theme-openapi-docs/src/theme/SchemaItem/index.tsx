@@ -65,6 +65,7 @@ export default function SchemaItem(props: Props) {
   let example: string | undefined;
   let nullable;
   let enumDescriptions: [string, string][] = [];
+  let constValue: string | undefined;
 
   if (schema) {
     deprecated = schema.deprecated;
@@ -75,6 +76,7 @@ export default function SchemaItem(props: Props) {
     nullable =
       schema.nullable ||
       (Array.isArray(schema.type) && schema.type.includes("null")); // support JSON Schema nullable
+    constValue = schema.const;
   }
 
   const renderRequired = guard(
@@ -161,6 +163,30 @@ export default function SchemaItem(props: Props) {
     return undefined;
   }
 
+  function renderConstValue() {
+    if (constValue !== undefined) {
+      if (typeof constValue === "string") {
+        return (
+          <div>
+            <strong>Constant value: </strong>
+            <span>
+              <code>{constValue}</code>
+            </span>
+          </div>
+        );
+      }
+      return (
+        <div>
+          <strong>Constant value: </strong>
+          <span>
+            <code>{JSON.stringify(constValue)}</code>
+          </span>
+        </div>
+      );
+    }
+    return undefined;
+  }
+
   const schemaContent = (
     <div>
       <span className="openapi-schema__container">
@@ -184,6 +210,7 @@ export default function SchemaItem(props: Props) {
       {renderSchemaDescription}
       {renderEnumDescriptions}
       {renderQualifierMessage}
+      {renderConstValue()}
       {renderDefaultValue()}
       {renderExample()}
       {collapsibleSchemaContent ?? collapsibleSchemaContent}
