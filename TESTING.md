@@ -30,3 +30,15 @@ yarn test
 ---
 
 For more details, see the comments in `setupTests.ts`, `jest.config.js`, and the `__mocks__` directory.
+
+## Limitations: Testing Deeply Integrated Theme Components
+
+Some Docusaurus theme components—such as `ApiItem`—are tightly coupled to Docusaurus internals, context providers, and plugin APIs. As a result, these components cannot be meaningfully unit tested in isolation using Jest and Testing Library, even with extensive mocks or stubs. Attempts to do so will result in missing module errors or require disabling significant portions of the component, defeating the purpose of the test.
+
+**Recommended Approach:**
+
+- For these components, use integration or end-to-end (E2E) testing in a real Docusaurus site instance (e.g., with Playwright, Cypress, or Puppeteer).
+- Focus unit tests on pure functions and small subcomponents that do not require Docusaurus context.
+- Document these limitations for future contributors.
+
+See this section if you encounter errors related to missing Docusaurus modules when testing theme components.

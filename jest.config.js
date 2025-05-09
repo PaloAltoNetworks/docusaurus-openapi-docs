@@ -6,6 +6,9 @@
  * ========================================================================== */
 
 module.exports = {
+  moduleNameMapper: {
+    "^@docusaurus/(.*)$": "<rootDir>/__mocks__/docusaurus-stub.js",
+  },
   setupFilesAfterEnv: [
     "<rootDir>/setupTests.ts",
     "<rootDir>/packages/docusaurus-theme-openapi-docs/jest.setup.js",
