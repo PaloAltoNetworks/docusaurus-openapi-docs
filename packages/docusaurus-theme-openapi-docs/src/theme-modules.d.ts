@@ -31,6 +31,13 @@ declare module "@theme/ResponseSchema" {
   export default ResponseSchema;
 }
 declare module "@theme/TabItem" {
+  declare module "@docusaurus/plugin-content-docs/client";
+  declare module "@theme/ApiExplorer/Authorization/slice";
+  declare module "@theme/ApiExplorer/persistanceMiddleware";
+  declare module "@theme/ApiItem/Layout";
+  declare module "@theme/SkeletonLoader";
+  declare module "@docusaurus/theme-common/internal";
+
   import * as React from "react";
   interface TabItemProps {
     value: string;
