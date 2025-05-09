@@ -37,6 +37,10 @@ declare module "@theme/TabItem" {
   declare module "@theme/ApiItem/Layout";
   declare module "@theme/SkeletonLoader";
   declare module "@docusaurus/theme-common/internal";
+  declare module "@theme/ApiExplorer/Accept/slice";
+  declare module "@theme/ApiExplorer/ContentType/slice";
+  declare module "@theme/ApiItem/hooks";
+  declare module "@theme/ApiItem/store";
 
   import * as React from "react";
   interface TabItemProps {
