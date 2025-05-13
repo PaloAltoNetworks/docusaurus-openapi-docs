@@ -9,6 +9,9 @@ import { SchemaObject } from "../openapi/types";
 
 function prettyName(schema: SchemaObject, circular?: boolean) {
   if (schema.format) {
+    if (schema.type) {
+      return `${schema.type}<${schema.format}>`;
+    }
     return schema.format;
   }
 
