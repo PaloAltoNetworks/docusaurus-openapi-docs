@@ -6,13 +6,35 @@
  * ========================================================================== */
 
 module.exports = {
+  moduleNameMapper: {
+    "^@docusaurus/(.*)$": "<rootDir>/__mocks__/docusaurus-stub.js",
+  },
+  setupFilesAfterEnv: [
+    "<rootDir>/setupTests.ts",
+    "<rootDir>/packages/docusaurus-theme-openapi-docs/jest.setup.js",
+  ],
   preset: "ts-jest",
-  testEnvironment: "node",
+  testEnvironment: "jsdom",
   roots: [
     "<rootDir>/packages/docusaurus-plugin-openapi-docs/src",
     "<rootDir>/packages/docusaurus-theme-openapi-docs/src",
   ],
   moduleNameMapper: {
+    "^@docusaurus/theme-common/internal$":
+      "<rootDir>/__mocks__/theme-common-internal.js",
+    "^@docusaurus/useIsBrowser$": "<rootDir>/__mocks__/useIsBrowser.js",
+    "^@docusaurus/useBaseUrl$": "<rootDir>/__mocks__/useBaseUrl.js",
+    "^@theme/ApiTabs$": "<rootDir>/__mocks__/ApiTabs.js",
+    "^@theme/Heading$": "<rootDir>/__mocks__/Heading.js",
+    "^@theme/Details$": "<rootDir>/__mocks__/Details.js",
+    "^@theme/Markdown$": "<rootDir>/__mocks__/Markdown.js",
+    "^@theme/ResponseHeaders$": "<rootDir>/__mocks__/ResponseHeaders.js",
+    "^@theme/ResponseSchema$": "<rootDir>/__mocks__/ResponseSchema.js",
+    "^@theme/TabItem$": "<rootDir>/__mocks__/TabItem.js",
+    "^@theme/ThemedImage$": "<rootDir>/__mocks__/ThemedImage.js",
+
+    "^@theme/(.*)$":
+      "<rootDir>/packages/docusaurus-theme-openapi-docs/src/theme/$1",
     "^neotraverse/legacy$":
       "<rootDir>/node_modules/neotraverse/dist/legacy/legacy.cjs",
   },
