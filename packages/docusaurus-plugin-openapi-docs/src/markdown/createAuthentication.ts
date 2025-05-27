@@ -13,8 +13,15 @@ export function createAuthentication(securitySchemes: SecuritySchemeObject) {
   if (!securitySchemes || !Object.keys(securitySchemes).length) return "";
 
   const createAuthenticationTable = (securityScheme: any) => {
-    const { bearerFormat, flows, name, scheme, type, openIdConnectUrl } =
-      securityScheme;
+    const {
+      bearerFormat,
+      flows,
+      name,
+      scheme,
+      type,
+      openIdConnectUrl,
+      in: paramIn,
+    } = securityScheme;
 
     const createSecuritySchemeTypeRow = () =>
       create("tr", {
@@ -70,7 +77,9 @@ export function createAuthentication(securitySchemes: SecuritySchemeObject) {
                   createSecuritySchemeTypeRow(),
                   create("tr", {
                     children: [
-                      create("th", { children: "Header parameter name:" }),
+                      create("th", {
+                        children: `${paramIn.charAt(0).toUpperCase() + paramIn.slice(1)} parameter name:`,
+                      }),
                       create("td", { children: name }),
                     ],
                   }),
@@ -142,7 +151,6 @@ export function createAuthentication(securitySchemes: SecuritySchemeObject) {
         return "";
     }
   };
-
   const formatTabLabel = (key: string, type: string, scheme: string) => {
     const formattedLabel = key
       .replace(/(_|-)/g, " ")

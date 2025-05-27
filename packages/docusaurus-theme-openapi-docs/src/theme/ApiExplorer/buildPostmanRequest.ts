@@ -430,10 +430,9 @@ function buildPostmanRequest(
     clonedPostman.url.host = [url];
   }
 
-  setQueryParams(clonedPostman, queryParams);
-  setPathParams(clonedPostman, pathParams);
+  const enhancedQueryParams = [...queryParams];
+  const enhancedCookieParams = [...cookieParams];
 
-  const cookie = buildCookie(cookieParams);
   let otherHeaders = [];
 
   let selectedAuth: Scheme[] = [];
@@ -491,23 +490,45 @@ function buildPostmanRequest(
       continue;
     }
 
-    // API Key
+    // API Key in header
     if (a.type === "apiKey" && a.in === "header") {
       const { apiKey } = auth.data[a.key];
-      if (apiKey === undefined) {
-        otherHeaders.push({
-          key: a.name,
-          value: `<${a.name ?? a.type}>`,
-        });
-        continue;
-      }
       otherHeaders.push({
         key: a.name,
-        value: apiKey,
+        value: apiKey || `<${a.name ?? a.type}>`,
+      });
+      continue;
+    }
+
+    // API Key in query
+    if (a.type === "apiKey" && a.in === "query") {
+      const { apiKey } = auth.data[a.key];
+      enhancedQueryParams.push({
+        name: a.name,
+        in: "query",
+        value: apiKey || `<${a.name ?? a.type}>`,
+      });
+      continue;
+    }
+
+    // API Key in cookie
+    if (a.type === "apiKey" && a.in === "cookie") {
+      const { apiKey } = auth.data[a.key];
+      enhancedCookieParams.push({
+        name: a.name,
+        in: "cookie",
+        value: apiKey || `<${a.name ?? a.type}>`,
       });
       continue;
     }
   }
+
+  // Use the enhanced params that might include API keys
+  setQueryParams(clonedPostman, enhancedQueryParams);
+  setPathParams(clonedPostman, pathParams);
+
+  // Use enhanced cookie params that might include API keys
+  const cookie = buildCookie(enhancedCookieParams);
 
   setHeaders(
     clonedPostman,
