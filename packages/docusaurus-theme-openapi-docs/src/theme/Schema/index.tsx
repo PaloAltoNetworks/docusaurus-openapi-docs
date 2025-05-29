@@ -21,7 +21,10 @@ import {
   getQualifierMessage,
   getSchemaName,
 } from "docusaurus-plugin-openapi-docs/lib/markdown/schema";
-import { SchemaObject } from "docusaurus-plugin-openapi-docs/lib/openapi/types";
+import {
+  SchemaObject,
+  SchemaType,
+} from "docusaurus-plugin-openapi-docs/lib/openapi/types";
 import isEmpty from "lodash/isEmpty";
 
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -122,10 +125,7 @@ const AnyOneOf: React.FC<SchemaProps> = ({ schema, schemaType }) => {
               value={`${index}-item-properties`}
             >
               {/* Handle primitive types directly */}
-              {(["string", "number", "integer", "boolean"].includes(
-                anyOneSchema.type
-              ) ||
-                anyOneSchema.const) && (
+              {(isPrimitive(anyOneSchema) || anyOneSchema.const) && (
                 <SchemaItem
                   collapsible={false}
                   name={undefined}
@@ -938,3 +938,17 @@ const SchemaNode: React.FC<SchemaProps> = ({ schema, schemaType }) => {
 };
 
 export default SchemaNode;
+
+type PrimitiveSchemaType = Exclude<SchemaType, "object" | "array">;
+
+const PRIMITIVE_TYPES: Record<PrimitiveSchemaType, true> = {
+  string: true,
+  number: true,
+  integer: true,
+  boolean: true,
+  null: true,
+} as const;
+
+const isPrimitive = (schema: SchemaObject) => {
+  return PRIMITIVE_TYPES[schema.type as PrimitiveSchemaType];
+};
