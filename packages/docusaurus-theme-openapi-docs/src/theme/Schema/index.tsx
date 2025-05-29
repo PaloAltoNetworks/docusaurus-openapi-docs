@@ -504,88 +504,42 @@ const Items: React.FC<{
   schema: any;
   schemaType: "request" | "response";
 }> = ({ schema, schemaType }) => {
-  // Handles case when schema.items has properties
-  if (schema.items?.properties) {
-    return (
-      <>
-        <OpeningArrayBracket />
-        <Properties schema={schema.items} schemaType={schemaType} />
-        <ClosingArrayBracket />
-      </>
-    );
-  }
-
-  // Handles case when schema.items has additionalProperties
-  if (schema.items?.additionalProperties) {
-    return (
-      <>
-        <OpeningArrayBracket />
-        <AdditionalProperties schema={schema.items} schemaType={schemaType} />
-        <ClosingArrayBracket />
-      </>
-    );
-  }
-
-  // Handles case when schema.items has oneOf or anyOf
-  if (schema.items?.oneOf || schema.items?.anyOf) {
-    return (
-      <>
-        <OpeningArrayBracket />
-        <AnyOneOf schema={schema.items} schemaType={schemaType} />
-        <ClosingArrayBracket />
-      </>
-    );
-  }
-
-  // Handles case when schema.items has allOf
+  // Process schema.items to handle allOf merging
+  let itemsSchema = schema.items;
   if (schema.items?.allOf) {
-    const mergedSchemas = mergeAllOf(schema.items) as SchemaObject;
+    itemsSchema = mergeAllOf(schema.items) as SchemaObject;
+  }
 
-    // Handles combo anyOf/oneOf + properties
-    if (
-      (mergedSchemas.oneOf || mergedSchemas.anyOf) &&
-      mergedSchemas.properties
-    ) {
-      return (
-        <>
-          <OpeningArrayBracket />
-          <AnyOneOf schema={mergedSchemas} schemaType={schemaType} />
-          <Properties schema={mergedSchemas} schemaType={schemaType} />
-          <ClosingArrayBracket />
-        </>
-      );
-    }
+  // Handle complex schemas with multiple schema types
+  const hasOneOfAnyOf = itemsSchema?.oneOf || itemsSchema?.anyOf;
+  const hasProperties = itemsSchema?.properties;
+  const hasAdditionalProperties = itemsSchema?.additionalProperties;
 
-    // Handles only anyOf/oneOf
-    if (mergedSchemas.oneOf || mergedSchemas.anyOf) {
-      return (
-        <>
-          <OpeningArrayBracket />
-          <AnyOneOf schema={mergedSchemas} schemaType={schemaType} />
-          <ClosingArrayBracket />
-        </>
-      );
-    }
-
-    // Handles properties
-    if (mergedSchemas.properties) {
-      return (
-        <>
-          <OpeningArrayBracket />
-          <Properties schema={mergedSchemas} schemaType={schemaType} />
-          <ClosingArrayBracket />
-        </>
-      );
-    }
+  if (hasOneOfAnyOf || hasProperties || hasAdditionalProperties) {
+    return (
+      <>
+        <OpeningArrayBracket />
+        {hasOneOfAnyOf && (
+          <AnyOneOf schema={itemsSchema} schemaType={schemaType} />
+        )}
+        {hasProperties && (
+          <Properties schema={itemsSchema} schemaType={schemaType} />
+        )}
+        {hasAdditionalProperties && (
+          <AdditionalProperties schema={itemsSchema} schemaType={schemaType} />
+        )}
+        <ClosingArrayBracket />
+      </>
+    );
   }
 
   // Handles basic types (string, number, integer, boolean, object)
   if (
-    schema.items?.type === "string" ||
-    schema.items?.type === "number" ||
-    schema.items?.type === "integer" ||
-    schema.items?.type === "boolean" ||
-    schema.items?.type === "object"
+    itemsSchema?.type === "string" ||
+    itemsSchema?.type === "number" ||
+    itemsSchema?.type === "integer" ||
+    itemsSchema?.type === "boolean" ||
+    itemsSchema?.type === "object"
   ) {
     return (
       <div style={{ marginLeft: ".5rem" }}>
@@ -593,9 +547,9 @@ const Items: React.FC<{
         <SchemaItem
           collapsible={false}
           name="" // No name for array items
-          schemaName={getSchemaName(schema.items)}
-          qualifierMessage={getQualifierMessage(schema.items)}
-          schema={schema.items}
+          schemaName={getSchemaName(itemsSchema)}
+          qualifierMessage={getQualifierMessage(itemsSchema)}
+          schema={itemsSchema}
           discriminator={false}
           children={null}
         />
@@ -608,7 +562,7 @@ const Items: React.FC<{
   return (
     <>
       <OpeningArrayBracket />
-      {Object.entries(schema.items || {}).map(([key, val]: [string, any]) => (
+      {Object.entries(itemsSchema || {}).map(([key, val]: [string, any]) => (
         <SchemaEdge
           key={key}
           name={key}
