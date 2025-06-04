@@ -5,7 +5,12 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import type { JSONSchema4, JSONSchema6, JSONSchema7 } from "json-schema";
+import type {
+  JSONSchema4,
+  JSONSchema6,
+  JSONSchema7,
+  JSONSchema7TypeName,
+} from "json-schema";
 
 interface Map<T> {
   [key: string]: T;
@@ -325,6 +330,7 @@ export interface ReferenceObject {
 }
 
 export type JSONSchema = JSONSchema4 | JSONSchema6 | JSONSchema7;
+export type SchemaType = JSONSchema7TypeName;
 export type SchemaObject = Omit<
   JSONSchema,
   | "type"
@@ -337,7 +343,7 @@ export type SchemaObject = Omit<
   | "additionalProperties"
 > & {
   // OpenAPI specific overrides
-  type?: "string" | "number" | "integer" | "boolean" | "object" | "array";
+  type?: SchemaType;
   allOf?: SchemaObject[];
   oneOf?: SchemaObject[];
   anyOf?: SchemaObject[];
@@ -371,7 +377,7 @@ export type SchemaObjectWithRef = Omit<
   | "additionalProperties"
 > & {
   // OpenAPI specific overrides
-  type?: "string" | "number" | "integer" | "boolean" | "object" | "array";
+  type?: SchemaType;
   allOf?: (SchemaObject | ReferenceObject)[];
   oneOf?: (SchemaObject | ReferenceObject)[];
   anyOf?: (SchemaObject | ReferenceObject)[];

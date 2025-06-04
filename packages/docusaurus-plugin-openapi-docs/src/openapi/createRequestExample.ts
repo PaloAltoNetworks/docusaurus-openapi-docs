@@ -18,6 +18,7 @@ interface OASTypeToTypeMap {
   boolean: boolean;
   object: any;
   array: any[];
+  null: string | null;
 }
 
 type Primitives = {
@@ -50,6 +51,9 @@ const primitives: Primitives = {
   },
   object: {},
   array: {},
+  null: {
+    default: () => "null",
+  },
 };
 
 function sampleRequestFromProp(name: string, prop: any, obj: any): any {

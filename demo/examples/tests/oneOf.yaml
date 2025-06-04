@@ -22,6 +22,7 @@ paths:
               - type: string
               - type: number
               - type: boolean
+              - type: null
         ```
       responses:
         "200":
@@ -36,6 +37,7 @@ paths:
                       - type: string
                       - type: number
                       - type: boolean
+                      - type: "null"
 
   /oneof-complex-types:
     get:

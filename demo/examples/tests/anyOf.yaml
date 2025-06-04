@@ -19,6 +19,7 @@ paths:
           - type: string
           - type: integer
           - type: boolean
+          - type: null
         ```
       responses:
         "200":
@@ -30,6 +31,7 @@ paths:
                   - type: string
                   - type: integer
                   - type: boolean
+                  - type: "null"
 
   /anyof-oneof:
     get:
