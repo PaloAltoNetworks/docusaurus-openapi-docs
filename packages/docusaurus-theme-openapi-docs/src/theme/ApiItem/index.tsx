@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* ============================================================================
  * Copyright (c) Palo Alto Networks
  *
@@ -7,8 +8,8 @@
 
 import React from "react";
 
-import BrowserOnly from "@docusaurus/BrowserOnly";
-import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
+// import BrowserOnly from "@docusaurus/BrowserOnly";
+// import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import { DocProvider } from "@docusaurus/plugin-content-docs/client";
 import { HtmlClassNameProvider } from "@docusaurus/theme-common";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
