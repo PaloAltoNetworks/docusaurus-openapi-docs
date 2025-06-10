@@ -238,6 +238,7 @@ paths:
       description: "description of requestBody schema properties example"
       requestBody:
         description: "description of requestBody"
+        required: true
         content:
           application/json:
             schema:
@@ -264,6 +265,7 @@ paths:
       description: "description of requestBody schema properties examples"
       requestBody:
         description: "description of requestBody"
+        required: true
         content:
           application/json:
             schema:

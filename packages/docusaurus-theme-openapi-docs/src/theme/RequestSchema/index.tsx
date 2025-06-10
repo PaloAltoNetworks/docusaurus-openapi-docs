@@ -13,9 +13,11 @@ import Markdown from "@theme/Markdown";
 import MimeTabs from "@theme/MimeTabs"; // Assume these components exist
 import {
   ExampleFromSchema,
-  ResponseExample,
-  ResponseExamples,
-} from "@theme/ResponseExamples";
+  RequestExample,
+  RequestExamples,
+  RequestSchemaExample,
+  RequestSchemaExamples,
+} from "@theme/RequestExamples";
 import SchemaNode from "@theme/Schema";
 import SchemaTabs from "@theme/SchemaTabs";
 import SkeletonLoader from "@theme/SkeletonLoader";
@@ -50,12 +52,12 @@ const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
     return (
       <MimeTabs className="openapi-tabs__mime" schemaType="request">
         {mimeTypes.map((mimeType) => {
-          const responseExamples =
-            body.content![mimeType].schema?.examples ||
-            body.content![mimeType].examples;
-          const responseExample =
-            body.content![mimeType].schema?.example ||
-            body.content![mimeType].example;
+          const responseMimeExamples = body.content![mimeType].examples;
+          const responseMimeExample = body.content![mimeType].example;
+          const responseSchemaExamples =
+            body.content![mimeType].schema?.examples;
+          const responseSchemaExample = body.content![mimeType].schema?.example;
+
           const firstBody = body.content![mimeType].schema;
           if (
             firstBody === undefined ||
@@ -84,10 +86,10 @@ const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
                         <summary>
                           <h3 className="openapi-markdown__details-summary-header-body">
                             {title}
-                            {body.required === true && (
-                              <span className="openapi-schema__required">
+                            {body.required && (
+                              <strong className="openapi-schema__required">
                                 required
-                              </span>
+                              </strong>
                             )}
                           </h3>
                         </summary>
@@ -114,11 +116,27 @@ const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
                     mimeType: mimeType,
                   })}
 
-                {responseExamples &&
-                  ResponseExamples({ responseExamples, mimeType })}
-
-                {responseExample &&
-                  ResponseExample({ responseExample, mimeType })}
+                {responseMimeExamples
+                  ? RequestExamples({
+                      requestExamples: responseMimeExamples,
+                      mimeType,
+                    })
+                  : responseMimeExample
+                    ? RequestExample({
+                        requestExample: responseMimeExample,
+                        mimeType,
+                      })
+                    : responseSchemaExamples
+                      ? RequestSchemaExamples({
+                          requestExamples: responseSchemaExamples,
+                          mimeType,
+                        })
+                      : responseSchemaExample
+                        ? RequestSchemaExample({
+                            requestExample: responseSchemaExample,
+                            mimeType,
+                          })
+                        : null}
               </SchemaTabs>
             </TabItem>
           );
@@ -127,55 +145,6 @@ const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
     );
   }
   return null;
-  // const randomFirstKey = mimeTypes[0];
-  // const firstBody =
-  //   body.content[randomFirstKey].schema ?? body.content![randomFirstKey];
-
-  // if (firstBody === undefined) {
-  //   return null;
-  // }
-
-  // return (
-  //   <MimeTabs className="openapi-tabs__mime" schemaType="request">
-  //     {/* @ts-ignore */}
-  //     <TabItem label={randomFirstKey} value={`${randomFirstKey}-schema`}>
-  //       <Details
-  //         className="openapi-markdown__details mime"
-  //         data-collapsed={false}
-  //         open={true}
-  //         style={style}
-  //         summary={
-  //           <>
-  //             <summary>
-  //               <h3 className="openapi-markdown__details-summary-header-body">
-  //                 {title}
-  //                 {firstBody.type === "array" && (
-  //                   <span style={{ opacity: "0.6" }}> array</span>
-  //                 )}
-  //                 {body.required && (
-  //                   <strong className="openapi-schema__required">
-  //                     required
-  //                   </strong>
-  //                 )}
-  //               </h3>
-  //             </summary>
-  //           </>
-  //         }
-  //       >
-  //         <div style={{ textAlign: "left", marginLeft: "1rem" }}>
-  //           {body.description && (
-  //             <div style={{ marginTop: "1rem", marginBottom: "1rem" }}>
-  //               <Markdown>{body.description}</Markdown>
-  //             </div>
-  //           )}
-  //         </div>
-  //         <ul style={{ marginLeft: "1rem" }}>
-  //           <SchemaNode schema={firstBody} schemaType="request" />
-  //         </ul>
-  //       </Details>
-  //     </TabItem>
-  //   </MimeTabs>
-  // );
 };
 
 const RequestSchema: React.FC<Props> = (props) => {
