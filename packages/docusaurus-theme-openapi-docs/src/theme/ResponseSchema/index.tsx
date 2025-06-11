@@ -9,13 +9,15 @@ import React from "react";
 
 import BrowserOnly from "@docusaurus/BrowserOnly";
 import Details from "@theme/Details";
-import Markdown from "@theme/Markdown";
-import MimeTabs from "@theme/MimeTabs"; // Assume these components exist
 import {
   ExampleFromSchema,
-  ResponseExample,
-  ResponseExamples,
-} from "@theme/ResponseExamples";
+  MimeExample,
+  MimeExamples,
+  SchemaExample,
+  SchemaExamples,
+} from "@theme/Examples";
+import Markdown from "@theme/Markdown";
+import MimeTabs from "@theme/MimeTabs"; // Assume these components exist
 import SchemaNode from "@theme/Schema";
 import SchemaTabs from "@theme/SchemaTabs";
 import SkeletonLoader from "@theme/SkeletonLoader";
@@ -54,15 +56,20 @@ const ResponseSchemaComponent: React.FC<Props> = ({
     return (
       <MimeTabs className="openapi-tabs__mime" schemaType="response">
         {mimeTypes.map((mimeType: any) => {
-          const responseExamples = body.content![mimeType].examples;
-          const responseExample = body.content![mimeType].example;
+          const mimeExamples = body.content![mimeType].examples;
+          const mimeExample = body.content![mimeType].example;
+          const schemaExamples = body.content![mimeType].schema?.examples;
+          const schemaExample = body.content![mimeType].schema?.example;
+
           const firstBody: any =
             body.content![mimeType].schema ?? body.content![mimeType];
 
           if (
             firstBody === undefined &&
-            responseExample === undefined &&
-            responseExamples === undefined
+            mimeExample === undefined &&
+            mimeExamples === undefined &&
+            schemaExample === undefined &&
+            schemaExamples === undefined
           ) {
             return undefined;
           }
@@ -109,13 +116,23 @@ const ResponseSchemaComponent: React.FC<Props> = ({
                     </Details>
                   </TabItem>
                   {firstBody &&
-                    ExampleFromSchema({ schema: firstBody, mimeType })}
+                    ExampleFromSchema({
+                      schema: firstBody,
+                      mimeType,
+                      context: { type: "response" },
+                    })}
 
-                  {responseExamples &&
-                    ResponseExamples({ examples: responseExamples, mimeType })}
+                  {mimeExamples &&
+                    MimeExamples({ examples: mimeExamples, mimeType })}
 
-                  {responseExample &&
-                    ResponseExample({ example: responseExample, mimeType })}
+                  {mimeExample &&
+                    MimeExample({ example: mimeExample, mimeType })}
+
+                  {schemaExamples &&
+                    SchemaExamples({ examples: schemaExamples, mimeType })}
+
+                  {schemaExample &&
+                    SchemaExample({ example: schemaExample, mimeType })}
                 </SchemaTabs>
               </TabItem>
             );

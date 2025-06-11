@@ -7,10 +7,13 @@
 
 import React from "react";
 
+import CodeSamples from "@theme/CodeSamples";
 import Markdown from "@theme/Markdown";
-import ResponseSamples from "@theme/ResponseSamples";
 import TabItem from "@theme/TabItem";
-import { sampleResponseFromSchema } from "docusaurus-plugin-openapi-docs/lib/openapi/createResponseExample";
+import {
+  sampleFromSchema,
+  ExampleContext,
+} from "docusaurus-plugin-openapi-docs/lib/openapi/createSchemaExample";
 import format from "xml-formatter";
 
 export function json2xml(o: Record<string, any>, tab: string): string {
@@ -79,7 +82,7 @@ export const MimeExample: React.FC<MimeExampleProps> = ({
           {example.summary}
         </Markdown>
       )}
-      <ResponseSamples responseExample={exampleContent} language={language} />
+      <CodeSamples example={exampleContent} language={language} />
     </TabItem>
   );
 };
@@ -111,10 +114,7 @@ export const MimeExamples: React.FC<MimeExamplesProps> = ({
               {exampleValue.summary}
             </Markdown>
           )}
-          <ResponseSamples
-            responseExample={exampleContent}
-            language={language}
-          />
+          <CodeSamples example={exampleContent} language={language} />
         </TabItem>
       );
     }
@@ -145,7 +145,7 @@ export const SchemaExample: React.FC<SchemaExampleProps> = ({
           {example.summary}
         </Markdown>
       )}
-      <ResponseSamples responseExample={exampleContent} language={language} />
+      <CodeSamples example={exampleContent} language={language} />
     </TabItem>
   );
 };
@@ -172,7 +172,7 @@ export const SchemaExamples: React.FC<SchemaExamplesProps> = ({
     return (
       // @ts-ignore
       <TabItem label={exampleName} value={exampleName} key={exampleName}>
-        <ResponseSamples responseExample={exampleContent} language={language} />
+        <CodeSamples example={exampleContent} language={language} />
       </TabItem>
     );
   });
@@ -183,13 +183,15 @@ export const SchemaExamples: React.FC<SchemaExamplesProps> = ({
 export interface ExampleFromSchemaProps {
   schema: any;
   mimeType: string;
+  context: ExampleContext;
 }
 
 export const ExampleFromSchema: React.FC<ExampleFromSchemaProps> = ({
   schema,
   mimeType,
+  context,
 }) => {
-  const example = sampleResponseFromSchema(schema);
+  const example = sampleFromSchema(schema, context);
 
   if (mimeType.endsWith("xml")) {
     let exampleObject;
@@ -222,7 +224,7 @@ export const ExampleFromSchema: React.FC<ExampleFromSchemaProps> = ({
       return (
         // @ts-ignore
         <TabItem label="Example (auto)" value="Example (auto)">
-          <ResponseSamples responseExample={xmlExample} language="xml" />
+          <CodeSamples example={xmlExample} language="xml" />
         </TabItem>
       );
     }
@@ -232,8 +234,8 @@ export const ExampleFromSchema: React.FC<ExampleFromSchemaProps> = ({
     return (
       // @ts-ignore
       <TabItem label="Example (auto)" value="Example (auto)">
-        <ResponseSamples
-          responseExample={JSON.stringify(example, null, 2)}
+        <CodeSamples
+          example={JSON.stringify(example, null, 2)}
           language="json"
         />
       </TabItem>

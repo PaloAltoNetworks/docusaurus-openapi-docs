@@ -9,15 +9,15 @@ import React from "react";
 
 import BrowserOnly from "@docusaurus/BrowserOnly";
 import Details from "@theme/Details";
-import Markdown from "@theme/Markdown";
-import MimeTabs from "@theme/MimeTabs"; // Assume these components exist
 import {
   ExampleFromSchema,
-  RequestMimeExample,
-  RequestMimeExamples,
-  RequestSchemaExample,
-  RequestSchemaExamples,
-} from "@theme/RequestExamples";
+  MimeExample,
+  MimeExamples,
+  SchemaExample,
+  SchemaExamples,
+} from "@theme/Examples";
+import Markdown from "@theme/Markdown";
+import MimeTabs from "@theme/MimeTabs"; // Assume these components exist
 import SchemaNode from "@theme/Schema";
 import SchemaTabs from "@theme/SchemaTabs";
 import SkeletonLoader from "@theme/SkeletonLoader";
@@ -110,19 +110,22 @@ const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
                   </Details>
                 </TabItem>
                 {firstBody &&
-                  ExampleFromSchema({ schema: firstBody, mimeType })}
+                  ExampleFromSchema({
+                    schema: firstBody,
+                    mimeType,
+                    context: { type: "request" },
+                  })}
 
                 {mimeExamples &&
-                  RequestMimeExamples({ examples: mimeExamples, mimeType })}
+                  MimeExamples({ examples: mimeExamples, mimeType })}
 
-                {mimeExample &&
-                  RequestMimeExample({ example: mimeExample, mimeType })}
+                {mimeExample && MimeExample({ example: mimeExample, mimeType })}
 
                 {schemaExamples &&
-                  RequestSchemaExamples({ examples: schemaExamples, mimeType })}
+                  SchemaExamples({ examples: schemaExamples, mimeType })}
 
                 {schemaExample &&
-                  RequestSchemaExample({ example: schemaExample, mimeType })}
+                  SchemaExample({ example: schemaExample, mimeType })}
               </SchemaTabs>
             </TabItem>
           );
