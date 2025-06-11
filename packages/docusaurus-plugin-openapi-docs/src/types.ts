@@ -118,6 +118,7 @@ export interface ApiMetadataBase {
   frontMatter: Record<string, unknown>;
   method?: string;
   path?: string;
+  position?: number;
 }
 
 export interface ApiPageMetadata extends ApiMetadataBase {

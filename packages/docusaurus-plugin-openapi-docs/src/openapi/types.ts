@@ -156,8 +156,8 @@ export interface OperationObject {
   deprecated?: boolean;
   security?: SecurityRequirementObject[];
   servers?: ServerObject[];
-
   // extensions
+  "x-position"?: number;
   "x-deprecated-description"?: string;
 }
 
