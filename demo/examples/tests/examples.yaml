@@ -57,7 +57,7 @@ paths:
             example2:
               summary: "name example 2"
               description: "name example 2 description"
-              value: "Jane Doe"
+              value: "Jane Smith"
       responses:
         "204":
           description: no content

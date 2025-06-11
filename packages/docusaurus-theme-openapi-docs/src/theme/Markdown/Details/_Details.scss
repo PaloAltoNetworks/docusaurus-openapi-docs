@@ -24,11 +24,7 @@
 /* Top-Level Details Caret Styling */
 .openapi-left-panel__container > .openapi-markdown__details > summary::before,
 .openapi-markdown__details.mime > summary::before {
-  top: 0.1rem;
-}
-
-.openapi-markdown__details.response > summary::before {
-  top: 0.25rem; /* TODO: figure out why this is necessary */
+  top: 0.25rem;
 }
 /* End of Top-Level Details Caret Styling */
 
