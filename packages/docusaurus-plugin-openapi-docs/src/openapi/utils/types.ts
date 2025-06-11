@@ -89,6 +89,7 @@ export interface OpenAPIOperation {
   servers?: OpenAPIServer[];
   "x-codeSamples"?: OpenAPIXCodeSample[];
   "x-code-samples"?: OpenAPIXCodeSample[]; // deprecated
+  "x-position"?: number;
 }
 
 export interface OpenAPIParameter {
