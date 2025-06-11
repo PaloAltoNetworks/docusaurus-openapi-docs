@@ -13,8 +13,8 @@ import Markdown from "@theme/Markdown";
 import MimeTabs from "@theme/MimeTabs"; // Assume these components exist
 import {
   ExampleFromSchema,
-  RequestExample,
-  RequestExamples,
+  RequestMimeExample,
+  RequestMimeExamples,
   RequestSchemaExample,
   RequestSchemaExamples,
 } from "@theme/RequestExamples";
@@ -52,11 +52,10 @@ const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
     return (
       <MimeTabs className="openapi-tabs__mime" schemaType="request">
         {mimeTypes.map((mimeType) => {
-          const responseMimeExamples = body.content![mimeType].examples;
-          const responseMimeExample = body.content![mimeType].example;
-          const responseSchemaExamples =
-            body.content![mimeType].schema?.examples;
-          const responseSchemaExample = body.content![mimeType].schema?.example;
+          const mimeExamples = body.content![mimeType].examples;
+          const mimeExample = body.content![mimeType].example;
+          const schemaExamples = body.content![mimeType].schema?.examples;
+          const schemaExample = body.content![mimeType].schema?.example;
 
           const firstBody = body.content![mimeType].schema;
           if (
@@ -111,32 +110,19 @@ const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
                   </Details>
                 </TabItem>
                 {firstBody &&
-                  ExampleFromSchema({
-                    schema: firstBody,
-                    mimeType: mimeType,
-                  })}
+                  ExampleFromSchema({ schema: firstBody, mimeType })}
 
-                {responseMimeExamples
-                  ? RequestExamples({
-                      requestExamples: responseMimeExamples,
-                      mimeType,
-                    })
-                  : responseMimeExample
-                    ? RequestExample({
-                        requestExample: responseMimeExample,
-                        mimeType,
-                      })
-                    : responseSchemaExamples
-                      ? RequestSchemaExamples({
-                          requestExamples: responseSchemaExamples,
-                          mimeType,
-                        })
-                      : responseSchemaExample
-                        ? RequestSchemaExample({
-                            requestExample: responseSchemaExample,
-                            mimeType,
-                          })
-                        : null}
+                {mimeExamples &&
+                  RequestMimeExamples({ examples: mimeExamples, mimeType })}
+
+                {mimeExample &&
+                  RequestMimeExample({ example: mimeExample, mimeType })}
+
+                {schemaExamples &&
+                  RequestSchemaExamples({ examples: schemaExamples, mimeType })}
+
+                {schemaExample &&
+                  RequestSchemaExample({ example: schemaExample, mimeType })}
               </SchemaTabs>
             </TabItem>
           );

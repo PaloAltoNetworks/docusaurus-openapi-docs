@@ -109,16 +109,13 @@ const ResponseSchemaComponent: React.FC<Props> = ({
                     </Details>
                   </TabItem>
                   {firstBody &&
-                    ExampleFromSchema({
-                      schema: firstBody,
-                      mimeType: mimeType,
-                    })}
+                    ExampleFromSchema({ schema: firstBody, mimeType })}
 
                   {responseExamples &&
-                    ResponseExamples({ responseExamples, mimeType })}
+                    ResponseExamples({ examples: responseExamples, mimeType })}
 
                   {responseExample &&
-                    ResponseExample({ responseExample, mimeType })}
+                    ResponseExample({ example: responseExample, mimeType })}
                 </SchemaTabs>
               </TabItem>
             );
