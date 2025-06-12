@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { guard } from "./utils";
+import { guard, create, render } from "./utils";
 
 describe("guard", () => {
   it("should guard empty strings", () => {
@@ -45,5 +45,24 @@ describe("guard", () => {
   it("should not guard true booleans", () => {
     const actual = guard(true, (value) => `${value}`);
     expect(actual).toBe("true");
+  });
+});
+
+describe("create", () => {
+  it("should create element with props and children", () => {
+    const actual = create("div", { className: "x", children: "hello" });
+    expect(actual).toBe('<div className={"x"}>hello</div>');
+  });
+});
+
+describe("render", () => {
+  it("should render arrays while filtering undefined", () => {
+    const actual = render(["a", undefined, "b"]);
+    expect(actual).toBe("ab");
+  });
+
+  it("should render undefined as empty string", () => {
+    const actual = render(undefined);
+    expect(actual).toBe("");
   });
 });

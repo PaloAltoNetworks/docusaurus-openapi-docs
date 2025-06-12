@@ -188,16 +188,16 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 | `customProps`        | `object`  | `null`  | Additional props for customizing a sidebar item.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | `sidebarGenerators`  | `object`  | `null`  | Optional: Customize sidebar rendering with callback functions.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 
-> You may optionally configure a `sidebarOptions`. In doing so, an individual `sidebar.js` slice with the configured options will be generated within the respective `outputDir`.
+> You may optionally configure a `sidebarOptions`. In doing so, an individual `sidebar.ts` slice with the configured options will be generated within the respective `outputDir`.
 
 `versions` can be configured with the following options:
 
-| Name       | Type     | Default | Description                                                                                                              |
-| ---------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `specPath` | `string` | `null`  | Designated URL or path to the source of an OpenAPI specification file or directory of micro OpenAPI specification files. |
-| `ouputDir` | `string` | `null`  | Desired output path for versioned, generated MDX files.                                                                  |
-| `label`    | `string` | `null`  | _Optional:_ Version label used when generating version selector dropdown menu.                                           |
-| `baseUrl`  | `string` | `null`  | _Optional:_ Version base URL used when generating version selector dropdown menu.                                        |
+| Name        | Type     | Default | Description                                                                                                              |
+| ----------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `specPath`  | `string` | `null`  | Designated URL or path to the source of an OpenAPI specification file or directory of micro OpenAPI specification files. |
+| `outputDir` | `string` | `null`  | Desired output path for versioned, generated MDX files.                                                                  |
+| `label`     | `string` | `null`  | _Optional:_ Version label used when generating version selector dropdown menu.                                           |
+| `baseUrl`   | `string` | `null`  | _Optional:_ Version base URL used when generating version selector dropdown menu.                                        |
 
 > All versions will automatically inherit `sidebarOptions` from the parent/base config.
 

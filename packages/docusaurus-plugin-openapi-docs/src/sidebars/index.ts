@@ -65,7 +65,8 @@ const createDocItem: ApiDocItemGenerator = (
         );
   return {
     type: "doc" as const,
-    id: basePath === "" || undefined ? `${id}` : `${basePath}/${id}`,
+    id:
+      basePath === "" || basePath === undefined ? `${id}` : `${basePath}/${id}`,
     label: (sidebar_label as string) ?? title ?? id,
     customProps: customProps,
     className: className ? className : undefined,
@@ -142,7 +143,10 @@ function groupByTags(
     const id = infoItem.id;
     rootIntroDoc = {
       type: "doc" as const,
-      id: basePath === "" || undefined ? `${id}` : `${basePath}/${id}`,
+      id:
+        basePath === "" || basePath === undefined
+          ? `${id}`
+          : `${basePath}/${id}`,
     };
   }
 
@@ -167,7 +171,7 @@ function groupByTags(
         linkConfig = {
           type: "doc",
           id:
-            basePath === "" || undefined
+            basePath === "" || basePath === undefined
               ? `${taggedInfoObject.id}`
               : `${basePath}/${taggedInfoObject.id}`,
         } as SidebarItemCategoryLinkConfig;
@@ -179,7 +183,9 @@ function groupByTags(
         linkConfig = {
           type: "doc",
           id:
-            basePath === "" || undefined ? `${tagId}` : `${basePath}/${tagId}`,
+            basePath === "" || basePath === undefined
+              ? `${tagId}`
+              : `${basePath}/${tagId}`,
         } as SidebarItemCategoryLinkConfig;
       }
 
