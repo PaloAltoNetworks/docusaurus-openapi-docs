@@ -8,6 +8,8 @@
 import React, { ReactNode } from "react";
 
 import Markdown from "@theme/Markdown";
+import SchemaTabs from "@theme/SchemaTabs";
+import TabItem from "@theme/TabItem";
 import clsx from "clsx";
 
 import { guard } from "../../markdown/utils";
@@ -63,6 +65,7 @@ export default function SchemaItem(props: Props) {
   let schemaDescription;
   let defaultValue: string | undefined;
   let example: string | undefined;
+  let examples: string[] | undefined;
   let nullable;
   let enumDescriptions: [string, string][] = [];
   let constValue: string | undefined;
@@ -73,6 +76,7 @@ export default function SchemaItem(props: Props) {
     enumDescriptions = transformEnumDescriptions(schema["x-enumDescriptions"]);
     defaultValue = schema.default;
     example = schema.example;
+    examples = schema.examples;
     nullable =
       schema.nullable ||
       (Array.isArray(schema.type) && schema.type.includes("null")); // support JSON Schema nullable
@@ -163,6 +167,53 @@ export default function SchemaItem(props: Props) {
     return undefined;
   }
 
+  // Helper function to format example value
+  const formatExample = (example: any) => {
+    if (typeof example === "object" && example !== null) {
+      return JSON.stringify(example);
+    }
+    return String(example);
+  };
+
+  function renderExamples() {
+    if (examples && examples.length > 0) {
+      // If there's only one example, display it without tabs
+      if (examples.length === 1) {
+        return (
+          <div>
+            <strong>Example: </strong>
+            <span>
+              <code>{formatExample(examples[0])}</code>
+            </span>
+          </div>
+        );
+      }
+
+      // Multiple examples - use tabs
+      return (
+        <div>
+          <strong>Examples:</strong>
+          <SchemaTabs>
+            {examples.map((example, index) => (
+              // @ts-ignore
+              <TabItem
+                value={`Example ${index + 1}`}
+                label={`Example ${index + 1}`}
+                key={`Example ${index + 1}`}
+              >
+                <p>
+                  <strong>Example: </strong>
+                  <code>{formatExample(example)}</code>
+                </p>
+              </TabItem>
+            ))}
+          </SchemaTabs>
+        </div>
+      );
+    }
+    return undefined;
+  }
+
   function renderConstValue() {
     if (constValue !== undefined) {
       if (typeof constValue === "string") {
@@ -213,6 +264,7 @@ export default function SchemaItem(props: Props) {
       {renderConstValue()}
       {renderDefaultValue()}
       {renderExample()}
+      {renderExamples()}
       {collapsibleSchemaContent ?? collapsibleSchemaContent}
     </div>
   );
