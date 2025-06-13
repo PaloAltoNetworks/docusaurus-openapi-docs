@@ -1,0 +1,455 @@
+openapi: 3.1.0
+info:
+  title: Examples Demo API
+  description: Demonstrates various examples schema combinations.
+  version: 1.0.0
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+security: []
+servers:
+  - url: http://test.local:8080
+    description: Local server
+tags:
+  - name: examples
+    description: examples
+paths:
+  /requestParameters/example:
+    get:
+      tags:
+        - examples
+      summary: example in request parameters
+      description: "description of request parameters example"
+      parameters:
+        - name: name
+          description: name example
+          in: query
+          schema:
+            type: string
+          example: "John Doe"
+        - name: age
+          description: age example
+          in: query
+          schema:
+            type: number
+          example: 25
+      responses:
+        "204":
+          description: no content
+
+  /requestParameters/examples:
+    get:
+      tags:
+        - examples
+      summary: examples in request parameters
+      description: "description of request parameters examples"
+      parameters:
+        - name: name
+          description: name example
+          in: query
+          schema:
+            type: string
+          examples:
+            example1:
+              summary: "name example 1"
+              description: "name example 1 description"
+              value: "John Doe"
+            example2:
+              summary: "name example 2"
+              description: "name example 2 description"
+              value: "Jane Smith"
+      responses:
+        "204":
+          description: no content
+
+  /requestParameters/schema/example:
+    get:
+      tags:
+        - examples
+      summary: example in request parameters schema
+      description: "description of request parameters schema example"
+      parameters:
+        - name: name
+          description: name example
+          in: query
+          schema:
+            type: string
+            example: "John Doe"
+        - name: age
+          description: age example
+          in: query
+          schema:
+            type: number
+            example: 25
+      responses:
+        "204":
+          description: no content
+
+  /requestParameters/schema/examples:
+    get:
+      tags:
+        - examples
+      summary: examples in request parameters schema
+      description: "description of request parameters schema examples"
+      parameters:
+        - name: name
+          description: name example
+          in: query
+          schema:
+            type: string
+            examples:
+              - "John Doe"
+              - "Jane Smith"
+        - name: age
+          description: age example
+          in: query
+          schema:
+            type: number
+            examples:
+              - 25
+              - 30
+      responses:
+        "204":
+          description: no content
+
+  /requestBody/mediaTypeObject/example:
+    post:
+      tags:
+        - examples
+      summary: example of media type object in requestBody
+      description: "description of requestBody media type object example"
+      requestBody:
+        description: "description of requestBody"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                age:
+                  type: number
+                isStudent:
+                  type: boolean
+            example:
+              name: "John Doe"
+              age: 25
+              isStudent: false
+      responses:
+        "204":
+          description: no content
+
+  /requestBody/mediaTypeObject/examples:
+    post:
+      tags:
+        - examples
+      summary: examples of media type object in requestBody
+      description: "description of requestBody media type object examples"
+      requestBody:
+        description: "description of requestBody"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                age:
+                  type: number
+                isStudent:
+                  type: boolean
+            examples:
+              example1:
+                value:
+                  name: "John Doe"
+                  age: 25
+                  isStudent: false
+              example2:
+                value:
+                  name: "Jane Smith"
+                  age: 30
+                  isStudent: true
+      responses:
+        "204":
+          description: no content
+
+  /requestBody/schema/example:
+    post:
+      tags:
+        - examples
+      summary: example of schema in requestBody
+      description: "description of requestBody schema example"
+      requestBody:
+        description: "description of requestBody"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                age:
+                  type: number
+                isStudent:
+                  type: boolean
+              example:
+                name: "John Doe"
+                age: 25
+                isStudent: false
+      responses:
+        "204":
+          description: no content
+
+  /requestBody/schema/examples:
+    post:
+      tags:
+        - examples
+      summary: examples of schema in requestBody
+      description: "description of requestBody schema examples"
+      requestBody:
+        description: "description of requestBody"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                age:
+                  type: number
+                isStudent:
+                  type: boolean
+              examples:
+                - name: "John Doe"
+                  age: 25
+                  isStudent: false
+                - name: "Jane Smith"
+                  age: 30
+                  isStudent: true
+      responses:
+        "204":
+          description: no content
+
+  /requestBody/schema/properties/example:
+    post:
+      tags:
+        - examples
+      summary: example of properties in requestBody schema
+      description: "description of requestBody schema properties example"
+      requestBody:
+        description: "description of requestBody"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "John Doe"
+                age:
+                  type: number
+                  example: 25
+                isStudent:
+                  type: boolean
+                  example: false
+      responses:
+        "204":
+          description: no content
+
+  /requestBody/schema/properties/examples:
+    post:
+      tags:
+        - examples
+      summary: examples of properties in requestBody schema
+      description: "description of requestBody schema properties examples"
+      requestBody:
+        description: "description of requestBody"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  examples:
+                    - "John Doe"
+                    - "Jane Smith"
+                age:
+                  type: number
+                  examples:
+                    - 25
+                    - 30
+                isStudent:
+                  type: boolean
+                  examples:
+                    - true
+                    - false
+      responses:
+        "204":
+          description: no content
+
+  /response/mediaTypeObject/example:
+    get:
+      tags:
+        - examples
+      summary: example of media type object in response
+      description: "description of response media type object example"
+      responses:
+        "200":
+          description: successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  age:
+                    type: number
+                  isStudent:
+                    type: boolean
+              example:
+                name: "John Doe"
+                age: 25
+                isStudent: false
+
+  /response/mediaTypeObject/examples:
+    get:
+      tags:
+        - examples
+      summary: examples of media type object in response
+      description: "description of response media type object examples"
+      responses:
+        "200":
+          description: successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  age:
+                    type: number
+                  isStudent:
+                    type: boolean
+              examples:
+                example1:
+                  value:
+                    name: "John Doe"
+                    age: 25
+                    isStudent: false
+                example2:
+                  value:
+                    name: "Jane Smith"
+                    age: 30
+                    isStudent: true
+
+  /response/schema/example:
+    get:
+      tags:
+        - examples
+      summary: example of schema in response
+      description: "description of response schema example"
+      responses:
+        "200":
+          description: successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  age:
+                    type: number
+                  isStudent:
+                    type: boolean
+                example:
+                  name: "John Doe"
+                  age: 25
+                  isStudent: false
+
+  /response/schema/examples:
+    get:
+      tags:
+        - examples
+      summary: examples of schema in response
+      description: "description of response schema examples"
+      responses:
+        "200":
+          description: successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  age:
+                    type: number
+                  isStudent:
+                    type: boolean
+                examples:
+                  - name: "John Doe"
+                    age: 25
+                    isStudent: false
+                  - name: "Jane Smith"
+                    age: 30
+                    isStudent: true
+
+  /response/schema/properties/example:
+    get:
+      tags:
+        - examples
+      summary: example of schema properties in response
+      description: "description of response schema properties example"
+      responses:
+        "200":
+          description: successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: "John Doe"
+                  age:
+                    type: number
+                    example: 25
+                  isStudent:
+                    type: boolean
+                    example: false
+
+  /response/schema/properties/examples:
+    get:
+      tags:
+        - examples
+      summary: examples of schema properties in response
+      description: "description of response schema properties examples"
+      responses:
+        "200":
+          description: successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    examples:
+                      - "John Doe"
+                      - "Jane Smith"
+                  age:
+                    type: number
+                    examples:
+                      - 25
+                      - 30
+                  isStudent:
+                    type: boolean
+                    examples:
+                      - true
+                      - false
