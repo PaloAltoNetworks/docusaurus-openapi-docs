@@ -1,0 +1,65 @@
+openapi: 3.0.2
+info:
+  title: Links Example API
+  description: Demonstrates response links.
+  version: 1.0.0
+tags:
+  - name: links
+    description: link tests
+paths:
+  /users/{userId}:
+    get:
+      tags:
+        - links
+      summary: Get user by ID
+      description: |
+        Retrieves a user and provides a link to their posts.
+
+        Schema:
+        ```yaml
+        responses:
+          '200':
+            links:
+              UserPosts:
+                operationId: getUserPosts
+                parameters:
+                  userId: '$response.body#/id'
+        ```
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: A user object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+          links:
+            UserPosts:
+              operationId: getUserPosts
+              parameters:
+                userId: "$response.body#/id"
+  /users/{userId}/posts:
+    get:
+      tags:
+        - links
+      summary: Get posts for user
+      description: Return posts for the given user ID.
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: A list of posts

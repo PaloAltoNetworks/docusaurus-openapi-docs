@@ -1,0 +1,100 @@
+openapi: 3.1.0
+info:
+  title: Conditional and Prefix Items API
+  description: Demonstrates if/then/else and prefixItems usage.
+  version: 1.0.0
+tags:
+  - name: advanced
+    description: conditional and array tests
+paths:
+  /conditional-object:
+    get:
+      tags:
+        - advanced
+      summary: Conditional schema with if/then/else
+      description: |
+        This endpoint validates an object with conditional logic.
+
+        Schema:
+        ```yaml
+        type: object
+        properties:
+          type:
+            type: string
+        if:
+          properties:
+            type:
+              const: special
+        then:
+          required: [specialProp]
+          properties:
+            specialProp:
+              type: string
+        else:
+          properties:
+            otherProp:
+              type: integer
+        example:
+          type: special
+          specialProp: "value"
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                if:
+                  properties:
+                    type:
+                      const: special
+                then:
+                  required:
+                    - specialProp
+                  properties:
+                    specialProp:
+                      type: string
+                else:
+                  properties:
+                    otherProp:
+                      type: integer
+                example:
+                  type: special
+                  specialProp: "value"
+  /fixed-array:
+    get:
+      tags:
+        - advanced
+      summary: Array with prefixItems
+      description: |
+        This endpoint demonstrates the prefixItems feature.
+
+        Schema:
+        ```yaml
+        type: array
+        prefixItems:
+          - type: string
+          - type: integer
+        items: false
+        example:
+          - "name"
+          - 1
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                prefixItems:
+                  - type: string
+                  - type: integer
+                items: false
+                example:
+                  - "name"
+                  - 1

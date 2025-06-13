@@ -1,0 +1,68 @@
+openapi: 3.0.1
+info:
+  title: Callback Example API
+  description: Demonstrates callback usage.
+  version: 1.0.0
+tags:
+  - name: callbacks
+    description: callback tests
+paths:
+  /streams:
+    post:
+      tags:
+        - callbacks
+      summary: Subscribe for stream events
+      description: |
+        This endpoint registers for stream events.
+
+        Schema:
+        ```yaml
+        callbacks:
+          onEvent:
+            '{$request.body#/callbackUrl}':
+              post:
+                requestBody:
+                  description: Callback payload
+                  required: true
+                  content:
+                    application/json:
+                      schema:
+                        type: object
+                        properties:
+                          message:
+                            type: string
+                responses:
+                  '200':
+                    description: Callback accepted
+        ```
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                callbackUrl:
+                  type: string
+              required:
+                - callbackUrl
+      callbacks:
+        onEvent:
+          "{$request.body#/callbackUrl}":
+            post:
+              requestBody:
+                description: Callback payload
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        message:
+                          type: string
+              responses:
+                "200":
+                  description: Callback accepted
+      responses:
+        "201":
+          description: Subscription created

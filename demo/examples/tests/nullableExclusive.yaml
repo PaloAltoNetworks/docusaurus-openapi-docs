@@ -1,0 +1,52 @@
+openapi: 3.0.2
+info:
+  title: Nullable and Exclusive Numeric Bounds API
+  description: Demonstrates nullable fields with exclusive minimum and maximum.
+  version: 1.0.0
+tags:
+  - name: nullableExclusive
+    description: nullable and exclusive bound tests
+paths:
+  /nullable-number:
+    get:
+      tags:
+        - nullableExclusive
+      summary: Nullable number with exclusive bounds
+      description: |
+        This endpoint returns a nullable number using exclusive limits.
+
+        Schema:
+        ```yaml
+        type: object
+        properties:
+          score:
+            type: number
+            nullable: true
+            minimum: 0
+            exclusiveMinimum: true
+            maximum: 100
+            exclusiveMaximum: true
+        required:
+          - score
+        example:
+          score: 50
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  score:
+                    type: number
+                    nullable: true
+                    minimum: 0
+                    exclusiveMinimum: true
+                    maximum: 100
+                    exclusiveMaximum: true
+                required:
+                  - score
+                example:
+                  score: 50

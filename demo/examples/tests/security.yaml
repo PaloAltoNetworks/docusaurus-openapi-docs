@@ -1,0 +1,54 @@
+openapi: 3.0.4
+info:
+  title: Security Schemes API
+  description: Demonstrates HTTP basic and API key authentication.
+  version: 1.0.0
+tags:
+  - name: security
+    description: security tests
+paths:
+  /protected-basic:
+    get:
+      tags:
+        - security
+      summary: Basic auth protected endpoint
+      description: |
+        Requires HTTP basic authentication.
+
+        Schema:
+        ```yaml
+        security:
+          - BasicAuth: []
+        ```
+      security:
+        - BasicAuth: []
+      responses:
+        "200":
+          description: Authorized
+  /protected-apikey:
+    get:
+      tags:
+        - security
+      summary: API key protected endpoint
+      description: |
+        Requires an API key in the header.
+
+        Schema:
+        ```yaml
+        security:
+          - ApiKeyAuth: []
+        ```
+      security:
+        - ApiKeyAuth: []
+      responses:
+        "200":
+          description: Authorized
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
