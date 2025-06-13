@@ -181,11 +181,11 @@ export const sampleResponseFromSchema = (schema: SchemaObject = {}): any => {
 
     if (type === "array") {
       if (Array.isArray(items?.anyOf)) {
-        return items?.anyOf.map((item: any) => sampleResponseFromSchema(item));
+        return processArrayItems(items, "anyOf");
       }
 
       if (Array.isArray(items?.oneOf)) {
-        return items?.oneOf.map((item: any) => sampleResponseFromSchema(item));
+        return processArrayItems(items, "oneOf");
       }
 
       return [sampleResponseFromSchema(items)];
@@ -239,4 +239,27 @@ function normalizeArray(arr: any) {
     return arr;
   }
   return [arr];
+}
+
+function processArrayItems(
+  items: SchemaObject,
+  schemaType: "anyOf" | "oneOf"
+): any[] {
+  const itemsArray = items[schemaType] as SchemaObject[];
+  return itemsArray.map((item: SchemaObject) => {
+    // If items has properties, merge them with each item
+    if (items.properties) {
+      const combinedSchema = {
+        ...item,
+        properties: {
+          ...items.properties, // Common properties from parent
+          ...item.properties, // Specific properties from this anyOf/oneOf item
+        },
+      };
+      // Remove anyOf/oneOf to prevent infinite recursion when calling sampleResponseFromSchema
+      delete combinedSchema[schemaType];
+      return sampleResponseFromSchema(combinedSchema);
+    }
+    return sampleResponseFromSchema(item);
+  });
 }

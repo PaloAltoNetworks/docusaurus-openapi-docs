@@ -63,3 +63,63 @@ paths:
                   - type: boolean
                     title: A boolean
                 title: A string or integer, or a boolean
+
+  /anyof-with-properties-in-array-item:
+    get:
+      tags:
+        - anyOf
+      summary: anyOf with Properties in Array Item
+      description: |
+        Schema:
+        ```yaml
+        type: array
+        items:
+          type: object
+          anyOf:
+            - type: object
+              title: Item
+              properties:
+                orderNo:
+                  type: string
+                  example: "123456"
+            - type: object
+              title: Error
+              properties:
+                error:
+                  type: string
+                  example: "Invalid order number"
+          properties:
+            name:
+              type: string
+              example: pencil
+          required:
+            - orderNo
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  anyOf:
+                    - type: object
+                      title: Item
+                      properties:
+                        orderNo:
+                          type: string
+                          example: "123456"
+                    - type: object
+                      title: Error
+                      properties:
+                        error:
+                          type: string
+                          example: "Invalid order number"
+                  properties:
+                    name:
+                      type: string
+                      example: pencil
+                  required:
+                    - orderNo
