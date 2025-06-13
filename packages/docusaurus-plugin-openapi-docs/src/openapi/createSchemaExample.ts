@@ -234,14 +234,27 @@ function primitive(schema: SchemaObject = {}) {
     return;
   }
 
-  let fn = schema.default ? () => schema.default : primitives[type].default;
-
-  if (format !== undefined) {
-    fn = primitives[type][format] || fn;
+  // If type is an array, use the first type
+  if (Array.isArray(type)) {
+    type = type[0];
+    if (type === undefined) {
+      return;
+    }
   }
 
-  if (fn) {
-    return fn(schema);
+  // Use schema default if available, otherwise use type default
+  if (schema.default !== undefined) {
+    return schema.default;
+  }
+
+  const typeConfig = primitives[type];
+  if (typeConfig) {
+    if (format !== undefined && typeConfig[format] !== undefined) {
+      return typeConfig[format](schema);
+    }
+    if (typeConfig.default !== undefined) {
+      return typeConfig.default(schema);
+    }
   }
 
   return "Unknown Type: " + schema.type;

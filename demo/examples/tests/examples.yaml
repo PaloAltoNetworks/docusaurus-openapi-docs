@@ -453,3 +453,39 @@ paths:
                     examples:
                       - true
                       - false
+
+  /response/schema/properties/multipleTypes/examples:
+    get:
+      tags:
+        - examples
+      summary: examples of schema properties with multiple types in response
+      description: "description of response schema properties with multiple types examples"
+      responses:
+        "200":
+          description: successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type:
+                      - string
+                      - "null"
+                    examples:
+                      - "John Doe"
+                      - "Jane Smith"
+                  age:
+                    type:
+                      - number
+                      - "null"
+                    examples:
+                      - 25
+                      - 30
+                  isStudent:
+                    type:
+                      - boolean
+                      - "null"
+                    examples:
+                      - true
+                      - false
