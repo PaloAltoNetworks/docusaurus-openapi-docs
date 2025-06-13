@@ -1,0 +1,65 @@
+openapi: 3.1.0
+info:
+  title: Webhooks Example API
+  description: Demonstrates the webhooks object.
+  version: 1.0.0
+jsonSchemaDialect: https://json-schema.org/draft/2020-12/schema
+tags:
+  - name: webhooks
+    description: webhook tests
+paths:
+  /register:
+    post:
+      tags:
+        - webhooks
+      summary: Register a webhook
+      description: |
+        Registers a webhook URL which will be called on events.
+
+        Schema:
+        ```yaml
+        webhooks:
+          onNotify:
+            post:
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        message:
+                          type: string
+              responses:
+                '200':
+                  description: Hook processed
+        ```
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+              required:
+                - url
+      responses:
+        "200":
+          description: Registered
+webhooks:
+  onNotify:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+      responses:
+        "200":
+          description: Hook processed

@@ -1,0 +1,48 @@
+openapi: 3.0.3
+info:
+  title: Format Strings API
+  description: Demonstrates various string formats.
+  version: 1.0.0
+tags:
+  - name: formats
+    description: format tests
+paths:
+  /string-formats:
+    get:
+      tags:
+        - formats
+      summary: Strings with format validation
+      description: |
+        This endpoint returns strings in different formats.
+
+        Schema:
+        ```yaml
+        type: object
+        properties:
+          uuid:
+            type: string
+            format: uuid
+          email:
+            type: string
+            format: email
+        example:
+          uuid: "123e4567-e89b-12d3-a456-426614174000"
+          email: "user@example.com"
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                    format: uuid
+                  email:
+                    type: string
+                    format: email
+                example:
+                  uuid: "123e4567-e89b-12d3-a456-426614174000"
+                  email: "user@example.com"

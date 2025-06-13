@@ -1,0 +1,46 @@
+openapi: 3.0.2
+info:
+  title: MinMax Constraints API
+  description: Demonstrates min and max numeric constraints.
+  version: 1.0.0
+tags:
+  - name: minmax
+    description: min and max tests
+paths:
+  /age-range:
+    get:
+      tags:
+        - minmax
+      summary: Age range with minimum and maximum
+      description: |
+        This endpoint returns an object with numeric boundaries.
+
+        Schema:
+        ```yaml
+        type: object
+        properties:
+          age:
+            type: integer
+            minimum: 18
+            maximum: 65
+        required:
+          - age
+        example:
+          age: 30
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  age:
+                    type: integer
+                    minimum: 18
+                    maximum: 65
+                required:
+                  - age
+                example:
+                  age: 30

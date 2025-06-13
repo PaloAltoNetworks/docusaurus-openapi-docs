@@ -299,15 +299,6 @@ paths:
 
 components:
   schemas:
-    # Your existing schemas are integrated here.
-    ExistingSchema1:
-      type: object
-      properties: ...
-
-    ExistingSchema2:
-      type: object
-      properties: ...
-
     # New schemas for Books demonstration
     BookBase:
       type: object

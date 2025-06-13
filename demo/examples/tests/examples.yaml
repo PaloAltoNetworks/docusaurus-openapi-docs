@@ -1,0 +1,57 @@
+openapi: 3.0.2
+info:
+  title: Multiple Examples API
+  description: Demonstrates the `examples` field.
+  version: 1.0.0
+tags:
+  - name: examples
+    description: examples tests
+paths:
+  /color:
+    get:
+      tags:
+        - examples
+      summary: Parameter with multiple examples
+      description: |
+        Provides color information.
+
+        Schema:
+        ```yaml
+        parameters:
+          - name: palette
+            in: query
+            schema:
+              type: string
+            examples:
+              primary:
+                value: red
+              secondary:
+                value: blue
+        ```
+      parameters:
+        - name: palette
+          in: query
+          schema:
+            type: string
+          examples:
+            primary:
+              value: red
+            secondary:
+              value: blue
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  palette:
+                    type: string
+              examples:
+                primary:
+                  value:
+                    palette: red
+                secondary:
+                  value:
+                    palette: blue

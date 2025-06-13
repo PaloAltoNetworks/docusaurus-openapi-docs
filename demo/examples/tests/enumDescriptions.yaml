@@ -12,7 +12,25 @@ paths:
       tags:
         - enumDescriptions
       summary: Get entities by status
-      description: Get all entities or search by status
+      description: |
+        Get all entities or search by status.
+
+        Schema:
+        ```yaml
+        status:
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - active
+              - inactive
+              - pending
+            x-enumDescriptions:
+              active: The entity is active
+              inactive: The entity is inactive
+              pending: The entity is pending approval
+        ```
       parameters:
         - name: status
           in: query
@@ -39,7 +57,27 @@ paths:
       tags:
         - enumDescriptions
       summary: Get entities by multiple status
-      description: Get all entities or search by multiple status
+      description: |
+        Get all entities or search by multiple status.
+
+        Schema:
+        ```yaml
+        status:
+          in: query
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - active
+                - inactive
+                - pending
+              x-enumDescriptions:
+                active: The entity is active
+                inactive: The entity is inactive
+                pending: The entity is pending approval
+        ```
       parameters:
         - name: status
           in: query
