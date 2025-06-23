@@ -14,6 +14,7 @@ on:
 
 jobs:
   check:
+    if: ${{ github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' }}
     name: Check
     runs-on: ubuntu-latest
     steps:
