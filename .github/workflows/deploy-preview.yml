@@ -6,6 +6,7 @@ on:
 
 jobs:
   precheck:
+    if: ${{ github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' }}
     name: Precheck
     runs-on: ubuntu-latest
     permissions:
@@ -21,7 +22,7 @@ jobs:
       GH_TOKEN: ${{ secrets.PAT }}
 
   analyze:
-    if: github.repository_owner	== 'PaloAltoNetworks' && needs.precheck.outputs.is-org-member-result == 'null'
+    if: github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' && needs.precheck.outputs.is-org-member-result == 'null'
     name: Analyze
     needs: precheck
     runs-on: ubuntu-latest
@@ -49,7 +50,7 @@ jobs:
         uses: github/codeql-action/analyze@1b549b9259bda1cb5ddde3b41741a82a2d15a841 # v3
 
   analyze_unsafe:
-    if: github.repository_owner	== 'PaloAltoNetworks' && needs.precheck.outputs.is-org-member-result != 'null'
+    if: github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' && needs.precheck.outputs.is-org-member-result != 'null'
     name: Analyze Unsafe
     needs: precheck
     runs-on: ubuntu-latest
@@ -81,7 +82,8 @@ jobs:
     name: Build
     needs: [analyze, analyze_unsafe]
     if: |
-      !failure() && !cancelled() && 
+      github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' &&
+      !failure() && !cancelled() &&
       (success('analyze') || success('analyze_unsafe'))
     runs-on: ubuntu-latest
     permissions:
@@ -116,7 +118,7 @@ jobs:
   deploy:
     name: Deploy
     needs: build
-    if: ${{ !failure() && !cancelled() }}
+    if: ${{ github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' && !failure() && !cancelled() }}
     runs-on: ubuntu-latest
 
     steps:
