@@ -48,7 +48,7 @@ Key Features:
 
 ## Bootstrapping from Template (new Docusaurus site)
 
-Run the following to bootstrap a Docsaurus v3 site (classic theme) with `docusaurus-openapi-docs`:
+Run the following to bootstrap a Docusaurus v3 site (classic theme) with `docusaurus-openapi-docs`:
 
 ```bash
 npx create-docusaurus@3.7.0 my-website --package-manager yarn
@@ -192,13 +192,13 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 
 `versions` can be configured with the following options:
 
-| Name          | Type     | Default | Description                                                                                                              |
-| ------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `specPath`    | `string` | `null`  | Designated URL or path to the source of an OpenAPI specification file or directory of micro OpenAPI specification files. |
-| `ouputDir`    | `string` | `null`  | Desired output path for versioned, generated MDX files.                                                                  |
-| `label`       | `string` | `null`  | _Optional:_ Version label used when generating version selector dropdown menu.                                           |
-| `baseUrl`     | `string` | `null`  | _Optional:_ Version base URL used when generating version selector dropdown menu.                                        |
-| `downloadUrl` | `string` | `null`  | _Optional:_ Designated URL for downloading OpenAPI specification for versioned.                                          |
+| Name          | Type     | Default | Description                                                                                                                |
+| ------------- | -------- | ------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `specPath`    | `string` | `null`  | Designated URL or path to the source of an OpenAPI specification file or a directory of micro OpenAPI specification files. |
+| `outputDir`   | `string` | `null`  | Desired output path for versioned, generated MDX files.                                                                    |
+| `label`       | `string` | `null`  | _Optional:_ Version label used when generating the version selector dropdown menu.                                         |
+| `baseUrl`     | `string` | `null`  | _Optional:_ Version base URL used when generating the version selector dropdown menu.                                      |
+| `downloadUrl` | `string` | `null`  | _Optional:_ Designated URL for downloading the versioned OpenAPI specification.                                            |
 
 > All versions will automatically inherit `sidebarOptions` from the parent/base config.
 
@@ -330,11 +330,11 @@ yarn docusaurus gen-api-docs:version petstore:all
 
 > This will generate API docs for all of the OpenAPI specification (OAS) files referenced in your `versions` config and will also generate a `versions.json` file.
 
-> Substitue `all` with a specific version ID to generate/clean a specific version. Generating for `all` or a specific version ID will automatically update the `versions.json` file.
+> Substitute `all` with a specific version ID to generate or clean a specific version. Generating for `all` or a single version ID will automatically update the `versions.json` file.
 
 ## Developer Quick Start
 
-> Looking to make a contribution? Make sure to checkout out our contributing guide.
+> Looking to make a contribution? Make sure to check out our contributing guide.
 
 After [forking](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/fork) the main repository, run the following:
 
