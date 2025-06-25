@@ -57,18 +57,23 @@ const BaseSchemaComponent: React.FC<Props> = ({
     return (
       <MimeTabs className="openapi-tabs__mime" schemaType={schemaType}>
         {mimeTypes.map((mimeType: any) => {
-          const mimeExamples = body.content![mimeType].examples;
-          const mimeExample = body.content![mimeType].example;
-          const schemaExamples = body.content![mimeType].schema?.examples;
-          const schemaExample = body.content![mimeType].schema?.example;
-          const firstBody = body.content![mimeType].schema;
+          const mimeExamples = body.content?.[mimeType]?.examples;
+          const mimeExample = body.content?.[mimeType]?.example;
+          const schemaExamples = body.content?.[mimeType]?.schema?.examples;
+          const schemaExample = body.content?.[mimeType]?.schema?.example;
+          const firstBody = body.content?.[mimeType]?.schema;
 
           if (
             firstBody === undefined ||
             (firstBody.properties &&
               Object.keys(firstBody.properties).length === 0)
           ) {
-            return null;
+            return (
+              // @ts-ignore
+              <TabItem key={mimeType} label={mimeType} value={mimeType}>
+                <div>No schema</div>
+              </TabItem>
+            );
           }
 
           if (firstBody) {

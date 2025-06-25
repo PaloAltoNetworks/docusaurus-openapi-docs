@@ -347,6 +347,18 @@ paths:
                     age: 30
                     isStudent: true
 
+  /response/mediaTypeObject/noSchema:
+    get:
+      tags:
+        - examples
+      summary: no schema in response
+      description: "description of response media type object no schema"
+      responses:
+        "200":
+          description: successful response
+          content:
+            application/json:
+
   /response/schema/example:
     get:
       tags:
