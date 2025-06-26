@@ -7,10 +7,13 @@
 
 import React from "react";
 
+import CodeSamples from "@theme/CodeSamples";
 import Markdown from "@theme/Markdown";
-import ResponseSamples from "@theme/ResponseSamples";
 import TabItem from "@theme/TabItem";
-import { sampleResponseFromSchema } from "docusaurus-plugin-openapi-docs/lib/openapi/createResponseExample";
+import {
+  sampleFromSchema,
+  ExampleContext,
+} from "docusaurus-plugin-openapi-docs/lib/openapi/createSchemaExample";
 import format from "xml-formatter";
 
 export function json2xml(o: Record<string, any>, tab: string): string {
@@ -50,23 +53,56 @@ export function json2xml(o: Record<string, any>, tab: string): string {
   return tab ? xml.replace(/\t/g, tab) : xml.replace(/\t|\n/g, "");
 }
 
-interface ResponseExamplesProps {
-  responseExamples: any;
-  mimeType: string;
-}
-export const ResponseExamples: React.FC<ResponseExamplesProps> = ({
-  responseExamples,
-  mimeType,
-}): any => {
+export function getLanguageFromMimeType(mimeType: string): string {
   let language = "shell";
   if (mimeType.endsWith("json")) language = "json";
   if (mimeType.endsWith("xml")) language = "xml";
+  return language;
+}
 
-  // Map response examples to an array of TabItem elements
-  const examplesArray = Object.entries(responseExamples).map(
+export interface MimeExampleProps {
+  example: any;
+  mimeType: string;
+}
+
+export const MimeExample: React.FC<MimeExampleProps> = ({
+  example,
+  mimeType,
+}) => {
+  const language = getLanguageFromMimeType(mimeType);
+
+  const isObject = typeof example === "object";
+  const exampleContent = isObject ? JSON.stringify(example, null, 2) : example;
+
+  return (
+    // @ts-ignore
+    <TabItem label="Example" value="Example">
+      {example.summary && (
+        <Markdown className="openapi-example__summary">
+          {example.summary}
+        </Markdown>
+      )}
+      <CodeSamples example={exampleContent} language={language} />
+    </TabItem>
+  );
+};
+
+export interface MimeExamplesProps {
+  examples: any;
+  mimeType: string;
+}
+
+export const MimeExamples: React.FC<MimeExamplesProps> = ({
+  examples,
+  mimeType,
+}): any => {
+  const language = getLanguageFromMimeType(mimeType);
+
+  // Map examples to an array of TabItem elements
+  const examplesArray = Object.entries(examples).map(
     ([exampleName, exampleValue]: any) => {
       const isObject = typeof exampleValue.value === "object";
-      const responseExample = isObject
+      const exampleContent = isObject
         ? JSON.stringify(exampleValue.value, null, 2)
         : exampleValue.value;
 
@@ -78,10 +114,7 @@ export const ResponseExamples: React.FC<ResponseExamplesProps> = ({
               {exampleValue.summary}
             </Markdown>
           )}
-          <ResponseSamples
-            responseExample={responseExample}
-            language={language}
-          />
+          <CodeSamples example={exampleContent} language={language} />
         </TabItem>
       );
     }
@@ -90,70 +123,94 @@ export const ResponseExamples: React.FC<ResponseExamplesProps> = ({
   return examplesArray;
 };
 
-interface ResponseExampleProps {
-  responseExample: any;
+export interface SchemaExampleProps {
+  example: any;
   mimeType: string;
 }
 
-export const ResponseExample: React.FC<ResponseExampleProps> = ({
-  responseExample,
+export const SchemaExample: React.FC<SchemaExampleProps> = ({
+  example,
   mimeType,
 }) => {
-  let language = "shell";
-  if (mimeType.endsWith("json")) {
-    language = "json";
-  }
-  if (mimeType.endsWith("xml")) {
-    language = "xml";
-  }
+  const language = getLanguageFromMimeType(mimeType);
 
-  const isObject = typeof responseExample === "object";
-  const exampleContent = isObject
-    ? JSON.stringify(responseExample, null, 2)
-    : responseExample;
+  const isObject = typeof example === "object";
+  const exampleContent = isObject ? JSON.stringify(example, null, 2) : example;
 
   return (
     // @ts-ignore
     <TabItem label="Example" value="Example">
-      {responseExample.summary && (
+      {example.summary && (
         <Markdown className="openapi-example__summary">
-          {responseExample.summary}
+          {example.summary}
         </Markdown>
       )}
-      <ResponseSamples responseExample={exampleContent} language={language} />
+      <CodeSamples example={exampleContent} language={language} />
     </TabItem>
   );
 };
 
-interface ExampleFromSchemaProps {
+export interface SchemaExamplesProps {
+  examples: any[];
+  mimeType: string;
+}
+
+export const SchemaExamples: React.FC<SchemaExamplesProps> = ({
+  examples,
+  mimeType,
+}) => {
+  const language = getLanguageFromMimeType(mimeType);
+
+  // Map examples to an array of TabItem elements
+  const examplesArray = examples.map((example: any, i: number) => {
+    const exampleName = `Example ${i + 1}`;
+    const isObject = typeof example === "object";
+    const exampleContent = isObject
+      ? JSON.stringify(example, null, 2)
+      : example;
+
+    return (
+      // @ts-ignore
+      <TabItem label={exampleName} value={exampleName} key={exampleName}>
+        <CodeSamples example={exampleContent} language={language} />
+      </TabItem>
+    );
+  });
+
+  return examplesArray;
+};
+
+export interface ExampleFromSchemaProps {
   schema: any;
   mimeType: string;
+  context: ExampleContext;
 }
 
 export const ExampleFromSchema: React.FC<ExampleFromSchemaProps> = ({
   schema,
   mimeType,
+  context,
 }) => {
-  const responseExample = sampleResponseFromSchema(schema);
+  const example = sampleFromSchema(schema, context);
 
   if (mimeType.endsWith("xml")) {
-    let responseExampleObject;
+    let exampleObject;
     try {
-      responseExampleObject = JSON.parse(JSON.stringify(responseExample));
+      exampleObject = JSON.parse(JSON.stringify(example));
     } catch {
       return null;
     }
 
-    if (typeof responseExampleObject === "object") {
+    if (typeof exampleObject === "object") {
       let xmlExample;
       try {
-        xmlExample = format(json2xml(responseExampleObject, ""), {
+        xmlExample = format(json2xml(exampleObject, ""), {
           indentation: "  ",
           lineSeparator: "\n",
           collapseContent: true,
         });
       } catch {
-        const xmlExampleWithRoot = { root: responseExampleObject };
+        const xmlExampleWithRoot = { root: exampleObject };
         try {
           xmlExample = format(json2xml(xmlExampleWithRoot, ""), {
             indentation: "  ",
@@ -161,27 +218,24 @@ export const ExampleFromSchema: React.FC<ExampleFromSchemaProps> = ({
             collapseContent: true,
           });
         } catch {
-          xmlExample = json2xml(responseExampleObject, "");
+          xmlExample = json2xml(exampleObject, "");
         }
       }
       return (
         // @ts-ignore
         <TabItem label="Example (auto)" value="Example (auto)">
-          <ResponseSamples responseExample={xmlExample} language="xml" />
+          <CodeSamples example={xmlExample} language="xml" />
         </TabItem>
       );
     }
   }
 
-  if (
-    typeof responseExample === "object" ||
-    typeof responseExample === "string"
-  ) {
+  if (typeof example === "object" || typeof example === "string") {
     return (
       // @ts-ignore
       <TabItem label="Example (auto)" value="Example (auto)">
-        <ResponseSamples
-          responseExample={JSON.stringify(responseExample, null, 2)}
+        <CodeSamples
+          example={JSON.stringify(example, null, 2)}
           language="json"
         />
       </TabItem>
