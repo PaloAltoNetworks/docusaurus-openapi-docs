@@ -7,8 +7,8 @@
 
 import React from "react";
 
+import CodeSamples from "@theme/CodeSamples";
 import Markdown from "@theme/Markdown";
-import ResponseSamples from "@theme/ResponseSamples";
 import TabItem from "@theme/TabItem";
 import { sampleResponseFromSchema } from "docusaurus-plugin-openapi-docs/lib/openapi/createResponseExample";
 import format from "xml-formatter";
@@ -78,10 +78,7 @@ export const ResponseExamples: React.FC<ResponseExamplesProps> = ({
               {exampleValue.summary}
             </Markdown>
           )}
-          <ResponseSamples
-            responseExample={responseExample}
-            language={language}
-          />
+          <CodeSamples example={responseExample} language={language} />
         </TabItem>
       );
     }
@@ -120,7 +117,7 @@ export const ResponseExample: React.FC<ResponseExampleProps> = ({
           {responseExample.summary}
         </Markdown>
       )}
-      <ResponseSamples responseExample={exampleContent} language={language} />
+      <CodeSamples example={exampleContent} language={language} />
     </TabItem>
   );
 };
@@ -167,7 +164,7 @@ export const ExampleFromSchema: React.FC<ExampleFromSchemaProps> = ({
       return (
         // @ts-ignore
         <TabItem label="Example (auto)" value="Example (auto)">
-          <ResponseSamples responseExample={xmlExample} language="xml" />
+          <CodeSamples example={xmlExample} language="xml" />
         </TabItem>
       );
     }
@@ -180,8 +177,8 @@ export const ExampleFromSchema: React.FC<ExampleFromSchemaProps> = ({
     return (
       // @ts-ignore
       <TabItem label="Example (auto)" value="Example (auto)">
-        <ResponseSamples
-          responseExample={JSON.stringify(responseExample, null, 2)}
+        <CodeSamples
+          example={JSON.stringify(responseExample, null, 2)}
           language="json"
         />
       </TabItem>
