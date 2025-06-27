@@ -1,3 +1,14 @@
+## 4.5.1 (Jun 27, 2025)
+
+High level enhancements
+
+- Various bug fixes
+
+Other enhancements and bug fixes
+
+- Fix Postman request initialization ([#1181](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1181))
+- Add AGENTS guidelines ([#1179](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1179))
+
 ## 4.5.0 (Jun 27, 2025)
 
 High level enhancements
