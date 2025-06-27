@@ -10,10 +10,9 @@ import { translate } from "@docusaurus/Translate";
 import clsx from "clsx";
 import copy from "copy-text-to-clipboard";
 
-import type { Props as BaseCopyButtonProps } from "@theme/CodeBlock/Buttons/CopyButton";
-
-interface CopyButtonProps extends BaseCopyButtonProps {
+interface CopyButtonProps {
   code: string;
+  className?: string;
 }
 
 export default function CopyButton({
