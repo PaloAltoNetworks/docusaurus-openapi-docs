@@ -71,6 +71,7 @@
     "semver": "^7.3.5",
     "start-server-and-test": "^1.14.0",
     "ts-jest": "^27.0.6",
+    "ts-node": "^10.9.2",
     "typescript": "^5.1"
   },
   "lint-staged": {
