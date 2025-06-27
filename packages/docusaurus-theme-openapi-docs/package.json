@@ -35,6 +35,8 @@
     "@types/file-saver": "^2.0.5",
     "@types/lodash": "^4.14.176",
     "@types/pako": "^2.0.3",
+    "@types/postman-collection": "^3.5.11",
+    "@types/react-modal": "^3.16.3",
     "concurrently": "^5.2.0",
     "docusaurus-plugin-openapi-docs": "^4.4.0",
     "docusaurus-plugin-sass": "^0.2.3",
