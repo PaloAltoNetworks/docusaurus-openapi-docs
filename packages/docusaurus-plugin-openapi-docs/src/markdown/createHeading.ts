@@ -5,14 +5,14 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { clean, create } from "./utils";
+import { create } from "./utils";
 
 export function createHeading(heading: string) {
   return [
     create(
       "Heading",
       {
-        children: clean(heading),
+        children: heading,
         as: "h1",
         className: "openapi__heading",
       },
