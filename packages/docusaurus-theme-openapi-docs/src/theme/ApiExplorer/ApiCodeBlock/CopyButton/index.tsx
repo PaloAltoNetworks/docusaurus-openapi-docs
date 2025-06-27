@@ -6,11 +6,15 @@
  * ========================================================================== */
 
 import React, { useCallback, useState, useRef, useEffect } from "react";
-
-import { CopyButtonProps } from "@docusaurus/theme-common/internal";
 import { translate } from "@docusaurus/Translate";
 import clsx from "clsx";
 import copy from "copy-text-to-clipboard";
+
+import type { Props as BaseCopyButtonProps } from "@theme/CodeBlock/Buttons/CopyButton";
+
+interface CopyButtonProps extends BaseCopyButtonProps {
+  code: string;
+}
 
 export default function CopyButton({
   code,
