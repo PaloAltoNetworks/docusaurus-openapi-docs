@@ -22,7 +22,11 @@ function ApiExplorer({
   infoPath: string;
 }) {
   const postman = new sdk.Request(
-    item.postman ? (item.postman as any).toJSON() : {}
+    item.postman
+      ? sdk.Request.isRequest(item.postman)
+        ? (item.postman as any).toJSON()
+        : (item.postman as any)
+      : {}
   );
 
   return (
