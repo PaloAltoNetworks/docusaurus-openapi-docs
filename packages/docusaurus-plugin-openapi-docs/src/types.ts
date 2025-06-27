@@ -6,7 +6,7 @@
  * ========================================================================== */
 
 import { SidebarItemDoc } from "@docusaurus/plugin-content-docs/src/sidebars/types";
-import type Request from "postman-collection";
+import Request from "postman-collection";
 
 import {
   InfoObject,

@@ -15,8 +15,8 @@ import kebabCase from "lodash/kebabCase";
 import unionBy from "lodash/unionBy";
 import uniq from "lodash/uniq";
 import Converter from "openapi-to-postmanv2";
-import Collection from "postman-collection";
-import sdk from "postman-collection";
+import { Collection } from "postman-collection";
+import * as sdk from "postman-collection";
 
 import { sampleRequestFromSchema } from "./createRequestExample";
 import { OpenApiObject, TagGroupObject, TagObject } from "./types";

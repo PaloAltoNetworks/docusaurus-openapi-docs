@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React, { useState, useEffect, type JSX } from "react";
+import React, { useState, useEffect } from "react";
 
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import ApiCodeBlock from "@theme/ApiExplorer/ApiCodeBlock";
@@ -14,7 +14,7 @@ import CodeTabs from "@theme/ApiExplorer/CodeTabs";
 import { useTypedSelector } from "@theme/ApiItem/hooks";
 import cloneDeep from "lodash/cloneDeep";
 import codegen from "postman-code-generators";
-import sdk from "postman-collection";
+import * as sdk from "postman-collection";
 
 import { CodeSample, Language } from "./code-snippets-types";
 import {
@@ -31,7 +31,7 @@ export interface Props {
   codeSamples: CodeSample[];
 }
 
-function CodeTab({ children, hidden, className }: any): JSX.Element {
+function CodeTab({ children, hidden, className }: any): React.JSX.Element {
   return (
     <div role="tabpanel" className={className} {...{ hidden }}>
       {children}
