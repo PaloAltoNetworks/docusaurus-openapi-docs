@@ -189,6 +189,7 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 | `sidebarGenerators`  | `object`  | `null`  | Optional: Customize sidebar rendering with callback functions.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 
 > You may optionally configure a `sidebarOptions`. In doing so, an individual `sidebar.js` slice with the configured options will be generated within the respective `outputDir`.
+> Use `x-position` vendor extension (or the front matter `position`) on operations to explicitly order sidebar items.
 
 `versions` can be configured with the following options:
 
