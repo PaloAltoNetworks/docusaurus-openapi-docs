@@ -21,6 +21,7 @@ interface Options {
   width: number;
   viewHeight: number;
   concurrency: number;
+  diffAlpha: number;
   summaryFile: string;
 }
 
@@ -33,6 +34,7 @@ function parseArgs(): Options {
     width: 1280,
     viewHeight: 1024,
     concurrency: 4,
+    diffAlpha: 1,
     summaryFile: "visual_diffs/results.json",
   };
   for (let i = 0; i < args.length; i++) {
@@ -61,6 +63,10 @@ function parseArgs(): Options {
       case "-c":
       case "--concurrency":
         opts.concurrency = Number(args[++i]);
+        break;
+      case "-a":
+      case "--diff-alpha":
+        opts.diffAlpha = Number(args[++i]);
         break;
       case "-s":
       case "--summary-file":
@@ -104,7 +110,8 @@ function compareImages(
   prodPath: string,
   prevPath: string,
   diffPath: string,
-  tolerance: number
+  tolerance: number,
+  diffAlpha: number
 ): boolean {
   const prod = PNG.sync.read(fs.readFileSync(prodPath));
   const prev = PNG.sync.read(fs.readFileSync(prevPath));
@@ -121,6 +128,7 @@ function compareImages(
     prod.height,
     {
       threshold: tolerance,
+      alpha: diffAlpha,
     }
   );
   if (numDiff > 0) {
@@ -188,7 +196,15 @@ async function run() {
         new URL(cleanPath, opts.previewUrl).toString(),
         prevSnap
       );
-      if (compareImages(prodSnap, prevSnap, diffImg, opts.tolerance)) {
+      if (
+        compareImages(
+          prodSnap,
+          prevSnap,
+          diffImg,
+          opts.tolerance,
+          opts.diffAlpha
+        )
+      ) {
         console.log(`MATCH: /${cleanPath}`);
         matches += 1;
         pages.push({ path: `/${cleanPath}`, status: "match" });
