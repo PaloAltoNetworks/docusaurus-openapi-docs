@@ -222,6 +222,24 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 | --------------- | ---------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `createDocItem` | `function` | `null`  | Optional: Returns a `SidebarItemDoc` object containing metadata for a sidebar item.<br/><br/>**Function type:** `(item: ApiPageMetadata \| SchemaPageMetadata, context: { sidebarOptions: SidebarOptions; basePath: string }) => SidebarItemDoc` |
 
+## Supported Vendor Extensions
+
+The plugin extracts a number of vendor extensions from the OpenAPI spec to enrich the generated docs. The theme renders some of these values as part of the UI.
+
+| Extension                                  | Purpose                                                               |
+| ------------------------------------------ | --------------------------------------------------------------------- |
+| `x-codeSamples`                            | Operation level code snippets displayed in the API Explorer.          |
+| `x-tagGroups`                              | Groups tags in the sidebar navigation.                                |
+| `x-tags`                                   | Assigns tags to schema objects so they appear with tagged operations. |
+| `x-position`                               | Controls ordering of items in the sidebar.                            |
+| `x-logo` / `x-dark-logo`                   | Provides logos for light and dark themes on the intro page.           |
+| `x-deprecated-description`                 | Custom text shown for deprecated operations.                          |
+| `x-webhooks`                               | Defines webhook events.                                               |
+| `x-displayName`                            | Overrides tag display names.                                          |
+| `x-enumDescription` / `x-enumDescriptions` | Documents enum values.                                                |
+
+Other ReDoc specific extensions such as `x-circular-ref`, `x-code-samples` (deprecated), `x-examples`, `x-ignoredHeaderParameters`, `x-nullable`, `x-servers`, `x-traitTag`, `x-additionalPropertiesName`, and `x-explicitMappingOnly` are ignored when extracting custom data.
+
 ## CLI Usage
 
 ```bash
