@@ -156,7 +156,6 @@ async function run() {
     throw new Error("Missing preview URL");
   }
   if (!opts.previewUrl.endsWith("/")) opts.previewUrl += "/";
-
   const sitemapXml = await fetchSitemap(
     "https://docusaurus-openapi.tryingpan.dev/sitemap.xml"
   );
