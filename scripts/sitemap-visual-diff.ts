@@ -20,6 +20,7 @@ interface Options {
   tolerance: number;
   width: number;
   viewHeight: number;
+  concurrency: number;
   summaryFile: string;
 }
 
@@ -31,6 +32,7 @@ function parseArgs(): Options {
     tolerance: 0,
     width: 1280,
     viewHeight: 1024,
+    concurrency: 4,
     summaryFile: "visual_diffs/results.json",
   };
   for (let i = 0; i < args.length; i++) {
@@ -55,6 +57,10 @@ function parseArgs(): Options {
       case "-v":
       case "--view-height":
         opts.viewHeight = Number(args[++i]);
+        break;
+      case "-c":
+      case "--concurrency":
+        opts.concurrency = Number(args[++i]);
         break;
       case "-s":
       case "--summary-file":
@@ -125,6 +131,25 @@ function compareImages(
   return true;
 }
 
+async function promisePool<T>(
+  items: T[],
+  concurrency: number,
+  iteratorFn: (item: T) => Promise<void>
+) {
+  const executing: Promise<void>[] = [];
+
+  for (const item of items) {
+    const p = iteratorFn(item).then(() => {
+      executing.splice(executing.indexOf(p), 1);
+    });
+    executing.push(p);
+    if (executing.length >= concurrency) {
+      await Promise.race(executing);
+    }
+  }
+  await Promise.all(executing);
+}
+
 async function run() {
   const opts = parseArgs();
   if (!opts.previewUrl) {
@@ -132,7 +157,10 @@ async function run() {
   }
   if (!opts.previewUrl.endsWith("/")) opts.previewUrl += "/";
 
-  const sitemapXml = await fetchSitemap("https://docusaurus-openapi.tryingpan.dev/sitemap.xml");
+  const sitemapXml = await fetchSitemap(
+    "https://docusaurus-openapi.tryingpan.dev/sitemap.xml"
+  );
+
   const paths = parseUrlsFromSitemap(await sitemapXml);
   console.log(`Found ${paths.length} paths.`);
 
@@ -140,21 +168,20 @@ async function run() {
   const context = await browser.newContext({
     viewport: { width: opts.width, height: opts.viewHeight },
   });
-  const page = await context.newPage();
-
   let total = 0;
   let matches = 0;
   let mismatches = 0;
   let skipped = 0;
   const pages: { path: string; status: string }[] = [];
 
-  for (const url of paths) {
+  async function processPath(url: string) {
     total += 1;
     const cleanPath =
       new URL(url).pathname.replace(/^\//, "").replace(/\/$/, "") || "root";
     const prodSnap = path.join(opts.outputDir, "prod", `${cleanPath}.png`);
     const prevSnap = path.join(opts.outputDir, "preview", `${cleanPath}.png`);
     const diffImg = path.join(opts.outputDir, "diff", `${cleanPath}.png`);
+    const page = await context.newPage();
     try {
       await screenshotFullPage(page, url, prodSnap);
       await screenshotFullPage(
@@ -176,7 +203,10 @@ async function run() {
       skipped += 1;
       pages.push({ path: `/${cleanPath}`, status: "skip" });
     }
+    await page.close();
   }
+
+  await promisePool(paths, opts.concurrency, processPath);
 
   await browser.close();
   console.log(
