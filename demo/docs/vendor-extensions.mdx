@@ -1,0 +1,24 @@
+---
+id: vendor-extensions
+hide_title: true
+sidebar_label: Vendor Extensions
+title: Vendor Extensions
+---
+
+## Overview
+
+The OpenAPI plugin and theme recognize several [vendor extensions](https://swagger.io/specification/#specification-extensions) for customizing the generated documentation. Supported extensions include:
+
+| Extension | Purpose |
+|-----------|---------|
+| `x-codeSamples` | Provide language specific code snippets for operations. These are displayed in the API Explorer panel. |
+| `x-tagGroups` | Group tags in the sidebar navigation. |
+| `x-tags` | Assign tags to schema objects so they appear with tagged operations when `groupPathsBy: tag` is enabled. |
+| `x-position` | Explicit ordering of operations in the generated sidebar. |
+| `x-logo` / `x-dark-logo` | Display light and dark logos on the introduction page. |
+| `x-deprecated-description` | Custom text shown alongside deprecated operations. |
+| `x-webhooks` | Define webhook events under the `x-webhooks` key. |
+| `x-displayName` | Override tag names used for grouping. |
+| `x-enumDescription` / `x-enumDescriptions` | Document individual enum values. |
+
+Other ReDoc extensions such as `x-circular-ref`, `x-code-samples` (deprecated), `x-examples`, `x-ignoredHeaderParameters`, `x-nullable`, `x-servers`, `x-traitTag`, `x-additionalPropertiesName`, and `x-explicitMappingOnly` are detected but ignored when extracting custom extensions.
