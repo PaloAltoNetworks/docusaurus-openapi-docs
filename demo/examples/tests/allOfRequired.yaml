@@ -4,13 +4,13 @@ info:
   description: Demonstrates property required flag inherited from parent when using allOf.
   version: 1.0.0
 tags:
-  - name: allOfRequired
+  - name: allOf
     description: allOf required tests
 paths:
   /allof-parent-required:
     get:
       tags:
-        - allOfRequired
+        - allOf
       summary: allOf inherits parent required
       description: |
         Parent object marks the "pet" property as required while its schema is composed via allOf.
