@@ -100,7 +100,7 @@ function parseUrlsFromSitemap(xml: string): string[] {
 async function screenshotFullPage(page: any, url: string, outputPath: string) {
   await page.goto(url, { waitUntil: "networkidle" });
   await page.evaluate(() => {
-    document.querySelectorAll("details").forEach((d) => {
+    document.querySelectorAll("div.container details").forEach((d) => {
       const summary = d.querySelector("summary");
       if (!d.open && summary) (summary as HTMLElement).click();
       (d as HTMLDetailsElement).open = true;
