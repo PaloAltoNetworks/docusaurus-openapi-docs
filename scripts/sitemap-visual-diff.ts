@@ -23,6 +23,7 @@ interface Options {
   concurrency: number;
   diffAlpha: number;
   summaryFile: string;
+  paths: string;
 }
 
 function parseArgs(): Options {
@@ -36,6 +37,7 @@ function parseArgs(): Options {
     concurrency: 4,
     diffAlpha: 1,
     summaryFile: "visual_diffs/results.json",
+    paths: "",
   };
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
@@ -71,6 +73,10 @@ function parseArgs(): Options {
       case "-s":
       case "--summary-file":
         opts.summaryFile = args[++i];
+        break;
+      case "-P":
+      case "--paths":
+        opts.paths = args[++i];
         break;
     }
   }
@@ -168,7 +174,11 @@ async function run() {
   const sitemapXml = await fetchSitemap(
     "https://docusaurus-openapi.tryingpan.dev/sitemap.xml"
   );
-  const paths = parseUrlsFromSitemap(await sitemapXml);
+  let paths = parseUrlsFromSitemap(sitemapXml);
+  if (opts.paths) {
+    const regex = new RegExp(opts.paths);
+    paths = paths.filter((p) => regex.test(p));
+  }
   console.log(`Found ${paths.length} paths.`);
 
   const browser = await chromium.launch();
