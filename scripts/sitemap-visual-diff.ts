@@ -100,11 +100,12 @@ function parseUrlsFromSitemap(xml: string): string[] {
 async function screenshotFullPage(page: any, url: string, outputPath: string) {
   await page.goto(url, { waitUntil: "networkidle" });
   await page.evaluate(() => {
-    document.querySelectorAll("div.container details").forEach((d) => {
-      const summary = d.querySelector("summary");
-      if (!d.open && summary) (summary as HTMLElement).click();
-      (d as HTMLDetailsElement).open = true;
-      d.setAttribute("data-collapsed", "false");
+    document.querySelectorAll("div.container details").forEach((el) => {
+      const detail = el as HTMLDetailsElement;
+      const summary = detail.querySelector("summary");
+      if (!detail.open && summary) (summary as HTMLElement).click();
+      detail.open = true;
+      detail.setAttribute("data-collapsed", "false");
     });
   });
   await page.waitForTimeout(500);
