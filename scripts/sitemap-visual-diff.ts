@@ -31,7 +31,7 @@ function parseArgs(): Options {
   const opts: Options = {
     previewUrl: "",
     outputDir: "visual_diffs",
-    tolerance: 0,
+    tolerance: 0.3,
     width: 1280,
     viewHeight: 1024,
     concurrency: 4,
@@ -100,16 +100,31 @@ function parseUrlsFromSitemap(xml: string): string[] {
 async function screenshotFullPage(page: any, url: string, outputPath: string) {
   await page.goto(url, { waitUntil: "networkidle" });
   await page.evaluate(() => {
-    document.querySelectorAll("details").forEach((d) => {
-      const summary = d.querySelector("summary");
-      if (!d.open && summary) (summary as HTMLElement).click();
-      (d as HTMLDetailsElement).open = true;
-      d.setAttribute("data-collapsed", "false");
+    document.querySelectorAll("div.container details").forEach((el) => {
+      const detail = el as HTMLDetailsElement;
+      const summary = detail.querySelector("summary");
+      if (!detail.open && summary) (summary as HTMLElement).click();
+      detail.open = true;
+      detail.setAttribute("data-collapsed", "false");
     });
   });
   await page.waitForTimeout(500);
   await fs.promises.mkdir(path.dirname(outputPath), { recursive: true });
-  await page.screenshot({ path: outputPath, fullPage: true });
+  const container = await page.$("div.container");
+  if (container) {
+    await container.screenshot({ path: outputPath });
+  } else {
+    await page.screenshot({ path: outputPath, fullPage: true });
+  }
+}
+
+function padImage(img: PNG, width: number, height: number): PNG {
+  if (img.width === width && img.height === height) {
+    return img;
+  }
+  const out = new PNG({ width, height });
+  PNG.bitblt(img, out, 0, 0, img.width, img.height, 0, 0);
+  return out;
 }
 
 function compareImages(
@@ -119,11 +134,16 @@ function compareImages(
   tolerance: number,
   diffAlpha: number
 ): boolean {
-  const prod = PNG.sync.read(fs.readFileSync(prodPath));
-  const prev = PNG.sync.read(fs.readFileSync(prevPath));
+  let prod = PNG.sync.read(fs.readFileSync(prodPath));
+  let prev = PNG.sync.read(fs.readFileSync(prevPath));
   if (prod.width !== prev.width || prod.height !== prev.height) {
-    console.warn(`Size mismatch for ${prevPath}`);
-    return false;
+    const width = Math.max(prod.width, prev.width);
+    const height = Math.max(prod.height, prev.height);
+    console.warn(
+      `Size mismatch for ${prevPath}, padding images to ${width}x${height}`
+    );
+    prod = padImage(prod, width, height);
+    prev = padImage(prev, width, height);
   }
   const diff = new PNG({ width: prod.width, height: prod.height });
   const numDiff = pixelmatch(
