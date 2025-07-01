@@ -17,7 +17,7 @@ export const OpeningArrayBracket = () => (
         paddingBottom: ".5rem",
       }}
     >
-      Array [
+      Arrray [
     </div>
   </li>
 );
