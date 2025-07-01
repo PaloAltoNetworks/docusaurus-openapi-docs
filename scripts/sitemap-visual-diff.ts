@@ -110,7 +110,12 @@ async function screenshotFullPage(page: any, url: string, outputPath: string) {
   });
   await page.waitForTimeout(500);
   await fs.promises.mkdir(path.dirname(outputPath), { recursive: true });
-  await page.screenshot({ path: outputPath, fullPage: true });
+  const container = await page.$("div.container");
+  if (container) {
+    await container.screenshot({ path: outputPath });
+  } else {
+    await page.screenshot({ path: outputPath, fullPage: true });
+  }
 }
 
 function compareImages(
