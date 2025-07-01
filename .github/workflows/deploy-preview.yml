@@ -179,6 +179,9 @@ jobs:
       - name: Run visual diff
         run: yarn ts-node scripts/sitemap-visual-diff.ts --preview-url ${{ needs.deploy.outputs.preview_url }} --summary-file visual_diffs/results.json --concurrency 4 --paths "/tests/"
 
+      - name: Generate report and summary
+        run: yarn ts-node scripts/generate-visual-diff-report.ts visual_diffs/results.json visual_diffs/index.html
+
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:

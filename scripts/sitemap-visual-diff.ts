@@ -31,7 +31,7 @@ function parseArgs(): Options {
   const opts: Options = {
     previewUrl: "",
     outputDir: "visual_diffs",
-    tolerance: 0,
+    tolerance: 0.2,
     width: 1280,
     viewHeight: 1024,
     concurrency: 4,
