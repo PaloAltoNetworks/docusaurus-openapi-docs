@@ -118,6 +118,15 @@ async function screenshotFullPage(page: any, url: string, outputPath: string) {
   }
 }
 
+function padImage(img: PNG, width: number, height: number): PNG {
+  if (img.width === width && img.height === height) {
+    return img;
+  }
+  const out = new PNG({ width, height });
+  PNG.bitblt(img, out, 0, 0, img.width, img.height, 0, 0);
+  return out;
+}
+
 function compareImages(
   prodPath: string,
   prevPath: string,
@@ -125,11 +134,16 @@ function compareImages(
   tolerance: number,
   diffAlpha: number
 ): boolean {
-  const prod = PNG.sync.read(fs.readFileSync(prodPath));
-  const prev = PNG.sync.read(fs.readFileSync(prevPath));
+  let prod = PNG.sync.read(fs.readFileSync(prodPath));
+  let prev = PNG.sync.read(fs.readFileSync(prevPath));
   if (prod.width !== prev.width || prod.height !== prev.height) {
-    console.warn(`Size mismatch for ${prevPath}`);
-    return false;
+    const width = Math.max(prod.width, prev.width);
+    const height = Math.max(prod.height, prev.height);
+    console.warn(
+      `Size mismatch for ${prevPath}, padding images to ${width}x${height}`
+    );
+    prod = padImage(prod, width, height);
+    prev = padImage(prev, width, height);
   }
   const diff = new PNG({ width: prod.width, height: prod.height });
   const numDiff = pixelmatch(
