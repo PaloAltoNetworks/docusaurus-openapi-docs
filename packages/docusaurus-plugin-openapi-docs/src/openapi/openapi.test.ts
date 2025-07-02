@@ -37,4 +37,18 @@ describe("openapi", () => {
       ).toBeDefined();
     });
   });
+
+  describe("doc card markdown", () => {
+    it("preserves markdown and html in tag descriptions", async () => {
+      const results = await readOpenapiFiles(
+        posixPath(path.join(__dirname, "__fixtures__/docCards"))
+      );
+      const yaml = results.find((x) => x.source.endsWith("openapi.yaml"));
+      expect(yaml).toBeTruthy();
+      const tag = yaml?.data.tags?.find((t) => t.name === "docCards");
+      expect(tag?.description).toBe(
+        "This tag shows **markdown** and <b>HTML</b> in the doc card."
+      );
+    });
+  });
 });

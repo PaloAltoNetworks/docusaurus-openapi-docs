@@ -1,0 +1,20 @@
+openapi: 3.0.3
+info:
+  title: DocCard Markdown Example
+  version: 1.0.0
+paths:
+  /docs:
+    get:
+      summary: Doc card operation
+      description: |
+        Returns documentation.
+        Supports **markdown** and <b>HTML</b> in descriptions.
+      tags:
+        - docCards
+      responses:
+        "200":
+          description: OK
+
+tags:
+  - name: docCards
+    description: This tag shows **markdown** and <b>HTML</b> in the doc card.
