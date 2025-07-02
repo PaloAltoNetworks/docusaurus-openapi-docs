@@ -15,8 +15,8 @@ import kebabCase from "lodash/kebabCase";
 import unionBy from "lodash/unionBy";
 import uniq from "lodash/uniq";
 import Converter from "openapi-to-postmanv2";
-import Collection from "postman-collection";
-import sdk from "postman-collection";
+import { Collection } from "postman-collection";
+import * as sdk from "postman-collection";
 
 import { sampleRequestFromSchema } from "./createRequestExample";
 import { OpenApiObject, TagGroupObject, TagObject } from "./types";
@@ -263,6 +263,7 @@ function createItems(
           jsonRequestBodyExample,
           info: openapiData.info,
         },
+        position: operationObject["x-position"] as number | undefined,
       };
 
       items.push(apiPage);
@@ -508,6 +509,22 @@ function createItems(
         items.push(tagPage);
       });
   }
+
+  items.sort((a, b) => {
+    // Items with position come first, sorted by position
+    if (a.position !== undefined && b.position !== undefined) {
+      return a.position - b.position;
+    }
+    // Items with position come before items without position
+    if (a.position !== undefined) {
+      return -1;
+    }
+    if (b.position !== undefined) {
+      return 1;
+    }
+    // If neither has position, maintain original order
+    return 0;
+  });
 
   return items as ApiMetadata[];
 }

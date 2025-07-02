@@ -16,10 +16,6 @@ import clsx from "clsx";
 import { getQualifierMessage, getSchemaName } from "../../markdown/schema";
 import { guard, toString } from "../../markdown/utils";
 
-interface Map<T> {
-  [key: string]: T;
-}
-
 export interface ExampleObject {
   summary?: string | null;
   description?: string | null;
@@ -32,7 +28,7 @@ export interface Props {
   param: {
     description: string;
     example: any;
-    examples: Map<ExampleObject> | any[];
+    examples: Record<string, ExampleObject>;
     name: string;
     required: boolean;
     deprecated: boolean;

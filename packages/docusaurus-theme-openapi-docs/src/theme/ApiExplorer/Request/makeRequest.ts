@@ -6,7 +6,7 @@
  * ========================================================================== */
 
 import { Body } from "@theme/ApiExplorer/Body/slice";
-import sdk from "postman-collection";
+import * as sdk from "postman-collection";
 
 function fetchWithtimeout(
   url: string,
@@ -156,8 +156,9 @@ async function makeRequest(
         myHeaders.delete("Content-Type");
 
         myBody = new FormData();
-        if (Array.isArray(request.body.formdata.members)) {
-          for (const data of request.body.formdata.members) {
+        const members = (request.body as any)?.formdata?.members;
+        if (Array.isArray(members)) {
+          for (const data of members) {
             if (data.key && data.value.content) {
               myBody.append(data.key, data.value.content);
             }

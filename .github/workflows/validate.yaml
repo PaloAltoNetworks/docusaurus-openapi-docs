@@ -11,6 +11,7 @@ env:
 
 jobs:
   prepare-yarn-cache:
+    if: ${{ github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' }}
     name: Prepare Cache
     runs-on: ubuntu-latest
     steps:
@@ -29,6 +30,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
   lint:
+    if: ${{ github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' }}
     name: Lint
     needs: prepare-yarn-cache
     runs-on: ubuntu-latest
@@ -51,6 +53,7 @@ jobs:
         run: yarn lint --max-warnings 0
 
   test:
+    if: ${{ github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' }}
     name: Test
     needs: prepare-yarn-cache
     runs-on: ubuntu-latest
@@ -71,6 +74,7 @@ jobs:
         run: yarn test
 
   cypress:
+    if: ${{ github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' }}
     name: Cypress
     needs: prepare-yarn-cache
     runs-on: ubuntu-latest

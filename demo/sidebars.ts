@@ -47,6 +47,10 @@ const sidebars: SidebarsConfig = {
       id: "advanced",
     },
     {
+      type: "doc",
+      id: "vendor-extensions",
+    },
+    {
       type: "category",
       label: "Customization",
       link: {

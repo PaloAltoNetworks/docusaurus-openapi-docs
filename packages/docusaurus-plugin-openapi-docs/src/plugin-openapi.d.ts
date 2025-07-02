@@ -5,10 +5,11 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import type { TOCItem } from "@docusaurus/mdx-loader";
+import type { VersionBanner } from "@docusaurus/plugin-content-docs";
 import type { FrontMatter as DocsFrontMatter } from "@docusaurus/types";
 import type { Props as DocsProps } from "@docusaurus/types";
 
-// TODO: figure out how to import this
 declare module "docusaurus-plugin-openapi-docs" {
   import type { PropSidebars } from "@docusaurus/plugin-content-docs-types";
 
@@ -77,7 +78,7 @@ declare module "@theme/ApiItem" {
       readonly frontMatter: FrontMatter;
       readonly metadata: Metadata;
       readonly contentTitle: string | undefined;
-      readonly toc: array | undefined;
+      readonly toc: readonly TOCItem[] | undefined;
       (): JSX.Element;
     };
   }

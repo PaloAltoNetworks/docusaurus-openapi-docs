@@ -9,6 +9,7 @@ on:
 
 jobs:
   build-size:
+    if: ${{ github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' }}
     name: Build Size Report
     timeout-minutes: 30
     runs-on: ubuntu-latest
@@ -29,6 +30,7 @@ jobs:
           compression: none
 
   build-time:
+    if: ${{ github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' }}
     name: Build Time Perf
     timeout-minutes: 30
     runs-on: ubuntu-latest
