@@ -85,12 +85,12 @@ function CardLayout({
         {icon} {title}
       </Heading>
       {description && (
-        <p
+        <Markdown
           className={clsx("text--truncate", styles.cardDescription)}
           title={description}
         >
-          <Markdown>{description}</Markdown>
-        </p>
+          {description}
+        </Markdown>
       )}
     </CardContainer>
   );
