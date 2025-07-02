@@ -67,6 +67,9 @@
   --openapi-code-tab-border-color-java: #0374bd;
   --openapi-code-tab-border-color-powershell: #00adef;
   --openapi-code-tab-shadow-color-python: rgba(255, 219, 80, 0.25);
+  --openapi-code-tab-shadow-color-curl: var(
+    --openapi-code-tab-shadow-color-bash
+  );
   --openapi-code-tab-shadow-color-bash: rgba(250, 56, 62, 0.25);
   --openapi-code-tab-shadow-color-go: rgba(84, 199, 236, 0.25);
   --openapi-code-tab-shadow-color-js: rgba(255, 186, 0, 0.25);
