@@ -274,11 +274,19 @@ function createItems(
   for (let [path, pathObject] of Object.entries(
     openapiData["x-webhooks"] ?? openapiData["webhooks"] ?? {}
   )) {
+    const eventName = path;
     path = "webhook";
     const { $ref, description, parameters, servers, summary, ...rest } =
       pathObject;
     for (let [method, operationObject] of Object.entries({ ...rest })) {
       method = "event";
+      if (
+        operationObject.summary === undefined &&
+        operationObject.operationId === undefined
+      ) {
+        operationObject.summary = eventName;
+      }
+
       const title =
         operationObject.summary ??
         operationObject.operationId ??
@@ -290,7 +298,7 @@ function createItems(
 
       const baseId = operationObject.operationId
         ? kebabCase(operationObject.operationId)
-        : kebabCase(operationObject.summary);
+        : kebabCase(operationObject.summary ?? eventName);
 
       const extensions = [];
       const commonExtensions = ["x-codeSamples"];
