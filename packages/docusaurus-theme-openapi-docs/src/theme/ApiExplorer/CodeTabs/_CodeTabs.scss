@@ -197,7 +197,11 @@ body[class="ReactModal__Body--open"] {
   }
 
   &.active {
-    box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-curl);
+    box-shadow: 0 0 0 3px
+      var(
+        --openapi-code-tab-shadow-color-curl,
+        var(--openapi-code-tab-shadow-color-bash)
+      );
     border-color: var(--ifm-color-danger);
   }
 }
