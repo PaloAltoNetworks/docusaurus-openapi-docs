@@ -28,9 +28,9 @@
     "watch": "concurrently --names \"lib,lib-next,tsc\" --kill-others \"yarn babel:lib --watch\" \"yarn babel:lib-next --watch\" \"yarn tsc --watch\""
   },
   "devDependencies": {
-    "@docusaurus/theme-classic": "^3.8.1",
-    "@docusaurus/theme-common": "^3.8.1",
-    "@docusaurus/types": "^3.8.1",
+    "@docusaurus/theme-classic": "^3.5.0",
+    "@docusaurus/theme-common": "^3.5.0",
+    "@docusaurus/types": "^3.5.0",
     "@types/crypto-js": "^4.2.2",
     "@types/file-saver": "^2.0.7",
     "@types/lodash": "^4.17.20",
