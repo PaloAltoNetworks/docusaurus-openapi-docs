@@ -16,7 +16,7 @@ import type {
 import {
   useDocById,
   findFirstSidebarItemLink,
-} from "@docusaurus/plugin-content-docs/client";
+} from "@docusaurus/plugin-content-docs/lib/client/docsUtils";
 import { usePluralForm } from "@docusaurus/theme-common";
 import { translate } from "@docusaurus/Translate";
 import type { Props } from "@theme/DocCard";
