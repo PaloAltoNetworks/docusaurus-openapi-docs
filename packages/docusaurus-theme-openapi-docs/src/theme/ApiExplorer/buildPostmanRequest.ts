@@ -12,7 +12,7 @@ import {
   ServerObject,
 } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import cloneDeep from "lodash/cloneDeep";
-import sdk from "postman-collection";
+import * as sdk from "postman-collection";
 
 type Param = {
   value?: string | string[];
@@ -73,7 +73,7 @@ function setQueryParams(postman: sdk.Request, queryParams: Param[]) {
             ([key, val]) =>
               new sdk.QueryParam({
                 key: `${param.name}[${key}]`,
-                value: val,
+                value: String(val),
               })
           );
         } else if (param.explode) {
@@ -81,7 +81,7 @@ function setQueryParams(postman: sdk.Request, queryParams: Param[]) {
             ([key, val]) =>
               new sdk.QueryParam({
                 key: key,
-                value: val,
+                value: String(val),
               })
           );
         } else {
@@ -181,7 +181,10 @@ function setPathParams(postman: sdk.Request, pathParams: Param[]) {
     });
   });
 
-  postman.url.variables.assimilate(source, false);
+  postman.url.variables.assimilate(
+    source.filter((v): v is sdk.Variable => v !== undefined),
+    false
+  );
 }
 
 function buildCookie(cookieParams: Param[]) {
@@ -207,7 +210,9 @@ function buildCookie(cookieParams: Param[]) {
                 ([key, val]) =>
                   new sdk.Cookie({
                     key: key,
-                    value: val,
+                    value: String(val),
+                    domain: "",
+                    path: "",
                   })
               );
             } else {
@@ -217,6 +222,8 @@ function buildCookie(cookieParams: Param[]) {
                 value: Object.entries(jsonResult)
                   .map(([key, val]) => `${key},${val}`)
                   .join(","),
+                domain: "",
+                path: "",
               });
             }
           }
@@ -224,7 +231,9 @@ function buildCookie(cookieParams: Param[]) {
           // Handle scalar values
           return new sdk.Cookie({
             key: param.name,
-            value: param.value,
+            value: String(param.value),
+            domain: "",
+            path: "",
           });
         }
       }

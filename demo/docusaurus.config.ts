@@ -9,6 +9,7 @@ import { myCustomApiMdGenerator } from "./customMdGenerators";
 const config: Config = {
   future: {
     experimental_faster: (process.env.DOCUSAURUS_FASTER ?? "true") === "true",
+    v4: true,
   },
 
   title: "Docusaurus OpenAPI Docs",

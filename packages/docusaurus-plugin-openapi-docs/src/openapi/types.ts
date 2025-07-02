@@ -12,10 +12,6 @@ import type {
   JSONSchema7TypeName,
 } from "json-schema";
 
-interface Map<T> {
-  [key: string]: T;
-}
-
 export interface OpenApiObject {
   openapi: string;
   info: InfoObject;
@@ -74,7 +70,7 @@ export interface LicenseObject {
 export interface ServerObject {
   url: string;
   description?: string;
-  variables?: Map<ServerVariable>;
+  variables?: Record<string, ServerVariable>;
 }
 
 export interface ServerVariable {
@@ -84,32 +80,32 @@ export interface ServerVariable {
 }
 
 export interface ComponentsObject {
-  schemas?: Map<SchemaObject>;
-  responses?: Map<ResponseObject>;
-  parameters?: Map<ParameterObject>;
-  examples?: Map<ExampleObject>;
-  requestBodies?: Map<RequestBodyObject>;
-  headers?: Map<HeaderObject>;
-  securitySchemes?: Map<SecuritySchemeObject>;
-  links?: Map<LinkObject>;
-  callbacks?: Map<CallbackObject>;
+  schemas?: Record<string, SchemaObject>;
+  responses?: Record<string, ResponseObject>;
+  parameters?: Record<string, ParameterObject>;
+  examples?: Record<string, ExampleObject>;
+  requestBodies?: Record<string, RequestBodyObject>;
+  headers?: Record<string, HeaderObject>;
+  securitySchemes?: Record<string, SecuritySchemeObject>;
+  links?: Record<string, LinkObject>;
+  callbacks?: Record<string, CallbackObject>;
 }
 
 export interface ComponentsObjectWithRef {
-  schemas?: Map<SchemaObjectWithRef | ReferenceObject>;
-  responses?: Map<ResponseObjectWithRef | ReferenceObject>;
-  parameters?: Map<ParameterObjectWithRef | ReferenceObject>;
-  examples?: Map<ExampleObject | ReferenceObject>;
-  requestBodies?: Map<RequestBodyObjectWithRef | ReferenceObject>;
-  headers?: Map<HeaderObjectWithRef | ReferenceObject>;
-  securitySchemes?: Map<SecuritySchemeObject | ReferenceObject>;
-  links?: Map<LinkObject | ReferenceObject>;
-  callbacks?: Map<CallbackObjectWithRef | ReferenceObject>;
+  schemas?: Record<string, SchemaObjectWithRef | ReferenceObject>;
+  responses?: Record<string, ResponseObjectWithRef | ReferenceObject>;
+  parameters?: Record<string, ParameterObjectWithRef | ReferenceObject>;
+  examples?: Record<string, ExampleObject | ReferenceObject>;
+  requestBodies?: Record<string, RequestBodyObjectWithRef | ReferenceObject>;
+  headers?: Record<string, HeaderObjectWithRef | ReferenceObject>;
+  securitySchemes?: Record<string, SecuritySchemeObject | ReferenceObject>;
+  links?: Record<string, LinkObject | ReferenceObject>;
+  callbacks?: Record<string, CallbackObjectWithRef | ReferenceObject>;
 }
 
-export type PathsObject = Map<PathItemObject>;
+export type PathsObject = Record<string, PathItemObject>;
 
-export type PathsObjectWithRef = Map<PathItemObjectWithRef>;
+export type PathsObjectWithRef = Record<string, PathItemObjectWithRef>;
 
 export interface PathItemObject {
   $ref?: string;
@@ -152,12 +148,12 @@ export interface OperationObject {
   parameters?: ParameterObject[];
   requestBody?: RequestBodyObject;
   responses: ResponsesObject;
-  callbacks?: Map<CallbackObject>;
+  callbacks?: Record<string, CallbackObject>;
   deprecated?: boolean;
   security?: SecurityRequirementObject[];
   servers?: ServerObject[];
-
   // extensions
+  "x-position"?: number;
   "x-deprecated-description"?: string;
 }
 
@@ -170,7 +166,7 @@ export interface OperationObjectWithRef {
   parameters?: (ParameterObjectWithRef | ReferenceObject)[];
   requestBody?: RequestBodyObjectWithRef | ReferenceObject;
   responses: ResponsesObjectWithRef;
-  callbacks?: Map<CallbackObjectWithRef | ReferenceObject>;
+  callbacks?: Record<string, CallbackObjectWithRef | ReferenceObject>;
   deprecated?: boolean;
   security?: SecurityRequirementObject[];
   servers?: ServerObject[];
@@ -197,9 +193,9 @@ export interface ParameterObject {
   allowReserved?: boolean;
   schema?: SchemaObject;
   example?: any;
-  examples?: Map<ExampleObject>;
+  examples?: Record<string, ExampleObject>;
   //
-  content?: Map<MediaTypeObject>;
+  content?: Record<string, MediaTypeObject>;
   param?: Object;
   // ignoring stylings: matrix, label, form, simple, spaceDelimited,
   // pipeDelimited and deepObject
@@ -219,43 +215,43 @@ export interface ParameterObjectWithRef {
   allowReserved?: boolean;
   schema?: SchemaObjectWithRef | ReferenceObject;
   example?: any;
-  examples?: Map<ExampleObject | ReferenceObject>;
+  examples?: Record<string, ExampleObject | ReferenceObject>;
   //
-  content?: Map<MediaTypeObjectWithRef>;
+  content?: Record<string, MediaTypeObjectWithRef>;
   // ignoring stylings: matrix, label, form, simple, spaceDelimited,
   // pipeDelimited and deepObject
 }
 
 export interface RequestBodyObject {
   description?: string;
-  content: Map<MediaTypeObject>;
+  content: Record<string, MediaTypeObject>;
   required?: boolean;
 }
 
 export interface RequestBodyObjectWithRef {
   description?: string;
-  content: Map<MediaTypeObjectWithRef>;
+  content: Record<string, MediaTypeObjectWithRef>;
   required?: boolean;
 }
 
 export interface MediaTypeObject {
   schema?: SchemaObject;
   example?: any;
-  examples?: Map<ExampleObject>;
-  encoding?: Map<EncodingObject>;
+  examples?: Record<string, ExampleObject>;
+  encoding?: Record<string, EncodingObject>;
   type?: any;
 }
 
 export interface MediaTypeObjectWithRef {
   schema?: SchemaObjectWithRef | ReferenceObject;
   example?: any;
-  examples?: Map<ExampleObject | ReferenceObject>;
-  encoding?: Map<EncodingObjectWithRef>;
+  examples?: Record<string, ExampleObject | ReferenceObject>;
+  encoding?: Record<string, EncodingObjectWithRef>;
 }
 
 export interface EncodingObject {
   contentType?: string;
-  headers?: Map<HeaderObject>;
+  headers?: Record<string, HeaderObject>;
   style?: string;
   explode?: boolean;
   allowReserved?: boolean;
@@ -263,35 +259,36 @@ export interface EncodingObject {
 
 export interface EncodingObjectWithRef {
   contentType?: string;
-  headers?: Map<HeaderObjectWithRef | ReferenceObject>;
+  headers?: Record<string, HeaderObjectWithRef | ReferenceObject>;
   style?: string;
   explode?: boolean;
   allowReserved?: boolean;
 }
 
-export type ResponsesObject = Map<ResponseObject>;
+export type ResponsesObject = Record<string, ResponseObject>;
 
-export type ResponsesObjectWithRef = Map<
+export type ResponsesObjectWithRef = Record<
+  string,
   ResponseObjectWithRef | ReferenceObject
 >;
 
 export interface ResponseObject {
   description: string;
-  headers?: Map<HeaderObject>;
-  content?: Map<MediaTypeObject>;
-  links?: Map<LinkObject>;
+  headers?: Record<string, HeaderObject>;
+  content?: Record<string, MediaTypeObject>;
+  links?: Record<string, LinkObject>;
 }
 
 export interface ResponseObjectWithRef {
   description: string;
-  headers?: Map<HeaderObjectWithRef | ReferenceObject>;
-  content?: Map<MediaTypeObjectWithRef>;
-  links?: Map<LinkObject | ReferenceObject>;
+  headers?: Record<string, HeaderObjectWithRef | ReferenceObject>;
+  content?: Record<string, MediaTypeObjectWithRef>;
+  links?: Record<string, LinkObject | ReferenceObject>;
 }
 
-export type CallbackObject = Map<PathItemObject>;
+export type CallbackObject = Record<string, PathItemObject>;
 
-export type CallbackObjectWithRef = Map<PathItemObjectWithRef>;
+export type CallbackObjectWithRef = Record<string, PathItemObjectWithRef>;
 
 export interface ExampleObject {
   summary?: string;
@@ -303,7 +300,7 @@ export interface ExampleObject {
 export interface LinkObject {
   operationRef?: string;
   operationId?: string;
-  parameters?: Map<any>;
+  parameters?: Record<string, any>;
   requestBody?: any;
   description?: string;
   server?: ServerObject;
@@ -349,7 +346,7 @@ export type SchemaObject = Omit<
   anyOf?: SchemaObject[];
   not?: SchemaObject;
   items?: SchemaObject;
-  properties?: Map<SchemaObject>;
+  properties?: Record<string, SchemaObject>;
   additionalProperties?: boolean | SchemaObject;
 
   // OpenAPI additions
@@ -383,7 +380,7 @@ export type SchemaObjectWithRef = Omit<
   anyOf?: (SchemaObject | ReferenceObject)[];
   not?: SchemaObject | ReferenceObject;
   items?: SchemaObject | ReferenceObject;
-  properties?: Map<SchemaObject | ReferenceObject>;
+  properties?: Record<string, SchemaObject | ReferenceObject>;
   additionalProperties?: boolean | SchemaObject | ReferenceObject;
 
   // OpenAPI additions
@@ -399,7 +396,7 @@ export type SchemaObjectWithRef = Omit<
 
 export interface DiscriminatorObject {
   propertyName: string;
-  mapping?: Map<string>;
+  mapping?: Record<string, string>;
 }
 
 export interface XMLObject {
@@ -455,7 +452,7 @@ export interface OAuthFlowObject {
   authorizationUrl?: string; // required for some
   tokenUrl?: string; // required for some
   refreshUrl?: string;
-  scopes: Map<string>;
+  scopes: Record<string, string>;
 }
 
-export type SecurityRequirementObject = Map<string[]>;
+export type SecurityRequirementObject = Record<string, string[]>;

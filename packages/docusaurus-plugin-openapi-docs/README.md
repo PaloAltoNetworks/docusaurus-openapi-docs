@@ -41,17 +41,17 @@ Key Features:
 
 | Docusaurus OpenAPI Docs | Docusaurus      |
 | ----------------------- | --------------- |
-| 4.0.x (current)         | `3.5.0 - 3.7.x` |
+| 4.0.x (current)         | `3.5.0 - 3.8.1` |
 | 3.0.x (end-of-support)  | `3.0.1 - 3.4.0` |
 | 2.2.3 (legacy)          | `2.4.1 - 2.4.3` |
 | 1.7.3 (end-of-support)  | `2.0.1 - 2.2.0` |
 
 ## Bootstrapping from Template (new Docusaurus site)
 
-Run the following to bootstrap a Docsaurus v3 site (classic theme) with `docusaurus-openapi-docs`:
+Run the following to bootstrap a Docusaurus v3 site (classic theme) with `docusaurus-openapi-docs`:
 
 ```bash
-npx create-docusaurus@3.7.0 my-website --package-manager yarn
+npx create-docusaurus@3.8.1 my-website --package-manager yarn
 ```
 
 > When prompted to select a template choose `Git repository`.
@@ -189,15 +189,17 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 | `sidebarGenerators`  | `object`  | `null`  | Optional: Customize sidebar rendering with callback functions.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 
 > You may optionally configure a `sidebarOptions`. In doing so, an individual `sidebar.js` slice with the configured options will be generated within the respective `outputDir`.
+> Use `x-position` vendor extension (or the front matter `position`) on operations to explicitly order sidebar items.
 
 `versions` can be configured with the following options:
 
-| Name       | Type     | Default | Description                                                                                                              |
-| ---------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `specPath` | `string` | `null`  | Designated URL or path to the source of an OpenAPI specification file or directory of micro OpenAPI specification files. |
-| `ouputDir` | `string` | `null`  | Desired output path for versioned, generated MDX files.                                                                  |
-| `label`    | `string` | `null`  | _Optional:_ Version label used when generating version selector dropdown menu.                                           |
-| `baseUrl`  | `string` | `null`  | _Optional:_ Version base URL used when generating version selector dropdown menu.                                        |
+| Name          | Type     | Default | Description                                                                                                                |
+| ------------- | -------- | ------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `specPath`    | `string` | `null`  | Designated URL or path to the source of an OpenAPI specification file or a directory of micro OpenAPI specification files. |
+| `outputDir`   | `string` | `null`  | Desired output path for versioned, generated MDX files.                                                                    |
+| `label`       | `string` | `null`  | _Optional:_ Version label used when generating the version selector dropdown menu.                                         |
+| `baseUrl`     | `string` | `null`  | _Optional:_ Version base URL used when generating the version selector dropdown menu.                                      |
+| `downloadUrl` | `string` | `null`  | _Optional:_ Designated URL for downloading the versioned OpenAPI specification.                                            |
 
 > All versions will automatically inherit `sidebarOptions` from the parent/base config.
 
@@ -219,6 +221,24 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 | Name            | Type       | Default | Description                                                                                                                                                                                                                                      |
 | --------------- | ---------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `createDocItem` | `function` | `null`  | Optional: Returns a `SidebarItemDoc` object containing metadata for a sidebar item.<br/><br/>**Function type:** `(item: ApiPageMetadata \| SchemaPageMetadata, context: { sidebarOptions: SidebarOptions; basePath: string }) => SidebarItemDoc` |
+
+## Supported Vendor Extensions
+
+The plugin extracts a number of vendor extensions from the OpenAPI spec to enrich the generated docs. The theme renders some of these values as part of the UI.
+
+| Extension                                  | Purpose                                                               |
+| ------------------------------------------ | --------------------------------------------------------------------- |
+| `x-codeSamples`                            | Operation level code snippets displayed in the API Explorer.          |
+| `x-tagGroups`                              | Groups tags in the sidebar navigation.                                |
+| `x-tags`                                   | Assigns tags to schema objects so they appear with tagged operations. |
+| `x-position`                               | Controls ordering of items in the sidebar.                            |
+| `x-logo` / `x-dark-logo`                   | Provides logos for light and dark themes on the intro page.           |
+| `x-deprecated-description`                 | Custom text shown for deprecated operations.                          |
+| `x-webhooks`                               | Defines webhook events.                                               |
+| `x-displayName`                            | Overrides tag display names.                                          |
+| `x-enumDescription` / `x-enumDescriptions` | Documents enum values.                                                |
+
+Other ReDoc specific extensions such as `x-circular-ref`, `x-code-samples` (deprecated), `x-examples`, `x-ignoredHeaderParameters`, `x-nullable`, `x-servers`, `x-traitTag`, `x-additionalPropertiesName`, and `x-explicitMappingOnly` are ignored when extracting custom data.
 
 ## CLI Usage
 
@@ -329,11 +349,11 @@ yarn docusaurus gen-api-docs:version petstore:all
 
 > This will generate API docs for all of the OpenAPI specification (OAS) files referenced in your `versions` config and will also generate a `versions.json` file.
 
-> Substitue `all` with a specific version ID to generate/clean a specific version. Generating for `all` or a specific version ID will automatically update the `versions.json` file.
+> Substitute `all` with a specific version ID to generate or clean a specific version. Generating for `all` or a single version ID will automatically update the `versions.json` file.
 
 ## Developer Quick Start
 
-> Looking to make a contribution? Make sure to checkout out our contributing guide.
+> Looking to make a contribution? Make sure to check out our contributing guide.
 
 After [forking](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/fork) the main repository, run the following:
 

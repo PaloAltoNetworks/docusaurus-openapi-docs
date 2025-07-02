@@ -96,7 +96,7 @@ export default function CodeBlockString({
                     getLineProps={getLineProps}
                     getTokenProps={getTokenProps}
                     classNames={lineClassNames[i]}
-                    showLineNumbers={showLineNumbers}
+                    showLineNumbers={!!showLineNumbers}
                   />
                 ))}
               </code>
@@ -122,9 +122,9 @@ export default function CodeBlockString({
             )}
             code={code}
             language={(language ?? "text") as Language}
-            showLineNumbers={showLineNumbers}
+            showLineNumbers={!!showLineNumbers}
             blockClassName={blockClassName}
-            title={title}
+            title={typeof title === "string" ? title : undefined}
             lineClassNames={lineClassNames}
           />
         </div>

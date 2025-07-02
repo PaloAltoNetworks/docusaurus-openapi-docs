@@ -1,3 +1,41 @@
+## 4.5.1 (Jun 27, 2025)
+
+High level enhancements
+
+- Various bug fixes
+
+Other enhancements and bug fixes
+
+- Fix Postman request initialization ([#1181](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1181))
+- Add AGENTS guidelines ([#1179](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1179))
+
+## 4.5.0 (Jun 27, 2025)
+
+High level enhancements
+
+- Support const values, null type, and vendor extensions for sidebar order
+- Improve schema support for array items, type, and format
+
+Other enhancements and bug fixes
+
+- docs: update compatibility for docusaurus 3.8.1 ([#1177](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1177))
+- chore(demo): upgrade Docusaurus to v3.8.1 ([#1176](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1176))
+- chore: add typings and remove placeholders ([#1175](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1175))
+- fix types for plugin openapi ([#1174](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1174))
+- refactor: replace Map type with Record ([#1173](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1173))
+- refactor(theme): clean up type definitions ([#1172](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1172))
+- refactor: change ResponseSamples to CodeSamples ([#1162](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1162))
+- refactor: refactor request and response example ([#1161](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1161))
+- Change the tab label of anyOf/oneOf ([#1167](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1167))
+- docs: fix typos and tables ([#1170](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1170))
+- chore: restrict workflows to main repo ([#1169](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1169))
+- [Enhancement] Add vendor extension support for positioning sidebar items ([#1160](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1160))
+- feat: support allOf, anyOf, and oneOf schemas with properties in array items ([#1156](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1156))
+- feat: support null type ([#1155](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1155))
+- Add support for apiKey in query and cookie param ([#1151](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1151))
+- Add type and format to schema ([#1148](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1148))
+- feat: support const for OAS 3.1.1 ([#1143](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1143))
+
 ## 4.4.0 (May 2, 2025)
 
 High level enhancements

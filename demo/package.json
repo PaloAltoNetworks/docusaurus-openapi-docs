@@ -1,6 +1,6 @@
 {
   "name": "demo",
-  "version": "4.4.0",
+  "version": "4.5.1",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
@@ -21,13 +21,13 @@
     "re-gen": "yarn clean-all-versions && yarn gen-all-versions"
   },
   "dependencies": {
-    "@docusaurus/core": "3.7.0",
-    "@docusaurus/faster": "3.7.0",
-    "@docusaurus/plugin-google-gtag": "3.7.0",
-    "@docusaurus/preset-classic": "3.7.0",
+    "@docusaurus/core": "3.8.1",
+    "@docusaurus/faster": "3.8.1",
+    "@docusaurus/plugin-google-gtag": "3.8.1",
+    "@docusaurus/preset-classic": "3.8.1",
     "clsx": "^1.1.1",
-    "docusaurus-plugin-openapi-docs": "^4.4.0",
-    "docusaurus-theme-openapi-docs": "^4.4.0",
+    "docusaurus-plugin-openapi-docs": "^4.5.1",
+    "docusaurus-theme-openapi-docs": "^4.5.1",
     "prism-react-renderer": "^2.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
