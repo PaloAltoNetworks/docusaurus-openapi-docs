@@ -6,9 +6,8 @@ paths:
   /docs:
     get:
       summary: Doc card operation
-      description: |
-        Returns documentation.
-        Supports **markdown** and <b>HTML</b> in descriptions.
+      description: >
+        Returns documentation with **markdown** and <b>HTML</b> in descriptions.
       tags:
         - docCards
       responses:
