@@ -49,8 +49,10 @@ describe("openapi", () => {
       expect(tag?.description).toBe(
         "This tag shows **markdown** and <b>HTML</b> in the doc card."
       );
-      const op = yaml?.data.paths?.["/docs-admon"]?.get;
-      expect(op?.description).toContain(":::info");
+      const op = yaml?.data.paths?.["/docs"]?.get;
+      expect(op?.description.trim()).toBe(
+        "Returns documentation with **markdown** and <b>HTML</b> in descriptions."
+      );
     });
   });
 });
