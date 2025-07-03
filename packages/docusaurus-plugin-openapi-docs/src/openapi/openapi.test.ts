@@ -50,7 +50,7 @@ describe("openapi", () => {
         "This tag shows **markdown** and <b>HTML</b> in the doc card."
       );
       const op = yaml?.data.paths?.["/docs"]?.get;
-      expect(op?.description.trim()).toBe(
+      expect(op?.description?.trim()).toBe(
         "Returns documentation with **markdown** and <b>HTML</b> in descriptions."
       );
     });
