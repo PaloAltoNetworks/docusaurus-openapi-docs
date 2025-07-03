@@ -13,6 +13,18 @@ paths:
       responses:
         "200":
           description: OK
+  /docs-admon:
+    get:
+      summary: Doc card admonition operation
+      description: >
+        :::info
+        Returns documentation with **markdown** and <b>HTML</b> in descriptions inside an admonition.
+        :::
+      tags:
+        - docCards
+      responses:
+        "200":
+          description: OK
 
 tags:
   - name: docCards
