@@ -672,7 +672,7 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
     );
   }
 
-  if (schema.items?.anyOf || schema.items?.oneOf) {
+  if (schema.items?.anyOf || schema.items?.oneOf || schema.items?.allOf) {
     return (
       <SchemaNodeDetails
         name={name}
