@@ -23,7 +23,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4
         with:
-          node-version: "18"
+          node-version: "20"
           cache: yarn
       - name: Prepare git
         run: |
