@@ -57,73 +57,75 @@ const ResponseSchemaComponent: React.FC<Props> = ({
           const mediaTypeObject = body.content?.[mimeType];
           const responseExamples = mediaTypeObject?.examples;
           const responseExample = mediaTypeObject?.example;
-          const firstBody = mediaTypeObject?.schema ?? mediaTypeObject;
+          const firstBody = mediaTypeObject?.schema;
 
           if (
-            firstBody === undefined &&
-            responseExample === undefined &&
-            responseExamples === undefined
+            !firstBody ||
+            (firstBody.properties &&
+              Object.keys(firstBody.properties).length === 0)
           ) {
-            return undefined;
-          }
-
-          if (firstBody) {
             return (
               // @ts-ignore
               <TabItem key={mimeType} label={mimeType} value={mimeType}>
-                <SchemaTabs className="openapi-tabs__schema">
-                  {/* @ts-ignore */}
-                  <TabItem key={title} label={title} value={title}>
-                    <Details
-                      className="openapi-markdown__details response"
-                      data-collapsed={false}
-                      open={true}
-                      style={style}
-                      summary={
-                        <>
-                          <summary>
-                            <strong className="openapi-markdown__details-summary-response">
-                              {title}
-                              {body.required === true && (
-                                <span className="openapi-schema__required">
-                                  required
-                                </span>
-                              )}
-                            </strong>
-                          </summary>
-                        </>
-                      }
-                    >
-                      <div style={{ textAlign: "left", marginLeft: "1rem" }}>
-                        {body.description && (
-                          <div
-                            style={{ marginTop: "1rem", marginBottom: "1rem" }}
-                          >
-                            <Markdown>{body.description}</Markdown>
-                          </div>
-                        )}
-                      </div>
-                      <ul style={{ marginLeft: "1rem" }}>
-                        <SchemaNode schema={firstBody} schemaType="response" />
-                      </ul>
-                    </Details>
-                  </TabItem>
-                  {firstBody &&
-                    ExampleFromSchema({
-                      schema: firstBody,
-                      mimeType: mimeType,
-                    })}
-
-                  {responseExamples &&
-                    ResponseExamples({ responseExamples, mimeType })}
-
-                  {responseExample &&
-                    ResponseExample({ responseExample, mimeType })}
-                </SchemaTabs>
+                <div>No schema</div>
               </TabItem>
             );
           }
-          return undefined;
+
+          return (
+            // @ts-ignore
+            <TabItem key={mimeType} label={mimeType} value={mimeType}>
+              <SchemaTabs className="openapi-tabs__schema">
+                {/* @ts-ignore */}
+                <TabItem key={title} label={title} value={title}>
+                  <Details
+                    className="openapi-markdown__details response"
+                    data-collapsed={false}
+                    open={true}
+                    style={style}
+                    summary={
+                      <>
+                        <summary>
+                          <strong className="openapi-markdown__details-summary-response">
+                            {title}
+                            {body.required === true && (
+                              <span className="openapi-schema__required">
+                                required
+                              </span>
+                            )}
+                          </strong>
+                        </summary>
+                      </>
+                    }
+                  >
+                    <div style={{ textAlign: "left", marginLeft: "1rem" }}>
+                      {body.description && (
+                        <div
+                          style={{ marginTop: "1rem", marginBottom: "1rem" }}
+                        >
+                          <Markdown>{body.description}</Markdown>
+                        </div>
+                      )}
+                    </div>
+                    <ul style={{ marginLeft: "1rem" }}>
+                      <SchemaNode schema={firstBody} schemaType="response" />
+                    </ul>
+                  </Details>
+                </TabItem>
+                {firstBody &&
+                  ExampleFromSchema({
+                    schema: firstBody,
+                    mimeType: mimeType,
+                  })}
+
+                {responseExamples &&
+                  ResponseExamples({ responseExamples, mimeType })}
+
+                {responseExample &&
+                  ResponseExample({ responseExample, mimeType })}
+              </SchemaTabs>
+            </TabItem>
+          );
         })}
       </MimeTabs>
     );
