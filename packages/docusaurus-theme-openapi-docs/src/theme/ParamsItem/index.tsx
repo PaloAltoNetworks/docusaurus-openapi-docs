@@ -7,6 +7,7 @@
 
 import React from "react";
 
+import { renderExamplesRecord, renderStringExamples } from "@theme/Example";
 import Markdown from "@theme/Markdown";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
@@ -28,7 +29,7 @@ export interface Props {
   param: {
     description: string;
     example: any;
-    examples: Record<string, ExampleObject>;
+    examples: Record<string, ExampleObject> | undefined;
     name: string;
     required: boolean;
     deprecated: boolean;
@@ -53,18 +54,13 @@ ${enumDescriptions
 };
 
 function ParamsItem({ param, ...rest }: Props) {
-  const {
-    description,
-    example,
-    examples,
-    name,
-    required,
-    deprecated,
-    enumDescriptions,
-  } = param;
+  const { description, name, required, deprecated, enumDescriptions } = param;
 
   let schema = param.schema;
   let defaultValue: string | undefined;
+
+  let examples = param.examples || (schema?.examples as any[] | undefined);
+  let example = param.example || schema?.example;
 
   if (!schema) {
     schema = { type: "any" };
@@ -140,35 +136,18 @@ function ParamsItem({ param, ...rest }: Props) {
   const renderExample = guard(toString(example), (example) => (
     <div>
       <strong>Example: </strong>
-      {example}
+      <code>{example}</code>
     </div>
   ));
 
   const renderExamples = guard(examples, (examples) => {
-    const exampleEntries = Object.entries(examples);
-    return (
-      <>
-        <strong>Examples:</strong>
-        <SchemaTabs>
-          {exampleEntries.map(([exampleName, exampleProperties]) => (
-            // @ts-ignore
-            <TabItem value={exampleName} label={exampleName}>
-              {exampleProperties.summary && <p>{exampleProperties.summary}</p>}
-              {exampleProperties.description && (
-                <p>
-                  <strong>Description: </strong>
-                  <span>{exampleProperties.description}</span>
-                </p>
-              )}
-              <p>
-                <strong>Example: </strong>
-                <code>{exampleProperties.value}</code>
-              </p>
-            </TabItem>
-          ))}
-        </SchemaTabs>
-      </>
-    );
+    if (!examples) {
+      return undefined;
+    }
+    if (Array.isArray(examples)) {
+      return renderStringExamples(examples);
+    }
+    return renderExamplesRecord(examples);
   });
 
   return (

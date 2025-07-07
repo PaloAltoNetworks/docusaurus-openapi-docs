@@ -54,10 +54,10 @@ const ResponseSchemaComponent: React.FC<Props> = ({
     return (
       <MimeTabs className="openapi-tabs__mime" schemaType="response">
         {mimeTypes.map((mimeType: any) => {
-          const responseExamples = body.content![mimeType].examples;
-          const responseExample = body.content![mimeType].example;
-          const firstBody: any =
-            body.content![mimeType].schema ?? body.content![mimeType];
+          const mediaTypeObject = body.content?.[mimeType];
+          const responseExamples = mediaTypeObject?.examples;
+          const responseExample = mediaTypeObject?.example;
+          const firstBody = mediaTypeObject?.schema ?? mediaTypeObject;
 
           if (
             firstBody === undefined &&
