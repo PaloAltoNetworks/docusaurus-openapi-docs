@@ -7,6 +7,7 @@
 
 import React, { ReactNode } from "react";
 
+import { renderStringExamples } from "@theme/Example";
 import Markdown from "@theme/Markdown";
 import clsx from "clsx";
 
@@ -63,6 +64,7 @@ export default function SchemaItem(props: Props) {
   let schemaDescription;
   let defaultValue: string | undefined;
   let example: string | undefined;
+  let examples: string[] | undefined;
   let nullable;
   let enumDescriptions: [string, string][] = [];
   let constValue: string | undefined;
@@ -73,6 +75,7 @@ export default function SchemaItem(props: Props) {
     enumDescriptions = transformEnumDescriptions(schema["x-enumDescriptions"]);
     defaultValue = schema.default;
     example = schema.example;
+    examples = schema.examples;
     nullable =
       schema.nullable ||
       (Array.isArray(schema.type) && schema.type.includes("null")); // support JSON Schema nullable
@@ -213,6 +216,7 @@ export default function SchemaItem(props: Props) {
       {renderConstValue()}
       {renderDefaultValue()}
       {renderExample()}
+      {renderStringExamples(examples)}
       {collapsibleSchemaContent ?? collapsibleSchemaContent}
     </div>
   );
