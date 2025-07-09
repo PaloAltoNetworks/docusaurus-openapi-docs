@@ -62,24 +62,36 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-testing-library": "^4.12.4",
+    "fast-xml-parser": "^4.5.1",
     "husky": "^7.0.2",
     "jest": "^27.3.1",
     "lerna": "^8.1.2",
     "lint-staged": "^11.2.3",
     "nodemon": "^2.0.15",
+    "pixelmatch": "^5.3.0",
+    "playwright": "^1.40.0",
+    "pngjs": "^7.0.0",
     "prettier": "^3.2.5",
     "semver": "^7.3.5",
     "start-server-and-test": "^1.14.0",
     "ts-jest": "^27.0.6",
     "ts-node": "^10.9.2",
-    "typescript": "^5.1",
-    "fast-xml-parser": "^4.5.1",
-    "playwright": "^1.40.0",
-    "pixelmatch": "^5.3.0",
-    "pngjs": "^7.0.0"
+    "typescript": "^5.1"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
+  },
+  "resolutions": {
+    "@cypress/request": "^3.0.0",
+    "axios": "^0.30.0",
+    "semver": "^7.5.2",
+    "jpeg-js": "^0.4.4",
+    "merge": "^2.1.1",
+    "debug": "^4.3.1",
+    "phin": "^3.7.1",
+    "diff": "^3.5.0",
+    "cookie": "^0.7.0",
+    "webpack-dev-server": "^5.2.1"
   },
   "engines": {
     "node": ">=14"
