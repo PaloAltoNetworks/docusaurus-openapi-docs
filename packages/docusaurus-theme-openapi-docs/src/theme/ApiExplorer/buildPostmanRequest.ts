@@ -55,20 +55,10 @@ function setQueryParams(postman: sdk.Request, queryParams: Param[]) {
         }
       }
 
-      const decodedValue = decodeURI(param.value);
-      const tryJson = () => {
-        try {
-          return JSON.parse(decodedValue);
-        } catch (e) {
-          return false;
-        }
-      };
-
-      const jsonResult = tryJson();
-
       // Handle object values
-      if (jsonResult && typeof jsonResult === "object") {
-        if (param.style === "deepObject") {
+      if (param.style === "deepObject") {
+        const jsonResult = tryDecodeJsonParam(param.value);
+        if (jsonResult && typeof jsonResult === "object") {
           return Object.entries(jsonResult).map(
             ([key, val]) =>
               new sdk.QueryParam({
@@ -76,7 +66,10 @@ function setQueryParams(postman: sdk.Request, queryParams: Param[]) {
                 value: String(val),
               })
           );
-        } else if (param.explode) {
+        }
+      } else if (param.explode) {
+        const jsonResult = tryDecodeJsonParam(param.value);
+        if (jsonResult && typeof jsonResult === "object") {
           return Object.entries(jsonResult).map(
             ([key, val]) =>
               new sdk.QueryParam({
@@ -94,17 +87,9 @@ function setQueryParams(postman: sdk.Request, queryParams: Param[]) {
         }
       }
 
-      // Handle boolean values
-      if (typeof decodedValue === "boolean") {
-        return new sdk.QueryParam({
-          key: param.name,
-          value: decodedValue ? "true" : "false",
-        });
-      }
-
       // Parameter allows empty value: "/hello?extended"
       if (param.allowEmptyValue) {
-        if (decodedValue === "true") {
+        if (param.value === "true") {
           return new sdk.QueryParam({
             key: param.name,
             value: null,
@@ -150,18 +135,9 @@ function setPathParams(postman: sdk.Request, pathParams: Param[]) {
       });
     }
 
-    const decodedValue = decodeURI(param.value);
-    const tryJson = () => {
-      try {
-        return JSON.parse(decodedValue);
-      } catch (e) {
-        return false;
-      }
-    };
+    const jsonResult = tryDecodeJsonParam(param.value);
 
-    const jsonResult = tryJson();
-
-    if (typeof jsonResult === "object") {
+    if (jsonResult && typeof jsonResult === "object") {
       if (param.style === "matrix") {
         serializedValue = Object.entries(jsonResult)
           .map(([key, val]) => `;${key}=${val}`)
@@ -172,7 +148,7 @@ function setPathParams(postman: sdk.Request, pathParams: Param[]) {
           .join(",");
       }
     } else {
-      serializedValue = decodedValue || `:${param.name}`;
+      serializedValue = param.value;
     }
 
     return new sdk.Variable({
@@ -191,17 +167,8 @@ function buildCookie(cookieParams: Param[]) {
   const cookies = cookieParams
     .map((param) => {
       if (param.value) {
-        const decodedValue = decodeURI(param.value as string);
-        const tryJson = () => {
-          try {
-            return JSON.parse(decodedValue);
-          } catch (e) {
-            return false;
-          }
-        };
-
-        const jsonResult = tryJson();
-        if (typeof jsonResult === "object") {
+        const jsonResult = tryDecodeJsonParam(param.value as string);
+        if (jsonResult && typeof jsonResult === "object") {
           if (param.style === "form") {
             // Handle form style
             if (param.explode) {
@@ -266,16 +233,9 @@ function setHeaders(
 
   headerParams.forEach((param) => {
     if (param.value) {
-      const decodedValue = decodeURI(param.value as string);
-      const tryJson = () => {
-        try {
-          return JSON.parse(decodedValue);
-        } catch (e) {
-          return false;
-        }
-      };
-
-      const jsonResult = tryJson();
+      const jsonResult = Array.isArray(param.value)
+        ? param.value.map(tryDecodeJsonParam)
+        : tryDecodeJsonParam(param.value);
       if (Array.isArray(param.value)) {
         if (param.style === "simple") {
           if (param.explode) {
@@ -321,6 +281,14 @@ function setHeaders(
 
   if (cookie) {
     postman.addHeader({ key: "Cookie", value: cookie });
+  }
+}
+
+function tryDecodeJsonParam(value: string): any {
+  try {
+    return JSON.parse(decodeURI(value));
+  } catch (e) {
+    return false;
   }
 }
 
