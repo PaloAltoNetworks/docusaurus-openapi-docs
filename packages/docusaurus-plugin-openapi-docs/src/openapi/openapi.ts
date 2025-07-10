@@ -423,6 +423,7 @@ function createItems(
 
   if (
     options?.showSchemas === true ||
+    options?.generateSchemas === true ||
     Object.entries(openapiData?.components?.schemas ?? {})
       .flatMap(([_, s]) => s["x-tags"])
       .filter((item) => !!item).length > 0
@@ -431,7 +432,11 @@ function createItems(
     for (let [schema, schemaObject] of Object.entries(
       openapiData?.components?.schemas ?? {}
     )) {
-      if (options?.showSchemas === true || schemaObject["x-tags"]) {
+      if (
+        options?.showSchemas === true ||
+        options?.generateSchemas === true ||
+        schemaObject["x-tags"]
+      ) {
         const baseIdSpaces =
           schemaObject?.title?.replace(" ", "-").toLowerCase() ?? "";
         const baseId = kebabCase(baseIdSpaces);
