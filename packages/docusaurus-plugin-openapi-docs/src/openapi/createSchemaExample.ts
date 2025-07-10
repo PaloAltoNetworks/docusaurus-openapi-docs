@@ -56,9 +56,9 @@ const primitives: Primitives = {
   },
 };
 
-type ExampleType = "request" | "response";
+export type ExampleType = "request" | "response";
 
-interface ExampleContext {
+export interface ExampleContext {
   type: ExampleType;
 }
 
