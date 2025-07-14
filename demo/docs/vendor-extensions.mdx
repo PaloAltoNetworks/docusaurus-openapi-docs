@@ -21,4 +21,4 @@ The OpenAPI plugin and theme recognize several [vendor extensions](https://swagg
 | `x-displayName` | Override tag names used for grouping. |
 | `x-enumDescription` / `x-enumDescriptions` | Document individual enum values. |
 
-Other ReDoc extensions such as `x-circular-ref`, `x-code-samples` (deprecated), `x-examples`, `x-ignoredHeaderParameters`, `x-nullable`, `x-servers`, `x-traitTag`, `x-additionalPropertiesName`, and `x-explicitMappingOnly` are detected but ignored when extracting custom extensions.
+Circular references flagged with `x-circular-ref` or detected automatically are serialized as `circular(<title>)`. Other ReDoc extensions such as `x-code-samples` (deprecated), `x-examples`, `x-ignoredHeaderParameters`, `x-nullable`, `x-servers`, `x-traitTag`, `x-additionalPropertiesName`, and `x-explicitMappingOnly` are detected but ignored when extracting custom extensions.

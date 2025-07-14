@@ -238,7 +238,7 @@ The plugin extracts a number of vendor extensions from the OpenAPI spec to enric
 | `x-displayName`                            | Overrides tag display names.                                          |
 | `x-enumDescription` / `x-enumDescriptions` | Documents enum values.                                                |
 
-Other ReDoc specific extensions such as `x-circular-ref`, `x-code-samples` (deprecated), `x-examples`, `x-ignoredHeaderParameters`, `x-nullable`, `x-servers`, `x-traitTag`, `x-additionalPropertiesName`, and `x-explicitMappingOnly` are ignored when extracting custom data.
+Circular references flagged with `x-circular-ref` or detected automatically are serialized as `circular(<title>)`. Other ReDoc specific extensions such as `x-code-samples` (deprecated), `x-examples`, `x-ignoredHeaderParameters`, `x-nullable`, `x-servers`, `x-traitTag`, `x-additionalPropertiesName`, and `x-explicitMappingOnly` are ignored when extracting custom data.
 
 ## CLI Usage
 
