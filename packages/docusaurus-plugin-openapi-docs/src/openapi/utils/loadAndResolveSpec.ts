@@ -123,20 +123,13 @@ async function resolveJsonRefs(specUrlOrObject: object | string) {
   }
 }
 
-function markCircularRefs(obj: any, stack: any[] = []): boolean {
+function markCircularRefs(obj: any, stack: any[] = []): boolean | "circular" {
   if (!obj || typeof obj !== "object") {
     return false;
   }
 
-  const pos = stack.indexOf(obj);
-  if (pos !== -1) {
-    for (let i = pos + 1; i < stack.length; i++) {
-      const cyc = stack[i];
-      if (cyc && typeof cyc === "object") {
-        cyc["x-circular-ref"] = true;
-      }
-    }
-    return true;
+  if (stack.includes(obj)) {
+    return "circular";
   }
 
   stack.push(obj);
@@ -146,7 +139,11 @@ function markCircularRefs(obj: any, stack: any[] = []): boolean {
     for (let i = 0; i < obj.length; i++) {
       const val = obj[i];
       if (typeof val === "object" && val !== null) {
-        if (markCircularRefs(val, stack)) {
+        const res = markCircularRefs(val, stack);
+        if (res) {
+          if (res === "circular") {
+            obj[i] = { ...val, "x-circular-ref": true };
+          }
           foundCircular = true;
         }
       }
@@ -155,7 +152,11 @@ function markCircularRefs(obj: any, stack: any[] = []): boolean {
     for (const key of Object.keys(obj)) {
       const val = obj[key];
       if (typeof val === "object" && val !== null) {
-        if (markCircularRefs(val, stack)) {
+        const res = markCircularRefs(val, stack);
+        if (res) {
+          if (res === "circular") {
+            obj[key] = { ...val, "x-circular-ref": true };
+          }
           foundCircular = true;
         }
       }

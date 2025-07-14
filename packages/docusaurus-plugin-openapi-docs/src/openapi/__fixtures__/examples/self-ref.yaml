@@ -1,0 +1,15 @@
+openapi: 3.0.3
+info:
+  title: Self Ref Example
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    Node:
+      title: Node
+      type: object
+      properties:
+        name:
+          type: string
+        child:
+          $ref: "#/components/schemas/Node"
