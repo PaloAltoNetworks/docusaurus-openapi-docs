@@ -783,17 +783,49 @@ export function createNodes(
   }
 
   if (schema.allOf !== undefined) {
-    const mergedSchemas = mergeAllOf(schema) as SchemaObject;
-
     if (
-      mergedSchemas.oneOf !== undefined ||
-      mergedSchemas.anyOf !== undefined
+      schema.allOf.length &&
+      typeof schema.allOf[0] === "string" &&
+      (schema.allOf[0] as string).includes("circular")
     ) {
-      nodes.push(createAnyOneOf(mergedSchemas));
-    }
+      nodes.push(
+        create("div", {
+          style: {
+            marginTop: ".5rem",
+            marginBottom: ".5rem",
+            marginLeft: "1rem",
+          },
+          children: createDescription(schema.allOf[0]),
+        })
+      );
 
-    if (mergedSchemas.properties !== undefined) {
-      nodes.push(createProperties(mergedSchemas));
+      const rest = schema.allOf.slice(1);
+      if (rest.length) {
+        const mergedSchemas = mergeAllOf({ allOf: rest } as SchemaObject);
+        if (
+          mergedSchemas.oneOf !== undefined ||
+          mergedSchemas.anyOf !== undefined
+        ) {
+          nodes.push(createAnyOneOf(mergedSchemas));
+        }
+
+        if (mergedSchemas.properties !== undefined) {
+          nodes.push(createProperties(mergedSchemas));
+        }
+      }
+    } else {
+      const mergedSchemas = mergeAllOf(schema) as SchemaObject;
+
+      if (
+        mergedSchemas.oneOf !== undefined ||
+        mergedSchemas.anyOf !== undefined
+      ) {
+        nodes.push(createAnyOneOf(mergedSchemas));
+      }
+
+      if (mergedSchemas.properties !== undefined) {
+        nodes.push(createProperties(mergedSchemas));
+      }
     }
   }
 
