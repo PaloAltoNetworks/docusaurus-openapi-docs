@@ -142,7 +142,7 @@ function markCircularRefs(obj: any, stack: any[] = []): boolean | "circular" {
         const res = markCircularRefs(val, stack);
         if (res) {
           if (res === "circular") {
-            obj[i] = { ...val, "x-circular-ref": true };
+            obj[i] = { title: val.title, "x-circular-ref": true };
           }
           foundCircular = true;
         }
@@ -155,7 +155,7 @@ function markCircularRefs(obj: any, stack: any[] = []): boolean | "circular" {
         const res = markCircularRefs(val, stack);
         if (res) {
           if (res === "circular") {
-            obj[key] = { ...val, "x-circular-ref": true };
+            obj[key] = { title: val.title, "x-circular-ref": true };
           }
           foundCircular = true;
         }
