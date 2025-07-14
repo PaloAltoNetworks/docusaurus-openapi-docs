@@ -92,6 +92,17 @@ export default function SchemaItem(props: Props) {
     <span className="openapi-schema__nullable">nullable</span>
   ));
 
+  const circularMatch =
+    typeof schemaName === "string" && schemaName.startsWith("circular(")
+      ? schemaName.match(/^circular\\(([^)]*)\\)/)
+      : null;
+
+  const renderCircular = guard(circularMatch, () => (
+    <span className="openapi-schema__circular">
+      {circularMatch ? `circular(${circularMatch[1]})` : "circular"}
+    </span>
+  ));
+
   const renderEnumDescriptions = guard(
     getEnumDescriptionMarkdown(enumDescriptions),
     (value) => {
@@ -206,6 +217,7 @@ export default function SchemaItem(props: Props) {
         {renderNullable}
         {renderRequired}
         {renderDeprecated}
+        {renderCircular}
       </span>
       {renderSchemaDescription}
       {renderEnumDescriptions}
