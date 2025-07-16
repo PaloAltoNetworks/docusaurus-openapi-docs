@@ -129,6 +129,7 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+      checks: write
     outputs:
       preview_url: ${{ steps.deploy_preview.outputs.details_url }}
 
