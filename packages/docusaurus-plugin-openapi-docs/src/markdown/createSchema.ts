@@ -783,11 +783,11 @@ export function createNodes(
   }
 
   if (schema.allOf !== undefined) {
-    if (
-      schema.allOf.length &&
-      typeof schema.allOf[0] === "string" &&
-      (schema.allOf[0] as string).includes("circular")
-    ) {
+    const circularIndex = schema.allOf.findIndex((item: any) => {
+      return typeof item === "string" && item.includes("circular");
+    });
+
+    if (circularIndex !== -1) {
       nodes.push(
         create("div", {
           style: {
@@ -795,11 +795,14 @@ export function createNodes(
             marginBottom: ".5rem",
             marginLeft: "1rem",
           },
-          children: createDescription(schema.allOf[0]),
+          children: createDescription(schema.allOf[circularIndex] as string),
         })
       );
 
-      const rest = schema.allOf.slice(1);
+      const rest = schema.allOf
+        .slice(0, circularIndex)
+        .concat(schema.allOf.slice(circularIndex + 1));
+
       if (rest.length) {
         const mergedSchemas = mergeAllOf({ allOf: rest } as SchemaObject);
         if (
