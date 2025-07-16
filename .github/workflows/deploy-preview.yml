@@ -17,12 +17,19 @@ jobs:
     steps:
       - name: Check if actor is org member
         id: is-org-member
-        run: echo "is-org-member-result=$(gh api -X GET orgs/PaloAltoNetworks/memberships/${{ github.actor }} | jq -r .message)" >> "$GITHUB_OUTPUT"
-    env:
-      GH_TOKEN: ${{ secrets.PAT }}
+        run: |
+          status=$(curl -s -o /dev/null -w "%{http_code}" -H "Authorization: Bearer $GH_TOKEN" \
+            https://api.github.com/orgs/PaloAltoNetworks/members/${{ github.actor }})
+          if [ "$status" = "204" ]; then
+            echo "is-org-member-result=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "is-org-member-result=false" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.PAT }}
 
   analyze:
-    if: github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' && needs.precheck.outputs.is-org-member-result == 'null'
+    if: github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' && needs.precheck.outputs.is-org-member-result == 'true'
     name: Analyze
     needs: precheck
     runs-on: ubuntu-latest
@@ -50,7 +57,7 @@ jobs:
         uses: github/codeql-action/analyze@1b549b9259bda1cb5ddde3b41741a82a2d15a841 # v3
 
   analyze_unsafe:
-    if: github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' && needs.precheck.outputs.is-org-member-result != 'null'
+    if: github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' && needs.precheck.outputs.is-org-member-result == 'false'
     name: Analyze Unsafe
     needs: precheck
     runs-on: ubuntu-latest
