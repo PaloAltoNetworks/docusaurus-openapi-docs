@@ -783,11 +783,11 @@ export function createNodes(
   }
 
   if (schema.allOf !== undefined) {
-    const circularIndex = schema.allOf.findIndex((item: any) => {
+    const circularItems = schema.allOf.filter((item: any) => {
       return typeof item === "string" && item.includes("circular");
     });
 
-    if (circularIndex !== -1) {
+    for (const label of circularItems) {
       nodes.push(
         create("div", {
           style: {
@@ -795,29 +795,17 @@ export function createNodes(
             marginBottom: ".5rem",
             marginLeft: "1rem",
           },
-          children: createDescription(schema.allOf[circularIndex] as string),
+          children: createDescription(label as string),
         })
       );
+    }
 
-      const rest = schema.allOf
-        .slice(0, circularIndex)
-        .concat(schema.allOf.slice(circularIndex + 1));
+    const rest = schema.allOf.filter((item: any) => {
+      return !(typeof item === "string" && item.includes("circular"));
+    });
 
-      if (rest.length) {
-        const mergedSchemas = mergeAllOf({ allOf: rest } as SchemaObject);
-        if (
-          mergedSchemas.oneOf !== undefined ||
-          mergedSchemas.anyOf !== undefined
-        ) {
-          nodes.push(createAnyOneOf(mergedSchemas));
-        }
-
-        if (mergedSchemas.properties !== undefined) {
-          nodes.push(createProperties(mergedSchemas));
-        }
-      }
-    } else {
-      const mergedSchemas = mergeAllOf(schema) as SchemaObject;
+    if (rest.length) {
+      const mergedSchemas = mergeAllOf({ allOf: rest } as SchemaObject);
 
       if (
         mergedSchemas.oneOf !== undefined ||
