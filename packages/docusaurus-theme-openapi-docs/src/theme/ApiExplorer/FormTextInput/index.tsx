@@ -8,7 +8,9 @@
 // @ts-nocheck
 import React from "react";
 
+import { translate } from "@docusaurus/Translate";
 import { ErrorMessage } from "@hookform/error-message";
+import { OPENAPI_FORM } from "@theme/translationIds";
 import clsx from "clsx";
 import { useFormContext } from "react-hook-form";
 
@@ -41,7 +43,12 @@ function FormTextInput({
       {paramName ? (
         <input
           {...register(paramName, {
-            required: isRequired ? "This field is required" : false,
+            required: isRequired
+              ? translate({
+                  id: OPENAPI_FORM.FIELD_REQUIRED,
+                  message: "This field is required",
+                })
+              : false,
           })}
           className={clsx("openapi-explorer__form-item-input", {
             error: showErrorMessage,
