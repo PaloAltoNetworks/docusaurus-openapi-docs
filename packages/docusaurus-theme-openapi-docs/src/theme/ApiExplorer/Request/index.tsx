@@ -9,6 +9,7 @@
 import React, { useState } from "react";
 
 import { useDoc } from "@docusaurus/plugin-content-docs/client";
+import { translate } from "@docusaurus/Translate";
 import Accept from "@theme/ApiExplorer/Accept";
 import Authorization from "@theme/ApiExplorer/Authorization";
 import Body from "@theme/ApiExplorer/Body";
@@ -24,6 +25,7 @@ import {
 } from "@theme/ApiExplorer/Response/slice";
 import Server from "@theme/ApiExplorer/Server";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
+import { OPENAPI_REQUEST } from "@theme/translationIds";
 import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 import * as sdk from "postman-collection";
@@ -261,10 +263,14 @@ function Request({ item }: { item: ApiItem }) {
                   setExpandBody(!expandBody);
                 }}
               >
-                Body
+                {translate({ id: OPENAPI_REQUEST.BODY_TITLE, message: "Body" })}
                 {requestBodyRequired && (
                   <span className="openapi-schema__required">
-                    &nbsp;required
+                    &nbsp;
+                    {translate({
+                      id: OPENAPI_REQUEST.REQUIRED_LABEL,
+                      message: "required",
+                    })}
                   </span>
                 )}
               </summary>
@@ -290,14 +296,20 @@ function Request({ item }: { item: ApiItem }) {
                   setExpandAccept(!expandAccept);
                 }}
               >
-                Accept
+                {translate({
+                  id: OPENAPI_REQUEST.ACCEPT_TITLE,
+                  message: "Accept",
+                })}
               </summary>
               <Accept />
             </details>
           )}
           {showRequestButton && item.method !== "event" && (
             <button className="openapi-explorer__request-btn" type="submit">
-              Send API Request
+              {translate({
+                id: OPENAPI_REQUEST.SEND_BUTTON,
+                message: "Send API Request",
+              })}
             </button>
           )}
         </div>
