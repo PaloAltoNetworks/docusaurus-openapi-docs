@@ -346,6 +346,8 @@ yarn build-packages
 yarn watch:demo
 ```
 
+Whenever you modify the plugin or theme sources, run `yarn build-packages` again so the demo picks up your latest code.
+
 ## Credits
 
 Special thanks to [@bourdakos1](https://github.com/bourdakos1) (Nick Bourdakos), the author of [docusaurus-openapi](https://github.com/cloud-annotations/docusaurus-openapi), which this project is heavily based on.

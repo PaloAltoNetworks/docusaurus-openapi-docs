@@ -22,11 +22,19 @@ function serializer(replacer: any, cycleReplacer: any) {
 
   if (cycleReplacer === undefined)
     cycleReplacer = function (key: any, value: any) {
+      if (value?.["x-circular-ref"]) {
+        return value.title ? `circular(${value.title})` : "circular()";
+      }
       if (stack[0] === value) return "circular()";
       return value.title ? `circular(${value.title})` : "circular()";
     };
 
   return function (key: any, value: any) {
+    // Convert objects flagged as circular
+    if (value?.["x-circular-ref"]) {
+      return value.title ? `circular(${value.title})` : "circular()";
+    }
+
     // Resolve discriminator ref pointers
     if (value?.discriminator !== undefined) {
       const parser = new OpenAPIParser(stack[0]);
@@ -115,6 +123,60 @@ async function resolveJsonRefs(specUrlOrObject: object | string) {
   }
 }
 
+function markCircularRefs(
+  obj: any,
+  stack: any[] = [],
+  key: string | undefined = undefined
+): boolean | "circular" {
+  if (!obj || typeof obj !== "object") {
+    return false;
+  }
+
+  if (stack.includes(obj)) {
+    return "circular";
+  }
+
+  stack.push(obj);
+  let foundCircular = false;
+
+  if (Array.isArray(obj)) {
+    for (let i = 0; i < obj.length; i++) {
+      const val = obj[i];
+      if (typeof val === "object" && val !== null) {
+        const res = markCircularRefs(val, stack, String(i));
+        if (res) {
+          if (res === "circular") {
+            obj[i] = {
+              title: val.title ?? String(i),
+              "x-circular-ref": true,
+            };
+          }
+          foundCircular = true;
+        }
+      }
+    }
+  } else {
+    for (const k of Object.keys(obj)) {
+      const val = obj[k];
+      if (typeof val === "object" && val !== null) {
+        const res = markCircularRefs(val, stack, k);
+        if (res) {
+          if (res === "circular") {
+            obj[k] = {
+              title: val.title ?? k,
+              "x-circular-ref": true,
+            };
+          }
+          foundCircular = true;
+        }
+      }
+    }
+  }
+
+  stack.pop();
+  return foundCircular;
+}
+
 export async function loadAndResolveSpec(specUrlOrObject: object | string) {
   const config = new Config({} as ResolvedConfig);
   const bundleOpts = {
@@ -153,6 +215,9 @@ export async function loadAndResolveSpec(specUrlOrObject: object | string) {
   }
 
   const resolved = await resolveJsonRefs(parsed);
+
+  // Mark any remaining circular references
+  markCircularRefs(resolved);
 
   // Force serialization and replace circular $ref pointers
   // @ts-ignore

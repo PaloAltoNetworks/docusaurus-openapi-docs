@@ -67,6 +67,17 @@
   background-color: transparent;
 }
 
+.openapi-schema__circular {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10.5px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--openapi-circular);
+  margin-left: 1%;
+  background-color: transparent;
+}
+
 .openapi-schema__strikethrough {
   text-decoration: line-through;
 }

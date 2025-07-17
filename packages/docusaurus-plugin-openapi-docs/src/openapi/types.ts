@@ -359,6 +359,7 @@ export type SchemaObject = Omit<
   example?: any;
   deprecated?: boolean;
   "x-tags"?: string[];
+  "x-circular-ref"?: boolean;
   "x-enumDescriptions"?: Record<string, string>;
 };
 
@@ -392,6 +393,7 @@ export type SchemaObjectWithRef = Omit<
   externalDocs?: ExternalDocumentationObject;
   example?: any;
   deprecated?: boolean;
+  "x-circular-ref"?: boolean;
 };
 
 export interface DiscriminatorObject {
