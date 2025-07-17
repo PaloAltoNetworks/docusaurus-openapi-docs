@@ -789,13 +789,13 @@ export function createNodes(
 
     for (const label of circularItems) {
       nodes.push(
-        create("div", {
-          style: {
-            marginTop: ".5rem",
-            marginBottom: ".5rem",
-            marginLeft: "1rem",
-          },
-          children: createDescription(label as string),
+        create("SchemaItem", {
+          collapsible: false,
+          name: "",
+          required: false,
+          schemaName: label,
+          qualifierMessage: undefined,
+          schema: {},
         })
       );
     }
