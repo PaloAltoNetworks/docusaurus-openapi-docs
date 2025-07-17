@@ -59,3 +59,35 @@ export const OPENAPI_RESPONSE_EXAMPLES = {
   EXAMPLE: "theme.openapi.responseExamples.example",
   AUTO_EXAMPLE: "theme.openapi.responseExamples.autoExample",
 };
+
+export const OPENAPI_BODY = {
+  EXAMPLE_FROM_SCHEMA: "theme.openapi.body.exampleFromSchema",
+};
+
+export const OPENAPI_STATUS_CODES = {
+  RESPONSE_HEADERS: "theme.openapi.statusCodes.responseHeaders",
+  SCHEMA_TITLE: "theme.openapi.statusCodes.schemaTitle",
+};
+
+export const OPENAPI_SCHEMA_ITEM = {
+  REQUIRED: "theme.openapi.schemaItem.required",
+  DEPRECATED: "theme.openapi.schemaItem.deprecated",
+  NULLABLE: "theme.openapi.schemaItem.nullable",
+  DEFAULT_VALUE: "theme.openapi.schemaItem.defaultValue",
+  EXAMPLE: "theme.openapi.schemaItem.example",
+  EXAMPLES: "theme.openapi.schemaItem.examples",
+  DESCRIPTION: "theme.openapi.schemaItem.description",
+  CONSTANT_VALUE: "theme.openapi.schemaItem.constantValue",
+};
+
+export const OPENAPI_PARAMS_DETAILS = {
+  PARAMETERS_TITLE: "theme.openapi.paramsDetails.parametersTitle",
+};
+
+export const OPENAPI_SECURITY_SCHEMES = {
+  NAME: "theme.openapi.securitySchemes.name",
+  TYPE: "theme.openapi.securitySchemes.type",
+  SCOPES: "theme.openapi.securitySchemes.scopes",
+  IN: "theme.openapi.securitySchemes.in",
+  FLOWS: "theme.openapi.securitySchemes.flows",
+};
