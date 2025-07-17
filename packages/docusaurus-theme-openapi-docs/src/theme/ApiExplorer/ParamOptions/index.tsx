@@ -7,6 +7,7 @@
 
 import React, { useState } from "react";
 
+import { translate } from "@docusaurus/Translate";
 import FormItem from "@theme/ApiExplorer/FormItem";
 import ParamArrayFormItem from "@theme/ApiExplorer/ParamOptions/ParamFormItems/ParamArrayFormItem";
 import ParamBooleanFormItem from "@theme/ApiExplorer/ParamOptions/ParamFormItems/ParamBooleanFormItem";
@@ -14,6 +15,7 @@ import ParamMultiSelectFormItem from "@theme/ApiExplorer/ParamOptions/ParamFormI
 import ParamSelectFormItem from "@theme/ApiExplorer/ParamOptions/ParamFormItems/ParamSelectFormItem";
 import ParamTextFormItem from "@theme/ApiExplorer/ParamOptions/ParamFormItems/ParamTextFormItem";
 import { useTypedSelector } from "@theme/ApiItem/hooks";
+import { OPENAPI_PARAM_OPTIONS } from "@theme/translationIds";
 
 import { Param } from "./slice";
 
@@ -119,8 +121,14 @@ function ParamOptions() {
               </span>
             </span>
             {showOptional
-              ? "Hide optional parameters"
-              : "Show optional parameters"}
+              ? translate({
+                  id: OPENAPI_PARAM_OPTIONS.HIDE_OPTIONAL,
+                  message: "Hide optional parameters",
+                })
+              : translate({
+                  id: OPENAPI_PARAM_OPTIONS.SHOW_OPTIONAL,
+                  message: "Show optional parameters",
+                })}
           </button>
 
           <div

@@ -7,6 +7,9 @@
 
 import React from "react";
 
+import { translate } from "@docusaurus/Translate";
+import { OPENAPI_SCHEMA_ITEM } from "@theme/translationIds";
+
 import BrowserOnly from "@docusaurus/BrowserOnly";
 import Details from "@theme/Details";
 import Markdown from "@theme/Markdown";
@@ -86,7 +89,10 @@ const ResponseSchemaComponent: React.FC<Props> = ({
                               {title}
                               {body.required === true && (
                                 <span className="openapi-schema__required">
-                                  required
+                                  {translate({
+                                    id: OPENAPI_SCHEMA_ITEM.REQUIRED,
+                                    message: "required",
+                                  })}
                                 </span>
                               )}
                             </strong>
