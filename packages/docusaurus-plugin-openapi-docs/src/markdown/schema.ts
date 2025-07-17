@@ -7,7 +7,10 @@
 
 import { SchemaObject } from "../openapi/types";
 
-function prettyName(schema: SchemaObject, circular?: boolean) {
+function prettyName(schema: SchemaObject | string, circular?: boolean) {
+  if (typeof schema === "string") {
+    return schema.startsWith("circular(") ? schema : "";
+  }
   if (schema.format) {
     if (schema.type) {
       return `${schema.type}<${schema.format}>`;
@@ -51,10 +54,10 @@ function prettyName(schema: SchemaObject, circular?: boolean) {
 }
 
 export function getSchemaName(
-  schema: SchemaObject,
+  schema: SchemaObject | string,
   circular?: boolean
 ): string {
-  if (schema.items) {
+  if (typeof schema !== "string" && schema.items) {
     return prettyName(schema.items, circular) + "[]";
   }
 
