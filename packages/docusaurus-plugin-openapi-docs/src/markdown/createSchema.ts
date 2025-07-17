@@ -784,16 +784,28 @@ export function createNodes(
 
   if (schema.allOf !== undefined) {
     const circularItems = schema.allOf.filter((item: any) => {
-      return typeof item === "string" && item.includes("circular");
+      if (typeof item === "string" && item.includes("circular")) {
+        return true;
+      }
+      if (typeof item === "object" && item["x-circular-ref"]) {
+        return true;
+      }
+      return false;
     });
 
     for (const label of circularItems) {
+      const schemaName =
+        typeof label === "string"
+          ? label
+          : label.title
+            ? `circular(${label.title})`
+            : "circular()";
       nodes.push(
         create("SchemaItem", {
           collapsible: false,
           name: "",
           required: false,
-          schemaName: label,
+          schemaName,
           qualifierMessage: undefined,
           schema: {},
         })
@@ -801,7 +813,13 @@ export function createNodes(
     }
 
     const rest = schema.allOf.filter((item: any) => {
-      return !(typeof item === "string" && item.includes("circular"));
+      if (typeof item === "string" && item.includes("circular")) {
+        return false;
+      }
+      if (typeof item === "object" && item["x-circular-ref"]) {
+        return false;
+      }
+      return true;
     });
 
     if (rest.length) {
@@ -828,14 +846,25 @@ export function createNodes(
   if (schema.type !== undefined) {
     if (schema.allOf) {
       //handle circular result in allOf
-      if (schema.allOf.length && typeof schema.allOf[0] === "string") {
+      const first: any = schema.allOf[0];
+      if (
+        schema.allOf.length &&
+        ((typeof first === "string" && first.includes("circular")) ||
+          (typeof first === "object" && first["x-circular-ref"]))
+      ) {
+        const label =
+          typeof first === "string"
+            ? first
+            : first.title
+              ? `circular(${first.title})`
+              : "circular()";
         return create("div", {
           style: {
             marginTop: ".5rem",
             marginBottom: ".5rem",
             marginLeft: "1rem",
           },
-          children: createDescription(schema.allOf[0]),
+          children: createDescription(label),
         });
       }
     }

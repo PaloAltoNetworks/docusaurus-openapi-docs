@@ -97,10 +97,16 @@ export default function SchemaItem(props: Props) {
       ? schemaName.match(/^circular\\(([^)]*)\\)/)
       : null;
 
-  const renderCircular = guard(circularMatch, () => (
-    <span className="openapi-schema__circular">
-      {circularMatch ? `circular(${circularMatch[1]})` : "circular"}
-    </span>
+  const circularTitle = schema?.["x-circular-ref"]
+    ? schema.title
+      ? `circular(${schema.title})`
+      : "circular"
+    : circularMatch
+      ? `circular(${circularMatch[1]})`
+      : null;
+
+  const renderCircular = guard(circularTitle, () => (
+    <span className="openapi-schema__circular">{circularTitle}</span>
   ));
 
   const renderEnumDescriptions = guard(

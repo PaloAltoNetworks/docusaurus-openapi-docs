@@ -11,6 +11,9 @@ function prettyName(schema: SchemaObject | string, circular?: boolean) {
   if (typeof schema === "string") {
     return schema.startsWith("circular(") ? schema : "";
   }
+  if (schema["x-circular-ref"]) {
+    return schema.title ? `circular(${schema.title})` : "circular()";
+  }
   if (schema.format) {
     if (schema.type) {
       return `${schema.type}<${schema.format}>`;
