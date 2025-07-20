@@ -234,6 +234,9 @@ hide_send_button: true
 {{#frontMatter.show_extensions}}
 show_extensions: true
 {{/frontMatter.show_extensions}}
+{{#frontMatter.mask_credentials_disabled}}
+mask_credentials: false
+{{/frontMatter.mask_credentials_disabled}}
 ---
 
 {{{markdown}}}

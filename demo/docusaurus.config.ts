@@ -268,6 +268,7 @@ const config: Config = {
         docsPluginId: "classic",
         config: {
           petstore_versioned: {
+            maskCredentials: false,
             specPath: "examples/petstore.yaml",
             outputDir: "docs/petstore_versioned", // No trailing slash
             sidebarOptions: {
@@ -327,10 +328,12 @@ const config: Config = {
             },
           } satisfies OpenApiPlugin.Options,
           burgers: {
+            maskCredentials: true,
             specPath: "examples/food/burgers/openapi.yaml",
             outputDir: "docs/food/burgers",
           } satisfies OpenApiPlugin.Options,
           yogurt: {
+            maskCredentials: false,
             specPath: "examples/food/yogurtstore/openapi.yaml",
             outputDir: "docs/food/yogurtstore",
           } satisfies OpenApiPlugin.Options,
