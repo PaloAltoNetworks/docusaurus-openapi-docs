@@ -48,7 +48,7 @@ function jsonToCollection(data: OpenApiObject): Promise<Collection> {
     if (!schemaPack.validationResult?.result) {
       return reject(schemaPack.validationResult?.reason);
     }
-    
+
     schemaPack.convert((_err: any, conversionResult: any) => {
       if (_err || !conversionResult.result) {
         return reject(_err || conversionResult.reason);
@@ -256,6 +256,9 @@ function createItems(
           ...(options?.showExtensions && {
             show_extensions: options.showExtensions,
           }),
+          ...(options?.maskCredentials === false && {
+            mask_credentials_disabled: true,
+          }),
         },
         api: {
           ...defaults,
@@ -408,6 +411,9 @@ function createItems(
           }),
           ...(options?.showExtensions && {
             show_extensions: options.showExtensions,
+          }),
+          ...(options?.maskCredentials === false && {
+            mask_credentials_disabled: true,
           }),
         },
         api: {

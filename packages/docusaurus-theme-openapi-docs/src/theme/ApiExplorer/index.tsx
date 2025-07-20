@@ -7,6 +7,7 @@
 
 import React from "react";
 
+import { useDoc } from "@docusaurus/plugin-content-docs/client";
 import CodeSnippets from "@theme/ApiExplorer/CodeSnippets";
 import Request from "@theme/ApiExplorer/Request";
 import Response from "@theme/ApiExplorer/Response";
@@ -21,6 +22,9 @@ function ApiExplorer({
   item: NonNullable<ApiItem>;
   infoPath: string;
 }) {
+  const metadata = useDoc();
+  const { mask_credentials } = metadata.frontMatter;
+
   const postman = new sdk.Request(
     item.postman
       ? sdk.Request.isRequest(item.postman)
@@ -36,6 +40,7 @@ function ApiExplorer({
         <CodeSnippets
           postman={postman}
           codeSamples={(item as any)["x-codeSamples"] ?? []}
+          maskCredentials={mask_credentials}
         />
       )}
       <Request item={item} />
