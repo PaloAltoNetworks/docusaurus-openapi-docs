@@ -7,6 +7,9 @@
 
 import React from "react";
 
+import { translate } from "@docusaurus/Translate";
+import { OPENAPI_SECURITY_SCHEMES } from "@theme/translationIds";
+
 import Link from "@docusaurus/Link";
 import { useTypedSelector } from "@theme/ApiItem/hooks";
 
@@ -48,16 +51,31 @@ function SecuritySchemes(props: any) {
                   }}
                 >
                   <span>
-                    <strong>name:</strong>{" "}
+                    <strong>
+                      {translate({
+                        id: OPENAPI_SECURITY_SCHEMES.NAME,
+                        message: "name:",
+                      })}
+                    </strong>{" "}
                     <Link to={infoAuthPath}>{name ?? key}</Link>
                   </span>
                   <span>
-                    <strong>type: </strong>
+                    <strong>
+                      {translate({
+                        id: OPENAPI_SECURITY_SCHEMES.TYPE,
+                        message: "type:",
+                      })}
+                    </strong>{" "}
                     {type}
                   </span>
                   {scopes && scopes.length > 0 && (
                     <span>
-                      <strong>scopes: </strong>
+                      <strong>
+                        {translate({
+                          id: OPENAPI_SECURITY_SCHEMES.SCOPES,
+                          message: "scopes:",
+                        })}
+                      </strong>{" "}
                       <code>
                         {auth.scopes.length > 0 ? auth.scopes.toString() : "[]"}
                       </code>
@@ -89,16 +107,31 @@ function SecuritySchemes(props: any) {
                   }}
                 >
                   <span>
-                    <strong>name:</strong>{" "}
+                    <strong>
+                      {translate({
+                        id: OPENAPI_SECURITY_SCHEMES.NAME,
+                        message: "name:",
+                      })}
+                    </strong>{" "}
                     <Link to={infoAuthPath}>{name ?? key}</Link>
                   </span>
                   <span>
-                    <strong>type: </strong>
+                    <strong>
+                      {translate({
+                        id: OPENAPI_SECURITY_SCHEMES.TYPE,
+                        message: "type:",
+                      })}
+                    </strong>{" "}
                     {type}
                   </span>
                   {scopes && scopes.length > 0 && (
                     <span>
-                      <strong>scopes: </strong>
+                      <strong>
+                        {translate({
+                          id: OPENAPI_SECURITY_SCHEMES.SCOPES,
+                          message: "scopes:",
+                        })}
+                      </strong>{" "}
                       <code>
                         {auth.scopes.length > 0 ? auth.scopes.toString() : "[]"}
                       </code>
@@ -128,15 +161,30 @@ function SecuritySchemes(props: any) {
                 }}
               >
                 <span>
-                  <strong>name:</strong>{" "}
+                  <strong>
+                    {translate({
+                      id: OPENAPI_SECURITY_SCHEMES.NAME,
+                      message: "name:",
+                    })}
+                  </strong>{" "}
                   <Link to={infoAuthPath}>{auth.name ?? auth.key}</Link>
                 </span>
                 <span>
-                  <strong>type: </strong>
+                  <strong>
+                    {translate({
+                      id: OPENAPI_SECURITY_SCHEMES.TYPE,
+                      message: "type:",
+                    })}
+                  </strong>{" "}
                   {auth.type}
                 </span>
                 <span>
-                  <strong>in: </strong>
+                  <strong>
+                    {translate({
+                      id: OPENAPI_SECURITY_SCHEMES.IN,
+                      message: "in:",
+                    })}
+                  </strong>{" "}
                   {auth.in}
                 </span>
               </pre>
@@ -156,16 +204,31 @@ function SecuritySchemes(props: any) {
                 }}
               >
                 <span>
-                  <strong>name:</strong>{" "}
+                  <strong>
+                    {translate({
+                      id: OPENAPI_SECURITY_SCHEMES.NAME,
+                      message: "name:",
+                    })}
+                  </strong>{" "}
                   <Link to={infoAuthPath}>{name ?? key}</Link>
                 </span>
                 <span>
-                  <strong>type: </strong>
+                  <strong>
+                    {translate({
+                      id: OPENAPI_SECURITY_SCHEMES.TYPE,
+                      message: "type:",
+                    })}
+                  </strong>{" "}
                   {type}
                 </span>
                 {scopes && scopes.length > 0 && (
                   <span>
-                    <strong>scopes: </strong>
+                    <strong>
+                      {translate({
+                        id: OPENAPI_SECURITY_SCHEMES.SCOPES,
+                        message: "scopes:",
+                      })}
+                    </strong>{" "}
                     <code>
                       {auth.scopes.length > 0 ? auth.scopes.toString() : "[]"}
                     </code>
@@ -198,16 +261,31 @@ function SecuritySchemes(props: any) {
                 }}
               >
                 <span>
-                  <strong>name:</strong>{" "}
+                  <strong>
+                    {translate({
+                      id: OPENAPI_SECURITY_SCHEMES.NAME,
+                      message: "name:",
+                    })}
+                  </strong>{" "}
                   <Link to={infoAuthPath}>{name ?? key}</Link>
                 </span>
                 <span>
-                  <strong>type: </strong>
+                  <strong>
+                    {translate({
+                      id: OPENAPI_SECURITY_SCHEMES.TYPE,
+                      message: "type:",
+                    })}
+                  </strong>{" "}
                   {type}
                 </span>
                 {scopes && scopes.length > 0 && (
                   <span>
-                    <strong>scopes: </strong>
+                    <strong>
+                      {translate({
+                        id: OPENAPI_SECURITY_SCHEMES.SCOPES,
+                        message: "scopes:",
+                      })}
+                    </strong>{" "}
                     <code>
                       {auth.scopes.length > 0 ? auth.scopes.toString() : "[]"}
                     </code>
@@ -226,7 +304,12 @@ function SecuritySchemes(props: any) {
                 {flows && (
                   <span>
                     <code>
-                      <strong>flows: </strong>
+                      <strong>
+                        {translate({
+                          id: OPENAPI_SECURITY_SCHEMES.FLOWS,
+                          message: "flows:",
+                        })}
+                      </strong>{" "}
                       {JSON.stringify(flows, null, 2)}
                     </code>
                   </span>
@@ -248,16 +331,31 @@ function SecuritySchemes(props: any) {
                 }}
               >
                 <span>
-                  <strong>name:</strong>{" "}
+                  <strong>
+                    {translate({
+                      id: OPENAPI_SECURITY_SCHEMES.NAME,
+                      message: "name:",
+                    })}
+                  </strong>{" "}
                   <Link to={infoAuthPath}>{name ?? key}</Link>
                 </span>
                 <span>
-                  <strong>type: </strong>
+                  <strong>
+                    {translate({
+                      id: OPENAPI_SECURITY_SCHEMES.TYPE,
+                      message: "type:",
+                    })}
+                  </strong>{" "}
                   {type}
                 </span>
                 {scopes && scopes.length > 0 && (
                   <span>
-                    <strong>scopes: </strong>
+                    <strong>
+                      {translate({
+                        id: OPENAPI_SECURITY_SCHEMES.SCOPES,
+                        message: "scopes:",
+                      })}
+                    </strong>{" "}
                     <code>
                       {auth.scopes.length > 0 ? auth.scopes.toString() : "[]"}
                     </code>
