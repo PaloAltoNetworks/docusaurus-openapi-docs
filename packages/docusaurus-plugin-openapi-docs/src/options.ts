@@ -49,6 +49,7 @@ export const OptionsSchema = Joi.object({
         markdownGenerators: markdownGenerators,
         showSchemas: Joi.boolean(),
         disableCompression: Joi.boolean(),
+        maskCredentials: Joi.boolean(),
         version: Joi.string().when("versions", {
           is: Joi.exist(),
           then: Joi.required(),
