@@ -110,20 +110,43 @@ function CodeSnippets({
 
   // User-defined languages array
   // Can override languageSet, change order of langs, override options and variants
-  const userDefinedLanguageSet =
-    (siteConfig?.themeConfig?.languageTabs as Language[] | undefined) ??
-    languageSet;
+  const languageAliases: Record<
+    string,
+    { language: string; variant?: string }
+  > = {
+    curl: { language: "shell", variant: "curl" },
+    nodejs: { language: "node" },
+  };
+
+  const userDefinedLanguageSet = (
+    siteConfig?.themeConfig?.languageTabs as Language[] | undefined
+  )
+    ?.map((lang) => {
+      const alias = languageAliases[lang.language];
+      if (alias) {
+        return {
+          ...lang,
+          ...alias,
+          label: lang.label ?? lang.language,
+        };
+      }
+      return lang;
+    })
+    .filter((lang) => languageSet.some((ls) => ls.language === lang.language));
+
+  const finalLanguageSet =
+    userDefinedLanguageSet && userDefinedLanguageSet.length
+      ? userDefinedLanguageSet
+      : languageSet;
 
   // Filter languageSet by user-defined langs
-  const filteredLanguageSet = languageSet.filter((ls) => {
-    return userDefinedLanguageSet?.some((lang) => {
-      return lang.language === ls.language;
-    });
-  });
+  const filteredLanguageSet = languageSet.filter((ls) =>
+    finalLanguageSet.some((lang) => lang.language === ls.language)
+  );
 
   // Merge user-defined langs into languageSet
   const mergedLangs = mergeCodeSampleLanguage(
-    mergeArraysbyLanguage(userDefinedLanguageSet, filteredLanguageSet),
+    mergeArraysbyLanguage(finalLanguageSet, filteredLanguageSet),
     codeSamples
   );
 
@@ -264,7 +287,7 @@ function CodeSnippets({
           return (
             <CodeTab
               value={lang.language}
-              label={lang.language}
+              label={lang.label ?? lang.language}
               key={lang.language}
               attributes={{
                 className: `openapi-tabs__code-item--${lang.logoClass}`,

@@ -40,6 +40,7 @@ export interface Language {
   language: string;
   codeSampleLanguage: CodeSampleLanguage;
   logoClass: string;
+  label?: string;
   variant: string;
   variants: string[];
   options?: { [key: string]: boolean };
