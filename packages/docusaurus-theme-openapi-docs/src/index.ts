@@ -42,6 +42,7 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
           resolve: {
             fallback: {
               buffer: require.resolve("buffer/"),
+              path: require.resolve("path-browserify"),
             },
           },
           plugins: [
@@ -71,6 +72,7 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
         resolve: {
           fallback: {
             buffer: require.resolve("buffer/"),
+            path: require.resolve("path-browserify"),
           },
         },
         plugins: [

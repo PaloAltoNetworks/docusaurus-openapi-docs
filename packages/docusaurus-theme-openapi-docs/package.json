@@ -57,6 +57,7 @@
     "httpsnippet-lite": "^3.0.5",
     "@har-sdk/postman": "^2.4.7",
     "@har-sdk/core": "^1.5.0",
+    "path-browserify": "^1.0.1",
     "prism-react-renderer": "^2.4.1",
     "process": "^0.11.10",
     "react-hook-form": "^7.59.0",
