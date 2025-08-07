@@ -8,12 +8,13 @@
 import React, { useEffect, useState } from "react";
 
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import { Postman } from "@har-sdk/core";
 import { postman2har } from "@har-sdk/postman";
 import ApiCodeBlock from "@theme/ApiExplorer/ApiCodeBlock";
 import buildPostmanRequest from "@theme/ApiExplorer/buildPostmanRequest";
 import CodeTabs from "@theme/ApiExplorer/CodeTabs";
 import { useTypedSelector } from "@theme/ApiItem/hooks";
-import HTTPSnippet from "httpsnippet-lite";
+import { HTTPSnippet, TargetId } from "httpsnippet-lite";
 import cloneDeep from "lodash/cloneDeep";
 import * as sdk from "postman-collection";
 
@@ -165,9 +166,15 @@ function CodeSnippets({
       const collection = new sdk.Collection({
         item: [{ name: "request", request: cleanedPostmanRequest }],
       });
-      const [harRequest] = await postman2har(collection.toJSON());
-      const snippet = new HTTPSnippet(harRequest).convert(
-        mergedLanguage.language,
+      const [harRequest] = await postman2har({
+        ...collection.toJSON(),
+        info: {
+          schema:
+            "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        },
+      } as Postman.Document);
+      const snippet = await new HTTPSnippet(harRequest).convert(
+        mergedLanguage.language as TargetId,
         mergedLanguage.variant,
         mergedLanguage.options
       );
@@ -201,9 +208,15 @@ function CodeSnippets({
         const collection = new sdk.Collection({
           item: [{ name: "request", request: cleanedPostmanRequest }],
         });
-        const [harRequest] = await postman2har(collection.toJSON());
-        const snippet = new HTTPSnippet(harRequest).convert(
-          mergedLanguage.language,
+        const [harRequest] = await postman2har({
+          ...collection.toJSON(),
+          info: {
+            schema:
+              "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+          },
+        } as Postman.Document);
+        const snippet = await new HTTPSnippet(harRequest).convert(
+          mergedLanguage.language as TargetId,
           selectedVariant,
           mergedLanguage.options
         );

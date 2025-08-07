@@ -2127,7 +2127,7 @@
   dependencies:
     "@hapi/hoek" "^9.0.0"
 
-"@har-sdk/core@1.5.0":
+"@har-sdk/core@1.5.0", "@har-sdk/core@^1.5.0":
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/@har-sdk/core/-/core-1.5.0.tgz#d9f8bac773465475674af5cd185e5e37e848ecf9"
   integrity sha512-djc7HOTwclLDQj1v3aK7xmpwTcR7FnjJ2WTd1Q9MYwrfAldWgKscgJVWvNPsomtqRUdi8CQAsV5TiN/HykdrAw==
