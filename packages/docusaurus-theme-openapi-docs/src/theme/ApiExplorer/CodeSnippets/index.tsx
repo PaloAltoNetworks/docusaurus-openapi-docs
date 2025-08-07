@@ -17,6 +17,7 @@ import { useTypedSelector } from "@theme/ApiItem/hooks";
 import { HTTPSnippet, TargetId } from "httpsnippet-lite";
 import cloneDeep from "lodash/cloneDeep";
 import * as sdk from "postman-collection";
+import type { Param } from "@theme/ApiExplorer/ParamOptions/slice";
 
 import { CodeSample, Language } from "./code-snippets-types";
 import {
@@ -195,13 +196,26 @@ function CodeSnippets({
       const collection = new sdk.Collection({
         item: [{ name: "request", request: cleanedPostmanRequest }],
       });
-      const [harRequest] = await postman2har({
-        ...collection.toJSON(),
-        info: {
-          schema:
-            "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-        },
-      } as Postman.Document);
+
+      const environment = Object.fromEntries(
+        pathParams.map((param: Param) => [
+          param.name,
+          Array.isArray(param.value)
+            ? param.value[0]
+            : (param.value ?? `<${param.name}>`),
+        ])
+      );
+
+      const [harRequest] = await postman2har(
+        {
+          ...collection.toJSON(),
+          info: {
+            schema:
+              "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+          },
+        } as Postman.Document,
+        { environment }
+      );
       const snippet = await new HTTPSnippet(harRequest).convert(
         mergedLanguage.language as TargetId,
         selectedVariant ?? mergedLanguage.variant,
