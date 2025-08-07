@@ -37,13 +37,11 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
     ): Configuration {
       const { getStyleLoaders, currentBundler } = utils;
 
-      // --- Drop-in replacement for @faker-js/faker --------------------------
       const fakerAlias = { "@faker-js/faker": false } as const;
 
       const ignoreFaker = new currentBundler.instance.IgnorePlugin({
         resourceRegExp: /^@faker-js\/faker$/,
       });
-      // ----------------------------------------------------------------------
 
       const existingRules: any[] = config.module?.rules ?? [];
       const hasSassRule = existingRules.some(
