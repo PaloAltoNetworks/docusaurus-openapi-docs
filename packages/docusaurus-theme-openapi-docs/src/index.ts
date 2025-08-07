@@ -37,7 +37,15 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
     ): Configuration {
       const { getStyleLoaders, currentBundler } = utils;
 
-      const fakerAlias = { "@faker-js/faker": false } as const;
+      const fakerAlias = {
+        "@faker-js/faker": path.resolve(
+          __dirname,
+          "..",
+          "src",
+          "shims",
+          "faker.ts"
+        ),
+      };
 
       const ignoreFaker = new currentBundler.instance.IgnorePlugin({
         resourceRegExp: /^@faker-js\/faker$/,
