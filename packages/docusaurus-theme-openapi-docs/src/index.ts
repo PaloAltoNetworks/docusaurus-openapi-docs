@@ -7,19 +7,19 @@
 
 import path from "path";
 
-import type { Plugin } from "@docusaurus/types";
+import type { Plugin, ConfigureWebpackUtils } from "@docusaurus/types";
+import type { Configuration } from "webpack";
 
 export default function docusaurusThemeOpenAPI(): Plugin<void> {
   return {
     name: "docusaurus-theme-openapi",
 
     getClientModules() {
-      const modules = [
+      return [
         require.resolve(
           path.join(__dirname, "..", "lib", "theme", "styles.scss")
         ),
       ];
-      return modules;
     },
 
     getThemePath() {
@@ -30,26 +30,45 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
       return path.resolve(__dirname, "..", "src", "theme");
     },
 
-    configureWebpack(_, isServer, utils) {
-      const rules: any = _.module?.rules ?? [];
-      const sassLoaderRule = rules.filter((r: any) => {
-        return String(r.test) === String(/\.s[ca]ss$/);
+    configureWebpack(
+      config: Configuration,
+      isServer: boolean,
+      utils: ConfigureWebpackUtils
+    ): Configuration {
+      const { getStyleLoaders, currentBundler } = utils;
+
+      // --- Drop-in replacement for @faker-js/faker --------------------------
+      const fakerAlias = { "@faker-js/faker": false } as const;
+
+      const ignoreFaker = new currentBundler.instance.IgnorePlugin({
+        resourceRegExp: /^@faker-js\/faker$/,
       });
-      const { getStyleLoaders } = utils;
-      // Avoid conflicts with docusaurus-plugin-sass
-      if (sassLoaderRule.length === 0) {
-        return {
-          resolve: {
-            fallback: {
-              buffer: require.resolve("buffer/"),
-            },
+      // ----------------------------------------------------------------------
+
+      const existingRules: any[] = config.module?.rules ?? [];
+      const hasSassRule = existingRules.some(
+        (r) => String(r.test) === String(/\.s[ca]ss$/)
+      );
+
+      const baseConfig: Configuration = {
+        resolve: {
+          alias: fakerAlias,
+          fallback: {
+            buffer: require.resolve("buffer/"),
           },
-          plugins: [
-            new utils.currentBundler.instance.ProvidePlugin({
-              process: require.resolve("process/browser"),
-              Buffer: ["buffer", "Buffer"],
-            }),
-          ],
+        },
+        plugins: [
+          ignoreFaker,
+          new currentBundler.instance.ProvidePlugin({
+            process: require.resolve("process/browser"),
+            Buffer: ["buffer", "Buffer"],
+          }),
+        ],
+      };
+
+      if (!hasSassRule) {
+        return {
+          ...baseConfig,
           module: {
             rules: [
               {
@@ -67,19 +86,8 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
           },
         };
       }
-      return {
-        resolve: {
-          fallback: {
-            buffer: require.resolve("buffer/"),
-          },
-        },
-        plugins: [
-          new utils.currentBundler.instance.ProvidePlugin({
-            process: require.resolve("process/browser"),
-            Buffer: ["buffer", "Buffer"],
-          }),
-        ],
-      };
+
+      return baseConfig;
     },
   };
 }
