@@ -5,15 +5,16 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import { postman2har } from "@har-sdk/postman";
 import ApiCodeBlock from "@theme/ApiExplorer/ApiCodeBlock";
 import buildPostmanRequest from "@theme/ApiExplorer/buildPostmanRequest";
 import CodeTabs from "@theme/ApiExplorer/CodeTabs";
 import { useTypedSelector } from "@theme/ApiItem/hooks";
+import HTTPSnippet from "httpsnippet-lite";
 import cloneDeep from "lodash/cloneDeep";
-import codegen from "postman-code-generators";
 import * as sdk from "postman-collection";
 
 import { CodeSample, Language } from "./code-snippets-types";
@@ -150,43 +151,29 @@ function CodeSnippets({
       setCodeSampleCodeText(getCodeSampleSourceFromLanguage(language));
     }
 
-    if (language && !!language.options) {
-      codegen.convert(
-        language.language,
-        language.variant,
-        cleanedPostmanRequest,
-        language.options,
-        (error: any, snippet: string) => {
-          if (error) {
-            return;
-          }
-          setCodeText(snippet);
-        }
-      );
-    } else if (language && !language.options) {
+    async function generateSnippet() {
+      if (!language) {
+        setCodeText("");
+        return;
+      }
       const langSource = mergedLangs.filter(
         (lang) => lang.language === language.language
       );
-
-      // Merges user-defined language with default languageSet
-      // This allows users to define only the minimal properties necessary in languageTabs
-      // User-defined properties should override languageSet properties
-      const mergedLanguage = { ...langSource[0], ...language };
-      codegen.convert(
+      const mergedLanguage = language.options
+        ? language
+        : { ...langSource[0], ...language };
+      const collection = new sdk.Collection({
+        item: [{ name: "request", request: cleanedPostmanRequest }],
+      });
+      const [harRequest] = await postman2har(collection.toJSON());
+      const snippet = new HTTPSnippet(harRequest).convert(
         mergedLanguage.language,
         mergedLanguage.variant,
-        cleanedPostmanRequest,
-        mergedLanguage.options,
-        (error: any, snippet: string) => {
-          if (error) {
-            return;
-          }
-          setCodeText(snippet);
-        }
+        mergedLanguage.options
       );
-    } else {
-      setCodeText("");
+      setCodeText(typeof snippet === "string" ? snippet : "");
     }
+    generateSnippet();
   }, [
     accept,
     body,
@@ -203,19 +190,25 @@ function CodeSnippets({
   ]);
   // no dependencies was intentionally set for this particular hook. it's safe as long as if conditions are set
   useEffect(function onSelectedVariantUpdate() {
-    if (selectedVariant && selectedVariant !== language?.variant) {
-      codegen.convert(
-        language.language,
-        selectedVariant,
-        cleanedPostmanRequest,
-        language.options,
-        (error: any, snippet: string) => {
-          if (error) {
-            return;
-          }
-          setCodeText(snippet);
-        }
-      );
+    if (selectedVariant && selectedVariant !== language?.variant && language) {
+      (async () => {
+        const langSource = mergedLangs.filter(
+          (lang) => lang.language === language.language
+        );
+        const mergedLanguage = language.options
+          ? language
+          : { ...langSource[0], ...language };
+        const collection = new sdk.Collection({
+          item: [{ name: "request", request: cleanedPostmanRequest }],
+        });
+        const [harRequest] = await postman2har(collection.toJSON());
+        const snippet = new HTTPSnippet(harRequest).convert(
+          mergedLanguage.language,
+          selectedVariant,
+          mergedLanguage.options
+        );
+        setCodeText(typeof snippet === "string" ? snippet : "");
+      })();
     }
   });
 

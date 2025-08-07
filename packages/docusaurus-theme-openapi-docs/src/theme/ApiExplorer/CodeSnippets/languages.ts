@@ -5,12 +5,16 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import { availableTargets } from "httpsnippet-lite";
 import find from "lodash/find";
 import mergeWith from "lodash/mergeWith";
 import unionBy from "lodash/unionBy";
-import codegen from "postman-code-generators";
 
-import { CodeSample, Language } from "./code-snippets-types";
+import {
+  CodeSample,
+  Language,
+  CodeSampleLanguage,
+} from "./code-snippets-types";
 
 export function mergeCodeSampleLanguage(
   languages: Language[],
@@ -73,23 +77,42 @@ export function getCodeSampleSourceFromLanguage(language: Language) {
 
 export function generateLanguageSet() {
   const languageSet: Language[] = [];
-  codegen.getLanguageList().forEach((language: any) => {
-    const variants: any = [];
-    language.variants.forEach((variant: any) => {
-      variants.push(variant.key);
-    });
+  const languageMap: Record<string, CodeSampleLanguage> = {
+    c: "C",
+    csharp: "C#",
+    go: "Go",
+    java: "Java",
+    javascript: "JavaScript",
+    kotlin: "Kotlin",
+    node: "JavaScript",
+    objc: "Objective-C",
+    ocaml: "OCaml",
+    php: "PHP",
+    powershell: "PowerShell",
+    python: "Python",
+    r: "R",
+    ruby: "Ruby",
+    rust: "Rust",
+    shell: "Shell",
+    swift: "Swift",
+  };
+  const highlightMap: Record<string, string> = {
+    node: "javascript",
+  };
+  availableTargets().forEach((target) => {
+    const codeSample = languageMap[target.key];
+    if (!codeSample) {
+      return;
+    }
+    const variants = target.clients.map((client: any) => client.key);
     languageSet.push({
-      highlight: language.syntax_mode,
-      language: language.key,
-      codeSampleLanguage: language.label,
-      logoClass: language.key,
-      options: {
-        longFormat: false,
-        followRedirect: true,
-        trimRequestBody: true,
-      },
+      highlight: highlightMap[target.key] ?? target.key,
+      language: target.key,
+      codeSampleLanguage: codeSample,
+      logoClass: target.key,
+      options: {},
       variant: variants[0],
-      variants: variants,
+      variants,
     });
   });
   return languageSet;
