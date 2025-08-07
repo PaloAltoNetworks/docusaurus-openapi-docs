@@ -114,20 +114,21 @@ function setQueryParams(postman: sdk.Request, queryParams: Param[]) {
 function setPathParams(postman: sdk.Request, pathParams: Param[]) {
   // Map through the path parameters
   const source = pathParams.map((param) => {
-    if (!param.value) {
-      return undefined;
-    }
+    const value =
+      param.value !== undefined && param.value !== ""
+        ? param.value
+        : `<${param.name}>`;
 
     let serializedValue;
 
     // Handle different styles
-    if (Array.isArray(param.value)) {
+    if (Array.isArray(value)) {
       if (param.style === "label") {
-        serializedValue = `.${param.value.join(".")}`;
+        serializedValue = `.${value.join(".")}`;
       } else if (param.style === "matrix") {
-        serializedValue = `;${param.name}=${param.value.join(";")}`;
+        serializedValue = `;${param.name}=${value.join(";")}`;
       } else {
-        serializedValue = param.value.join(",");
+        serializedValue = value.join(",");
       }
       return new sdk.Variable({
         key: param.name,
@@ -135,7 +136,7 @@ function setPathParams(postman: sdk.Request, pathParams: Param[]) {
       });
     }
 
-    const jsonResult = tryDecodeJsonParam(param.value);
+    const jsonResult = tryDecodeJsonParam(value);
 
     if (jsonResult && typeof jsonResult === "object") {
       if (param.style === "matrix") {
@@ -148,7 +149,7 @@ function setPathParams(postman: sdk.Request, pathParams: Param[]) {
           .join(",");
       }
     } else {
-      serializedValue = param.value;
+      serializedValue = value;
     }
 
     return new sdk.Variable({
@@ -157,10 +158,7 @@ function setPathParams(postman: sdk.Request, pathParams: Param[]) {
     });
   });
 
-  postman.url.variables.assimilate(
-    source.filter((v): v is sdk.Variable => v !== undefined),
-    false
-  );
+  postman.url.variables.assimilate(source, false);
 }
 
 function buildCookie(cookieParams: Param[]) {
