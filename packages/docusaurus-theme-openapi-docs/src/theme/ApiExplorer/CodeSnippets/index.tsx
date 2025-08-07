@@ -155,8 +155,6 @@ function CodeSnippets({
     (lang) =>
       lang.language === localStorage.getItem("docusaurus.tab.code-samples")
   );
-  const [selectedVariant, setSelectedVariant] = useState<string | undefined>();
-  const [selectedSample, setSelectedSample] = useState<string | undefined>();
   const [language, setLanguage] = useState(() => {
     // Return first index if only 1 user-defined language exists
     if (mergedLangs.length === 1) {
@@ -165,6 +163,12 @@ function CodeSnippets({
     // Fall back to language in localStorage or first user-defined language
     return defaultLang[0] ?? mergedLangs[0];
   });
+  const [selectedVariant, setSelectedVariant] = useState<string | undefined>(
+    language.variant
+  );
+  const [selectedSample, setSelectedSample] = useState<string | undefined>(
+    language.sample
+  );
   const [codeText, setCodeText] = useState<string>("");
   const [codeSampleCodeText, setCodeSampleCodeText] = useState<
     string | (() => string)
@@ -174,7 +178,9 @@ function CodeSnippets({
     if (language && !!language.sample) {
       setCodeSampleCodeText(getCodeSampleSourceFromLanguage(language));
     }
+  }, [language, selectedSample]);
 
+  useEffect(() => {
     async function generateSnippet() {
       if (!language) {
         setCodeText("");
@@ -198,7 +204,7 @@ function CodeSnippets({
       } as Postman.Document);
       const snippet = await new HTTPSnippet(harRequest).convert(
         mergedLanguage.language as TargetId,
-        mergedLanguage.variant,
+        selectedVariant ?? mergedLanguage.variant,
         mergedLanguage.options
       );
       setCodeText(typeof snippet === "string" ? snippet : "");
@@ -217,53 +223,8 @@ function CodeSnippets({
     server,
     cleanedPostmanRequest,
     mergedLangs,
+    selectedVariant,
   ]);
-  // no dependencies was intentionally set for this particular hook. it's safe as long as if conditions are set
-  useEffect(function onSelectedVariantUpdate() {
-    if (selectedVariant && selectedVariant !== language?.variant && language) {
-      (async () => {
-        const langSource = mergedLangs.filter(
-          (lang) => lang.language === language.language
-        );
-        const mergedLanguage = language.options
-          ? language
-          : { ...langSource[0], ...language };
-        const collection = new sdk.Collection({
-          item: [{ name: "request", request: cleanedPostmanRequest }],
-        });
-        const [harRequest] = await postman2har({
-          ...collection.toJSON(),
-          info: {
-            schema:
-              "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-          },
-        } as Postman.Document);
-        const snippet = await new HTTPSnippet(harRequest).convert(
-          mergedLanguage.language as TargetId,
-          selectedVariant,
-          mergedLanguage.options
-        );
-        setCodeText(typeof snippet === "string" ? snippet : "");
-      })();
-    }
-  });
-
-  // no dependencies was intentionally set for this particular hook. it's safe as long as if conditions are set
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(function onSelectedSampleUpdate() {
-    if (
-      language &&
-      language.samples &&
-      language.samplesSources &&
-      selectedSample &&
-      selectedSample !== language.sample
-    ) {
-      const sampleIndex = language.samples.findIndex(
-        (smp) => smp === selectedSample
-      );
-      setCodeSampleCodeText(language.samplesSources[sampleIndex]);
-    }
-  });
 
   if (language === undefined) {
     return null;
@@ -303,7 +264,7 @@ function CodeSnippets({
                   }}
                   includeSample={true}
                   currentLanguage={lang.language}
-                  defaultValue={selectedSample}
+                  defaultValue={selectedSample ?? language.sample}
                   languageSet={mergedLangs}
                   lazy
                 >
@@ -344,7 +305,7 @@ function CodeSnippets({
                 }}
                 includeVariant={true}
                 currentLanguage={lang.language}
-                defaultValue={selectedVariant}
+                defaultValue={selectedVariant ?? language.variant}
                 languageSet={mergedLangs}
                 lazy
               >
