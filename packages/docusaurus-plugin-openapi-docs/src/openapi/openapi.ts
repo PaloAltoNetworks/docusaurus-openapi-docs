@@ -43,9 +43,15 @@ function jsonToCollection(data: OpenApiObject): Promise<Collection> {
       { schemaFaker: false }
     );
     schemaPack.computedOptions.schemaFaker = false;
+
+    // Make sure the schema was properly validated or reject with error
+    if (!schemaPack.validationResult?.result) {
+      return reject(schemaPack.validationResult?.reason);
+    }
+
     schemaPack.convert((_err: any, conversionResult: any) => {
-      if (!conversionResult.result) {
-        return reject(conversionResult.reason);
+      if (_err || !conversionResult.result) {
+        return reject(_err || conversionResult.reason);
       }
       return resolve(new sdk.Collection(conversionResult.output[0].data));
     });
@@ -250,6 +256,9 @@ function createItems(
           ...(options?.showExtensions && {
             show_extensions: options.showExtensions,
           }),
+          ...(options?.maskCredentials === false && {
+            mask_credentials_disabled: true,
+          }),
         },
         api: {
           ...defaults,
@@ -402,6 +411,9 @@ function createItems(
           }),
           ...(options?.showExtensions && {
             show_extensions: options.showExtensions,
+          }),
+          ...(options?.maskCredentials === false && {
+            mask_credentials_disabled: true,
           }),
         },
         api: {

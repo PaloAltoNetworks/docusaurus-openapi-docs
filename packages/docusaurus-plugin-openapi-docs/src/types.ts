@@ -52,6 +52,7 @@ export interface APIOptions {
   markdownGenerators?: MarkdownGenerator;
   showSchemas?: boolean;
   disableCompression?: boolean;
+  maskCredentials?: boolean;
 }
 
 export interface MarkdownGenerator {
