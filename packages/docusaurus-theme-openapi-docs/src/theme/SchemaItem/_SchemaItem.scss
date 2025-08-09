@@ -27,6 +27,18 @@
     content: "";
     display: inline-block;
   }
+
+  .openapi-tabs__schema-container {
+    > .openapi-tabs__schema-tabs-container {
+      margin: 0.2rem 0;
+    }
+
+    @layer docusaurus.infima {
+      > .margin-top--md {
+        margin-top: 0rem !important;
+      }
+    }
+  }
 }
 
 .openapi-schema__name {

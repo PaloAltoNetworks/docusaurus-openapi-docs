@@ -58,6 +58,20 @@ paths:
               summary: "name example 2"
               description: "name example 2 description"
               value: "Jane Smith"
+        - name: age
+          description: age example
+          in: query
+          schema:
+            type: number
+          examples:
+            example1:
+              summary: "age example 1"
+              description: "age example 1 description"
+              value: 25
+            example2:
+              summary: "age example 2"
+              description: "age example 2 description"
+              value: 30
       responses:
         "204":
           description: no content
