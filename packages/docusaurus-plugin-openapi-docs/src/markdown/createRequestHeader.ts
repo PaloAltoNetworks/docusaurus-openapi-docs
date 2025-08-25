@@ -7,14 +7,14 @@
 
 import { create } from "./utils";
 
-export function createRequestHeader() {
+export function createRequestHeader(header: string) {
   return [
     create("Heading", {
-      id: "request",
+      id: header.replace(" ", "-").toLowerCase(),
       as: "h2",
       className: "openapi-tabs__heading",
       children: [
-        "{translate({ id: 'theme.openapi.request.title', message: 'Request' })}",
+        `{translate({ id: 'theme.openapi.request.title', message: '${header}' })}`,
       ],
     }),
     "\n\n",

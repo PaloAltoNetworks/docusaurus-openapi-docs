@@ -82,7 +82,7 @@ export function createApiPageMD({
       : undefined,
     createDeprecationNotice({ deprecated, description: deprecatedDescription }),
     createDescription(description),
-    requestBody || parameters ? createRequestHeader() : undefined,
+    requestBody || parameters ? createRequestHeader("Request") : undefined,
     createParamsDetails({ parameters }),
     createRequestBodyDetails({
       title: "Body",
