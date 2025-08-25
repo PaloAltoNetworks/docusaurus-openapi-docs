@@ -72,7 +72,7 @@ function Server() {
         <FormItem>
           <FormSelect
             options={options.map((s: any) => s.url)}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
               dispatch(
                 setServer(
                   JSON.stringify(
@@ -94,7 +94,7 @@ function Server() {
                 <FormItem label={key}>
                   <FormSelect
                     options={value.variables[key].enum}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                       dispatch(
                         setServerVariable(
                           JSON.stringify({ key, value: e.target.value })

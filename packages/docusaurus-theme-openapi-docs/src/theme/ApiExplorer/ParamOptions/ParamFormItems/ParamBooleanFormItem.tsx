@@ -33,11 +33,10 @@ export default function ParamBooleanFormItem({ param }: ParamProps) {
         control={control}
         rules={{ required: param.required ? "This field is required" : false }}
         name="paramBoolean"
-        render={({ field: { onChange, name } }) => (
+        render={({ field: { onChange } }) => (
           <FormSelect
-            name={name}
             options={["---", "true", "false"]}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
               const val = e.target.value;
               dispatch(
                 setParam({

@@ -27,7 +27,7 @@ function ContentType() {
       <FormSelect
         value={value}
         options={options}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+        onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
           dispatch(setContentType(e.target.value))
         }
       />

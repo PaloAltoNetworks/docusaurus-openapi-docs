@@ -63,12 +63,11 @@ export default function ParamMultiSelectFormItem({ param }: ParamProps) {
         control={control}
         rules={{ required: param.required ? "This field is required" : false }}
         name="paramMultiSelect"
-        render={({ field: { onChange, name } }) => (
+        render={({ field: { onChange } }) => (
           <FormMultiSelect
             options={options as string[]}
-            name={name}
             onChange={(e: any) => handleChange(e, onChange)}
-            showErrors={showErrorMessage}
+            showErrors={!!showErrorMessage}
           />
         )}
       />

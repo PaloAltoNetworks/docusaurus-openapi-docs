@@ -35,10 +35,10 @@ export default function ParamSelectFormItem({ param }: ParamProps) {
         control={control}
         rules={{ required: param.required ? "This field is required" : false }}
         name="paramSelect"
-        render={({ field: { onChange, name } }) => (
+        render={({ field: { onChange } }) => (
           <FormSelect
             options={["---", ...(options as string[])]}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
               const val = e.target.value;
               dispatch(
                 setParam({
