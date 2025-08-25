@@ -25,6 +25,41 @@ function SecuritySchemes(props: any) {
   }
 
   const selectedAuth = options[selected];
+
+  const keyTranslations: Record<string, { id: string; message: string }> = {
+    description: {
+      id: OPENAPI_SECURITY_SCHEMES.DESCRIPTION,
+      message: "description:",
+    },
+    scheme: {
+      id: OPENAPI_SECURITY_SCHEMES.SCHEME,
+      message: "scheme:",
+    },
+    bearerFormat: {
+      id: OPENAPI_SECURITY_SCHEMES.BEARER_FORMAT,
+      message: "bearerFormat:",
+    },
+    openIdConnectUrl: {
+      id: OPENAPI_SECURITY_SCHEMES.OPEN_ID_CONNECT_URL,
+      message: "openIdConnectUrl:",
+    },
+  };
+
+  const renderRest = (rest: Record<string, any>) =>
+    Object.keys(rest).map((k) => {
+      const translation = keyTranslations[k];
+      const label = translation
+        ? translate({ id: translation.id, message: translation.message })
+        : `${k}:`;
+      return (
+        <span key={k}>
+          <strong>{label} </strong>
+          {typeof rest[k] === "object"
+            ? JSON.stringify(rest[k], null, 2)
+            : String(rest[k])}
+        </span>
+      );
+    });
   return (
     <details className="openapi-security__details" open={false}>
       <summary className="openapi-security__summary-container">
@@ -81,16 +116,7 @@ function SecuritySchemes(props: any) {
                       </code>
                     </span>
                   )}
-                  {Object.keys(rest).map((k, i) => {
-                    return (
-                      <span key={k}>
-                        <strong>{k}: </strong>
-                        {typeof rest[k] === "object"
-                          ? JSON.stringify(rest[k], null, 2)
-                          : String(rest[k])}
-                      </span>
-                    );
-                  })}
+                  {renderRest(rest)}
                 </pre>
               </React.Fragment>
             );
@@ -137,16 +163,7 @@ function SecuritySchemes(props: any) {
                       </code>
                     </span>
                   )}
-                  {Object.keys(rest).map((k, i) => {
-                    return (
-                      <span key={k}>
-                        <strong>{k}: </strong>
-                        {typeof rest[k] === "object"
-                          ? JSON.stringify(rest[k], null, 2)
-                          : String(rest[k])}
-                      </span>
-                    );
-                  })}
+                  {renderRest(rest)}
                 </pre>
               </React.Fragment>
             );
@@ -234,16 +251,7 @@ function SecuritySchemes(props: any) {
                     </code>
                   </span>
                 )}
-                {Object.keys(rest).map((k, i) => {
-                  return (
-                    <span key={k}>
-                      <strong>{k}: </strong>
-                      {typeof rest[k] === "object"
-                        ? JSON.stringify(rest[k], null, 2)
-                        : String(rest[k])}
-                    </span>
-                  );
-                })}
+                {renderRest(rest)}
               </pre>
             </React.Fragment>
           );
@@ -291,16 +299,7 @@ function SecuritySchemes(props: any) {
                     </code>
                   </span>
                 )}
-                {Object.keys(rest).map((k, i) => {
-                  return (
-                    <span key={k}>
-                      <strong>{k}: </strong>
-                      {typeof rest[k] === "object"
-                        ? JSON.stringify(rest[k], null, 2)
-                        : String(rest[k])}
-                    </span>
-                  );
-                })}
+                {renderRest(rest)}
                 {flows && (
                   <span>
                     <code>
@@ -361,16 +360,7 @@ function SecuritySchemes(props: any) {
                     </code>
                   </span>
                 )}
-                {Object.keys(rest).map((k, i) => {
-                  return (
-                    <span key={k}>
-                      <strong>{k}: </strong>
-                      {typeof rest[k] === "object"
-                        ? JSON.stringify(rest[k], null, 2)
-                        : String(rest[k])}
-                    </span>
-                  );
-                })}
+                {renderRest(rest)}
               </pre>
             </React.Fragment>
           );

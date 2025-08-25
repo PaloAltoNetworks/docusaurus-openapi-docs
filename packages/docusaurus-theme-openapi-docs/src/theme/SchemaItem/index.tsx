@@ -38,7 +38,15 @@ const transformEnumDescriptions = (
 
 const getEnumDescriptionMarkdown = (enumDescriptions?: [string, string][]) => {
   if (enumDescriptions?.length) {
-    return `| Enum Value | Description |
+    const enumValue = translate({
+      id: OPENAPI_SCHEMA_ITEM.ENUM_VALUE,
+      message: "Enum Value",
+    });
+    const description = translate({
+      id: OPENAPI_SCHEMA_ITEM.ENUM_DESCRIPTION,
+      message: "Description",
+    });
+    return `| ${enumValue} | ${description} |
 | ---- | ----- |
 ${enumDescriptions
   .map((desc) => {

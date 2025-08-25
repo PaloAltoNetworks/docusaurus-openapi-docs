@@ -72,7 +72,8 @@ export function createApiPageMD({
     `import StatusCodes from "@theme/StatusCodes";\n`,
     `import OperationTabs from "@theme/OperationTabs";\n`,
     `import TabItem from "@theme/TabItem";\n`,
-    `import Heading from "@theme/Heading";\n\n`,
+    `import Heading from "@theme/Heading";\n`,
+    `import { translate } from "@docusaurus/Translate";\n\n`,
     createHeading(title),
     createMethodEndpoint(method, path),
     infoPath && createAuthorization(infoPath),
@@ -81,7 +82,7 @@ export function createApiPageMD({
       : undefined,
     createDeprecationNotice({ deprecated, description: deprecatedDescription }),
     createDescription(description),
-    requestBody || parameters ? createRequestHeader("Request") : undefined,
+    requestBody || parameters ? createRequestHeader() : undefined,
     createParamsDetails({ parameters }),
     createRequestBodyDetails({
       title: "Body",
