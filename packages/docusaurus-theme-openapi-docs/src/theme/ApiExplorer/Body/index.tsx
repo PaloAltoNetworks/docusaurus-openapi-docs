@@ -168,7 +168,7 @@ function Body({
                 >
                   <FormSelect
                     options={["---", ...val.enum]}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                       const val = e.target.value;
                       if (val === "---") {
                         dispatch(clearFormBodyKey(key));

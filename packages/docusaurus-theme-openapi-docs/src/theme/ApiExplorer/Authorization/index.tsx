@@ -36,7 +36,7 @@ function Authorization() {
           <FormSelect
             options={optionKeys}
             value={selected}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
               dispatch(setSelectedAuth(e.target.value));
             }}
           />
