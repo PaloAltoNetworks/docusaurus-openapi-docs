@@ -376,7 +376,7 @@ function createDetailsNode(
                       create("span", {
                         className: "openapi-schema__required",
                         children:
-                          "{translate({ id: 'theme.openapi.schemaItem.required', message: 'required' })}",
+                          "<Translate id='theme.openapi.schemaItem.required'>required</Translate>",
                       }),
                     ]
                   ),
@@ -532,7 +532,7 @@ function createPropertyDiscriminator(
               create("span", {
                 className: "openapi-schema__required",
                 children:
-                  "{translate({ id: 'theme.openapi.schemaItem.required', message: 'required' })}",
+                  "<Translate id='theme.openapi.schemaItem.required'>required</Translate>",
               }),
             ]),
           ],

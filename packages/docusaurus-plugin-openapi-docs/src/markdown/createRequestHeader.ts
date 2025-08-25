@@ -14,7 +14,7 @@ export function createRequestHeader(header: string) {
       as: "h2",
       className: "openapi-tabs__heading",
       children: [
-        `{translate({ id: 'theme.openapi.request.title', message: '${header}' })}`,
+        `<Translate id="theme.openapi.request.title">${header}</Translate>`,
       ],
     }),
     "\n\n",

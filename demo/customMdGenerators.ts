@@ -50,7 +50,7 @@ export function myCustomApiMdGenerator({
     `import OperationTabs from "@theme/OperationTabs";\n`,
     `import TabItem from "@theme/TabItem";\n`,
     `import Heading from "@theme/Heading";\n`,
-    `import { translate } from "@docusaurus/Translate";\n\n`,
+    `import Translate from "@docusaurus/Translate";\n\n`,
     createHeading(title),
     createMethodEndpoint(method, path),
     createServersTable(servers),
