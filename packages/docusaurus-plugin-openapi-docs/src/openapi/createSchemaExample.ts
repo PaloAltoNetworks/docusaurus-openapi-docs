@@ -111,10 +111,14 @@ export const sampleFromSchema = (
   try {
     // deep copy schema before processing
     let schemaCopy = JSON.parse(JSON.stringify(schema));
-    let { type, example, allOf, properties, items, oneOf, anyOf } = schemaCopy;
+    let { type, example, examples, allOf, properties, items, oneOf, anyOf } =
+      schemaCopy;
 
     if (example !== undefined) {
       return example;
+    }
+    if (examples !== undefined && examples.length > 0) {
+      return examples[0];
     }
 
     if (oneOf) {
