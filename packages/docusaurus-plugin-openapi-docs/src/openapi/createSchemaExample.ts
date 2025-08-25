@@ -91,7 +91,11 @@ function sampleFromProp(
 
   // TODO: handle discriminators
 
-  if (prop.oneOf) {
+  if (prop.example !== undefined) {
+    obj[name] = prop.example;
+  } else if (prop.examples !== undefined && prop.examples.length > 0) {
+    obj[name] = prop.examples[0];
+  } else if (prop.oneOf) {
     obj[name] = sampleFromSchema(prop.oneOf[0], context);
   } else if (prop.anyOf) {
     obj[name] = sampleFromSchema(prop.anyOf[0], context);
