@@ -7,12 +7,15 @@
 
 import React from "react";
 
+import { translate } from "@docusaurus/Translate";
+
 import ApiTabs from "@theme/ApiTabs";
 import Details from "@theme/Details";
 import Markdown from "@theme/Markdown";
 import ResponseHeaders from "@theme/ResponseHeaders";
 import ResponseSchema from "@theme/ResponseSchema";
 import TabItem from "@theme/TabItem";
+import { OPENAPI_STATUS_CODES } from "@theme/translationIds";
 import { ApiItem } from "docusaurus-plugin-openapi-docs/lib/types";
 
 interface Props {
@@ -51,7 +54,12 @@ const StatusCodes: React.FC<Props> = ({ label, id, responses }: any) => {
                 style={{ textAlign: "left", marginBottom: "1rem" }}
                 summary={
                   <summary>
-                    <strong>Response Headers</strong>
+                    <strong>
+                      {translate({
+                        id: OPENAPI_STATUS_CODES.RESPONSE_HEADERS,
+                        message: "Response Headers",
+                      })}
+                    </strong>
                   </summary>
                 }
               >
@@ -59,7 +67,10 @@ const StatusCodes: React.FC<Props> = ({ label, id, responses }: any) => {
               </Details>
             )}
             <ResponseSchema
-              title="Schema"
+              title={translate({
+                id: OPENAPI_STATUS_CODES.SCHEMA_TITLE,
+                message: "Schema",
+              })}
               body={{ content: response.content }}
             />
           </TabItem>

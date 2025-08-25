@@ -7,10 +7,12 @@
 
 import React from "react";
 
+import { translate } from "@docusaurus/Translate";
 import { ErrorMessage } from "@hookform/error-message";
 import FormSelect from "@theme/ApiExplorer/FormSelect";
 import { Param, setParam } from "@theme/ApiExplorer/ParamOptions/slice";
 import { useTypedDispatch } from "@theme/ApiItem/hooks";
+import { OPENAPI_FORM } from "@theme/translationIds";
 import { Controller, useFormContext } from "react-hook-form";
 
 export interface ParamProps {
@@ -33,7 +35,14 @@ export default function ParamSelectFormItem({ param }: ParamProps) {
     <>
       <Controller
         control={control}
-        rules={{ required: param.required ? "This field is required" : false }}
+        rules={{
+          required: param.required
+            ? translate({
+                id: OPENAPI_FORM.FIELD_REQUIRED,
+                message: "This field is required",
+              })
+            : false,
+        }}
         name="paramSelect"
         render={({ field: { onChange, name } }) => (
           <FormSelect

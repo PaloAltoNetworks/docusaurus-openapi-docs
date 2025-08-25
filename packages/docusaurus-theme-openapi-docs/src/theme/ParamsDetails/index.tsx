@@ -7,6 +7,9 @@
 
 import React from "react";
 
+import { translate } from "@docusaurus/Translate";
+import { OPENAPI_PARAMS_DETAILS } from "@theme/translationIds";
+
 import BrowserOnly from "@docusaurus/BrowserOnly";
 import Details from "@theme/Details";
 import ParamsItem from "@theme/ParamsItem";
@@ -31,7 +34,13 @@ const ParamsDetailsComponent: React.FC<Props> = ({ parameters }) => {
         const summaryElement = (
           <summary>
             <h3 className="openapi-markdown__details-summary-header-params">
-              {`${type.charAt(0).toUpperCase() + type.slice(1)} Parameters`}
+              {translate(
+                {
+                  id: OPENAPI_PARAMS_DETAILS.PARAMETERS_TITLE,
+                  message: "{type} Parameters",
+                },
+                { type: type.charAt(0).toUpperCase() + type.slice(1) }
+              )}
             </h3>
           </summary>
         );
