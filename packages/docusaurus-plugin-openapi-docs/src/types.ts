@@ -78,6 +78,7 @@ export interface SidebarOptions {
   sidebarCollapsible?: boolean;
   sidebarCollapsed?: boolean;
   sidebarGenerators?: SidebarGenerators;
+  nested?: boolean;
 }
 
 export interface APIVersionOptions {
