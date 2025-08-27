@@ -871,9 +871,6 @@ const SchemaNode: React.FC<SchemaProps> = ({ schema, schemaType }) => {
 
     return (
       <div>
-        <span className="badge badge--info" style={{ marginBottom: "1rem" }}>
-          {translate({ id: OPENAPI_SCHEMA_ITEM.ALL_OF, message: "allOf" })}
-        </span>
         {mergedSchemas.oneOf && (
           <AnyOneOf schema={mergedSchemas} schemaType={schemaType} />
         )}

@@ -84,7 +84,6 @@ export const OPENAPI_SCHEMA_ITEM = {
   POSSIBLE_VALUES: "theme.openapi.schemaItem.possibleValues",
   ONE_OF: "theme.openapi.schemaItem.oneOf",
   ANY_OF: "theme.openapi.schemaItem.anyOf",
-  ALL_OF: "theme.openapi.schemaItem.allOf",
 };
 
 export const OPENAPI_PARAMS_DETAILS = {
