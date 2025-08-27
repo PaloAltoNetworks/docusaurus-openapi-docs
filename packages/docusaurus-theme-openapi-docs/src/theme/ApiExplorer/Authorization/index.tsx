@@ -34,7 +34,12 @@ function Authorization() {
   return (
     <div>
       {optionKeys.length > 1 && (
-        <FormItem label="Security Scheme">
+        <FormItem
+          label={translate({
+            id: OPENAPI_AUTH.SECURITY_SCHEME,
+            message: "Security Scheme",
+          })}
+        >
           <FormSelect
             options={optionKeys}
             value={selected}

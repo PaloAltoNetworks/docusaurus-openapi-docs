@@ -53,6 +53,7 @@ export const OPENAPI_AUTH = {
   BEARER_TOKEN: "theme.openapi.auth.bearerToken",
   USERNAME: "theme.openapi.auth.username",
   PASSWORD: "theme.openapi.auth.password",
+  SECURITY_SCHEME: "theme.openapi.auth.securityScheme",
 };
 
 export const OPENAPI_RESPONSE_EXAMPLES = {
@@ -78,6 +79,11 @@ export const OPENAPI_SCHEMA_ITEM = {
   EXAMPLES: "theme.openapi.schemaItem.examples",
   DESCRIPTION: "theme.openapi.schemaItem.description",
   CONSTANT_VALUE: "theme.openapi.schemaItem.constantValue",
+  ENUM_VALUE: "theme.openapi.schemaItem.enumValue",
+  ENUM_DESCRIPTION: "theme.openapi.schemaItem.enumDescription",
+  POSSIBLE_VALUES: "theme.openapi.schemaItem.possibleValues",
+  ONE_OF: "theme.openapi.schemaItem.oneOf",
+  ANY_OF: "theme.openapi.schemaItem.anyOf",
 };
 
 export const OPENAPI_PARAMS_DETAILS = {
@@ -90,4 +96,8 @@ export const OPENAPI_SECURITY_SCHEMES = {
   SCOPES: "theme.openapi.securitySchemes.scopes",
   IN: "theme.openapi.securitySchemes.in",
   FLOWS: "theme.openapi.securitySchemes.flows",
+  DESCRIPTION: "theme.openapi.securitySchemes.description",
+  SCHEME: "theme.openapi.securitySchemes.scheme",
+  BEARER_FORMAT: "theme.openapi.securitySchemes.bearerFormat",
+  OPEN_ID_CONNECT_URL: "theme.openapi.securitySchemes.openIdConnectUrl",
 };

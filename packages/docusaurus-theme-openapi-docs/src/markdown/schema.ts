@@ -5,6 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import { translate } from "@docusaurus/Translate";
+import { OPENAPI_SCHEMA_ITEM } from "../theme/translationIds";
 import { SchemaObject } from "../types";
 
 function prettyName(schema: SchemaObject, circular?: boolean) {
@@ -72,7 +74,10 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
     return getQualifierMessage(schema.items);
   }
 
-  let message = "**Possible values:** ";
+  let message = `**${translate({
+    id: OPENAPI_SCHEMA_ITEM.POSSIBLE_VALUES,
+    message: "Possible values:",
+  })}** `;
 
   let qualifierGroups = [];
 

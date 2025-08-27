@@ -7,6 +7,9 @@
 
 import React from "react";
 
+import { translate } from "@docusaurus/Translate";
+import { OPENAPI_SCHEMA_ITEM } from "@theme/translationIds";
+
 import { ClosingArrayBracket, OpeningArrayBracket } from "@theme/ArrayBrackets";
 import Details from "@theme/Details";
 import DiscriminatorTabs from "@theme/DiscriminatorTabs";
@@ -89,12 +92,29 @@ const Summary: React.FC<SummaryProps> = ({
         {(isRequired || deprecated || nullable) && (
           <span className="openapi-schema__divider" />
         )}
-        {nullable && <span className="openapi-schema__nullable">nullable</span>}
+        {nullable && (
+          <span className="openapi-schema__nullable">
+            {translate({
+              id: OPENAPI_SCHEMA_ITEM.NULLABLE,
+              message: "nullable",
+            })}
+          </span>
+        )}
         {isRequired && (
-          <span className="openapi-schema__required">required</span>
+          <span className="openapi-schema__required">
+            {translate({
+              id: OPENAPI_SCHEMA_ITEM.REQUIRED,
+              message: "required",
+            })}
+          </span>
         )}
         {deprecated && (
-          <span className="openapi-schema__deprecated">deprecated</span>
+          <span className="openapi-schema__deprecated">
+            {translate({
+              id: OPENAPI_SCHEMA_ITEM.DEPRECATED,
+              message: "deprecated",
+            })}
+          </span>
         )}
       </span>
     </summary>
@@ -108,14 +128,17 @@ interface SchemaProps {
 }
 
 const AnyOneOf: React.FC<SchemaProps> = ({ schema, schemaType }) => {
-  const type = schema.oneOf ? "oneOf" : "anyOf";
+  const key = schema.oneOf ? "oneOf" : "anyOf";
+  const type = schema.oneOf
+    ? translate({ id: OPENAPI_SCHEMA_ITEM.ONE_OF, message: "oneOf" })
+    : translate({ id: OPENAPI_SCHEMA_ITEM.ANY_OF, message: "anyOf" });
   return (
     <>
       <span className="badge badge--info" style={{ marginBottom: "1rem" }}>
         {type}
       </span>
       <SchemaTabs>
-        {schema[type]?.map((anyOneSchema: any, index: number) => {
+        {schema[key]?.map((anyOneSchema: any, index: number) => {
           const label = anyOneSchema.title || anyOneSchema.type;
           return (
             // @ts-ignore
@@ -254,7 +277,12 @@ const PropertyDiscriminator: React.FC<SchemaEdgeProps> = ({
             )}
             {required && <span className="openapi-schema__divider"></span>}
             {required && (
-              <span className="openapi-schema__required">required</span>
+              <span className="openapi-schema__required">
+                {translate({
+                  id: OPENAPI_SCHEMA_ITEM.REQUIRED,
+                  message: "required",
+                })}
+              </span>
             )}
           </span>
           <div style={{ marginLeft: "1rem" }}>
