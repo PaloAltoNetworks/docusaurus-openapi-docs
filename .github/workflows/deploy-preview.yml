@@ -146,10 +146,14 @@ jobs:
 
       # 2. ADDED AUTHENTICATION STEP
       - name: Authenticate to Google Cloud
+        id: auth
         uses: google-github-actions/auth@v2
         with:
           workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
           service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+
+      - name: Export Google Cloud Credentials
+        run: echo "GCP_SA_KEY=$(cat ${{ steps.auth.outputs.credentials_file_path }})" >> $GITHUB_ENV
 
       - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4
         with:
@@ -164,6 +168,7 @@ jobs:
         uses: FirebaseExtended/action-hosting-deploy@e2eda2e106cfa35cdbcf4ac9ddaf6c4756df2c8c # v0.10.0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ env.GCP_SA_KEY }}"
           projectId: pandev
           expires: 30d
           channelId: "pr${{ github.event.number }}"
