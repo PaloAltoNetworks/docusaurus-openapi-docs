@@ -21,7 +21,8 @@ export type {
   SidebarItemLink,
   PropSidebar,
   PropSidebarItem,
-} from "@docusaurus/plugin-content-docs-types";
+} from "./plugin-content-docs-types";
+
 export interface PluginOptions {
   id?: string;
   docsPlugin?: string;
