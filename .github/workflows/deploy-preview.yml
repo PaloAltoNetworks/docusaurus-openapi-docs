@@ -161,10 +161,9 @@ jobs:
       # 3. MODIFIED DEPLOYMENT STEP
       - name: Deploy to Firebase
         id: deploy_preview
-        uses: FirebaseExtended/action-hosting-deploy@0cbcac4740c2bfb00d632f0b863b57713124eb5a # v0.9.0
+        uses: FirebaseExtended/action-hosting-deploy@e2eda2e106cfa35cdbcf4ac9ddaf6c4756df2c8c # v0.10.0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "${{ env.SERVICE_ACCOUNT_KEY }}"
           projectId: pandev
           expires: 30d
           channelId: "pr${{ github.event.number }}"
