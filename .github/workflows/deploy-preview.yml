@@ -130,7 +130,7 @@ jobs:
       contents: read
       pull-requests: write
       checks: write
-      id-token: write # <-- 1. ADDED PERMISSION
+      id-token: write
     outputs:
       preview_url: ${{ steps.deploy_preview.outputs.details_url }}
 
