@@ -2,7 +2,7 @@ name: "Deploy Preview"
 
 on:
   pull_request_target:
-    branches: [main, v3.0.0, v2.0.0]
+    branches: [main]
 
 jobs:
   precheck:
@@ -130,6 +130,7 @@ jobs:
       contents: read
       pull-requests: write
       checks: write
+      id-token: write # <-- 1. ADDED PERMISSION
     outputs:
       preview_url: ${{ steps.deploy_preview.outputs.details_url }}
 
@@ -143,19 +144,26 @@ jobs:
           node-version: "20"
           cache: "yarn"
 
-      - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4
+      # 2. ADDED AUTHENTICATION STEP
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+
+      - uses: actions/download-artifact@95815c8cf2ff2164869cbab79da8d1f422bc89e # v4
         with:
           name: build
 
       - name: Unzip build artifact
         run: unzip build.zip
 
+      # 3. MODIFIED DEPLOYMENT STEP
       - name: Deploy to Firebase
         id: deploy_preview
         uses: FirebaseExtended/action-hosting-deploy@0cbcac4740c2bfb00d632f0b863b57713124eb5a # v0.9.0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_PANDEV }}"
           projectId: pandev
           expires: 30d
           channelId: "pr${{ github.event.number }}"
@@ -199,28 +207,3 @@ jobs:
         with:
           name: visual_diffs
           path: visual_diffs
-
-      # - name: Comment PR with results
-      #   if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
-      #   uses: actions/github-script@v7
-      #   with:
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     script: |
-      #       const fs = require('fs');
-      #       const results = JSON.parse(fs.readFileSync('visual_diffs/results.json', 'utf8'));
-      #       const runUrl = `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`;
-      #       let body = `### Visual Diff Summary\n\n[View Logs](${runUrl})\n\n`;
-      #       body += `Total: ${results.summary.total}, Matches: ${results.summary.matches}, Diffs: ${results.summary.mismatches}, Skipped: ${results.summary.skipped}\n\n`;
-      #       if (results.pages.length) {
-      #         body += '| Page | Status |\n| --- | --- |\n';
-      #         for (const p of results.pages) {
-      #           if (p.status !== 'match') {
-      #             body += `| ${p.path} | ${p.status} |\n`;
-      #           }
-      #         }
-      #       }
-      #       await github.rest.issues.createComment({
-      #         ...context.repo,
-      #         issue_number: context.issue.number,
-      #         body
-      #       });
