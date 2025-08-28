@@ -50,6 +50,16 @@ jobs:
           node-version: "20"
           cache: "yarn"
 
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@b7593ed2efd1c1617e1b0254da33b86225adb2a5
+        with:
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+
+      - name: Export Google Cloud Credentials
+        run: echo "GCP_SA_KEY=$(cat ${{ steps.auth.outputs.credentials_file_path }})" >> $GITHUB_ENV
+
       - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4
         with:
           name: build
@@ -62,7 +72,7 @@ jobs:
         uses: FirebaseExtended/action-hosting-deploy@0cbcac4740c2bfb00d632f0b863b57713124eb5a # v0.9.0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_PANDEV }}"
+          firebaseServiceAccount: "${{ env.GCP_SA_KEY }}"
           projectId: pandev
           channelId: live
           target: docusaurus-openapi.tryingpan.dev
