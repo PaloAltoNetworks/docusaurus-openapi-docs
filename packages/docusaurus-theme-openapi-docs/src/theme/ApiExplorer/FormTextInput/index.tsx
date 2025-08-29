@@ -19,6 +19,8 @@ export interface Props {
   placeholder?: string;
   password?: boolean;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  paramName?: string;
+  isRequired?: boolean;
 }
 
 function FormTextInput({

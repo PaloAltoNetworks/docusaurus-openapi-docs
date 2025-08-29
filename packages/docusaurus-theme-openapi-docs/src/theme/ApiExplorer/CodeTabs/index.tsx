@@ -15,16 +15,17 @@ import {
 } from "@docusaurus/theme-common/internal";
 import { TabItemProps } from "@docusaurus/theme-common/lib/utils/tabsUtils";
 import useIsBrowser from "@docusaurus/useIsBrowser";
-import { Language } from "@theme/ApiExplorer/CodeSnippets";
 import clsx from "clsx";
+
+import { Language } from "../CodeSnippets/code-snippets-types";
 
 export interface Props {
   action: {
     [key: string]: React.Dispatch<any>;
   };
-  currentLanguage: Language;
+  currentLanguage?: Language;
   languageSet: Language[];
-  includeVariant: boolean;
+  includeVariant?: boolean;
 }
 
 export interface CodeTabsProps extends Props, TabProps {
@@ -94,13 +95,13 @@ function TabList({
       let newLanguage: Language;
       if (currentLanguage && includeVariant) {
         newLanguage = languageSet.filter(
-          (lang: Language) => lang.language === currentLanguage
+          (lang: Language) => lang.language === currentLanguage.language
         )[0];
         newLanguage.variant = newTabValue;
         action.setSelectedVariant(newTabValue.toLowerCase());
       } else if (currentLanguage && includeSample) {
         newLanguage = languageSet.filter(
-          (lang: Language) => lang.language === currentLanguage
+          (lang: Language) => lang.language === currentLanguage.language
         )[0];
         newLanguage.sample = newTabValue;
         action.setSelectedSample(newTabValue);

@@ -141,9 +141,9 @@ function CodeSnippets({
     return defaultLang[0] ?? mergedLangs[0];
   });
   const [codeText, setCodeText] = useState<string>("");
-  const [codeSampleCodeText, setCodeSampleCodeText] = useState<
-    string | (() => string)
-  >(() => getCodeSampleSourceFromLanguage(language));
+  const [codeSampleCodeText, setCodeSampleCodeText] = useState<string>(() =>
+    getCodeSampleSourceFromLanguage(language)
+  );
 
   useEffect(() => {
     if (language && !!language.sample) {
@@ -273,7 +273,7 @@ function CodeSnippets({
                     setSelectedSample: setSelectedSample,
                   }}
                   includeSample={true}
-                  currentLanguage={lang.language}
+                  currentLanguage={lang}
                   defaultValue={selectedSample}
                   languageSet={mergedLangs}
                   lazy
@@ -314,7 +314,7 @@ function CodeSnippets({
                   setSelectedVariant: setSelectedVariant,
                 }}
                 includeVariant={true}
-                currentLanguage={lang.language}
+                currentLanguage={lang}
                 defaultValue={selectedVariant}
                 languageSet={mergedLangs}
                 lazy

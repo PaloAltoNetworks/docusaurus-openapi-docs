@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { SidebarItemDoc } from "@docusaurus/plugin-content-docs/src/sidebars/types";
+import type { SidebarItemDoc } from "@docusaurus/plugin-content-docs/lib/sidebars/types";
 import Request from "postman-collection";
 
 import {
@@ -21,7 +21,7 @@ export type {
   SidebarItemLink,
   PropSidebar,
   PropSidebarItem,
-} from "@docusaurus/plugin-content-docs-types";
+} from "@docusaurus/plugin-content-docs/lib/sidebars/types";
 export interface PluginOptions {
   id?: string;
   docsPlugin?: string;
