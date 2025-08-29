@@ -161,7 +161,6 @@ jobs:
       - name: Unzip build artifact
         run: unzip build.zip
 
-      # 3. MODIFIED DEPLOYMENT STEP
       - name: Deploy to Firebase
         id: deploy_preview
         uses: FirebaseExtended/action-hosting-deploy@e2eda2e106cfa35cdbcf4ac9ddaf6c4756df2c8c # v0.10.0
