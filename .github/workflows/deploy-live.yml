@@ -39,7 +39,8 @@ jobs:
     name: Deploy
     needs: build
     runs-on: ubuntu-latest
-    id-token: write
+    permissions:
+      id-token: write
 
     steps:
       - name: Checkout repository
