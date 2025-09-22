@@ -363,6 +363,14 @@ Example:
 yarn docusaurus gen-api-docs petstore
 ```
 
+To generate only schema MDX files—without updating the sidebar or requiring `showSchemas` in your plugin config—use the `--schemas-only` flag:
+
+```bash title="generating only schema docs for 'petstore'"
+yarn docusaurus gen-api-docs petstore --schemas-only
+```
+
+> This command writes the schema pages to the configured output directory while leaving other generated docs untouched.
+
 ### Cleaning API Docs
 
 To clean/remove all API Docs, run the following command from the root directory of your project:

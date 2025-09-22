@@ -11,6 +11,8 @@ import path from "path";
 import { posixPath } from "@docusaurus/utils";
 
 import { readOpenapiFiles } from ".";
+import { processOpenapiFile } from "./openapi";
+import type { APIOptions, SidebarOptions } from "../types";
 
 // npx jest packages/docusaurus-plugin-openapi/src/openapi/openapi.test.ts --watch
 
@@ -35,6 +37,62 @@ describe("openapi", () => {
       expect(
         yaml?.data.components?.schemas?.HelloString["x-tags"]
       ).toBeDefined();
+    });
+  });
+
+  describe("schemasOnly", () => {
+    it("includes schema metadata when showSchemas is disabled", async () => {
+      const openapiData = {
+        openapi: "3.0.0",
+        info: {
+          title: "Schema Only",
+          version: "1.0.0",
+        },
+        paths: {
+          "/ping": {
+            get: {
+              summary: "Ping",
+              responses: {
+                "200": {
+                  description: "OK",
+                },
+              },
+            },
+          },
+        },
+        components: {
+          schemas: {
+            WithoutTags: {
+              title: "Without Tags",
+              type: "object",
+              properties: {
+                value: {
+                  type: "string",
+                },
+              },
+            },
+          },
+        },
+      };
+
+      const options: APIOptions = {
+        specPath: "dummy", // required by the type but unused in this context
+        outputDir: "build",
+        showSchemas: false,
+        schemasOnly: true,
+      };
+
+      const sidebarOptions = {} as SidebarOptions;
+
+      const [items] = await processOpenapiFile(
+        openapiData as any,
+        options,
+        sidebarOptions
+      );
+
+      const schemaItems = items.filter((item) => item.type === "schema");
+      expect(schemaItems).toHaveLength(1);
+      expect(schemaItems[0].id).toBe("without-tags");
     });
   });
 });
