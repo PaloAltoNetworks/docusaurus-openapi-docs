@@ -95,6 +95,7 @@ function createItems(
   let items: PartialPage<ApiMetadata>[] = [];
   const infoIdSpaces = openapiData.info.title.replace(" ", "-").toLowerCase();
   const infoId = kebabCase(infoIdSpaces);
+  const schemasOnly = options?.schemasOnly === true;
 
   if (openapiData.info.description || openapiData.info.title) {
     // Only create an info page if we have a description.
@@ -434,6 +435,7 @@ function createItems(
   }
 
   if (
+    schemasOnly ||
     options?.showSchemas === true ||
     Object.entries(openapiData?.components?.schemas ?? {})
       .flatMap(([_, s]) => s["x-tags"])
@@ -443,7 +445,11 @@ function createItems(
     for (let [schema, schemaObject] of Object.entries(
       openapiData?.components?.schemas ?? {}
     )) {
-      if (options?.showSchemas === true || schemaObject["x-tags"]) {
+      if (
+        schemasOnly ||
+        options?.showSchemas === true ||
+        schemaObject["x-tags"]
+      ) {
         const baseIdSpaces =
           schemaObject?.title?.replace(" ", "-").toLowerCase() ?? "";
         const baseId = kebabCase(baseIdSpaces);
