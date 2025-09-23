@@ -129,17 +129,32 @@ interface SchemaProps {
 
 const AnyOneOf: React.FC<SchemaProps> = ({ schema, schemaType }) => {
   const key = schema.oneOf ? "oneOf" : "anyOf";
-  const type = schema.oneOf
+  const groupLabel = schema.oneOf
     ? translate({ id: OPENAPI_SCHEMA_ITEM.ONE_OF, message: "oneOf" })
     : translate({ id: OPENAPI_SCHEMA_ITEM.ANY_OF, message: "anyOf" });
+
   return (
     <>
       <span className="badge badge--info" style={{ marginBottom: "1rem" }}>
-        {type}
+        {groupLabel}
       </span>
       <SchemaTabs>
         {schema[key]?.map((anyOneSchema: any, index: number) => {
-          const label = anyOneSchema.title || anyOneSchema.type;
+          // Prefer explicit title, then inferred name, then raw type, finally fallback MOD{n}
+          const computedSchemaName = getSchemaName(anyOneSchema);
+          const label =
+            anyOneSchema.title ||
+            computedSchemaName ||
+            anyOneSchema.type ||
+            `MOD${index + 1}`;
+          const isPrimitiveArm =
+            isPrimitive(anyOneSchema) || anyOneSchema.const;
+          const emptyObjectPrimitive =
+            anyOneSchema.type === "object" &&
+            !anyOneSchema.properties &&
+            !anyOneSchema.allOf &&
+            !anyOneSchema.oneOf &&
+            !anyOneSchema.anyOf;
           return (
             // @ts-ignore
             <TabItem
@@ -147,37 +162,28 @@ const AnyOneOf: React.FC<SchemaProps> = ({ schema, schemaType }) => {
               label={label}
               value={`${index}-item-properties`}
             >
-              {/* Handle primitive types directly */}
-              {(isPrimitive(anyOneSchema) || anyOneSchema.const) && (
+              {isPrimitiveArm && (
                 <SchemaItem
                   collapsible={false}
                   name={undefined}
-                  schemaName={anyOneSchema.type}
+                  schemaName={computedSchemaName}
                   qualifierMessage={getQualifierMessage(anyOneSchema)}
                   schema={anyOneSchema}
                   discriminator={false}
                   children={null}
                 />
               )}
-
-              {/* Handle empty object as a primitive type */}
-              {anyOneSchema.type === "object" &&
-                !anyOneSchema.properties &&
-                !anyOneSchema.allOf &&
-                !anyOneSchema.oneOf &&
-                !anyOneSchema.anyOf && (
-                  <SchemaItem
-                    collapsible={false}
-                    name={undefined}
-                    schemaName={anyOneSchema.type}
-                    qualifierMessage={getQualifierMessage(anyOneSchema)}
-                    schema={anyOneSchema}
-                    discriminator={false}
-                    children={null}
-                  />
-                )}
-
-              {/* Handle actual object types with properties or nested schemas */}
+              {emptyObjectPrimitive && (
+                <SchemaItem
+                  collapsible={false}
+                  name={undefined}
+                  schemaName={computedSchemaName}
+                  qualifierMessage={getQualifierMessage(anyOneSchema)}
+                  schema={anyOneSchema}
+                  discriminator={false}
+                  children={null}
+                />
+              )}
               {anyOneSchema.type === "object" && anyOneSchema.properties && (
                 <Properties schema={anyOneSchema} schemaType={schemaType} />
               )}
