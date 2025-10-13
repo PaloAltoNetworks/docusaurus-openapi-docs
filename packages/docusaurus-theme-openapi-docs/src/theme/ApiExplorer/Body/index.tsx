@@ -7,6 +7,8 @@
 
 import React from "react";
 
+import { translate } from "@docusaurus/Translate";
+
 import json2xml from "@theme/ApiExplorer/Body/json2xml";
 import FormFileUpload from "@theme/ApiExplorer/FormFileUpload";
 import FormItem from "@theme/ApiExplorer/FormItem";
@@ -17,6 +19,7 @@ import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import Markdown from "@theme/Markdown";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
+import { OPENAPI_BODY, OPENAPI_REQUEST } from "@theme/translationIds";
 import { RequestBodyObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import format from "xml-formatter";
 
@@ -98,7 +101,10 @@ function Body({
     return (
       <FormItem>
         <FormFileUpload
-          placeholder={schema.description || "Body"}
+          placeholder={
+            schema.description ||
+            translate({ id: OPENAPI_REQUEST.BODY_TITLE, message: "Body" })
+          }
           onChange={(file: any) => {
             if (file === undefined) {
               dispatch(clearRawBody());
@@ -168,7 +174,7 @@ function Body({
                 >
                   <FormSelect
                     options={["---", ...val.enum]}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                       const val = e.target.value;
                       if (val === "---") {
                         dispatch(clearFormBodyKey(key));
@@ -302,7 +308,10 @@ function Body({
         <SchemaTabs className="openapi-tabs__schema" lazy>
           {/* @ts-ignore */}
           <TabItem
-            label="Example (from schema)"
+            label={translate({
+              id: OPENAPI_BODY.EXAMPLE_FROM_SCHEMA,
+              message: "Example (from schema)",
+            })}
             value="Example (from schema)"
             default
           >
@@ -334,7 +343,10 @@ function Body({
         <SchemaTabs className="openapi-tabs__schema" lazy>
           {/* @ts-ignore */}
           <TabItem
-            label="Example (from schema)"
+            label={translate({
+              id: OPENAPI_BODY.EXAMPLE_FROM_SCHEMA,
+              message: "Example (from schema)",
+            })}
             value="Example (from schema)"
             default
           >

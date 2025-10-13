@@ -8,9 +8,11 @@
 import React, { type JSX, useEffect, useState } from "react";
 
 import { usePrismTheme } from "@docusaurus/theme-common";
+import { translate } from "@docusaurus/Translate";
 import useIsBrowser from "@docusaurus/useIsBrowser";
 import { ErrorMessage } from "@hookform/error-message";
 import { setStringRawBody } from "@theme/ApiExplorer/Body/slice";
+import { OPENAPI_FORM } from "@theme/translationIds";
 import clsx from "clsx";
 import { Controller, useFormContext } from "react-hook-form";
 import { LiveProvider, LiveEditor, withLive } from "react-live";
@@ -85,7 +87,13 @@ function App({
         <Controller
           control={control}
           rules={{
-            required: isRequired && !code ? "This field is required" : false,
+            required:
+              isRequired && !code
+                ? translate({
+                    id: OPENAPI_FORM.FIELD_REQUIRED,
+                    message: "This field is required",
+                  })
+                : false,
           }}
           name="requestBody"
           render={({ field: { onChange, name } }) => (

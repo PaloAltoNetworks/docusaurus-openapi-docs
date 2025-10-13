@@ -7,11 +7,12 @@
 
 import React from "react";
 
-import { renderExamplesRecord, renderStringExamples } from "@theme/Example";
+import { translate } from "@docusaurus/Translate";
 import Markdown from "@theme/Markdown";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
 /* eslint-disable import/no-extraneous-dependencies*/
+import { OPENAPI_SCHEMA_ITEM } from "@theme/translationIds";
 import clsx from "clsx";
 
 import { getQualifierMessage, getSchemaName } from "../../markdown/schema";
@@ -40,7 +41,15 @@ export interface Props {
 
 const getEnumDescriptionMarkdown = (enumDescriptions?: [string, string][]) => {
   if (enumDescriptions?.length) {
-    return `| Enum Value | Description |
+    const enumValue = translate({
+      id: OPENAPI_SCHEMA_ITEM.ENUM_VALUE,
+      message: "Enum Value",
+    });
+    const description = translate({
+      id: OPENAPI_SCHEMA_ITEM.ENUM_DESCRIPTION,
+      message: "Description",
+    });
+    return `| ${enumValue} | ${description} |
 | ---- | ----- |
 ${enumDescriptions
   .map((desc) => {
@@ -83,11 +92,15 @@ function ParamsItem({ param, ...rest }: Props) {
   ));
 
   const renderSchemaRequired = guard(required, () => (
-    <span className="openapi-schema__required">required</span>
+    <span className="openapi-schema__required">
+      {translate({ id: OPENAPI_SCHEMA_ITEM.REQUIRED, message: "required" })}
+    </span>
   ));
 
   const renderDeprecated = guard(deprecated, () => (
-    <span className="openapi-schema__deprecated">deprecated</span>
+    <span className="openapi-schema__deprecated">
+      {translate({ id: OPENAPI_SCHEMA_ITEM.DEPRECATED, message: "deprecated" })}
+    </span>
   ));
 
   const renderQualifier = guard(getQualifierMessage(schema), (qualifier) => (
@@ -114,7 +127,12 @@ function ParamsItem({ param, ...rest }: Props) {
       if (typeof defaultValue === "string") {
         return (
           <div>
-            <strong>Default value: </strong>
+            <strong>
+              {translate({
+                id: OPENAPI_SCHEMA_ITEM.DEFAULT_VALUE,
+                message: "Default value:",
+              })}{" "}
+            </strong>
             <span>
               <code>{defaultValue}</code>
             </span>
@@ -123,7 +141,12 @@ function ParamsItem({ param, ...rest }: Props) {
       }
       return (
         <div>
-          <strong>Default value: </strong>
+          <strong>
+            {translate({
+              id: OPENAPI_SCHEMA_ITEM.DEFAULT_VALUE,
+              message: "Default value:",
+            })}{" "}
+          </strong>
           <span>
             <code>{JSON.stringify(defaultValue)}</code>
           </span>
@@ -135,19 +158,56 @@ function ParamsItem({ param, ...rest }: Props) {
 
   const renderExample = guard(toString(example), (example) => (
     <div>
-      <strong>Example: </strong>
-      <code>{example}</code>
+      <strong>
+        {translate({
+          id: OPENAPI_SCHEMA_ITEM.EXAMPLE,
+          message: "Example:",
+        })}{" "}
+      </strong>
+      {example}
     </div>
   ));
 
   const renderExamples = guard(examples, (examples) => {
-    if (!examples) {
-      return undefined;
-    }
-    if (Array.isArray(examples)) {
-      return renderStringExamples(examples);
-    }
-    return renderExamplesRecord(examples);
+    const exampleEntries = Object.entries(examples);
+    return (
+      <>
+        <strong>
+          {translate({
+            id: OPENAPI_SCHEMA_ITEM.EXAMPLES,
+            message: "Examples:",
+          })}
+        </strong>
+        <SchemaTabs>
+          {exampleEntries.map(([exampleName, exampleProperties]) => (
+            // @ts-ignore
+            <TabItem value={exampleName} label={exampleName}>
+              {exampleProperties.summary && <p>{exampleProperties.summary}</p>}
+              {exampleProperties.description && (
+                <p>
+                  <strong>
+                    {translate({
+                      id: OPENAPI_SCHEMA_ITEM.DESCRIPTION,
+                      message: "Description:",
+                    })}{" "}
+                  </strong>
+                  <span>{exampleProperties.description}</span>
+                </p>
+              )}
+              <p>
+                <strong>
+                  {translate({
+                    id: OPENAPI_SCHEMA_ITEM.EXAMPLE,
+                    message: "Example:",
+                  })}{" "}
+                </strong>
+                <code>{exampleProperties.value}</code>
+              </p>
+            </TabItem>
+          ))}
+        </SchemaTabs>
+      </>
+    );
   });
 
   return (

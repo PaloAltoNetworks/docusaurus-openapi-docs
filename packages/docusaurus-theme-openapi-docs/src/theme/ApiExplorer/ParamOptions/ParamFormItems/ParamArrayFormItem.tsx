@@ -7,12 +7,14 @@
 
 import React, { useEffect, useState } from "react";
 
+import { translate } from "@docusaurus/Translate";
 import { ErrorMessage } from "@hookform/error-message";
 import { nanoid } from "@reduxjs/toolkit";
 import FormSelect from "@theme/ApiExplorer/FormSelect";
 import FormTextInput from "@theme/ApiExplorer/FormTextInput";
 import { Param, setParam } from "@theme/ApiExplorer/ParamOptions/slice";
 import { useTypedDispatch } from "@theme/ApiItem/hooks";
+import { OPENAPI_FORM } from "@theme/translationIds";
 import { Controller, useFormContext } from "react-hook-form";
 
 export interface ParamProps {
@@ -30,7 +32,7 @@ function ArrayItem({
     return (
       <FormSelect
         options={["---", "true", "false"]}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
           const val = e.target.value;
           onChange(val === "---" ? undefined : val);
         }}
@@ -87,15 +89,16 @@ export default function ParamArrayFormItem({ param }: ParamProps) {
   }, [items]);
 
   useEffect(() => {
-    if (param.schema?.example?.length > 0) {
-      const examplesWithIds = param.schema.example.map((item: any) => ({
+    const example = param.schema?.example;
+    if (Array.isArray(example) && example.length > 0) {
+      const examplesWithIds = example.map((item: any) => ({
         id: nanoid(),
         value: item.toString(),
       }));
 
       setItems(examplesWithIds);
     }
-  }, [param.schema.example, param.schema.length]);
+  }, [param.schema?.example]);
 
   function handleDeleteItem(itemToDelete: { id: string }) {
     return () => {
@@ -121,9 +124,16 @@ export default function ParamArrayFormItem({ param }: ParamProps) {
     <>
       <Controller
         control={control}
-        rules={{ required: param.required ? "This field is required" : false }}
+        rules={{
+          required: param.required
+            ? translate({
+                id: OPENAPI_FORM.FIELD_REQUIRED,
+                message: "This field is required",
+              })
+            : false,
+        }}
         name="paramArray"
-        render={({ field: { onChange, name } }) => (
+        render={({ field: { onChange } }) => (
           <>
             {items.map((item) => (
               <div key={item.id} style={{ display: "flex" }}>

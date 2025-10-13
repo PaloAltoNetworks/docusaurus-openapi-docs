@@ -7,10 +7,12 @@
 
 import React from "react";
 
+import { translate } from "@docusaurus/Translate";
 import FormItem from "@theme/ApiExplorer/FormItem";
 import FormSelect from "@theme/ApiExplorer/FormSelect";
 import FormTextInput from "@theme/ApiExplorer/FormTextInput";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
+import { OPENAPI_AUTH } from "@theme/translationIds";
 
 import { setAuthData, setSelectedAuth } from "./slice";
 
@@ -32,11 +34,16 @@ function Authorization() {
   return (
     <div>
       {optionKeys.length > 1 && (
-        <FormItem label="Security Scheme">
+        <FormItem
+          label={translate({
+            id: OPENAPI_AUTH.SECURITY_SCHEME,
+            message: "Security Scheme",
+          })}
+        >
           <FormSelect
             options={optionKeys}
             value={selected}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
               dispatch(setSelectedAuth(e.target.value));
             }}
           />
@@ -45,9 +52,18 @@ function Authorization() {
       {selectedAuth.map((a: any) => {
         if (a.type === "http" && a.scheme === "bearer") {
           return (
-            <FormItem label="Bearer Token" key={a.key + "-bearer"}>
+            <FormItem
+              label={translate({
+                id: OPENAPI_AUTH.BEARER_TOKEN,
+                message: "Bearer Token",
+              })}
+              key={a.key + "-bearer"}
+            >
               <FormTextInput
-                placeholder="Bearer Token"
+                placeholder={translate({
+                  id: OPENAPI_AUTH.BEARER_TOKEN,
+                  message: "Bearer Token",
+                })}
                 password
                 value={data[a.key].token ?? ""}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,9 +83,18 @@ function Authorization() {
 
         if (a.type === "oauth2") {
           return (
-            <FormItem label="Bearer Token" key={a.key + "-oauth2"}>
+            <FormItem
+              label={translate({
+                id: OPENAPI_AUTH.BEARER_TOKEN,
+                message: "Bearer Token",
+              })}
+              key={a.key + "-oauth2"}
+            >
               <FormTextInput
-                placeholder="Bearer Token"
+                placeholder={translate({
+                  id: OPENAPI_AUTH.BEARER_TOKEN,
+                  message: "Bearer Token",
+                })}
                 password
                 value={data[a.key].token ?? ""}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,9 +115,17 @@ function Authorization() {
         if (a.type === "http" && a.scheme === "basic") {
           return (
             <React.Fragment key={a.key + "-basic"}>
-              <FormItem label="Username">
+              <FormItem
+                label={translate({
+                  id: OPENAPI_AUTH.USERNAME,
+                  message: "Username",
+                })}
+              >
                 <FormTextInput
-                  placeholder="Username"
+                  placeholder={translate({
+                    id: OPENAPI_AUTH.USERNAME,
+                    message: "Username",
+                  })}
                   value={data[a.key].username ?? ""}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     const value = e.target.value;
@@ -106,9 +139,17 @@ function Authorization() {
                   }}
                 />
               </FormItem>
-              <FormItem label="Password">
+              <FormItem
+                label={translate({
+                  id: OPENAPI_AUTH.PASSWORD,
+                  message: "Password",
+                })}
+              >
                 <FormTextInput
-                  placeholder="Password"
+                  placeholder={translate({
+                    id: OPENAPI_AUTH.PASSWORD,
+                    message: "Password",
+                  })}
                   password
                   value={data[a.key].password ?? ""}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {

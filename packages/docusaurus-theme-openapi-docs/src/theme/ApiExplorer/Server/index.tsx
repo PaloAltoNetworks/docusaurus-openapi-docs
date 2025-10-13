@@ -7,11 +7,13 @@
 
 import React, { useState } from "react";
 
+import { translate } from "@docusaurus/Translate";
 import FloatingButton from "@theme/ApiExplorer/FloatingButton";
 import FormItem from "@theme/ApiExplorer/FormItem";
 import FormSelect from "@theme/ApiExplorer/FormSelect";
 import FormTextInput from "@theme/ApiExplorer/FormTextInput";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
+import { OPENAPI_SERVER } from "@theme/translationIds";
 
 import { setServer, setServerVariable } from "./slice";
 
@@ -57,7 +59,10 @@ function Server() {
       }
     }
     return (
-      <FloatingButton onClick={() => setIsEditing(true)} label="Edit">
+      <FloatingButton
+        onClick={() => setIsEditing(true)}
+        label={translate({ id: OPENAPI_SERVER.EDIT_BUTTON, message: "Edit" })}
+      >
         <FormItem>
           <span className="openapi-explorer__server-url" title={url}>
             {url}
@@ -68,11 +73,14 @@ function Server() {
   }
   return (
     <div className="openapi-explorer__server-container">
-      <FloatingButton onClick={() => setIsEditing(false)} label="Hide">
+      <FloatingButton
+        onClick={() => setIsEditing(false)}
+        label={translate({ id: OPENAPI_SERVER.HIDE_BUTTON, message: "Hide" })}
+      >
         <FormItem>
           <FormSelect
             options={options.map((s: any) => s.url)}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
               dispatch(
                 setServer(
                   JSON.stringify(
@@ -94,7 +102,7 @@ function Server() {
                 <FormItem label={key}>
                   <FormSelect
                     options={value.variables[key].enum}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                       dispatch(
                         setServerVariable(
                           JSON.stringify({ key, value: e.target.value })

@@ -20,8 +20,10 @@ import {
   useTabs,
 } from "@docusaurus/theme-common/internal";
 import { TabItemProps } from "@docusaurus/theme-common/lib/utils/tabsUtils";
+import { translate } from "@docusaurus/Translate";
 import useIsBrowser from "@docusaurus/useIsBrowser";
 import Heading from "@theme/Heading";
+import { OPENAPI_TABS } from "@theme/translationIds";
 import clsx from "clsx";
 
 export interface TabListProps extends TabProps {
@@ -35,7 +37,10 @@ function TabList({
   selectedValue,
   selectValue,
   tabValues,
-  label = "Responses",
+  label = translate({
+    id: OPENAPI_TABS.RESPONSES_LABEL,
+    message: "Responses",
+  }),
   id = "responses",
 }: TabListProps & ReturnType<typeof useTabs>) {
   const tabRefs: (HTMLLIElement | null)[] = [];

@@ -8,6 +8,7 @@
 import React from "react";
 
 import BrowserOnly from "@docusaurus/BrowserOnly";
+import { translate } from "@docusaurus/Translate";
 import Details from "@theme/Details";
 import Markdown from "@theme/Markdown";
 import MimeTabs from "@theme/MimeTabs"; // Assume these components exist
@@ -20,6 +21,7 @@ import SchemaNode from "@theme/Schema";
 import SchemaTabs from "@theme/SchemaTabs";
 import SkeletonLoader from "@theme/SkeletonLoader";
 import TabItem from "@theme/TabItem";
+import { OPENAPI_SCHEMA, OPENAPI_SCHEMA_ITEM } from "@theme/translationIds";
 import { MediaTypeObject } from "docusaurus-plugin-openapi-docs/lib/openapi/types";
 
 interface Props {
@@ -67,7 +69,12 @@ const ResponseSchemaComponent: React.FC<Props> = ({
             return (
               // @ts-ignore
               <TabItem key={mimeType} label={mimeType} value={mimeType}>
-                <div>No schema</div>
+                <div>
+                  {translate({
+                    id: OPENAPI_SCHEMA.NO_SCHEMA,
+                    message: "No schema",
+                  })}
+                </div>
               </TabItem>
             );
           }
@@ -90,7 +97,10 @@ const ResponseSchemaComponent: React.FC<Props> = ({
                             {title}
                             {body.required === true && (
                               <span className="openapi-schema__required">
-                                required
+                                {translate({
+                                  id: OPENAPI_SCHEMA_ITEM.REQUIRED,
+                                  message: "required",
+                                })}
                               </span>
                             )}
                           </strong>
