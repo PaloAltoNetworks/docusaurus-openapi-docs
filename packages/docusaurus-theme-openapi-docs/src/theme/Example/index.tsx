@@ -7,9 +7,37 @@
 
 import React from "react";
 
+import { translate } from "@docusaurus/Translate";
 import { ExampleObject } from "@theme/ParamsItem";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
+import { OPENAPI_SCHEMA_ITEM } from "@theme/translationIds";
+
+const EXAMPLE_CLASS_NAME = "openapi-example";
+const EXAMPLES_CLASS_NAME = "openapi-examples";
+
+type ExampleType = string;
+type ExamplesType = Record<string, ExampleObject> | string[];
+
+/**
+ * Example Component Props
+ */
+type ExampleProps =
+  | { example: ExampleType; examples?: ExamplesType }
+  | { example?: ExampleType; examples: ExamplesType };
+
+/**
+ * Example Component
+ */
+export const Example = ({ example, examples }: ExampleProps) => {
+  if (example) {
+    return renderExample(example);
+  }
+  if (examples) {
+    return renderExamples(examples);
+  }
+  return undefined;
+};
 
 /**
  * Format example value
@@ -24,51 +52,55 @@ const formatExample = (example: any) => {
   return String(example);
 };
 
+const renderExample = (example: ExampleType) => {
+  return (
+    <div className={EXAMPLE_CLASS_NAME}>
+      <strong>
+        {translate({
+          id: OPENAPI_SCHEMA_ITEM.EXAMPLE,
+          message: "Example:",
+        })}
+      </strong>
+      <span>
+        <code>{example}</code>
+      </span>
+    </div>
+  );
+};
+
+const renderExamples = (examples: ExamplesType) => {
+  if (Array.isArray(examples)) {
+    return renderStringArrayExamples(examples);
+  }
+  return renderExamplesRecord(examples);
+};
+
 /**
  * Render string examples
  *
  * @param examples
  * @returns
  */
-export function renderStringExamples(
-  examples: string[] | undefined
-): React.JSX.Element | undefined {
-  if (examples && examples.length > 0) {
-    // If there's only one example, display it without tabs
-    if (examples.length === 1) {
-      return (
-        <div>
-          <strong>Example: </strong>
-          <span>
-            <code>{formatExample(examples[0])}</code>
-          </span>
-        </div>
-      );
-    }
-
-    // Multiple examples - use tabs
-    return (
-      <div>
-        <strong>Examples:</strong>
-        <SchemaTabs>
-          {examples.map((example, index) => (
-            // @ts-ignore
-            <TabItem
-              value={`Example ${index + 1}`}
-              label={`Example ${index + 1}`}
-              key={`Example ${index + 1}`}
-            >
-              <p>
-                <strong>Example: </strong>
-                <code>{formatExample(example)}</code>
-              </p>
-            </TabItem>
-          ))}
-        </SchemaTabs>
-      </div>
-    );
+export function renderStringArrayExamples(examples: string[]) {
+  if (examples.length === 0) {
+    return undefined;
   }
-  return undefined;
+  // If there's only one example, display it without tabs
+  if (examples.length === 1) {
+    return renderExample(examples[0]);
+  }
+
+  // Multiple examples - use tabs
+  const exampleEntries = examples.reduce(
+    (acc, example, index) => ({
+      ...acc,
+      [`Example ${index + 1}`]: {
+        value: example,
+      },
+    }),
+    {} as Record<string, ExampleObject>
+  );
+  return renderExamplesRecord(exampleEntries);
 }
 
 export const renderExamplesRecord = (
@@ -81,25 +113,23 @@ export const renderExamplesRecord = (
     if (!firstExample) {
       return undefined;
     }
-    return (
-      <div>
-        <strong>Example: </strong>
-        <span>
-          <code>{formatExample(firstExample.value)}</code>
-        </span>
-      </div>
-    );
+    return renderExample(firstExample.value);
   }
 
   return (
-    <>
-      <strong>Examples:</strong>
+    <div className={EXAMPLES_CLASS_NAME}>
+      <strong>
+        {translate({
+          id: OPENAPI_SCHEMA_ITEM.EXAMPLES,
+          message: "Examples:",
+        })}
+      </strong>
       <SchemaTabs>
         {exampleEntries.map(([exampleName, exampleProperties]) =>
           renderExampleObject(exampleName, exampleProperties)
         )}
       </SchemaTabs>
-    </>
+    </div>
   );
 };
 
@@ -120,12 +150,22 @@ const renderExampleObject = (
       {exampleProperties.summary && <p>{exampleProperties.summary}</p>}
       {exampleProperties.description && (
         <p>
-          <strong>Description: </strong>
+          <strong>
+            {translate({
+              id: OPENAPI_SCHEMA_ITEM.DESCRIPTION,
+              message: "Description:",
+            })}{" "}
+          </strong>
           <span>{exampleProperties.description}</span>
         </p>
       )}
       <p>
-        <strong>Example: </strong>
+        <strong>
+          {translate({
+            id: OPENAPI_SCHEMA_ITEM.EXAMPLE,
+            message: "Example:",
+          })}{" "}
+        </strong>
         <code>{formatExample(exampleProperties.value)}</code>
       </p>
     </TabItem>

@@ -1,0 +1,11 @@
+.openapi-examples {
+  > .openapi-tabs__schema-container {
+    margin: 0.4rem;
+
+    @layer docusaurus.infima {
+      > .margin-top--md {
+        margin: 0.2rem !important;
+      }
+    }
+  }
+}

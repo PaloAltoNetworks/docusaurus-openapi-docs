@@ -1,14 +1,14 @@
 .openapi-params__list-item {
   margin: 0 0 0 1rem !important;
   position: relative;
-  padding: 5px 0 5px 1rem;
+  padding-left: 1rem;
   border-left: thin solid var(--openapi-tree-line-color) !important;
   margin-top: unset !important;
 
   // Horizonal line styling for param attributes
   &::before {
     position: absolute;
-    top: 10px;
+    top: 5px;
     left: 0;
     width: 0.7rem;
     /* width of horizontal line */
@@ -23,18 +23,6 @@
   &:hover {
     .openapi-schema__property {
       color: var(--ifm-color-primary);
-    }
-  }
-
-  .openapi-tabs__schema-container {
-    > .openapi-tabs__schema-tabs-container {
-      margin: 0.2rem 0;
-    }
-
-    @layer docusaurus.infima {
-      > .margin-top--md {
-        margin-top: 0rem !important;
-      }
     }
   }
 }

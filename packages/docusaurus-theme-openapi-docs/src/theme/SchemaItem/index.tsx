@@ -7,11 +7,11 @@
 
 import React, { ReactNode } from "react";
 
-import { renderStringExamples } from "@theme/Example";
-import Markdown from "@theme/Markdown";
-import clsx from "clsx";
 import { translate } from "@docusaurus/Translate";
+import { Example } from "@theme/Example";
+import Markdown from "@theme/Markdown";
 import { OPENAPI_SCHEMA_ITEM } from "@theme/translationIds";
+import clsx from "clsx";
 
 import { guard } from "../../markdown/utils";
 
@@ -170,40 +170,6 @@ export default function SchemaItem(props: Props) {
     return undefined;
   }
 
-  function renderExample() {
-    if (example !== undefined) {
-      if (typeof example === "string") {
-        return (
-          <div>
-            <strong>
-              {translate({
-                id: OPENAPI_SCHEMA_ITEM.EXAMPLE,
-                message: "Example:",
-              })}{" "}
-            </strong>
-            <span>
-              <code>{example}</code>
-            </span>
-          </div>
-        );
-      }
-      return (
-        <div>
-          <strong>
-            {translate({
-              id: OPENAPI_SCHEMA_ITEM.EXAMPLE,
-              message: "Example:",
-            })}{" "}
-          </strong>
-          <span>
-            <code>{JSON.stringify(example)}</code>
-          </span>
-        </div>
-      );
-    }
-    return undefined;
-  }
-
   function renderConstValue() {
     if (constValue !== undefined) {
       if (typeof constValue === "string") {
@@ -263,8 +229,8 @@ export default function SchemaItem(props: Props) {
       {renderQualifierMessage}
       {renderConstValue()}
       {renderDefaultValue()}
-      {renderExample()}
-      {renderStringExamples(examples)}
+      {example && <Example example={example} />}
+      {examples && <Example examples={examples} />}
       {collapsibleSchemaContent ?? collapsibleSchemaContent}
     </div>
   );
