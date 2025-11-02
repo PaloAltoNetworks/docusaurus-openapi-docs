@@ -300,7 +300,6 @@ const config: Config = {
               categoryLinkSource: "tag",
             },
             markdownGenerators: {
-              // Explicitly disable info page generation for testing
               createInfoPageMD: true,
             }, // customize MDX with markdown generator
             template: "templates/api.mustache", // Customize API MDX with mustache template
