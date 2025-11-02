@@ -57,7 +57,7 @@ export interface APIOptions {
 
 export interface MarkdownGenerator {
   createApiPageMD?: (pageData: ApiPageMetadata) => string;
-  createInfoPageMD?: ((pageData: InfoPageMetadata) => string) | null;
+  createInfoPageMD?: ((pageData: InfoPageMetadata) => string) | boolean;
   createTagPageMD?: (pageData: TagPageMetadata) => string;
   createSchemaPageMD?: (pageData: SchemaPageMetadata) => string;
 }

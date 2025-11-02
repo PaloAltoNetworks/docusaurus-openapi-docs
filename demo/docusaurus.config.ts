@@ -301,7 +301,7 @@ const config: Config = {
             },
             markdownGenerators: {
               // Explicitly disable info page generation for testing
-              createInfoPageMD: null,
+              createInfoPageMD: true,
             }, // customize MDX with markdown generator
             template: "templates/api.mustache", // Customize API MDX with mustache template
             infoTemplate: "templates/info.mustache",
@@ -325,7 +325,7 @@ const config: Config = {
             markdownGenerators: {
               createApiPageMD: myCustomApiMdGenerator,
               // Explicitly disable info page generation for testing
-              createInfoPageMD: null,
+              createInfoPageMD: false,
             }, // customize MDX with markdown generator
           } satisfies OpenApiPlugin.Options,
           cos: {

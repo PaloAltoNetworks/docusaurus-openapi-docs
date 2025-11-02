@@ -303,8 +303,14 @@ custom_edit_url: null
 
       const apiPageGenerator =
         markdownGenerators?.createApiPageMD ?? createApiPageMD;
+
+      // Handle boolean values for createInfoPageMD
+      // true or undefined = use default, false = disabled (won't be called), function = use custom
       const infoPageGenerator =
-        markdownGenerators?.createInfoPageMD ?? createInfoPageMD;
+        typeof markdownGenerators?.createInfoPageMD === "function"
+          ? markdownGenerators.createInfoPageMD
+          : createInfoPageMD;
+
       const tagPageGenerator =
         markdownGenerators?.createTagPageMD ?? createTagPageMD;
       const schemaPageGenerator =
