@@ -11,7 +11,7 @@ import type { JSONSchema4, JSONSchema6, JSONSchema7 } from "json-schema";
 export interface ThemeConfig {
   api?: {
     proxy?: string;
-    authPersistance?: false | "localStorage" | "sessionStorage";
+    authPersistence?: false | "localStorage" | "sessionStorage";
   };
 }
 

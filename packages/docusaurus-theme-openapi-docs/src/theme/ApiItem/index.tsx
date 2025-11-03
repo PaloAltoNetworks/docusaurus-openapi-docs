@@ -15,6 +15,7 @@ import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import useIsBrowser from "@docusaurus/useIsBrowser";
 import { createAuth } from "@theme/ApiExplorer/Authorization/slice";
 import { createPersistanceMiddleware } from "@theme/ApiExplorer/persistanceMiddleware";
+import { createStorage } from "@theme/ApiExplorer/storage-utils";
 import DocItemLayout from "@theme/ApiItem/Layout";
 import CodeBlock from "@theme/CodeBlock";
 import type { Props } from "@theme/DocItem";
@@ -129,10 +130,12 @@ export default function ApiItem(props: Props): JSX.Element {
       securitySchemes: api?.securitySchemes,
       options,
     });
+
+    const storage = createStorage(options?.authPersistence ?? "sessionStorage");
     // TODO: determine way to rehydrate without flashing
     // const acceptValue = window?.sessionStorage.getItem("accept");
     // const contentTypeValue = window?.sessionStorage.getItem("contentType");
-    const server = window?.sessionStorage.getItem("server");
+    const server = storage.getItem("server");
     const serverObject = (JSON.parse(server!) as ServerObject) ?? {};
 
     store2 = createStoreWithState(
