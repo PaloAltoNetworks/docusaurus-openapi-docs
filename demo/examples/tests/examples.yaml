@@ -37,7 +37,7 @@ paths:
           description: isStudent example
           in: query
           schema:
-            type: boolean
+            type: [boolean, "null"]
           example: false
       responses:
         "204":

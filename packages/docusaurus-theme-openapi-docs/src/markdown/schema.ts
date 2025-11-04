@@ -6,6 +6,7 @@
  * ========================================================================== */
 
 import { translate } from "@docusaurus/Translate";
+
 import { OPENAPI_SCHEMA_ITEM } from "../theme/translationIds";
 import { SchemaObject } from "../types";
 
@@ -40,6 +41,10 @@ function prettyName(schema: SchemaObject, circular?: boolean) {
   if (schema.type === "array") {
     return schema.xml?.name ?? schema.type;
     // return schema.type;
+  }
+
+  if (Array.isArray(schema.type)) {
+    return schema.type.join(" | ");
   }
 
   return schema.title ?? schema.type;
