@@ -33,6 +33,12 @@ paths:
           schema:
             type: number
           example: 25
+        - name: isStudent
+          description: isStudent example
+          in: query
+          schema:
+            type: boolean
+          example: false
       responses:
         "204":
           description: no content
@@ -72,6 +78,20 @@ paths:
               summary: "age example 2"
               description: "age example 2 description"
               value: 30
+        - name: isStudent
+          description: isStudent example
+          in: query
+          schema:
+            type: boolean
+          examples:
+            example1:
+              summary: "isStudent example 1"
+              description: "isStudent example 1 description"
+              value: true
+            example2:
+              summary: "isStudent example 2"
+              description: "isStudent example 2 description"
+              value: false
       responses:
         "204":
           description: no content
@@ -95,6 +115,12 @@ paths:
           schema:
             type: number
             example: 25
+        - name: isStudent
+          description: isStudent example
+          in: query
+          schema:
+            type: boolean
+          example: false
       responses:
         "204":
           description: no content
@@ -122,6 +148,14 @@ paths:
             examples:
               - 25
               - 30
+        - name: isStudent
+          description: isStudent example
+          in: query
+          schema:
+            type: boolean
+            examples:
+              - true
+              - false
       responses:
         "204":
           description: no content
@@ -177,12 +211,12 @@ paths:
                 value:
                   name: "John Doe"
                   age: 25
-                  isStudent: false
+                  isStudent: true
               example2:
                 value:
                   name: "Jane Smith"
                   age: 30
-                  isStudent: true
+                  isStudent: false
       responses:
         "204":
           description: no content
@@ -236,10 +270,10 @@ paths:
               examples:
                 - name: "John Doe"
                   age: 25
-                  isStudent: false
+                  isStudent: true
                 - name: "Jane Smith"
                   age: 30
-                  isStudent: true
+                  isStudent: false
       responses:
         "204":
           description: no content
@@ -354,12 +388,12 @@ paths:
                   value:
                     name: "John Doe"
                     age: 25
-                    isStudent: false
+                    isStudent: true
                 example2:
                   value:
                     name: "Jane Smith"
                     age: 30
-                    isStudent: true
+                    isStudent: false
 
   /response/mediaTypeObject/noSchema:
     get:
@@ -421,10 +455,10 @@ paths:
                 examples:
                   - name: "John Doe"
                     age: 25
-                    isStudent: false
+                    isStudent: true
                   - name: "Jane Smith"
                     age: 30
-                    isStudent: true
+                    isStudent: false
 
   /response/schema/properties/example:
     get:

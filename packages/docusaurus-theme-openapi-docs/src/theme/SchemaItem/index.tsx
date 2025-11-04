@@ -229,8 +229,8 @@ export default function SchemaItem(props: Props) {
       {renderQualifierMessage}
       {renderConstValue()}
       {renderDefaultValue()}
-      {example && <Example example={example} />}
-      {examples && <Example examples={examples} />}
+      <Example example={example} />
+      <Example examples={examples} />
       {collapsibleSchemaContent ?? collapsibleSchemaContent}
     </div>
   );

@@ -67,8 +67,8 @@ function ParamsItem({ param, ...rest }: Props) {
   let schema = param.schema;
   let defaultValue: string | undefined;
 
-  let examples = param.examples || (schema?.examples as any[] | undefined);
-  let example = param.example || schema?.example;
+  let examples = param.examples ?? (schema?.examples as any[] | undefined);
+  let example = param.example ?? schema?.example;
 
   if (!schema) {
     schema = { type: "any" };
@@ -176,8 +176,8 @@ function ParamsItem({ param, ...rest }: Props) {
       {renderDescription}
       {renderEnumDescriptions}
       {renderDefaultValue()}
-      {example && <Example example={example} />}
-      {examples && <Example examples={examples} />}
+      <Example example={example} />
+      <Example examples={examples} />
     </div>
   );
 }

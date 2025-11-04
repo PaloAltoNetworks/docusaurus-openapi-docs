@@ -22,18 +22,19 @@ type ExamplesType = Record<string, ExampleObject> | string[];
 /**
  * Example Component Props
  */
-type ExampleProps =
-  | { example: ExampleType; examples?: ExamplesType }
-  | { example?: ExampleType; examples: ExamplesType };
+type ExampleProps = {
+  example?: ExampleType;
+  examples?: ExamplesType;
+};
 
 /**
  * Example Component
  */
 export const Example = ({ example, examples }: ExampleProps) => {
-  if (example) {
+  if (example !== undefined) {
     return renderExample(example);
   }
-  if (examples) {
+  if (examples !== undefined) {
     return renderExamples(examples);
   }
   return undefined;
@@ -59,10 +60,10 @@ const renderExample = (example: ExampleType) => {
         {translate({
           id: OPENAPI_SCHEMA_ITEM.EXAMPLE,
           message: "Example:",
-        })}
+        })}{" "}
       </strong>
       <span>
-        <code>{example}</code>
+        <code>{formatExample(example)}</code>
       </span>
     </div>
   );
@@ -159,15 +160,9 @@ const renderExampleObject = (
           <span>{exampleProperties.description}</span>
         </p>
       )}
-      <p>
-        <strong>
-          {translate({
-            id: OPENAPI_SCHEMA_ITEM.EXAMPLE,
-            message: "Example:",
-          })}{" "}
-        </strong>
-        <code>{formatExample(exampleProperties.value)}</code>
-      </p>
+      {exampleProperties.value !== undefined
+        ? renderExample(exampleProperties.value)
+        : undefined}
     </TabItem>
   );
 };
