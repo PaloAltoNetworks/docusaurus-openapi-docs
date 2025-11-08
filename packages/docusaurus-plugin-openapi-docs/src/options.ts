@@ -20,6 +20,13 @@ const sidebarOptions = Joi.object({
   sidebarGenerators: sidebarGenerators,
 });
 
+const templateGenerators = Joi.object({
+  createIntroTemplateMD: Joi.function(),
+  createInfoTemplateMD: Joi.function(),
+  createTagTemplateMD: Joi.function(),
+  createSchemaTemplateMD: Joi.function(),
+});
+
 const markdownGenerators = Joi.object({
   createApiPageMD: Joi.function(),
   createInfoPageMD: Joi.function(),
@@ -39,6 +46,7 @@ export const OptionsSchema = Joi.object({
         proxy: Joi.string(),
         outputDir: Joi.string().required(),
         template: Joi.string(),
+        templateGenerators: templateGenerators,
         infoTemplate: Joi.string(),
         tagTemplate: Joi.string(),
         schemaTemplate: Joi.string(),
