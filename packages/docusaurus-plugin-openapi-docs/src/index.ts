@@ -26,7 +26,6 @@ import {
   infoMdTemplateDefault,
   tagMdTemplateDefault,
   schemaMdTemplateDefault,
-  infoMdTemplateDefault,
 } from "./markdown/templates";
 import { processOpenapiFiles, readOpenapiFiles } from "./openapi";
 import { OptionsSchema } from "./options";
