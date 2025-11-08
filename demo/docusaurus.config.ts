@@ -320,7 +320,7 @@ const config: Config = {
             hideSendButton: false,
             showSchemas: true,
             templateGenerators: {
-              createInfoTemplateMD: myCustomIntroTemplateGenerator,
+              createIntroTemplateMD: myCustomIntroTemplateGenerator,
             },
             markdownGenerators: { createApiPageMD: myCustomApiMdGenerator }, // customize MDX with markdown generator
           } satisfies OpenApiPlugin.Options,
