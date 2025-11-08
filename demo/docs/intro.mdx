@@ -29,7 +29,6 @@ OpenAPI plugin for generating API reference docs in Docusaurus v3.
 
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/blob/HEAD/LICENSE) [![npm latest package](https://img.shields.io/npm/v/docusaurus-plugin-openapi-docs/latest.svg)](https://www.npmjs.com/package/docusaurus-plugin-openapi-docs) [![npm downloads](https://img.shields.io/npm/dm/docusaurus-plugin-openapi-docs.svg)](https://www.npmjs.com/package/docusaurus-plugin-openapi-docs) [![npm canary package](https://img.shields.io/npm/v/docusaurus-plugin-openapi-docs/canary.svg)](https://www.npmjs.com/package/docusaurus-plugin-openapi-docs) [![npm beta package](https://img.shields.io/npm/v/docusaurus-plugin-openapi-docs/beta.svg)](https://www.npmjs.com/package/docusaurus-plugin-openapi-docs)
 
-
 <iframe
   src="https://ghbtns.com/github-btn.html?user=PaloAltoNetworks&amp;repo=docusaurus-openapi-docs&amp;type=star&amp;count=true&amp;size=large"
   width={160}
@@ -81,7 +80,6 @@ Other ReDoc specific extensions such as `x-circular-ref`, `x-code-samples` (depr
 | 3.0.x (end-of-support)  | `3.0.1 - 3.4.0` |
 | 2.2.3 (legacy)          | `2.4.1 - 2.4.3` |
 | 1.7.3 (end-of-support)  | `2.0.1 - 2.2.0` |
-
 
 :::tip
 If you're building a Docusaurus site from scratch, the easiest way to get started is by [installing from template](#bootstrapping-from-template-new-docusaurus-site).
@@ -207,20 +205,21 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 | `specPath`           | `string`  | `null`  | Designated URL or path to the source of an OpenAPI specification file or directory of multiple OpenAPI specification files.                     |
 | `outputDir`          | `string`  | `null`  | Desired output path for generated MDX and sidebar files.                                                                                        |
 | `proxy`              | `string`  | `null`  | _Optional:_ Proxy URL to prepend to base URL when performing API requests from browser.                                                         |
-| `template`           | `string`  | `null`  | _Optional:_ Customize MDX content with a desired template.                                                                                      |
-| `infoTemplate`       | `string`  | `null`  | _Optional:_ Customize MDX content for **info** pages only.                                                                                      |
-| `tagTemplate`        | `string`  | `null`  | _Optional:_ Customize MDX content for **tag** pages only.                                                                                       |
-| `schemaTemplate`     | `string`  | `null`  | _Optional:_ Customize MDX content for **schema** pages only.                                                                                    |
-| `downloadUrl`        | `string`  | `null`  | _Optional:_ Designated URL for downloading OpenAPI specification. (requires `info` section/doc)                                                 |
-| `hideSendButton`     | `boolean` | `null`  | _Optional:_ If set to `true`, hides the “Send API Request” button in the API demo panel.                                                        |
-| `showExtensions`     | `boolean` | `null`  | _Optional:_ If set to `true`, renders operation‑level vendor‑extensions in descriptions.                                                         |
+| `template`           | `string`  | `null`  | _Optional:_ Customize MDX content with a desired template _(path to file holding template)_.                                                      |
+| `templateGenerators` | `object`  | `null`  | _Optional:_ Customize MDX content with generator functions. See below for a list of supported options.                                          |
+| `infoTemplate`       | `string`  | `null`  | _Optional:_ Customize MDX content for **info** pages only.                                                                                          |
+| `tagTemplate`        | `string`  | `null`  | _Optional:_ Customize MDX content for **tag** pages only.                                                                                           |
+| `schemaTemplate`     | `string`  | `null`  | _Optional:_ Customize MDX content for **schema** pages only.                                                                                        |
+| `downloadUrl`        | `string`  | `null`  | _Optional:_ Designated URL for downloading OpenAPI specification. (requires `info` section/doc)                                                   |
+| `hideSendButton`     | `boolean` | `null`  | _Optional:_ If set to `true`, hides the “Send API Request” button in the API demo panel.                                                          |
+| `showExtensions`     | `boolean` | `null`  | _Optional:_ If set to `true`, renders operation‑level vendor‑extensions in descriptions.                                                          |
 | `sidebarOptions`     | `object`  | `null`  | _Optional:_ Set of options for sidebar configuration. See below for a list of supported options.                                                |
-| `version`            | `string`  | `null`  | _Optional:_ Version assigned to a single or micro‑spec API specified in `specPath`.                                                             |
-| `label`              | `string`  | `null`  | _Optional:_ Version label used when generating the version‑selector dropdown menu.                                                               |
-| `baseUrl`            | `string`  | `null`  | _Optional:_ Base URL for versioned docs in the version‑selector dropdown.                                                                        |
-| `versions`           | `object`  | `null`  | _Optional:_ Options for versioning configuration. See below for a list of supported options.                                                     |
-| `markdownGenerators` | `object`  | `null`  | _Optional:_ Customize MDX content via generator functions. See below for a list of supported options.                                            |
-| `showSchemas`        | `boolean` | `null`  | _Optional:_ If set to `true`, generates standalone schema pages and adds them to the sidebar.                                                    |
+| `version`            | `string`  | `null`  | _Optional:_ Version assigned to a single or micro‑spec API specified in `specPath`.                                                               |
+| `label`              | `string`  | `null`  | _Optional:_ Version label used when generating the version‑selector dropdown menu.                                                              |
+| `baseUrl`            | `string`  | `null`  | _Optional:_ Base URL for versioned docs in the version‑selector dropdown.                                                                       |
+| `versions`           | `object`  | `null`  | _Optional:_ Options for versioning configuration. See below for a list of supported options.                                                    |
+| `markdownGenerators` | `object`  | `null`  | _Optional:_ Customize MDX content via generator functions. See below for a list of supported options.                                           |
+| `showSchemas`        | `boolean` | `null`  | _Optional:_ If set to `true`, generates standalone schema pages and adds them to the sidebar.                                                     |
 
 ### sidebarOptions
 
@@ -246,7 +245,39 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 | `label`     | `string` | `null`  | _Optional:_ Version label used when generating the version selector dropdown menu. |
 | `baseUrl`   | `string` | `null`  | _Optional:_ Version base URL used when generating the version selector dropdown menu. |
 | `downloadUrl` | `string` | `null` | _Optional:_ Designated URL for downloading the versioned OpenAPI specification. |
+
 > All versions will automatically inherit `sidebarOptions` from the parent/base config.
+
+### templateGenerators
+
+`templateGenerators` can be configured with the following options:
+
+| Name                   | Type     | Default | Description                                                                                                                                    |
+| ---------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `createIntroTemplateMD`  | `function` | `null`    | _Optional:_ Returns a string of the raw markdown body for introduction page.<br/><br/>**Function type:** `() => string`       |
+| `createInfoTemplateMD`   | `function` | `null`    | _Optional:_ Returns a string of the raw markdown body for info pages.<br/><br/>**Function type:** `() => string`     |
+| `createTagTemplateMD`    | `function` | `null`    | _Optional:_ Returns a string of the raw markdown body for tag pages.<br/><br/>**Function type:** `() => string`       |
+| `createSchemaTemplateMD` | `function` | `null`    | _Optional:_ Returns a string of the raw markdown body for schema pages.<br/><br/>**Function type:** `() => string` |
+
+Example:
+
+```typescript
+petstore31: {
+  specPath: "examples/petstore-3.1.yaml",
+  proxy: "https://cors.pan.dev",
+  outputDir: "docs/petstore31",
+  sidebarOptions: {
+    groupPathsBy: "tag",
+    categoryLinkSource: "tag",
+  },
+  downloadUrl: "/petstore-3.1.yaml",
+  hideSendButton: false,
+  showSchemas: true,
+  markdownGenerators: {
+    createIntroTemplateMD: myCustomInfroMdGenerator
+  }, // customize markdown generator
+} satisfies OpenApiPlugin.Options,
+```
 
 ### markdownGenerators
 
