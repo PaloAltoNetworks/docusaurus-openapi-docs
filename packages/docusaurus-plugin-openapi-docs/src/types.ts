@@ -35,6 +35,7 @@ export interface APIOptions {
   specPath: string;
   outputDir: string;
   template?: string;
+  templateGenerators?: TemplateGenerators;
   infoTemplate?: string;
   tagTemplate?: string;
   schemaTemplate?: string;
@@ -60,6 +61,13 @@ export interface MarkdownGenerator {
   createInfoPageMD?: (pageData: InfoPageMetadata) => string;
   createTagPageMD?: (pageData: TagPageMetadata) => string;
   createSchemaPageMD?: (pageData: SchemaPageMetadata) => string;
+}
+
+export interface TemplateGenerators {
+  createIntroTemplateMD?: () => string;
+  createInfoTemplateMD?: () => string;
+  createTagTemplateMD?: () => string;
+  createSchemaTemplateMD?: () => string;
 }
 
 export type ApiDocItemGenerator = (
