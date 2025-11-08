@@ -161,6 +161,7 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 | `outputDir`          | `string`  | `null`  | Desired output path for generated MDX and sidebar files.                                                                    |
 | `proxy`              | `string`  | `null`  | _Optional:_ Proxy URL to prepend to base URL when performing API requests from browser.                                     |
 | `template`           | `string`  | `null`  | _Optional:_ Customize MDX content with a desired template.                                                                  |
+| `templateGenerators` | `object`  | `null`  | _Optional:_ Customize MDX content with generator functions. See below for a list of supported options.                      |
 | `infoTemplate`       | `string`  | `null`  | _Optional:_ Customize MDX content for **info** pages only.                                                                  |
 | `tagTemplate`        | `string`  | `null`  | _Optional:_ Customize MDX content for **tag** pages only.                                                                   |
 | `schemaTemplate`     | `string`  | `null`  | _Optional:_ Customize MDX content for **schema** pages only.                                                                |
@@ -201,6 +202,17 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 | `downloadUrl` | `string` | `null`  | _Optional:_ Designated URL for downloading the versioned OpenAPI specification.                                            |
 
 > All versions will automatically inherit `sidebarOptions` from the parent/base config.
+
+### templateGenerators
+
+`templateGenerators` can be configured with the following options:
+
+| Name                     | Type       | Default | Description                                                                                                        |
+| ------------------------ | ---------- | ------- | ------------------------------------------------------------------------------------------------------------------ |
+| `createIntroTemplateMD`  | `function` | `null`  | _Optional:_ Returns a string of the raw markdown body for API pages.<br/><br/>**Function type:** `() => string`    |
+| `createInfoTemplateMD`   | `function` | `null`  | _Optional:_ Returns a string of the raw markdown body for info pages.<br/><br/>**Function type:** `() => string`   |
+| `createTagTemplateMD`    | `function` | `null`  | _Optional:_ Returns a string of the raw markdown body for tag pages.<br/><br/>**Function type:** `() => string`    |
+| `createSchemaTemplateMD` | `function` | `null`  | _Optional:_ Returns a string of the raw markdown body for schema pages.<br/><br/>**Function type:** `() => string` |
 
 ### markdownGenerators
 
