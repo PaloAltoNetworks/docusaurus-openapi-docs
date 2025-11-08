@@ -78,7 +78,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
 \`\`\`
       `;
 
-export const schemaMdTemplateDefault = `---;
+export const schemaMdTemplateDefault = `---
 id: {{{id}}}
 title: "{{{title}}}"
 description: "{{{frontMatter.description}}}"
