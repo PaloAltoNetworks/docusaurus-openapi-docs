@@ -136,7 +136,9 @@ export default function ApiItem(props: Props): JSX.Element {
     // const acceptValue = window?.sessionStorage.getItem("accept");
     // const contentTypeValue = window?.sessionStorage.getItem("contentType");
     const server = storage.getItem("server");
-    const serverObject = (JSON.parse(server!) as ServerObject) ?? {};
+    const serverObject = server
+      ? (JSON.parse(server) as ServerObject)
+      : undefined;
 
     store2 = createStoreWithState(
       {
@@ -149,7 +151,7 @@ export default function ApiItem(props: Props): JSX.Element {
           options: contentTypeArray,
         },
         server: {
-          value: serverObject.url ? serverObject : undefined,
+          value: serverObject?.url ? serverObject : undefined,
           options: servers,
         },
         response: { value: undefined },

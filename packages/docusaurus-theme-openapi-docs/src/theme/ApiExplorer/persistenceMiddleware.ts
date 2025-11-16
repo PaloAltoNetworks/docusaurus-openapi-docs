@@ -63,10 +63,13 @@ export function createPersistenceMiddleware(options: ThemeConfig["api"]) {
 
       if (action.type === "server/setServerVariable") {
         const server = storage.getItem("server");
+        if (!server) {
+          return result;
+        }
         const variables = JSON.parse(action.payload);
 
-        let serverObject = (JSON.parse(server!) as ServerObject) ?? {};
-        if (serverObject?.variables?.[variables.key]) {
+        const serverObject = (JSON.parse(server) as ServerObject) ?? {};
+        if (serverObject.variables?.[variables.key]) {
           serverObject.variables[variables.key].default = variables.value;
           storage.setItem("server", JSON.stringify(serverObject));
         }
