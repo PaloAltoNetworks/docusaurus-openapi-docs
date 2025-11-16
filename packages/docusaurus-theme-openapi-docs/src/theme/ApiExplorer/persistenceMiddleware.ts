@@ -16,8 +16,8 @@ import type { ThemeConfig } from "docusaurus-theme-openapi-docs/src/types";
 
 import { createStorage, hashArray } from "./storage-utils";
 
-export function createPersistanceMiddleware(options: ThemeConfig["api"]) {
-  const persistanceMiddleware: Middleware<{}, RootState, AppDispatch> =
+export function createPersistenceMiddleware(options: ThemeConfig["api"]) {
+  const persistenceMiddleware: Middleware<{}, RootState, AppDispatch> =
     (storeAPI) =>
     (next) =>
     (action: ReturnType<typeof setAuthData | typeof setSelectedAuth> | any) => {
@@ -74,5 +74,5 @@ export function createPersistanceMiddleware(options: ThemeConfig["api"]) {
 
       return result;
     };
-  return persistanceMiddleware;
+  return persistenceMiddleware;
 }

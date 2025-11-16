@@ -14,7 +14,7 @@ import { HtmlClassNameProvider } from "@docusaurus/theme-common";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import useIsBrowser from "@docusaurus/useIsBrowser";
 import { createAuth } from "@theme/ApiExplorer/Authorization/slice";
-import { createPersistanceMiddleware } from "@theme/ApiExplorer/persistanceMiddleware";
+import { createPersistenceMiddleware } from "@theme/ApiExplorer/persistenceMiddleware";
 import { createStorage } from "@theme/ApiExplorer/storage-utils";
 import DocItemLayout from "@theme/ApiItem/Layout";
 import CodeBlock from "@theme/CodeBlock";
@@ -91,11 +91,11 @@ export default function ApiItem(props: Props): JSX.Element {
 
   // Define store2
   let store2: any = {};
-  const persistanceMiddleware = createPersistanceMiddleware(options);
+  const persistenceMiddleware = createPersistenceMiddleware(options);
 
   // Init store for SSR
   if (!isBrowser) {
-    store2 = createStoreWithoutState({}, [persistanceMiddleware]);
+    store2 = createStoreWithoutState({}, [persistenceMiddleware]);
   }
 
   // Init store for CSR to hydrate components
@@ -157,7 +157,7 @@ export default function ApiItem(props: Props): JSX.Element {
         params,
         auth,
       },
-      [persistanceMiddleware]
+      [persistenceMiddleware]
     );
   }
 
