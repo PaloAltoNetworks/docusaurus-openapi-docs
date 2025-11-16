@@ -5,12 +5,12 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { Middleware } from "@reduxjs/toolkit";
+import type { Middleware } from "@reduxjs/toolkit";
 import {
   setAuthData,
   setSelectedAuth,
 } from "@theme/ApiExplorer/Authorization/slice";
-import { AppDispatch, RootState } from "@theme/ApiItem/store";
+import type { AppDispatch, RootState } from "@theme/ApiItem/store";
 import type { ServerObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import type { ThemeConfig } from "docusaurus-theme-openapi-docs/src/types";
 
