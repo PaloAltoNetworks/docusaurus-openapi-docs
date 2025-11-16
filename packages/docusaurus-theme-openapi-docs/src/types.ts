@@ -11,7 +11,13 @@ import type { JSONSchema4, JSONSchema6, JSONSchema7 } from "json-schema";
 export interface ThemeConfig {
   api?: {
     proxy?: string;
-    authPersistence?: false | "localStorage" | "sessionStorage";
+    /**
+     * Controls how authentication credentials are persisted in the API explorer.
+     * - `false`: No persistence (in-memory only)
+     * - `"sessionStorage"`: Persist for the browser session (default)
+     * - `"localStorage"`: Persist across browser sessions
+     */
+    authPersistence?: false | "sessionStorage" | "localStorage";
   };
 }
 
