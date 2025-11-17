@@ -7,10 +7,11 @@
 
 import React, { ReactNode } from "react";
 
-import Markdown from "@theme/Markdown";
-import clsx from "clsx";
 import { translate } from "@docusaurus/Translate";
+import { Example } from "@theme/Example";
+import Markdown from "@theme/Markdown";
 import { OPENAPI_SCHEMA_ITEM } from "@theme/translationIds";
+import clsx from "clsx";
 
 import { guard } from "../../markdown/utils";
 
@@ -73,6 +74,7 @@ export default function SchemaItem(props: Props) {
   let schemaDescription;
   let defaultValue: string | undefined;
   let example: string | undefined;
+  let examples: string[] | undefined;
   let nullable;
   let enumDescriptions: [string, string][] = [];
   let constValue: string | undefined;
@@ -83,6 +85,7 @@ export default function SchemaItem(props: Props) {
     enumDescriptions = transformEnumDescriptions(schema["x-enumDescriptions"]);
     defaultValue = schema.default;
     example = schema.example;
+    examples = schema.examples;
     nullable =
       schema.nullable ||
       (Array.isArray(schema.type) && schema.type.includes("null")); // support JSON Schema nullable
@@ -167,40 +170,6 @@ export default function SchemaItem(props: Props) {
     return undefined;
   }
 
-  function renderExample() {
-    if (example !== undefined) {
-      if (typeof example === "string") {
-        return (
-          <div>
-            <strong>
-              {translate({
-                id: OPENAPI_SCHEMA_ITEM.EXAMPLE,
-                message: "Example:",
-              })}{" "}
-            </strong>
-            <span>
-              <code>{example}</code>
-            </span>
-          </div>
-        );
-      }
-      return (
-        <div>
-          <strong>
-            {translate({
-              id: OPENAPI_SCHEMA_ITEM.EXAMPLE,
-              message: "Example:",
-            })}{" "}
-          </strong>
-          <span>
-            <code>{JSON.stringify(example)}</code>
-          </span>
-        </div>
-      );
-    }
-    return undefined;
-  }
-
   function renderConstValue() {
     if (constValue !== undefined) {
       if (typeof constValue === "string") {
@@ -260,7 +229,8 @@ export default function SchemaItem(props: Props) {
       {renderQualifierMessage}
       {renderConstValue()}
       {renderDefaultValue()}
-      {renderExample()}
+      <Example example={example} />
+      <Example examples={examples} />
       {collapsibleSchemaContent ?? collapsibleSchemaContent}
     </div>
   );

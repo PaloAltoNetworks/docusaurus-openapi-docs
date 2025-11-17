@@ -8,16 +8,14 @@
 import React from "react";
 
 import { translate } from "@docusaurus/Translate";
-
+import { Example } from "@theme/Example";
 import Markdown from "@theme/Markdown";
-import SchemaTabs from "@theme/SchemaTabs";
-import TabItem from "@theme/TabItem";
 /* eslint-disable import/no-extraneous-dependencies*/
-import clsx from "clsx";
 import { OPENAPI_SCHEMA_ITEM } from "@theme/translationIds";
+import clsx from "clsx";
 
 import { getQualifierMessage, getSchemaName } from "../../markdown/schema";
-import { guard, toString } from "../../markdown/utils";
+import { guard } from "../../markdown/utils";
 
 export interface ExampleObject {
   summary?: string;
@@ -31,7 +29,7 @@ export interface Props {
   param: {
     description: string;
     example: any;
-    examples: Record<string, ExampleObject>;
+    examples: Record<string, ExampleObject> | undefined;
     name: string;
     required: boolean;
     deprecated: boolean;
@@ -64,18 +62,13 @@ ${enumDescriptions
 };
 
 function ParamsItem({ param, ...rest }: Props) {
-  const {
-    description,
-    example,
-    examples,
-    name,
-    required,
-    deprecated,
-    enumDescriptions,
-  } = param;
+  const { description, name, required, deprecated, enumDescriptions } = param;
 
   let schema = param.schema;
   let defaultValue: string | undefined;
+
+  let examples = param.examples ?? (schema?.examples as any[] | undefined);
+  let example = param.example ?? schema?.example;
 
   if (!schema) {
     schema = { type: "any" };
@@ -162,60 +155,6 @@ function ParamsItem({ param, ...rest }: Props) {
     return undefined;
   }
 
-  const renderExample = guard(toString(example), (example) => (
-    <div>
-      <strong>
-        {translate({
-          id: OPENAPI_SCHEMA_ITEM.EXAMPLE,
-          message: "Example:",
-        })}{" "}
-      </strong>
-      {example}
-    </div>
-  ));
-
-  const renderExamples = guard(examples, (examples) => {
-    const exampleEntries = Object.entries(examples);
-    return (
-      <>
-        <strong>
-          {translate({
-            id: OPENAPI_SCHEMA_ITEM.EXAMPLES,
-            message: "Examples:",
-          })}
-        </strong>
-        <SchemaTabs>
-          {exampleEntries.map(([exampleName, exampleProperties]) => (
-            // @ts-ignore
-            <TabItem value={exampleName} label={exampleName}>
-              {exampleProperties.summary && <p>{exampleProperties.summary}</p>}
-              {exampleProperties.description && (
-                <p>
-                  <strong>
-                    {translate({
-                      id: OPENAPI_SCHEMA_ITEM.DESCRIPTION,
-                      message: "Description:",
-                    })}{" "}
-                  </strong>
-                  <span>{exampleProperties.description}</span>
-                </p>
-              )}
-              <p>
-                <strong>
-                  {translate({
-                    id: OPENAPI_SCHEMA_ITEM.EXAMPLE,
-                    message: "Example:",
-                  })}{" "}
-                </strong>
-                <code>{exampleProperties.value}</code>
-              </p>
-            </TabItem>
-          ))}
-        </SchemaTabs>
-      </>
-    );
-  });
-
   return (
     <div className="openapi-params__list-item">
       <span className="openapi-schema__container">
@@ -237,8 +176,8 @@ function ParamsItem({ param, ...rest }: Props) {
       {renderDescription}
       {renderEnumDescriptions}
       {renderDefaultValue()}
-      {renderExample}
-      {renderExamples}
+      <Example example={example} />
+      <Example examples={examples} />
     </div>
   );
 }
