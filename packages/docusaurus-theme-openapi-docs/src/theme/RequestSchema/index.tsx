@@ -7,17 +7,18 @@
 
 import React from "react";
 
-import { translate } from "@docusaurus/Translate";
-import { OPENAPI_REQUEST, OPENAPI_SCHEMA_ITEM } from "@theme/translationIds";
-
 import BrowserOnly from "@docusaurus/BrowserOnly";
+import { translate } from "@docusaurus/Translate";
 import Details from "@theme/Details";
 import Markdown from "@theme/Markdown";
 import MimeTabs from "@theme/MimeTabs"; // Assume these components exist
 import SchemaNode from "@theme/Schema";
 import SkeletonLoader from "@theme/SkeletonLoader";
 import TabItem from "@theme/TabItem";
+import { OPENAPI_REQUEST, OPENAPI_SCHEMA_ITEM } from "@theme/translationIds";
 import { MediaTypeObject } from "docusaurus-plugin-openapi-docs/lib/openapi/types";
+
+import { SchemaObject } from "../../types";
 
 interface Props {
   style?: React.CSSProperties;
@@ -55,6 +56,7 @@ const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
           ) {
             return null;
           }
+
           return (
             // @ts-ignore
             <TabItem key={mimeType} label={mimeType} value={mimeType}>
@@ -92,7 +94,10 @@ const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
                   )}
                 </div>
                 <ul style={{ marginLeft: "1rem" }}>
-                  <SchemaNode schema={firstBody} schemaType="request" />
+                  <SchemaNode
+                    schema={firstBody as SchemaObject}
+                    schemaType="request"
+                  />
                 </ul>
               </Details>
             </TabItem>
@@ -151,7 +156,10 @@ const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
             )}
           </div>
           <ul style={{ marginLeft: "1rem" }}>
-            <SchemaNode schema={firstBody} schemaType="request" />
+            <SchemaNode
+              schema={firstBody as SchemaObject}
+              schemaType="request"
+            />
           </ul>
         </Details>
       </TabItem>

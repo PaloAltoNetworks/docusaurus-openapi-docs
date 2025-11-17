@@ -9,7 +9,7 @@ import React from "react";
 
 import SchemaItem from "@theme/SchemaItem";
 
-import { getQualifierMessage, getSchemaName } from "../../markdown/schema";
+import { getSchemaName } from "../../markdown/schema";
 
 interface ResponseHeadersProps {
   description?: string;
@@ -35,7 +35,6 @@ export const ResponseHeaders: React.FC<{
             name={name}
             collapsible={false}
             schemaName={getSchemaName(schema)}
-            qualifierMessage={getQualifierMessage(schema)}
             schema={schema}
             discriminator={false}
             children={null}
