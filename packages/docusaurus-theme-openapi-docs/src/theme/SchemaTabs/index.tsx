@@ -115,7 +115,10 @@ function TabList({
   };
 
   return (
-    <div className="openapi-tabs__schema-tabs-container">
+    <div
+      className="openapi-tabs__schema-tabs-container"
+      style={{ marginBottom: "1rem" }}
+    >
       {showTabArrows && (
         <button
           className="openapi-tabs__arrow left"
