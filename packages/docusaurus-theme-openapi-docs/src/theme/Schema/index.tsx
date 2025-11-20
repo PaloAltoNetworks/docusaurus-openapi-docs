@@ -885,6 +885,48 @@ const SchemaNode: React.FC<SchemaProps> = ({ schema, schemaType }) => {
 
   // Handle allOf, oneOf, anyOf without discriminators
   if (schema.allOf) {
+    // Check if allOf contains multiple oneOf/anyOf items that should be rendered separately
+    const oneOfItems = schema.allOf.filter(
+      (item: any) => item.oneOf || item.anyOf
+    );
+    const hasMultipleChoices = oneOfItems.length > 1;
+
+    if (hasMultipleChoices) {
+      // Render each oneOf/anyOf constraint first, then shared properties
+      const mergedSchemas = mergeAllOf(schema) as SchemaObject;
+
+      if (
+        (schemaType === "request" && mergedSchemas.readOnly) ||
+        (schemaType === "response" && mergedSchemas.writeOnly)
+      ) {
+        return null;
+      }
+
+      return (
+        <div>
+          {/* Render all oneOf/anyOf constraints first */}
+          {schema.allOf.map((item: any, index: number) => {
+            if (item.oneOf || item.anyOf) {
+              return (
+                <div key={index}>
+                  <AnyOneOf schema={item} schemaType={schemaType} />
+                </div>
+              );
+            }
+            return null;
+          })}
+          {/* Then render shared properties from the merge */}
+          {mergedSchemas.properties && (
+            <Properties schema={mergedSchemas} schemaType={schemaType} />
+          )}
+          {mergedSchemas.items && (
+            <Items schema={mergedSchemas} schemaType={schemaType} />
+          )}
+        </div>
+      );
+    }
+
+    // For other allOf cases, use standard merge behavior
     const mergedSchemas = mergeAllOf(schema) as SchemaObject;
 
     if (
