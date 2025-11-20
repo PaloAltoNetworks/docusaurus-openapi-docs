@@ -6,6 +6,7 @@
  * ========================================================================== */
 
 import { translate } from "@docusaurus/Translate";
+
 import { OPENAPI_SCHEMA_ITEM } from "../theme/translationIds";
 import { SchemaObject } from "../types";
 
@@ -94,13 +95,25 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
     let minLength;
     let maxLength;
     if (schema.minLength && schema.minLength > 1) {
-      minLength = `\`>= ${schema.minLength} characters\``;
+      const charactersMessage = translate({
+        id: OPENAPI_SCHEMA_ITEM.CHARACTERS,
+        message: "characters",
+      });
+      minLength = `\`>= ${schema.minLength} ${charactersMessage}\``;
     }
     if (schema.minLength && schema.minLength === 1) {
-      minLength = `\`non-empty\``;
+      const nonEmptyMessage = translate({
+        id: OPENAPI_SCHEMA_ITEM.NON_EMPTY,
+        message: "non-empty",
+      });
+      minLength = `\`${nonEmptyMessage}\``;
     }
     if (schema.maxLength) {
-      maxLength = `\`<= ${schema.maxLength} characters\``;
+      const charactersMessage = translate({
+        id: OPENAPI_SCHEMA_ITEM.CHARACTERS,
+        message: "characters",
+      });
+      maxLength = `\`<= ${schema.maxLength} ${charactersMessage}\``;
     }
 
     if (minLength && !maxLength) {
@@ -154,9 +167,11 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
   }
 
   if (schema.pattern) {
-    qualifierGroups.push(
-      `Value must match regular expression \`${schema.pattern}\``
-    );
+    const expressionMessage = translate({
+      id: OPENAPI_SCHEMA_ITEM.EXPRESSION,
+      message: "Value must match regular expression",
+    });
+    qualifierGroups.push(`${expressionMessage} \`${schema.pattern}\``);
   }
 
   // Check if discriminator mapping

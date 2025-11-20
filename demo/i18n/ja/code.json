@@ -1,0 +1,238 @@
+{
+  "theme.openapi.response.title": {
+    "message": "レスポンス",
+    "description": "The label for response title"
+  },
+  "theme.openapi.response.clear": {
+    "message": "クリア",
+    "description": "The label for clear response button"
+  },
+  "theme.openapi.response.placeholder": {
+    "message": "レスポンスがここに表示されます",
+    "description": "The placeholder for response area"
+  },
+  "theme.openapi.response.headersTab": {
+    "message": "ヘッダー",
+    "description": "The label for response headers tab"
+  },
+  "theme.openapi.tabs.responses.label": {
+    "message": "レスポンス",
+    "description": "The label for responses tab"
+  },
+  "theme.openapi.request.body.title": {
+    "message": "ボディ",
+    "description": "The title for request body section"
+  },
+  "theme.openapi.request.accept.title": {
+    "message": "Accept",
+    "description": "The title for accept header"
+  },
+  "theme.openapi.request.sendButton": {
+    "message": "送信",
+    "description": "The label for send request button"
+  },
+  "theme.openapi.request.requiredLabel": {
+    "message": "必須",
+    "description": "The label for required fields"
+  },
+  "theme.openapi.request.title": {
+    "message": "リクエスト",
+    "description": "The title for request section"
+  },
+  "theme.openapi.request.collapseAll": {
+    "message": "すべて折りたたむ",
+    "description": "The label for collapse all button"
+  },
+  "theme.openapi.request.expandAll": {
+    "message": "すべて展開",
+    "description": "The label for expand all button"
+  },
+  "theme.openapi.request.baseUrl.title": {
+    "message": "ベースURL",
+    "description": "The title for base URL section"
+  },
+  "theme.openapi.request.auth.title": {
+    "message": "認証",
+    "description": "The title for authentication section"
+  },
+  "theme.openapi.request.parameters.title": {
+    "message": "パラメータ",
+    "description": "The title for parameters section"
+  },
+  "theme.openapi.request.fetchingMessage": {
+    "message": "リクエスト送信中...",
+    "description": "The message shown while fetching"
+  },
+  "theme.openapi.request.connectionFailed": {
+    "message": "接続に失敗しました",
+    "description": "The message shown when connection fails"
+  },
+  "theme.openapi.server.editButton": {
+    "message": "編集",
+    "description": "The label for edit server button"
+  },
+  "theme.openapi.server.hideButton": {
+    "message": "非表示",
+    "description": "The label for hide server button"
+  },
+  "theme.openapi.paramOptions.showOptional": {
+    "message": "オプションを表示",
+    "description": "The label for show optional parameters button"
+  },
+  "theme.openapi.paramOptions.hideOptional": {
+    "message": "オプションを非表示",
+    "description": "The label for hide optional parameters button"
+  },
+  "theme.openapi.formFileUpload.clearButton": {
+    "message": "クリア",
+    "description": "The label for clear file upload button"
+  },
+  "theme.openapi.form.fieldRequired": {
+    "message": "このフィールドは必須です",
+    "description": "The message for required field validation"
+  },
+  "theme.openapi.auth.bearerToken": {
+    "message": "Bearer Token",
+    "description": "The label for bearer token"
+  },
+  "theme.openapi.auth.username": {
+    "message": "ユーザー名",
+    "description": "The label for username"
+  },
+  "theme.openapi.auth.password": {
+    "message": "パスワード",
+    "description": "The label for password"
+  },
+  "theme.openapi.auth.securityScheme": {
+    "message": "セキュリティスキーム",
+    "description": "The label for security scheme"
+  },
+  "theme.openapi.responseExamples.example": {
+    "message": "例",
+    "description": "The label for example"
+  },
+  "theme.openapi.responseExamples.autoExample": {
+    "message": "例(自動)",
+    "description": "The label for auto-generated example"
+  },
+  "theme.openapi.body.exampleFromSchema": {
+    "message": "スキーマから生成された例",
+    "description": "The label for example from schema"
+  },
+  "theme.openapi.statusCodes.responseHeaders": {
+    "message": "レスポンスヘッダー",
+    "description": "The label for response headers"
+  },
+  "theme.openapi.statusCodes.schemaTitle": {
+    "message": "Schema",
+    "description": "The title for schema section"
+  },
+  "theme.openapi.schema.noSchema": {
+    "message": "スキーマがありません",
+    "description": "The message when no schema is available"
+  },
+  "theme.openapi.schemaItem.required": {
+    "message": "必須",
+    "description": "The label for required schema item"
+  },
+  "theme.openapi.schemaItem.deprecated": {
+    "message": "非推奨",
+    "description": "The label for deprecated schema item"
+  },
+  "theme.openapi.schemaItem.nullable": {
+    "message": "null許容",
+    "description": "The label for nullable schema item"
+  },
+  "theme.openapi.schemaItem.defaultValue": {
+    "message": "デフォルト値",
+    "description": "The label for default value"
+  },
+  "theme.openapi.schemaItem.example": {
+    "message": "例",
+    "description": "The label for example"
+  },
+  "theme.openapi.schemaItem.examples": {
+    "message": "例",
+    "description": "The label for examples"
+  },
+  "theme.openapi.schemaItem.description": {
+    "message": "説明",
+    "description": "The label for description"
+  },
+  "theme.openapi.schemaItem.constantValue": {
+    "message": "定数値",
+    "description": "The label for constant value"
+  },
+  "theme.openapi.schemaItem.enumValue": {
+    "message": "列挙値",
+    "description": "The label for enum value"
+  },
+  "theme.openapi.schemaItem.enumDescription": {
+    "message": "列挙値の説明",
+    "description": "The label for enum description"
+  },
+  "theme.openapi.schemaItem.possibleValues": {
+    "message": "使用可能な値",
+    "description": "The label for possible values"
+  },
+  "theme.openapi.schemaItem.oneOf": {
+    "message": "いずれか1つ",
+    "description": "The label for oneOf"
+  },
+  "theme.openapi.schemaItem.anyOf": {
+    "message": "いずれか",
+    "description": "The label for anyOf"
+  },
+  "theme.openapi.paramsDetails.parametersTitle": {
+    "message": "パラメータ",
+    "description": "The title for parameters section"
+  },
+  "theme.openapi.securitySchemes.name": {
+    "message": "名前",
+    "description": "The label for security scheme name"
+  },
+  "theme.openapi.securitySchemes.type": {
+    "message": "タイプ",
+    "description": "The label for security scheme type"
+  },
+  "theme.openapi.securitySchemes.scopes": {
+    "message": "スコープ",
+    "description": "The label for security scheme scopes"
+  },
+  "theme.openapi.securitySchemes.in": {
+    "message": "場所",
+    "description": "The label for security scheme location"
+  },
+  "theme.openapi.securitySchemes.flows": {
+    "message": "フロー",
+    "description": "The label for security scheme flows"
+  },
+  "theme.openapi.securitySchemes.description": {
+    "message": "説明",
+    "description": "The label for security scheme description"
+  },
+  "theme.openapi.securitySchemes.scheme": {
+    "message": "スキーム",
+    "description": "The label for security scheme"
+  },
+  "theme.openapi.securitySchemes.bearerFormat": {
+    "message": "Bearerフォーマット",
+    "description": "The label for bearer format"
+  },
+  "theme.openapi.securitySchemes.openIdConnectUrl": {
+    "message": "OpenID Connect URL",
+    "description": "The label for OpenID Connect URL"
+  },
+  "theme.openapi.schemaItem.expression": {
+    "message": "正規表現に一致する値",
+    "description": "The label for expression"
+  },
+  "theme.openapi.schemaItem.characters": {
+    "message": "文字",
+    "description": "The label for characters"
+  },
+  "theme.openapi.schemaItem.nonEmpty": {
+    "message": "空でない文字列",
+    "description": "The label for non-empty"
+  }
+}

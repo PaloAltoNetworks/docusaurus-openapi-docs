@@ -24,7 +24,9 @@ export function create(
 
   let propString = "";
   for (const [key, value] of Object.entries(rest)) {
-    propString += `\n  ${key}={${JSON.stringify(value)}}`;
+    if (value !== undefined) {
+      propString += `\n  ${key}={${JSON.stringify(value)}}`;
+    }
   }
   let indentedChildren = render(children).replace(/^/gm, "  ");
 

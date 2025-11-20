@@ -17,7 +17,7 @@ import {
 import { createDescription } from "./createDescription";
 import { createDetails } from "./createDetails";
 import { createDetailsSummary } from "./createDetailsSummary";
-import { getQualifierMessage, getSchemaName } from "./schema";
+import { getSchemaName } from "./schema";
 import { create, guard } from "./utils";
 import { SchemaObject } from "../openapi/types";
 
@@ -140,7 +140,6 @@ function createProperties(schema: SchemaObject) {
       name: "",
       required: false,
       schemaName: "object",
-      qualifierMessage: undefined,
       schema: {},
     });
   }
@@ -169,7 +168,6 @@ function createAdditionalProperties(schema: SchemaObject) {
       name: "property name*",
       required: false,
       schemaName: "any",
-      qualifierMessage: getQualifierMessage(schema),
       schema: schema,
       collapsible: false,
       discriminator: false,
@@ -209,7 +207,6 @@ function createAdditionalProperties(schema: SchemaObject) {
       name: "property name*",
       required: false,
       schemaName: schemaName,
-      qualifierMessage: getQualifierMessage(schema),
       schema: additionalProperties,
       collapsible: false,
       discriminator: false,
@@ -399,12 +396,6 @@ function createDetailsNode(
                   children: createDescription(description),
                 })
               ),
-              guard(getQualifierMessage(schema), (message) =>
-                create("div", {
-                  style: { marginTop: ".5rem", marginBottom: ".5rem" },
-                  children: createDescription(message),
-                })
-              ),
               createNodes(schema, SCHEMA_TYPE),
             ],
           }),
@@ -543,14 +534,6 @@ function createPropertyDiscriminator(
               paddingLeft: "1rem",
             },
             children: createDescription(description),
-          })
-        ),
-        guard(getQualifierMessage(discriminator), (message) =>
-          create("div", {
-            style: {
-              paddingLeft: "1rem",
-            },
-            children: createDescription(message),
           })
         ),
         create("DiscriminatorTabs", {
@@ -727,7 +710,6 @@ function createEdges({
       name,
       required: Array.isArray(required) ? required.includes(name) : required,
       schemaName: mergedSchemaName,
-      qualifierMessage: getQualifierMessage(mergedSchemas),
       schema: mergedSchemas,
     });
   }
@@ -738,7 +720,6 @@ function createEdges({
     name,
     required: Array.isArray(required) ? required.includes(name) : required,
     schemaName: schemaName,
-    qualifierMessage: getQualifierMessage(schema),
     schema: schema,
   });
 }
@@ -823,17 +804,7 @@ export function createNodes(
         marginTop: ".5rem",
         marginBottom: ".5rem",
       },
-      children: [
-        createDescription(schema.type),
-        guard(getQualifierMessage(schema), (message) =>
-          create("div", {
-            style: {
-              paddingTop: "1rem",
-            },
-            children: createDescription(message),
-          })
-        ),
-      ],
+      children: [createDescription(schema.type)],
     });
   }
 
@@ -844,17 +815,7 @@ export function createNodes(
         marginTop: ".5rem",
         marginBottom: ".5rem",
       },
-      children: [
-        createDescription(schema),
-        guard(getQualifierMessage(schema), (message) =>
-          create("div", {
-            style: {
-              paddingTop: "1rem",
-            },
-            children: createDescription(message),
-          })
-        ),
-      ],
+      children: [createDescription(schema)],
     });
   }
 

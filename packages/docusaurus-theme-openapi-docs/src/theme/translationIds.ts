@@ -71,6 +71,8 @@ export const OPENAPI_STATUS_CODES = {
 };
 
 export const OPENAPI_SCHEMA_ITEM = {
+  CHARACTERS: "theme.openapi.schemaItem.characters",
+  NON_EMPTY: "theme.openapi.schemaItem.nonEmpty",
   REQUIRED: "theme.openapi.schemaItem.required",
   DEPRECATED: "theme.openapi.schemaItem.deprecated",
   NULLABLE: "theme.openapi.schemaItem.nullable",
@@ -82,6 +84,7 @@ export const OPENAPI_SCHEMA_ITEM = {
   ENUM_VALUE: "theme.openapi.schemaItem.enumValue",
   ENUM_DESCRIPTION: "theme.openapi.schemaItem.enumDescription",
   POSSIBLE_VALUES: "theme.openapi.schemaItem.possibleValues",
+  EXPRESSION: "theme.openapi.schemaItem.expression",
   ONE_OF: "theme.openapi.schemaItem.oneOf",
   ANY_OF: "theme.openapi.schemaItem.anyOf",
 };
