@@ -412,6 +412,205 @@ paths:
                 required:
                   - pet
 
+  /allof-multiple-oneof:
+    post:
+      tags:
+        - allOf
+      summary: allOf with multiple oneOf constraints
+      description: |
+        Schema demonstrating allOf containing multiple independent oneOf constraints.
+        The object must satisfy one option from each oneOf group AND include shared properties.
+
+        This pattern is used when multiple independent constraints must all be satisfied,
+        similar to the security-rules schema where a rule must be one policy type AND exist in one scope.
+
+        Schema:
+        ```yaml
+        type: object
+        allOf:
+          # Constraint 1: Must be one of these types
+          - oneOf:
+              - title: standard
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum: [standard]
+                  priority:
+                    type: integer
+                    minimum: 1
+                    maximum: 10
+                required: [type, priority]
+              - title: express
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum: [express]
+                  expedited:
+                    type: boolean
+                required: [type, expedited]
+          
+          # Constraint 2: Must exist in one of these scopes
+          - oneOf:
+              - title: global
+                type: object
+                properties:
+                  scope:
+                    type: string
+                    enum: [global]
+                required: [scope]
+              - title: regional
+                type: object
+                properties:
+                  scope:
+                    type: string
+                    enum: [regional]
+                  region:
+                    type: string
+                required: [scope, region]
+              - title: local
+                type: object
+                properties:
+                  scope:
+                    type: string
+                    enum: [local]
+                  location:
+                    type: string
+                required: [scope, location]
+
+        # Shared properties that apply regardless of which options are chosen
+        properties:
+          id:
+            type: string
+            format: uuid
+          name:
+            type: string
+          description:
+            type: string
+          enabled:
+            type: boolean
+            default: true
+        required: [id, name]
+        ```
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              allOf:
+                # Constraint 1: Must be one of these types
+                - oneOf:
+                    - title: standard
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          enum: [standard]
+                          description: Standard processing type
+                          example: standard
+                        priority:
+                          type: integer
+                          minimum: 1
+                          maximum: 10
+                          description: Priority level for standard type
+                          example: 5
+                      required: [type, priority]
+                    - title: express
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          enum: [express]
+                          description: Express processing type
+                          example: express
+                        expedited:
+                          type: boolean
+                          description: Enable expedited processing
+                          default: true
+                      required: [type, expedited]
+
+                # Constraint 2: Must exist in one of these scopes
+                - oneOf:
+                    - title: global
+                      type: object
+                      properties:
+                        scope:
+                          type: string
+                          enum: [global]
+                          description: Global scope
+                          example: global
+                      required: [scope]
+                    - title: regional
+                      type: object
+                      properties:
+                        scope:
+                          type: string
+                          enum: [regional]
+                          description: Regional scope
+                          example: regional
+                        region:
+                          type: string
+                          pattern: ^[a-z]{2}-[a-z]+-\d+$
+                          description: AWS-style region identifier
+                          example: us-west-2
+                      required: [scope, region]
+                    - title: local
+                      type: object
+                      properties:
+                        scope:
+                          type: string
+                          enum: [local]
+                          description: Local scope
+                          example: local
+                        location:
+                          type: string
+                          maxLength: 100
+                          description: Specific location identifier
+                          example: datacenter-1
+                      required: [scope, location]
+
+              # Shared properties
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier
+                  example: 123e4567-e89b-12d3-a456-426655440000
+                name:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  description: Resource name
+                  example: my-resource
+                description:
+                  type: string
+                  maxLength: 1024
+                  description: Optional description
+                  example: This is a test resource
+                enabled:
+                  type: boolean
+                  description: Whether the resource is enabled
+                  default: true
+              required: [id, name]
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  name:
+                    type: string
+                  message:
+                    type: string
+                    example: Resource created successfully
+
 components:
   schemas:
     # Your existing schemas are integrated here.
