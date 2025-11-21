@@ -299,6 +299,9 @@ const config: Config = {
               groupPathsBy: "tag",
               categoryLinkSource: "tag",
             },
+            markdownGenerators: {
+              createInfoPageMD: true,
+            }, // customize MDX with markdown generator
             template: "templates/api.mustache", // Customize API MDX with mustache template
             infoTemplate: "templates/info.mustache",
             tagTemplate: "templates/tag.mustache",
@@ -318,7 +321,11 @@ const config: Config = {
             downloadUrl: "/petstore-3.1.yaml",
             hideSendButton: false,
             showSchemas: true,
-            markdownGenerators: { createApiPageMD: myCustomApiMdGenerator }, // customize MDX with markdown generator
+            markdownGenerators: {
+              createApiPageMD: myCustomApiMdGenerator,
+              // Explicitly disable info page generation for testing
+              createInfoPageMD: false,
+            }, // customize MDX with markdown generator
           } satisfies OpenApiPlugin.Options,
           cos: {
             specPath: "examples/openapi-cos.json",

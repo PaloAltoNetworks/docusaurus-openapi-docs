@@ -22,7 +22,8 @@ const sidebarOptions = Joi.object({
 
 const markdownGenerators = Joi.object({
   createApiPageMD: Joi.function(),
-  createInfoPageMD: Joi.function(),
+  // Allow createInfoPageMD to be a function, true (use default), or false (disable)
+  createInfoPageMD: Joi.alternatives().try(Joi.function(), Joi.boolean()),
   createTagPageMD: Joi.function(),
   createSchemaPageMD: Joi.function(),
 });
