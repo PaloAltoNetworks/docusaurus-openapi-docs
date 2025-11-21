@@ -126,7 +126,7 @@ function groupByTags(
   }
 
   const basePath = docPath
-    ? outputDir.split(docPath!)[1].replace(/^\/+/g, "")
+    ? (outputDir.split(docPath!)[1] || "").replace(/^\/+/g, "")
     : outputDir.slice(outputDir.indexOf("/", 1)).replace(/^\/+/g, "");
 
   const createDocItemFnContext = {
