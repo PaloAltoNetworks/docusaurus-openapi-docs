@@ -51,6 +51,7 @@ export interface APIOptions {
   proxy?: string;
   markdownGenerators?: MarkdownGenerator;
   showSchemas?: boolean;
+  schemasOnly?: boolean;
   disableCompression?: boolean;
   maskCredentials?: boolean;
 }
