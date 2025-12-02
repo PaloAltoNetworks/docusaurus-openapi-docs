@@ -76,7 +76,7 @@ function CodeSnippets({
               const authOptions =
                 clonedAuth?.options?.[key] ??
                 clonedAuth?.options?.[comboAuthId];
-              placeholder = authOptions?.[0]?.name;
+              placeholder = authOptions?.find((opt: any) => opt.key === key)?.name;
               obj[key] = cleanCredentials(obj[key]);
             } else {
               obj[key] = `<${placeholder ?? key}>`;
