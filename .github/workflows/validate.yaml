@@ -50,7 +50,7 @@ jobs:
             */*/node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
       - name: Install
-        run: yarn install
+        run: yarn install --frozen-lockfile
       - name: Check format
         run: yarn format
       - name: Lint
@@ -75,7 +75,7 @@ jobs:
             */*/node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
       - name: Install
-        run: yarn install
+        run: yarn install --frozen-lockfile
       - name: Test
         run: yarn test
 
@@ -99,7 +99,7 @@ jobs:
             /home/runner/.cache/Cypress
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
       - name: Install
-        run: yarn install
+        run: yarn install --frozen-lockfile
       - name: Build
         run: yarn build
       - name: Cypress
