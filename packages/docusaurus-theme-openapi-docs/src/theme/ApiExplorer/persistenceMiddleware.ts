@@ -5,19 +5,19 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { Middleware } from "@reduxjs/toolkit";
+import type { Middleware } from "@reduxjs/toolkit";
 import {
   setAuthData,
   setSelectedAuth,
 } from "@theme/ApiExplorer/Authorization/slice";
-import { AppDispatch, RootState } from "@theme/ApiItem/store";
-/* eslint-disable import/no-extraneous-dependencies*/
-import { ThemeConfig } from "docusaurus-theme-openapi-docs/src/types";
+import type { AppDispatch, RootState } from "@theme/ApiItem/store";
+import type { ServerObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
+import type { ThemeConfig } from "docusaurus-theme-openapi-docs/src/types";
 
 import { createStorage, hashArray } from "./storage-utils";
 
-export function createPersistanceMiddleware(options: ThemeConfig["api"]) {
-  const persistanceMiddleware: Middleware<{}, RootState, AppDispatch> =
+export function createPersistenceMiddleware(options: ThemeConfig["api"]) {
+  const persistenceMiddleware: Middleware<{}, RootState, AppDispatch> =
     (storeAPI) =>
     (next) =>
     (action: ReturnType<typeof setAuthData | typeof setSelectedAuth> | any) => {
@@ -25,7 +25,9 @@ export function createPersistanceMiddleware(options: ThemeConfig["api"]) {
 
       const state = storeAPI.getState();
 
-      const storage = createStorage("sessionStorage");
+      const storage = createStorage(
+        options?.authPersistence ?? "sessionStorage"
+      );
 
       if (action.type === setAuthData.type) {
         for (const [key, value] of Object.entries(state.auth.data)) {
@@ -60,14 +62,20 @@ export function createPersistanceMiddleware(options: ThemeConfig["api"]) {
       }
 
       if (action.type === "server/setServerVariable") {
-        const server = storage.getItem("server") ?? "{}";
+        const server = storage.getItem("server");
+        if (!server) {
+          return result;
+        }
         const variables = JSON.parse(action.payload);
-        let serverObject = JSON.parse(server);
-        serverObject.variables[variables.key].default = variables.value;
-        storage.setItem("server", JSON.stringify(serverObject));
+
+        const serverObject = (JSON.parse(server) as ServerObject) ?? {};
+        if (serverObject.variables?.[variables.key]) {
+          serverObject.variables[variables.key].default = variables.value;
+          storage.setItem("server", JSON.stringify(serverObject));
+        }
       }
 
       return result;
     };
-  return persistanceMiddleware;
+  return persistenceMiddleware;
 }
