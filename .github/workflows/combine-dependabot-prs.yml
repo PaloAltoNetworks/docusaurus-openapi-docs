@@ -41,10 +41,10 @@ jobs:
             for (const pull of pulls) {
               const branch = pull['head']['ref'];
               console.log('Pull for branch: ' + branch);
-              if (branch.startsWith('${{ github.event.inputs.branchPrefix }}')) {
+              if (branch.startsWith('${process.env.BRANCH_PREFIX}')) {
                 console.log('Branch matched: ' + branch);
                 statusOK = true;
-                if(${{ github.event.inputs.mustBeGreen }}) {
+                if("true" == process.env.MUST_BE_GREEN}) {
                   console.log('Checking green status: ' + branch);
                   const statuses = await github.paginate('GET /repos/{owner}/{repo}/commits/{ref}/status', {
                     owner: context.repo.owner,
@@ -65,7 +65,7 @@ jobs:
                 for(const label of labels) {
                   const labelName = label['name'];
                   console.log('Checking label: ' + labelName);
-                  if(labelName == '${{ github.event.inputs.ignoreLabel }}') {
+                  if(labelName == '${process.env.IGNORE_LABEL}') {
                     console.log('Discarding ' + branch + ' with label ' + labelName);
                     statusOK = false;
                   }
@@ -88,6 +88,10 @@ jobs:
             combined = branches.join(' ')
             console.log('Combined: ' + combined);
             return combined
+        env:
+          BRANCH_PREFIX: ${{ github.event.inputs.branchPrefix }}
+          MUST_BE_GREEN: ${{ github.event.inputs.mustBeGreen }}
+          IGNORE_LABEL: ${{ github.event.inputs.ignoreLabel }}
 
       - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
         with:
@@ -126,6 +130,8 @@ jobs:
         name: Create Combined Pull Request
         env:
           PRS_STRING: ${{ steps.fetch-branch-names.outputs.prs-string }}
+          COMBINE_BRANCH_NAME: ${{ github.event.inputs.combineBranchName }}
+          BASE_BRANCH: ${{ steps.fetch-branch-names.outputs.base-branch }}
         with:
           github-token: ${{ steps.get_token.outputs.app_token }}
           script: |
@@ -135,7 +141,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               title: '🛡️ Security Updates',
-              head: '${{ github.event.inputs.combineBranchName }}',
-              base: '${{ steps.fetch-branch-names.outputs.base-branch }}',
+              head: '${process.env.COMBINE_BRANCH_NAME}',
+              base: '${process.env.BASE_BRANCH}',
               body: body
             });
