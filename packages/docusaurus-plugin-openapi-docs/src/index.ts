@@ -81,11 +81,11 @@ export function getDocsPluginConfig(
   return;
 }
 
-function getPluginConfig(plugins: any[], pluginId: string): any {
+export function getPluginConfig(plugins: any[], pluginId: string): any {
   return plugins.filter((data) => data[1].id === pluginId)[0][1];
 }
 
-function getPluginInstances(plugins: any[]): any {
+export function getPluginInstances(plugins: any[]): any {
   return plugins.filter((data) => data[0] === "docusaurus-plugin-openapi-docs");
 }
 
