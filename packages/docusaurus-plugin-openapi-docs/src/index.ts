@@ -81,11 +81,11 @@ export function getDocsPluginConfig(
   return;
 }
 
-function getPluginConfig(plugins: any[], pluginId: string): any {
+export function getPluginConfig(plugins: any[], pluginId: string): any {
   return plugins.filter((data) => data[1].id === pluginId)[0][1];
 }
 
-function getPluginInstances(plugins: any[]): any {
+export function getPluginInstances(plugins: any[]): any {
   return plugins.filter((data) => data[0] === "docusaurus-plugin-openapi-docs");
 }
 
@@ -677,7 +677,7 @@ custom_edit_url: null
           let targetDocsPluginId: any;
           if (pluginId) {
             try {
-              const pluginConfig = getPluginConfig(plugins, pluginId);
+              const pluginConfig = getPluginConfig(pluginInstances, pluginId);
               targetConfig = pluginConfig.config ?? {};
               targetDocsPluginId = pluginConfig.docsPluginId;
             } catch {
@@ -744,7 +744,7 @@ custom_edit_url: null
           let targetDocsPluginId: any;
           if (pluginId) {
             try {
-              const pluginConfig = getPluginConfig(plugins, pluginId);
+              const pluginConfig = getPluginConfig(pluginInstances, pluginId);
               targetConfig = pluginConfig.config ?? {};
               targetDocsPluginId = pluginConfig.docsPluginId;
             } catch {
@@ -837,7 +837,7 @@ custom_edit_url: null
           let targetConfig: any;
           if (pluginId) {
             try {
-              const pluginConfig = getPluginConfig(plugins, pluginId);
+              const pluginConfig = getPluginConfig(pluginInstances, pluginId);
               targetConfig = pluginConfig.config ?? {};
             } catch {
               console.error(
@@ -894,7 +894,7 @@ custom_edit_url: null
           let targetConfig: any;
           if (pluginId) {
             try {
-              const pluginConfig = getPluginConfig(plugins, pluginId);
+              const pluginConfig = getPluginConfig(pluginInstances, pluginId);
               targetConfig = pluginConfig.config ?? {};
             } catch {
               console.error(
