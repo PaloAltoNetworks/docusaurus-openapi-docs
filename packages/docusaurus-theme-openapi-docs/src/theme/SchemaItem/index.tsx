@@ -7,11 +7,12 @@
 
 import React, { ReactNode } from "react";
 
-import Markdown from "@theme/Markdown";
-import clsx from "clsx";
 import { translate } from "@docusaurus/Translate";
+import Markdown from "@theme/Markdown";
 import { OPENAPI_SCHEMA_ITEM } from "@theme/translationIds";
+import clsx from "clsx";
 
+import { getQualifierMessage } from "../../markdown/schema";
 import { guard } from "../../markdown/utils";
 
 export interface Props {
@@ -127,7 +128,11 @@ export default function SchemaItem(props: Props) {
     </>
   ));
 
-  const renderQualifierMessage = guard(qualifierMessage, (message) => (
+  // Generate qualifierMessage from schema if not provided
+  const effectiveQualifierMessage =
+    qualifierMessage ?? (schema ? getQualifierMessage(schema) : undefined);
+
+  const renderQualifierMessage = guard(effectiveQualifierMessage, (message) => (
     <>
       <Markdown>{message}</Markdown>
     </>

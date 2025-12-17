@@ -22,6 +22,11 @@ const config: Config = {
   organizationName: "PaloAltoNetworks",
   projectName: "docusaurus-openapi-docs",
 
+  i18n: {
+    defaultLocale: "en",
+    locales: ["en", "ja"],
+  },
+
   presets: [
     [
       "classic",

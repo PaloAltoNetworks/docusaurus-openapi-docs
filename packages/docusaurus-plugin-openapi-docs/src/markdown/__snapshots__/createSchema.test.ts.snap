@@ -22,7 +22,6 @@ Array [
               name={\\"type\\"}
               required={true}
               schemaName={\\"string\\"}
-              qualifierMessage={\\"**Possible values:** [\`nose\`]\\"}
               schema={{ type: \\"string\\", enum: [\\"nose\\"] }}
             ></SchemaItem>
           </TabItem>
@@ -32,7 +31,6 @@ Array [
               name={\\"type\\"}
               required={true}
               schemaName={\\"string\\"}
-              qualifierMessage={\\"**Possible values:** [\`mouth\`]\\"}
               schema={{ type: \\"string\\", enum: [\\"mouth\\"] }}
             ></SchemaItem>
           </TabItem>
@@ -42,7 +40,6 @@ Array [
               name={\\"type\\"}
               required={true}
               schemaName={\\"string\\"}
-              qualifierMessage={\\"**Possible values:** [\`eyes\`]\\"}
               schema={{ type: \\"string\\", enum: [\\"eyes\\"] }}
             ></SchemaItem>
             <SchemaItem
@@ -50,7 +47,6 @@ Array [
               name={\\"default\\"}
               required={false}
               schemaName={\\"string\\"}
-              qualifierMessage={undefined}
               schema={{ type: \\"string\\" }}
             ></SchemaItem>
           </TabItem>
@@ -61,7 +57,6 @@ Array [
         name={\\"description\\"}
         required={true}
         schemaName={\\"string\\"}
-        qualifierMessage={undefined}
         schema={{
           type: \\"string\\",
           description: \\"Description of the body part.\\",
@@ -102,7 +97,6 @@ Array [
         name={\\"a\\"}
         required={false}
         schemaName={\\"\\"}
-        qualifierMessage={undefined}
         schema={\\"string\\"}
       ></SchemaItem>
       <SchemaItem
@@ -110,7 +104,6 @@ Array [
         name={\\"b\\"}
         required={false}
         schemaName={\\"\\"}
-        qualifierMessage={undefined}
         schema={\\"number\\"}
       ></SchemaItem>
       <li>
@@ -137,7 +130,6 @@ Array [
   name={\\"property name*\\"}
   required={false}
   schemaName={\\"boolean\\"}
-  qualifierMessage={undefined}
   schema={{ type: \\"boolean\\" }}
   collapsible={false}
   discriminator={false}
@@ -152,7 +144,6 @@ Array [
   name={\\"property name*\\"}
   required={false}
   schemaName={\\"integer\\"}
-  qualifierMessage={undefined}
   schema={{ type: \\"integer\\" }}
   collapsible={false}
   discriminator={false}
@@ -167,7 +158,6 @@ Array [
   name={\\"property name*\\"}
   required={false}
   schemaName={\\"number\\"}
-  qualifierMessage={undefined}
   schema={{ type: \\"number\\" }}
   collapsible={false}
   discriminator={false}
@@ -182,7 +172,6 @@ Array [
   name={\\"property name*\\"}
   required={false}
   schemaName={\\"string\\"}
-  qualifierMessage={undefined}
   schema={{ type: \\"string\\" }}
   collapsible={false}
   discriminator={false}
@@ -197,7 +186,6 @@ Array [
   name={\\"property name*\\"}
   required={false}
   schemaName={\\"any\\"}
-  qualifierMessage={undefined}
   schema={{ type: \\"object\\", additionalProperties: {} }}
   collapsible={false}
   discriminator={false}
@@ -214,7 +202,6 @@ Array [
   name={\\"property name*\\"}
   required={false}
   schemaName={\\"any\\"}
-  qualifierMessage={undefined}
   schema={{ type: \\"object\\", additionalProperties: true }}
   collapsible={false}
   discriminator={false}
@@ -239,7 +226,6 @@ Array [
         name={\\"innerProp1\\"}
         required={false}
         schemaName={\\"string\\"}
-        qualifierMessage={undefined}
         schema={{ type: \\"string\\" }}
       ></SchemaItem>
       <SchemaItem
@@ -247,7 +233,6 @@ Array [
         name={\\"innerProp2\\"}
         required={false}
         schemaName={\\"number\\"}
-        qualifierMessage={undefined}
         schema={{ type: \\"number\\" }}
       ></SchemaItem>
     </div>
@@ -264,7 +249,6 @@ Array [
   name={\\"sharedProp\\"}
   required={true}
   schemaName={\\"string\\"}
-  qualifierMessage={undefined}
   schema={{ type: \\"string\\" }}
 ></SchemaItem>;
 ",
@@ -273,7 +257,6 @@ Array [
   name={\\"anotherProp\\"}
   required={true}
   schemaName={\\"number\\"}
-  qualifierMessage={undefined}
   schema={{ type: \\"number\\" }}
 ></SchemaItem>;
 ",
@@ -296,7 +279,6 @@ Array [
         name={\\"innerProp1\\"}
         required={false}
         schemaName={\\"string\\"}
-        qualifierMessage={undefined}
         schema={{ type: \\"string\\" }}
       ></SchemaItem>
     </div>
@@ -317,7 +299,6 @@ Array [
         name={\\"innerProp2\\"}
         required={false}
         schemaName={\\"number\\"}
-        qualifierMessage={undefined}
         schema={{ type: \\"number\\" }}
       ></SchemaItem>
     </div>
@@ -334,7 +315,6 @@ Array [
   name={\\"parentProp1\\"}
   required={false}
   schemaName={\\"string\\"}
-  qualifierMessage={undefined}
   schema={{ type: \\"string\\" }}
 ></SchemaItem>;
 ",
@@ -343,7 +323,6 @@ Array [
   name={\\"parentProp2\\"}
   required={false}
   schemaName={\\"string\\"}
-  qualifierMessage={undefined}
   schema={{ type: \\"string\\" }}
 ></SchemaItem>;
 ",
@@ -352,7 +331,6 @@ Array [
   name={\\"allOfProp1\\"}
   required={false}
   schemaName={\\"string\\"}
-  qualifierMessage={undefined}
   schema={{ type: \\"string\\" }}
 ></SchemaItem>;
 ",
@@ -361,7 +339,6 @@ Array [
   name={\\"allOfProp2\\"}
   required={false}
   schemaName={\\"string\\"}
-  qualifierMessage={undefined}
   schema={{ type: \\"string\\" }}
 ></SchemaItem>;
 ",
@@ -370,7 +347,6 @@ Array [
   name={\\"parentProp1\\"}
   required={false}
   schemaName={\\"string\\"}
-  qualifierMessage={undefined}
   schema={{ type: \\"string\\" }}
 ></SchemaItem>;
 ",
@@ -379,7 +355,6 @@ Array [
   name={\\"parentProp2\\"}
   required={false}
   schemaName={\\"string\\"}
-  qualifierMessage={undefined}
   schema={{ type: \\"string\\" }}
 ></SchemaItem>;
 ",
@@ -486,7 +461,6 @@ Array [
         name={\\"type\\"}
         required={true}
         schemaName={\\"string\\"}
-        qualifierMessage={\\"**Possible values:** [\`typeA\`]\\"}
         schema={{ type: \\"string\\", enum: [\\"typeA\\"] }}
       ></SchemaItem>
       <SchemaItem
@@ -494,7 +468,6 @@ Array [
         name={\\"propA\\"}
         required={false}
         schemaName={\\"string\\"}
-        qualifierMessage={undefined}
         schema={{ type: \\"string\\" }}
       ></SchemaItem>
     </TabItem>
@@ -504,7 +477,6 @@ Array [
         name={\\"type\\"}
         required={true}
         schemaName={\\"string\\"}
-        qualifierMessage={\\"**Possible values:** [\`typeB\`]\\"}
         schema={{ type: \\"string\\", enum: [\\"typeB\\"] }}
       ></SchemaItem>
       <SchemaItem
@@ -512,7 +484,6 @@ Array [
         name={\\"propB\\"}
         required={false}
         schemaName={\\"number\\"}
-        qualifierMessage={undefined}
         schema={{ type: \\"number\\" }}
       ></SchemaItem>
     </TabItem>
@@ -529,9 +500,6 @@ Array [
       </strong>
       <span className={\\"openapi-schema__name\\"}>string</span>
     </span>
-    <div style={{ paddingLeft: \\"1rem\\" }}>
-      **Possible values:** [\`typeA\`, \`typeB\`]
-    </div>
     <DiscriminatorTabs className={\\"openapi-tabs__discriminator\\"}>
       <TabItem label={\\"typeA\\"} value={\\"0-item-discriminator\\"}>
         <div style={{ marginTop: \\".5rem\\", marginBottom: \\".5rem\\" }}>
@@ -563,7 +531,6 @@ Array [
         name={\\"type\\"}
         required={true}
         schemaName={\\"string\\"}
-        qualifierMessage={\\"**Possible values:** [\`typeA\`]\\"}
         schema={{ type: \\"string\\", enum: [\\"typeA\\"] }}
       ></SchemaItem>
       <SchemaItem
@@ -571,7 +538,6 @@ Array [
         name={\\"propA\\"}
         required={false}
         schemaName={\\"string\\"}
-        qualifierMessage={undefined}
         schema={{ type: \\"string\\" }}
       ></SchemaItem>
     </TabItem>
@@ -581,7 +547,6 @@ Array [
         name={\\"type\\"}
         required={true}
         schemaName={\\"string\\"}
-        qualifierMessage={\\"**Possible values:** [\`typeB\`]\\"}
         schema={{ type: \\"string\\", enum: [\\"typeB\\"] }}
       ></SchemaItem>
       <SchemaItem
@@ -589,7 +554,6 @@ Array [
         name={\\"propB\\"}
         required={false}
         schemaName={\\"number\\"}
-        qualifierMessage={undefined}
         schema={{ type: \\"number\\" }}
       ></SchemaItem>
     </TabItem>
@@ -601,7 +565,6 @@ Array [
   name={\\"type\\"}
   required={false}
   schemaName={\\"string\\"}
-  qualifierMessage={undefined}
   schema={{ type: \\"string\\" }}
 ></SchemaItem>;
 ",
@@ -621,7 +584,6 @@ Array [
         name={\\"type\\"}
         required={true}
         schemaName={\\"string\\"}
-        qualifierMessage={\\"**Possible values:** [\`typeA\`]\\"}
         schema={{ type: \\"string\\", enum: [\\"typeA\\"] }}
       ></SchemaItem>
       <SchemaItem
@@ -629,7 +591,6 @@ Array [
         name={\\"propA\\"}
         required={false}
         schemaName={\\"string\\"}
-        qualifierMessage={undefined}
         schema={{ type: \\"string\\" }}
       ></SchemaItem>
     </TabItem>
@@ -639,7 +600,6 @@ Array [
         name={\\"type\\"}
         required={true}
         schemaName={\\"string\\"}
-        qualifierMessage={\\"**Possible values:** [\`typeB\`]\\"}
         schema={{ type: \\"string\\", enum: [\\"typeB\\"] }}
       ></SchemaItem>
       <SchemaItem
@@ -647,7 +607,6 @@ Array [
         name={\\"propB\\"}
         required={false}
         schemaName={\\"number\\"}
-        qualifierMessage={undefined}
         schema={{ type: \\"number\\" }}
       ></SchemaItem>
     </TabItem>
@@ -659,7 +618,6 @@ Array [
   name={\\"type\\"}
   required={false}
   schemaName={\\"string\\"}
-  qualifierMessage={undefined}
   schema={{ type: \\"string\\" }}
 ></SchemaItem>;
 ",
@@ -673,7 +631,6 @@ Array [
   name={\\"type\\"}
   required={false}
   schemaName={\\"string\\"}
-  qualifierMessage={undefined}
   schema={{ type: \\"string\\" }}
 ></SchemaItem>;
 ",
@@ -688,7 +645,6 @@ Array [
         name={\\"type\\"}
         required={true}
         schemaName={\\"string\\"}
-        qualifierMessage={\\"**Possible values:** [\`typeA\`]\\"}
         schema={{ type: \\"string\\", enum: [\\"typeA\\"] }}
       ></SchemaItem>
       <SchemaItem
@@ -696,7 +652,6 @@ Array [
         name={\\"propA\\"}
         required={false}
         schemaName={\\"string\\"}
-        qualifierMessage={undefined}
         schema={{ type: \\"string\\" }}
       ></SchemaItem>
     </TabItem>
@@ -706,7 +661,6 @@ Array [
         name={\\"type\\"}
         required={true}
         schemaName={\\"string\\"}
-        qualifierMessage={\\"**Possible values:** [\`typeB\`]\\"}
         schema={{ type: \\"string\\", enum: [\\"typeB\\"] }}
       ></SchemaItem>
       <SchemaItem
@@ -714,7 +668,6 @@ Array [
         name={\\"propB\\"}
         required={false}
         schemaName={\\"number\\"}
-        qualifierMessage={undefined}
         schema={{ type: \\"number\\" }}
       ></SchemaItem>
     </TabItem>
@@ -726,7 +679,6 @@ Array [
   name={\\"sharedProp\\"}
   required={false}
   schemaName={\\"string\\"}
-  qualifierMessage={undefined}
   schema={{ type: \\"string\\" }}
 ></SchemaItem>;
 ",
@@ -735,7 +687,6 @@ Array [
   name={\\"type\\"}
   required={false}
   schemaName={\\"string\\"}
-  qualifierMessage={undefined}
   schema={{ type: \\"string\\" }}
 ></SchemaItem>;
 ",
@@ -754,9 +705,6 @@ Array [
       </strong>
       <span className={\\"openapi-schema__name\\"}>string</span>
     </span>
-    <div style={{ paddingLeft: \\"1rem\\" }}>
-      **Possible values:** [\`typeA\`, \`typeB\`]
-    </div>
     <DiscriminatorTabs className={\\"openapi-tabs__discriminator\\"}>
       <TabItem label={\\"typeA\\"} value={\\"0-item-discriminator\\"}>
         <div style={{ marginTop: \\".5rem\\", marginBottom: \\".5rem\\" }}>
@@ -783,7 +731,6 @@ Array [
         name={\\"type\\"}
         required={true}
         schemaName={\\"string\\"}
-        qualifierMessage={\\"**Possible values:** [\`typeA\`]\\"}
         schema={{ type: \\"string\\", enum: [\\"typeA\\"] }}
       ></SchemaItem>
       <SchemaItem
@@ -791,7 +738,6 @@ Array [
         name={\\"propA\\"}
         required={false}
         schemaName={\\"string\\"}
-        qualifierMessage={undefined}
         schema={{ type: \\"string\\" }}
       ></SchemaItem>
     </TabItem>
@@ -801,7 +747,6 @@ Array [
         name={\\"type\\"}
         required={true}
         schemaName={\\"string\\"}
-        qualifierMessage={\\"**Possible values:** [\`typeB\`]\\"}
         schema={{ type: \\"string\\", enum: [\\"typeB\\"] }}
       ></SchemaItem>
       <SchemaItem
@@ -809,7 +754,6 @@ Array [
         name={\\"propB\\"}
         required={false}
         schemaName={\\"number\\"}
-        qualifierMessage={undefined}
         schema={{ type: \\"number\\" }}
       ></SchemaItem>
     </TabItem>
@@ -821,7 +765,6 @@ Array [
   name={\\"sharedProp\\"}
   required={false}
   schemaName={\\"string\\"}
-  qualifierMessage={undefined}
   schema={{ type: \\"string\\" }}
 ></SchemaItem>;
 ",
@@ -835,9 +778,6 @@ Array [
       </strong>
       <span className={\\"openapi-schema__name\\"}>string</span>
     </span>
-    <div style={{ paddingLeft: \\"1rem\\" }}>
-      **Possible values:** [\`typeA\`, \`typeB\`]
-    </div>
     <DiscriminatorTabs className={\\"openapi-tabs__discriminator\\"}>
       <TabItem label={\\"typeA\\"} value={\\"0-item-discriminator\\"}>
         <div style={{ marginTop: \\".5rem\\", marginBottom: \\".5rem\\" }}>
@@ -869,7 +809,6 @@ Array [
         name={\\"type\\"}
         required={true}
         schemaName={\\"string\\"}
-        qualifierMessage={\\"**Possible values:** [\`typeA\`]\\"}
         schema={{ type: \\"string\\", enum: [\\"typeA\\"] }}
       ></SchemaItem>
       <SchemaItem collapsible={true} className={\\"schemaItem\\"}>
@@ -886,7 +825,6 @@ Array [
               name={\\"propA1\\"}
               required={false}
               schemaName={\\"string\\"}
-              qualifierMessage={undefined}
               schema={{ type: \\"string\\" }}
             ></SchemaItem>
             <SchemaItem
@@ -894,7 +832,6 @@ Array [
               name={\\"propA2\\"}
               required={false}
               schemaName={\\"number\\"}
-              qualifierMessage={undefined}
               schema={{ type: \\"number\\" }}
             ></SchemaItem>
           </div>
@@ -907,7 +844,6 @@ Array [
         name={\\"type\\"}
         required={true}
         schemaName={\\"string\\"}
-        qualifierMessage={\\"**Possible values:** [\`typeB\`]\\"}
         schema={{ type: \\"string\\", enum: [\\"typeB\\"] }}
       ></SchemaItem>
       <SchemaItem collapsible={true} className={\\"schemaItem\\"}>
@@ -924,7 +860,6 @@ Array [
               name={\\"propB1\\"}
               required={false}
               schemaName={\\"string\\"}
-              qualifierMessage={undefined}
               schema={{ type: \\"string\\" }}
             ></SchemaItem>
             <SchemaItem
@@ -932,7 +867,6 @@ Array [
               name={\\"propB2\\"}
               required={false}
               schemaName={\\"boolean\\"}
-              qualifierMessage={undefined}
               schema={{ type: \\"boolean\\" }}
             ></SchemaItem>
           </div>
@@ -947,7 +881,6 @@ Array [
   name={\\"type\\"}
   required={false}
   schemaName={\\"string\\"}
-  qualifierMessage={undefined}
   schema={{ type: \\"string\\" }}
 ></SchemaItem>;
 ",
@@ -967,7 +900,6 @@ Array [
         name={\\"type\\"}
         required={true}
         schemaName={\\"string\\"}
-        qualifierMessage={\\"**Possible values:** [\`typeA\`]\\"}
         schema={{ type: \\"string\\", enum: [\\"typeA\\"] }}
       ></SchemaItem>
       <SchemaItem
@@ -975,7 +907,6 @@ Array [
         name={\\"propA\\"}
         required={true}
         schemaName={\\"string\\"}
-        qualifierMessage={undefined}
         schema={{ type: \\"string\\" }}
       ></SchemaItem>
     </TabItem>
@@ -985,7 +916,6 @@ Array [
         name={\\"type\\"}
         required={true}
         schemaName={\\"string\\"}
-        qualifierMessage={\\"**Possible values:** [\`typeB\`]\\"}
         schema={{ type: \\"string\\", enum: [\\"typeB\\"] }}
       ></SchemaItem>
       <SchemaItem
@@ -993,7 +923,6 @@ Array [
         name={\\"propB\\"}
         required={true}
         schemaName={\\"number\\"}
-        qualifierMessage={undefined}
         schema={{ type: \\"number\\" }}
       ></SchemaItem>
     </TabItem>
@@ -1005,7 +934,6 @@ Array [
   name={\\"type\\"}
   required={false}
   schemaName={\\"string\\"}
-  qualifierMessage={undefined}
   schema={{ type: \\"string\\" }}
 ></SchemaItem>;
 ",
@@ -1025,7 +953,6 @@ Array [
         name={\\"type\\"}
         required={true}
         schemaName={\\"string\\"}
-        qualifierMessage={\\"**Possible values:** [\`typeA\`]\\"}
         schema={{ type: \\"string\\", enum: [\\"typeA\\"] }}
       ></SchemaItem>
       <SchemaItem
@@ -1033,7 +960,6 @@ Array [
         name={\\"propA\\"}
         required={true}
         schemaName={\\"string\\"}
-        qualifierMessage={undefined}
         schema={{ type: \\"string\\" }}
       ></SchemaItem>
     </TabItem>
@@ -1043,7 +969,6 @@ Array [
         name={\\"type\\"}
         required={true}
         schemaName={\\"string\\"}
-        qualifierMessage={\\"**Possible values:** [\`typeB\`]\\"}
         schema={{ type: \\"string\\", enum: [\\"typeB\\"] }}
       ></SchemaItem>
       <SchemaItem
@@ -1051,7 +976,6 @@ Array [
         name={\\"propB\\"}
         required={true}
         schemaName={\\"number\\"}
-        qualifierMessage={undefined}
         schema={{ type: \\"number\\" }}
       ></SchemaItem>
     </TabItem>
@@ -1068,9 +992,6 @@ Array [
       </strong>
       <span className={\\"openapi-schema__name\\"}>string</span>
     </span>
-    <div style={{ paddingLeft: \\"1rem\\" }}>
-      **Possible values:** [\`typeA\`, \`typeB\`]
-    </div>
     <DiscriminatorTabs className={\\"openapi-tabs__discriminator\\"}>
       <TabItem label={\\"typeA\\"} value={\\"0-item-discriminator\\"}>
         <div style={{ marginTop: \\".5rem\\", marginBottom: \\".5rem\\" }}>
@@ -1102,7 +1023,6 @@ Array [
         name={\\"type\\"}
         required={true}
         schemaName={\\"string\\"}
-        qualifierMessage={\\"**Possible values:** [\`typeA\`]\\"}
         schema={{ type: \\"string\\", enum: [\\"typeA\\"] }}
       ></SchemaItem>
       <SchemaItem
@@ -1110,7 +1030,6 @@ Array [
         name={\\"propA\\"}
         required={false}
         schemaName={\\"string\\"}
-        qualifierMessage={undefined}
         schema={{ type: \\"string\\" }}
       ></SchemaItem>
     </TabItem>
@@ -1120,7 +1039,6 @@ Array [
         name={\\"type\\"}
         required={true}
         schemaName={\\"string\\"}
-        qualifierMessage={\\"**Possible values:** [\`typeB\`]\\"}
         schema={{ type: \\"string\\", enum: [\\"typeB\\"] }}
       ></SchemaItem>
       <SchemaItem
@@ -1128,7 +1046,6 @@ Array [
         name={\\"propB\\"}
         required={false}
         schemaName={\\"number\\"}
-        qualifierMessage={undefined}
         schema={{ type: \\"number\\" }}
       ></SchemaItem>
     </TabItem>
@@ -1140,7 +1057,6 @@ Array [
   name={\\"type\\"}
   required={false}
   schemaName={\\"string\\"}
-  qualifierMessage={undefined}
   schema={{ type: \\"string\\" }}
 ></SchemaItem>;
 ",
@@ -1149,7 +1065,6 @@ Array [
   name={\\"sharedProp\\"}
   required={false}
   schemaName={\\"string\\"}
-  qualifierMessage={undefined}
   schema={{ type: \\"string\\" }}
 ></SchemaItem>;
 ",
@@ -1169,7 +1084,6 @@ Array [
         name={\\"type\\"}
         required={true}
         schemaName={\\"string\\"}
-        qualifierMessage={\\"**Possible values:** [\`typeA\`]\\"}
         schema={{ type: \\"string\\", enum: [\\"typeA\\"] }}
       ></SchemaItem>
       <SchemaItem
@@ -1177,7 +1091,6 @@ Array [
         name={\\"propA\\"}
         required={false}
         schemaName={\\"string\\"}
-        qualifierMessage={undefined}
         schema={{ type: \\"string\\" }}
       ></SchemaItem>
     </TabItem>
@@ -1187,7 +1100,6 @@ Array [
         name={\\"type\\"}
         required={true}
         schemaName={\\"string\\"}
-        qualifierMessage={\\"**Possible values:** [\`typeB\`]\\"}
         schema={{ type: \\"string\\", enum: [\\"typeB\\"] }}
       ></SchemaItem>
       <SchemaItem
@@ -1195,7 +1107,6 @@ Array [
         name={\\"propB\\"}
         required={false}
         schemaName={\\"number\\"}
-        qualifierMessage={undefined}
         schema={{ type: \\"number\\" }}
       ></SchemaItem>
     </TabItem>
@@ -1212,9 +1123,6 @@ Array [
       </strong>
       <span className={\\"openapi-schema__name\\"}>string</span>
     </span>
-    <div style={{ paddingLeft: \\"1rem\\" }}>
-      **Possible values:** [\`typeA\`, \`typeB\`]
-    </div>
     <DiscriminatorTabs className={\\"openapi-tabs__discriminator\\"}>
       <TabItem label={\\"typeA\\"} value={\\"0-item-discriminator\\"}>
         <div style={{ marginTop: \\".5rem\\", marginBottom: \\".5rem\\" }}>
@@ -1235,7 +1143,6 @@ Array [
   name={\\"sharedProp\\"}
   required={false}
   schemaName={\\"string\\"}
-  qualifierMessage={undefined}
   schema={{ type: \\"string\\" }}
 ></SchemaItem>;
 ",
@@ -1270,7 +1177,6 @@ Array [
               name={\\"noseLength\\"}
               required={true}
               schemaName={\\"number\\"}
-              qualifierMessage={undefined}
               schema={{ type: \\"number\\" }}
             ></SchemaItem>
           </TabItem>
@@ -1424,7 +1330,6 @@ Array [
               name={\\"objectProp\\"}
               required={false}
               schemaName={\\"string\\"}
-              qualifierMessage={undefined}
               schema={{ type: \\"string\\" }}
             ></SchemaItem>
           </TabItem>
@@ -1527,7 +1432,6 @@ Array [
               name={\\"requiredPropA\\"}
               required={true}
               schemaName={\\"string\\"}
-              qualifierMessage={undefined}
               schema={{ type: \\"string\\" }}
             ></SchemaItem>
           </TabItem>
@@ -1537,7 +1441,6 @@ Array [
               name={\\"requiredPropB\\"}
               required={true}
               schemaName={\\"number\\"}
-              qualifierMessage={undefined}
               schema={{ type: \\"number\\" }}
             ></SchemaItem>
           </TabItem>
@@ -1557,7 +1460,6 @@ Array [
   name={\\"sharedProp\\"}
   required={false}
   schemaName={\\"string\\"}
-  qualifierMessage={undefined}
   schema={{ type: \\"string\\" }}
 ></SchemaItem>;
 ",
@@ -1581,7 +1483,6 @@ Array [
               name={\\"specificPropA\\"}
               required={false}
               schemaName={\\"string\\"}
-              qualifierMessage={undefined}
               schema={{ type: \\"string\\" }}
             ></SchemaItem>
           </TabItem>
@@ -1591,7 +1492,6 @@ Array [
               name={\\"specificPropB\\"}
               required={false}
               schemaName={\\"number\\"}
-              qualifierMessage={undefined}
               schema={{ type: \\"number\\" }}
             ></SchemaItem>
           </TabItem>

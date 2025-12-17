@@ -28,7 +28,14 @@ export type SchemaObject = Omit<
   | "additionalProperties"
 > & {
   // OpenAPI specific overrides
-  type?: "string" | "number" | "integer" | "boolean" | "object" | "array";
+  type?:
+    | "string"
+    | "number"
+    | "integer"
+    | "boolean"
+    | "object"
+    | "array"
+    | "null";
   allOf?: SchemaObject[];
   oneOf?: SchemaObject[];
   anyOf?: SchemaObject[];

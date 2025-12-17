@@ -1,0 +1,238 @@
+{
+  "theme.openapi.response.title": {
+    "message": "Response",
+    "description": "The label for response title"
+  },
+  "theme.openapi.response.clear": {
+    "message": "Clear",
+    "description": "The label for clear response button"
+  },
+  "theme.openapi.response.placeholder": {
+    "message": "Click the <code>Send API Request</code> button above and see the response here!",
+    "description": "The placeholder for response area"
+  },
+  "theme.openapi.response.headersTab": {
+    "message": "Headers",
+    "description": "The label for response headers tab"
+  },
+  "theme.openapi.tabs.responses.label": {
+    "message": "Responses",
+    "description": "The label for responses tab"
+  },
+  "theme.openapi.request.body.title": {
+    "message": "Body",
+    "description": "The title for request body section"
+  },
+  "theme.openapi.request.accept.title": {
+    "message": "Accept",
+    "description": "The title for accept header"
+  },
+  "theme.openapi.request.sendButton": {
+    "message": "Send API Request",
+    "description": "The label for send request button"
+  },
+  "theme.openapi.request.requiredLabel": {
+    "message": "required",
+    "description": "The label for required fields"
+  },
+  "theme.openapi.request.title": {
+    "message": "Request",
+    "description": "The title for request section"
+  },
+  "theme.openapi.request.collapseAll": {
+    "message": "Collapse all",
+    "description": "The label for collapse all button"
+  },
+  "theme.openapi.request.expandAll": {
+    "message": "Expand all",
+    "description": "The label for expand all button"
+  },
+  "theme.openapi.request.baseUrl.title": {
+    "message": "Base URL",
+    "description": "The title for base URL section"
+  },
+  "theme.openapi.request.auth.title": {
+    "message": "Auth",
+    "description": "The title for authentication section"
+  },
+  "theme.openapi.request.parameters.title": {
+    "message": "Parameters",
+    "description": "The title for parameters section"
+  },
+  "theme.openapi.request.fetchingMessage": {
+    "message": "Fetching...",
+    "description": "The message shown while fetching"
+  },
+  "theme.openapi.request.connectionFailed": {
+    "message": "Connection failed",
+    "description": "The message shown when connection fails"
+  },
+  "theme.openapi.server.editButton": {
+    "message": "Edit",
+    "description": "The label for edit server button"
+  },
+  "theme.openapi.server.hideButton": {
+    "message": "Hide",
+    "description": "The label for hide server button"
+  },
+  "theme.openapi.paramOptions.showOptional": {
+    "message": "Show optional parameters",
+    "description": "The label for show optional parameters button"
+  },
+  "theme.openapi.paramOptions.hideOptional": {
+    "message": "Hide optional parameters",
+    "description": "The label for hide optional parameters button"
+  },
+  "theme.openapi.formFileUpload.clearButton": {
+    "message": "Clear",
+    "description": "The label for clear file upload button"
+  },
+  "theme.openapi.form.fieldRequired": {
+    "message": "This field is required",
+    "description": "The message for required field validation"
+  },
+  "theme.openapi.auth.bearerToken": {
+    "message": "Bearer Token",
+    "description": "The label for bearer token"
+  },
+  "theme.openapi.auth.username": {
+    "message": "Username",
+    "description": "The label for username"
+  },
+  "theme.openapi.auth.password": {
+    "message": "Password",
+    "description": "The label for password"
+  },
+  "theme.openapi.auth.securityScheme": {
+    "message": "Security Scheme",
+    "description": "The label for security scheme"
+  },
+  "theme.openapi.responseExamples.example": {
+    "message": "Example",
+    "description": "The label for example"
+  },
+  "theme.openapi.responseExamples.autoExample": {
+    "message": "Example (auto)",
+    "description": "The label for auto-generated example"
+  },
+  "theme.openapi.body.exampleFromSchema": {
+    "message": "Example (from schema)",
+    "description": "The label for example from schema"
+  },
+  "theme.openapi.statusCodes.responseHeaders": {
+    "message": "Response Headers",
+    "description": "The label for response headers"
+  },
+  "theme.openapi.statusCodes.schemaTitle": {
+    "message": "Schema",
+    "description": "The title for schema section"
+  },
+  "theme.openapi.schema.noSchema": {
+    "message": "No schema",
+    "description": "The message when no schema is available"
+  },
+  "theme.openapi.schemaItem.required": {
+    "message": "required",
+    "description": "The label for required schema item"
+  },
+  "theme.openapi.schemaItem.deprecated": {
+    "message": "deprecated",
+    "description": "The label for deprecated schema item"
+  },
+  "theme.openapi.schemaItem.nullable": {
+    "message": "nullable",
+    "description": "The label for nullable schema item"
+  },
+  "theme.openapi.schemaItem.defaultValue": {
+    "message": "Default value:",
+    "description": "The label for default value"
+  },
+  "theme.openapi.schemaItem.example": {
+    "message": "Example:",
+    "description": "The label for example"
+  },
+  "theme.openapi.schemaItem.examples": {
+    "message": "Examples",
+    "description": "The label for examples"
+  },
+  "theme.openapi.schemaItem.description": {
+    "message": "Description",
+    "description": "The label for description"
+  },
+  "theme.openapi.schemaItem.constantValue": {
+    "message": "Constant value:",
+    "description": "The label for constant value"
+  },
+  "theme.openapi.schemaItem.enumValue": {
+    "message": "Enum Value",
+    "description": "The label for enum value"
+  },
+  "theme.openapi.schemaItem.enumDescription": {
+    "message": "Description",
+    "description": "The label for enum description"
+  },
+  "theme.openapi.schemaItem.possibleValues": {
+    "message": "Possible values:",
+    "description": "The label for possible values"
+  },
+  "theme.openapi.schemaItem.oneOf": {
+    "message": "oneOf",
+    "description": "The label for oneOf"
+  },
+  "theme.openapi.schemaItem.anyOf": {
+    "message": "anyOf",
+    "description": "The label for anyOf"
+  },
+  "theme.openapi.paramsDetails.parametersTitle": {
+    "message": "Parameters",
+    "description": "The title for parameters section"
+  },
+  "theme.openapi.securitySchemes.name": {
+    "message": "name:",
+    "description": "The label for security scheme name"
+  },
+  "theme.openapi.securitySchemes.type": {
+    "message": "type:",
+    "description": "The label for security scheme type"
+  },
+  "theme.openapi.securitySchemes.scopes": {
+    "message": "scopes:",
+    "description": "The label for security scheme scopes"
+  },
+  "theme.openapi.securitySchemes.in": {
+    "message": "in:",
+    "description": "The label for security scheme location"
+  },
+  "theme.openapi.securitySchemes.flows": {
+    "message": "flows:",
+    "description": "The label for security scheme flows"
+  },
+  "theme.openapi.securitySchemes.description": {
+    "message": "description:",
+    "description": "The label for security scheme description"
+  },
+  "theme.openapi.securitySchemes.scheme": {
+    "message": "scheme:",
+    "description": "The label for security scheme"
+  },
+  "theme.openapi.securitySchemes.bearerFormat": {
+    "message": "bearerFormat:",
+    "description": "The label for bearer format"
+  },
+  "theme.openapi.securitySchemes.openIdConnectUrl": {
+    "message": "openIdConnectUrl:",
+    "description": "The label for OpenID Connect URL"
+  },
+  "theme.openapi.schemaItem.expression": {
+    "message": "Value must match regular expression",
+    "description": "The label for expression"
+  },
+  "theme.openapi.schemaItem.characters": {
+    "message": "characters",
+    "description": "The label for characters"
+  },
+  "theme.openapi.schemaItem.nonEmpty": {
+    "message": "non-empty",
+    "description": "The label for non-empty"
+  }
+}
