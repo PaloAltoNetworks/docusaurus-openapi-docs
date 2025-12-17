@@ -5,6 +5,7 @@ import type * as OpenApiPlugin from "docusaurus-plugin-openapi-docs";
 
 import { DOCUSAURUS_VERSION } from "@docusaurus/utils";
 import { myCustomApiMdGenerator } from "./customMdGenerators";
+import { myCustomIntroTemplateGenerator } from "./customTemplateGenerators";
 
 const config: Config = {
   future: {
@@ -318,6 +319,9 @@ const config: Config = {
             downloadUrl: "/petstore-3.1.yaml",
             hideSendButton: false,
             showSchemas: true,
+            templateGenerators: {
+              createIntroTemplateMD: myCustomIntroTemplateGenerator,
+            },
             markdownGenerators: { createApiPageMD: myCustomApiMdGenerator }, // customize MDX with markdown generator
           } satisfies OpenApiPlugin.Options,
           cos: {
