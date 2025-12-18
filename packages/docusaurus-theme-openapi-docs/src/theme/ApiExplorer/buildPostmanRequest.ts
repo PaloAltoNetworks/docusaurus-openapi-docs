@@ -313,7 +313,11 @@ function setBody(clonedPostman: sdk.Request, body: Body) {
   switch (clonedPostman.body.mode) {
     case "raw": {
       // check file even though it should already be set from above
-      if (body.type !== "raw" || body.content?.type === "file") {
+      if (
+        body.type !== "raw" ||
+        body.content?.type === "file" ||
+        body.content?.type === "file[]"
+      ) {
         clonedPostman.body = undefined;
         return;
       }
@@ -328,15 +332,23 @@ function setBody(clonedPostman: sdk.Request, body: Body) {
         clonedPostman.body.raw = `${body.content?.value}`;
         return;
       }
-      const params = Object.entries(body.content)
+      const params: sdk.FormParam[] = [];
+      Object.entries(body.content)
         .filter((entry): entry is [string, NonNullable<Content>] => !!entry[1])
-        .map(([key, content]) => {
+        .forEach(([key, content]) => {
           if (content.type === "file") {
-            return new sdk.FormParam({ key: key, ...content });
+            params.push(new sdk.FormParam({ key: key, ...content }));
+          } else if (content.type === "file[]") {
+            content.value.forEach((file) =>
+              params.push(new sdk.FormParam({ key, value: file }))
+            );
+          } else {
+            params.push(new sdk.FormParam({ key: key, value: content.value }));
           }
-          return new sdk.FormParam({ key: key, value: content.value });
         });
-      clonedPostman.body.formdata?.assimilate(params, false);
+      params.forEach((param) => {
+        clonedPostman.body?.formdata?.add(param);
+      });
       return;
     }
     case "urlencoded": {
@@ -350,7 +362,11 @@ function setBody(clonedPostman: sdk.Request, body: Body) {
       const params = Object.entries(body.content)
         .filter((entry): entry is [string, NonNullable<Content>] => !!entry[1])
         .map(([key, content]) => {
-          if (content.type !== "file" && content.value) {
+          if (
+            content.type !== "file" &&
+            content.type !== "file[]" &&
+            content.value
+          ) {
             return new sdk.QueryParam({ key: key, value: content.value });
           }
           return undefined;
