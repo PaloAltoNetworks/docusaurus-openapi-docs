@@ -48,6 +48,8 @@ export const OptionsSchema = Joi.object({
         sidebarOptions: sidebarOptions,
         markdownGenerators: markdownGenerators,
         showSchemas: Joi.boolean(),
+        showInfoPage: Joi.boolean(),
+        schemasOnly: Joi.boolean(),
         disableCompression: Joi.boolean(),
         maskCredentials: Joi.boolean(),
         version: Joi.string().when("versions", {

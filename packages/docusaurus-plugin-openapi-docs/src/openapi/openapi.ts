@@ -97,8 +97,11 @@ function createItems(
   const infoId = kebabCase(infoIdSpaces);
   const schemasOnly = options?.schemasOnly === true;
 
-  if (openapiData.info.description || openapiData.info.title) {
-    // Only create an info page if we have a description.
+  // Only create an info page if we have a description/title AND showInfoPage is not false
+  if (
+    (openapiData.info.description || openapiData.info.title) &&
+    options?.showInfoPage !== false
+  ) {
     const infoDescription = openapiData.info?.description;
     let splitDescription: any;
     if (infoDescription) {

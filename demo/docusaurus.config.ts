@@ -352,6 +352,7 @@ const config: Config = {
               groupPathsBy: "tag",
             },
             showSchemas: true,
+            showInfoPage: false, // Disable info page generation
           } satisfies OpenApiPlugin.Options,
           tests: {
             specPath: "examples/tests",
