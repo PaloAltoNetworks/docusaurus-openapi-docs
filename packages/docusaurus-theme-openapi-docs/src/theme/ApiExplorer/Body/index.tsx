@@ -96,6 +96,8 @@ function Body({
   const schema = requestBodyMetadata?.content?.[contentType]?.schema;
   const example = requestBodyMetadata?.content?.[contentType]?.example;
   const examples = requestBodyMetadata?.content?.[contentType]?.examples;
+  // OpenAPI 3.1 / JSON Schema: schema.examples is an array of example values
+  const schemaExamples = schema?.examples as any[] | undefined;
 
   if (schema?.format === "binary") {
     return (
@@ -254,6 +256,17 @@ function Body({
         });
       }
     }
+    // OpenAPI 3.1: schema.examples is an array of example values
+    if (schemaExamples && Array.isArray(schemaExamples)) {
+      schemaExamples.forEach((schemaExample, index) => {
+        const body = JSON.stringify(schemaExample, null, 2);
+        examplesBodies.push({
+          label: `Example ${index + 1}`,
+          body,
+          summary: undefined,
+        });
+      });
+    }
     language = "json";
   }
 
@@ -298,6 +311,26 @@ function Body({
           summary: example.summary,
         });
       }
+    }
+    // OpenAPI 3.1: schema.examples is an array of example values
+    if (schemaExamples && Array.isArray(schemaExamples)) {
+      schemaExamples.forEach((schemaExample, index) => {
+        let formattedXmlBody;
+        try {
+          formattedXmlBody = format(json2xml(schemaExample, ""), {
+            indentation: "  ",
+            lineSeparator: "\n",
+            collapseContent: true,
+          });
+        } catch {
+          formattedXmlBody = json2xml(schemaExample);
+        }
+        examplesBodies.push({
+          label: `Example ${index + 1}`,
+          body: formattedXmlBody,
+          summary: undefined,
+        });
+      });
     }
     language = "xml";
   }
