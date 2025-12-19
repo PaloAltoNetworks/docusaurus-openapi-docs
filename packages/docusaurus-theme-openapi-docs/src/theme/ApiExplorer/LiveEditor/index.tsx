@@ -11,7 +11,6 @@ import { usePrismTheme } from "@docusaurus/theme-common";
 import { translate } from "@docusaurus/Translate";
 import useIsBrowser from "@docusaurus/useIsBrowser";
 import { ErrorMessage } from "@hookform/error-message";
-import { setStringRawBody } from "@theme/ApiExplorer/Body/slice";
 import { OPENAPI_FORM } from "@theme/translationIds";
 import clsx from "clsx";
 import { Controller, useFormContext } from "react-hook-form";
@@ -56,8 +55,8 @@ function App({
   const [code, setCode] = React.useState(children.replace(/\n$/, ""));
 
   useEffect(() => {
-    action(setStringRawBody(code));
-  }, [action, code]);
+    action(code);
+  }, [code]);
 
   const {
     control,

@@ -12,8 +12,6 @@ import { translate } from "@docusaurus/Translate";
 import json2xml from "@theme/ApiExplorer/Body/json2xml";
 import FormFileUpload from "@theme/ApiExplorer/FormFileUpload";
 import FormItem from "@theme/ApiExplorer/FormItem";
-import FormSelect from "@theme/ApiExplorer/FormSelect";
-import FormTextInput from "@theme/ApiExplorer/FormTextInput";
 import LiveApp from "@theme/ApiExplorer/LiveEditor";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import Markdown from "@theme/Markdown";
@@ -23,13 +21,8 @@ import { OPENAPI_BODY, OPENAPI_REQUEST } from "@theme/translationIds";
 import { RequestBodyObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import format from "xml-formatter";
 
-import {
-  clearFormBodyKey,
-  clearRawBody,
-  setFileFormBody,
-  setFileRawBody,
-  setStringFormBody,
-} from "./slice";
+import { clearRawBody, setFileRawBody, setStringRawBody } from "./slice";
+import FormBodyItem from "./FormBodyItem";
 
 export interface Props {
   jsonRequestBodyExample: string;
@@ -130,96 +123,23 @@ function Body({
   ) {
     return (
       <FormItem className="openapi-explorer__form-item-body-container">
-        <div>
-          {Object.entries(schema.properties ?? {}).map(([key, val]: any) => {
-            if (val.format === "binary") {
-              return (
-                <FormItem
-                  key={key}
-                  label={key}
-                  required={
-                    Array.isArray(schema.required) &&
-                    schema.required.includes(key)
-                  }
-                >
-                  <FormFileUpload
-                    placeholder={val.description || key}
-                    onChange={(file: any) => {
-                      if (file === undefined) {
-                        dispatch(clearFormBodyKey(key));
-                        return;
-                      }
-                      dispatch(
-                        setFileFormBody({
-                          key: key,
-                          value: {
-                            src: `/path/to/${file.name}`,
-                            content: file,
-                          },
-                        })
-                      );
-                    }}
-                  />
-                </FormItem>
-              );
-            }
-
-            if (val.enum) {
-              return (
-                <FormItem
-                  key={key}
-                  label={key}
-                  required={
-                    Array.isArray(schema.required) &&
-                    schema.required.includes(key)
-                  }
-                >
-                  <FormSelect
-                    options={["---", ...val.enum]}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                      const val = e.target.value;
-                      if (val === "---") {
-                        dispatch(clearFormBodyKey(key));
-                      } else {
-                        dispatch(
-                          setStringFormBody({
-                            key: key,
-                            value: val,
-                          })
-                        );
-                      }
-                    }}
-                  />
-                </FormItem>
-              );
-            }
-            // TODO: support all the other types.
-            return (
-              <FormItem
-                key={key}
-                label={key}
-                required={
-                  Array.isArray(schema.required) &&
-                  schema.required.includes(key)
-                }
-              >
-                <FormTextInput
-                  paramName={key}
-                  isRequired={
-                    Array.isArray(schema.required) &&
-                    schema.required.includes(key)
-                  }
-                  placeholder={val.description || key}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    dispatch(
-                      setStringFormBody({ key: key, value: e.target.value })
-                    );
-                  }}
-                />
-              </FormItem>
-            );
-          })}
-        </div>
+        {Object.entries(schema.properties ?? {}).map(([key, val]: any) => {
+          return (
+            <FormItem
+              key={key}
+              label={key}
+              required={
+                Array.isArray(schema.required) && schema.required.includes(key)
+              }
+            >
+              <FormBodyItem
+                schemaObject={val}
+                id={key}
+                schema={schema}
+              ></FormBodyItem>
+            </FormItem>
+          );
+        })}
       </FormItem>
     );
   }
@@ -348,7 +268,11 @@ function Body({
             value="Example (from schema)"
             default
           >
-            <LiveApp action={dispatch} language={language} required={required}>
+            <LiveApp
+              action={(code: string) => dispatch(setStringRawBody(code))}
+              language={language}
+              required={required}
+            >
               {defaultBody}
             </LiveApp>
           </TabItem>
@@ -357,7 +281,7 @@ function Body({
             {example.summary && <Markdown>{example.summary}</Markdown>}
             {exampleBody && (
               <LiveApp
-                action={dispatch}
+                action={(code: string) => dispatch(setStringRawBody(code))}
                 language={language}
                 required={required}
               >
@@ -383,7 +307,11 @@ function Body({
             value="Example (from schema)"
             default
           >
-            <LiveApp action={dispatch} language={language} required={required}>
+            <LiveApp
+              action={(code: string) => dispatch(setStringRawBody(code))}
+              language={language}
+              required={required}
+            >
               {defaultBody}
             </LiveApp>
           </TabItem>
@@ -397,7 +325,10 @@ function Body({
               >
                 {example.summary && <Markdown>{example.summary}</Markdown>}
                 {example.body && (
-                  <LiveApp action={dispatch} language={language}>
+                  <LiveApp
+                    action={(code: string) => dispatch(setStringRawBody(code))}
+                    language={language}
+                  >
                     {example.body}
                   </LiveApp>
                 )}
@@ -411,7 +342,11 @@ function Body({
 
   return (
     <FormItem>
-      <LiveApp action={dispatch} language={language} required={required}>
+      <LiveApp
+        action={(code: string) => dispatch(setStringRawBody(code))}
+        language={language}
+        required={required}
+      >
         {defaultBody}
       </LiveApp>
     </FormItem>
