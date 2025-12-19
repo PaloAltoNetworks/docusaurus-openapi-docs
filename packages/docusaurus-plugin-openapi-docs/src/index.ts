@@ -353,9 +353,18 @@ custom_edit_url: null
                 .toString("base64"));
           let infoBasePath = `${outputDir}/${item.infoId}`;
           if (docRouteBasePath) {
-            infoBasePath = `${docRouteBasePath}/${outputDir
-              .split(docPath!)[1]
-              .replace(/^\/+/g, "")}/${item.infoId}`.replace(/^\/+/g, "");
+            // Safely extract path segment, handling cases where docPath may not be in outputDir
+            const outputSegment =
+              docPath && outputDir.includes(docPath)
+                ? (outputDir.split(docPath)[1]?.replace(/^\/+/g, "") ?? "")
+                : outputDir
+                    .slice(outputDir.indexOf("/", 1))
+                    .replace(/^\/+/g, "");
+            infoBasePath =
+              `${docRouteBasePath}/${outputSegment}/${item.infoId}`.replace(
+                /^\/+/g,
+                ""
+              );
           }
           if (item.infoId) item.infoPath = infoBasePath;
         }
