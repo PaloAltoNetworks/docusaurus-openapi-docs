@@ -10,6 +10,8 @@ import React, { useState } from "react";
 
 import { useDoc } from "@docusaurus/plugin-content-docs/client";
 import { translate } from "@docusaurus/Translate";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import type { ThemeConfig } from "docusaurus-theme-openapi-docs/src/types";
 import Accept from "@theme/ApiExplorer/Accept";
 import Authorization from "@theme/ApiExplorer/Authorization";
 import Body from "@theme/ApiExplorer/Body";
@@ -31,12 +33,18 @@ import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 import * as sdk from "postman-collection";
 import { FormProvider, useForm } from "react-hook-form";
 
-import makeRequest from "./makeRequest";
+import makeRequest, { RequestError, RequestErrorType } from "./makeRequest";
 
 function Request({ item }: { item: ApiItem }) {
   const postman = new sdk.Request(item.postman);
   const metadata = useDoc();
-  const { proxy, hide_send_button: hideSendButton } = metadata.frontMatter;
+  const { proxy: frontMatterProxy, hide_send_button: hideSendButton } =
+    metadata.frontMatter;
+  const { siteConfig } = useDocusaurusContext();
+  const themeConfig = siteConfig.themeConfig as ThemeConfig;
+  const requestTimeout = themeConfig.api?.requestTimeout;
+  // Frontmatter proxy (per-spec) takes precedence over theme config proxy (site-wide)
+  const proxy = frontMatterProxy ?? themeConfig.api?.proxy;
 
   const pathParams = useTypedSelector((state: any) => state.params.path);
   const queryParams = useTypedSelector((state: any) => state.params.query);
@@ -118,6 +126,36 @@ function Request({ item }: { item: ApiItem }) {
     res.headers && dispatch(setHeaders(Object.fromEntries(res.headers)));
   };
 
+  const getErrorMessage = (errorType: RequestErrorType): string => {
+    switch (errorType) {
+      case "timeout":
+        return translate({
+          id: OPENAPI_REQUEST.ERROR_TIMEOUT,
+          message:
+            "The request timed out waiting for the server to respond. Please try again. If the issue persists, try using a different client (e.g., curl) with a longer timeout.",
+        });
+      case "network":
+        return translate({
+          id: OPENAPI_REQUEST.ERROR_NETWORK,
+          message:
+            "Unable to reach the server. Please check your network connection and verify the server URL is correct. If the server is running, this may be a CORS issue.",
+        });
+      case "cors":
+        return translate({
+          id: OPENAPI_REQUEST.ERROR_CORS,
+          message:
+            "The request was blocked, possibly due to CORS restrictions. Ensure the server allows requests from this origin, or try using a proxy.",
+        });
+      case "unknown":
+      default:
+        return translate({
+          id: OPENAPI_REQUEST.ERROR_UNKNOWN,
+          message:
+            "An unexpected error occurred while making the request. Please try again.",
+        });
+    }
+  };
+
   const onSubmit = async (data) => {
     dispatch(
       setResponse(
@@ -129,7 +167,12 @@ function Request({ item }: { item: ApiItem }) {
     );
     try {
       await delay(1200);
-      const res = await makeRequest(postmanRequest, proxy, body);
+      const res = await makeRequest(
+        postmanRequest,
+        proxy,
+        body,
+        requestTimeout
+      );
       if (res.headers.get("content-type")?.includes("text/event-stream")) {
         await handleEventStream(res);
       } else {
@@ -137,14 +180,18 @@ function Request({ item }: { item: ApiItem }) {
       }
     } catch (e) {
       console.log(e);
-      dispatch(
-        setResponse(
-          translate({
-            id: OPENAPI_REQUEST.CONNECTION_FAILED,
-            message: "Connection failed",
-          })
-        )
-      );
+
+      let errorMessage: string;
+      if (e instanceof RequestError) {
+        errorMessage = getErrorMessage(e.type);
+      } else {
+        errorMessage = translate({
+          id: OPENAPI_REQUEST.CONNECTION_FAILED,
+          message: "Connection failed",
+        });
+      }
+
+      dispatch(setResponse(errorMessage));
       dispatch(clearCode());
       dispatch(clearHeaders());
     }

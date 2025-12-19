@@ -12,6 +12,8 @@ export interface ThemeConfig {
   api?: {
     proxy?: string;
     authPersistance?: false | "localStorage" | "sessionStorage";
+    /** Request timeout in milliseconds. Defaults to 30000 (30 seconds). */
+    requestTimeout?: number;
   };
 }
 
