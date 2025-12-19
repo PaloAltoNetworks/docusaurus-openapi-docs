@@ -371,6 +371,8 @@ yarn docusaurus gen-api-docs petstore --schemas-only
 
 > This command writes the schema pages to the configured output directory while leaving other generated docs untouched.
 
+The `--schemas-only` flag is also available for `gen-api-docs:version`.
+
 ### Cleaning API Docs
 
 To clean/remove all API Docs, run the following command from the root directory of your project:
@@ -396,6 +398,8 @@ To clean only schema docs while leaving API, info, and tag docs untouched, use t
 ```bash title="cleaning only schema docs for 'petstore'"
 yarn docusaurus clean-api-docs petstore --schemas-only
 ```
+
+> The `--schemas-only` flag is also available for `clean-api-docs:version`.
 
 ### Versioning OpenAPI docs
 
