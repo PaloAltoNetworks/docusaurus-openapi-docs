@@ -176,6 +176,8 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 | `versions`           | `object`  | `null`  | _Optional:_ Options for versioning configuration. See below for a list of supported options.                                                |
 | `markdownGenerators` | `object`  | `null`  | _Optional:_ Customize MDX content via generator functions. See below for a list of supported options.                                       |
 | `showSchemas`        | `boolean` | `null`  | _Optional:_ If set to `true`, generates standalone schema pages and adds them to the sidebar.                                               |
+| `showInfoPage`       | `boolean` | `true`  | _Optional:_ If set to `false`, disables generation of the info page (overview page with API title and description).                         |
+| `schemasOnly`        | `boolean` | `false` | _Optional:_ If set to `true`, generates only schema pages (no API endpoint pages). Also available as `--schemas-only` CLI flag.             |
 
 ### sidebarOptions
 
