@@ -1,0 +1,106 @@
+openapi: 3.1.0
+info:
+  title: Schema Examples API (OAS 3.1)
+  description: Demonstrates OpenAPI 3.1 schema.examples support.
+  version: 1.0.0
+tags:
+  - name: schemaExamples
+    description: OpenAPI 3.1 schema examples tests
+paths:
+  /schema-examples-array:
+    post:
+      tags:
+        - schemaExamples
+      summary: Schema with examples array (OAS 3.1)
+      description: |
+        OpenAPI 3.1 allows `examples` at the schema level as an array of values.
+        This is different from Media Type `examples` which is an object with named examples.
+
+        Schema:
+        ```yaml
+        schema:
+          type: object
+          properties:
+            name:
+              type: string
+            age:
+              type: integer
+          examples:
+            - name: "John Doe"
+              age: 30
+            - name: "Jane Smith"
+              age: 25
+        ```
+      requestBody:
+        description: Request body with schema.examples array
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                age:
+                  type: integer
+              examples:
+                - name: "John Doe"
+                  age: 30
+                - name: "Jane Smith"
+                  age: 25
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  message:
+                    type: string
+                examples:
+                  - id: 1
+                    message: "User created successfully"
+                  - id: 2
+                    message: "User updated successfully"
+
+  /schema-example-vs-examples:
+    post:
+      tags:
+        - schemaExamples
+      summary: Schema example vs examples comparison
+      description: |
+        Demonstrates the difference between:
+        - `schema.example` (singular) - used for generated example
+        - `schema.examples` (plural, OAS 3.1) - array of example values
+        - `content.example` (Media Type level)
+        - `content.examples` (Media Type level, named examples object)
+      requestBody:
+        description: Request with both schema.example and schema.examples
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum:
+                    - active
+                    - inactive
+                    - pending
+                count:
+                  type: integer
+                  minimum: 0
+              examples:
+                - status: "active"
+                  count: 10
+                - status: "inactive"
+                  count: 0
+                - status: "pending"
+                  count: 5
+      responses:
+        "200":
+          description: Successful response
