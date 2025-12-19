@@ -145,9 +145,13 @@ const AnyOneOf: React.FC<SchemaProps> = ({ schema, schemaType }) => {
       </span>
       <SchemaTabs groupId={`schema-${uniqueId}`} lazy>
         {schema[key]?.map((anyOneSchema: any, index: number) => {
+          // Use getSchemaName to include format info (e.g., "string<date-time>")
+          const computedSchemaName = getSchemaName(anyOneSchema);
+
           // Determine label for the tab
-          // If schema is just oneOf/anyOf without title/type, use a generic label
-          let label = anyOneSchema.title || anyOneSchema.type;
+          // Prefer explicit title, then computed schema name, then raw type
+          let label =
+            anyOneSchema.title || computedSchemaName || anyOneSchema.type;
           if (!label) {
             if (anyOneSchema.oneOf) {
               label = translate({
@@ -175,7 +179,7 @@ const AnyOneOf: React.FC<SchemaProps> = ({ schema, schemaType }) => {
                 <SchemaItem
                   collapsible={false}
                   name={undefined}
-                  schemaName={anyOneSchema.type}
+                  schemaName={computedSchemaName}
                   qualifierMessage={getQualifierMessage(anyOneSchema)}
                   schema={anyOneSchema}
                   discriminator={false}
@@ -192,7 +196,7 @@ const AnyOneOf: React.FC<SchemaProps> = ({ schema, schemaType }) => {
                   <SchemaItem
                     collapsible={false}
                     name={undefined}
-                    schemaName={anyOneSchema.type}
+                    schemaName={computedSchemaName}
                     qualifierMessage={getQualifierMessage(anyOneSchema)}
                     schema={anyOneSchema}
                     discriminator={false}
