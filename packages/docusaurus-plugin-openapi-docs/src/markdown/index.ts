@@ -135,7 +135,7 @@ export function createSchemaPageMD({ schema }: SchemaPageMetadata) {
   return render([
     `import Schema from "@theme/Schema";\n`,
     `import Heading from "@theme/Heading";\n\n`,
-    createHeading(title.replace(lessThan, "&lt;").replace(greaterThan, "&gt;")),
+    createHeading(title),
     createDescription(description),
     create("Schema", {
       schema: schema,
