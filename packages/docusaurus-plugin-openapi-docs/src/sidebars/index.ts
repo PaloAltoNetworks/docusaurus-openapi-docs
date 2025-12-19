@@ -125,9 +125,21 @@ function groupByTags(
     apiTags = uniq(apiTags.concat(operationTags, schemaTags));
   }
 
-  const basePath = docPath
-    ? outputDir.split(docPath!)[1].replace(/^\/+/g, "")
-    : outputDir.slice(outputDir.indexOf("/", 1)).replace(/^\/+/g, "");
+  // Extract base path from outputDir, handling cases where docPath may not be in outputDir
+  const getBasePathFromOutput = (
+    output: string,
+    doc: string | undefined
+  ): string => {
+    if (doc && output.includes(doc)) {
+      return output.split(doc)[1]?.replace(/^\/+/g, "") ?? "";
+    }
+    const slashIndex = output.indexOf("/", 1);
+    return slashIndex === -1
+      ? ""
+      : output.slice(slashIndex).replace(/^\/+/g, "");
+  };
+
+  const basePath = getBasePathFromOutput(outputDir, docPath);
 
   const createDocItemFnContext = {
     sidebarOptions,
