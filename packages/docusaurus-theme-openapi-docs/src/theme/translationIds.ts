@@ -74,6 +74,10 @@ export const OPENAPI_STATUS_CODES = {
   SCHEMA_TITLE: "theme.openapi.statusCodes.schemaTitle",
 };
 
+export const OPENAPI_SCHEMA = {
+  NO_SCHEMA: "theme.openapi.schema.noSchema",
+};
+
 export const OPENAPI_SCHEMA_ITEM = {
   REQUIRED: "theme.openapi.schemaItem.required",
   DEPRECATED: "theme.openapi.schemaItem.deprecated",

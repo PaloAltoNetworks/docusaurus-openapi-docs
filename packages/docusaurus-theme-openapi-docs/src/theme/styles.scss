@@ -41,6 +41,8 @@
 @use "./CodeSamples/CodeSamples";
 /* Markdown Styling */
 @use "./Markdown/Details/Details";
+/* Example Styling */
+@use "./Example/Example";
 
 :root {
   --openapi-required: var(--ifm-color-danger);
