@@ -8,17 +8,81 @@
 import { Body } from "@theme/ApiExplorer/Body/slice";
 import * as sdk from "postman-collection";
 
+// Custom error types for better error handling
+export type RequestErrorType =
+  | "timeout"
+  | "network"
+  | "cors"
+  | "abort"
+  | "unknown";
+
+export class RequestError extends Error {
+  type: RequestErrorType;
+  originalError?: Error;
+
+  constructor(type: RequestErrorType, message: string, originalError?: Error) {
+    super(message);
+    this.name = "RequestError";
+    this.type = type;
+    this.originalError = originalError;
+  }
+}
+
 function fetchWithtimeout(
   url: string,
   options: RequestInit,
   timeout = 5000
-): any {
-  return Promise.race([
-    fetch(url, options),
-    new Promise((_, reject) =>
-      setTimeout(() => reject(new Error("Request timed out")), timeout)
-    ),
-  ]);
+): Promise<Response> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+  return fetch(url, {
+    ...options,
+    signal: controller.signal,
+  })
+    .then((response) => {
+      clearTimeout(timeoutId);
+      return response;
+    })
+    .catch((error) => {
+      clearTimeout(timeoutId);
+
+      // Check if it was an abort due to timeout
+      if (error.name === "AbortError") {
+        throw new RequestError(
+          "timeout",
+          "The request timed out waiting for the server to respond. Please try again. If the issue persists, try using a different client (e.g., curl) with a longer timeout.",
+          error
+        );
+      }
+
+      // Check for network errors (offline, DNS failure, etc.)
+      if (error instanceof TypeError && error.message === "Failed to fetch") {
+        // This could be CORS, network failure, or the server being unreachable
+        throw new RequestError(
+          "network",
+          "Unable to reach the server. Please check your network connection and verify the server URL is correct. If the server is running, this may be a CORS issue.",
+          error
+        );
+      }
+
+      // Handle other TypeErrors that might indicate CORS issues
+      if (error instanceof TypeError) {
+        throw new RequestError(
+          "cors",
+          "The request was blocked, possibly due to CORS restrictions. Ensure the server allows requests from this origin, or try using a proxy.",
+          error
+        );
+      }
+
+      // Generic error fallback
+      throw new RequestError(
+        "unknown",
+        error.message ||
+          "An unexpected error occurred while making the request.",
+        error
+      );
+    });
 }
 
 async function loadImage(content: Blob): Promise<string | ArrayBuffer | null> {
@@ -194,7 +258,8 @@ async function makeRequest(
     finalUrl = normalizedProxy + request.url.toString();
   }
 
-  return fetchWithtimeout(finalUrl, requestOptions).then((response: any) => {
+  try {
+    const response = await fetchWithtimeout(finalUrl, requestOptions);
     const contentType = response.headers.get("content-type");
     let fileExtension = "";
 
@@ -224,32 +289,45 @@ async function makeRequest(
       }
 
       if (fileExtension) {
-        return response.blob().then((blob: any) => {
-          const url = window.URL.createObjectURL(blob);
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
 
-          const link = document.createElement("a");
-          link.href = url;
-          // Now the file name includes the extension
-          link.setAttribute("download", `file${fileExtension}`);
+        const link = document.createElement("a");
+        link.href = url;
+        // Now the file name includes the extension
+        link.setAttribute("download", `file${fileExtension}`);
 
-          // These two lines are necessary to make the link click in Firefox
-          link.style.display = "none";
-          document.body.appendChild(link);
+        // These two lines are necessary to make the link click in Firefox
+        link.style.display = "none";
+        document.body.appendChild(link);
 
-          link.click();
+        link.click();
 
-          // After link is clicked, it's safe to remove it.
-          setTimeout(() => document.body.removeChild(link), 0);
+        // After link is clicked, it's safe to remove it.
+        setTimeout(() => document.body.removeChild(link), 0);
 
-          return response;
-        });
+        return response;
       } else {
         return response;
       }
     }
 
     return response;
-  });
+  } catch (error) {
+    // Re-throw RequestError instances as-is
+    if (error instanceof RequestError) {
+      throw error;
+    }
+
+    // Wrap unexpected errors
+    throw new RequestError(
+      "unknown",
+      error instanceof Error
+        ? error.message
+        : "An unexpected error occurred while processing the response.",
+      error instanceof Error ? error : undefined
+    );
+  }
 }
 
 export default makeRequest;

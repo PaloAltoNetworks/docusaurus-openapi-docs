@@ -29,6 +29,10 @@ export const OPENAPI_REQUEST = {
   PARAMETERS_TITLE: "theme.openapi.request.parameters.title",
   FETCHING_MESSAGE: "theme.openapi.request.fetchingMessage",
   CONNECTION_FAILED: "theme.openapi.request.connectionFailed",
+  ERROR_TIMEOUT: "theme.openapi.request.error.timeout",
+  ERROR_NETWORK: "theme.openapi.request.error.network",
+  ERROR_CORS: "theme.openapi.request.error.cors",
+  ERROR_UNKNOWN: "theme.openapi.request.error.unknown",
 };
 
 export const OPENAPI_SERVER = {
