@@ -206,7 +206,7 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 | -------------------- | --------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | `specPath`           | `string`  | `null`  | Designated URL or path to the source of an OpenAPI specification file or directory of multiple OpenAPI specification files.                     |
 | `outputDir`          | `string`  | `null`  | Desired output path for generated MDX and sidebar files.                                                                                        |
-| `proxy`              | `string`  | `null`  | _Optional:_ Proxy URL to prepend to base URL when performing API requests from browser.                                                         |
+| `proxy`              | `string`  | `null`  | _Optional:_ Proxy URL to prepend to base URL when performing API requests from browser. Overrides site-wide `themeConfig.api.proxy` if set. |
 | `template`           | `string`  | `null`  | _Optional:_ Customize MDX content with a desired template.                                                                                      |
 | `infoTemplate`       | `string`  | `null`  | _Optional:_ Customize MDX content for **info** pages only.                                                                                      |
 | `tagTemplate`        | `string`  | `null`  | _Optional:_ Customize MDX content for **tag** pages only.                                                                                       |
@@ -284,6 +284,31 @@ petstore31: {
 | Name            | Type       | Default | Description                                                                                                                                                                                                                                      |
 | --------------- | ---------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `createDocItem` | `function` | `null`  | Optional: Returns a `SidebarItemDoc` object containing metadata for a sidebar item.<br/><br/>**Function type:** `(item: ApiPageMetadata \| SchemaPageMetadata, context: { sidebarOptions: SidebarOptions; basePath: string }) => SidebarItemDoc` |
+
+## Theme Configuration Options
+
+The `docusaurus-theme-openapi-docs` theme can be configured with the following options in `themeConfig.api`:
+
+| Name             | Type     | Default | Description                                                                                                                                         |
+| ---------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `proxy`          | `string` | `null`  | _Optional:_ Site-wide proxy URL to prepend to base URL when performing API requests. Can be overridden per-spec via plugin config.                  |
+| `authPersistance`| `string` | `null`  | _Optional:_ Determines how auth credentials are persisted. Options: `"localStorage"`, `"sessionStorage"`, or `false` to disable.                    |
+| `requestTimeout` | `number` | `30000` | _Optional:_ Request timeout in milliseconds for API requests made from the browser. Defaults to 30 seconds.                                         |
+
+Example:
+
+```typescript
+// docusaurus.config.ts
+{
+  themeConfig: {
+    api: {
+      proxy: "https://cors.pan.dev",  // Site-wide proxy (can be overridden per-spec in plugin config)
+      authPersistance: "localStorage",
+      requestTimeout: 60000, // 60 seconds
+    },
+  },
+}
+```
 
 ## CLI Usage
 

@@ -28,10 +28,12 @@ export class RequestError extends Error {
   }
 }
 
+const DEFAULT_REQUEST_TIMEOUT = 30000; // 30 seconds
+
 function fetchWithtimeout(
   url: string,
   options: RequestInit,
-  timeout = 5000
+  timeout = DEFAULT_REQUEST_TIMEOUT
 ): Promise<Response> {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
@@ -111,7 +113,8 @@ async function loadImage(content: Blob): Promise<string | ArrayBuffer | null> {
 async function makeRequest(
   request: sdk.Request,
   proxy: string | undefined,
-  _body: Body
+  _body: Body,
+  timeout: number = DEFAULT_REQUEST_TIMEOUT
 ) {
   const headers = request.toJSON().header;
 
@@ -259,7 +262,7 @@ async function makeRequest(
   }
 
   try {
-    const response = await fetchWithtimeout(finalUrl, requestOptions);
+    const response = await fetchWithtimeout(finalUrl, requestOptions, timeout);
     const contentType = response.headers.get("content-type");
     let fileExtension = "";
 

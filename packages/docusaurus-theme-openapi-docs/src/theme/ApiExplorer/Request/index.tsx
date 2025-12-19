@@ -10,6 +10,8 @@ import React, { useState } from "react";
 
 import { useDoc } from "@docusaurus/plugin-content-docs/client";
 import { translate } from "@docusaurus/Translate";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import type { ThemeConfig } from "docusaurus-theme-openapi-docs/src/types";
 import Accept from "@theme/ApiExplorer/Accept";
 import Authorization from "@theme/ApiExplorer/Authorization";
 import Body from "@theme/ApiExplorer/Body";
@@ -36,7 +38,13 @@ import makeRequest, { RequestError, RequestErrorType } from "./makeRequest";
 function Request({ item }: { item: ApiItem }) {
   const postman = new sdk.Request(item.postman);
   const metadata = useDoc();
-  const { proxy, hide_send_button: hideSendButton } = metadata.frontMatter;
+  const { proxy: frontMatterProxy, hide_send_button: hideSendButton } =
+    metadata.frontMatter;
+  const { siteConfig } = useDocusaurusContext();
+  const themeConfig = siteConfig.themeConfig as ThemeConfig;
+  const requestTimeout = themeConfig.api?.requestTimeout;
+  // Frontmatter proxy (per-spec) takes precedence over theme config proxy (site-wide)
+  const proxy = frontMatterProxy ?? themeConfig.api?.proxy;
 
   const pathParams = useTypedSelector((state: any) => state.params.path);
   const queryParams = useTypedSelector((state: any) => state.params.query);
@@ -159,7 +167,12 @@ function Request({ item }: { item: ApiItem }) {
     );
     try {
       await delay(1200);
-      const res = await makeRequest(postmanRequest, proxy, body);
+      const res = await makeRequest(
+        postmanRequest,
+        proxy,
+        body,
+        requestTimeout
+      );
       if (res.headers.get("content-type")?.includes("text/event-stream")) {
         await handleEventStream(res);
       } else {
