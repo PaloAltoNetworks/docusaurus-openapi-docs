@@ -307,6 +307,16 @@ yarn docusaurus gen-api-docs all --all-versions
 
 > This will generate API docs for all versions of all the OpenAPI specification (OAS) files referenced in your `docusaurus-plugin-openapi-docs` config.
 
+To generate only schema MDX files—without updating the sidebar or requiring `showSchemas` in your plugin config—use the `--schemas-only` flag:
+
+```bash
+yarn docusaurus gen-api-docs petstore --schemas-only
+```
+
+> This command writes the schema pages to the configured output directory while leaving other generated docs untouched.
+
+The `--schemas-only` flag is also available for `gen-api-docs:version`.
+
 ### Cleaning API Docs
 
 To clean/remove all API Docs, run the following command from the root directory of your project:
@@ -338,6 +348,14 @@ yarn docusaurus clean-api-docs all --all-versions
 ```
 
 > This will clean API docs for all versions of all the OpenAPI specification (OAS) files referenced in your `docusaurus-plugin-openapi-docs` config.
+
+To clean only schema docs while leaving API, info, and tag docs untouched, use the `--schemas-only` flag:
+
+```bash
+yarn docusaurus clean-api-docs petstore --schemas-only
+```
+
+> The `--schemas-only` flag is also available for `clean-api-docs:version`.
 
 ### Versioning OpenAPI docs
 
