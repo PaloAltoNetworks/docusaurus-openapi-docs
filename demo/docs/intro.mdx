@@ -391,6 +391,12 @@ Example:
 yarn docusaurus clean-api-docs petstore
 ```
 
+To clean only schema docs while leaving API, info, and tag docs untouched, use the `--schemas-only` flag:
+
+```bash title="cleaning only schema docs for 'petstore'"
+yarn docusaurus clean-api-docs petstore --schemas-only
+```
+
 ### Versioning OpenAPI docs
 
 To generate _all_ versioned OpenAPI docs, run the following command from the root directory of your project:

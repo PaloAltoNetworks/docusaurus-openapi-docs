@@ -491,29 +491,53 @@ custom_edit_url: null
     }
   }
 
-  async function cleanApiDocs(options: APIOptions) {
+  async function cleanApiDocs(options: APIOptions, schemasOnly = false) {
     const { outputDir } = options;
     const apiDir = posixPath(path.join(siteDir, outputDir));
-    const apiMdxFiles = await Globby(["*.api.mdx", "*.info.mdx", "*.tag.mdx"], {
-      cwd: path.resolve(apiDir),
-      deep: 1,
-    });
-    const sidebarFile = await Globby(["sidebar.js", "sidebar.ts"], {
-      cwd: path.resolve(apiDir),
-      deep: 1,
-    });
-    apiMdxFiles.map((mdx) =>
-      fs.unlink(`${apiDir}/${mdx}`, (err) => {
-        if (err) {
-          console.error(
-            chalk.red(`Cleanup failed for "${apiDir}/${mdx}"`),
-            chalk.yellow(err)
-          );
-        } else {
-          console.log(chalk.green(`Cleanup succeeded for "${apiDir}/${mdx}"`));
+
+    // When schemasOnly is true, only clean the schemas directory
+    if (!schemasOnly) {
+      const apiMdxFiles = await Globby(
+        ["*.api.mdx", "*.info.mdx", "*.tag.mdx"],
+        {
+          cwd: path.resolve(apiDir),
+          deep: 1,
         }
-      })
-    );
+      );
+      const sidebarFile = await Globby(["sidebar.js", "sidebar.ts"], {
+        cwd: path.resolve(apiDir),
+        deep: 1,
+      });
+      apiMdxFiles.map((mdx) =>
+        fs.unlink(`${apiDir}/${mdx}`, (err) => {
+          if (err) {
+            console.error(
+              chalk.red(`Cleanup failed for "${apiDir}/${mdx}"`),
+              chalk.yellow(err)
+            );
+          } else {
+            console.log(
+              chalk.green(`Cleanup succeeded for "${apiDir}/${mdx}"`)
+            );
+          }
+        })
+      );
+
+      sidebarFile.map((sidebar) =>
+        fs.unlink(`${apiDir}/${sidebar}`, (err) => {
+          if (err) {
+            console.error(
+              chalk.red(`Cleanup failed for "${apiDir}/${sidebar}"`),
+              chalk.yellow(err)
+            );
+          } else {
+            console.log(
+              chalk.green(`Cleanup succeeded for "${apiDir}/${sidebar}"`)
+            );
+          }
+        })
+      );
+    }
 
     try {
       fs.rmSync(`${apiDir}/schemas`, { recursive: true });
@@ -526,21 +550,6 @@ custom_edit_url: null
         );
       }
     }
-
-    sidebarFile.map((sidebar) =>
-      fs.unlink(`${apiDir}/${sidebar}`, (err) => {
-        if (err) {
-          console.error(
-            chalk.red(`Cleanup failed for "${apiDir}/${sidebar}"`),
-            chalk.yellow(err)
-          );
-        } else {
-          console.log(
-            chalk.green(`Cleanup succeeded for "${apiDir}/${sidebar}"`)
-          );
-        }
-      })
-    );
   }
 
   async function generateVersions(versions: object, outputDir: string) {
@@ -641,7 +650,7 @@ custom_edit_url: null
     }
   }
 
-  async function cleanAllVersions(options: APIOptions) {
+  async function cleanAllVersions(options: APIOptions, schemasOnly = false) {
     const parentOptions = Object.assign({}, options);
 
     const { versions } = parentOptions as any;
@@ -649,14 +658,16 @@ custom_edit_url: null
     delete parentOptions.versions;
 
     if (versions != null && Object.keys(versions).length > 0) {
-      await cleanVersions(parentOptions.outputDir);
+      if (!schemasOnly) {
+        await cleanVersions(parentOptions.outputDir);
+      }
       Object.keys(versions).forEach(async (key) => {
         const versionOptions = versions[key];
         const mergedOptions = {
           ...parentOptions,
           ...versionOptions,
         };
-        await cleanApiDocs(mergedOptions);
+        await cleanApiDocs(mergedOptions, schemasOnly);
       });
     }
   }
@@ -844,10 +855,12 @@ custom_edit_url: null
         .arguments("<id>")
         .option("-p, --plugin-id <plugin>", "OpenAPI docs plugin ID.")
         .option("--all-versions", "Clean all versions.")
+        .option("--schemas-only", "Clean only schema docs.")
         .action(async (id, instance) => {
           const options = instance.opts();
           const pluginId = options.pluginId;
           const allVersions = options.allVersions;
+          const schemasOnly = options.schemasOnly;
           const pluginInstances = getPluginInstances(plugins);
           let targetConfig: any;
           if (pluginId) {
@@ -880,16 +893,16 @@ custom_edit_url: null
               );
             } else {
               Object.keys(targetConfig).forEach(async function (key) {
-                await cleanApiDocs(targetConfig[key]);
+                await cleanApiDocs(targetConfig[key], schemasOnly);
                 if (allVersions) {
-                  await cleanAllVersions(targetConfig[key]);
+                  await cleanAllVersions(targetConfig[key], schemasOnly);
                 }
               });
             }
           } else {
-            await cleanApiDocs(targetConfig[id]);
+            await cleanApiDocs(targetConfig[id], schemasOnly);
             if (allVersions) {
-              await cleanAllVersions(targetConfig[id]);
+              await cleanAllVersions(targetConfig[id], schemasOnly);
             }
           }
         });
@@ -902,9 +915,11 @@ custom_edit_url: null
         .usage("<id:version>")
         .arguments("<id:version>")
         .option("-p, --plugin-id <plugin>", "OpenAPI docs plugin ID.")
+        .option("--schemas-only", "Clean only schema docs.")
         .action(async (id, instance) => {
           const options = instance.opts();
           const pluginId = options.pluginId;
+          const schemasOnly = options.schemasOnly;
           const pluginInstances = getPluginInstances(plugins);
           let targetConfig: any;
           if (pluginId) {
@@ -940,14 +955,16 @@ custom_edit_url: null
                 "Can't use id 'all' for OpenAPI docs versions configuration key."
               );
             } else {
-              await cleanVersions(parentConfig.outputDir);
+              if (!schemasOnly) {
+                await cleanVersions(parentConfig.outputDir);
+              }
               Object.keys(versions).forEach(async (key) => {
                 const versionConfig = versions[key];
                 const mergedConfig = {
                   ...parentConfig,
                   ...versionConfig,
                 };
-                await cleanApiDocs(mergedConfig);
+                await cleanApiDocs(mergedConfig, schemasOnly);
               });
             }
           } else {
@@ -956,7 +973,7 @@ custom_edit_url: null
               ...parentConfig,
               ...versionConfig,
             };
-            await cleanApiDocs(mergedConfig);
+            await cleanApiDocs(mergedConfig, schemasOnly);
           }
         });
     },

@@ -370,6 +370,14 @@ yarn docusaurus clean-api-docs all --all-versions
 
 > This will clean API docs for all versions of all the OpenAPI specification (OAS) files referenced in your `docusaurus-plugin-openapi-docs` config.
 
+To clean only schema docs while leaving API, info, and tag docs untouched, use the `--schemas-only` flag:
+
+```bash
+yarn docusaurus clean-api-docs petstore --schemas-only
+```
+
+> The `--schemas-only` flag is also available for `clean-api-docs:version`.
+
 ### Versioning OpenAPI docs
 
 To generate _all_ versioned OpenAPI docs, run the following command from the root directory of your project:
