@@ -128,6 +128,13 @@ interface SchemaProps {
 
 const AnyOneOf: React.FC<SchemaProps> = ({ schema, schemaType }) => {
   const key = schema.oneOf ? "oneOf" : "anyOf";
+  const schemaArray = schema[key];
+
+  // Handle empty oneOf/anyOf arrays - return null to avoid empty Tabs error
+  if (!schemaArray || !Array.isArray(schemaArray) || schemaArray.length === 0) {
+    return null;
+  }
+
   const type = schema.oneOf
     ? translate({ id: OPENAPI_SCHEMA_ITEM.ONE_OF, message: "oneOf" })
     : translate({ id: OPENAPI_SCHEMA_ITEM.ANY_OF, message: "anyOf" });

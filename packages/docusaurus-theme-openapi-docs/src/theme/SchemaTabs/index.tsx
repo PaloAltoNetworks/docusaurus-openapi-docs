@@ -212,8 +212,37 @@ function TabsComponent(props: TabProps): React.JSX.Element {
     </div>
   );
 }
-export default function SchemaTabs(props: TabProps): React.JSX.Element {
+export default function SchemaTabs(props: TabProps): React.JSX.Element | null {
   const isBrowser = useIsBrowser();
+
+  // Filter out null/undefined children before sanitizing
+  const children = Array.isArray(props.children)
+    ? props.children.filter(Boolean)
+    : props.children
+      ? [props.children]
+      : [];
+
+  // Return null if no valid children to avoid "Tabs requires at least one TabItem" error
+  if (children.length === 0) {
+    return null;
+  }
+
+  let sanitizedChildren;
+  try {
+    sanitizedChildren = sanitizeTabsChildren(children);
+  } catch (e) {
+    // If sanitization fails (no valid TabItem children), return null
+    return null;
+  }
+
+  // Additional check - if sanitization returns empty/invalid, return null
+  if (
+    !sanitizedChildren ||
+    (Array.isArray(sanitizedChildren) && sanitizedChildren.length === 0)
+  ) {
+    return null;
+  }
+
   return (
     <TabsComponent
       // Remount tabs after hydration
@@ -221,7 +250,7 @@ export default function SchemaTabs(props: TabProps): React.JSX.Element {
       key={String(isBrowser)}
       {...props}
     >
-      {sanitizeTabsChildren(props.children)}
+      {sanitizedChildren}
     </TabsComponent>
   );
 }
