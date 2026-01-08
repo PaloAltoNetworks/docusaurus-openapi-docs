@@ -11,7 +11,6 @@ import React, { useState } from "react";
 import { useDoc } from "@docusaurus/plugin-content-docs/client";
 import { translate } from "@docusaurus/Translate";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
-import type { ThemeConfig } from "docusaurus-theme-openapi-docs/src/types";
 import Accept from "@theme/ApiExplorer/Accept";
 import Authorization from "@theme/ApiExplorer/Authorization";
 import Body from "@theme/ApiExplorer/Body";
@@ -30,6 +29,7 @@ import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import { OPENAPI_REQUEST } from "@theme/translationIds";
 import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
+import type { ThemeConfig } from "docusaurus-theme-openapi-docs/src/types";
 import * as sdk from "postman-collection";
 import { FormProvider, useForm } from "react-hook-form";
 
@@ -200,7 +200,7 @@ function Request({ item }: { item: ApiItem }) {
   const showServerOptions = serverOptions.length > 0;
   const showAcceptOptions = acceptOptions.length > 1;
   const showRequestBody = contentType !== undefined;
-  const showRequestButton = item.servers && !hideSendButton;
+  const showRequestButton = (item.servers || proxy) && !hideSendButton;
   const showAuth = authSelected !== undefined;
   const showParams = allParams.length > 0;
   const requestBodyRequired = item.requestBody?.required;
@@ -210,7 +210,8 @@ function Request({ item }: { item: ApiItem }) {
     !showAuth &&
     !showParams &&
     !showRequestBody &&
-    !showServerOptions
+    !showServerOptions &&
+    !showRequestButton
   ) {
     return null;
   }
