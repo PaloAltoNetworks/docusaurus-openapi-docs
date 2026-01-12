@@ -91,7 +91,10 @@
     "phin": "^3.7.1",
     "diff": "^3.5.0",
     "cookie": "^0.7.0",
-    "webpack-dev-server": "^5.2.1"
+    "webpack-dev-server": "^5.2.1",
+    "form-data": "^4.0.4",
+    "qs": "^6.13.0",
+    "tmp": "^0.2.4"
   },
   "engines": {
     "node": ">=14"

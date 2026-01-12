@@ -17,8 +17,13 @@ const config: Config = {
   url: "https://docusaurus-openapi.tryingpan.dev",
   baseUrl: "/",
   onBrokenLinks: "warn",
-  onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
+
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: "warn",
+    },
+  },
   organizationName: "PaloAltoNetworks",
   projectName: "docusaurus-openapi-docs",
 
