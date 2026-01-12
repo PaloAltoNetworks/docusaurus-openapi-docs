@@ -18,14 +18,14 @@ const config: Config = {
   baseUrl: "/",
   onBrokenLinks: "warn",
   favicon: "img/favicon.ico",
+  organizationName: "PaloAltoNetworks",
+  projectName: "docusaurus-openapi-docs",
 
   markdown: {
     hooks: {
       onBrokenMarkdownLinks: "warn",
     },
   },
-  organizationName: "PaloAltoNetworks",
-  projectName: "docusaurus-openapi-docs",
 
   presets: [
     [
