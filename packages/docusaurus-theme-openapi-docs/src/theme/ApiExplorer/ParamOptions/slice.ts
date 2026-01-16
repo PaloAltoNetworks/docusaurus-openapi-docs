@@ -19,7 +19,7 @@ export interface State {
 
 const initialState: State = {} as any;
 
-export const slice = createSlice({
+const slice = createSlice({
   name: "params",
   initialState,
   reducers: {

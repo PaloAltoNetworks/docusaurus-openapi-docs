@@ -17,10 +17,15 @@ const config: Config = {
   url: "https://docusaurus-openapi.tryingpan.dev",
   baseUrl: "/",
   onBrokenLinks: "warn",
-  onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
   organizationName: "PaloAltoNetworks",
   projectName: "docusaurus-openapi-docs",
+
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: "warn",
+    },
+  },
 
   presets: [
     [
