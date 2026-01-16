@@ -1,3 +1,46 @@
+## 4.6.0 (Jan 16, 2026)
+
+High level enhancements
+
+- Initial i18n (internationalization) support for translating UI labels
+- New `authPersistence` option to control credential storage (sessionStorage, localStorage, or disabled)
+- OpenAPI 3.1 `schema.examples` array support in example generation and API Explorer
+- New `showInfoPage` option to disable info page generation
+- New `maskCredentials` plugin option to mask sensitive data in generated docs
+- New `--schema-only` CLI flag for generating only schema documentation
+- Customizable `requestTimeout` in ThemeConfig for API requests
+
+Other enhancements and bug fixes
+
+- feat(theme): add initial i18n support ([#1210](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1210))
+- feat: translate additional labels ([#1221](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1221))
+- feat: implement authPersistence in ThemeConfig ([#1273](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1273))
+- feat(api-explorer): add OpenAPI 3.1 schema.examples support ([#1269](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1269))
+- feat: support schema.examples array in example generator ([#1270](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1270))
+- Support schema property examples (extract) ([#1198](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1198))
+- feat: add showInfoPage option to disable info page generation ([#1272](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1272))
+- Add maskCredentials as a pluginOption ([#1212](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1212))
+- feat: add CLI option for schema-only generation ([#1228](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1228))
+- Improve API request error handling and add support for customizing requestTimeout ([#1267](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1267))
+- feat: display format for oneOf primitive arms ([#1268](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1268))
+- feat: support const in example generation ([#1260](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1260))
+- 'multipart/form-data' body: Add posibility to render file array and form object example via LiveEditor ([#1266](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1266))
+- Support both curl and bash code tab highlight ([#1195](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1195))
+- fix: allow Send API Request button with proxy-only configuration ([#1274](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1274))
+- fix: handle undefined when outputDir doesn't contain docPath ([#1271](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1271))
+- fix: improve placeholder assignment in CodeSnippets component ([#1256](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1256))
+- bugfix: nested oneOf/anyOf inside allOf ([#1250](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1250))
+- Fix nested anyOf/oneOf schema rendering with lazy tabs ([#1248](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1248))
+- fix: properly encode parameters ([#1202](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1202))
+- Fix schema output missing when using allOf within array items ([#1197](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1197))
+- fix(webhooks): use event name when summary missing ([#1193](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1193))
+- Add allOf required spec and fix items branch ([#1190](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1190))
+- Fix incorrectly encoded heading ([#1149](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1149))
+- Improve error handling when spec isn't valid ([#1200](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1200))
+- refactor: use docusaurus sidebar types ([#1220](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1220))
+- docs: explain swizzling DocCard ([#1207](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1207))
+- docs: expand list of ignored vendor extensions ([#1184](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1184))
+
 ## 4.5.1 (Jun 27, 2025)
 
 High level enhancements
