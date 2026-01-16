@@ -10,6 +10,7 @@ import React from "react";
 import { useDoc } from "@docusaurus/plugin-content-docs/client";
 import { usePrismTheme } from "@docusaurus/theme-common";
 import { translate } from "@docusaurus/Translate";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import ApiCodeBlock from "@theme/ApiExplorer/ApiCodeBlock";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import SchemaTabs from "@theme/SchemaTabs";
@@ -17,6 +18,7 @@ import TabItem from "@theme/TabItem";
 import { OPENAPI_RESPONSE } from "@theme/translationIds";
 import clsx from "clsx";
 import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
+import type { ThemeConfig } from "docusaurus-theme-openapi-docs/src/types";
 
 import { clearResponse, clearCode, clearHeaders } from "./slice";
 
@@ -42,7 +44,11 @@ function formatXml(xml: string) {
 
 function Response({ item }: { item: ApiItem }) {
   const metadata = useDoc();
+  const { siteConfig } = useDocusaurusContext();
+  const themeConfig = siteConfig.themeConfig as ThemeConfig;
   const hideSendButton = metadata.frontMatter.hide_send_button;
+  const proxy =
+    metadata.frontMatter.proxy ?? themeConfig.api?.proxy;
   const prismTheme = usePrismTheme();
   const code = useTypedSelector((state: any) => state.response.code);
   const headers = useTypedSelector((state: any) => state.response.headers);
@@ -57,7 +63,7 @@ function Response({ item }: { item: ApiItem }) {
           ? "openapi-response__dot--success"
           : "openapi-response__dot--info");
 
-  if (!item.servers || hideSendButton) {
+  if ((!item.servers && !proxy) || hideSendButton) {
     return null;
   }
 
