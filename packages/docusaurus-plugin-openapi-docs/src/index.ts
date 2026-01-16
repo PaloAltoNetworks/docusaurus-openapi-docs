@@ -21,6 +21,10 @@ import {
   createSchemaPageMD,
   createTagPageMD,
 } from "./markdown";
+import {
+  externalizeJsonPropsSimple,
+  ExternalizedJsonFile,
+} from "./markdown/externalizeJsonProps";
 import { processOpenapiFiles, readOpenapiFiles } from "./openapi";
 import { OptionsSchema } from "./options";
 import generateSidebarSlice from "./sidebars";
@@ -383,7 +387,33 @@ custom_edit_url: null
                   "Operation must have summary or operationId defined"
                 );
               }
-              fs.writeFileSync(`${outputDir}/${item.id}.api.mdx`, view, "utf8");
+
+              let finalView = view;
+              let jsonFilesToWrite: ExternalizedJsonFile[] = [];
+
+              // Externalize large JSON props if enabled
+              if (options.externalJsonProps) {
+                const result = externalizeJsonPropsSimple(view, item.id);
+                finalView = result.mdx;
+                jsonFilesToWrite = result.jsonFiles;
+
+                // Write JSON files
+                for (const jsonFile of jsonFilesToWrite) {
+                  const jsonPath = `${outputDir}/${jsonFile.filename}`;
+                  if (!fs.existsSync(jsonPath)) {
+                    fs.writeFileSync(jsonPath, jsonFile.content, "utf8");
+                    console.log(
+                      chalk.green(`Successfully created "${jsonPath}"`)
+                    );
+                  }
+                }
+              }
+
+              fs.writeFileSync(
+                `${outputDir}/${item.id}.api.mdx`,
+                finalView,
+                "utf8"
+              );
               console.log(
                 chalk.green(
                   `Successfully created "${outputDir}/${item.id}.api.mdx"`
@@ -469,7 +499,27 @@ custom_edit_url: null
                 throw Error("Schema must have title defined");
               }
               // eslint-disable-next-line testing-library/render-result-naming-convention
-              const schemaView = render(schemaMdTemplate, item);
+              let schemaView = render(schemaMdTemplate, item);
+              let jsonFilesToWrite: ExternalizedJsonFile[] = [];
+
+              // Externalize large JSON props if enabled
+              if (options.externalJsonProps) {
+                const result = externalizeJsonPropsSimple(schemaView, item.id);
+                schemaView = result.mdx;
+                jsonFilesToWrite = result.jsonFiles;
+
+                // Write JSON files in schemas directory
+                for (const jsonFile of jsonFilesToWrite) {
+                  const jsonPath = `${outputDir}/schemas/${jsonFile.filename}`;
+                  if (!fs.existsSync(jsonPath)) {
+                    fs.writeFileSync(jsonPath, jsonFile.content, "utf8");
+                    console.log(
+                      chalk.green(`Successfully created "${jsonPath}"`)
+                    );
+                  }
+                }
+              }
+
               fs.writeFileSync(
                 `${outputDir}/schemas/${item.id}.schema.mdx`,
                 schemaView,
@@ -517,6 +567,11 @@ custom_edit_url: null
         cwd: path.resolve(apiDir),
         deep: 1,
       });
+      // Clean up externalized JSON files
+      const jsonFiles = await Globby(["*.json", "!versions.json"], {
+        cwd: path.resolve(apiDir),
+        deep: 1,
+      });
       apiMdxFiles.map((mdx) =>
         fs.unlink(`${apiDir}/${mdx}`, (err) => {
           if (err) {
@@ -542,6 +597,22 @@ custom_edit_url: null
           } else {
             console.log(
               chalk.green(`Cleanup succeeded for "${apiDir}/${sidebar}"`)
+            );
+          }
+        })
+      );
+
+      // Clean up externalized JSON files
+      jsonFiles.map((jsonFile) =>
+        fs.unlink(`${apiDir}/${jsonFile}`, (err) => {
+          if (err) {
+            console.error(
+              chalk.red(`Cleanup failed for "${apiDir}/${jsonFile}"`),
+              chalk.yellow(err)
+            );
+          } else {
+            console.log(
+              chalk.green(`Cleanup succeeded for "${apiDir}/${jsonFile}"`)
             );
           }
         })
