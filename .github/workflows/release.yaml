@@ -9,6 +9,9 @@ on:
 env:
   FORCE_COLOR: true
 
+permissions:
+  contents: write
+
 jobs:
   release:
     name: Release
