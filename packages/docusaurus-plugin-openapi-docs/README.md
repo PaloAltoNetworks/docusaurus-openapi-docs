@@ -156,28 +156,29 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 
 `config` can be configured with the following options:
 
-| Name                 | Type      | Default | Description                                                                                                                                 |
-| -------------------- | --------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `specPath`           | `string`  | `null`  | Designated URL or path to the source of an OpenAPI specification file or directory of multiple OpenAPI specification files.                 |
-| `outputDir`          | `string`  | `null`  | Desired output path for generated MDX and sidebar files.                                                                                    |
-| `proxy`              | `string`  | `null`  | _Optional:_ Proxy URL to prepend to base URL when performing API requests from browser. Overrides site-wide `themeConfig.api.proxy` if set. |
-| `template`           | `string`  | `null`  | _Optional:_ Customize MDX content with a desired template.                                                                                  |
-| `infoTemplate`       | `string`  | `null`  | _Optional:_ Customize MDX content for **info** pages only.                                                                                  |
-| `tagTemplate`        | `string`  | `null`  | _Optional:_ Customize MDX content for **tag** pages only.                                                                                   |
-| `schemaTemplate`     | `string`  | `null`  | _Optional:_ Customize MDX content for **schema** pages only.                                                                                |
-| `downloadUrl`        | `string`  | `null`  | _Optional:_ Designated URL for downloading OpenAPI specification. (requires `info` section/doc)                                             |
-| `hideSendButton`     | `boolean` | `null`  | _Optional:_ If set to `true`, hides the “Send API Request” button in the API demo panel.                                                    |
-| `showExtensions`     | `boolean` | `null`  | _Optional:_ If set to `true`, renders operation‑level vendor‑extensions in descriptions.                                                    |
-| `maskCredentials`    | `boolean` | `true`  | _Optional:_ If set to `false`, disables credential masking in generated code snippets. By default, credentials are masked for security.     |
-| `sidebarOptions`     | `object`  | `null`  | _Optional:_ Set of options for sidebar configuration. See below for a list of supported options.                                            |
-| `version`            | `string`  | `null`  | _Optional:_ Version assigned to a single or micro‑spec API specified in `specPath`.                                                         |
-| `label`              | `string`  | `null`  | _Optional:_ Version label used when generating the version‑selector dropdown menu.                                                          |
-| `baseUrl`            | `string`  | `null`  | _Optional:_ Base URL for versioned docs in the version‑selector dropdown.                                                                   |
-| `versions`           | `object`  | `null`  | _Optional:_ Options for versioning configuration. See below for a list of supported options.                                                |
-| `markdownGenerators` | `object`  | `null`  | _Optional:_ Customize MDX content via generator functions. See below for a list of supported options.                                       |
-| `showSchemas`        | `boolean` | `null`  | _Optional:_ If set to `true`, generates standalone schema pages and adds them to the sidebar.                                               |
-| `showInfoPage`       | `boolean` | `true`  | _Optional:_ If set to `false`, disables generation of the info page (overview page with API title and description).                         |
-| `schemasOnly`        | `boolean` | `false` | _Optional:_ If set to `true`, generates only schema pages (no API endpoint pages). Also available as `--schemas-only` CLI flag.             |
+| Name                 | Type      | Default | Description                                                                                                                                                    |
+| -------------------- | --------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `specPath`           | `string`  | `null`  | Designated URL or path to the source of an OpenAPI specification file or directory of multiple OpenAPI specification files.                                    |
+| `outputDir`          | `string`  | `null`  | Desired output path for generated MDX and sidebar files.                                                                                                       |
+| `proxy`              | `string`  | `null`  | _Optional:_ Proxy URL to prepend to base URL when performing API requests from browser. Overrides site-wide `themeConfig.api.proxy` if set.                    |
+| `template`           | `string`  | `null`  | _Optional:_ Customize MDX content with a desired template.                                                                                                     |
+| `infoTemplate`       | `string`  | `null`  | _Optional:_ Customize MDX content for **info** pages only.                                                                                                     |
+| `tagTemplate`        | `string`  | `null`  | _Optional:_ Customize MDX content for **tag** pages only.                                                                                                      |
+| `schemaTemplate`     | `string`  | `null`  | _Optional:_ Customize MDX content for **schema** pages only.                                                                                                   |
+| `downloadUrl`        | `string`  | `null`  | _Optional:_ Designated URL for downloading OpenAPI specification. (requires `info` section/doc)                                                                |
+| `hideSendButton`     | `boolean` | `null`  | _Optional:_ If set to `true`, hides the “Send API Request” button in the API demo panel.                                                                       |
+| `showExtensions`     | `boolean` | `null`  | _Optional:_ If set to `true`, renders operation‑level vendor‑extensions in descriptions.                                                                       |
+| `maskCredentials`    | `boolean` | `true`  | _Optional:_ If set to `false`, disables credential masking in generated code snippets. By default, credentials are masked for security.                        |
+| `sidebarOptions`     | `object`  | `null`  | _Optional:_ Set of options for sidebar configuration. See below for a list of supported options.                                                               |
+| `version`            | `string`  | `null`  | _Optional:_ Version assigned to a single or micro‑spec API specified in `specPath`.                                                                            |
+| `label`              | `string`  | `null`  | _Optional:_ Version label used when generating the version‑selector dropdown menu.                                                                             |
+| `baseUrl`            | `string`  | `null`  | _Optional:_ Base URL for versioned docs in the version‑selector dropdown.                                                                                      |
+| `versions`           | `object`  | `null`  | _Optional:_ Options for versioning configuration. See below for a list of supported options.                                                                   |
+| `markdownGenerators` | `object`  | `null`  | _Optional:_ Customize MDX content via generator functions. See below for a list of supported options.                                                          |
+| `showSchemas`        | `boolean` | `null`  | _Optional:_ If set to `true`, generates standalone schema pages and adds them to the sidebar.                                                                  |
+| `showInfoPage`       | `boolean` | `true`  | _Optional:_ If set to `false`, disables generation of the info page (overview page with API title and description).                                            |
+| `schemasOnly`        | `boolean` | `false` | _Optional:_ If set to `true`, generates only schema pages (no API endpoint pages). Also available as `--schemas-only` CLI flag.                                |
+| `externalJsonProps`  | `boolean` | `true`  | _Optional:_ If set to `false`, disables externalization of large JSON props. By default, large JSON is written to external files for better build performance. |
 
 ### sidebarOptions
 
@@ -225,6 +226,28 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 | Name            | Type       | Default | Description                                                                                                                                                                                                                                      |
 | --------------- | ---------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `createDocItem` | `function` | `null`  | Optional: Returns a `SidebarItemDoc` object containing metadata for a sidebar item.<br/><br/>**Function type:** `(item: ApiPageMetadata \| SchemaPageMetadata, context: { sidebarOptions: SidebarOptions; basePath: string }) => SidebarItemDoc` |
+
+### Performance Optimization
+
+By default, `externalJsonProps` is enabled to optimize Docusaurus build times. This externalizes large JSON objects to separate files, significantly improving build performance for large OpenAPI specs.
+
+**How it works:**
+
+- With `externalJsonProps: true` (default): Large JSON props are written to separate `.json` files and loaded via `require()`. This bypasses MDX AST processing entirely, allowing the bundler to handle JSON more efficiently.
+
+- With `externalJsonProps: false`: Large JSON objects (responses, request bodies, parameters) are embedded directly in the MDX. The MDX compiler must parse these into an AST and serialize them back, which can be slow for deeply nested schemas.
+
+**When to disable:**
+
+You may set `externalJsonProps: false` if you have custom tooling that depends on parsing the MDX files directly:
+
+```typescript
+petstore: {
+  specPath: "examples/petstore.yaml",
+  outputDir: "docs/petstore",
+  externalJsonProps: false, // Disable if needed for custom tooling
+} satisfies OpenApiPlugin.Options,
+```
 
 ## Theme Configuration Options
 
