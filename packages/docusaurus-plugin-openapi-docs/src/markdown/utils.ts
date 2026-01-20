@@ -48,13 +48,7 @@ interface ExternalizationContext {
 let externalizationContext: ExternalizationContext | null = null;
 
 /**
- * Minimum size (in characters) for a JSON prop to be externalized.
- * Props smaller than this threshold will remain inline.
- */
-const MIN_SIZE_THRESHOLD = 500;
-
-/**
- * Props that should be considered for externalization.
+ * Props that should be externalized to separate JSON files.
  * These typically contain large JSON objects in API docs.
  */
 const EXTERNALIZABLE_PROPS = new Set([
@@ -171,8 +165,7 @@ function shouldExternalize(key: string, value: any): boolean {
     return false;
   }
 
-  const jsonString = JSON.stringify(value);
-  return jsonString.length >= MIN_SIZE_THRESHOLD;
+  return true;
 }
 
 /**
