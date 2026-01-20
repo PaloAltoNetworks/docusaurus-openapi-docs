@@ -16,25 +16,21 @@ export interface ExternalFile {
 }
 
 /**
- * Result of MDX generation that includes both the MDX string
- * and any external files that need to be written.
+ * Result of running MDX generation with externalization.
  */
-export interface MdxResult {
-  /** The generated MDX content */
-  mdx: string;
+export interface ExternalizationResult<T> {
+  /** The result of the generation function */
+  result: T;
   /** External JSON files to write */
-  externalFiles: ExternalFile[];
+  files: ExternalFile[];
 }
 
 /**
  * Context for externalization during MDX generation.
- * Set this before calling render() to enable externalization.
  */
 interface ExternalizationContext {
   /** Base filename for external files (e.g., "add-pet" for "add-pet.api.mdx") */
   baseFilename: string;
-  /** Whether externalization is enabled */
-  enabled: boolean;
   /** Counter for generating unique filenames per component type */
   componentCounters: Record<string, number>;
   /** Collected external files during generation */
@@ -43,7 +39,7 @@ interface ExternalizationContext {
 
 /**
  * Module-level externalization context.
- * Set via setExternalizationContext() before generating MDX.
+ * Note: AsyncLocalStorage would be cleaner but isn't available in browser bundles.
  */
 let externalizationContext: ExternalizationContext | null = null;
 
@@ -60,41 +56,37 @@ const EXTERNALIZABLE_COMPONENTS = new Set([
 ]);
 
 /**
- * Sets up the externalization context for MDX generation.
- * Call this before render() to enable externalization of large JSON props.
+ * Runs a function with externalization enabled.
+ * Any calls to create() within the function will externalize eligible component props.
  *
  * @param baseFilename - Base filename for the MDX file (without extension)
- * @param enabled - Whether externalization should be enabled
+ * @param fn - Function to run with externalization enabled
+ * @returns The function result and any external files that were collected
+ *
+ * @example
+ * const { result: mdx, files } = runWithExternalization("add-pet", () => {
+ *   return createApiPageMD(item);
+ * });
  */
-export function setExternalizationContext(
+export function runWithExternalization<T>(
   baseFilename: string,
-  enabled: boolean
-): void {
+  fn: () => T
+): ExternalizationResult<T> {
+  // Set up context
   externalizationContext = {
     baseFilename,
-    enabled,
     componentCounters: {},
     files: [],
   };
-}
 
-/**
- * Clears the externalization context and returns collected files.
- * Call this after render() to get the external files to write.
- *
- * @returns Array of external files collected during generation
- */
-export function clearExternalizationContext(): ExternalFile[] {
-  const files = externalizationContext?.files ?? [];
-  externalizationContext = null;
-  return files;
-}
-
-/**
- * Checks if externalization is currently enabled.
- */
-export function isExternalizationEnabled(): boolean {
-  return externalizationContext?.enabled ?? false;
+  try {
+    const result = fn();
+    const files = externalizationContext.files;
+    return { result, files };
+  } finally {
+    // Always clear context
+    externalizationContext = null;
+  }
 }
 
 /**
@@ -109,7 +101,7 @@ export type Options = { inline?: boolean };
 
 /**
  * Creates a JSX component string with the given tag, props, and options.
- * When externalization context is set and enabled, props for eligible
+ * When called within runWithExternalization(), props for eligible
  * components are externalized to a single JSON file and spread.
  */
 export function create(
@@ -160,7 +152,8 @@ function shouldExternalizeComponent(
   tag: string,
   props: Record<string, any>
 ): boolean {
-  if (!externalizationContext?.enabled) {
+  // No context means externalization is not enabled
+  if (!externalizationContext) {
     return false;
   }
 

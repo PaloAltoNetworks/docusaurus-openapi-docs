@@ -21,11 +21,7 @@ import {
   createSchemaPageMD,
   createTagPageMD,
 } from "./markdown";
-import {
-  clearExternalizationContext,
-  ExternalFile,
-  setExternalizationContext,
-} from "./markdown/utils";
+import { ExternalFile, runWithExternalization } from "./markdown/utils";
 import { processOpenapiFiles, readOpenapiFiles } from "./openapi";
 import { OptionsSchema } from "./options";
 import generateSidebarSlice from "./sidebars";
@@ -339,21 +335,20 @@ custom_edit_url: null
           item.downloadUrl = downloadUrl;
         }
 
-        // Set up externalization context for API and schema pages
-        const shouldExternalize =
+        // Generate markdown, with externalization for API and schema pages
+        let externalFiles: ExternalFile[] = [];
+        if (
           options.externalJsonProps &&
-          (item.type === "api" || item.type === "schema");
-        if (shouldExternalize) {
-          setExternalizationContext(item.id, true);
+          (item.type === "api" || item.type === "schema")
+        ) {
+          const result = runWithExternalization(item.id, () =>
+            pageGeneratorByType[item.type](item as any)
+          );
+          item.markdown = result.result;
+          externalFiles = result.files;
+        } else {
+          item.markdown = pageGeneratorByType[item.type](item as any);
         }
-
-        const markdown = pageGeneratorByType[item.type](item as any);
-        item.markdown = markdown;
-
-        // Collect externalized files
-        const externalFiles: ExternalFile[] = shouldExternalize
-          ? clearExternalizationContext()
-          : [];
         if (isSchemasOnly && item.type !== "schema") {
           return;
         }
