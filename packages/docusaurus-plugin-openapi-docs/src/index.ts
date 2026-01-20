@@ -22,9 +22,10 @@ import {
   createTagPageMD,
 } from "./markdown";
 import {
-  externalizeJsonPropsSimple,
-  ExternalizedJsonFile,
-} from "./markdown/externalizeJsonProps";
+  clearExternalizationContext,
+  ExternalFile,
+  setExternalizationContext,
+} from "./markdown/utils";
 import { processOpenapiFiles, readOpenapiFiles } from "./openapi";
 import { OptionsSchema } from "./options";
 import generateSidebarSlice from "./sidebars";
@@ -337,8 +338,22 @@ custom_edit_url: null
         if (downloadUrl) {
           item.downloadUrl = downloadUrl;
         }
+
+        // Set up externalization context for API and schema pages
+        const shouldExternalize =
+          options.externalJsonProps &&
+          (item.type === "api" || item.type === "schema");
+        if (shouldExternalize) {
+          setExternalizationContext(item.id, true);
+        }
+
         const markdown = pageGeneratorByType[item.type](item as any);
         item.markdown = markdown;
+
+        // Collect externalized files
+        const externalFiles: ExternalFile[] = shouldExternalize
+          ? clearExternalizationContext()
+          : [];
         if (isSchemasOnly && item.type !== "schema") {
           return;
         }
@@ -388,32 +403,18 @@ custom_edit_url: null
                 );
               }
 
-              let finalView = view;
-              let jsonFilesToWrite: ExternalizedJsonFile[] = [];
-
-              // Externalize large JSON props if enabled
-              if (options.externalJsonProps) {
-                const result = externalizeJsonPropsSimple(view, item.id);
-                finalView = result.mdx;
-                jsonFilesToWrite = result.jsonFiles;
-
-                // Write JSON files
-                for (const jsonFile of jsonFilesToWrite) {
-                  const jsonPath = `${outputDir}/${jsonFile.filename}`;
-                  if (!fs.existsSync(jsonPath)) {
-                    fs.writeFileSync(jsonPath, jsonFile.content, "utf8");
-                    console.log(
-                      chalk.green(`Successfully created "${jsonPath}"`)
-                    );
-                  }
+              // Write externalized JSON files
+              for (const jsonFile of externalFiles) {
+                const jsonPath = `${outputDir}/${jsonFile.filename}`;
+                if (!fs.existsSync(jsonPath)) {
+                  fs.writeFileSync(jsonPath, jsonFile.content, "utf8");
+                  console.log(
+                    chalk.green(`Successfully created "${jsonPath}"`)
+                  );
                 }
               }
 
-              fs.writeFileSync(
-                `${outputDir}/${item.id}.api.mdx`,
-                finalView,
-                "utf8"
-              );
+              fs.writeFileSync(`${outputDir}/${item.id}.api.mdx`, view, "utf8");
               console.log(
                 chalk.green(
                   `Successfully created "${outputDir}/${item.id}.api.mdx"`
@@ -499,24 +500,16 @@ custom_edit_url: null
                 throw Error("Schema must have title defined");
               }
               // eslint-disable-next-line testing-library/render-result-naming-convention
-              let schemaView = render(schemaMdTemplate, item);
-              let jsonFilesToWrite: ExternalizedJsonFile[] = [];
+              const schemaView = render(schemaMdTemplate, item);
 
-              // Externalize large JSON props if enabled
-              if (options.externalJsonProps) {
-                const result = externalizeJsonPropsSimple(schemaView, item.id);
-                schemaView = result.mdx;
-                jsonFilesToWrite = result.jsonFiles;
-
-                // Write JSON files in schemas directory
-                for (const jsonFile of jsonFilesToWrite) {
-                  const jsonPath = `${outputDir}/schemas/${jsonFile.filename}`;
-                  if (!fs.existsSync(jsonPath)) {
-                    fs.writeFileSync(jsonPath, jsonFile.content, "utf8");
-                    console.log(
-                      chalk.green(`Successfully created "${jsonPath}"`)
-                    );
-                  }
+              // Write externalized JSON files in schemas directory
+              for (const jsonFile of externalFiles) {
+                const jsonPath = `${outputDir}/schemas/${jsonFile.filename}`;
+                if (!fs.existsSync(jsonPath)) {
+                  fs.writeFileSync(jsonPath, jsonFile.content, "utf8");
+                  console.log(
+                    chalk.green(`Successfully created "${jsonPath}"`)
+                  );
                 }
               }
 

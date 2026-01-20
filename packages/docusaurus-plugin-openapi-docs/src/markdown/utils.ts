@@ -6,8 +6,105 @@
  * ========================================================================== */
 
 /**
+ * Represents an external JSON file to be written alongside the MDX.
+ */
+export interface ExternalFile {
+  /** The filename for the JSON file (relative to outputDir) */
+  filename: string;
+  /** The JSON content to write */
+  content: string;
+}
+
+/**
+ * Result of MDX generation that includes both the MDX string
+ * and any external files that need to be written.
+ */
+export interface MdxResult {
+  /** The generated MDX content */
+  mdx: string;
+  /** External JSON files to write */
+  externalFiles: ExternalFile[];
+}
+
+/**
+ * Context for externalization during MDX generation.
+ * Set this before calling render() to enable externalization.
+ */
+interface ExternalizationContext {
+  /** Base filename for external files (e.g., "add-pet" for "add-pet.api.mdx") */
+  baseFilename: string;
+  /** Whether externalization is enabled */
+  enabled: boolean;
+  /** Counter for generating unique filenames per prop type */
+  propCounters: Record<string, number>;
+  /** Collected external files during generation */
+  files: ExternalFile[];
+}
+
+/**
+ * Module-level externalization context.
+ * Set via setExternalizationContext() before generating MDX.
+ */
+let externalizationContext: ExternalizationContext | null = null;
+
+/**
+ * Minimum size (in characters) for a JSON prop to be externalized.
+ * Props smaller than this threshold will remain inline.
+ */
+const MIN_SIZE_THRESHOLD = 500;
+
+/**
+ * Props that should be considered for externalization.
+ * These typically contain large JSON objects in API docs.
+ */
+const EXTERNALIZABLE_PROPS = new Set([
+  "responses",
+  "parameters",
+  "body",
+  "schema",
+]);
+
+/**
+ * Sets up the externalization context for MDX generation.
+ * Call this before render() to enable externalization of large JSON props.
+ *
+ * @param baseFilename - Base filename for the MDX file (without extension)
+ * @param enabled - Whether externalization should be enabled
+ */
+export function setExternalizationContext(
+  baseFilename: string,
+  enabled: boolean
+): void {
+  externalizationContext = {
+    baseFilename,
+    enabled,
+    propCounters: {},
+    files: [],
+  };
+}
+
+/**
+ * Clears the externalization context and returns collected files.
+ * Call this after render() to get the external files to write.
+ *
+ * @returns Array of external files collected during generation
+ */
+export function clearExternalizationContext(): ExternalFile[] {
+  const files = externalizationContext?.files ?? [];
+  externalizationContext = null;
+  return files;
+}
+
+/**
+ * Checks if externalization is currently enabled.
+ */
+export function isExternalizationEnabled(): boolean {
+  return externalizationContext?.enabled ?? false;
+}
+
+/**
  * Children in the plugin does not accept DOM elements, when compared with Children in the theme.
- * It is designed for rendering HTML a strings.
+ * It is designed for rendering HTML as strings.
  */
 export type Children = string | undefined | (string | string[] | undefined)[];
 
@@ -15,6 +112,11 @@ export type Props = Record<string, any> & { children?: Children };
 
 export type Options = { inline?: boolean };
 
+/**
+ * Creates a JSX component string with the given tag, props, and options.
+ * When externalization context is set and enabled, large JSON props
+ * will be externalized to separate files.
+ */
 export function create(
   tag: string,
   props: Props,
@@ -24,7 +126,22 @@ export function create(
 
   let propString = "";
   for (const [key, value] of Object.entries(rest)) {
-    propString += `\n  ${key}={${JSON.stringify(value)}}`;
+    // Check if this prop should be externalized
+    if (shouldExternalize(key, value)) {
+      const filename = generateExternalFilename(key);
+      const content = JSON.stringify(value);
+
+      // Add to external files
+      externalizationContext!.files.push({
+        filename,
+        content,
+      });
+
+      // Use require() instead of inline JSON
+      propString += `\n  ${key}={require("./${filename}")}`;
+    } else {
+      propString += `\n  ${key}={${JSON.stringify(value)}}`;
+    }
   }
   let indentedChildren = render(children).replace(/^/gm, "  ");
 
@@ -36,6 +153,41 @@ export function create(
   propString += propString ? "\n" : "";
   indentedChildren += indentedChildren ? "\n" : "";
   return `<${tag}${propString}>\n${indentedChildren}</${tag}>`;
+}
+
+/**
+ * Determines if a prop value should be externalized.
+ */
+function shouldExternalize(key: string, value: any): boolean {
+  if (!externalizationContext?.enabled) {
+    return false;
+  }
+
+  if (!EXTERNALIZABLE_PROPS.has(key)) {
+    return false;
+  }
+
+  if (value === undefined || value === null) {
+    return false;
+  }
+
+  const jsonString = JSON.stringify(value);
+  return jsonString.length >= MIN_SIZE_THRESHOLD;
+}
+
+/**
+ * Generates a unique filename for an externalized prop.
+ */
+function generateExternalFilename(propName: string): string {
+  if (!externalizationContext) {
+    throw new Error("Externalization context not set");
+  }
+
+  const count = (externalizationContext.propCounters[propName] ?? 0) + 1;
+  externalizationContext.propCounters[propName] = count;
+
+  const suffix = count > 1 ? `.${count}` : "";
+  return `${externalizationContext.baseFilename}.${propName}${suffix}.json`;
 }
 
 export function guard<T>(
