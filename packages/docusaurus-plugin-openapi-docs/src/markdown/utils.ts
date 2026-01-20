@@ -35,8 +35,8 @@ interface ExternalizationContext {
   baseFilename: string;
   /** Whether externalization is enabled */
   enabled: boolean;
-  /** Counter for generating unique filenames per prop type */
-  propCounters: Record<string, number>;
+  /** Counter for generating unique filenames per component type */
+  componentCounters: Record<string, number>;
   /** Collected external files during generation */
   files: ExternalFile[];
 }
@@ -48,14 +48,15 @@ interface ExternalizationContext {
 let externalizationContext: ExternalizationContext | null = null;
 
 /**
- * Props that should be externalized to separate JSON files.
- * These typically contain large JSON objects in API docs.
+ * Components whose props should be externalized to separate JSON files.
+ * These are the components that typically receive large JSON objects.
  */
-const EXTERNALIZABLE_PROPS = new Set([
-  "responses",
-  "parameters",
-  "body",
-  "schema",
+const EXTERNALIZABLE_COMPONENTS = new Set([
+  "StatusCodes",
+  "ParamsDetails",
+  "RequestSchema",
+  "Schema",
+  "SchemaItem",
 ]);
 
 /**
@@ -72,7 +73,7 @@ export function setExternalizationContext(
   externalizationContext = {
     baseFilename,
     enabled,
-    propCounters: {},
+    componentCounters: {},
     files: [],
   };
 }
@@ -108,8 +109,8 @@ export type Options = { inline?: boolean };
 
 /**
  * Creates a JSX component string with the given tag, props, and options.
- * When externalization context is set and enabled, large JSON props
- * will be externalized to separate files.
+ * When externalization context is set and enabled, props for eligible
+ * components are externalized to a single JSON file and spread.
  */
 export function create(
   tag: string,
@@ -119,24 +120,27 @@ export function create(
   const { children, ...rest } = props;
 
   let propString = "";
-  for (const [key, value] of Object.entries(rest)) {
-    // Check if this prop should be externalized
-    if (shouldExternalize(key, value)) {
-      const filename = generateExternalFilename(key);
-      const content = JSON.stringify(value);
 
-      // Add to external files
-      externalizationContext!.files.push({
-        filename,
-        content,
-      });
+  // Check if this component's props should be externalized
+  if (shouldExternalizeComponent(tag, rest)) {
+    const filename = generateExternalFilename(tag);
+    const content = JSON.stringify(rest);
 
-      // Use require() instead of inline JSON
-      propString += `\n  ${key}={require("./${filename}")}`;
-    } else {
+    // Add to external files
+    externalizationContext!.files.push({
+      filename,
+      content,
+    });
+
+    // Use spread syntax with require
+    propString = `\n  {...require("./${filename}")}`;
+  } else {
+    // Inline props as usual
+    for (const [key, value] of Object.entries(rest)) {
       propString += `\n  ${key}={${JSON.stringify(value)}}`;
     }
   }
+
   let indentedChildren = render(children).replace(/^/gm, "  ");
 
   if (options.inline) {
@@ -150,18 +154,25 @@ export function create(
 }
 
 /**
- * Determines if a prop value should be externalized.
+ * Determines if a component's props should be externalized.
  */
-function shouldExternalize(key: string, value: any): boolean {
+function shouldExternalizeComponent(
+  tag: string,
+  props: Record<string, any>
+): boolean {
   if (!externalizationContext?.enabled) {
     return false;
   }
 
-  if (!EXTERNALIZABLE_PROPS.has(key)) {
+  if (!EXTERNALIZABLE_COMPONENTS.has(tag)) {
     return false;
   }
 
-  if (value === undefined || value === null) {
+  // Don't externalize if props are empty or only contain undefined/null
+  const hasContent = Object.values(props).some(
+    (v) => v !== undefined && v !== null
+  );
+  if (!hasContent) {
     return false;
   }
 
@@ -169,18 +180,19 @@ function shouldExternalize(key: string, value: any): boolean {
 }
 
 /**
- * Generates a unique filename for an externalized prop.
+ * Generates a unique filename for an externalized component's props.
  */
-function generateExternalFilename(propName: string): string {
+function generateExternalFilename(componentName: string): string {
   if (!externalizationContext) {
     throw new Error("Externalization context not set");
   }
 
-  const count = (externalizationContext.propCounters[propName] ?? 0) + 1;
-  externalizationContext.propCounters[propName] = count;
+  const count =
+    (externalizationContext.componentCounters[componentName] ?? 0) + 1;
+  externalizationContext.componentCounters[componentName] = count;
 
   const suffix = count > 1 ? `.${count}` : "";
-  return `${externalizationContext.baseFilename}.${propName}${suffix}.json`;
+  return `${externalizationContext.baseFilename}.${componentName}${suffix}.json`;
 }
 
 export function guard<T>(
