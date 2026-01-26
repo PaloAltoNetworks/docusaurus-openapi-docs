@@ -5,9 +5,11 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React from "react";
+import React, { useCallback } from "react";
 
 import { translate } from "@docusaurus/Translate";
+import { setSchemaSelection } from "@theme/ApiExplorer/SchemaSelection/slice";
+import { useTypedDispatch } from "@theme/ApiItem/hooks";
 import { ClosingArrayBracket, OpeningArrayBracket } from "@theme/ArrayBrackets";
 import Details from "@theme/Details";
 import DiscriminatorTabs from "@theme/DiscriminatorTabs";
@@ -124,9 +126,19 @@ const Summary: React.FC<SummaryProps> = ({
 interface SchemaProps {
   schema: SchemaObject;
   schemaType: "request" | "response";
+  /**
+   * Optional path identifier for tracking anyOf/oneOf selections.
+   * When provided, tab selections will be dispatched to Redux state
+   * to enable dynamic body example updates.
+   */
+  schemaPath?: string;
 }
 
-const AnyOneOf: React.FC<SchemaProps> = ({ schema, schemaType }) => {
+const AnyOneOf: React.FC<SchemaProps> = ({
+  schema,
+  schemaType,
+  schemaPath,
+}) => {
   const key = schema.oneOf ? "oneOf" : "anyOf";
   const type = schema.oneOf
     ? translate({ id: OPENAPI_SCHEMA_ITEM.ONE_OF, message: "oneOf" })
@@ -138,12 +150,36 @@ const AnyOneOf: React.FC<SchemaProps> = ({ schema, schemaType }) => {
     []
   );
 
+  // Try to get Redux dispatch - will be undefined if not inside a Provider
+  let dispatch: ReturnType<typeof useTypedDispatch> | undefined;
+  try {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    dispatch = useTypedDispatch();
+  } catch {
+    // Not inside a Redux Provider, which is fine for response schemas
+    dispatch = undefined;
+  }
+
+  // Handle tab change - dispatch to Redux if schemaPath is provided
+  const handleTabChange = useCallback(
+    (index: number) => {
+      if (schemaPath && dispatch) {
+        dispatch(setSchemaSelection({ path: schemaPath, index }));
+      }
+    },
+    [schemaPath, dispatch]
+  );
+
   return (
     <>
       <span className="badge badge--info" style={{ marginBottom: "1rem" }}>
         {type}
       </span>
-      <SchemaTabs groupId={`schema-${uniqueId}`} lazy>
+      <SchemaTabs
+        groupId={`schema-${uniqueId}`}
+        lazy
+        onChange={handleTabChange}
+      >
         {schema[key]?.map((anyOneSchema: any, index: number) => {
           // Use getSchemaName to include format info (e.g., "string<date-time>")
           const computedSchemaName = getSchemaName(anyOneSchema);
@@ -167,6 +203,12 @@ const AnyOneOf: React.FC<SchemaProps> = ({ schema, schemaType }) => {
               label = `Option ${index + 1}`;
             }
           }
+
+          // Build the nested schemaPath for child anyOf/oneOf
+          const childSchemaPath = schemaPath
+            ? `${schemaPath}.${index}`
+            : undefined;
+
           return (
             // @ts-ignore
             <TabItem
@@ -208,19 +250,39 @@ const AnyOneOf: React.FC<SchemaProps> = ({ schema, schemaType }) => {
               {/* Note: In OpenAPI, properties implies type: object even if not explicitly set */}
               {(anyOneSchema.type === "object" || !anyOneSchema.type) &&
                 anyOneSchema.properties && (
-                  <Properties schema={anyOneSchema} schemaType={schemaType} />
+                  <Properties
+                    schema={anyOneSchema}
+                    schemaType={schemaType}
+                    schemaPath={childSchemaPath}
+                  />
                 )}
               {anyOneSchema.allOf && (
-                <SchemaNode schema={anyOneSchema} schemaType={schemaType} />
+                <SchemaNode
+                  schema={anyOneSchema}
+                  schemaType={schemaType}
+                  schemaPath={childSchemaPath}
+                />
               )}
               {anyOneSchema.oneOf && (
-                <SchemaNode schema={anyOneSchema} schemaType={schemaType} />
+                <SchemaNode
+                  schema={anyOneSchema}
+                  schemaType={schemaType}
+                  schemaPath={childSchemaPath}
+                />
               )}
               {anyOneSchema.anyOf && (
-                <SchemaNode schema={anyOneSchema} schemaType={schemaType} />
+                <SchemaNode
+                  schema={anyOneSchema}
+                  schemaType={schemaType}
+                  schemaPath={childSchemaPath}
+                />
               )}
               {anyOneSchema.items && (
-                <Items schema={anyOneSchema} schemaType={schemaType} />
+                <Items
+                  schema={anyOneSchema}
+                  schemaType={schemaType}
+                  schemaPath={childSchemaPath}
+                />
               )}
             </TabItem>
           );
@@ -230,7 +292,11 @@ const AnyOneOf: React.FC<SchemaProps> = ({ schema, schemaType }) => {
   );
 };
 
-const Properties: React.FC<SchemaProps> = ({ schema, schemaType }) => {
+const Properties: React.FC<SchemaProps> = ({
+  schema,
+  schemaType,
+  schemaPath,
+}) => {
   const discriminator = schema.discriminator;
   if (discriminator && !discriminator.mapping) {
     const anyOneOf = schema.oneOf ?? schema.anyOf ?? {};
@@ -274,6 +340,7 @@ const Properties: React.FC<SchemaProps> = ({ schema, schemaType }) => {
             }
             discriminator={discriminator}
             schemaType={schemaType}
+            schemaPath={schemaPath ? `${schemaPath}.${key}` : undefined}
           />
         )
       )}
@@ -531,6 +598,7 @@ const SchemaNodeDetails: React.FC<SchemaEdgeProps> = ({
   schema,
   required,
   schemaType,
+  schemaPath,
 }) => {
   return (
     <SchemaItem collapsible={true}>
@@ -550,7 +618,11 @@ const SchemaNodeDetails: React.FC<SchemaEdgeProps> = ({
           {getQualifierMessage(schema) && (
             <MarkdownWrapper text={getQualifierMessage(schema)} />
           )}
-          <SchemaNode schema={schema} schemaType={schemaType} />
+          <SchemaNode
+            schema={schema}
+            schemaType={schemaType}
+            schemaPath={schemaPath}
+          />
         </div>
       </Details>
     </SchemaItem>
@@ -560,7 +632,8 @@ const SchemaNodeDetails: React.FC<SchemaEdgeProps> = ({
 const Items: React.FC<{
   schema: any;
   schemaType: "request" | "response";
-}> = ({ schema, schemaType }) => {
+  schemaPath?: string;
+}> = ({ schema, schemaType, schemaPath }) => {
   // Process schema.items to handle allOf merging
   let itemsSchema = schema.items;
   if (schema.items?.allOf) {
@@ -572,15 +645,26 @@ const Items: React.FC<{
   const hasProperties = itemsSchema?.properties;
   const hasAdditionalProperties = itemsSchema?.additionalProperties;
 
+  // Build the items schema path
+  const itemsSchemaPath = schemaPath ? `${schemaPath}.items` : undefined;
+
   if (hasOneOfAnyOf || hasProperties || hasAdditionalProperties) {
     return (
       <>
         <OpeningArrayBracket />
         {hasOneOfAnyOf && (
-          <AnyOneOf schema={itemsSchema} schemaType={schemaType} />
+          <AnyOneOf
+            schema={itemsSchema}
+            schemaType={schemaType}
+            schemaPath={itemsSchemaPath}
+          />
         )}
         {hasProperties && (
-          <Properties schema={itemsSchema} schemaType={schemaType} />
+          <Properties
+            schema={itemsSchema}
+            schemaType={schemaType}
+            schemaPath={itemsSchemaPath}
+          />
         )}
         {hasAdditionalProperties && (
           <AdditionalProperties schema={itemsSchema} schemaType={schemaType} />
@@ -645,6 +729,7 @@ interface SchemaEdgeProps {
   nullable?: boolean | undefined;
   discriminator?: any;
   schemaType: "request" | "response";
+  schemaPath?: string;
 }
 
 const SchemaEdge: React.FC<SchemaEdgeProps> = ({
@@ -653,6 +738,7 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
   required,
   discriminator,
   schemaType,
+  schemaPath,
 }) => {
   if (
     (schemaType === "request" && schema.readOnly) ||
@@ -686,6 +772,7 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
         required={required}
         schema={schema}
         nullable={schema.nullable}
+        schemaPath={schemaPath}
       />
     );
   }
@@ -699,6 +786,7 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
         required={required}
         schema={schema}
         nullable={schema.nullable}
+        schemaPath={schemaPath}
       />
     );
   }
@@ -712,6 +800,7 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
         required={required}
         schema={schema}
         nullable={schema.nullable}
+        schemaPath={schemaPath}
       />
     );
   }
@@ -725,6 +814,7 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
         nullable={schema.nullable}
         schema={schema}
         schemaType={schemaType}
+        schemaPath={schemaPath}
       />
     );
   }
@@ -738,6 +828,7 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
         nullable={schema.nullable}
         schema={schema}
         schemaType={schemaType}
+        schemaPath={schemaPath}
       />
     );
   }
@@ -787,6 +878,7 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
           nullable={mergedSchemas.nullable}
           schema={mergedSchemas}
           schemaType={schemaType}
+          schemaPath={schemaPath}
         />
       );
     }
@@ -802,6 +894,7 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
           nullable={mergedSchemas.nullable}
           schema={mergedSchemas}
           schemaType={schemaType}
+          schemaPath={schemaPath}
         />
       );
     }
@@ -817,6 +910,7 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
           nullable={mergedSchemas.nullable}
           schema={mergedSchemas}
           schemaType={schemaType}
+          schemaPath={schemaPath}
         />
       );
     }
@@ -851,24 +945,51 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
 
 function renderChildren(
   schema: SchemaObject,
-  schemaType: "request" | "response"
+  schemaType: "request" | "response",
+  schemaPath?: string
 ) {
   return (
     <>
-      {schema.oneOf && <AnyOneOf schema={schema} schemaType={schemaType} />}
-      {schema.anyOf && <AnyOneOf schema={schema} schemaType={schemaType} />}
+      {schema.oneOf && (
+        <AnyOneOf
+          schema={schema}
+          schemaType={schemaType}
+          schemaPath={schemaPath}
+        />
+      )}
+      {schema.anyOf && (
+        <AnyOneOf
+          schema={schema}
+          schemaType={schemaType}
+          schemaPath={schemaPath}
+        />
+      )}
       {schema.properties && (
-        <Properties schema={schema} schemaType={schemaType} />
+        <Properties
+          schema={schema}
+          schemaType={schemaType}
+          schemaPath={schemaPath}
+        />
       )}
       {schema.additionalProperties && (
         <AdditionalProperties schema={schema} schemaType={schemaType} />
       )}
-      {schema.items && <Items schema={schema} schemaType={schemaType} />}
+      {schema.items && (
+        <Items
+          schema={schema}
+          schemaType={schemaType}
+          schemaPath={schemaPath}
+        />
+      )}
     </>
   );
 }
 
-const SchemaNode: React.FC<SchemaProps> = ({ schema, schemaType }) => {
+const SchemaNode: React.FC<SchemaProps> = ({
+  schema,
+  schemaType,
+  schemaPath,
+}) => {
   if (
     (schemaType === "request" && schema.readOnly) ||
     (schemaType === "response" && schema.writeOnly)
@@ -911,9 +1032,16 @@ const SchemaNode: React.FC<SchemaProps> = ({ schema, schemaType }) => {
           {/* Render all oneOf/anyOf constraints first */}
           {schema.allOf.map((item: any, index: number) => {
             if (item.oneOf || item.anyOf) {
+              const itemSchemaPath = schemaPath
+                ? `${schemaPath}.allOf.${index}`
+                : undefined;
               return (
                 <div key={index}>
-                  <AnyOneOf schema={item} schemaType={schemaType} />
+                  <AnyOneOf
+                    schema={item}
+                    schemaType={schemaType}
+                    schemaPath={itemSchemaPath}
+                  />
                 </div>
               );
             }
@@ -921,10 +1049,18 @@ const SchemaNode: React.FC<SchemaProps> = ({ schema, schemaType }) => {
           })}
           {/* Then render shared properties from the merge */}
           {mergedSchemas.properties && (
-            <Properties schema={mergedSchemas} schemaType={schemaType} />
+            <Properties
+              schema={mergedSchemas}
+              schemaType={schemaType}
+              schemaPath={schemaPath}
+            />
           )}
           {mergedSchemas.items && (
-            <Items schema={mergedSchemas} schemaType={schemaType} />
+            <Items
+              schema={mergedSchemas}
+              schemaType={schemaType}
+              schemaPath={schemaPath}
+            />
           )}
         </div>
       );
@@ -943,16 +1079,32 @@ const SchemaNode: React.FC<SchemaProps> = ({ schema, schemaType }) => {
     return (
       <div>
         {mergedSchemas.oneOf && (
-          <AnyOneOf schema={mergedSchemas} schemaType={schemaType} />
+          <AnyOneOf
+            schema={mergedSchemas}
+            schemaType={schemaType}
+            schemaPath={schemaPath}
+          />
         )}
         {mergedSchemas.anyOf && (
-          <AnyOneOf schema={mergedSchemas} schemaType={schemaType} />
+          <AnyOneOf
+            schema={mergedSchemas}
+            schemaType={schemaType}
+            schemaPath={schemaPath}
+          />
         )}
         {mergedSchemas.properties && (
-          <Properties schema={mergedSchemas} schemaType={schemaType} />
+          <Properties
+            schema={mergedSchemas}
+            schemaType={schemaType}
+            schemaPath={schemaPath}
+          />
         )}
         {mergedSchemas.items && (
-          <Items schema={mergedSchemas} schemaType={schemaType} />
+          <Items
+            schema={mergedSchemas}
+            schemaType={schemaType}
+            schemaPath={schemaPath}
+          />
         )}
       </div>
     );
@@ -983,7 +1135,7 @@ const SchemaNode: React.FC<SchemaProps> = ({ schema, schemaType }) => {
     );
   }
 
-  return renderChildren(schema, schemaType);
+  return renderChildren(schema, schemaType, schemaPath);
 };
 
 export default SchemaNode;

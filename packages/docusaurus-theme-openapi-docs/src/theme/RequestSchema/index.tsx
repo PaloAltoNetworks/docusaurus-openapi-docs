@@ -93,7 +93,11 @@ const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
                     )}
                   </div>
                   <ul style={{ marginLeft: "1rem" }}>
-                    <SchemaNode schema={firstBody} schemaType="request" />
+                    <SchemaNode
+                      schema={firstBody}
+                      schemaType="request"
+                      schemaPath="requestBody"
+                    />
                   </ul>
                 </Details>
               </div>
@@ -153,7 +157,11 @@ const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
             )}
           </div>
           <ul style={{ marginLeft: "1rem" }}>
-            <SchemaNode schema={firstBody} schemaType="request" />
+            <SchemaNode
+              schema={firstBody}
+              schemaType="request"
+              schemaPath="requestBody"
+            />
           </ul>
         </Details>
       </TabItem>
