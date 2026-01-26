@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React from "react";
+import React, { useEffect } from "react";
 
 import { translate } from "@docusaurus/Translate";
 
@@ -19,6 +19,7 @@ import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
 import { OPENAPI_BODY, OPENAPI_REQUEST } from "@theme/translationIds";
 import { RequestBodyObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
+import { sampleFromSchema } from "docusaurus-plugin-openapi-docs/src/openapi/createSchemaExample";
 import format from "xml-formatter";
 
 import { clearRawBody, setFileRawBody, setStringRawBody } from "./slice";
@@ -149,12 +150,21 @@ function Body({
   let exampleBody;
   let examplesBodies = [] as any;
 
+  // Generate example from the schema for the current content type
+  let contentTypeExample;
+  if (schema) {
+    contentTypeExample = sampleFromSchema(schema, { type: "request" });
+  } else if (jsonRequestBodyExample) {
+    // Fallback to the build-time generated example if no schema is available
+    contentTypeExample = jsonRequestBodyExample;
+  }
+
   if (
     contentType.includes("application/json") ||
     contentType.endsWith("+json")
   ) {
-    if (jsonRequestBodyExample) {
-      defaultBody = JSON.stringify(jsonRequestBodyExample, null, 2);
+    if (contentTypeExample) {
+      defaultBody = JSON.stringify(contentTypeExample, null, 2);
     }
     if (example) {
       exampleBody = JSON.stringify(example, null, 2);
@@ -191,15 +201,15 @@ function Body({
   }
 
   if (contentType === "application/xml" || contentType.endsWith("+xml")) {
-    if (jsonRequestBodyExample) {
+    if (contentTypeExample) {
       try {
-        defaultBody = format(json2xml(jsonRequestBodyExample, ""), {
+        defaultBody = format(json2xml(contentTypeExample, ""), {
           indentation: "  ",
           lineSeparator: "\n",
           collapseContent: true,
         });
       } catch {
-        defaultBody = json2xml(jsonRequestBodyExample);
+        defaultBody = json2xml(contentTypeExample);
       }
     }
     if (example) {
@@ -255,6 +265,15 @@ function Body({
     language = "xml";
   }
 
+  // Update body in Redux when content type changes
+  useEffect(() => {
+    if (defaultBody) {
+      dispatch(setStringRawBody(defaultBody));
+    }
+    // Only re-run when contentType changes, not when defaultBody changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contentType]);
+
   if (exampleBody) {
     return (
       <FormItem>
@@ -269,6 +288,7 @@ function Body({
             default
           >
             <LiveApp
+              key={contentType}
               action={(code: string) => dispatch(setStringRawBody(code))}
               language={language}
               required={required}
@@ -281,6 +301,7 @@ function Body({
             {example.summary && <Markdown>{example.summary}</Markdown>}
             {exampleBody && (
               <LiveApp
+                key={contentType}
                 action={(code: string) => dispatch(setStringRawBody(code))}
                 language={language}
                 required={required}
@@ -308,6 +329,7 @@ function Body({
             default
           >
             <LiveApp
+              key={contentType}
               action={(code: string) => dispatch(setStringRawBody(code))}
               language={language}
               required={required}
@@ -326,6 +348,7 @@ function Body({
                 {example.summary && <Markdown>{example.summary}</Markdown>}
                 {example.body && (
                   <LiveApp
+                    key={`${contentType}-${example.label}`}
                     action={(code: string) => dispatch(setStringRawBody(code))}
                     language={language}
                   >
@@ -343,6 +366,7 @@ function Body({
   return (
     <FormItem>
       <LiveApp
+        key={contentType}
         action={(code: string) => dispatch(setStringRawBody(code))}
         language={language}
         required={required}

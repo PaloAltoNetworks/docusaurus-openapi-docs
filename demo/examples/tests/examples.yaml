@@ -549,3 +549,56 @@ paths:
                     examples:
                       - true
                       - false
+
+  /requestBody/multipleContentTypes:
+    post:
+      tags:
+        - examples
+      summary: multiple content types with different schemas
+      description: "This endpoint accepts either JSON or XML with different schemas"
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Example endpoint request
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - example_request_json_param
+              properties:
+                example_request_json_param:
+                  type: string
+                  description: This field should only appear in JSON requests
+                  example: "json_value"
+          application/xml:
+            schema:
+              type: object
+              required:
+                - example_request_xml_param
+              properties:
+                example_request_xml_param:
+                  type: string
+                  description: This field should only appear in XML requests
+                  example: "xml_value"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - example_response_param
+                properties:
+                  example_response_param:
+                    type: string
+                    description: The example response parameter
+                    example: "response_value"
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
