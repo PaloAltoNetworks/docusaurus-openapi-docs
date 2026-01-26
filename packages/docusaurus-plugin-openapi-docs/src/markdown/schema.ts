@@ -8,6 +8,12 @@
 import { SchemaObject } from "../openapi/types";
 
 function prettyName(schema: SchemaObject, circular?: boolean) {
+  // Handle enum-only schemas (valid in JSON Schema)
+  // When enum is present without explicit type, treat as string
+  if (schema.enum && !schema.type) {
+    return "string";
+  }
+
   if (schema.format) {
     if (schema.type) {
       return `${schema.type}<${schema.format}>`;

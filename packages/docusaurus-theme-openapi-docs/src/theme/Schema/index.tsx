@@ -999,5 +999,10 @@ const PRIMITIVE_TYPES: Record<PrimitiveSchemaType, true> = {
 } as const;
 
 const isPrimitive = (schema: SchemaObject) => {
+  // Enum-only schemas (without explicit type) should be treated as primitives
+  // This is valid JSON Schema where enum values define the constraints
+  if (schema.enum && !schema.type) {
+    return true;
+  }
   return PRIMITIVE_TYPES[schema.type as PrimitiveSchemaType];
 };

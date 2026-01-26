@@ -11,6 +11,12 @@ import { OPENAPI_SCHEMA_ITEM } from "../theme/translationIds";
 import { SchemaObject } from "../types";
 
 function prettyName(schema: SchemaObject, circular?: boolean) {
+  // Handle enum-only schemas (valid in JSON Schema)
+  // When enum is present without explicit type, treat as string
+  if (schema.enum && !schema.type) {
+    return "string";
+  }
+
   if (schema.format) {
     return schema.format;
   }
