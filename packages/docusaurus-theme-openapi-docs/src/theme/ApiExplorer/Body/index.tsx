@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 
 import { translate } from "@docusaurus/Translate";
 
@@ -24,6 +24,7 @@ import format from "xml-formatter";
 
 import { clearRawBody, setFileRawBody, setStringRawBody } from "./slice";
 import FormBodyItem from "./FormBodyItem";
+import { resolveSchemaWithSelections } from "./resolveSchemaWithSelections";
 
 export interface Props {
   jsonRequestBodyExample: string;
@@ -64,6 +65,9 @@ function Body({
   required,
 }: Props) {
   const contentType = useTypedSelector((state: any) => state.contentType.value);
+  const schemaSelections = useTypedSelector(
+    (state: any) => state.schemaSelection?.selections ?? {}
+  );
   const dispatch = useTypedDispatch();
 
   // Lot's of possible content-types:
@@ -87,12 +91,200 @@ function Body({
   // - multipart/form-data
   // - application/x-www-form-urlencoded
 
-  const schema = requestBodyMetadata?.content?.[contentType]?.schema;
+  const rawSchema = requestBodyMetadata?.content?.[contentType]?.schema;
   const example = requestBodyMetadata?.content?.[contentType]?.example;
   const examples = requestBodyMetadata?.content?.[contentType]?.examples;
+
+  // Resolve the schema based on user's anyOf/oneOf tab selections
+  const schema = useMemo(() => {
+    if (!rawSchema) return rawSchema;
+    return resolveSchemaWithSelections(
+      rawSchema,
+      schemaSelections,
+      "requestBody"
+    );
+  }, [rawSchema, schemaSelections]);
+
   // OpenAPI 3.1 / JSON Schema: schema.examples is an array of example values
   const schemaExamples = schema?.examples as any[] | undefined;
 
+  // Compute the default body based on content type and schema
+  // This needs to be computed before early returns so the useEffect can use it
+  const { defaultBody, exampleBody, examplesBodies, language } = useMemo(() => {
+    let lang = "plaintext";
+    let defBody = "";
+    let exBody;
+    let exBodies = [] as any;
+
+    // Skip body generation for binary and form content types
+    if (schema?.format === "binary") {
+      return {
+        defaultBody: defBody,
+        exampleBody: exBody,
+        examplesBodies: exBodies,
+        language: lang,
+      };
+    }
+    if (
+      (contentType === "multipart/form-data" ||
+        contentType === "application/x-www-form-urlencoded") &&
+      schema?.type === "object"
+    ) {
+      return {
+        defaultBody: defBody,
+        exampleBody: exBody,
+        examplesBodies: exBodies,
+        language: lang,
+      };
+    }
+
+    // Generate example from the schema for the current content type
+    let contentTypeExample;
+    if (schema) {
+      contentTypeExample = sampleFromSchema(schema, { type: "request" });
+    } else if (jsonRequestBodyExample) {
+      // Fallback to the build-time generated example if no schema is available
+      contentTypeExample = jsonRequestBodyExample;
+    }
+
+    if (
+      contentType?.includes("application/json") ||
+      contentType?.endsWith("+json")
+    ) {
+      if (contentTypeExample) {
+        defBody = JSON.stringify(contentTypeExample, null, 2);
+      }
+      if (example) {
+        exBody = JSON.stringify(example, null, 2);
+      }
+      if (examples) {
+        for (const [key, ex] of Object.entries(examples)) {
+          let body = ex.value;
+          try {
+            // If the value is already valid JSON we shouldn't double encode the value
+            JSON.parse(ex.value);
+          } catch (e) {
+            body = JSON.stringify(ex.value, null, 2);
+          }
+
+          exBodies.push({
+            label: key,
+            body,
+            summary: ex.summary,
+          });
+        }
+      }
+      // OpenAPI 3.1: schema.examples is an array of example values
+      if (schemaExamples && Array.isArray(schemaExamples)) {
+        schemaExamples.forEach((schemaExample, index) => {
+          const body = JSON.stringify(schemaExample, null, 2);
+          exBodies.push({
+            label: `Example ${index + 1}`,
+            body,
+            summary: undefined,
+          });
+        });
+      }
+      lang = "json";
+    }
+
+    if (contentType === "application/xml" || contentType?.endsWith("+xml")) {
+      if (contentTypeExample) {
+        try {
+          defBody = format(json2xml(contentTypeExample, ""), {
+            indentation: "  ",
+            lineSeparator: "\n",
+            collapseContent: true,
+          });
+        } catch {
+          defBody = json2xml(contentTypeExample);
+        }
+      }
+      if (example) {
+        try {
+          exBody = format(json2xml(example, ""), {
+            indentation: "  ",
+            lineSeparator: "\n",
+            collapseContent: true,
+          });
+        } catch {
+          exBody = json2xml(example);
+        }
+      }
+      if (examples) {
+        for (const [key, ex] of Object.entries(examples)) {
+          let formattedXmlBody;
+          try {
+            formattedXmlBody = format(ex.value, {
+              indentation: "  ",
+              lineSeparator: "\n",
+              collapseContent: true,
+            });
+          } catch {
+            formattedXmlBody = ex.value;
+          }
+          exBodies.push({
+            label: key,
+            body: formattedXmlBody,
+            summary: ex.summary,
+          });
+        }
+      }
+      // OpenAPI 3.1: schema.examples is an array of example values
+      if (schemaExamples && Array.isArray(schemaExamples)) {
+        schemaExamples.forEach((schemaExample, index) => {
+          let formattedXmlBody;
+          try {
+            formattedXmlBody = format(json2xml(schemaExample, ""), {
+              indentation: "  ",
+              lineSeparator: "\n",
+              collapseContent: true,
+            });
+          } catch {
+            formattedXmlBody = json2xml(schemaExample);
+          }
+          exBodies.push({
+            label: `Example ${index + 1}`,
+            body: formattedXmlBody,
+            summary: undefined,
+          });
+        });
+      }
+      lang = "xml";
+    }
+
+    return {
+      defaultBody: defBody,
+      exampleBody: exBody,
+      examplesBodies: exBodies,
+      language: lang,
+    };
+  }, [
+    schema,
+    contentType,
+    example,
+    examples,
+    schemaExamples,
+    jsonRequestBodyExample,
+  ]);
+
+  // Create a stable key for the LiveApp component that changes when schema selection changes
+  // This forces the editor to remount and pick up the new defaultBody
+  const schemaSelectionKey = useMemo(
+    () => JSON.stringify(schemaSelections),
+    [schemaSelections]
+  );
+
+  // Update body in Redux when content type or schema selection changes
+  useEffect(() => {
+    if (defaultBody) {
+      dispatch(setStringRawBody(defaultBody));
+    }
+    // Re-run when contentType, schemaSelections, or defaultBody change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contentType, schemaSelections, defaultBody]);
+
+  // Now handle early returns after all hooks have been called
   if (schema?.format === "binary") {
     return (
       <FormItem>
@@ -117,6 +309,7 @@ function Body({
       </FormItem>
     );
   }
+
   if (
     (contentType === "multipart/form-data" ||
       contentType === "application/x-www-form-urlencoded") &&
@@ -145,135 +338,6 @@ function Body({
     );
   }
 
-  let language = "plaintext";
-  let defaultBody = ""; //"body content";
-  let exampleBody;
-  let examplesBodies = [] as any;
-
-  // Generate example from the schema for the current content type
-  let contentTypeExample;
-  if (schema) {
-    contentTypeExample = sampleFromSchema(schema, { type: "request" });
-  } else if (jsonRequestBodyExample) {
-    // Fallback to the build-time generated example if no schema is available
-    contentTypeExample = jsonRequestBodyExample;
-  }
-
-  if (
-    contentType.includes("application/json") ||
-    contentType.endsWith("+json")
-  ) {
-    if (contentTypeExample) {
-      defaultBody = JSON.stringify(contentTypeExample, null, 2);
-    }
-    if (example) {
-      exampleBody = JSON.stringify(example, null, 2);
-    }
-    if (examples) {
-      for (const [key, example] of Object.entries(examples)) {
-        let body = example.value;
-        try {
-          // If the value is already valid JSON we shouldn't double encode the value
-          JSON.parse(example.value);
-        } catch (e) {
-          body = JSON.stringify(example.value, null, 2);
-        }
-
-        examplesBodies.push({
-          label: key,
-          body,
-          summary: example.summary,
-        });
-      }
-    }
-    // OpenAPI 3.1: schema.examples is an array of example values
-    if (schemaExamples && Array.isArray(schemaExamples)) {
-      schemaExamples.forEach((schemaExample, index) => {
-        const body = JSON.stringify(schemaExample, null, 2);
-        examplesBodies.push({
-          label: `Example ${index + 1}`,
-          body,
-          summary: undefined,
-        });
-      });
-    }
-    language = "json";
-  }
-
-  if (contentType === "application/xml" || contentType.endsWith("+xml")) {
-    if (contentTypeExample) {
-      try {
-        defaultBody = format(json2xml(contentTypeExample, ""), {
-          indentation: "  ",
-          lineSeparator: "\n",
-          collapseContent: true,
-        });
-      } catch {
-        defaultBody = json2xml(contentTypeExample);
-      }
-    }
-    if (example) {
-      try {
-        exampleBody = format(json2xml(example, ""), {
-          indentation: "  ",
-          lineSeparator: "\n",
-          collapseContent: true,
-        });
-      } catch {
-        exampleBody = json2xml(example);
-      }
-    }
-    if (examples) {
-      for (const [key, example] of Object.entries(examples)) {
-        let formattedXmlBody;
-        try {
-          formattedXmlBody = format(example.value, {
-            indentation: "  ",
-            lineSeparator: "\n",
-            collapseContent: true,
-          });
-        } catch {
-          formattedXmlBody = example.value;
-        }
-        examplesBodies.push({
-          label: key,
-          body: formattedXmlBody,
-          summary: example.summary,
-        });
-      }
-    }
-    // OpenAPI 3.1: schema.examples is an array of example values
-    if (schemaExamples && Array.isArray(schemaExamples)) {
-      schemaExamples.forEach((schemaExample, index) => {
-        let formattedXmlBody;
-        try {
-          formattedXmlBody = format(json2xml(schemaExample, ""), {
-            indentation: "  ",
-            lineSeparator: "\n",
-            collapseContent: true,
-          });
-        } catch {
-          formattedXmlBody = json2xml(schemaExample);
-        }
-        examplesBodies.push({
-          label: `Example ${index + 1}`,
-          body: formattedXmlBody,
-          summary: undefined,
-        });
-      });
-    }
-    language = "xml";
-  }
-
-  // Update body in Redux when content type changes
-  useEffect(() => {
-    if (defaultBody) {
-      dispatch(setStringRawBody(defaultBody));
-    }
-    // Only re-run when contentType changes, not when defaultBody changes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [contentType]);
-
   if (exampleBody) {
     return (
       <FormItem>
@@ -288,7 +352,7 @@ function Body({
             default
           >
             <LiveApp
-              key={contentType}
+              key={`${contentType}-${schemaSelectionKey}`}
               action={(code: string) => dispatch(setStringRawBody(code))}
               language={language}
               required={required}
@@ -301,7 +365,7 @@ function Body({
             {example.summary && <Markdown>{example.summary}</Markdown>}
             {exampleBody && (
               <LiveApp
-                key={contentType}
+                key={`${contentType}-example`}
                 action={(code: string) => dispatch(setStringRawBody(code))}
                 language={language}
                 required={required}
@@ -329,7 +393,7 @@ function Body({
             default
           >
             <LiveApp
-              key={contentType}
+              key={`${contentType}-${schemaSelectionKey}`}
               action={(code: string) => dispatch(setStringRawBody(code))}
               language={language}
               required={required}
@@ -337,22 +401,18 @@ function Body({
               {defaultBody}
             </LiveApp>
           </TabItem>
-          {examplesBodies.map((example: any) => {
+          {examplesBodies.map((ex: any) => {
             return (
               // @ts-ignore
-              <TabItem
-                label={example.label}
-                value={example.label}
-                key={example.label}
-              >
-                {example.summary && <Markdown>{example.summary}</Markdown>}
-                {example.body && (
+              <TabItem label={ex.label} value={ex.label} key={ex.label}>
+                {ex.summary && <Markdown>{ex.summary}</Markdown>}
+                {ex.body && (
                   <LiveApp
-                    key={`${contentType}-${example.label}`}
+                    key={`${contentType}-${ex.label}`}
                     action={(code: string) => dispatch(setStringRawBody(code))}
                     language={language}
                   >
-                    {example.body}
+                    {ex.body}
                   </LiveApp>
                 )}
               </TabItem>
@@ -366,7 +426,7 @@ function Body({
   return (
     <FormItem>
       <LiveApp
-        key={contentType}
+        key={`${contentType}-${schemaSelectionKey}`}
         action={(code: string) => dispatch(setStringRawBody(code))}
         language={language}
         required={required}
