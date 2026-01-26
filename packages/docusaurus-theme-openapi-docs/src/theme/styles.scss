@@ -166,6 +166,16 @@
   border-right: thin solid var(--ifm-toc-border-color);
 }
 
+@media (min-width: 997px) {
+  .openapi-right-panel__container {
+    position: sticky;
+    top: calc(var(--ifm-navbar-height) + 1rem);
+    max-height: calc(100vh - var(--ifm-navbar-height) - 2rem);
+    overflow-y: auto;
+    align-self: flex-start;
+  }
+}
+
 @media (max-width: 997px) {
   .schema {
     margin-bottom: 1rem;
