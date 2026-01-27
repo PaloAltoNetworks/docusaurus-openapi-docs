@@ -1,3 +1,41 @@
+## 4.7.0 (2026-01-27)
+
+Major performance improvement: The new `externalJsonProps` option (enabled by default) dramatically reduces build times and bundle sizes by externalizing large JSON props from MDX files.
+
+- New `externalJsonProps` plugin option significantly improves build performance
+- Sticky positioning for the API Explorer right panel improves UX on long API pages
+- Dynamic request body updates when switching anyOf/oneOf tabs
+
+#### :rocket: New Feature
+
+- feat(plugin): add externalJsonProps option (enabled by default) to improve build performance ([#1279](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1279))
+- feat(theme): add sticky positioning to API Explorer right panel ([#1288](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1288))
+- feat: dynamically update request body when anyOf/oneOf tab changes ([#1287](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1287))
+
+#### :bug: Bug Fix
+
+- fix: render inline enum values in anyOf schemas ([#1286](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1286))
+- fix: generate correct examples for different request content types ([#1284](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1284))
+
+#### :house: Refactoring
+
+- refactor: change plugin and theme types.ts to types.d.ts ([#1281](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1281))
+- refactor: externalize using create() and drop size threshold requirement ([#1280](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1280))
+
+#### :memo: Documentation
+
+- docs: sync README and intro.mdx with plugin docs
+
+#### :robot: Dependencies
+
+- chore(deps): bump lodash from 4.17.21 to 4.17.23 ([#1282](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1282))
+
+#### Committers: 3
+
+- dependabot[bot]
+- Ollie Monk
+- Steven Serrata
+
 ## 4.6.0 (Jan 16, 2026)
 
 High level enhancements

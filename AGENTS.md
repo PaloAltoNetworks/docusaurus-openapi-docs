@@ -86,24 +86,62 @@ This outputs a changelog template comparing commits between the latest tag and `
 
 **Changelog format:**
 
+The changelog uses a categorized format inspired by [Docusaurus](https://github.com/facebook/docusaurus/blob/main/CHANGELOG.md). Each release includes a high-level summary followed by categorized changes with emoji headers.
+
 ```markdown
-## X.Y.Z (Mon DD, YYYY)
+## X.Y.Z (YYYY-MM-DD)
 
-High level enhancements
+Brief summary of the most significant changes in this release (1-3 sentences).
 
-- Brief summary of major features or fixes
+- Bullet points highlighting major user-facing features or fixes
 
-Other enhancements and bug fixes
+#### :rocket: New Feature
 
-- Commit message ([#123](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/123))
+- feat: description of feature ([#123](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/123))
+
+#### :bug: Bug Fix
+
+- fix: description of fix ([#124](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/124))
+
+#### :house: Refactoring
+
+- refactor: description ([#125](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/125))
+
+#### :memo: Documentation
+
+- docs: description ([#126](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/126))
+
+#### :robot: Dependencies
+
+- chore(deps): bump package from X to Y ([#127](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/127))
+
+#### Committers: N
+
+- Name or username
 ```
+
+**Category headers (include only sections with changes):**
+
+| Emoji           | Category      | Commit Prefix   |
+| --------------- | ------------- | --------------- |
+| :rocket:        | New Feature   | `feat`          |
+| :bug:           | Bug Fix       | `fix`, `bugfix` |
+| :running_woman: | Performance   | `perf`          |
+| :nail_care:     | Polish        | `style`         |
+| :house:         | Refactoring   | `refactor`      |
+| :memo:          | Documentation | `docs`          |
+| :test_tube:     | Testing       | `test`          |
+| :robot:         | Dependencies  | `chore(deps)`   |
+| :wrench:        | Maintenance   | `chore`         |
 
 **Guidelines for changelog entries:**
 
-- Replace `TODO HIGHLIGHTS` with a concise summary of user-facing changes
-- Remove internal commits (CI changes, minor refactors) that don't affect users
-- Group related changes together when appropriate
-- Use past tense for descriptions
+- Replace `TODO: Add high-level summary` with a concise summary of user-facing changes
+- Use ISO date format: `YYYY-MM-DD`
+- Remove internal commits (CI changes, workflow updates) that don't affect users
+- Keep the original commit message format (e.g., `feat:`, `fix:`)
+- Only include category sections that have changes
+- List committers alphabetically at the end
 
 #### Step 3: Update Documentation (if needed)
 

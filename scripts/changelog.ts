@@ -16,6 +16,24 @@ const BRANCH = "main";
 
 const COMMIT_FILTERS = [/\(release\) v.*/];
 
+// Commit categorization patterns
+const CATEGORY_PATTERNS: {
+  pattern: RegExp;
+  category: string;
+  emoji: string;
+}[] = [
+  { pattern: /^feat/i, category: "New Feature", emoji: ":rocket:" },
+  { pattern: /^fix/i, category: "Bug Fix", emoji: ":bug:" },
+  { pattern: /^bugfix/i, category: "Bug Fix", emoji: ":bug:" },
+  { pattern: /^perf/i, category: "Performance", emoji: ":running_woman:" },
+  { pattern: /^refactor/i, category: "Refactoring", emoji: ":house:" },
+  { pattern: /^docs/i, category: "Documentation", emoji: ":memo:" },
+  { pattern: /^chore\(deps\)/i, category: "Dependencies", emoji: ":robot:" },
+  { pattern: /^chore/i, category: "Maintenance", emoji: ":wrench:" },
+  { pattern: /^test/i, category: "Testing", emoji: ":test_tube:" },
+  { pattern: /^style/i, category: "Polish", emoji: ":nail_care:" },
+];
+
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will
 // terminate the Node.js process with a non-zero exit code.
@@ -42,27 +60,85 @@ function findLatestTag() {
   return getOutput(`git describe --tags --abbrev=0 --match "v*"`);
 }
 
-function getCommits(commitRange: string) {
-  return getOutput(`git log --pretty="%s" ${commitRange}`).split(/\r?\n/);
+interface CommitInfo {
+  message: string;
+  author: string;
+  hash: string;
 }
 
-function formatCommits(commits: string[]) {
-  return commits
-    .filter((c) => {
-      for (const filter of COMMIT_FILTERS) {
-        if (filter.test(c)) {
-          return false;
-        }
+function getCommits(commitRange: string): CommitInfo[] {
+  const output = getOutput(
+    `git log --pretty=format:"%H|%an|%s" ${commitRange}`
+  );
+  if (!output.trim()) return [];
+
+  return output.split(/\r?\n/).map((line) => {
+    const [hash, author, ...messageParts] = line.split("|");
+    return {
+      hash: hash || "",
+      author: author || "",
+      message: messageParts.join("|") || "",
+    };
+  });
+}
+
+function categorizeCommit(message: string): {
+  category: string;
+  emoji: string;
+} {
+  for (const { pattern, category, emoji } of CATEGORY_PATTERNS) {
+    if (pattern.test(message)) {
+      return { category, emoji };
+    }
+  }
+  return { category: "Other", emoji: ":sparkles:" };
+}
+
+function formatCommitMessage(message: string): string {
+  const r = /\(#(\d+)\)$/;
+  return message.replace(
+    r,
+    `([#$1](https://github.com/${ORG}/${REPO}/pull/$1))`
+  );
+}
+
+function filterCommits(commits: CommitInfo[]): CommitInfo[] {
+  return commits.filter((c) => {
+    for (const filter of COMMIT_FILTERS) {
+      if (filter.test(c.message)) {
+        return false;
       }
-      return true;
-    })
-    .map((c) => {
-      const r = /\(#(\d+)\)$/;
-      return `- ${c.replace(
-        r,
-        `([#$1](https://github.com/${ORG}/${REPO}/pull/$1))`
-      )}`;
-    });
+    }
+    return true;
+  });
+}
+
+function groupCommitsByCategory(
+  commits: CommitInfo[]
+): Map<string, { emoji: string; commits: CommitInfo[] }> {
+  const grouped = new Map<string, { emoji: string; commits: CommitInfo[] }>();
+
+  for (const commit of commits) {
+    const { category, emoji } = categorizeCommit(commit.message);
+    if (!grouped.has(category)) {
+      grouped.set(category, { emoji, commits: [] });
+    }
+    grouped.get(category)!.commits.push(commit);
+  }
+
+  return grouped;
+}
+
+function getUniqueCommitters(commits: CommitInfo[]): string[] {
+  const authors = new Set<string>();
+  for (const commit of commits) {
+    if (commit.author && commit.author.trim()) {
+      authors.add(commit.author);
+    }
+  }
+  return Array.from(authors).sort((a, b) =>
+    a.toLowerCase().localeCompare(b.toLowerCase())
+  );
 }
 
 function main() {
@@ -88,30 +164,56 @@ function main() {
   console.log(`Comparing ${commitRange}`);
 
   const commits = getCommits(commitRange);
-  const formattedCommits = formatCommits(commits);
+  const filteredCommits = filterCommits(commits);
 
-  if (formattedCommits.length === 0) {
+  if (filteredCommits.length === 0) {
     console.error("Error: There has been no changes since last release.");
     process.exit(1);
   }
 
-  const date = new Date().toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
+  const groupedCommits = groupCommitsByCategory(filteredCommits);
+  const committers = getUniqueCommitters(filteredCommits);
 
-  const changelog = `
-## ${pkg.version} (${date})
+  // Format date as YYYY-MM-DD
+  const date = new Date().toISOString().split("T")[0];
 
-High level enhancements
+  // Build changelog sections
+  const sections: string[] = [];
 
-- TODO HIGHLIGHTS
+  // Category order for consistent output
+  const categoryOrder = [
+    "New Feature",
+    "Bug Fix",
+    "Performance",
+    "Polish",
+    "Refactoring",
+    "Documentation",
+    "Testing",
+    "Dependencies",
+    "Maintenance",
+    "Other",
+  ];
 
-Other enhancements and bug fixes
+  for (const category of categoryOrder) {
+    const group = groupedCommits.get(category);
+    if (group && group.commits.length > 0) {
+      const commitLines = group.commits
+        .map((c) => `- ${formatCommitMessage(c.message)}`)
+        .join("\n");
+      sections.push(`#### ${group.emoji} ${category}\n\n${commitLines}`);
+    }
+  }
 
-${formattedCommits.join("\n")}
-  `;
+  const changelog = `## ${pkg.version} (${date})
+
+TODO: Add high-level summary of major changes
+
+${sections.join("\n\n")}
+
+#### Committers: ${committers.length}
+
+${committers.map((c) => `- ${c}`).join("\n")}
+`;
 
   printBanner("Prepend the following to CHANGELOG.md");
   console.log(changelog);
