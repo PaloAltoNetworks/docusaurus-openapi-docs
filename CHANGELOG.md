@@ -1,3 +1,11 @@
+## 4.7.1 (2026-01-27)
+
+Hotfix release for build error in v4.7.0.
+
+#### :bug: Bug Fix
+
+- fix(theme): use import type for plugin type imports ([#1292](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1292))
+
 ## 4.7.0 (2026-01-27)
 
 Major performance improvement: The new `externalJsonProps` option (enabled by default) dramatically reduces build times and bundle sizes by externalizing large JSON props from MDX files.
