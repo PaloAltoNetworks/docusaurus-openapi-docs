@@ -22,7 +22,7 @@ import type { Props } from "@theme/DocItem";
 import DocItemMetadata from "@theme/DocItem/Metadata";
 import SkeletonLoader from "@theme/SkeletonLoader";
 import clsx from "clsx";
-import {
+import type {
   ParameterObject,
   ServerObject,
 } from "docusaurus-plugin-openapi-docs/src/openapi/types";

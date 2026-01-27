@@ -18,8 +18,8 @@ import Markdown from "@theme/Markdown";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
 import { OPENAPI_BODY, OPENAPI_REQUEST } from "@theme/translationIds";
-import { RequestBodyObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
-import { sampleFromSchema } from "docusaurus-plugin-openapi-docs/src/openapi/createSchemaExample";
+import type { RequestBodyObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
+import { sampleFromSchema } from "docusaurus-plugin-openapi-docs/lib/openapi/createSchemaExample";
 import format from "xml-formatter";
 
 import { clearRawBody, setFileRawBody, setStringRawBody } from "./slice";

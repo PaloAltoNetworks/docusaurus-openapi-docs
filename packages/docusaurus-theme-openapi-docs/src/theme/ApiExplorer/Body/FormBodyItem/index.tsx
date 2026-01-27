@@ -11,7 +11,7 @@ import FormSelect from "@theme/ApiExplorer/FormSelect";
 import FormTextInput from "@theme/ApiExplorer/FormTextInput";
 import LiveApp from "@theme/ApiExplorer/LiveEditor";
 import { useTypedDispatch } from "@theme/ApiItem/hooks";
-import { SchemaObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
+import type { SchemaObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import { clearFormBodyKey, setFileFormBody, setStringFormBody } from "../slice";
 import FileArrayFormBodyItem from "../FileArrayFormBodyItem";
 
