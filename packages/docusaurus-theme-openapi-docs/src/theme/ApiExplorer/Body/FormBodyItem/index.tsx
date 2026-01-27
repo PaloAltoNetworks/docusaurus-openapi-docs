@@ -6,14 +6,16 @@
  * ========================================================================== */
 
 import React from "react";
+
 import FormFileUpload from "@theme/ApiExplorer/FormFileUpload";
 import FormSelect from "@theme/ApiExplorer/FormSelect";
 import FormTextInput from "@theme/ApiExplorer/FormTextInput";
 import LiveApp from "@theme/ApiExplorer/LiveEditor";
 import { useTypedDispatch } from "@theme/ApiItem/hooks";
-import { SchemaObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
-import { clearFormBodyKey, setFileFormBody, setStringFormBody } from "../slice";
+
+import type { SchemaObject } from "../../../../types";
 import FileArrayFormBodyItem from "../FileArrayFormBodyItem";
+import { clearFormBodyKey, setFileFormBody, setStringFormBody } from "../slice";
 
 interface FormBodyItemProps {
   schemaObject: SchemaObject;

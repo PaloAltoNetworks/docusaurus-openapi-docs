@@ -7,12 +7,10 @@
 
 import { AuthState, Scheme } from "@theme/ApiExplorer/Authorization/slice";
 import { Body, Content } from "@theme/ApiExplorer/Body/slice";
-import {
-  ParameterObject,
-  ServerObject,
-} from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import cloneDeep from "lodash/cloneDeep";
 import * as sdk from "postman-collection";
+
+import type { ParameterObject, ServerObject } from "../../types";
 
 type Param = {
   value?: string | string[];

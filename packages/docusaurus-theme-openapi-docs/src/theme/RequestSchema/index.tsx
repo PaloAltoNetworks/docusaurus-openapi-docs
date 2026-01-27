@@ -7,17 +7,17 @@
 
 import React from "react";
 
-import { translate } from "@docusaurus/Translate";
-import { OPENAPI_REQUEST, OPENAPI_SCHEMA_ITEM } from "@theme/translationIds";
-
 import BrowserOnly from "@docusaurus/BrowserOnly";
+import { translate } from "@docusaurus/Translate";
 import Details from "@theme/Details";
 import Markdown from "@theme/Markdown";
 import MimeTabs from "@theme/MimeTabs"; // Assume these components exist
 import SchemaNode from "@theme/Schema";
 import SkeletonLoader from "@theme/SkeletonLoader";
 import TabItem from "@theme/TabItem";
-import { MediaTypeObject } from "docusaurus-plugin-openapi-docs/lib/openapi/types";
+import { OPENAPI_REQUEST, OPENAPI_SCHEMA_ITEM } from "@theme/translationIds";
+
+import type { MediaTypeObject } from "../../types";
 
 interface Props {
   style?: React.CSSProperties;

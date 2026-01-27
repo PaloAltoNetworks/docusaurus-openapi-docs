@@ -7,13 +7,12 @@
 
 import React from "react";
 
-import { translate } from "@docusaurus/Translate";
-import { OPENAPI_PARAMS_DETAILS } from "@theme/translationIds";
-
 import BrowserOnly from "@docusaurus/BrowserOnly";
+import { translate } from "@docusaurus/Translate";
 import Details from "@theme/Details";
 import ParamsItem from "@theme/ParamsItem";
 import SkeletonLoader from "@theme/SkeletonLoader";
+import { OPENAPI_PARAMS_DETAILS } from "@theme/translationIds";
 
 interface Props {
   parameters: any[];

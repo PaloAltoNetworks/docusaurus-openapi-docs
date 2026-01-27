@@ -25,11 +25,9 @@ import {
   getQualifierMessage,
   getSchemaName,
 } from "docusaurus-plugin-openapi-docs/lib/markdown/schema";
-import {
-  SchemaObject,
-  SchemaType,
-} from "docusaurus-plugin-openapi-docs/lib/openapi/types";
 import isEmpty from "lodash/isEmpty";
+
+import type { SchemaObject, SchemaType } from "../../types";
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 // const jsonSchemaMergeAllOf = require("json-schema-merge-allof");

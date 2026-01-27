@@ -22,19 +22,17 @@ import type { Props } from "@theme/DocItem";
 import DocItemMetadata from "@theme/DocItem/Metadata";
 import SkeletonLoader from "@theme/SkeletonLoader";
 import clsx from "clsx";
-import {
-  ParameterObject,
-  ServerObject,
-} from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import type { ApiItem as ApiItemType } from "docusaurus-plugin-openapi-docs/src/types";
-import type {
-  DocFrontMatter,
-  ThemeConfig,
-} from "docusaurus-theme-openapi-docs/src/types";
 import { ungzip } from "pako";
 import { Provider } from "react-redux";
 
 import { createStoreWithoutState, createStoreWithState } from "./store";
+import type {
+  DocFrontMatter,
+  ParameterObject,
+  ServerObject,
+  ThemeConfig,
+} from "../../types";
 
 let ApiExplorer = (_: { item: any; infoPath: any }) => <div />;
 

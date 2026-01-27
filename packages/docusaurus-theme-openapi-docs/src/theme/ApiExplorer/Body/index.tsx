@@ -8,7 +8,6 @@
 import React, { useEffect, useMemo } from "react";
 
 import { translate } from "@docusaurus/Translate";
-
 import json2xml from "@theme/ApiExplorer/Body/json2xml";
 import FormFileUpload from "@theme/ApiExplorer/FormFileUpload";
 import FormItem from "@theme/ApiExplorer/FormItem";
@@ -18,13 +17,13 @@ import Markdown from "@theme/Markdown";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
 import { OPENAPI_BODY, OPENAPI_REQUEST } from "@theme/translationIds";
-import { RequestBodyObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
-import { sampleFromSchema } from "docusaurus-plugin-openapi-docs/src/openapi/createSchemaExample";
+import { sampleFromSchema } from "docusaurus-plugin-openapi-docs/lib/openapi/createSchemaExample";
 import format from "xml-formatter";
 
-import { clearRawBody, setFileRawBody, setStringRawBody } from "./slice";
 import FormBodyItem from "./FormBodyItem";
 import { resolveSchemaWithSelections } from "./resolveSchemaWithSelections";
+import { clearRawBody, setFileRawBody, setStringRawBody } from "./slice";
+import type { RequestBodyObject } from "../../../types";
 
 export interface Props {
   jsonRequestBodyExample: string;

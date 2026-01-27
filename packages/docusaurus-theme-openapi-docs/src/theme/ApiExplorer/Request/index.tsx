@@ -27,13 +27,12 @@ import {
 import Server from "@theme/ApiExplorer/Server";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import { OPENAPI_REQUEST } from "@theme/translationIds";
-import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
-import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
-import type { ThemeConfig } from "docusaurus-theme-openapi-docs/src/types";
+import type { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 import * as sdk from "postman-collection";
 import { FormProvider, useForm } from "react-hook-form";
 
 import makeRequest, { RequestError, RequestErrorType } from "./makeRequest";
+import type { ParameterObject, ThemeConfig } from "../../../types";
 
 function Request({ item }: { item: ApiItem }) {
   const postman = new sdk.Request(item.postman);
