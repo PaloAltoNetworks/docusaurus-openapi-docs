@@ -7,7 +7,7 @@
 
 import { AuthState, Scheme } from "@theme/ApiExplorer/Authorization/slice";
 import { Body, Content } from "@theme/ApiExplorer/Body/slice";
-import {
+import type {
   ParameterObject,
   ServerObject,
 } from "docusaurus-plugin-openapi-docs/src/openapi/types";

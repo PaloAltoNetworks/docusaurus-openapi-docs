@@ -7,7 +7,7 @@
 
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { createStorage, hashArray } from "@theme/ApiExplorer/storage-utils";
-import {
+import type {
   SecurityRequirementObject,
   SecuritySchemeObject,
 } from "docusaurus-plugin-openapi-docs/src/openapi/types";

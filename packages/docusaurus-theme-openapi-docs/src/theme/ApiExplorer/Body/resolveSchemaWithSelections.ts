@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { SchemaObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
+import type { SchemaObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import merge from "lodash/merge";
 
 export interface SchemaSelections {

@@ -6,8 +6,10 @@
  * ========================================================================== */
 
 import React, { useState } from "react";
+
 import FormFileUpload from "@theme/ApiExplorer/FormFileUpload";
 import { useTypedDispatch } from "@theme/ApiItem/hooks";
+
 import { FileContent, setFileArrayFormBody } from "../slice";
 
 interface FileArrayFormItemProps {

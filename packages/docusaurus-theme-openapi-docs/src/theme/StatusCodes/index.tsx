@@ -15,7 +15,7 @@ import ResponseHeaders from "@theme/ResponseHeaders";
 import ResponseSchema from "@theme/ResponseSchema";
 import TabItem from "@theme/TabItem";
 import { OPENAPI_STATUS_CODES } from "@theme/translationIds";
-import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
+import type { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 
 interface Props {
   id?: string;
