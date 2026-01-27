@@ -8,7 +8,6 @@
 import React from "react";
 
 import { translate } from "@docusaurus/Translate";
-
 import ApiTabs from "@theme/ApiTabs";
 import Details from "@theme/Details";
 import Markdown from "@theme/Markdown";
@@ -16,7 +15,7 @@ import ResponseHeaders from "@theme/ResponseHeaders";
 import ResponseSchema from "@theme/ResponseSchema";
 import TabItem from "@theme/TabItem";
 import { OPENAPI_STATUS_CODES } from "@theme/translationIds";
-import { ApiItem } from "docusaurus-plugin-openapi-docs/lib/types";
+import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 
 interface Props {
   id?: string;
