@@ -9,7 +9,6 @@ import React from "react";
 
 import { translate } from "@docusaurus/Translate";
 import { OPENAPI_SCHEMA_ITEM } from "@theme/translationIds";
-
 import clsx from "clsx";
 
 export interface Props {

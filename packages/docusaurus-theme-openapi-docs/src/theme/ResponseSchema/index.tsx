@@ -22,7 +22,7 @@ import SchemaTabs from "@theme/SchemaTabs";
 import SkeletonLoader from "@theme/SkeletonLoader";
 import TabItem from "@theme/TabItem";
 import { OPENAPI_SCHEMA, OPENAPI_SCHEMA_ITEM } from "@theme/translationIds";
-import { MediaTypeObject } from "docusaurus-plugin-openapi-docs/lib/openapi/types";
+import type { MediaTypeObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 
 interface Props {
   style?: React.CSSProperties;

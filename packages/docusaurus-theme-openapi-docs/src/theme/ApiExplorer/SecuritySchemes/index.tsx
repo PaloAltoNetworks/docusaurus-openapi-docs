@@ -7,11 +7,10 @@
 
 import React from "react";
 
-import { translate } from "@docusaurus/Translate";
-import { OPENAPI_SECURITY_SCHEMES } from "@theme/translationIds";
-
 import Link from "@docusaurus/Link";
+import { translate } from "@docusaurus/Translate";
 import { useTypedSelector } from "@theme/ApiItem/hooks";
+import { OPENAPI_SECURITY_SCHEMES } from "@theme/translationIds";
 
 function SecuritySchemes(props: any) {
   const options = useTypedSelector((state: any) => state.auth.options);

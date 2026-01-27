@@ -25,10 +25,10 @@ import {
   getQualifierMessage,
   getSchemaName,
 } from "docusaurus-plugin-openapi-docs/lib/markdown/schema";
-import {
+import type {
   SchemaObject,
   SchemaType,
-} from "docusaurus-plugin-openapi-docs/lib/openapi/types";
+} from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import isEmpty from "lodash/isEmpty";
 
 // eslint-disable-next-line import/no-extraneous-dependencies

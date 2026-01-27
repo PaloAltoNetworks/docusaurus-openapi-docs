@@ -17,7 +17,7 @@ import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
 import { OPENAPI_RESPONSE } from "@theme/translationIds";
 import clsx from "clsx";
-import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
+import type { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 import type { ThemeConfig } from "docusaurus-theme-openapi-docs/src/types";
 
 import { clearResponse, clearCode, clearHeaders } from "./slice";
@@ -47,8 +47,7 @@ function Response({ item }: { item: ApiItem }) {
   const { siteConfig } = useDocusaurusContext();
   const themeConfig = siteConfig.themeConfig as ThemeConfig;
   const hideSendButton = metadata.frontMatter.hide_send_button;
-  const proxy =
-    metadata.frontMatter.proxy ?? themeConfig.api?.proxy;
+  const proxy = metadata.frontMatter.proxy ?? themeConfig.api?.proxy;
   const prismTheme = usePrismTheme();
   const code = useTypedSelector((state: any) => state.response.code);
   const headers = useTypedSelector((state: any) => state.response.headers);
