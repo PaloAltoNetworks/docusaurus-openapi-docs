@@ -9,13 +9,13 @@ import React from "react";
 
 import { useDoc } from "@docusaurus/plugin-content-docs/client";
 import { usePrismTheme } from "@docusaurus/theme-common";
-import { translate } from "@docusaurus/Translate";
+import Translate, { translate } from "@docusaurus/Translate";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import ApiCodeBlock from "@theme/ApiExplorer/ApiCodeBlock";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
-import { OPENAPI_RESPONSE } from "@theme/translationIds";
+import { OPENAPI_REQUEST, OPENAPI_RESPONSE } from "@theme/translationIds";
 import clsx from "clsx";
 import type { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 import type { ThemeConfig } from "docusaurus-theme-openapi-docs/src/types";
@@ -126,11 +126,22 @@ function Response({ item }: { item: ApiItem }) {
               >
                 {prettyResponse || (
                   <p className="openapi-explorer__response-placeholder-message">
-                    {translate({
-                      id: OPENAPI_RESPONSE.PLACEHOLDER,
-                      message:
-                        "Click the <code>Send API Request</code> button above and see the response here!",
-                    })}
+                    <Translate
+                      id={OPENAPI_RESPONSE.PLACEHOLDER}
+                      values={{
+                        code: (
+                          <code>
+                            <Translate id={OPENAPI_REQUEST.SEND_BUTTON}>
+                              Send API Request
+                            </Translate>
+                          </code>
+                        ),
+                      }}
+                    >
+                      {
+                        "Click the {code} button above and see the response here!"
+                      }
+                    </Translate>
                   </p>
                 )}
               </ApiCodeBlock>
@@ -163,11 +174,20 @@ function Response({ item }: { item: ApiItem }) {
           </div>
         ) : (
           <p className="openapi-explorer__response-placeholder-message">
-            {translate({
-              id: OPENAPI_RESPONSE.PLACEHOLDER,
-              message:
-                "Click the <code>Send API Request</code> button above and see the response here!",
-            })}
+            <Translate
+              id={OPENAPI_RESPONSE.PLACEHOLDER}
+              values={{
+                code: (
+                  <code>
+                    <Translate id={OPENAPI_REQUEST.SEND_BUTTON}>
+                      Send API Request
+                    </Translate>
+                  </code>
+                ),
+              }}
+            >
+              {"Click the {code} button above and see the response here!"}
+            </Translate>
           </p>
         )}
       </div>
