@@ -23,8 +23,33 @@ export interface ParamProps {
   param: Param;
 }
 
+/**
+ * Extracts enum values from a schema, including when wrapped in allOf.
+ * This handles cases where an enum is referenced via allOf for composition.
+ */
+export function getSchemaEnum(schema: any): any[] | undefined {
+  // Direct enum on schema
+  if (schema?.enum) {
+    return schema.enum;
+  }
+
+  // Enum inside allOf - check each item
+  if (schema?.allOf && Array.isArray(schema.allOf)) {
+    for (const item of schema.allOf) {
+      if (item.enum) {
+        return item.enum;
+      }
+    }
+  }
+
+  return undefined;
+}
+
 function ParamOption({ param }: ParamProps) {
-  if (param.schema?.type === "array" && param.schema.items?.enum) {
+  const schemaEnum = getSchemaEnum(param.schema);
+  const itemsEnum = getSchemaEnum(param.schema?.items);
+
+  if (param.schema?.type === "array" && itemsEnum) {
     return <ParamMultiSelectFormItem param={param} />;
   }
 
@@ -32,7 +57,7 @@ function ParamOption({ param }: ParamProps) {
     return <ParamArrayFormItem param={param} />;
   }
 
-  if (param.schema?.enum) {
+  if (schemaEnum) {
     return <ParamSelectFormItem param={param} />;
   }
 
