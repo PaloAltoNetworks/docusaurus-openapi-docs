@@ -114,7 +114,8 @@ async function makeRequest(
   request: sdk.Request,
   proxy: string | undefined,
   _body: Body,
-  timeout: number = DEFAULT_REQUEST_TIMEOUT
+  timeout: number = DEFAULT_REQUEST_TIMEOUT,
+  credentials?: RequestCredentials
 ) {
   const headers = request.toJSON().header;
 
@@ -252,6 +253,7 @@ async function makeRequest(
     method: request.method,
     headers: myHeaders,
     body: myBody,
+    ...(credentials && { credentials }),
   };
 
   let finalUrl = request.url.toString();

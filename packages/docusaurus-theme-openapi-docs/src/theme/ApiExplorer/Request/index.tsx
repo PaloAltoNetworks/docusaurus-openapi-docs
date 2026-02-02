@@ -43,6 +43,7 @@ function Request({ item }: { item: ApiItem }) {
   const { siteConfig } = useDocusaurusContext();
   const themeConfig = siteConfig.themeConfig as ThemeConfig;
   const requestTimeout = themeConfig.api?.requestTimeout;
+  const requestCredentials = themeConfig.api?.requestCredentials;
   // Frontmatter proxy (per-spec) takes precedence over theme config proxy (site-wide)
   const proxy = frontMatterProxy ?? themeConfig.api?.proxy;
 
@@ -171,7 +172,8 @@ function Request({ item }: { item: ApiItem }) {
         postmanRequest,
         proxy,
         body,
-        requestTimeout
+        requestTimeout,
+        requestCredentials
       );
       if (res.headers.get("content-type")?.includes("text/event-stream")) {
         await handleEventStream(res);
