@@ -253,11 +253,12 @@ petstore: {
 
 The `docusaurus-theme-openapi-docs` theme can be configured with the following options in `themeConfig.api`:
 
-| Name              | Type     | Default | Description                                                                                                                        |
-| ----------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `proxy`           | `string` | `null`  | _Optional:_ Site-wide proxy URL to prepend to base URL when performing API requests. Can be overridden per-spec via plugin config. |
-| `authPersistance` | `string` | `null`  | _Optional:_ Determines how auth credentials are persisted. Options: `"localStorage"`, `"sessionStorage"`, or `false` to disable.   |
-| `requestTimeout`  | `number` | `30000` | _Optional:_ Request timeout in milliseconds for API requests made from the browser. Defaults to 30 seconds.                        |
+| Name                 | Type     | Default         | Description                                                                                                                        |
+| -------------------- | -------- | --------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `proxy`              | `string` | `null`          | _Optional:_ Site-wide proxy URL to prepend to base URL when performing API requests. Can be overridden per-spec via plugin config. |
+| `authPersistance`    | `string` | `null`          | _Optional:_ Determines how auth credentials are persisted. Options: `"localStorage"`, `"sessionStorage"`, or `false` to disable.   |
+| `requestTimeout`     | `number` | `30000`         | _Optional:_ Request timeout in milliseconds for API requests made from the browser. Defaults to 30 seconds.                        |
+| `requestCredentials` | `string` | `"same-origin"` | _Optional:_ Controls cookie behavior for API requests. Options: `"omit"`, `"same-origin"`, or `"include"`.                         |
 
 Example:
 
@@ -269,6 +270,7 @@ Example:
       proxy: "https://cors.pan.dev",  // Site-wide proxy (can be overridden per-spec in plugin config)
       authPersistance: "localStorage",
       requestTimeout: 60000, // 60 seconds
+      requestCredentials: "omit", // Prevent cookies from being sent with requests
     },
   },
 }

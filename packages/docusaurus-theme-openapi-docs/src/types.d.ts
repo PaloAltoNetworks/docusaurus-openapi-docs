@@ -27,6 +27,13 @@ export interface ThemeConfig {
     authPersistence?: false | "sessionStorage" | "localStorage";
     /** Request timeout in milliseconds. Defaults to 30000 (30 seconds). */
     requestTimeout?: number;
+    /**
+     * Controls whether cookies and credentials are sent with API requests.
+     * - `"omit"`: Never send cookies (useful when docs are on same domain as app)
+     * - `"same-origin"`: Send cookies for same-origin requests (default browser behavior)
+     * - `"include"`: Always send cookies, even for cross-origin requests
+     */
+    requestCredentials?: "omit" | "same-origin" | "include";
   };
 }
 
