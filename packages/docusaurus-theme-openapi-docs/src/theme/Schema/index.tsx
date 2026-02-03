@@ -44,6 +44,47 @@ const mergeAllOf = (allOf: any) => {
   return mergedSchemas ?? {};
 };
 
+/**
+ * Recursively searches for a property in a schema, including nested
+ * oneOf, anyOf, and allOf structures. This is needed for discriminators
+ * where the property definition may be in a nested schema.
+ */
+const findProperty = (
+  schema: SchemaObject,
+  propertyName: string
+): SchemaObject | undefined => {
+  // Check direct properties first
+  if (schema.properties?.[propertyName]) {
+    return schema.properties[propertyName];
+  }
+
+  // Search in oneOf schemas
+  if (schema.oneOf) {
+    for (const subschema of schema.oneOf) {
+      const found = findProperty(subschema as SchemaObject, propertyName);
+      if (found) return found;
+    }
+  }
+
+  // Search in anyOf schemas
+  if (schema.anyOf) {
+    for (const subschema of schema.anyOf) {
+      const found = findProperty(subschema as SchemaObject, propertyName);
+      if (found) return found;
+    }
+  }
+
+  // Search in allOf schemas
+  if (schema.allOf) {
+    for (const subschema of schema.allOf) {
+      const found = findProperty(subschema as SchemaObject, propertyName);
+      if (found) return found;
+    }
+  }
+
+  return undefined;
+};
+
 interface MarkdownProps {
   text: string | undefined;
 }
@@ -313,16 +354,10 @@ const Properties: React.FC<SchemaProps> = ({
     discriminator["mapping"] = inferredMapping;
   }
   if (Object.keys(schema.properties as {}).length === 0) {
-    return (
-      <SchemaItem
-        collapsible={false}
-        name=""
-        required={false}
-        schemaName="object"
-        qualifierMessage={undefined}
-        schema={{}}
-      />
-    );
+    // If properties are empty (e.g., after discriminator property removal in oneOf),
+    // don't render an empty "object" placeholder - just return nothing
+    // This prevents confusing empty object displays in discriminated unions
+    return null;
   }
 
   return (
@@ -442,10 +477,9 @@ const DiscriminatorNode: React.FC<DiscriminatorNodeProps> = ({
   let discriminatedSchemas: any = {};
   let inferredMapping: any = {};
 
-  // default to empty object if no parent-level properties exist
-  const discriminatorProperty = schema.properties
-    ? schema.properties![discriminator.propertyName]
-    : {};
+  // Search for the discriminator property in the schema, including nested structures
+  const discriminatorProperty =
+    findProperty(schema, discriminator.propertyName) ?? {};
 
   if (schema.allOf) {
     const mergedSchemas = mergeAllOf(schema) as SchemaObject;
@@ -997,12 +1031,30 @@ const SchemaNode: React.FC<SchemaProps> = ({
     return null;
   }
 
-  if (schema.discriminator) {
-    const { discriminator } = schema;
+  // Merge allOf first if present, so discriminators in nested schemas are properly handled
+  // This ensures discriminator property lookups work for schemas like:
+  // allOf: [{ $ref: CommonProps }, { oneOf: [...], discriminator: {...} }]
+  let workingSchema = schema;
+  if (schema.allOf && !schema.discriminator) {
+    // Check if any allOf item has a discriminator that should be hoisted
+    const discriminatorItem = schema.allOf.find(
+      (item: any) => item.discriminator
+    );
+    if (discriminatorItem) {
+      workingSchema = mergeAllOf(schema) as SchemaObject;
+      // Preserve the discriminator from the nested schema
+      if (!workingSchema.discriminator && discriminatorItem.discriminator) {
+        workingSchema.discriminator = discriminatorItem.discriminator;
+      }
+    }
+  }
+
+  if (workingSchema.discriminator) {
+    const { discriminator } = workingSchema;
     return (
       <DiscriminatorNode
         discriminator={discriminator}
-        schema={schema}
+        schema={workingSchema}
         schemaType={schemaType}
       />
     );
