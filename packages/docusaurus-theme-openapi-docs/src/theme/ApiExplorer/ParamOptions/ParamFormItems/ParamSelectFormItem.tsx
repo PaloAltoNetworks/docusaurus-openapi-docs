@@ -10,6 +10,7 @@ import React from "react";
 import { translate } from "@docusaurus/Translate";
 import { ErrorMessage } from "@hookform/error-message";
 import FormSelect from "@theme/ApiExplorer/FormSelect";
+import { getSchemaEnum } from "@theme/ApiExplorer/ParamOptions";
 import { Param, setParam } from "@theme/ApiExplorer/ParamOptions/slice";
 import { useTypedDispatch } from "@theme/ApiItem/hooks";
 import { OPENAPI_FORM } from "@theme/translationIds";
@@ -29,7 +30,7 @@ export default function ParamSelectFormItem({ param }: ParamProps) {
 
   const dispatch = useTypedDispatch();
 
-  const options = param.schema?.enum ?? [];
+  const options = getSchemaEnum(param.schema) ?? [];
 
   return (
     <>

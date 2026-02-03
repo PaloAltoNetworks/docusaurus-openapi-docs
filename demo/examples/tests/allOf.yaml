@@ -3,6 +3,9 @@ info:
   title: AllOf Variations API
   description: Demonstrates various allOf schema combinations.
   version: 1.0.0
+servers:
+  - url: https://api.example.com/v1
+    description: Example API server
 tags:
   - name: allOf
     description: allOf tests
@@ -412,6 +415,66 @@ paths:
                 required:
                   - pet
 
+  /allof-enum-parameter:
+    get:
+      tags:
+        - allOf
+      summary: allOf with Enum Parameter
+      description: |
+        Demonstrates that enum parameters wrapped in allOf should render as a dropdown/combobox
+        instead of a text input.
+
+        Parameter Schema:
+        ```yaml
+        name: status
+        in: query
+        schema:
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/TaskStatus'
+        ```
+
+        Where TaskStatus is:
+        ```yaml
+        TaskStatus:
+          type: string
+          enum: [Pending, InProgress, Completed, Cancelled]
+        ```
+      parameters:
+        - name: status
+          in: query
+          description: Filter by task status (should show as dropdown)
+          schema:
+            nullable: true
+            allOf:
+              - $ref: "#/components/schemas/TaskStatus"
+        - name: priorities
+          in: query
+          description: Filter by multiple priorities (should show as multi-select)
+          schema:
+            type: array
+            items:
+              allOf:
+                - $ref: "#/components/schemas/Priority"
+      responses:
+        "200":
+          description: A list of tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    status:
+                      $ref: "#/components/schemas/TaskStatus"
+                    priority:
+                      $ref: "#/components/schemas/Priority"
+
   /allof-multiple-oneof:
     post:
       tags:
@@ -613,14 +676,24 @@ paths:
 
 components:
   schemas:
-    # Your existing schemas are integrated here.
-    ExistingSchema1:
-      type: object
-      properties: ...
+    # Enum schemas for allOf parameter tests
+    TaskStatus:
+      type: string
+      description: The status of a task
+      enum:
+        - Pending
+        - InProgress
+        - Completed
+        - Cancelled
 
-    ExistingSchema2:
-      type: object
-      properties: ...
+    Priority:
+      type: string
+      description: Priority level
+      enum:
+        - Low
+        - Medium
+        - High
+        - Critical
 
     # New schemas for Books demonstration
     BookBase:

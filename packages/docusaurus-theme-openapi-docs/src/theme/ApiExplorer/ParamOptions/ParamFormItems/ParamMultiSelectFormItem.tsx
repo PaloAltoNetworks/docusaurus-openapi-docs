@@ -10,6 +10,7 @@ import React from "react";
 import { translate } from "@docusaurus/Translate";
 import { ErrorMessage } from "@hookform/error-message";
 import FormMultiSelect from "@theme/ApiExplorer/FormMultiSelect";
+import { getSchemaEnum } from "@theme/ApiExplorer/ParamOptions";
 import { Param, setParam } from "@theme/ApiExplorer/ParamOptions/slice";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import { OPENAPI_FORM } from "@theme/translationIds";
@@ -29,7 +30,7 @@ export default function ParamMultiSelectFormItem({ param }: ParamProps) {
 
   const dispatch = useTypedDispatch();
 
-  const options = param.schema?.items?.enum ?? [];
+  const options = getSchemaEnum(param.schema?.items) ?? [];
 
   const pathParams = useTypedSelector((state: any) => state.params.path);
   const queryParams = useTypedSelector((state: any) => state.params.query);

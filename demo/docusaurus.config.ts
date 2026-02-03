@@ -366,7 +366,7 @@ const config: Config = {
               groupPathsBy: "tag",
               categoryLinkSource: "info",
             },
-            hideSendButton: true,
+            hideSendButton: false,
             showSchemas: true,
           } satisfies OpenApiPlugin.Options,
         } satisfies Plugin.PluginOptions,
