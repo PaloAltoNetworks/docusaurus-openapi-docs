@@ -179,6 +179,7 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 | `showInfoPage`       | `boolean` | `true`  | _Optional:_ If set to `false`, disables generation of the info page (overview page with API title and description).                                            |
 | `schemasOnly`        | `boolean` | `false` | _Optional:_ If set to `true`, generates only schema pages (no API endpoint pages). Also available as `--schemas-only` CLI flag.                                |
 | `externalJsonProps`  | `boolean` | `true`  | _Optional:_ If set to `false`, disables externalization of large JSON props. By default, large JSON is written to external files for better build performance. |
+| `specInfoPagePath`   | `string`  | `null`  | _Optional:_ The path the root information page will be rendered at. Defaults to kebab case `info.title`.                                                       |
 
 ### sidebarOptions
 

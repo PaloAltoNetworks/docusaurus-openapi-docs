@@ -62,6 +62,11 @@ export interface APIOptions {
    * @see https://github.com/facebook/docusaurus/discussions/11664
    */
   externalJsonProps?: boolean;
+  /**
+   * The path the root information page will be rendered at.
+   * Defaults to kebab case info.title
+   */
+  specInfoPagePath?: string;
 }
 
 export interface MarkdownGenerator {

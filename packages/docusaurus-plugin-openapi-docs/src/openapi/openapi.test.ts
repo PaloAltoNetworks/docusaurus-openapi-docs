@@ -95,4 +95,95 @@ describe("openapi", () => {
       expect(schemaItems[0].id).toBe("without-tags");
     });
   });
+
+  describe("specInfoPagePath", () => {
+    it("uses default kebab-cased info.title when specInfoPagePath is not provided", async () => {
+      const openapiData = {
+        openapi: "3.0.0",
+        info: {
+          title: "Company Foo",
+          version: "1.0.0",
+          description: "Test API",
+        },
+        paths: {},
+      };
+
+      const options: APIOptions = {
+        specPath: "dummy",
+        outputDir: "build",
+      };
+
+      const sidebarOptions = {} as SidebarOptions;
+
+      const [items] = await processOpenapiFile(
+        openapiData as any,
+        options,
+        sidebarOptions
+      );
+
+      const infoItem = items.find((item) => item.type === "info");
+      expect(infoItem).toBeDefined();
+      expect(infoItem?.id).toBe("company-foo");
+    });
+
+    it("uses custom specInfoPagePath when provided", async () => {
+      const openapiData = {
+        openapi: "3.0.0",
+        info: {
+          title: "Company Foo",
+          version: "1.0.0",
+          description: "Test API",
+        },
+        paths: {},
+      };
+
+      const options: APIOptions = {
+        specPath: "dummy",
+        outputDir: "build",
+        specInfoPagePath: "custom-api-intro",
+      };
+
+      const sidebarOptions = {} as SidebarOptions;
+
+      const [items] = await processOpenapiFile(
+        openapiData as any,
+        options,
+        sidebarOptions
+      );
+
+      const infoItem = items.find((item) => item.type === "info");
+      expect(infoItem).toBeDefined();
+      expect(infoItem?.id).toBe("custom-api-intro");
+    });
+
+    it("kebab-cases custom specInfoPagePath", async () => {
+      const openapiData = {
+        openapi: "3.0.0",
+        info: {
+          title: "Company Foo",
+          version: "1.0.0",
+          description: "Test API",
+        },
+        paths: {},
+      };
+
+      const options: APIOptions = {
+        specPath: "dummy",
+        outputDir: "build",
+        specInfoPagePath: "Custom API Introduction",
+      };
+
+      const sidebarOptions = {} as SidebarOptions;
+
+      const [items] = await processOpenapiFile(
+        openapiData as any,
+        options,
+        sidebarOptions
+      );
+
+      const infoItem = items.find((item) => item.type === "info");
+      expect(infoItem).toBeDefined();
+      expect(infoItem?.id).toBe("custom-api-introduction");
+    });
+  });
 });
