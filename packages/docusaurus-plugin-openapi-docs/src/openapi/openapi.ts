@@ -94,7 +94,7 @@ function createItems(
   // TODO: Find a better way to handle this
   let items: PartialPage<ApiMetadata>[] = [];
   const infoIdSpaces = openapiData.info.title.replace(" ", "-").toLowerCase();
-  const infoId = kebabCase(infoIdSpaces);
+  const infoId = kebabCase(options?.specInfoPagePath ?? infoIdSpaces);
   const schemasOnly = options?.schemasOnly === true;
 
   // Only create an info page if we have a description/title AND showInfoPage is not false
