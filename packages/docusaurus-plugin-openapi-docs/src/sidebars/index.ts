@@ -130,13 +130,29 @@ function groupByTags(
     output: string,
     doc: string | undefined
   ): string => {
-    if (doc && output.includes(doc)) {
-      return output.split(doc)[1]?.replace(/^\/+/g, "") ?? "";
+    // Normalize path: remove leading ./ and leading/trailing slashes
+    const normalize = (p: string): string =>
+      p.replace(/^\.\//, "").replace(/^\/+|\/+$/g, "");
+
+    const outputSegments = normalize(output).split("/").filter(Boolean);
+
+    if (doc) {
+      const docSegments = normalize(doc).split("/").filter(Boolean);
+
+      // Find where docSegments sequence appears in outputSegments
+      for (let i = 0; i <= outputSegments.length - docSegments.length; i++) {
+        const match = docSegments.every(
+          (seg, j) => outputSegments[i + j] === seg
+        );
+        if (match) {
+          // Return everything after the matched sequence
+          return outputSegments.slice(i + docSegments.length).join("/");
+        }
+      }
     }
-    const slashIndex = output.indexOf("/", 1);
-    return slashIndex === -1
-      ? ""
-      : output.slice(slashIndex).replace(/^\/+/g, "");
+
+    // Fallback: return everything after first segment
+    return outputSegments.slice(1).join("/");
   };
 
   const basePath = getBasePathFromOutput(outputDir, docPath);
