@@ -54,4 +54,36 @@ describe("sampleFromSchema", () => {
       expect(result).toBe("dog");
     });
   });
+
+  describe("allOf with incompatible types", () => {
+    it("should return undefined when allOf contains incompatible types", () => {
+      const schema: SchemaObject = {
+        allOf: [{ type: "string" }, { type: "integer" }],
+      };
+      const context = { type: "request" as const };
+
+      const result = sampleFromSchema(schema, context);
+
+      expect(result).toBeUndefined();
+    });
+
+    it("should handle incompatible allOf types in a property", () => {
+      const schema: SchemaObject = {
+        type: "object",
+        properties: {
+          numero: {
+            allOf: [{ type: "string" }, { type: "integer" }],
+          },
+          name: {
+            type: "string",
+          },
+        },
+      };
+      const context = { type: "request" as const };
+
+      const result = sampleFromSchema(schema, context);
+
+      expect(result.name).toBe("string");
+    });
+  });
 });

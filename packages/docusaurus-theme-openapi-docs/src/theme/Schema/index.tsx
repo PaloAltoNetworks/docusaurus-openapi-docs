@@ -41,7 +41,7 @@ const mergeAllOf = (allOf: any) => {
 
   const mergedSchemas = merge(allOf, { onMergeError });
 
-  return mergedSchemas;
+  return mergedSchemas ?? {};
 };
 
 interface MarkdownProps {
