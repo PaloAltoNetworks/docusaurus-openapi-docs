@@ -475,6 +475,41 @@ paths:
                     priority:
                       $ref: "#/components/schemas/Priority"
 
+  /allof-incompatible-types:
+    get:
+      tags:
+        - allOf
+      summary: allOf with Incompatible Types
+      description: |
+        Schema with a property whose allOf contains incompatible primitive types
+        (string and integer).
+
+        Schema:
+        ```yaml
+        type: object
+        properties:
+          numero:
+            allOf:
+              - type: string
+              - type: integer
+          name:
+            type: string
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numero:
+                    allOf:
+                      - type: string
+                      - type: integer
+                  name:
+                    type: string
+
   /allof-multiple-oneof:
     post:
       tags:
