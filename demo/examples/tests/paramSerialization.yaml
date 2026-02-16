@@ -122,6 +122,71 @@ paths:
         "200":
           description: Successful response
 
+  /api/resource:customVerb:
+    post:
+      tags:
+        - params
+      summary: Custom verb endpoint in path
+      description: |
+        Demonstrates a literal custom verb suffix in the path segment.
+        Example:
+        ```
+        Result: /api/resource:customVerb
+        ```
+      responses:
+        "200":
+          description: Successful response
+
+  /files/{name}.{ext}:
+    get:
+      tags:
+        - params
+      summary: Path parameters in the same segment
+      description: |
+        Demonstrates multiple path parameters in a single path segment.
+        Example:
+        ```
+        {name} = "report"
+        {ext} = "pdf"
+        Result: /files/report.pdf
+        ```
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: ext
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+
+  /jobs/{id}:cancel:
+    post:
+      tags:
+        - params
+      summary: Path template combined with custom verb
+      description: |
+        Demonstrates a path parameter with a verb-like suffix in the same segment.
+        Example:
+        ```
+        {id} = "123"
+        Result: /jobs/123:cancel
+        ```
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+
   /search:
     get:
       tags:
