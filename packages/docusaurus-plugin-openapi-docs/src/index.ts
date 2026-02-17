@@ -368,17 +368,25 @@ custom_edit_url: null
           let infoBasePath = `${outputDir}/${item.infoId}`;
           if (docRouteBasePath) {
             // Safely extract path segment, handling cases where docPath may not be in outputDir
-            const outputSegment =
-              docPath && outputDir.includes(docPath)
-                ? (outputDir.split(docPath)[1]?.replace(/^\/+/g, "") ?? "")
-                : outputDir
-                    .slice(outputDir.indexOf("/", 1))
-                    .replace(/^\/+/g, "");
-            infoBasePath =
-              `${docRouteBasePath}/${outputSegment}/${item.infoId}`.replace(
-                /^\/+/g,
-                ""
-              );
+            const normalize = (p: string): string =>
+              p.replace(/^\.\//, "").replace(/^\/+|\/+$/g, "");
+            const outputSegments = normalize(outputDir).split("/").filter(Boolean);
+            let outputSegment = outputSegments.slice(1).join("/"); // fallback
+            if (docPath) {
+              const docSegments = normalize(docPath).split("/").filter(Boolean);
+              for (let i = 0; i <= outputSegments.length - docSegments.length; i++) {
+                const match = docSegments.every(
+                  (seg, j) => outputSegments[i + j] === seg
+                );
+                if (match) {
+                  outputSegment = outputSegments.slice(i + docSegments.length).join("/");
+                  break;
+                }
+              }
+            }
+            infoBasePath = `${docRouteBasePath}/${outputSegment}/${item.infoId}`
+              .replace(/^\/+/g, "")
+              .replace(/\/+/g, "/");
           }
           if (item.infoId) item.infoPath = infoBasePath;
         }
