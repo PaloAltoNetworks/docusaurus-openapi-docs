@@ -44,6 +44,80 @@ const mergeAllOf = (allOf: any) => {
   return mergedSchemas ?? {};
 };
 
+/**
+ * Recursively searches for a property in a schema, including nested
+ * oneOf, anyOf, and allOf structures. This is needed for discriminators
+ * where the property definition may be in a nested schema.
+ */
+const findProperty = (
+  schema: SchemaObject,
+  propertyName: string
+): SchemaObject | undefined => {
+  // Check direct properties first
+  if (schema.properties?.[propertyName]) {
+    return schema.properties[propertyName];
+  }
+
+  // Search in oneOf schemas
+  if (schema.oneOf) {
+    for (const subschema of schema.oneOf) {
+      const found = findProperty(subschema as SchemaObject, propertyName);
+      if (found) return found;
+    }
+  }
+
+  // Search in anyOf schemas
+  if (schema.anyOf) {
+    for (const subschema of schema.anyOf) {
+      const found = findProperty(subschema as SchemaObject, propertyName);
+      if (found) return found;
+    }
+  }
+
+  // Search in allOf schemas
+  if (schema.allOf) {
+    for (const subschema of schema.allOf) {
+      const found = findProperty(subschema as SchemaObject, propertyName);
+      if (found) return found;
+    }
+  }
+
+  return undefined;
+};
+
+/**
+ * Recursively searches for a discriminator in a schema, including nested
+ * oneOf, anyOf, and allOf structures.
+ */
+const findDiscriminator = (schema: SchemaObject): any | undefined => {
+  if (schema.discriminator) {
+    return schema.discriminator;
+  }
+
+  if (schema.oneOf) {
+    for (const subschema of schema.oneOf) {
+      const found = findDiscriminator(subschema as SchemaObject);
+      if (found) return found;
+    }
+  }
+
+  if (schema.anyOf) {
+    for (const subschema of schema.anyOf) {
+      const found = findDiscriminator(subschema as SchemaObject);
+      if (found) return found;
+    }
+  }
+
+  if (schema.allOf) {
+    for (const subschema of schema.allOf) {
+      const found = findDiscriminator(subschema as SchemaObject);
+      if (found) return found;
+    }
+  }
+
+  return undefined;
+};
+
 interface MarkdownProps {
   text: string | undefined;
 }
@@ -313,6 +387,11 @@ const Properties: React.FC<SchemaProps> = ({
     discriminator["mapping"] = inferredMapping;
   }
   if (Object.keys(schema.properties as {}).length === 0) {
+    // Hide placeholder only for discriminator cleanup artifacts; preserve
+    // empty object rendering for schemas that intentionally define no properties.
+    if (discriminator) {
+      return null;
+    }
     return (
       <SchemaItem
         collapsible={false}
@@ -442,10 +521,9 @@ const DiscriminatorNode: React.FC<DiscriminatorNodeProps> = ({
   let discriminatedSchemas: any = {};
   let inferredMapping: any = {};
 
-  // default to empty object if no parent-level properties exist
-  const discriminatorProperty = schema.properties
-    ? schema.properties![discriminator.propertyName]
-    : {};
+  // Search for the discriminator property in the schema, including nested structures
+  const discriminatorProperty =
+    findProperty(schema, discriminator.propertyName) ?? {};
 
   if (schema.allOf) {
     const mergedSchemas = mergeAllOf(schema) as SchemaObject;
@@ -997,12 +1075,24 @@ const SchemaNode: React.FC<SchemaProps> = ({
     return null;
   }
 
-  if (schema.discriminator) {
-    const { discriminator } = schema;
+  // Resolve discriminator recursively so nested oneOf/anyOf/allOf compositions
+  // can still render discriminator tabs.
+  let workingSchema = schema;
+  const resolvedDiscriminator =
+    schema.discriminator ?? findDiscriminator(schema);
+  if (schema.allOf && !schema.discriminator && resolvedDiscriminator) {
+    workingSchema = mergeAllOf(schema) as SchemaObject;
+  }
+  if (!workingSchema.discriminator && resolvedDiscriminator) {
+    workingSchema.discriminator = resolvedDiscriminator;
+  }
+
+  if (workingSchema.discriminator) {
+    const { discriminator } = workingSchema;
     return (
       <DiscriminatorNode
         discriminator={discriminator}
-        schema={schema}
+        schema={workingSchema}
         schemaType={schemaType}
       />
     );
