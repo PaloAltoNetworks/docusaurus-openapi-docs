@@ -510,6 +510,39 @@ paths:
                   name:
                     type: string
 
+  /allof-empty-object-properties:
+    get:
+      tags:
+        - allOf
+      summary: allOf with explicit empty object properties
+      description: |
+        Demonstrates an intentional empty object schema (properties: {}) to ensure
+        the renderer still shows the object shape rather than hiding it.
+
+        Schema:
+        ```yaml
+        type: object
+        properties:
+          metadata:
+            type: object
+            properties: {}
+          name:
+            type: string
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  metadata:
+                    type: object
+                    properties: {}
+                  name:
+                    type: string
+
   /allof-multiple-oneof:
     post:
       tags:

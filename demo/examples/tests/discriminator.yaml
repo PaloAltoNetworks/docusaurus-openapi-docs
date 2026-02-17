@@ -417,6 +417,32 @@ paths:
               schema:
                 $ref: "#/components/schemas/DoublyNestedBase"
 
+  /discriminator-deeply-nested-allof:
+    post:
+      tags:
+        - discriminator
+      summary: Deeply Nested Discriminator in allOf chains
+      description: |
+        Tests discriminator discovery through nested allOf chains:
+        - top-level allOf
+        - inner allOf
+        - oneOf with discriminator
+
+        This validates recursive discriminator lookup beyond first-level allOf items.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeepNestedDiscriminatorBase"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeepNestedDiscriminatorBase"
+
 components:
   schemas:
     BaseBasic:
@@ -663,6 +689,57 @@ components:
             mapping:
               variant-a: "#/components/schemas/NestedVariantA"
               variant-b: "#/components/schemas/NestedVariantB"
+
+    DeepNestedDiscriminatorBase:
+      allOf:
+        - $ref: "#/components/schemas/CommonProps"
+        - allOf:
+            - $ref: "#/components/schemas/DeepLayerCommon"
+            - oneOf:
+                - $ref: "#/components/schemas/DeepNestedVariantA"
+                - $ref: "#/components/schemas/DeepNestedVariantB"
+              discriminator:
+                propertyName: deepVariantType
+                mapping:
+                  deep-a: "#/components/schemas/DeepNestedVariantA"
+                  deep-b: "#/components/schemas/DeepNestedVariantB"
+
+    DeepLayerCommon:
+      type: object
+      properties:
+        layer:
+          type: string
+          enum: ["inner"]
+      required:
+        - layer
+
+    DeepNestedVariantA:
+      type: object
+      properties:
+        deepVariantType:
+          type: string
+          enum: ["deep-a"]
+        deepAConfig:
+          type: object
+          properties:
+            enabled:
+              type: boolean
+      required:
+        - deepVariantType
+
+    DeepNestedVariantB:
+      type: object
+      properties:
+        deepVariantType:
+          type: string
+          enum: ["deep-b"]
+        deepBConfig:
+          type: object
+          properties:
+            threshold:
+              type: number
+      required:
+        - deepVariantType
 
     NestedVariantA:
       type: object

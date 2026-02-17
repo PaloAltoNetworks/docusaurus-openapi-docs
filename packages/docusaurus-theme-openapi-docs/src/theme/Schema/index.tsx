@@ -85,6 +85,39 @@ const findProperty = (
   return undefined;
 };
 
+/**
+ * Recursively searches for a discriminator in a schema, including nested
+ * oneOf, anyOf, and allOf structures.
+ */
+const findDiscriminator = (schema: SchemaObject): any | undefined => {
+  if (schema.discriminator) {
+    return schema.discriminator;
+  }
+
+  if (schema.oneOf) {
+    for (const subschema of schema.oneOf) {
+      const found = findDiscriminator(subschema as SchemaObject);
+      if (found) return found;
+    }
+  }
+
+  if (schema.anyOf) {
+    for (const subschema of schema.anyOf) {
+      const found = findDiscriminator(subschema as SchemaObject);
+      if (found) return found;
+    }
+  }
+
+  if (schema.allOf) {
+    for (const subschema of schema.allOf) {
+      const found = findDiscriminator(subschema as SchemaObject);
+      if (found) return found;
+    }
+  }
+
+  return undefined;
+};
+
 interface MarkdownProps {
   text: string | undefined;
 }
@@ -354,10 +387,21 @@ const Properties: React.FC<SchemaProps> = ({
     discriminator["mapping"] = inferredMapping;
   }
   if (Object.keys(schema.properties as {}).length === 0) {
-    // If properties are empty (e.g., after discriminator property removal in oneOf),
-    // don't render an empty "object" placeholder - just return nothing
-    // This prevents confusing empty object displays in discriminated unions
-    return null;
+    // Hide placeholder only for discriminator cleanup artifacts; preserve
+    // empty object rendering for schemas that intentionally define no properties.
+    if (discriminator) {
+      return null;
+    }
+    return (
+      <SchemaItem
+        collapsible={false}
+        name=""
+        required={false}
+        schemaName="object"
+        qualifierMessage={undefined}
+        schema={{}}
+      />
+    );
   }
 
   return (
@@ -1031,22 +1075,16 @@ const SchemaNode: React.FC<SchemaProps> = ({
     return null;
   }
 
-  // Merge allOf first if present, so discriminators in nested schemas are properly handled
-  // This ensures discriminator property lookups work for schemas like:
-  // allOf: [{ $ref: CommonProps }, { oneOf: [...], discriminator: {...} }]
+  // Resolve discriminator recursively so nested oneOf/anyOf/allOf compositions
+  // can still render discriminator tabs.
   let workingSchema = schema;
-  if (schema.allOf && !schema.discriminator) {
-    // Check if any allOf item has a discriminator that should be hoisted
-    const discriminatorItem = schema.allOf.find(
-      (item: any) => item.discriminator
-    );
-    if (discriminatorItem) {
-      workingSchema = mergeAllOf(schema) as SchemaObject;
-      // Preserve the discriminator from the nested schema
-      if (!workingSchema.discriminator && discriminatorItem.discriminator) {
-        workingSchema.discriminator = discriminatorItem.discriminator;
-      }
-    }
+  const resolvedDiscriminator =
+    schema.discriminator ?? findDiscriminator(schema);
+  if (schema.allOf && !schema.discriminator && resolvedDiscriminator) {
+    workingSchema = mergeAllOf(schema) as SchemaObject;
+  }
+  if (!workingSchema.discriminator && resolvedDiscriminator) {
+    workingSchema.discriminator = resolvedDiscriminator;
   }
 
   if (workingSchema.discriminator) {
