@@ -32,7 +32,7 @@ export function mergeAllOf(allOf: SchemaObject) {
   };
 
   const mergedSchemas = merge(allOf, { onMergeError }) as SchemaObject;
-  return mergedSchemas;
+  return mergedSchemas ?? ({} as SchemaObject);
 }
 
 /**
