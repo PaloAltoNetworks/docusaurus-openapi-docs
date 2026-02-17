@@ -561,28 +561,44 @@ function createItems(
 /**
  * Attach Postman Request objects to the corresponding ApiItems.
  */
+function pathTemplateToRegex(pathTemplate: string): RegExp {
+  const pathWithTemplateTokens = pathTemplate.replace(
+    /\{[^}]+\}/g,
+    "__OPENAPI_PATH_PARAM__"
+  );
+  const escapedPathTemplate = pathWithTemplateTokens.replace(
+    /[.*+?^${}()|[\]\\]/g,
+    "\\$&"
+  );
+  const templatePattern = escapedPathTemplate.replace(
+    /__OPENAPI_PATH_PARAM__/g,
+    "[^/]+"
+  );
+  return new RegExp(`^${templatePattern}$`);
+}
+
 function bindCollectionToApiItems(
   items: ApiMetadata[],
   postmanCollection: sdk.Collection
 ) {
+  const apiMatchers = items
+    .filter((item): item is ApiPageMetadata => item.type === "api")
+    .map((item) => ({
+      apiItem: item,
+      method: item.api.method.toLowerCase(),
+      pathMatcher: pathTemplateToRegex(item.api.path),
+    }));
+
   postmanCollection.forEachItem((item: any) => {
     const method = item.request.method.toLowerCase();
-    const path = item.request.url
-      .getPath({ unresolved: true }) // unresolved returns "/:variableName" instead of "/<type>"
-      .replace(/(?<![a-z0-9-_]+):([a-z0-9-_]+)/gi, "{$1}"); // replace "/:variableName" with "/{variableName}"
-    const apiItem = items.find((item) => {
-      if (
-        item.type === "info" ||
-        item.type === "tag" ||
-        item.type === "schema"
-      ) {
-        return false;
-      }
-      return item.api.path === path && item.api.method === method;
-    });
+    const postmanPath = item.request.url.getPath({ unresolved: true });
+    const match = apiMatchers.find(
+      ({ method: itemMethod, pathMatcher }) =>
+        itemMethod === method && pathMatcher.test(postmanPath)
+    );
 
-    if (apiItem?.type === "api") {
-      apiItem.api.postman = item.request;
+    if (match) {
+      match.apiItem.api.postman = item.request;
     }
   });
 }
