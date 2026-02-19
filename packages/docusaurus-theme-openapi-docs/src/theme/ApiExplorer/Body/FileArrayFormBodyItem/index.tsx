@@ -43,11 +43,6 @@ export default function FileArrayFormBodyItem({
       return;
     }
 
-    let maxIndex = 0;
-
-    newItems.keys().forEach((item) => {
-      maxIndex = item > maxIndex ? item : maxIndex;
-    });
     newItems.set(index, {
       src: `/path/to/${file.name}`,
       content: file,
