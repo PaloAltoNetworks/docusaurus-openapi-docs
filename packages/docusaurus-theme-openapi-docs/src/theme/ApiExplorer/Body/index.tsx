@@ -316,22 +316,86 @@ function Body({
   ) {
     return (
       <FormItem className="openapi-explorer__form-item-body-container">
-        {Object.entries(schema.properties ?? {}).map(([key, val]: any) => {
-          return (
-            <FormItem key={key}>
-              <FormBodyItem
-                schemaObject={val}
-                id={key}
-                schema={schema}
-                label={key}
-                required={
-                  Array.isArray(schema.required) &&
-                  schema.required.includes(key)
+        <SchemaTabs className="openapi-tabs__schema" lazy>
+          {/* @ts-ignore */}
+          <TabItem
+            label={translate({
+              id: OPENAPI_BODY.EXAMPLE_FROM_SCHEMA,
+              message: "Example (from schema)",
+            })}
+            value="Example (from schema)"
+            default
+          >
+            {Object.entries(schema.properties ?? {}).map(([key, val]: any) => {
+              return (
+                <FormItem key={key}>
+                  <FormBodyItem
+                    schemaObject={val}
+                    id={key}
+                    schema={schema}
+                    exampleValue={val.example}
+                    label={key}
+                    required={
+                      Array.isArray(schema.required) &&
+                      schema.required.includes(key)
+                    }
+                  ></FormBodyItem>
+                </FormItem>
+              );
+            })}
+          </TabItem>
+          {example && (
+            // @ts-ignore
+            <TabItem label="Example" value="example">
+              {Object.entries(schema.properties ?? {}).map(
+                ([schemaKey, schemaVal]: any) => {
+                  return (
+                    <FormItem key={schemaKey}>
+                      <FormBodyItem
+                        schemaObject={schemaVal}
+                        id={schemaKey}
+                        schema={schema}
+                        exampleValue={example[schemaKey]}
+                        label={schemaKey}
+                        required={
+                          Array.isArray(schema.required) &&
+                          schema.required.includes(schemaKey)
+                        }
+                      ></FormBodyItem>
+                    </FormItem>
+                  );
                 }
-              />
-            </FormItem>
-          );
-        })}
+              )}
+            </TabItem>
+          )}
+          {examples &&
+            Object.entries(examples).map(([key, value]) => {
+              return (
+                // @ts-ignore
+                <TabItem label={key} value={key} key={key}>
+                  {Object.entries(schema.properties ?? {}).map(
+                    ([schemaKey, schemaVal]: any) => {
+                      return (
+                        <FormItem key={schemaKey}>
+                          <FormBodyItem
+                            schemaObject={schemaVal}
+                            id={schemaKey}
+                            schema={schema}
+                            exampleValue={value.value?.[schemaKey]}
+                            label={schemaKey}
+                            required={
+                              Array.isArray(schema.required) &&
+                              schema.required.includes(schemaKey)
+                            }
+                          ></FormBodyItem>
+                        </FormItem>
+                      );
+                    }
+                  )}
+                </TabItem>
+              );
+            })}
+        </SchemaTabs>
       </FormItem>
     );
   }
