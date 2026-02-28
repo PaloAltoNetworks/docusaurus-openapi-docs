@@ -62,7 +62,7 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-testing-library": "^4.12.4",
-    "fast-xml-parser": "^4.5.1",
+    "fast-xml-parser": "^5.3.8",
     "husky": "^7.0.2",
     "jest": "^27.3.1",
     "lerna": "^8.1.2",
