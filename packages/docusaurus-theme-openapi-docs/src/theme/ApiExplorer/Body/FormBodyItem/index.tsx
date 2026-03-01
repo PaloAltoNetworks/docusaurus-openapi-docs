@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import FormFileUpload from "@theme/ApiExplorer/FormFileUpload";
 import FormSelect from "@theme/ApiExplorer/FormSelect";
@@ -21,14 +21,34 @@ interface FormBodyItemProps {
   schemaObject: SchemaObject;
   id: string;
   schema: SchemaObject;
+  exampleValue?: SchemaObject["example"];
 }
 
 export default function FormBodyItem({
   schemaObject,
   id,
   schema,
+  exampleValue,
 }: FormBodyItemProps): React.JSX.Element {
   const dispatch = useTypedDispatch();
+  const [value, setValue] = useState(() => {
+    let initialValue = exampleValue ?? "";
+
+    if (schemaObject.type === "object" && exampleValue) {
+      initialValue = JSON.stringify(exampleValue, null, 2);
+    }
+
+    return initialValue;
+  });
+
+  useEffect(() => {
+    if (value) {
+      dispatch(setStringFormBody({ key: id, value }));
+    } else {
+      dispatch(clearFormBodyKey(id));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (
     schemaObject.type === "array" &&
@@ -62,23 +82,14 @@ export default function FormBodyItem({
     );
   }
 
-  if (
-    schemaObject.type === "object" &&
-    (schemaObject.example || schemaObject.examples)
-  ) {
-    const objectExample = JSON.stringify(
-      schemaObject.example ?? schemaObject.examples[0],
-      null,
-      2
-    );
-
+  if (schemaObject.type === "object") {
     return (
       <LiveApp
         action={(code: string) =>
           dispatch(setStringFormBody({ key: id, value: code }))
         }
       >
-        {objectExample}
+        {value}
       </LiveApp>
     );
   }
@@ -89,9 +100,11 @@ export default function FormBodyItem({
   ) {
     return (
       <FormSelect
+        value={value}
         options={["---", ...schemaObject.enum]}
         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
           const val = e.target.value;
+          setValue(val);
           if (val === "---") {
             dispatch(clearFormBodyKey(id));
           } else {
@@ -109,12 +122,14 @@ export default function FormBodyItem({
   // TODO: support all the other types.
   return (
     <FormTextInput
+      value={value}
       paramName={id}
       isRequired={
         Array.isArray(schema.required) && schema.required.includes(id)
       }
       placeholder={schemaObject.description || id}
       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+        setValue(e.target.value);
         dispatch(setStringFormBody({ key: id, value: e.target.value }));
       }}
     />
