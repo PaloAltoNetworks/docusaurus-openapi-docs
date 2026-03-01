@@ -364,7 +364,7 @@ function Body({
                         schemaObject={schemaVal}
                         id={schemaKey}
                         schema={schema}
-                        exampleValue={example.value[schemaKey]}
+                        exampleValue={example[schemaKey]}
                       ></FormBodyItem>
                     </FormItem>
                   );
