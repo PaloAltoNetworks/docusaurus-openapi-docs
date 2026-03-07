@@ -23,8 +23,9 @@ function ContentType() {
   }
 
   return (
-    <FormItem label="Content-Type">
+    <FormItem>
       <FormSelect
+        label="Content-Type"
         value={value}
         options={options}
         onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>

@@ -8,6 +8,7 @@
 import React from "react";
 
 import FormFileUpload from "@theme/ApiExplorer/FormFileUpload";
+import FormLabel from "@theme/ApiExplorer/FormLabel";
 import FormSelect from "@theme/ApiExplorer/FormSelect";
 import FormTextInput from "@theme/ApiExplorer/FormTextInput";
 import LiveApp from "@theme/ApiExplorer/LiveEditor";
@@ -21,12 +22,16 @@ interface FormBodyItemProps {
   schemaObject: SchemaObject;
   id: string;
   schema: SchemaObject;
+  label?: string;
+  required?: boolean;
 }
 
 export default function FormBodyItem({
   schemaObject,
   id,
   schema,
+  label,
+  required,
 }: FormBodyItemProps): React.JSX.Element {
   const dispatch = useTypedDispatch();
 
@@ -35,30 +40,36 @@ export default function FormBodyItem({
     schemaObject.items?.format === "binary"
   ) {
     return (
-      <FileArrayFormBodyItem id={id} description={schemaObject.description} />
+      <>
+        {label && <FormLabel label={label} required={required} />}
+        <FileArrayFormBodyItem id={id} description={schemaObject.description} />
+      </>
     );
   }
 
   if (schemaObject.format === "binary") {
     return (
-      <FormFileUpload
-        placeholder={schemaObject.description || id}
-        onChange={(file: any) => {
-          if (file === undefined) {
-            dispatch(clearFormBodyKey(id));
-            return;
-          }
-          dispatch(
-            setFileFormBody({
-              key: id,
-              value: {
-                src: `/path/to/${file.name}`,
-                content: file,
-              },
-            })
-          );
-        }}
-      />
+      <>
+        {label && <FormLabel label={label} required={required} />}
+        <FormFileUpload
+          placeholder={schemaObject.description || id}
+          onChange={(file: any) => {
+            if (file === undefined) {
+              dispatch(clearFormBodyKey(id));
+              return;
+            }
+            dispatch(
+              setFileFormBody({
+                key: id,
+                value: {
+                  src: `/path/to/${file.name}`,
+                  content: file,
+                },
+              })
+            );
+          }}
+        />
+      </>
     );
   }
 
@@ -73,13 +84,16 @@ export default function FormBodyItem({
     );
 
     return (
-      <LiveApp
-        action={(code: string) =>
-          dispatch(setStringFormBody({ key: id, value: code }))
-        }
-      >
-        {objectExample}
-      </LiveApp>
+      <>
+        {label && <FormLabel label={label} required={required} />}
+        <LiveApp
+          action={(code: string) =>
+            dispatch(setStringFormBody({ key: id, value: code }))
+          }
+        >
+          {objectExample}
+        </LiveApp>
+      </>
     );
   }
 
@@ -89,6 +103,8 @@ export default function FormBodyItem({
   ) {
     return (
       <FormSelect
+        label={label}
+        required={required}
         options={["---", ...schemaObject.enum]}
         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
           const val = e.target.value;
@@ -109,6 +125,8 @@ export default function FormBodyItem({
   // TODO: support all the other types.
   return (
     <FormTextInput
+      label={label}
+      required={required}
       paramName={id}
       isRequired={
         Array.isArray(schema.required) && schema.required.includes(id)

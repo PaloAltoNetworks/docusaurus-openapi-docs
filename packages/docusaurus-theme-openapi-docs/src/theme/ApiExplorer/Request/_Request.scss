@@ -48,6 +48,17 @@
 }
 
 .openapi-explorer__expand-details-btn {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding: 0;
+  cursor: pointer;
+  border: 0px solid transparent;
+  background-color: transparent;
+  text-transform: inherit;
+  font-weight: inherit;
+  font-size: inherit;
+
   &:hover {
     cursor: pointer;
   }

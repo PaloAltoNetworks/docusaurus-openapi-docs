@@ -5,8 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React from "react";
+import React, { useId } from "react";
 
+import FormLabel from "@theme/ApiExplorer/FormLabel";
 import clsx from "clsx";
 
 export interface Props {
@@ -14,9 +15,22 @@ export interface Props {
   options: string[];
   onChange?: React.ChangeEventHandler<HTMLSelectElement>;
   showErrors?: boolean;
+  label?: string;
+  type?: string;
+  required?: boolean;
 }
 
-function FormMultiSelect({ value, options, onChange, showErrors }: Props) {
+function FormMultiSelect({
+  value,
+  options,
+  onChange,
+  showErrors,
+  label,
+  type,
+  required,
+}: Props) {
+  const id = useId();
+
   if (options.length === 0) {
     return null;
   }
@@ -33,24 +47,30 @@ function FormMultiSelect({ value, options, onChange, showErrors }: Props) {
   }
 
   return (
-    <select
-      style={{ height: height }}
-      className={clsx("openapi-explorer__multi-select-input", {
-        error: showErrors,
-      })}
-      value={value}
-      onChange={onChange}
-      size={Math.min(6, options.length + 1)}
-      multiple
-    >
-      {options.map((option) => {
-        return (
-          <option key={option} value={option}>
-            {option}
-          </option>
-        );
-      })}
-    </select>
+    <>
+      {label && (
+        <FormLabel htmlFor={id} label={label} type={type} required={required} />
+      )}
+      <select
+        id={label ? id : undefined}
+        style={{ height: height }}
+        className={clsx("openapi-explorer__multi-select-input", {
+          error: showErrors,
+        })}
+        value={value}
+        onChange={onChange}
+        size={Math.min(6, options.length + 1)}
+        multiple
+      >
+        {options.map((option) => {
+          return (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          );
+        })}
+      </select>
+    </>
   );
 }
 
