@@ -84,7 +84,8 @@ function Response({ item }: { item: ApiItem }) {
         <span className="openapi-explorer__response-title">
           {translate({ id: OPENAPI_RESPONSE.TITLE, message: "Response" })}
         </span>
-        <span
+        <button
+          type="button"
           className="openapi-explorer__response-clear-btn"
           onClick={() => {
             dispatch(clearResponse());
@@ -93,7 +94,7 @@ function Response({ item }: { item: ApiItem }) {
           }}
         >
           {translate({ id: OPENAPI_RESPONSE.CLEAR, message: "Clear" })}
-        </span>
+        </button>
       </div>
       <div
         style={{

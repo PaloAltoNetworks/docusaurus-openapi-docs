@@ -318,18 +318,17 @@ function Body({
       <FormItem className="openapi-explorer__form-item-body-container">
         {Object.entries(schema.properties ?? {}).map(([key, val]: any) => {
           return (
-            <FormItem
-              key={key}
-              label={key}
-              required={
-                Array.isArray(schema.required) && schema.required.includes(key)
-              }
-            >
+            <FormItem key={key}>
               <FormBodyItem
                 schemaObject={val}
                 id={key}
                 schema={schema}
-              ></FormBodyItem>
+                label={key}
+                required={
+                  Array.isArray(schema.required) &&
+                  schema.required.includes(key)
+                }
+              />
             </FormItem>
           );
         })}

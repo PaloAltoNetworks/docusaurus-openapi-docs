@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import { translate } from "@docusaurus/Translate";
 import { ErrorMessage } from "@hookform/error-message";
 import { nanoid } from "@reduxjs/toolkit";
+import FormLabel from "@theme/ApiExplorer/FormLabel";
 import FormSelect from "@theme/ApiExplorer/FormSelect";
 import FormTextInput from "@theme/ApiExplorer/FormTextInput";
 import { Param, setParam } from "@theme/ApiExplorer/ParamOptions/slice";
@@ -19,6 +20,9 @@ import { Controller, useFormContext } from "react-hook-form";
 
 export interface ParamProps {
   param: Param;
+  label?: string;
+  type?: string;
+  required?: boolean;
 }
 
 function ArrayItem({
@@ -31,6 +35,7 @@ function ArrayItem({
   if (param.schema?.items?.type === "boolean") {
     return (
       <FormSelect
+        ariaLabel={param.description || param.name}
         options={["---", "true", "false"]}
         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
           const val = e.target.value;
@@ -52,7 +57,12 @@ function ArrayItem({
   );
 }
 
-export default function ParamArrayFormItem({ param }: ParamProps) {
+export default function ParamArrayFormItem({
+  param,
+  label,
+  type,
+  required,
+}: ParamProps) {
   const [items, setItems] = useState<{ id: string; value?: string }[]>([]);
   const dispatch = useTypedDispatch();
 
@@ -122,6 +132,7 @@ export default function ParamArrayFormItem({ param }: ParamProps) {
 
   return (
     <>
+      {label && <FormLabel label={label} type={type} required={required} />}
       <Controller
         control={control}
         rules={{
@@ -145,6 +156,7 @@ export default function ParamArrayFormItem({ param }: ParamProps) {
                 <button
                   className="openapi-explorer__delete-btn"
                   onClick={handleDeleteItem(item)}
+                  aria-label="Delete"
                 >
                   <svg
                     focusable="false"
@@ -157,7 +169,6 @@ export default function ParamArrayFormItem({ param }: ParamProps) {
                     aria-hidden="true"
                   >
                     <path d="M24 9.4L22.6 8 16 14.6 9.4 8 8 9.4 14.6 16 8 22.6 9.4 24 16 17.4 22.6 24 24 22.6 17.4 16 24 9.4z"></path>
-                    <title>Delete</title>
                   </svg>
                 </button>
               </div>

@@ -17,9 +17,17 @@ import { Controller, useFormContext } from "react-hook-form";
 
 export interface ParamProps {
   param: Param;
+  label?: string;
+  type?: string;
+  required?: boolean;
 }
 
-export default function ParamBooleanFormItem({ param }: ParamProps) {
+export default function ParamBooleanFormItem({
+  param,
+  label,
+  type,
+  required,
+}: ParamProps) {
   const dispatch = useTypedDispatch();
 
   const {
@@ -44,6 +52,9 @@ export default function ParamBooleanFormItem({ param }: ParamProps) {
         name="paramBoolean"
         render={({ field: { onChange } }) => (
           <FormSelect
+            label={label}
+            type={type}
+            required={required}
             options={["---", "true", "false"]}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
               const val = e.target.value;

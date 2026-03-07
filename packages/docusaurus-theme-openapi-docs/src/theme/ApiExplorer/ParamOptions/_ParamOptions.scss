@@ -63,14 +63,9 @@
   margin-top: calc(var(--ifm-pre-padding) / 2);
   background-color: var(--openapi-input-background);
   border: none;
-  outline: none;
   color: var(--ifm-pre-color);
   border-radius: 4px;
   margin-left: 4px;
-
-  &:focus {
-    outline: 0;
-  }
 
   &:active {
     box-shadow: inset 0px 0px 0px 2px var(--openapi-input-border);
@@ -100,10 +95,6 @@
   &:hover {
     color: var(--openapi-inverse-color);
     background-color: var(--openapi-input-border);
-  }
-
-  &:focus {
-    outline: 0;
   }
 
   &:active {
