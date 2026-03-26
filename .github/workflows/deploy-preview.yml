@@ -1,4 +1,4 @@
-name: "Deploy Preview"
+name: "Deploy Preview" # test: verify Firebase ADC credentials work without firebaseServiceAccount input
 
 on:
   pull_request_target:
