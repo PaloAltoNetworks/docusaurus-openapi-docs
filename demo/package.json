@@ -25,7 +25,7 @@
     "@docusaurus/faster": "3.9.2",
     "@docusaurus/plugin-google-gtag": "3.9.2",
     "@docusaurus/preset-classic": "3.9.2",
-    "clsx": "^1.1.1",
+    "clsx": "^2.1.1",
     "docusaurus-plugin-openapi-docs": "^4.6.0",
     "docusaurus-theme-openapi-docs": "^4.6.0",
     "prism-react-renderer": "^2.3.0",
