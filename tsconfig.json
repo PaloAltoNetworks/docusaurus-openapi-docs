@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "rootDir": ".",
+    "target": "ES2019",
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "noEmit": true,
