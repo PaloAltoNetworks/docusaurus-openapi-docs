@@ -18,13 +18,15 @@ export interface Props {
 }
 
 function FormLabel({ htmlFor, label, type, required }: Props) {
-  const LabelTag = htmlFor ? "label" : "span";
-
   return (
     <>
-      <LabelTag className="openapi-explorer__form-item-label" htmlFor={htmlFor}>
-        {label}
-      </LabelTag>
+      {htmlFor ? (
+        <label className="openapi-explorer__form-item-label" htmlFor={htmlFor}>
+          {label}
+        </label>
+      ) : (
+        <span className="openapi-explorer__form-item-label">{label}</span>
+      )}
       {type && <span style={{ opacity: 0.6 }}> — {type}</span>}
       {required && (
         <span className="openapi-schema__required">
