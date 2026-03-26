@@ -18,9 +18,17 @@ import { Controller, useFormContext } from "react-hook-form";
 
 export interface ParamProps {
   param: Param;
+  label?: string;
+  type?: string;
+  required?: boolean;
 }
 
-export default function ParamMultiSelectFormItem({ param }: ParamProps) {
+export default function ParamMultiSelectFormItem({
+  param,
+  label,
+  type,
+  required,
+}: ParamProps) {
   const {
     control,
     formState: { errors },
@@ -75,6 +83,9 @@ export default function ParamMultiSelectFormItem({ param }: ParamProps) {
         name="paramMultiSelect"
         render={({ field: { onChange } }) => (
           <FormMultiSelect
+            label={label}
+            type={type}
+            required={required}
             options={options as string[]}
             onChange={(e: any) => handleChange(e, onChange)}
             showErrors={!!showErrorMessage}

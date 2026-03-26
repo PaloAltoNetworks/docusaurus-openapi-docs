@@ -6,7 +6,7 @@
  * ========================================================================== */
 
 // @ts-nocheck
-import React, { useState } from "react";
+import React, { useState, useId } from "react";
 
 import { useDoc } from "@docusaurus/plugin-content-docs/client";
 import { translate } from "@docusaurus/Translate";
@@ -66,6 +66,8 @@ function Request({ item }: { item: ApiItem }) {
   const [expandBody, setExpandBody] = useState(true);
   const [expandParams, setExpandParams] = useState(true);
   const [expandServer, setExpandServer] = useState(true);
+
+  const serverLabelId = useId();
 
   const allParams = [
     ...pathParams,
@@ -251,7 +253,8 @@ function Request({ item }: { item: ApiItem }) {
             })}
           </span>
           {allDetailsExpanded ? (
-            <span
+            <button
+              type="button"
               className="openapi-explorer__expand-details-btn"
               onClick={collapseAllDetails}
             >
@@ -259,9 +262,10 @@ function Request({ item }: { item: ApiItem }) {
                 id: OPENAPI_REQUEST.COLLAPSE_ALL,
                 message: "Collapse all",
               })}
-            </span>
+            </button>
           ) : (
-            <span
+            <button
+              type="button"
               className="openapi-explorer__expand-details-btn"
               onClick={expandAllDetails}
             >
@@ -269,7 +273,7 @@ function Request({ item }: { item: ApiItem }) {
                 id: OPENAPI_REQUEST.EXPAND_ALL,
                 message: "Expand all",
               })}
-            </span>
+            </button>
           )}
         </div>
         <div className="openapi-explorer__details-outer-container">
@@ -279,6 +283,7 @@ function Request({ item }: { item: ApiItem }) {
               className="openapi-explorer__details-container"
             >
               <summary
+                id={serverLabelId}
                 className="openapi-explorer__details-summary"
                 onClick={(e) => {
                   e.preventDefault();
@@ -290,7 +295,7 @@ function Request({ item }: { item: ApiItem }) {
                   message: "Base URL",
                 })}
               </summary>
-              <Server />
+              <Server labelId={serverLabelId} />
             </details>
           )}
           {showAuth && (

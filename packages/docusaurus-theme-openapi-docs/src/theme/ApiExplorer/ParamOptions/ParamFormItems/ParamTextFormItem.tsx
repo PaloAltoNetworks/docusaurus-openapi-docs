@@ -13,12 +13,23 @@ import { useTypedDispatch } from "@theme/ApiItem/hooks";
 
 export interface ParamProps {
   param: Param;
+  label?: string;
+  type?: string;
+  required?: boolean;
 }
 
-export default function ParamTextFormItem({ param }: ParamProps) {
+export default function ParamTextFormItem({
+  param,
+  label,
+  type,
+  required,
+}: ParamProps) {
   const dispatch = useTypedDispatch();
   return (
     <FormTextInput
+      label={label}
+      type={type}
+      required={required}
       isRequired={param.required}
       paramName={param.name}
       placeholder={param.description || param.name}
