@@ -17,6 +17,10 @@ jobs:
       - name: Check if actor is org member
         id: is-org-member
         run: |
+          if [ "${{ github.actor }}" = "dependabot[bot]" ]; then
+            echo "is-org-member-result=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           status=$(curl -s -o /dev/null -w "%{http_code}" -H "Authorization: Bearer $GH_TOKEN" \
             https://api.github.com/orgs/PaloAltoNetworks/members/${{ github.actor }})
           if [ "$status" = "204" ]; then
