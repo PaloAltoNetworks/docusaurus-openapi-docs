@@ -19,7 +19,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: "yarn"
 
       - name: Install dependencies
@@ -51,7 +51,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: "yarn"
 
       - name: Authenticate to Google Cloud
