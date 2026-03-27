@@ -65,7 +65,7 @@
     "fast-xml-parser": "^5.5.7",
     "husky": "^9.1.7",
     "jest": "^27.3.1",
-    "lerna": "^8.1.2",
+    "lerna": "^9.0.7",
     "lint-staged": "^11.2.3",
     "nodemon": "^2.0.15",
     "pixelmatch": "^5.3.0",
