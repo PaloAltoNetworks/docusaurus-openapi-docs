@@ -11,6 +11,7 @@ env:
 
 permissions:
   contents: write
+  id-token: write
 
 jobs:
   release:
@@ -26,10 +27,9 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
       - uses: actions/setup-node@7c12f8017d5436eb855f1ed4399f037a36fbd9e8 # v2
         with:
-          node-version: "20"
+          node-version: "22"
           registry-url: "https://registry.npmjs.org"
       - name: Release
         run: npx ts-node --transpile-only scripts/publish.ts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
