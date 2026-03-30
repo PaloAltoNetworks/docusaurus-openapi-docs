@@ -131,8 +131,8 @@ function groupByTags(
     output: string,
     doc: string | undefined
   ): string => {
-    if (doc && output.includes(doc)) {
-      return output.split(doc)[1]?.replace(/^\/+/g, "") ?? "";
+    if (doc && output.startsWith(doc + "/")) {
+      return output.substring((doc + "/").length);
     }
     const slashIndex = output.indexOf("/", 1);
     return slashIndex === -1
