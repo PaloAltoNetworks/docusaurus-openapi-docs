@@ -12,7 +12,13 @@ import { translate } from "@docusaurus/Translate";
 import Details from "@theme/Details";
 import Markdown from "@theme/Markdown";
 import MimeTabs from "@theme/MimeTabs"; // Assume these components exist
+import {
+  ExampleFromSchema,
+  ResponseExample,
+  ResponseExamples,
+} from "@theme/ResponseExamples";
 import SchemaNode from "@theme/Schema";
+import SchemaTabs from "@theme/SchemaTabs";
 import SkeletonLoader from "@theme/SkeletonLoader";
 import TabItem from "@theme/TabItem";
 import { OPENAPI_REQUEST, OPENAPI_SCHEMA_ITEM } from "@theme/translationIds";
@@ -46,7 +52,11 @@ const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
     return (
       <MimeTabs className="openapi-tabs__mime" schemaType="request" lazy>
         {mimeTypes.map((mimeType) => {
-          const firstBody = body.content![mimeType].schema;
+          const mediaTypeObject = body.content![mimeType];
+          const firstBody = mediaTypeObject?.schema;
+          const requestExamples = mediaTypeObject?.examples;
+          const requestExample = mediaTypeObject?.example;
+
           if (
             firstBody === undefined ||
             (firstBody.properties &&
@@ -57,49 +67,71 @@ const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
           return (
             // @ts-ignore
             <TabItem key={mimeType} label={mimeType} value={mimeType}>
-              <div style={{ marginTop: "1rem" }}>
-                <Details
-                  className="openapi-markdown__details mime"
-                  data-collapsed={false}
-                  open={true}
-                  style={style}
-                  summary={
-                    <>
-                      <summary>
-                        <h3 className="openapi-markdown__details-summary-header-body">
-                          {translate({
-                            id: OPENAPI_REQUEST.BODY_TITLE,
-                            message: title,
-                          })}
-                          {body.required === true && (
-                            <span className="openapi-schema__required">
+              <SchemaTabs className="openapi-tabs__schema">
+                {/* @ts-ignore */}
+                <TabItem key={title} label={title} value={title}>
+                  <div style={{ marginTop: "1rem" }}>
+                    <Details
+                      className="openapi-markdown__details mime"
+                      data-collapsed={false}
+                      open={true}
+                      style={style}
+                      summary={
+                        <>
+                          <summary>
+                            <h3 className="openapi-markdown__details-summary-header-body">
                               {translate({
-                                id: OPENAPI_SCHEMA_ITEM.REQUIRED,
-                                message: "required",
+                                id: OPENAPI_REQUEST.BODY_TITLE,
+                                message: title,
                               })}
-                            </span>
-                          )}
-                        </h3>
-                      </summary>
-                    </>
-                  }
-                >
-                  <div style={{ textAlign: "left", marginLeft: "1rem" }}>
-                    {body.description && (
-                      <div style={{ marginTop: "1rem", marginBottom: "1rem" }}>
-                        <Markdown>{body.description}</Markdown>
+                              {body.required === true && (
+                                <span className="openapi-schema__required">
+                                  {translate({
+                                    id: OPENAPI_SCHEMA_ITEM.REQUIRED,
+                                    message: "required",
+                                  })}
+                                </span>
+                              )}
+                            </h3>
+                          </summary>
+                        </>
+                      }
+                    >
+                      <div style={{ textAlign: "left", marginLeft: "1rem" }}>
+                        {body.description && (
+                          <div
+                            style={{ marginTop: "1rem", marginBottom: "1rem" }}
+                          >
+                            <Markdown>{body.description}</Markdown>
+                          </div>
+                        )}
                       </div>
-                    )}
+                      <ul style={{ marginLeft: "1rem" }}>
+                        <SchemaNode
+                          schema={firstBody}
+                          schemaType="request"
+                          schemaPath="requestBody"
+                        />
+                      </ul>
+                    </Details>
                   </div>
-                  <ul style={{ marginLeft: "1rem" }}>
-                    <SchemaNode
-                      schema={firstBody}
-                      schemaType="request"
-                      schemaPath="requestBody"
-                    />
-                  </ul>
-                </Details>
-              </div>
+                </TabItem>
+                {firstBody &&
+                  ExampleFromSchema({
+                    schema: firstBody,
+                    mimeType: mimeType,
+                  })}
+                {requestExamples &&
+                  ResponseExamples({
+                    responseExamples: requestExamples,
+                    mimeType,
+                  })}
+                {requestExample &&
+                  ResponseExample({
+                    responseExample: requestExample,
+                    mimeType,
+                  })}
+              </SchemaTabs>
             </TabItem>
           );
         })}
@@ -108,8 +140,10 @@ const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
   }
 
   const randomFirstKey = mimeTypes[0];
-  const firstBody =
-    body.content[randomFirstKey].schema ?? body.content![randomFirstKey];
+  const mediaTypeObject = body.content[randomFirstKey];
+  const firstBody = mediaTypeObject?.schema ?? body.content![randomFirstKey];
+  const requestExamples = mediaTypeObject?.examples;
+  const requestExample = mediaTypeObject?.example;
 
   if (firstBody === undefined) {
     return null;
@@ -119,50 +153,70 @@ const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
     <MimeTabs className="openapi-tabs__mime" schemaType="request">
       {/* @ts-ignore */}
       <TabItem label={randomFirstKey} value={`${randomFirstKey}-schema`}>
-        <Details
-          className="openapi-markdown__details mime"
-          data-collapsed={false}
-          open={true}
-          style={style}
-          summary={
-            <>
-              <summary>
-                <h3 className="openapi-markdown__details-summary-header-body">
-                  {translate({
-                    id: OPENAPI_REQUEST.BODY_TITLE,
-                    message: title,
-                  })}
-                  {firstBody.type === "array" && (
-                    <span style={{ opacity: "0.6" }}> array</span>
-                  )}
-                  {body.required && (
-                    <strong className="openapi-schema__required">
+        <SchemaTabs className="openapi-tabs__schema">
+          {/* @ts-ignore */}
+          <TabItem key={title} label={title} value={title}>
+            <Details
+              className="openapi-markdown__details mime"
+              data-collapsed={false}
+              open={true}
+              style={style}
+              summary={
+                <>
+                  <summary>
+                    <h3 className="openapi-markdown__details-summary-header-body">
                       {translate({
-                        id: OPENAPI_SCHEMA_ITEM.REQUIRED,
-                        message: "required",
+                        id: OPENAPI_REQUEST.BODY_TITLE,
+                        message: title,
                       })}
-                    </strong>
-                  )}
-                </h3>
-              </summary>
-            </>
-          }
-        >
-          <div style={{ textAlign: "left", marginLeft: "1rem" }}>
-            {body.description && (
-              <div style={{ marginTop: "1rem", marginBottom: "1rem" }}>
-                <Markdown>{body.description}</Markdown>
+                      {firstBody.type === "array" && (
+                        <span style={{ opacity: "0.6" }}> array</span>
+                      )}
+                      {body.required && (
+                        <strong className="openapi-schema__required">
+                          {translate({
+                            id: OPENAPI_SCHEMA_ITEM.REQUIRED,
+                            message: "required",
+                          })}
+                        </strong>
+                      )}
+                    </h3>
+                  </summary>
+                </>
+              }
+            >
+              <div style={{ textAlign: "left", marginLeft: "1rem" }}>
+                {body.description && (
+                  <div style={{ marginTop: "1rem", marginBottom: "1rem" }}>
+                    <Markdown>{body.description}</Markdown>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-          <ul style={{ marginLeft: "1rem" }}>
-            <SchemaNode
-              schema={firstBody}
-              schemaType="request"
-              schemaPath="requestBody"
-            />
-          </ul>
-        </Details>
+              <ul style={{ marginLeft: "1rem" }}>
+                <SchemaNode
+                  schema={firstBody}
+                  schemaType="request"
+                  schemaPath="requestBody"
+                />
+              </ul>
+            </Details>
+          </TabItem>
+          {firstBody &&
+            ExampleFromSchema({
+              schema: firstBody,
+              mimeType: randomFirstKey,
+            })}
+          {requestExamples &&
+            ResponseExamples({
+              responseExamples: requestExamples,
+              mimeType: randomFirstKey,
+            })}
+          {requestExample &&
+            ResponseExample({
+              responseExample: requestExample,
+              mimeType: randomFirstKey,
+            })}
+        </SchemaTabs>
       </TabItem>
     </MimeTabs>
   );
