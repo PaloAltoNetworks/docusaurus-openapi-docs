@@ -303,6 +303,26 @@ function setBody(
   }
 
   if (body.type === "empty") {
+    // When the original request has formdata and encoding is declared, keep the
+    // placeholder params so the code snippet reflects the selected encoding even
+    // before the user has uploaded a file.
+    if (
+      clonedPostman.body?.mode === "formdata" &&
+      encoding &&
+      Object.keys(encoding).length > 0
+    ) {
+      const members: any[] =
+        (clonedPostman.body.formdata as any)?.members ?? [];
+      members.forEach((param: any) => {
+        const partContentType = encoding[param.key]?.contentType
+          ?.split(",")[0]
+          .trim();
+        if (partContentType) {
+          param.contentType = partContentType;
+        }
+      });
+      return;
+    }
     clonedPostman.body = undefined;
     return;
   }

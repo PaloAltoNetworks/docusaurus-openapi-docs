@@ -98,16 +98,18 @@ export default function FormBodyItem({
       <>
         {label && <FormLabel label={label} required={required} />}
         {hasMultipleEncodings && (
-          <FormSelect
-            label="Content-Type"
-            options={encodingOptions}
-            value={selectedEncoding}
-            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-              const ct = e.target.value;
-              setSelectedEncoding(ct);
-              dispatch(setFieldEncoding({ field: id, contentType: ct }));
-            }}
-          />
+          <div style={{ marginTop: "0.5rem" }}>
+            <FormSelect
+              label="Content-Type"
+              options={encodingOptions}
+              value={selectedEncoding}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                const ct = e.target.value;
+                setSelectedEncoding(ct);
+                dispatch(setFieldEncoding({ field: id, contentType: ct }));
+              }}
+            />
+          </div>
         )}
         <FormFileUpload
           placeholder={schemaObject.description || id}
