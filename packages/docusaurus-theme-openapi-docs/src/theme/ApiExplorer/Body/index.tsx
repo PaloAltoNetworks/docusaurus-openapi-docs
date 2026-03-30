@@ -93,6 +93,8 @@ function Body({
   const rawSchema = requestBodyMetadata?.content?.[contentType]?.schema;
   const example = requestBodyMetadata?.content?.[contentType]?.example;
   const examples = requestBodyMetadata?.content?.[contentType]?.examples;
+  const encoding: Record<string, { contentType?: string }> | undefined =
+    requestBodyMetadata?.content?.[contentType]?.encoding;
 
   // Resolve the schema based on user's anyOf/oneOf tab selections
   const schema = useMemo(() => {
@@ -339,6 +341,7 @@ function Body({
                       Array.isArray(schema.required) &&
                       schema.required.includes(key)
                     }
+                    fieldEncoding={encoding?.[key]?.contentType}
                   ></FormBodyItem>
                 </FormItem>
               );
@@ -361,6 +364,7 @@ function Body({
                           Array.isArray(schema.required) &&
                           schema.required.includes(schemaKey)
                         }
+                        fieldEncoding={encoding?.[schemaKey]?.contentType}
                       ></FormBodyItem>
                     </FormItem>
                   );
@@ -387,6 +391,7 @@ function Body({
                               Array.isArray(schema.required) &&
                               schema.required.includes(schemaKey)
                             }
+                            fieldEncoding={encoding?.[schemaKey]?.contentType}
                           ></FormBodyItem>
                         </FormItem>
                       );

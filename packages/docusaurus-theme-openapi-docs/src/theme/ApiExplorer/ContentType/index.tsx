@@ -12,6 +12,7 @@ import FormSelect from "@theme/ApiExplorer/FormSelect";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 
 import { setContentType } from "./slice";
+import { clearEncodingSelection } from "@theme/ApiExplorer/EncodingSelection/slice";
 
 function ContentType() {
   const value = useTypedSelector((state: any) => state.contentType.value);
@@ -28,9 +29,10 @@ function ContentType() {
         label="Content-Type"
         value={value}
         options={options}
-        onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-          dispatch(setContentType(e.target.value))
-        }
+        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+          dispatch(setContentType(e.target.value));
+          dispatch(clearEncodingSelection());
+        }}
       />
     </FormItem>
   );

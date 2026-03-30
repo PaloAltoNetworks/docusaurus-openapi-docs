@@ -159,6 +159,7 @@ export default function ApiItem(props: Props): JSX.Element {
         params,
         auth,
         schemaSelection: { selections: {} },
+        encodingSelection: {},
       },
       [persistenceMiddleware]
     );

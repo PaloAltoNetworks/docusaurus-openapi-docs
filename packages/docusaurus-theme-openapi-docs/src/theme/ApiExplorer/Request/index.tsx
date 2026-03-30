@@ -25,6 +25,7 @@ import {
   clearHeaders,
 } from "@theme/ApiExplorer/Response/slice";
 import Server from "@theme/ApiExplorer/Server";
+import { useResolvedEncoding } from "@theme/ApiExplorer/EncodingSelection/useResolvedEncoding";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import { OPENAPI_REQUEST } from "@theme/translationIds";
 import type { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
@@ -76,6 +77,8 @@ function Request({ item }: { item: ApiItem }) {
     ...headerParams,
   ];
 
+  const encoding = useResolvedEncoding(item.requestBody);
+
   const postmanRequest = buildPostmanRequest(postman, {
     queryParams,
     pathParams,
@@ -86,6 +89,7 @@ function Request({ item }: { item: ApiItem }) {
     body,
     server,
     auth,
+    encoding,
   });
 
   const delay = (ms: number) =>
@@ -175,7 +179,8 @@ function Request({ item }: { item: ApiItem }) {
         proxy,
         body,
         requestTimeout,
-        requestCredentials
+        requestCredentials,
+        encoding
       );
       if (res.headers.get("content-type")?.includes("text/event-stream")) {
         await handleEventStream(res);
