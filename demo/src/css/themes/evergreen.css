@@ -89,6 +89,9 @@
 
   --ifm-hr-background-color: var(--ifm-color-emphasis-200);
   --docusaurus-highlighted-code-line-bg: rgba(46, 133, 85, 0.1);
+
+  /* Explorer — bump code font size from the 12px default */
+  --openapi-explorer-font-size-code: 14px;
 }
 
 /* ============================================================
