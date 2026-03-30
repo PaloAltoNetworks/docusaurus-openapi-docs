@@ -58,7 +58,6 @@ jobs:
         with:
           node-version: "22"
           registry-url: "https://registry.npmjs.org"
-          cache: yarn
       - name: Prepare git
         if: steps.packages_changed.outputs.changed == 'true'
         run: |
