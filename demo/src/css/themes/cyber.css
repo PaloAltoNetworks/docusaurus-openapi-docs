@@ -1,0 +1,302 @@
+/**
+ * Cyber theme for docusaurus-openapi-docs demo.
+ *
+ * Dark-first, terminal-inspired. Neon green on near-black.
+ * Monospace font stack throughout — body, headings, code.
+ * Load alongside custom.css in docusaurus.config.ts:
+ *
+ *   customCss: ["./src/css/custom.css", "./src/css/themes/cyber.css"]
+ */
+
+/* ============================================================
+ * Fonts — JetBrains Mono everywhere
+ * ============================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap");
+
+/* ============================================================
+ * Light mode — soft terminal (dark mode is the star)
+ * ============================================================ */
+
+:root {
+  /* Primary — emerald (works on white backgrounds) */
+  --ifm-color-primary: #059669;
+  --ifm-color-primary-dark: #047857;
+  --ifm-color-primary-darker: #065f46;
+  --ifm-color-primary-darkest: #064e3b;
+  --ifm-color-primary-light: #10b981;
+  --ifm-color-primary-lighter: #34d399;
+  --ifm-color-primary-lightest: #6ee7b7;
+
+  /* Content */
+  --ifm-color-content: #111827;
+  --ifm-heading-color: #111827;
+  --ifm-color-content-secondary: #374151;
+
+  /* Semantic */
+  --ifm-color-success: #059669;
+  --ifm-color-warning: #d97706;
+  --ifm-color-danger: #dc2626;
+  --ifm-color-info: #0284c7;
+
+  /* Typography — monospace everywhere */
+  --ifm-font-size-base: 93%;
+  --ifm-code-font-size: 85%;
+  --ifm-font-family-base:
+    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Courier New", monospace;
+  --ifm-heading-font-family:
+    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Courier New", monospace;
+  --ifm-font-family-monospace:
+    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Courier New", monospace;
+  --font-mono:
+    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Courier New", monospace;
+  --ifm-font-weight-base: 400;
+  --ifm-font-weight-semibold: 600;
+  --ifm-heading-font-weight: 700;
+
+  /* Heading scale */
+  --ifm-h1-font-size: 1.9rem;
+  --ifm-h2-font-size: 1.55rem;
+  --ifm-h3-font-size: 1.25rem;
+  --ifm-h4-font-size: 1.05rem;
+  --ifm-h5-font-size: 1rem;
+  --ifm-h6-font-size: 0.9rem;
+
+  /* Theme hooks for custom.css */
+  --theme-primary-rgb: 5, 150, 105;
+  --site-primary-hue-saturation: 160 94%;
+  --theme-border-radius-sm: 2px;
+  --theme-border-radius-md: 4px;
+  --theme-border-radius-lg: 6px;
+  --theme-border-radius-xl: 8px;
+  --theme-border-radius-2xl: 12px;
+
+  /* Shadow scale */
+  --theme-shadow-sm:
+    0 4px 6px -1px rgba(5, 150, 105, 0.15), 0 0 0 0 rgba(0, 0, 0, 0.05);
+  --theme-shadow-md:
+    0 8px 8px -4px rgba(5, 150, 105, 0.2), 0 0 1px 0 rgba(0, 0, 0, 0.1);
+  --theme-shadow-lg:
+    0 8px 24px -6px rgba(5, 150, 105, 0.25), 0 0 1px 0 rgba(0, 0, 0, 0.1);
+
+  --ifm-hr-background-color: var(--ifm-color-emphasis-200);
+  --docusaurus-highlighted-code-line-bg: rgba(5, 150, 105, 0.1);
+}
+
+/* ============================================================
+ * Dark mode — neon green on near-black
+ * ============================================================ */
+
+[data-theme="dark"] {
+  /* Neon green primary */
+  --ifm-color-primary: #00ff88;
+  --ifm-color-primary-dark: #00e67a;
+  --ifm-color-primary-darker: #00cc6c;
+  --ifm-color-primary-darkest: #009951;
+  --ifm-color-primary-light: #33ffa0;
+  --ifm-color-primary-lighter: #66ffb8;
+  --ifm-color-primary-lightest: #99ffd0;
+
+  --ifm-color-content: #d1fae5;
+  --ifm-color-content-secondary: #6ee7b7;
+  --ifm-heading-color: #ecfdf5;
+
+  --ifm-background-color: #030a06 !important;
+  --ifm-navbar-background-color: #030a06;
+
+  /* Green-tinted dark gray scale */
+  --ifm-color-emphasis-100: #071209;
+  --ifm-color-emphasis-200: #0d2010;
+  --ifm-color-emphasis-300: #132d18;
+  --ifm-color-emphasis-400: #1e4726;
+  --ifm-color-emphasis-500: #2d6b38;
+  --ifm-color-emphasis-600: #3d8f4c;
+  --ifm-color-emphasis-700: #52b864;
+  --ifm-color-emphasis-800: #7dd993;
+  --ifm-color-emphasis-900: #b3f0c2;
+
+  --ifm-link-color: #00ff88;
+  --ifm-link-hover-color: #33ffa0;
+
+  --docusaurus-highlighted-code-line-bg: rgba(0, 255, 136, 0.1);
+  --theme-primary-rgb: 0, 255, 136;
+}
+
+/* ============================================================
+ * Method badge colors — sidebar pills
+ * ============================================================ */
+
+.get > .menu__link::before {
+  background-color: rgba(5, 150, 105, 0.15);
+  color: #047857;
+}
+.get > .menu__link--active::before {
+  background-color: #059669;
+  color: #ffffff;
+}
+
+.post > .menu__link::before {
+  background-color: rgba(2, 132, 199, 0.12);
+  color: #0369a1;
+}
+.post > .menu__link--active::before {
+  background-color: #0284c7;
+  color: #ffffff;
+}
+
+.delete > .menu__link::before {
+  background-color: rgba(220, 38, 38, 0.12);
+  color: #dc2626;
+}
+.delete > .menu__link--active::before {
+  background-color: #dc2626;
+  color: #ffffff;
+}
+
+.put > .menu__link::before {
+  background-color: rgba(217, 119, 6, 0.15);
+  color: #b45309;
+}
+.put > .menu__link--active::before {
+  background-color: #d97706;
+  color: #ffffff;
+}
+
+.patch > .menu__link::before {
+  background-color: rgba(217, 119, 6, 0.15);
+  color: #b45309;
+}
+.patch > .menu__link--active::before {
+  background-color: #d97706;
+  color: #ffffff;
+}
+
+/* Dark mode */
+[data-theme="dark"] .get > .menu__link::before {
+  background-color: rgba(0, 255, 136, 0.12);
+  color: #00ff88;
+}
+[data-theme="dark"] .get > .menu__link--active::before {
+  background-color: #00cc6c;
+  color: #030a06;
+}
+
+[data-theme="dark"] .post > .menu__link::before {
+  background-color: rgba(0, 212, 255, 0.12);
+  color: #00d4ff;
+}
+[data-theme="dark"] .post > .menu__link--active::before {
+  background-color: #00b8e6;
+  color: #030a06;
+}
+
+[data-theme="dark"] .delete > .menu__link::before {
+  background-color: rgba(255, 51, 102, 0.15);
+  color: #ff3366;
+}
+[data-theme="dark"] .delete > .menu__link--active::before {
+  background-color: #ff3366;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .put > .menu__link::before {
+  background-color: rgba(255, 149, 0, 0.15);
+  color: #ff9500;
+}
+[data-theme="dark"] .put > .menu__link--active::before {
+  background-color: #e08500;
+  color: #030a06;
+}
+
+[data-theme="dark"] .patch > .menu__link::before {
+  background-color: rgba(255, 149, 0, 0.15);
+  color: #ff9500;
+}
+[data-theme="dark"] .patch > .menu__link--active::before {
+  background-color: #e08500;
+  color: #030a06;
+}
+
+/* ============================================================
+ * API page method badges (.badge--*)
+ * ============================================================ */
+
+.badge--primary {
+  /* GET */
+  background-color: #059669;
+  color: #ffffff;
+  --ifm-badge-border-color: transparent;
+}
+
+.badge--success {
+  /* POST */
+  background-color: #0284c7;
+  color: #ffffff;
+  --ifm-badge-border-color: transparent;
+}
+
+.badge--danger {
+  /* DELETE */
+  background-color: #dc2626;
+  color: #ffffff;
+  --ifm-badge-border-color: transparent;
+}
+
+.badge--info {
+  /* PUT */
+  background-color: #d97706;
+  color: #ffffff;
+  --ifm-badge-border-color: transparent;
+}
+
+.badge--warning {
+  /* PATCH */
+  background-color: #d97706;
+  color: #ffffff;
+  --ifm-badge-border-color: transparent;
+}
+
+[data-theme="dark"] .badge--primary {
+  /* GET */
+  background-color: #00cc6c;
+  color: #030a06;
+}
+[data-theme="dark"] .badge--success {
+  /* POST */
+  background-color: #00b8e6;
+  color: #030a06;
+}
+[data-theme="dark"] .badge--danger {
+  /* DELETE */
+  background-color: #ff3366;
+  color: #ffffff;
+}
+[data-theme="dark"] .badge--info {
+  /* PUT */
+  background-color: #e08500;
+  color: #030a06;
+}
+[data-theme="dark"] .badge--warning {
+  /* PATCH */
+  background-color: #e08500;
+  color: #030a06;
+}
+
+/* ============================================================
+ * API Explorer — Send button dark mode
+ *
+ * Neon green with near-black text for maximum contrast.
+ * ============================================================ */
+
+[data-theme="dark"] .openapi-explorer__request-btn {
+  background-color: #00cc6c;
+  color: #030a06;
+}
+
+[data-theme="dark"] .openapi-explorer__request-btn:hover {
+  background-color: #00ff88;
+}
