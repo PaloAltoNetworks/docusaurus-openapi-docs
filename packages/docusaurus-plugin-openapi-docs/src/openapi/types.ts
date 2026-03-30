@@ -65,6 +65,7 @@ export interface ContactObject {
 export interface LicenseObject {
   name: string;
   url?: string;
+  identifier?: string;
 }
 
 export interface ServerObject {
