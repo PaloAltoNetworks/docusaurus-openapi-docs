@@ -54,6 +54,11 @@ export default function FormBodyItem({
     encodingOptions[0] ?? ""
   );
 
+  // Seed Redux with the first declared encoding on mount so the code snippet
+  // reflects a content type immediately, even before the user interacts.
+  // The empty dep array is intentional: `fieldEncoding` comes from a static
+  // spec value that never changes for the lifetime of this component instance,
+  // and re-seeding on every render would fight user selections.
   useEffect(() => {
     if (encodingOptions[0]) {
       dispatch(

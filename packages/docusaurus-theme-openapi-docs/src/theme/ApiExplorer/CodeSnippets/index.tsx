@@ -11,6 +11,7 @@ import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import ApiCodeBlock from "@theme/ApiExplorer/ApiCodeBlock";
 import buildPostmanRequest from "@theme/ApiExplorer/buildPostmanRequest";
 import CodeTabs from "@theme/ApiExplorer/CodeTabs";
+import { useResolvedEncoding } from "@theme/ApiExplorer/EncodingSelection/useResolvedEncoding";
 import { useTypedSelector } from "@theme/ApiItem/hooks";
 import cloneDeep from "lodash/cloneDeep";
 import codegen from "postman-code-generators";
@@ -30,7 +31,7 @@ export interface Props {
   postman: sdk.Request;
   codeSamples: CodeSample[];
   maskCredentials?: boolean;
-  requestBody?: any;
+  requestBody?: import("docusaurus-plugin-openapi-docs/src/openapi/types").RequestBodyObject;
 }
 
 function CodeTab({ children, hidden, className }: any): React.JSX.Element {
@@ -97,23 +98,7 @@ function CodeSnippets({
       })()
     : auth;
 
-  const specEncoding: Record<string, { contentType?: string }> =
-    requestBody?.content?.[contentType]?.encoding ?? {};
-  const encodingSelection = useTypedSelector(
-    (state: any) => state.encodingSelection
-  );
-  // Merge spec encoding with user selections — user picks override the spec default
-  const encoding = Object.keys(specEncoding).length
-    ? Object.fromEntries(
-        Object.entries(specEncoding).map(([field, enc]) => [
-          field,
-          {
-            ...enc,
-            contentType: encodingSelection[field] ?? enc.contentType,
-          },
-        ])
-      )
-    : undefined;
+  const encoding = useResolvedEncoding(requestBody);
 
   // Create a Postman request object using cleanedAuth or original auth
   const cleanedPostmanRequest = buildPostmanRequest(postman, {

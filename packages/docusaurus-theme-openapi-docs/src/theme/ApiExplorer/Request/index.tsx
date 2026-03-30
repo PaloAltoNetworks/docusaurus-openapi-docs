@@ -25,6 +25,7 @@ import {
   clearHeaders,
 } from "@theme/ApiExplorer/Response/slice";
 import Server from "@theme/ApiExplorer/Server";
+import { useResolvedEncoding } from "@theme/ApiExplorer/EncodingSelection/useResolvedEncoding";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import { OPENAPI_REQUEST } from "@theme/translationIds";
 import type { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
@@ -76,23 +77,7 @@ function Request({ item }: { item: ApiItem }) {
     ...headerParams,
   ];
 
-  const specEncoding: Record<string, { contentType?: string }> =
-    item.requestBody?.content?.[contentType]?.encoding ?? {};
-  const encodingSelection = useTypedSelector(
-    (state: any) => state.encodingSelection
-  );
-  // Merge spec encoding with user selections — user picks override the spec default
-  const encoding = Object.keys(specEncoding).length
-    ? Object.fromEntries(
-        Object.entries(specEncoding).map(([field, enc]) => [
-          field,
-          {
-            ...enc,
-            contentType: encodingSelection[field] ?? enc.contentType,
-          },
-        ])
-      )
-    : undefined;
+  const encoding = useResolvedEncoding(item.requestBody);
 
   const postmanRequest = buildPostmanRequest(postman, {
     queryParams,
