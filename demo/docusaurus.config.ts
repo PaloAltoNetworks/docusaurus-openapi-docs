@@ -41,7 +41,10 @@ const config: Config = {
         },
         blog: false,
         theme: {
-          customCss: "./src/css/custom.css",
+          customCss: [
+            "./src/css/custom.css",
+            "./src/css/themes/panw.css", // swap this line to try a different theme
+          ],
         },
         gtag: {
           trackingID: "GTM-THVM29S",

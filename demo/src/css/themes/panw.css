@@ -1,0 +1,314 @@
+/**
+ * PANW brand theme for docusaurus-openapi-docs demo.
+ *
+ * Colors and fonts sourced from pan.dev (PaloAltoNetworks/pan.dev).
+ * Load this alongside custom.css in docusaurus.config.ts:
+ *
+ *   customCss: ["./src/css/custom.css", "./src/css/themes/panw.css"]
+ */
+
+/* ============================================================
+ * Fonts
+ * ============================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap");
+
+/* ============================================================
+ * Light mode
+ * ============================================================ */
+
+:root {
+  /* Primary — PANW navy */
+  --ifm-color-primary: #004c9d;
+  --ifm-color-primary-dark: #00448d;
+  --ifm-color-primary-darker: #004185;
+  --ifm-color-primary-darkest: #00356e;
+  --ifm-color-primary-light: #0054ad;
+  --ifm-color-primary-lighter: #0057b5;
+  --ifm-color-primary-lightest: #0063cc;
+
+  /* PANW brand accent */
+  --panw-color-orange: #fa582d;
+  --panw-color-orange-dark: #e04d26;
+
+  /* Content */
+  --ifm-color-content: #1c1e21;
+  --ifm-heading-color: #1c1e21;
+  --ifm-color-content-secondary: #475566;
+
+  /* Semantic */
+  --ifm-color-success: #1db846;
+  --ifm-color-warning: #a36700;
+  --ifm-color-danger: #d13c3c;
+  --ifm-color-info: #0074d3;
+
+  /* Typography */
+  --ifm-font-size-base: 95%;
+  --ifm-code-font-size: 85%;
+  --ifm-font-family-base:
+    "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --ifm-heading-font-family:
+    "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --ifm-font-family-monospace:
+    "Fira Code", SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  --font-mono:
+    "Fira Code", SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  --ifm-font-weight-base: 400;
+  --ifm-font-weight-semibold: 600;
+  --ifm-heading-font-weight: 600;
+
+  /* Heading scale */
+  --ifm-h1-font-size: 2rem;
+  --ifm-h2-font-size: 1.6rem;
+  --ifm-h3-font-size: 1.3rem;
+  --ifm-h4-font-size: 1.1rem;
+  --ifm-h5-font-size: 1rem;
+  --ifm-h6-font-size: 0.9rem;
+
+  /* Used by the highlight-flash animation in custom.css */
+  --theme-primary-rgb: 0, 76, 157;
+
+  /* Used by the announcement bar stripe in custom.css */
+  --site-primary-hue-saturation: 214 100%;
+
+  /* Border radius (consumed by admonitions, scrollbars in custom.css) */
+  --theme-border-radius-sm: 4px;
+  --theme-border-radius-md: 8px;
+  --theme-border-radius-lg: 12px;
+  --theme-border-radius-xl: 16px;
+  --theme-border-radius-2xl: 24px;
+
+  /* Shadow scale */
+  --theme-shadow-sm:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 0 0 0 rgba(0, 0, 0, 0.4);
+  --theme-shadow-md:
+    0 8px 8px -4px rgba(0, 0, 0, 0.15), 0 0 1px 0 rgba(0, 0, 0, 0.4);
+  --theme-shadow-lg:
+    0 8px 24px -6px rgba(0, 0, 0, 0.15), 0 0 1px 0 rgba(0, 0, 0, 0.4);
+  --theme-shadow-xl:
+    0 32px 32px -8px rgba(0, 0, 0, 0.08), 0 0 32px -8px rgba(0, 0, 0, 0.12),
+    0 0 1px 0 rgba(0, 0, 0, 0.2);
+
+  --ifm-hr-background-color: var(--ifm-color-emphasis-200);
+  --docusaurus-highlighted-code-line-bg: rgba(0, 76, 157, 0.1);
+}
+
+/* ============================================================
+ * Dark mode
+ * ============================================================ */
+
+[data-theme="dark"] {
+  /* Light blue primary on near-black background */
+  --ifm-color-primary: #85c8ff;
+  --ifm-color-primary-dark: #5eb7ff;
+  --ifm-color-primary-darker: #4baeff;
+  --ifm-color-primary-darkest: #1194ff;
+  --ifm-color-primary-light: #acd9ff;
+  --ifm-color-primary-lighter: #bfe2ff;
+  --ifm-color-primary-lightest: #f9fcff;
+
+  --ifm-color-content: #d1d5db;
+  --ifm-color-content-secondary: #9aa5b2;
+  --ifm-heading-color: #f9fafb;
+
+  --ifm-background-color: #0b1117 !important;
+  --ifm-navbar-background-color: #0b1117;
+
+  /* Steel-blue gray scale */
+  --ifm-color-emphasis-100: #19222e;
+  --ifm-color-emphasis-200: #354252;
+  --ifm-color-emphasis-300: #475566;
+  --ifm-color-emphasis-400: #768494;
+  --ifm-color-emphasis-500: #9aa5b2;
+  --ifm-color-emphasis-600: #b8c1cc;
+  --ifm-color-emphasis-700: #dfe5eb;
+  --ifm-color-emphasis-800: #f0f4f7;
+  --ifm-color-emphasis-900: #fcfcfd;
+
+  --ifm-link-color: #85c8ff;
+  --ifm-link-hover-color: #acd9ff;
+
+  --docusaurus-highlighted-code-line-bg: rgba(133, 200, 255, 0.15);
+  --theme-primary-rgb: 133, 200, 255;
+}
+
+/* ============================================================
+ * Method badge colors — sidebar pills
+ *
+ * Only color properties here; shape/content lives in custom.css.
+ * ============================================================ */
+
+.get > .menu__link::before {
+  background-color: rgba(34, 197, 94, 0.15);
+  color: #15803d;
+}
+.get > .menu__link--active::before {
+  background-color: #16a34a;
+  color: #ffffff;
+}
+
+.post > .menu__link::before {
+  background-color: rgba(0, 76, 157, 0.12);
+  color: #004c9d;
+}
+.post > .menu__link--active::before {
+  background-color: #004c9d;
+  color: #ffffff;
+}
+
+.delete > .menu__link::before {
+  background-color: rgba(224, 46, 42, 0.12);
+  color: #dc2626;
+}
+.delete > .menu__link--active::before {
+  background-color: #dc2626;
+  color: #ffffff;
+}
+
+.put > .menu__link::before {
+  background-color: rgba(251, 191, 36, 0.2);
+  color: #a16207;
+}
+.put > .menu__link--active::before {
+  background-color: #d97706;
+  color: #ffffff;
+}
+
+.patch > .menu__link::before {
+  background-color: rgba(251, 191, 36, 0.2);
+  color: #a16207;
+}
+.patch > .menu__link--active::before {
+  background-color: #d97706;
+  color: #ffffff;
+}
+
+/* Dark mode */
+[data-theme="dark"] .get > .menu__link::before {
+  background-color: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+}
+[data-theme="dark"] .get > .menu__link--active::before {
+  background-color: #22c55e;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .post > .menu__link::before {
+  background-color: rgba(133, 200, 255, 0.15);
+  color: #85c8ff;
+}
+[data-theme="dark"] .post > .menu__link--active::before {
+  background-color: #5eb7ff;
+  color: #0b1117;
+}
+
+[data-theme="dark"] .delete > .menu__link::before {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+}
+[data-theme="dark"] .delete > .menu__link--active::before {
+  background-color: #ef4444;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .put > .menu__link::before {
+  background-color: rgba(251, 191, 36, 0.15);
+  color: #fbbf24;
+}
+[data-theme="dark"] .put > .menu__link--active::before {
+  background-color: #f59e0b;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .patch > .menu__link::before {
+  background-color: rgba(251, 191, 36, 0.15);
+  color: #fbbf24;
+}
+[data-theme="dark"] .patch > .menu__link--active::before {
+  background-color: #f59e0b;
+  color: #ffffff;
+}
+
+/* ============================================================
+ * API page method badges (.badge--*)
+ *
+ * MethodEndpoint maps: GET→primary, POST→success, DELETE→danger,
+ * PUT→info, PATCH→warning. Override to match the sidebar colors.
+ * ============================================================ */
+
+.badge--primary {
+  /* GET */
+  background-color: #16a34a;
+  color: #ffffff;
+  --ifm-badge-border-color: transparent;
+}
+
+.badge--success {
+  /* POST */
+  background-color: #004c9d;
+  color: #ffffff;
+  --ifm-badge-border-color: transparent;
+}
+
+.badge--danger {
+  /* DELETE */
+  background-color: #dc2626;
+  color: #ffffff;
+  --ifm-badge-border-color: transparent;
+}
+
+.badge--info {
+  /* PUT */
+  background-color: #d97706;
+  color: #ffffff;
+  --ifm-badge-border-color: transparent;
+}
+
+.badge--warning {
+  /* PATCH */
+  background-color: #d97706;
+  color: #ffffff;
+  --ifm-badge-border-color: transparent;
+}
+
+[data-theme="dark"] .badge--primary {
+  background-color: #22c55e;
+  color: #ffffff;
+}
+[data-theme="dark"] .badge--success {
+  background-color: #5eb7ff;
+  color: #0b1117;
+}
+[data-theme="dark"] .badge--danger {
+  background-color: #ef4444;
+  color: #ffffff;
+}
+[data-theme="dark"] .badge--info {
+  background-color: #f59e0b;
+  color: #ffffff;
+}
+[data-theme="dark"] .badge--warning {
+  background-color: #f59e0b;
+  color: #ffffff;
+}
+
+/* ============================================================
+ * API Explorer — Send button dark mode
+ *
+ * --ifm-color-primary-light resolves to #acd9ff in dark mode,
+ * giving white text near-zero contrast. Pin to PANW navy.
+ * ============================================================ */
+
+[data-theme="dark"] .openapi-explorer__request-btn {
+  background-color: #004c9d;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .openapi-explorer__request-btn:hover {
+  background-color: #0054ad;
+}

@@ -1,137 +1,21 @@
 /**
- * Global CSS for the docusaurus-openapi-docs demo site.
+ * Structural CSS for the docusaurus-openapi-docs demo site.
+ *
+ * This file contains layout, component behavior, animations, and utilities.
+ * It is intentionally free of hard-coded colors and fonts — those live in
+ * a theme file loaded alongside this one via docusaurus.config.ts:
+ *
+ *   customCss: ["./src/css/custom.css", "./src/css/themes/panw.css"]
+ *
+ * To try a different palette, swap the theme file. The following CSS
+ * variables must be defined by the active theme:
+ *
+ *   --theme-primary-rgb          RGB triplet of primary color (for animations)
+ *   --theme-border-radius-sm/md  Border radius tokens
+ *   --site-primary-hue-saturation  Hue+saturation for the announcement bar
  *
  * Structure inspired by @gleanwork/docusaurus-theme-glean.
- * Colors and fonts from Palo Alto Networks brand (pan.dev).
  */
-
-/* ============================================================
- * Fonts
- * ============================================================ */
-
-@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap");
-
-/* ============================================================
- * CSS Custom Properties — Light mode
- * ============================================================ */
-
-:root {
-  /* Primary — PANW navy */
-  --ifm-color-primary: #004c9d;
-  --ifm-color-primary-dark: #00448d;
-  --ifm-color-primary-darker: #004185;
-  --ifm-color-primary-darkest: #00356e;
-  --ifm-color-primary-light: #0054ad;
-  --ifm-color-primary-lighter: #0057b5;
-  --ifm-color-primary-lightest: #0063cc;
-
-  /* PANW brand accent */
-  --panw-color-orange: #fa582d;
-  --panw-color-orange-dark: #e04d26;
-
-  /* Content */
-  --ifm-color-content: #1c1e21;
-  --ifm-heading-color: #1c1e21;
-  --ifm-color-content-secondary: #475566;
-
-  /* Semantic */
-  --ifm-color-success: #1db846;
-  --ifm-color-warning: #a36700;
-  --ifm-color-danger: #d13c3c;
-  --ifm-color-info: #0074d3;
-
-  /* Typography */
-  --ifm-font-size-base: 95%;
-  --ifm-code-font-size: 85%;
-  --ifm-font-family-base:
-    "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system,
-    BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --ifm-heading-font-family:
-    "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system,
-    BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --ifm-font-family-monospace:
-    "Fira Code", SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-    "Courier New", monospace;
-  --font-mono:
-    "Fira Code", SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-    "Courier New", monospace;
-  --ifm-font-weight-base: 400;
-  --ifm-font-weight-semibold: 600;
-  --ifm-heading-font-weight: 600;
-
-  /* Heading scale */
-  --ifm-h1-font-size: 2rem;
-  --ifm-h2-font-size: 1.6rem;
-  --ifm-h3-font-size: 1.3rem;
-  --ifm-h4-font-size: 1.1rem;
-  --ifm-h5-font-size: 1rem;
-  --ifm-h6-font-size: 0.9rem;
-
-  /* Code highlight */
-  --docusaurus-highlighted-code-line-bg: rgba(0, 76, 157, 0.1);
-
-  /* Border radius scale */
-  --panw-border-radius-sm: 4px;
-  --panw-border-radius-md: 8px;
-  --panw-border-radius-lg: 12px;
-  --panw-border-radius-xl: 16px;
-  --panw-border-radius-2xl: 24px;
-
-  /* Shadow scale */
-  --panw-shadow-sm:
-    0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 0 0 0 rgba(0, 0, 0, 0.4);
-  --panw-shadow-md:
-    0 8px 8px -4px rgba(0, 0, 0, 0.15), 0 0 1px 0 rgba(0, 0, 0, 0.4);
-  --panw-shadow-lg:
-    0 8px 24px -6px rgba(0, 0, 0, 0.15), 0 0 1px 0 rgba(0, 0, 0, 0.4);
-  --panw-shadow-xl:
-    0 32px 32px -8px rgba(0, 0, 0, 0.08), 0 0 32px -8px rgba(0, 0, 0, 0.12),
-    0 0 1px 0 rgba(0, 0, 0, 0.2);
-
-  /* Announcement bar hue (PANW navy) */
-  --site-primary-hue-saturation: 214 100%;
-
-  --ifm-hr-background-color: var(--ifm-color-emphasis-200);
-}
-
-/* ============================================================
- * CSS Custom Properties — Dark mode
- * ============================================================ */
-
-[data-theme="dark"] {
-  /* PANW dark mode — light blue primary on near-black background */
-  --ifm-color-primary: #85c8ff;
-  --ifm-color-primary-dark: #5eb7ff;
-  --ifm-color-primary-darker: #4baeff;
-  --ifm-color-primary-darkest: #1194ff;
-  --ifm-color-primary-light: #acd9ff;
-  --ifm-color-primary-lighter: #bfe2ff;
-  --ifm-color-primary-lightest: #f9fcff;
-
-  --ifm-color-content: #d1d5db;
-  --ifm-color-content-secondary: #9aa5b2;
-  --ifm-heading-color: #f9fafb;
-
-  --ifm-background-color: #0b1117 !important;
-  --ifm-navbar-background-color: #0b1117;
-
-  /* Steel-blue gray scale for dark mode */
-  --ifm-color-emphasis-100: #19222e;
-  --ifm-color-emphasis-200: #354252;
-  --ifm-color-emphasis-300: #475566;
-  --ifm-color-emphasis-400: #768494;
-  --ifm-color-emphasis-500: #9aa5b2;
-  --ifm-color-emphasis-600: #b8c1cc;
-  --ifm-color-emphasis-700: #dfe5eb;
-  --ifm-color-emphasis-800: #f0f4f7;
-  --ifm-color-emphasis-900: #fcfcfd;
-
-  --docusaurus-highlighted-code-line-bg: rgba(133, 200, 255, 0.15);
-
-  --ifm-link-color: #85c8ff;
-  --ifm-link-hover-color: #acd9ff;
-}
 
 /* ============================================================
  * Typography
@@ -290,7 +174,9 @@ article li a:hover,
 }
 
 /* ============================================================
- * Sidebar Method labels — Default (pill style, inspired by Glean)
+ * Sidebar Method labels — Default (pill style)
+ *
+ * Shape and content labels only. Colors are in the theme file.
  * ============================================================ */
 
 .api-method > .menu__link,
@@ -318,62 +204,24 @@ article li a:hover,
   text-align: center;
 }
 
-/* GET */
+/* Content labels */
 .get > .menu__link::before {
   content: "get";
-  background-color: rgba(34, 197, 94, 0.15);
-  color: #15803d;
 }
-.get > .menu__link--active::before {
-  background-color: #16a34a;
-  color: #ffffff;
-}
-
-/* POST */
 .post > .menu__link::before {
   content: "post";
-  background-color: rgba(0, 76, 157, 0.12);
-  color: #004c9d;
 }
-.post > .menu__link--active::before {
-  background-color: #004c9d;
-  color: #ffffff;
-}
-
-/* DELETE */
 .delete > .menu__link::before {
   content: "del";
-  background-color: rgba(224, 46, 42, 0.12);
-  color: #dc2626;
 }
-.delete > .menu__link--active::before {
-  background-color: #dc2626;
-  color: #ffffff;
-}
-
-/* PUT */
 .put > .menu__link::before {
   content: "put";
-  background-color: rgba(251, 191, 36, 0.2);
-  color: #a16207;
 }
-.put > .menu__link--active::before {
-  background-color: #d97706;
-  color: #ffffff;
-}
-
-/* PATCH */
 .patch > .menu__link::before {
   content: "patch";
-  background-color: rgba(251, 191, 36, 0.2);
-  color: #a16207;
-}
-.patch > .menu__link--active::before {
-  background-color: #d97706;
-  color: #ffffff;
 }
 
-/* HEAD / EVENT / SCHEMA */
+/* HEAD / EVENT / SCHEMA — neutral colors, no theme needed */
 .head > .menu__link::before {
   content: "head";
   background-color: var(--ifm-color-emphasis-200);
@@ -394,116 +242,6 @@ article li a:hover,
 .menu__list-item--deprecated > .menu__link,
 .menu__list-item--deprecated > .menu__link:hover {
   text-decoration: line-through;
-}
-
-/* Dark mode badge overrides */
-[data-theme="dark"] .get > .menu__link::before {
-  background-color: rgba(34, 197, 94, 0.15);
-  color: #4ade80;
-}
-[data-theme="dark"] .get > .menu__link--active::before {
-  background-color: #22c55e;
-  color: #ffffff;
-}
-[data-theme="dark"] .post > .menu__link::before {
-  background-color: rgba(133, 200, 255, 0.15);
-  color: #85c8ff;
-}
-[data-theme="dark"] .post > .menu__link--active::before {
-  background-color: #5eb7ff;
-  color: #0b1117;
-}
-[data-theme="dark"] .delete > .menu__link::before {
-  background-color: rgba(239, 68, 68, 0.15);
-  color: #f87171;
-}
-[data-theme="dark"] .delete > .menu__link--active::before {
-  background-color: #ef4444;
-  color: #ffffff;
-}
-[data-theme="dark"] .put > .menu__link::before {
-  background-color: rgba(251, 191, 36, 0.15);
-  color: #fbbf24;
-}
-[data-theme="dark"] .put > .menu__link--active::before {
-  background-color: #f59e0b;
-  color: #ffffff;
-}
-[data-theme="dark"] .patch > .menu__link::before {
-  background-color: rgba(251, 191, 36, 0.15);
-  color: #fbbf24;
-}
-[data-theme="dark"] .patch > .menu__link--active::before {
-  background-color: #f59e0b;
-  color: #ffffff;
-}
-
-/* ============================================================
- * API page method badges (.badge--*)
- *
- * MethodEndpoint renders: GET→badge--primary, POST→badge--success,
- * DELETE→badge--danger, PUT→badge--info, PATCH→badge--warning.
- * Override to match the sidebar pill colors above.
- * ============================================================ */
-
-.badge--primary {
-  /* GET */
-  background-color: #16a34a;
-  color: #ffffff;
-  --ifm-badge-border-color: transparent;
-}
-
-.badge--success {
-  /* POST */
-  background-color: #004c9d;
-  color: #ffffff;
-  --ifm-badge-border-color: transparent;
-}
-
-.badge--danger {
-  /* DELETE */
-  background-color: #dc2626;
-  color: #ffffff;
-  --ifm-badge-border-color: transparent;
-}
-
-.badge--info {
-  /* PUT */
-  background-color: #d97706;
-  color: #ffffff;
-  --ifm-badge-border-color: transparent;
-}
-
-.badge--warning {
-  /* PATCH */
-  background-color: #d97706;
-  color: #ffffff;
-  --ifm-badge-border-color: transparent;
-}
-
-[data-theme="dark"] .badge--primary {
-  background-color: #22c55e;
-  color: #ffffff;
-}
-
-[data-theme="dark"] .badge--success {
-  background-color: #5eb7ff;
-  color: #0b1117;
-}
-
-[data-theme="dark"] .badge--danger {
-  background-color: #ef4444;
-  color: #ffffff;
-}
-
-[data-theme="dark"] .badge--info {
-  background-color: #f59e0b;
-  color: #ffffff;
-}
-
-[data-theme="dark"] .badge--warning {
-  background-color: #f59e0b;
-  color: #ffffff;
 }
 
 /* ============================================================
@@ -638,28 +376,12 @@ article li a:hover,
 }
 
 /* ============================================================
- * API Explorer — Send button dark mode fix
- *
- * The button uses var(--ifm-color-primary-light) which is #acd9ff in
- * dark mode — too pale for white text. Pin it to PANW navy instead.
- * ============================================================ */
-
-[data-theme="dark"] .openapi-explorer__request-btn {
-  background-color: #004c9d;
-  color: #ffffff;
-}
-
-[data-theme="dark"] .openapi-explorer__request-btn:hover {
-  background-color: #0054ad;
-}
-
-/* ============================================================
  * Admonitions
  * ============================================================ */
 
 .alert {
   border: none;
-  border-radius: var(--panw-border-radius-md);
+  border-radius: var(--theme-border-radius-md, 8px);
 }
 
 /* ============================================================
@@ -717,11 +439,13 @@ div[class^="announcementBar_"] {
 
 /* ============================================================
  * Schema parameter highlight animation
+ *
+ * Color driven by --theme-primary-rgb (defined in the theme file).
  * ============================================================ */
 
 [id]:target {
   animation: highlight-flash 2s ease-out;
-  background-color: rgba(0, 76, 157, 0.08);
+  background-color: rgba(var(--theme-primary-rgb, 0, 76, 157), 0.08);
   border-radius: 4px;
   padding: 2px 4px;
   margin: -2px -4px;
@@ -729,15 +453,15 @@ div[class^="announcementBar_"] {
 
 @keyframes highlight-flash {
   0% {
-    background-color: rgba(0, 76, 157, 0.25);
-    box-shadow: 0 0 0 3px rgba(0, 76, 157, 0.25);
+    background-color: rgba(var(--theme-primary-rgb, 0, 76, 157), 0.25);
+    box-shadow: 0 0 0 3px rgba(var(--theme-primary-rgb, 0, 76, 157), 0.25);
   }
   50% {
-    background-color: rgba(0, 76, 157, 0.15);
-    box-shadow: 0 0 0 2px rgba(0, 76, 157, 0.15);
+    background-color: rgba(var(--theme-primary-rgb, 0, 76, 157), 0.15);
+    box-shadow: 0 0 0 2px rgba(var(--theme-primary-rgb, 0, 76, 157), 0.15);
   }
   100% {
-    background-color: rgba(0, 76, 157, 0.08);
+    background-color: rgba(var(--theme-primary-rgb, 0, 76, 157), 0.08);
     box-shadow: none;
   }
 }
@@ -745,7 +469,7 @@ div[class^="announcementBar_"] {
 .openapi-markdown__details [id]:target,
 .openapi-schema__list-item [id]:target {
   animation: highlight-flash 2s ease-out;
-  background-color: rgba(0, 76, 157, 0.08) !important;
+  background-color: rgba(var(--theme-primary-rgb, 0, 76, 157), 0.08) !important;
 }
 
 /* ============================================================
@@ -770,12 +494,12 @@ div[class^="announcementBar_"] {
 
 .tabs-container [role="tabpanel"] pre::-webkit-scrollbar-track {
   background: var(--ifm-color-emphasis-200);
-  border-radius: var(--panw-border-radius-sm);
+  border-radius: var(--theme-border-radius-sm, 4px);
 }
 
 .tabs-container [role="tabpanel"] pre::-webkit-scrollbar-thumb {
   background: var(--ifm-color-emphasis-400);
-  border-radius: var(--panw-border-radius-sm);
+  border-radius: var(--theme-border-radius-sm, 4px);
 }
 
 .tabs-container [role="tabpanel"] pre::-webkit-scrollbar-thumb:hover {
