@@ -117,6 +117,8 @@ const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
                   </div>
                 </TabItem>
                 {firstBody &&
+                  !requestExample &&
+                  !requestExamples &&
                   ExampleFromSchema({
                     schema: firstBody,
                     mimeType: mimeType,
@@ -202,6 +204,8 @@ const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
             </Details>
           </TabItem>
           {firstBody &&
+            !requestExample &&
+            !requestExamples &&
             ExampleFromSchema({
               schema: firstBody,
               mimeType: randomFirstKey,
