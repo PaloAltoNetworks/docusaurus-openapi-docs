@@ -1,0 +1,303 @@
+/**
+ * Midnight theme for docusaurus-openapi-docs demo.
+ *
+ * Slate-900 base with sky-blue accents. VS Code dark energy.
+ * Inter body + JetBrains Mono code.
+ * Load alongside custom.css in docusaurus.config.ts:
+ *
+ *   customCss: ["./src/css/custom.css", "./src/css/themes/midnight.css"]
+ */
+
+/* ============================================================
+ * Fonts — Inter (body) + JetBrains Mono (code)
+ * ============================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap");
+
+/* ============================================================
+ * Light mode
+ * ============================================================ */
+
+:root {
+  /* Primary — sky blue */
+  --ifm-color-primary: #0284c7;
+  --ifm-color-primary-dark: #0369a1;
+  --ifm-color-primary-darker: #075985;
+  --ifm-color-primary-darkest: #0c4a6e;
+  --ifm-color-primary-light: #0ea5e9;
+  --ifm-color-primary-lighter: #38bdf8;
+  --ifm-color-primary-lightest: #7dd3fc;
+
+  /* Content */
+  --ifm-color-content: #0f172a;
+  --ifm-heading-color: #0f172a;
+  --ifm-color-content-secondary: #475569;
+
+  /* Semantic */
+  --ifm-color-success: #16a34a;
+  --ifm-color-warning: #d97706;
+  --ifm-color-danger: #dc2626;
+  --ifm-color-info: #0284c7;
+
+  /* Typography */
+  --ifm-font-size-base: 95%;
+  --ifm-code-font-size: 85%;
+  --ifm-font-family-base:
+    "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --ifm-heading-font-family:
+    "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --ifm-font-family-monospace:
+    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Courier New", monospace;
+  --font-mono:
+    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Courier New", monospace;
+  --ifm-font-weight-base: 400;
+  --ifm-font-weight-semibold: 600;
+  --ifm-heading-font-weight: 600;
+
+  /* Heading scale */
+  --ifm-h1-font-size: 2rem;
+  --ifm-h2-font-size: 1.6rem;
+  --ifm-h3-font-size: 1.3rem;
+  --ifm-h4-font-size: 1.1rem;
+  --ifm-h5-font-size: 1rem;
+  --ifm-h6-font-size: 0.9rem;
+
+  /* Theme hooks for custom.css */
+  --theme-primary-rgb: 2, 132, 199;
+  --site-primary-hue-saturation: 199 98%;
+  --theme-border-radius-sm: 4px;
+  --theme-border-radius-md: 8px;
+  --theme-border-radius-lg: 12px;
+  --theme-border-radius-xl: 16px;
+  --theme-border-radius-2xl: 24px;
+
+  /* Shadow scale */
+  --theme-shadow-sm:
+    0 4px 6px -1px rgba(2, 132, 199, 0.1), 0 0 0 0 rgba(0, 0, 0, 0.05);
+  --theme-shadow-md:
+    0 8px 8px -4px rgba(2, 132, 199, 0.15), 0 0 1px 0 rgba(0, 0, 0, 0.1);
+  --theme-shadow-lg:
+    0 8px 24px -6px rgba(2, 132, 199, 0.2), 0 0 1px 0 rgba(0, 0, 0, 0.1);
+
+  --ifm-hr-background-color: var(--ifm-color-emphasis-200);
+  --docusaurus-highlighted-code-line-bg: rgba(2, 132, 199, 0.1);
+}
+
+/* ============================================================
+ * Dark mode — slate-900 base, sky-blue accents
+ * ============================================================ */
+
+[data-theme="dark"] {
+  /* Sky blue primary */
+  --ifm-color-primary: #38bdf8;
+  --ifm-color-primary-dark: #0ea5e9;
+  --ifm-color-primary-darker: #0284c7;
+  --ifm-color-primary-darkest: #0369a1;
+  --ifm-color-primary-light: #7dd3fc;
+  --ifm-color-primary-lighter: #bae6fd;
+  --ifm-color-primary-lightest: #e0f2fe;
+
+  --ifm-color-content: #e2e8f0;
+  --ifm-color-content-secondary: #94a3b8;
+  --ifm-heading-color: #f8fafc;
+
+  --ifm-background-color: #0f172a !important;
+  --ifm-navbar-background-color: #0f172a;
+
+  /* Slate gray scale */
+  --ifm-color-emphasis-100: #1e293b;
+  --ifm-color-emphasis-200: #334155;
+  --ifm-color-emphasis-300: #475569;
+  --ifm-color-emphasis-400: #64748b;
+  --ifm-color-emphasis-500: #94a3b8;
+  --ifm-color-emphasis-600: #cbd5e1;
+  --ifm-color-emphasis-700: #e2e8f0;
+  --ifm-color-emphasis-800: #f1f5f9;
+  --ifm-color-emphasis-900: #f8fafc;
+
+  --ifm-link-color: #38bdf8;
+  --ifm-link-hover-color: #7dd3fc;
+
+  --docusaurus-highlighted-code-line-bg: rgba(56, 189, 248, 0.12);
+  --theme-primary-rgb: 56, 189, 248;
+}
+
+/* ============================================================
+ * Method badge colors — sidebar pills
+ * ============================================================ */
+
+.get > .menu__link::before {
+  background-color: rgba(22, 163, 74, 0.12);
+  color: #15803d;
+}
+.get > .menu__link--active::before {
+  background-color: #16a34a;
+  color: #ffffff;
+}
+
+.post > .menu__link::before {
+  background-color: rgba(2, 132, 199, 0.12);
+  color: #0284c7;
+}
+.post > .menu__link--active::before {
+  background-color: #0284c7;
+  color: #ffffff;
+}
+
+.delete > .menu__link::before {
+  background-color: rgba(220, 38, 38, 0.12);
+  color: #dc2626;
+}
+.delete > .menu__link--active::before {
+  background-color: #dc2626;
+  color: #ffffff;
+}
+
+.put > .menu__link::before {
+  background-color: rgba(217, 119, 6, 0.15);
+  color: #b45309;
+}
+.put > .menu__link--active::before {
+  background-color: #d97706;
+  color: #ffffff;
+}
+
+.patch > .menu__link::before {
+  background-color: rgba(217, 119, 6, 0.15);
+  color: #b45309;
+}
+.patch > .menu__link--active::before {
+  background-color: #d97706;
+  color: #ffffff;
+}
+
+/* Dark mode */
+[data-theme="dark"] .get > .menu__link::before {
+  background-color: rgba(34, 197, 94, 0.12);
+  color: #4ade80;
+}
+[data-theme="dark"] .get > .menu__link--active::before {
+  background-color: #22c55e;
+  color: #0f172a;
+}
+
+[data-theme="dark"] .post > .menu__link::before {
+  background-color: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+}
+[data-theme="dark"] .post > .menu__link--active::before {
+  background-color: #0ea5e9;
+  color: #0f172a;
+}
+
+[data-theme="dark"] .delete > .menu__link::before {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+}
+[data-theme="dark"] .delete > .menu__link--active::before {
+  background-color: #ef4444;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .put > .menu__link::before {
+  background-color: rgba(251, 191, 36, 0.12);
+  color: #fbbf24;
+}
+[data-theme="dark"] .put > .menu__link--active::before {
+  background-color: #f59e0b;
+  color: #0f172a;
+}
+
+[data-theme="dark"] .patch > .menu__link::before {
+  background-color: rgba(251, 191, 36, 0.12);
+  color: #fbbf24;
+}
+[data-theme="dark"] .patch > .menu__link--active::before {
+  background-color: #f59e0b;
+  color: #0f172a;
+}
+
+/* ============================================================
+ * API page method badges (.badge--*)
+ * ============================================================ */
+
+.badge--primary {
+  /* GET */
+  background-color: #16a34a;
+  color: #ffffff;
+  --ifm-badge-border-color: transparent;
+}
+
+.badge--success {
+  /* POST */
+  background-color: #0284c7;
+  color: #ffffff;
+  --ifm-badge-border-color: transparent;
+}
+
+.badge--danger {
+  /* DELETE */
+  background-color: #dc2626;
+  color: #ffffff;
+  --ifm-badge-border-color: transparent;
+}
+
+.badge--info {
+  /* PUT */
+  background-color: #d97706;
+  color: #ffffff;
+  --ifm-badge-border-color: transparent;
+}
+
+.badge--warning {
+  /* PATCH */
+  background-color: #d97706;
+  color: #ffffff;
+  --ifm-badge-border-color: transparent;
+}
+
+[data-theme="dark"] .badge--primary {
+  /* GET */
+  background-color: #22c55e;
+  color: #0f172a;
+}
+[data-theme="dark"] .badge--success {
+  /* POST */
+  background-color: #0ea5e9;
+  color: #0f172a;
+}
+[data-theme="dark"] .badge--danger {
+  /* DELETE */
+  background-color: #ef4444;
+  color: #ffffff;
+}
+[data-theme="dark"] .badge--info {
+  /* PUT */
+  background-color: #f59e0b;
+  color: #0f172a;
+}
+[data-theme="dark"] .badge--warning {
+  /* PATCH */
+  background-color: #f59e0b;
+  color: #0f172a;
+}
+
+/* ============================================================
+ * API Explorer — Send button dark mode
+ *
+ * Sky blue on slate-900 — strong contrast.
+ * ============================================================ */
+
+[data-theme="dark"] .openapi-explorer__request-btn {
+  background-color: #0284c7;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .openapi-explorer__request-btn:hover {
+  background-color: #0ea5e9;
+}
