@@ -38,9 +38,11 @@ export default function ParamTextFormItem({
           setParam({
             ...param,
             value:
-              param.in === "path" || param.in === "query"
+              param.in === "path"
                 ? e.target.value.replace(/\s/g, "%20")
-                : e.target.value,
+                : param.in === "query"
+                  ? encodeURIComponent(e.target.value)
+                  : e.target.value,
           })
         )
       }
