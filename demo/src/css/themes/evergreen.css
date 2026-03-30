@@ -90,8 +90,8 @@
   --ifm-hr-background-color: var(--ifm-color-emphasis-200);
   --docusaurus-highlighted-code-line-bg: rgba(46, 133, 85, 0.1);
 
-  /* Explorer — match code snippet font size */
-  --openapi-explorer-font-size-code: var(--ifm-code-font-size);
+  /* Explorer — unified font size for code tabs and request body */
+  --openapi-explorer-font-size-code: 13px;
 }
 
 /* ============================================================
@@ -292,6 +292,20 @@
   /* PATCH */
   background-color: #f59e0b;
   color: #18191a;
+}
+
+/* ============================================================
+ * API Explorer — request body editor font size
+ *
+ * react-simple-code-editor renders an inner textarea + pre that
+ * can slip past the outer !important font shorthand. Target them
+ * directly so the body editor matches the code snippet tabs.
+ * ============================================================ */
+
+.openapi-explorer__playground-editor,
+.openapi-explorer__playground-editor textarea,
+.openapi-explorer__playground-editor pre {
+  font-size: var(--openapi-explorer-font-size-code) !important;
 }
 
 /* ============================================================
