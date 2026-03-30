@@ -638,6 +638,22 @@ article li a:hover,
 }
 
 /* ============================================================
+ * API Explorer — Send button dark mode fix
+ *
+ * The button uses var(--ifm-color-primary-light) which is #acd9ff in
+ * dark mode — too pale for white text. Pin it to PANW navy instead.
+ * ============================================================ */
+
+[data-theme="dark"] .openapi-explorer__request-btn {
+  background-color: #004c9d;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .openapi-explorer__request-btn:hover {
+  background-color: #0054ad;
+}
+
+/* ============================================================
  * Admonitions
  * ============================================================ */
 
