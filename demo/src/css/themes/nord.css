@@ -1,0 +1,314 @@
+/**
+ * Nord theme for docusaurus-openapi-docs demo.
+ *
+ * Based on the Nord color palette by Arctic Ice Studio.
+ * Polar Night dark base, Frost blue-cyan accents, Aurora semantic colors.
+ * https://www.nordtheme.com/docs/colors-and-palettes
+ *
+ * Load alongside custom.css in docusaurus.config.ts:
+ *
+ *   customCss: ["./src/css/custom.css", "./src/css/themes/nord.css"]
+ */
+
+/* ============================================================
+ * Nord palette reference
+ *
+ * Polar Night:  #2e3440  #3b4252  #434c5e  #4c566a
+ * Snow Storm:   #d8dee9  #e5e9f0  #eceff4
+ * Frost:        #8fbcbb  #88c0d0  #81a1c1  #5e81ac
+ * Aurora:       #bf616a  #d08770  #ebcb8b  #a3be8c  #b48ead
+ * ============================================================ */
+
+/* ============================================================
+ * Fonts — Inter (body) + JetBrains Mono (code)
+ * ============================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap");
+
+/* ============================================================
+ * Light mode — Snow Storm base, nord10 primary
+ * ============================================================ */
+
+:root {
+  /* Primary — nord10 (Frost dark blue) */
+  --ifm-color-primary: #5e81ac;
+  --ifm-color-primary-dark: #4d6f99;
+  --ifm-color-primary-darker: #456590;
+  --ifm-color-primary-darkest: #384f72;
+  --ifm-color-primary-light: #6f90ba;
+  --ifm-color-primary-lighter: #81a1c1;
+  --ifm-color-primary-lightest: #88c0d0;
+
+  /* Content */
+  --ifm-color-content: #2e3440;
+  --ifm-heading-color: #2e3440;
+  --ifm-color-content-secondary: #4c566a;
+
+  /* Semantic — Aurora palette */
+  --ifm-color-success: #a3be8c;
+  --ifm-color-warning: #ebcb8b;
+  --ifm-color-danger: #bf616a;
+  --ifm-color-info: #81a1c1;
+
+  /* Typography */
+  --ifm-font-size-base: 95%;
+  --ifm-code-font-size: 85%;
+  --ifm-font-family-base:
+    "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --ifm-heading-font-family:
+    "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --ifm-font-family-monospace:
+    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Courier New", monospace;
+  --font-mono:
+    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Courier New", monospace;
+  --ifm-font-weight-base: 400;
+  --ifm-font-weight-semibold: 600;
+  --ifm-heading-font-weight: 600;
+
+  /* Heading scale */
+  --ifm-h1-font-size: 2rem;
+  --ifm-h2-font-size: 1.6rem;
+  --ifm-h3-font-size: 1.3rem;
+  --ifm-h4-font-size: 1.1rem;
+  --ifm-h5-font-size: 1rem;
+  --ifm-h6-font-size: 0.9rem;
+
+  /* Theme hooks for custom.css */
+  --theme-primary-rgb: 94, 129, 172;
+  --site-primary-hue-saturation: 210 30%;
+  --theme-border-radius-sm: 4px;
+  --theme-border-radius-md: 8px;
+  --theme-border-radius-lg: 12px;
+  --theme-border-radius-xl: 16px;
+  --theme-border-radius-2xl: 24px;
+
+  /* Shadow scale — cool-tinted */
+  --theme-shadow-sm:
+    0 4px 6px -1px rgba(46, 52, 64, 0.1), 0 0 0 0 rgba(46, 52, 64, 0.05);
+  --theme-shadow-md:
+    0 8px 8px -4px rgba(46, 52, 64, 0.12), 0 0 1px 0 rgba(46, 52, 64, 0.08);
+  --theme-shadow-lg:
+    0 8px 24px -6px rgba(46, 52, 64, 0.16), 0 0 1px 0 rgba(46, 52, 64, 0.08);
+
+  --ifm-hr-background-color: var(--ifm-color-emphasis-200);
+  --docusaurus-highlighted-code-line-bg: rgba(94, 129, 172, 0.1);
+}
+
+/* ============================================================
+ * Dark mode — Polar Night base, Frost accent
+ * ============================================================ */
+
+[data-theme="dark"] {
+  /* Primary — nord8 (Frost light blue) */
+  --ifm-color-primary: #88c0d0;
+  --ifm-color-primary-dark: #81a1c1;
+  --ifm-color-primary-darker: #5e81ac;
+  --ifm-color-primary-darkest: #4d6f99;
+  --ifm-color-primary-light: #8fbcbb;
+  --ifm-color-primary-lighter: #9ecdd4;
+  --ifm-color-primary-lightest: #b8dce5;
+
+  --ifm-color-content: #d8dee9;
+  --ifm-color-content-secondary: #81a1c1;
+  --ifm-heading-color: #eceff4;
+
+  /* Polar Night scale */
+  --ifm-background-color: #2e3440 !important;
+  --ifm-navbar-background-color: #2e3440;
+
+  --ifm-color-emphasis-100: #3b4252;
+  --ifm-color-emphasis-200: #434c5e;
+  --ifm-color-emphasis-300: #4c566a;
+  --ifm-color-emphasis-400: #677080;
+  --ifm-color-emphasis-500: #81a1c1;
+  --ifm-color-emphasis-600: #88c0d0;
+  --ifm-color-emphasis-700: #d8dee9;
+  --ifm-color-emphasis-800: #e5e9f0;
+  --ifm-color-emphasis-900: #eceff4;
+
+  --ifm-link-color: #88c0d0;
+  --ifm-link-hover-color: #8fbcbb;
+
+  --docusaurus-highlighted-code-line-bg: rgba(136, 192, 208, 0.12);
+  --theme-primary-rgb: 136, 192, 208;
+}
+
+/* ============================================================
+ * Method badge colors — sidebar pills
+ * ============================================================ */
+
+.get > .menu__link::before {
+  background-color: rgba(163, 190, 140, 0.2);
+  color: #5a7a3a;
+}
+.get > .menu__link--active::before {
+  background-color: #a3be8c;
+  color: #2e3440;
+}
+
+.post > .menu__link::before {
+  background-color: rgba(94, 129, 172, 0.15);
+  color: #5e81ac;
+}
+.post > .menu__link--active::before {
+  background-color: #5e81ac;
+  color: #eceff4;
+}
+
+.delete > .menu__link::before {
+  background-color: rgba(191, 97, 106, 0.15);
+  color: #bf616a;
+}
+.delete > .menu__link--active::before {
+  background-color: #bf616a;
+  color: #eceff4;
+}
+
+.put > .menu__link::before {
+  background-color: rgba(208, 135, 112, 0.15);
+  color: #b5603a;
+}
+.put > .menu__link--active::before {
+  background-color: #d08770;
+  color: #2e3440;
+}
+
+.patch > .menu__link::before {
+  background-color: rgba(208, 135, 112, 0.15);
+  color: #b5603a;
+}
+.patch > .menu__link--active::before {
+  background-color: #d08770;
+  color: #2e3440;
+}
+
+/* Dark mode */
+[data-theme="dark"] .get > .menu__link::before {
+  background-color: rgba(163, 190, 140, 0.15);
+  color: #a3be8c;
+}
+[data-theme="dark"] .get > .menu__link--active::before {
+  background-color: #a3be8c;
+  color: #2e3440;
+}
+
+[data-theme="dark"] .post > .menu__link::before {
+  background-color: rgba(136, 192, 208, 0.12);
+  color: #88c0d0;
+}
+[data-theme="dark"] .post > .menu__link--active::before {
+  background-color: #81a1c1;
+  color: #2e3440;
+}
+
+[data-theme="dark"] .delete > .menu__link::before {
+  background-color: rgba(191, 97, 106, 0.15);
+  color: #bf616a;
+}
+[data-theme="dark"] .delete > .menu__link--active::before {
+  background-color: #bf616a;
+  color: #eceff4;
+}
+
+[data-theme="dark"] .put > .menu__link::before {
+  background-color: rgba(208, 135, 112, 0.15);
+  color: #d08770;
+}
+[data-theme="dark"] .put > .menu__link--active::before {
+  background-color: #d08770;
+  color: #2e3440;
+}
+
+[data-theme="dark"] .patch > .menu__link::before {
+  background-color: rgba(208, 135, 112, 0.15);
+  color: #d08770;
+}
+[data-theme="dark"] .patch > .menu__link--active::before {
+  background-color: #d08770;
+  color: #2e3440;
+}
+
+/* ============================================================
+ * API page method badges (.badge--*)
+ * ============================================================ */
+
+.badge--primary {
+  /* GET */
+  background-color: #a3be8c;
+  color: #2e3440;
+  --ifm-badge-border-color: transparent;
+}
+
+.badge--success {
+  /* POST */
+  background-color: #5e81ac;
+  color: #eceff4;
+  --ifm-badge-border-color: transparent;
+}
+
+.badge--danger {
+  /* DELETE */
+  background-color: #bf616a;
+  color: #eceff4;
+  --ifm-badge-border-color: transparent;
+}
+
+.badge--info {
+  /* PUT */
+  background-color: #d08770;
+  color: #2e3440;
+  --ifm-badge-border-color: transparent;
+}
+
+.badge--warning {
+  /* PATCH */
+  background-color: #d08770;
+  color: #2e3440;
+  --ifm-badge-border-color: transparent;
+}
+
+[data-theme="dark"] .badge--primary {
+  /* GET */
+  background-color: #a3be8c;
+  color: #2e3440;
+}
+[data-theme="dark"] .badge--success {
+  /* POST */
+  background-color: #81a1c1;
+  color: #2e3440;
+}
+[data-theme="dark"] .badge--danger {
+  /* DELETE */
+  background-color: #bf616a;
+  color: #eceff4;
+}
+[data-theme="dark"] .badge--info {
+  /* PUT */
+  background-color: #d08770;
+  color: #2e3440;
+}
+[data-theme="dark"] .badge--warning {
+  /* PATCH */
+  background-color: #d08770;
+  color: #2e3440;
+}
+
+/* ============================================================
+ * API Explorer — Send button dark mode
+ *
+ * Frost blue on Polar Night — faithful to Nord's own UI patterns.
+ * ============================================================ */
+
+[data-theme="dark"] .openapi-explorer__request-btn {
+  background-color: #5e81ac;
+  color: #eceff4;
+}
+
+[data-theme="dark"] .openapi-explorer__request-btn:hover {
+  background-color: #81a1c1;
+}
