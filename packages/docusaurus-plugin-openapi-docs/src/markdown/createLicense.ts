@@ -10,7 +10,7 @@ import { LicenseObject } from "../openapi/types";
 
 export function createLicense(license: LicenseObject) {
   if (!license || !Object.keys(license).length) return "";
-  const { name, url } = license;
+  const { name, url, identifier } = license;
 
   return create("div", {
     style: {
@@ -27,6 +27,12 @@ export function createLicense(license: LicenseObject) {
         create("a", {
           href: url,
           children: name ?? url,
+        })
+      ),
+      guard(identifier, () =>
+        create("a", {
+          href: `https://spdx.org/licenses/${identifier}.html`,
+          children: name ?? identifier,
         })
       ),
     ],
