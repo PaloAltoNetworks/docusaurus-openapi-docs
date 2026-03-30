@@ -129,7 +129,9 @@ export function create(
   } else {
     // Inline props as usual
     for (const [key, value] of Object.entries(rest)) {
-      propString += `\n  ${key}={${JSON.stringify(value)}}`;
+      if (value !== undefined) {
+        propString += `\n  ${key}={${JSON.stringify(value)}}`;
+      }
     }
   }
 
