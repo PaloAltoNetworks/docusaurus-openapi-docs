@@ -140,9 +140,7 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
   if (schema.items) {
     const itemsEnum = getEnumFromSchema(schema.items as SchemaObject);
     if (itemsEnum) {
-      qualifierGroups.push(
-        `[${itemsEnum.map((e) => `\`${e}\``).join(", ")}]`
-      );
+      qualifierGroups.push(`[${itemsEnum.map((e) => `\`${e}\``).join(", ")}]`);
     }
   }
 
@@ -150,14 +148,22 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
     let lengthQualifier = "";
     let minLength;
     let maxLength;
+    const charactersMessage = translate({
+      id: OPENAPI_SCHEMA_ITEM.CHARACTERS,
+      message: "characters",
+    });
+    const nonEmptyMessage = translate({
+      id: OPENAPI_SCHEMA_ITEM.NON_EMPTY,
+      message: "non-empty",
+    });
     if (schema.minLength && schema.minLength > 1) {
-      minLength = `\`>= ${schema.minLength} characters\``;
+      minLength = `\`>= ${schema.minLength} ${charactersMessage}\``;
     }
     if (schema.minLength && schema.minLength === 1) {
-      minLength = `\`non-empty\``;
+      minLength = `\`${nonEmptyMessage}\``;
     }
     if (schema.maxLength) {
-      maxLength = `\`<= ${schema.maxLength} characters\``;
+      maxLength = `\`<= ${schema.maxLength} ${charactersMessage}\``;
     }
 
     if (minLength && !maxLength) {
@@ -211,9 +217,11 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
   }
 
   if (schema.pattern) {
-    qualifierGroups.push(
-      `Value must match regular expression \`${schema.pattern}\``
-    );
+    const expressionMessage = translate({
+      id: OPENAPI_SCHEMA_ITEM.EXPRESSION,
+      message: "Value must match regular expression",
+    });
+    qualifierGroups.push(`${expressionMessage} \`${schema.pattern}\``);
   }
 
   // Check if discriminator mapping

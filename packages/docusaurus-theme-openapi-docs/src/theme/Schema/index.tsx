@@ -21,15 +21,10 @@ import { OPENAPI_SCHEMA_ITEM } from "@theme/translationIds";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { merge } from "allof-merge";
 import clsx from "clsx";
-import {
-  getQualifierMessage,
-  getSchemaName,
-} from "docusaurus-plugin-openapi-docs/lib/markdown/schema";
-import type {
-  SchemaObject,
-  SchemaType,
-} from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import isEmpty from "lodash/isEmpty";
+
+import { getQualifierMessage, getSchemaName } from "../../markdown/schema";
+import type { SchemaObject } from "../../types.d";
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 // const jsonSchemaMergeAllOf = require("json-schema-merge-allof");
@@ -296,7 +291,6 @@ const AnyOneOf: React.FC<SchemaProps> = ({
                   collapsible={false}
                   name={undefined}
                   schemaName={computedSchemaName}
-                  qualifierMessage={getQualifierMessage(anyOneSchema)}
                   schema={anyOneSchema}
                   discriminator={false}
                   children={null}
@@ -313,7 +307,6 @@ const AnyOneOf: React.FC<SchemaProps> = ({
                     collapsible={false}
                     name={undefined}
                     schemaName={computedSchemaName}
-                    qualifierMessage={getQualifierMessage(anyOneSchema)}
                     schema={anyOneSchema}
                     discriminator={false}
                     children={null}
@@ -398,7 +391,6 @@ const Properties: React.FC<SchemaProps> = ({
         name=""
         required={false}
         schemaName="object"
-        qualifierMessage={undefined}
         schema={{}}
       />
     );
@@ -611,7 +603,6 @@ const AdditionalProperties: React.FC<SchemaProps> = ({
         name="property name*"
         required={false}
         schemaName="any"
-        qualifierMessage={getQualifierMessage(schema)}
         schema={schema}
         collapsible={false}
         discriminator={false}
@@ -657,7 +648,6 @@ const AdditionalProperties: React.FC<SchemaProps> = ({
         name="property name*"
         required={false}
         schemaName={schemaName}
-        qualifierMessage={getQualifierMessage(schema)}
         schema={additionalProperties}
         collapsible={false}
         discriminator={false}
@@ -767,7 +757,6 @@ const Items: React.FC<{
           collapsible={false}
           name="" // No name for array items
           schemaName={getSchemaName(itemsSchema)}
-          qualifierMessage={getQualifierMessage(itemsSchema)}
           schema={itemsSchema}
           discriminator={false}
           children={null}
@@ -927,7 +916,6 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
             Array.isArray(required) ? required.includes(name) : required
           }
           schemaName={schema.allOf[0]}
-          qualifierMessage={undefined}
           schema={schema.allOf[0]}
           discriminator={false}
           children={null}
@@ -999,7 +987,6 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
         name={name}
         required={Array.isArray(required) ? required.includes(name) : required}
         schemaName={mergedSchemaName}
-        qualifierMessage={getQualifierMessage(mergedSchemas)}
         schema={mergedSchemas}
         discriminator={false}
         children={null}
@@ -1013,7 +1000,6 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
       name={name}
       required={Array.isArray(required) ? required.includes(name) : required}
       schemaName={schemaName}
-      qualifierMessage={getQualifierMessage(schema)}
       schema={schema}
       discriminator={false}
       children={null}
@@ -1217,7 +1203,6 @@ const SchemaNode: React.FC<SchemaProps> = ({
         name={schema.type}
         required={Boolean(schema.required)}
         schemaName={schemaName}
-        qualifierMessage={getQualifierMessage(schema)}
         schema={schema}
         discriminator={false}
         children={null}
@@ -1230,7 +1215,9 @@ const SchemaNode: React.FC<SchemaProps> = ({
 
 export default SchemaNode;
 
-type PrimitiveSchemaType = Exclude<SchemaType, "object" | "array">;
+type PrimitiveSchemaType =
+  | Exclude<NonNullable<SchemaObject["type"]>, "object" | "array">
+  | "null";
 
 const PRIMITIVE_TYPES: Record<PrimitiveSchemaType, true> = {
   string: true,
