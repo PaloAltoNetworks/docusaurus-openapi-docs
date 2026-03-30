@@ -1,57 +1,61 @@
 /**
  * Global CSS for the docusaurus-openapi-docs demo site.
  *
- * Brand colors, typography, and layout inspired by
- * @gleanwork/docusaurus-theme-glean (brand.css + custom.css).
+ * Structure inspired by @gleanwork/docusaurus-theme-glean.
+ * Colors and fonts from Palo Alto Networks brand (pan.dev).
  */
 
 /* ============================================================
  * Fonts
  * ============================================================ */
 
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap");
 
 /* ============================================================
  * CSS Custom Properties — Light mode
  * ============================================================ */
 
 :root {
-  /* Primary — Glean blue */
-  --ifm-color-primary: #343ced;
-  --ifm-color-primary-dark: #1922eb;
-  --ifm-color-primary-darker: #141de2;
-  --ifm-color-primary-darkest: #1018ba;
-  --ifm-color-primary-light: #4f55ef;
-  --ifm-color-primary-lighter: #5c62f1;
-  --ifm-color-primary-lightest: #8488f4;
+  /* Primary — PANW navy */
+  --ifm-color-primary: #004c9d;
+  --ifm-color-primary-dark: #00448d;
+  --ifm-color-primary-darker: #004185;
+  --ifm-color-primary-darkest: #00356e;
+  --ifm-color-primary-light: #0054ad;
+  --ifm-color-primary-lighter: #0057b5;
+  --ifm-color-primary-lightest: #0063cc;
+
+  /* PANW brand accent */
+  --panw-color-orange: #fa582d;
+  --panw-color-orange-dark: #e04d26;
 
   /* Content */
   --ifm-color-content: #1c1e21;
   --ifm-heading-color: #1c1e21;
-  --ifm-color-content-secondary: #1c1e21;
+  --ifm-color-content-secondary: #475566;
 
   /* Semantic */
-  --ifm-color-success: #27ae60;
-  --ifm-color-warning: #d97706;
-  --ifm-color-danger: #e02e2a;
-  --ifm-color-info: #343ced;
+  --ifm-color-success: #1db846;
+  --ifm-color-warning: #a36700;
+  --ifm-color-danger: #d13c3c;
+  --ifm-color-info: #0074d3;
 
   /* Typography */
-  --ifm-font-size-base: 87.5%;
+  --ifm-font-size-base: 95%;
   --ifm-code-font-size: 85%;
   --ifm-font-family-base:
-    "Inter", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell,
-    Noto Sans, sans-serif;
+    "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --ifm-heading-font-family:
-    "Inter", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell,
-    Noto Sans, sans-serif;
+    "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --ifm-font-family-monospace:
-    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-    "Liberation Mono", "Courier New", monospace;
-  --font-jetbrains-mono:
-    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-    "Liberation Mono", "Courier New", monospace;
+    "Fira Code", SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  --font-mono:
+    "Fira Code", SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
   --ifm-font-weight-base: 400;
   --ifm-font-weight-semibold: 600;
   --ifm-heading-font-weight: 600;
@@ -65,28 +69,28 @@
   --ifm-h6-font-size: 0.9rem;
 
   /* Code highlight */
-  --docusaurus-highlighted-code-line-bg: rgba(52, 60, 237, 0.1);
+  --docusaurus-highlighted-code-line-bg: rgba(0, 76, 157, 0.1);
 
   /* Border radius scale */
-  --glean-border-radius-sm: 4px;
-  --glean-border-radius-md: 8px;
-  --glean-border-radius-lg: 12px;
-  --glean-border-radius-xl: 16px;
-  --glean-border-radius-2xl: 24px;
+  --panw-border-radius-sm: 4px;
+  --panw-border-radius-md: 8px;
+  --panw-border-radius-lg: 12px;
+  --panw-border-radius-xl: 16px;
+  --panw-border-radius-2xl: 24px;
 
   /* Shadow scale */
-  --glean-shadow-sm:
+  --panw-shadow-sm:
     0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 0 0 0 rgba(0, 0, 0, 0.4);
-  --glean-shadow-md:
+  --panw-shadow-md:
     0 8px 8px -4px rgba(0, 0, 0, 0.15), 0 0 1px 0 rgba(0, 0, 0, 0.4);
-  --glean-shadow-lg:
+  --panw-shadow-lg:
     0 8px 24px -6px rgba(0, 0, 0, 0.15), 0 0 1px 0 rgba(0, 0, 0, 0.4);
-  --glean-shadow-xl:
+  --panw-shadow-xl:
     0 32px 32px -8px rgba(0, 0, 0, 0.08), 0 0 32px -8px rgba(0, 0, 0, 0.12),
     0 0 1px 0 rgba(0, 0, 0, 0.2);
 
-  /* Announcement bar hue (blue) */
-  --site-primary-hue-saturation: 237 84%;
+  /* Announcement bar hue (PANW navy) */
+  --site-primary-hue-saturation: 214 100%;
 
   --ifm-hr-background-color: var(--ifm-color-emphasis-200);
 }
@@ -96,37 +100,37 @@
  * ============================================================ */
 
 [data-theme="dark"] {
-  /* Neutral gray primary in dark mode (Glean pattern) */
-  --ifm-color-primary: #d1d5db;
-  --ifm-color-primary-dark: #9ca3af;
-  --ifm-color-primary-darker: #6b7280;
-  --ifm-color-primary-darkest: #4b5563;
-  --ifm-color-primary-light: #e5e7eb;
-  --ifm-color-primary-lighter: #f3f4f6;
-  --ifm-color-primary-lightest: #f9fafb;
+  /* PANW dark mode — light blue primary on near-black background */
+  --ifm-color-primary: #85c8ff;
+  --ifm-color-primary-dark: #5eb7ff;
+  --ifm-color-primary-darker: #4baeff;
+  --ifm-color-primary-darkest: #1194ff;
+  --ifm-color-primary-light: #acd9ff;
+  --ifm-color-primary-lighter: #bfe2ff;
+  --ifm-color-primary-lightest: #f9fcff;
 
   --ifm-color-content: #d1d5db;
-  --ifm-color-content-secondary: #d1d5db;
+  --ifm-color-content-secondary: #9aa5b2;
   --ifm-heading-color: #f9fafb;
 
-  --ifm-background-color: #111827 !important;
-  --ifm-navbar-background-color: #111827;
+  --ifm-background-color: #0b1117 !important;
+  --ifm-navbar-background-color: #0b1117;
 
-  /* Full emphasis scale override for dark navy base */
-  --ifm-color-emphasis-100: #1f2937;
-  --ifm-color-emphasis-200: #374151;
-  --ifm-color-emphasis-300: #4b5563;
-  --ifm-color-emphasis-400: #6b7280;
-  --ifm-color-emphasis-500: #9ca3af;
-  --ifm-color-emphasis-600: #d1d5db;
-  --ifm-color-emphasis-700: #e5e7eb;
-  --ifm-color-emphasis-800: #f3f4f6;
-  --ifm-color-emphasis-900: #f9fafb;
+  /* Steel-blue gray scale for dark mode */
+  --ifm-color-emphasis-100: #19222e;
+  --ifm-color-emphasis-200: #354252;
+  --ifm-color-emphasis-300: #475566;
+  --ifm-color-emphasis-400: #768494;
+  --ifm-color-emphasis-500: #9aa5b2;
+  --ifm-color-emphasis-600: #b8c1cc;
+  --ifm-color-emphasis-700: #dfe5eb;
+  --ifm-color-emphasis-800: #f0f4f7;
+  --ifm-color-emphasis-900: #fcfcfd;
 
-  --docusaurus-highlighted-code-line-bg: rgba(52, 60, 237, 0.25);
+  --docusaurus-highlighted-code-line-bg: rgba(133, 200, 255, 0.15);
 
-  --ifm-link-color: #e5e7eb;
-  --ifm-link-hover-color: #f9fafb;
+  --ifm-link-color: #85c8ff;
+  --ifm-link-hover-color: #acd9ff;
 }
 
 /* ============================================================
@@ -158,7 +162,7 @@ article b {
 }
 
 .font-mono {
-  font-family: var(--font-jetbrains-mono);
+  font-family: var(--font-mono);
   font-variant-ligatures: none;
 }
 
@@ -328,11 +332,11 @@ article li a:hover,
 /* POST */
 .post > .menu__link::before {
   content: "post";
-  background-color: rgba(52, 60, 237, 0.12);
-  color: #343ced;
+  background-color: rgba(0, 76, 157, 0.12);
+  color: #004c9d;
 }
 .post > .menu__link--active::before {
-  background-color: #343ced;
+  background-color: #004c9d;
   color: #ffffff;
 }
 
@@ -402,12 +406,12 @@ article li a:hover,
   color: #ffffff;
 }
 [data-theme="dark"] .post > .menu__link::before {
-  background-color: rgba(92, 98, 241, 0.2);
-  color: #8488f4;
+  background-color: rgba(133, 200, 255, 0.15);
+  color: #85c8ff;
 }
 [data-theme="dark"] .post > .menu__link--active::before {
-  background-color: #5c62f1;
-  color: #ffffff;
+  background-color: #5eb7ff;
+  color: #0b1117;
 }
 [data-theme="dark"] .delete > .menu__link::before {
   background-color: rgba(239, 68, 68, 0.15);
@@ -430,6 +434,74 @@ article li a:hover,
   color: #fbbf24;
 }
 [data-theme="dark"] .patch > .menu__link--active::before {
+  background-color: #f59e0b;
+  color: #ffffff;
+}
+
+/* ============================================================
+ * API page method badges (.badge--*)
+ *
+ * MethodEndpoint renders: GET→badge--primary, POST→badge--success,
+ * DELETE→badge--danger, PUT→badge--info, PATCH→badge--warning.
+ * Override to match the sidebar pill colors above.
+ * ============================================================ */
+
+.badge--primary {
+  /* GET */
+  background-color: #16a34a;
+  color: #ffffff;
+  --ifm-badge-border-color: transparent;
+}
+
+.badge--success {
+  /* POST */
+  background-color: #004c9d;
+  color: #ffffff;
+  --ifm-badge-border-color: transparent;
+}
+
+.badge--danger {
+  /* DELETE */
+  background-color: #dc2626;
+  color: #ffffff;
+  --ifm-badge-border-color: transparent;
+}
+
+.badge--info {
+  /* PUT */
+  background-color: #d97706;
+  color: #ffffff;
+  --ifm-badge-border-color: transparent;
+}
+
+.badge--warning {
+  /* PATCH */
+  background-color: #d97706;
+  color: #ffffff;
+  --ifm-badge-border-color: transparent;
+}
+
+[data-theme="dark"] .badge--primary {
+  background-color: #22c55e;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .badge--success {
+  background-color: #5eb7ff;
+  color: #0b1117;
+}
+
+[data-theme="dark"] .badge--danger {
+  background-color: #ef4444;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .badge--info {
+  background-color: #f59e0b;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .badge--warning {
   background-color: #f59e0b;
   color: #ffffff;
 }
@@ -571,7 +643,7 @@ article li a:hover,
 
 .alert {
   border: none;
-  border-radius: var(--glean-border-radius-md);
+  border-radius: var(--panw-border-radius-md);
 }
 
 /* ============================================================
@@ -633,7 +705,7 @@ div[class^="announcementBar_"] {
 
 [id]:target {
   animation: highlight-flash 2s ease-out;
-  background-color: rgba(52, 60, 237, 0.08);
+  background-color: rgba(0, 76, 157, 0.08);
   border-radius: 4px;
   padding: 2px 4px;
   margin: -2px -4px;
@@ -641,15 +713,15 @@ div[class^="announcementBar_"] {
 
 @keyframes highlight-flash {
   0% {
-    background-color: rgba(52, 60, 237, 0.25);
-    box-shadow: 0 0 0 3px rgba(52, 60, 237, 0.25);
+    background-color: rgba(0, 76, 157, 0.25);
+    box-shadow: 0 0 0 3px rgba(0, 76, 157, 0.25);
   }
   50% {
-    background-color: rgba(52, 60, 237, 0.15);
-    box-shadow: 0 0 0 2px rgba(52, 60, 237, 0.15);
+    background-color: rgba(0, 76, 157, 0.15);
+    box-shadow: 0 0 0 2px rgba(0, 76, 157, 0.15);
   }
   100% {
-    background-color: rgba(52, 60, 237, 0.08);
+    background-color: rgba(0, 76, 157, 0.08);
     box-shadow: none;
   }
 }
@@ -657,7 +729,7 @@ div[class^="announcementBar_"] {
 .openapi-markdown__details [id]:target,
 .openapi-schema__list-item [id]:target {
   animation: highlight-flash 2s ease-out;
-  background-color: rgba(52, 60, 237, 0.08) !important;
+  background-color: rgba(0, 76, 157, 0.08) !important;
 }
 
 /* ============================================================
@@ -682,12 +754,12 @@ div[class^="announcementBar_"] {
 
 .tabs-container [role="tabpanel"] pre::-webkit-scrollbar-track {
   background: var(--ifm-color-emphasis-200);
-  border-radius: var(--glean-border-radius-sm);
+  border-radius: var(--panw-border-radius-sm);
 }
 
 .tabs-container [role="tabpanel"] pre::-webkit-scrollbar-thumb {
   background: var(--ifm-color-emphasis-400);
-  border-radius: var(--glean-border-radius-sm);
+  border-radius: var(--panw-border-radius-sm);
 }
 
 .tabs-container [role="tabpanel"] pre::-webkit-scrollbar-thumb:hover {
