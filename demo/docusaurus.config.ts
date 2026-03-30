@@ -1,3 +1,4 @@
+import { themes as prismThemes } from "prism-react-renderer";
 import type * as Preset from "@docusaurus/preset-classic";
 import type { Config } from "@docusaurus/types";
 import type * as Plugin from "@docusaurus/types/src/plugin";
@@ -56,10 +57,14 @@ const config: Config = {
         hideable: true,
       },
     },
+    colorMode: {
+      defaultMode: "light",
+      disableSwitch: false,
+      respectPrefersColorScheme: true,
+    },
     navbar: {
-      title: "OpenAPI Docs",
       logo: {
-        alt: "Keytar",
+        alt: "OpenAPI Docs",
         src: "img/docusaurus-openapi-docs-logo.svg",
       },
       items: [
@@ -148,6 +153,8 @@ const config: Config = {
       copyright: `Copyright © ${new Date().getFullYear()} Palo Alto Networks, Inc. Built with Docusaurus ${DOCUSAURUS_VERSION}.`,
     },
     prism: {
+      theme: prismThemes.github,
+      darkTheme: prismThemes.dracula,
       additionalLanguages: [
         "ruby",
         "csharp",
