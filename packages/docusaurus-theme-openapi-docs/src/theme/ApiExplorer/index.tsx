@@ -41,6 +41,7 @@ function ApiExplorer({
           postman={postman}
           codeSamples={(item as any)["x-codeSamples"] ?? []}
           maskCredentials={mask_credentials}
+          requestBody={item.requestBody}
         />
       )}
       <Request item={item} />

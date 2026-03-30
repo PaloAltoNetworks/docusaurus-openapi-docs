@@ -293,7 +293,11 @@ function tryDecodeJsonParam(value: string): any {
 }
 
 // TODO: this is all a bit hacky
-function setBody(clonedPostman: sdk.Request, body: Body) {
+function setBody(
+  clonedPostman: sdk.Request,
+  body: Body,
+  encoding?: Record<string, { contentType?: string }>
+) {
   if (clonedPostman.body === undefined) {
     return;
   }
@@ -336,14 +340,35 @@ function setBody(clonedPostman: sdk.Request, body: Body) {
       Object.entries(body.content)
         .filter((entry): entry is [string, NonNullable<Content>] => !!entry[1])
         .forEach(([key, content]) => {
+          const partContentType = encoding?.[key]?.contentType
+            ?.split(",")[0]
+            .trim();
           if (content.type === "file") {
-            params.push(new sdk.FormParam({ key: key, ...content }));
+            params.push(
+              new sdk.FormParam({
+                key: key,
+                ...content,
+                ...(partContentType && { contentType: partContentType }),
+              })
+            );
           } else if (content.type === "file[]") {
             content.value.forEach((file) =>
-              params.push(new sdk.FormParam({ key, value: file }))
+              params.push(
+                new sdk.FormParam({
+                  key,
+                  value: file,
+                  ...(partContentType && { contentType: partContentType }),
+                })
+              )
             );
           } else {
-            params.push(new sdk.FormParam({ key: key, value: content.value }));
+            params.push(
+              new sdk.FormParam({
+                key: key,
+                value: content.value,
+                ...(partContentType && { contentType: partContentType }),
+              })
+            );
           }
         });
       params.forEach((param) => {
@@ -391,6 +416,7 @@ interface Options {
   accept: string;
   body: Body;
   auth: AuthState;
+  encoding?: Record<string, { contentType?: string }>;
 }
 
 function buildPostmanRequest(
@@ -405,6 +431,7 @@ function buildPostmanRequest(
     body,
     server,
     auth,
+    encoding,
   }: Options
 ) {
   const clonedPostman = cloneDeep(postman);
@@ -532,7 +559,7 @@ function buildPostmanRequest(
     otherHeaders
   );
 
-  setBody(clonedPostman, body);
+  setBody(clonedPostman, body, encoding);
 
   return clonedPostman;
 }

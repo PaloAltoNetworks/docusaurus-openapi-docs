@@ -115,7 +115,8 @@ async function makeRequest(
   proxy: string | undefined,
   _body: Body,
   timeout: number = DEFAULT_REQUEST_TIMEOUT,
-  credentials?: RequestCredentials
+  credentials?: RequestCredentials,
+  encoding?: Record<string, { contentType?: string }>
 ) {
   const headers = request.toJSON().header;
 
@@ -227,12 +228,25 @@ async function makeRequest(
         const members = (request.body as any)?.formdata?.members;
         if (Array.isArray(members)) {
           for (const data of members) {
+            const partContentType = encoding?.[data.key]?.contentType
+              ?.split(",")[0]
+              .trim();
             if (data.key && data.value.content) {
-              myBody.append(data.key, data.value.content);
+              const blob = partContentType
+                ? new Blob([data.value.content], { type: partContentType })
+                : data.value.content;
+              myBody.append(data.key, blob);
             }
             // handle generic key-value payload
             if (data.key && typeof data.value === "string") {
-              myBody.append(data.key, data.value);
+              if (partContentType) {
+                myBody.append(
+                  data.key,
+                  new Blob([data.value], { type: partContentType })
+                );
+              } else {
+                myBody.append(data.key, data.value);
+              }
             }
           }
         }

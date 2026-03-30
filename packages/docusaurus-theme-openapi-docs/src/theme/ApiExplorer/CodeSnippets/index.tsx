@@ -30,6 +30,7 @@ export interface Props {
   postman: sdk.Request;
   codeSamples: CodeSample[];
   maskCredentials?: boolean;
+  requestBody?: any;
 }
 
 function CodeTab({ children, hidden, className }: any): React.JSX.Element {
@@ -44,6 +45,7 @@ function CodeSnippets({
   postman,
   codeSamples,
   maskCredentials: propMaskCredentials,
+  requestBody,
 }: Props) {
   const { siteConfig } = useDocusaurusContext();
 
@@ -76,7 +78,9 @@ function CodeSnippets({
               const authOptions =
                 clonedAuth?.options?.[key] ??
                 clonedAuth?.options?.[comboAuthId];
-              placeholder = authOptions?.find((opt: any) => opt.key === key)?.name;
+              placeholder = authOptions?.find(
+                (opt: any) => opt.key === key
+              )?.name;
               obj[key] = cleanCredentials(obj[key]);
             } else {
               obj[key] = `<${placeholder ?? key}>`;
@@ -93,6 +97,8 @@ function CodeSnippets({
       })()
     : auth;
 
+  const encoding = requestBody?.content?.[contentType]?.encoding ?? undefined;
+
   // Create a Postman request object using cleanedAuth or original auth
   const cleanedPostmanRequest = buildPostmanRequest(postman, {
     queryParams,
@@ -104,6 +110,7 @@ function CodeSnippets({
     body,
     server,
     auth: cleanedAuth,
+    encoding,
   });
 
   // User-defined languages array

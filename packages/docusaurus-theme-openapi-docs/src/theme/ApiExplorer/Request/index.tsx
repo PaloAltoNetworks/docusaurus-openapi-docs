@@ -76,6 +76,9 @@ function Request({ item }: { item: ApiItem }) {
     ...headerParams,
   ];
 
+  const encoding =
+    item.requestBody?.content?.[contentType]?.encoding ?? undefined;
+
   const postmanRequest = buildPostmanRequest(postman, {
     queryParams,
     pathParams,
@@ -86,6 +89,7 @@ function Request({ item }: { item: ApiItem }) {
     body,
     server,
     auth,
+    encoding,
   });
 
   const delay = (ms: number) =>
@@ -175,7 +179,8 @@ function Request({ item }: { item: ApiItem }) {
         proxy,
         body,
         requestTimeout,
-        requestCredentials
+        requestCredentials,
+        encoding
       );
       if (res.headers.get("content-type")?.includes("text/event-stream")) {
         await handleEventStream(res);
