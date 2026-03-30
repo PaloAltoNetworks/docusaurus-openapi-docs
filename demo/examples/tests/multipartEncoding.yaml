@@ -21,7 +21,7 @@ tags:
   - name: multipartEncoding
     description: Multipart encoding content-type tests
 paths:
-  /post/file-with-content-type:
+  /anything/file-with-content-type:
     post:
       tags:
         - multipartEncoding
@@ -59,7 +59,7 @@ paths:
         "200":
           description: Request echoed by HTTPBin — inspect `files` for Content-Type
 
-  /post/json-metadata-and-file:
+  /anything/json-metadata-and-file:
     post:
       tags:
         - multipartEncoding
@@ -105,7 +105,7 @@ paths:
         "200":
           description: Request echoed by HTTPBin — inspect part Content-Types
 
-  /post/multi-content-type:
+  /anything/multi-content-type:
     post:
       tags:
         - multipartEncoding
@@ -142,7 +142,7 @@ paths:
         "200":
           description: Request echoed by HTTPBin — verify the attachment Content-Type matches your selection
 
-  /post/mixed-encoding:
+  /anything/mixed-encoding:
     post:
       tags:
         - multipartEncoding
