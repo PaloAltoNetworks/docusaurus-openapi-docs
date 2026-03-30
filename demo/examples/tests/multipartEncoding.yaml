@@ -1,0 +1,144 @@
+openapi: 3.1.0
+info:
+  title: Multipart Encoding Demo API
+  description: |
+    Demonstrates OAS `encoding.contentType` support for `multipart/form-data` parts.
+
+    Per the OAS spec, the `encoding` object lets you declare the Content-Type for
+    individual form parts. Without this fix, all parts sent `application/octet-stream`
+    regardless of the declared encoding.
+
+    **Cases covered:**
+    - File part with explicit `contentType` (e.g. `text/plain`, `image/png`)
+    - String/JSON part with explicit `contentType: application/json`
+    - Multiple parts with mixed encoding
+    - Parts without encoding (default browser behaviour)
+  version: 1.0.0
+servers:
+  - url: https://httpbin.org
+    description: HTTPBin (inspect actual request parts in the response)
+tags:
+  - name: multipartEncoding
+    description: Multipart encoding content-type tests
+paths:
+  /post/file-with-content-type:
+    post:
+      tags:
+        - multipartEncoding
+      summary: File part with explicit contentType
+      description: |
+        Verifies that a binary file part declared with `encoding.contentType: text/plain`
+        is sent with `Content-Type: text/plain` rather than `application/octet-stream`.
+
+        Upload any file — check the generated code snippet and (via HTTPBin) the actual
+        request to confirm the part Content-Type is `text/plain`.
+
+        Schema:
+        ```yaml
+        encoding:
+          file:
+            contentType: text/plain
+        ```
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  description: The file to upload.
+                  type: string
+                  format: binary
+              required:
+                - file
+            encoding:
+              file:
+                contentType: text/plain
+      responses:
+        "200":
+          description: Request echoed by HTTPBin — inspect `files` for Content-Type
+
+  /post/json-metadata-and-file:
+    post:
+      tags:
+        - multipartEncoding
+      summary: JSON metadata part + binary file part
+      description: |
+        Verifies that:
+        - The `metadata` string part is sent with `Content-Type: application/json`
+        - The `file` binary part is sent with `Content-Type: image/png`
+
+        This is the canonical use-case from issue #1247.
+
+        Schema:
+        ```yaml
+        encoding:
+          metadata:
+            contentType: application/json
+          file:
+            contentType: image/png
+        ```
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                metadata:
+                  description: JSON metadata for the file.
+                  type: string
+                file:
+                  description: The file to upload.
+                  type: string
+                  format: binary
+              required:
+                - metadata
+                - file
+            encoding:
+              metadata:
+                contentType: application/json
+              file:
+                contentType: image/png
+      responses:
+        "200":
+          description: Request echoed by HTTPBin — inspect part Content-Types
+
+  /post/mixed-encoding:
+    post:
+      tags:
+        - multipartEncoding
+      summary: Mixed — some parts with encoding, some without
+      description: |
+        Verifies that parts without an `encoding` entry use the browser default
+        while parts with `encoding.contentType` use the declared value.
+
+        - `label` — no encoding declared → default (`text/plain`)
+        - `data` — `contentType: application/json`
+        - `attachment` — `contentType: application/octet-stream` (explicit)
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                label:
+                  description: A plain text label (no encoding declared).
+                  type: string
+                data:
+                  description: A JSON payload sent as application/json.
+                  type: string
+                attachment:
+                  description: A file sent as application/octet-stream.
+                  type: string
+                  format: binary
+            encoding:
+              data:
+                contentType: application/json
+              attachment:
+                contentType: application/octet-stream
+      responses:
+        "200":
+          description: Request echoed by HTTPBin — inspect part Content-Types
