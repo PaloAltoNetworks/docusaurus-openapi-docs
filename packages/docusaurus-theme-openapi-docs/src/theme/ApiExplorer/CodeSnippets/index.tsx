@@ -97,7 +97,23 @@ function CodeSnippets({
       })()
     : auth;
 
-  const encoding = requestBody?.content?.[contentType]?.encoding ?? undefined;
+  const specEncoding: Record<string, { contentType?: string }> =
+    requestBody?.content?.[contentType]?.encoding ?? {};
+  const encodingSelection = useTypedSelector(
+    (state: any) => state.encodingSelection
+  );
+  // Merge spec encoding with user selections — user picks override the spec default
+  const encoding = Object.keys(specEncoding).length
+    ? Object.fromEntries(
+        Object.entries(specEncoding).map(([field, enc]) => [
+          field,
+          {
+            ...enc,
+            contentType: encodingSelection[field] ?? enc.contentType,
+          },
+        ])
+      )
+    : undefined;
 
   // Create a Postman request object using cleanedAuth or original auth
   const cleanedPostmanRequest = buildPostmanRequest(postman, {

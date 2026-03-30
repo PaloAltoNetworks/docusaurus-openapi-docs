@@ -17,6 +17,7 @@ import type { SchemaObject } from "docusaurus-plugin-openapi-docs/src/openapi/ty
 
 import FileArrayFormBodyItem from "../FileArrayFormBodyItem";
 import { clearFormBodyKey, setFileFormBody, setStringFormBody } from "../slice";
+import { setFieldEncoding } from "../../EncodingSelection/slice";
 
 interface FormBodyItemProps {
   schemaObject: SchemaObject;
@@ -25,6 +26,7 @@ interface FormBodyItemProps {
   label?: string;
   required?: boolean;
   exampleValue?: SchemaObject["example"];
+  fieldEncoding?: string;
 }
 
 export default function FormBodyItem({
@@ -34,8 +36,32 @@ export default function FormBodyItem({
   label,
   required,
   exampleValue,
+  fieldEncoding,
 }: FormBodyItemProps): React.JSX.Element {
   const dispatch = useTypedDispatch();
+
+  // Parse comma-separated encoding contentType into selectable options
+  const encodingOptions = fieldEncoding
+    ? fieldEncoding
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean)
+    : [];
+  const hasMultipleEncodings = encodingOptions.length > 1;
+
+  // Initialize with the first declared content type
+  const [selectedEncoding, setSelectedEncoding] = useState<string>(
+    encodingOptions[0] ?? ""
+  );
+
+  useEffect(() => {
+    if (encodingOptions[0]) {
+      dispatch(
+        setFieldEncoding({ field: id, contentType: encodingOptions[0] })
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [value, setValue] = useState(() => {
     let initialValue = exampleValue ?? "";
 
@@ -71,6 +97,18 @@ export default function FormBodyItem({
     return (
       <>
         {label && <FormLabel label={label} required={required} />}
+        {hasMultipleEncodings && (
+          <FormSelect
+            label="Content-Type"
+            options={encodingOptions}
+            value={selectedEncoding}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+              const ct = e.target.value;
+              setSelectedEncoding(ct);
+              dispatch(setFieldEncoding({ field: id, contentType: ct }));
+            }}
+          />
+        )}
         <FormFileUpload
           placeholder={schemaObject.description || id}
           onChange={(file: any) => {
@@ -95,16 +133,16 @@ export default function FormBodyItem({
 
   if (schemaObject.type === "object") {
     return (
-    <>
-      {label && <FormLabel label={label} required={required} />}
-      <LiveApp
-        action={(code: string) =>
-          dispatch(setStringFormBody({ key: id, value: code }))
-        }
-      >
-        {value}
-      </LiveApp>
-    </>
+      <>
+        {label && <FormLabel label={label} required={required} />}
+        <LiveApp
+          action={(code: string) =>
+            dispatch(setStringFormBody({ key: id, value: code }))
+          }
+        >
+          {value}
+        </LiveApp>
+      </>
     );
   }
 

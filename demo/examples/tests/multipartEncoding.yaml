@@ -105,6 +105,43 @@ paths:
         "200":
           description: Request echoed by HTTPBin — inspect part Content-Types
 
+  /post/multi-content-type:
+    post:
+      tags:
+        - multipartEncoding
+      summary: File part with multiple selectable Content-Types
+      description: |
+        Verifies the Content-Type selector UI: when `encoding.contentType` is a
+        comma-separated list, a dropdown appears next to the file picker letting
+        the user choose which type to use. The code snippet and actual request
+        both update to reflect the selection.
+
+        Schema:
+        ```yaml
+        encoding:
+          attachment:
+            contentType: image/png, image/jpeg, application/octet-stream
+        ```
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                attachment:
+                  description: Upload an image — select its Content-Type from the dropdown.
+                  type: string
+                  format: binary
+              required:
+                - attachment
+            encoding:
+              attachment:
+                contentType: "image/png, image/jpeg, application/octet-stream"
+      responses:
+        "200":
+          description: Request echoed by HTTPBin — verify the attachment Content-Type matches your selection
+
   /post/mixed-encoding:
     post:
       tags:

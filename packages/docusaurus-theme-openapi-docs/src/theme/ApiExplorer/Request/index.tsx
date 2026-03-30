@@ -76,8 +76,23 @@ function Request({ item }: { item: ApiItem }) {
     ...headerParams,
   ];
 
-  const encoding =
-    item.requestBody?.content?.[contentType]?.encoding ?? undefined;
+  const specEncoding: Record<string, { contentType?: string }> =
+    item.requestBody?.content?.[contentType]?.encoding ?? {};
+  const encodingSelection = useTypedSelector(
+    (state: any) => state.encodingSelection
+  );
+  // Merge spec encoding with user selections — user picks override the spec default
+  const encoding = Object.keys(specEncoding).length
+    ? Object.fromEntries(
+        Object.entries(specEncoding).map(([field, enc]) => [
+          field,
+          {
+            ...enc,
+            contentType: encodingSelection[field] ?? enc.contentType,
+          },
+        ])
+      )
+    : undefined;
 
   const postmanRequest = buildPostmanRequest(postman, {
     queryParams,
