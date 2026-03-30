@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write
 
 jobs:
   publish-canary:
@@ -24,6 +25,7 @@ jobs:
         uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4
         with:
           node-version: "22"
+          registry-url: "https://registry.npmjs.org"
           cache: yarn
       - name: Prepare git
         run: |
@@ -31,13 +33,8 @@ jobs:
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git fetch
           git checkout main
-          echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" >> .npmrc
-        env:
-          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
       - name: Installation
         run: yarn && yarn build-packages
       - name: Publish Canary release
         run: |
           yarn canary
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
