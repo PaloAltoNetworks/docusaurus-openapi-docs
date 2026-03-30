@@ -8,6 +8,7 @@
 import React from "react";
 
 import BrowserOnly from "@docusaurus/BrowserOnly";
+import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import { useTypedSelector } from "@theme/ApiItem/hooks";
 
 function colorForMethod(method: string) {
@@ -38,6 +39,26 @@ export interface Props {
 }
 
 function MethodEndpoint({ method, path, context }: Props) {
+  // During SSR, render without Redux store access to avoid "Cannot read properties
+  // of null (reading 'store')" errors caused by useSelector running outside a Provider.
+  if (!ExecutionEnvironment.canUseDOM) {
+    return (
+      <>
+        <pre className="openapi__method-endpoint">
+          <span className={"badge badge--" + colorForMethod(method)}>
+            {method === "event" ? "Webhook" : method.toUpperCase()}
+          </span>{" "}
+          {method !== "event" && (
+            <h2 className="openapi__method-endpoint-path">
+              {`${path.replace(/{([a-z0-9-_]+)}/gi, ":$1")}`}
+            </h2>
+          )}
+        </pre>
+        <div className="openapi__divider" />
+      </>
+    );
+  }
+
   let serverValue = useTypedSelector((state: any) => state.server.value);
   let serverUrlWithVariables = "";
 
