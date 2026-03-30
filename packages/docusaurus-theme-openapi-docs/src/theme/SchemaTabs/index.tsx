@@ -223,8 +223,35 @@ function TabsComponent(props: SchemaTabsProps): React.JSX.Element {
     </div>
   );
 }
-export default function SchemaTabs(props: SchemaTabsProps): React.JSX.Element {
+export default function SchemaTabs(
+  props: SchemaTabsProps
+): React.JSX.Element | null {
   const isBrowser = useIsBrowser();
+
+  const children = Array.isArray(props.children)
+    ? props.children.filter(Boolean)
+    : props.children
+      ? [props.children]
+      : [];
+
+  if (children.length === 0) {
+    return null;
+  }
+
+  let sanitizedChildren;
+  try {
+    sanitizedChildren = sanitizeTabsChildren(children);
+  } catch {
+    return null;
+  }
+
+  if (
+    !sanitizedChildren ||
+    (Array.isArray(sanitizedChildren) && sanitizedChildren.length === 0)
+  ) {
+    return null;
+  }
+
   return (
     <TabsComponent
       // Remount tabs after hydration
@@ -232,7 +259,7 @@ export default function SchemaTabs(props: SchemaTabsProps): React.JSX.Element {
       key={String(isBrowser)}
       {...props}
     >
-      {sanitizeTabsChildren(props.children)}
+      {sanitizedChildren}
     </TabsComponent>
   );
 }

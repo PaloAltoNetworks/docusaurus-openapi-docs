@@ -214,6 +214,14 @@ const AnyOneOf: React.FC<SchemaProps> = ({
   schemaPath,
 }) => {
   const key = schema.oneOf ? "oneOf" : "anyOf";
+  const schemaArray = schema[key];
+
+  // Empty oneOf/anyOf arrays are valid in OpenAPI specs but would cause the
+  // Tabs component to throw "requires at least one TabItem". Return null instead.
+  if (!schemaArray || !Array.isArray(schemaArray) || schemaArray.length === 0) {
+    return null;
+  }
+
   const type = schema.oneOf
     ? translate({ id: OPENAPI_SCHEMA_ITEM.ONE_OF, message: "oneOf" })
     : translate({ id: OPENAPI_SCHEMA_ITEM.ANY_OF, message: "anyOf" });
