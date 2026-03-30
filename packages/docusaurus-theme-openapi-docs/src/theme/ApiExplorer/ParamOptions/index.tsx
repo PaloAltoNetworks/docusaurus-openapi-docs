@@ -48,6 +48,11 @@ export function getSchemaEnum(schema: any): any[] | undefined {
     }
   }
 
+  // const is semantically a single-value enum
+  if (schema?.const !== undefined) {
+    return [schema.const];
+  }
+
   return undefined;
 }
 
