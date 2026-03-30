@@ -102,7 +102,7 @@ function Request({ item }: { item: ApiItem }) {
     (param: { in: "path" | "query" | "header" | "cookie" }) => {
       const paramType = param.in;
       const paramsArray: ParameterObject[] = paramsObject[paramType];
-      paramsArray.push(param as ParameterObject);
+      paramsArray?.push(param as ParameterObject);
     }
   );
 
