@@ -102,9 +102,33 @@ function ParamsItem({ param, ...rest }: Props) {
     </span>
   ));
 
+  const constValue = schema?.const;
+
   const renderQualifier = guard(getQualifierMessage(schema), (qualifier) => (
     <Markdown>{qualifier}</Markdown>
   ));
+
+  function renderConstValue() {
+    if (constValue === undefined) {
+      return undefined;
+    }
+    const label = translate({
+      id: OPENAPI_SCHEMA_ITEM.CONSTANT_VALUE,
+      message: "Constant value:",
+    });
+    return (
+      <div>
+        <strong>{label} </strong>
+        <span>
+          <code>
+            {typeof constValue === "string"
+              ? constValue
+              : JSON.stringify(constValue)}
+          </code>
+        </span>
+      </div>
+    );
+  }
 
   const renderDescription = guard(description, (description) => (
     <Markdown>{description}</Markdown>
@@ -173,6 +197,7 @@ function ParamsItem({ param, ...rest }: Props) {
         {renderDeprecated}
       </span>
       {renderQualifier}
+      {renderConstValue()}
       {renderDescription}
       {renderEnumDescriptions}
       {renderDefaultValue()}
