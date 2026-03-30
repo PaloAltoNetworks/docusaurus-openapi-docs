@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - v2.0.0
+  workflow_dispatch:
 
 env:
   FORCE_COLOR: true
@@ -46,7 +47,7 @@ jobs:
       - name: Check if packages changed
         id: packages_changed
         run: |
-          if git diff --name-only HEAD~1 HEAD | grep -q "^packages/"; then
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]] || git diff --name-only HEAD~1 HEAD | grep -q "^packages/"; then
             echo "changed=true" >> $GITHUB_OUTPUT
           else
             echo "changed=false" >> $GITHUB_OUTPUT
