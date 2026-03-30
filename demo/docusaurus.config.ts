@@ -43,7 +43,7 @@ const config: Config = {
         theme: {
           customCss: [
             "./src/css/custom.css",
-            "./src/css/themes/midnight.css", // swap this line to try a different theme
+            "./src/css/themes/indigo.css", // swap this line to try a different theme
           ],
         },
         gtag: {
