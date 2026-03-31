@@ -41,6 +41,71 @@ function applyPalette(id: ThemeId): void {
   localStorage.setItem(STORAGE_KEY, id);
 }
 
+function MobileSection({
+  active,
+  onSelect,
+  current,
+}: {
+  active: ThemeId;
+  onSelect: (id: ThemeId) => void;
+  current: (typeof THEMES)[number];
+}) {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <div className={styles.mobileRoot}>
+      <button
+        className={styles.mobileToggle}
+        onClick={() => setExpanded((e) => !e)}
+        aria-expanded={expanded}
+      >
+        <span className={styles.mobileToggleLeft}>
+          <span
+            className={styles.mobileSwatch}
+            style={{ background: current.color }}
+          />
+          <span>Color Palette</span>
+        </span>
+        <svg
+          className={`${styles.mobileChevron} ${expanded ? styles.mobileChevronOpen : ""}`}
+          width="10"
+          height="10"
+          viewBox="0 0 10 10"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M2 3.5L5 6.5L8 3.5"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </button>
+
+      {expanded && (
+        <div className={styles.mobileGrid}>
+          {THEMES.map((theme) => (
+            <button
+              key={theme.id}
+              className={`${styles.mobileTile} ${theme.id === active ? styles.mobileTileActive : ""}`}
+              onClick={() => onSelect(theme.id)}
+              aria-pressed={theme.id === active}
+            >
+              <span
+                className={styles.mobileSwatch}
+                style={{ background: theme.color }}
+              />
+              <span>{theme.label}</span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function PalettePicker({
   mobile,
 }: {
@@ -94,25 +159,7 @@ export default function PalettePicker({
   /* ---- Mobile drawer ---------------------------------------------------- */
   if (mobile) {
     return (
-      <div className={styles.mobileRoot}>
-        <p className={styles.mobileHeading}>Color Palette</p>
-        <div className={styles.mobileGrid}>
-          {THEMES.map((theme) => (
-            <button
-              key={theme.id}
-              className={`${styles.mobileTile} ${theme.id === active ? styles.mobileTileActive : ""}`}
-              onClick={() => select(theme.id)}
-              aria-pressed={theme.id === active}
-            >
-              <span
-                className={styles.mobileSwatch}
-                style={{ background: theme.color }}
-              />
-              <span>{theme.label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
+      <MobileSection active={active} onSelect={select} current={current} />
     );
   }
 
