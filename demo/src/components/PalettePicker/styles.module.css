@@ -151,12 +151,13 @@
 
 .mobileChevron {
   color: var(--ifm-color-emphasis-600);
-  transition: transform 150ms ease;
+  transition: transform 200ms ease;
   flex-shrink: 0;
+  transform: rotate(-90deg);
 }
 
 .mobileChevronOpen {
-  transform: rotate(180deg);
+  transform: rotate(0deg);
 }
 
 .mobileGrid {
