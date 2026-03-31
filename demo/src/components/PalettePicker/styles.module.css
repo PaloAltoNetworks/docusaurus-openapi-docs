@@ -102,3 +102,10 @@
   flex-shrink: 0;
   color: var(--ifm-color-primary);
 }
+
+/* Hide in the mobile top bar — Docusaurus collapses the navbar at 996px */
+@media (max-width: 996px) {
+  .root {
+    display: none;
+  }
+}
