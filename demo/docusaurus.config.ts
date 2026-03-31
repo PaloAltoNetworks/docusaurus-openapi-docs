@@ -1,3 +1,4 @@
+import { themes as prismThemes } from "prism-react-renderer";
 import type * as Preset from "@docusaurus/preset-classic";
 import type { Config } from "@docusaurus/types";
 import type * as Plugin from "@docusaurus/types/src/plugin";
@@ -40,7 +41,7 @@ const config: Config = {
         },
         blog: false,
         theme: {
-          customCss: "./src/css/custom.css",
+          customCss: ["./src/css/custom.css"],
         },
         gtag: {
           trackingID: "GTM-THVM29S",
@@ -56,10 +57,14 @@ const config: Config = {
         hideable: true,
       },
     },
+    colorMode: {
+      defaultMode: "light",
+      disableSwitch: false,
+      respectPrefersColorScheme: true,
+    },
     navbar: {
-      title: "OpenAPI Docs",
       logo: {
-        alt: "Keytar",
+        alt: "OpenAPI Docs",
         src: "img/docusaurus-openapi-docs-logo.svg",
       },
       items: [
@@ -88,6 +93,7 @@ const config: Config = {
             },
           ],
         },
+        { type: "custom-PalettePicker", position: "right" },
         {
           href: "https://medium.com/palo-alto-networks-developer-blog",
           position: "right",
@@ -148,6 +154,8 @@ const config: Config = {
       copyright: `Copyright © ${new Date().getFullYear()} Palo Alto Networks, Inc. Built with Docusaurus ${DOCUSAURUS_VERSION}.`,
     },
     prism: {
+      theme: prismThemes.github,
+      darkTheme: prismThemes.dracula,
       additionalLanguages: [
         "ruby",
         "csharp",
@@ -372,6 +380,22 @@ const config: Config = {
         } satisfies Plugin.PluginOptions,
       },
     ],
+    // FOUC prevention: restore saved palette before React hydrates
+    function paletteScript() {
+      return {
+        name: "palette-fouc-script",
+        injectHtmlTags() {
+          return {
+            headTags: [
+              {
+                tagName: "script",
+                innerHTML: `try{var p=localStorage.getItem('openapi-demo-palette');if(p){var l=document.createElement('link');l.id='openapi-palette-link';l.rel='stylesheet';l.href='/themes/'+p+'.css';document.head.appendChild(l);}}catch(e){}`,
+              },
+            ],
+          };
+        },
+      };
+    },
   ],
   themes: ["docusaurus-theme-openapi-docs"],
   stylesheets: [

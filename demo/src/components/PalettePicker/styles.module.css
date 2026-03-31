@@ -1,0 +1,203 @@
+/* ============================================================
+ * Desktop — pill trigger + dropdown
+ * ============================================================ */
+
+.root {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 8px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ifm-color-content);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  height: 32px;
+  line-height: 1;
+  transition:
+    background 150ms,
+    border-color 150ms;
+  white-space: nowrap;
+}
+
+.trigger:hover {
+  background: var(--ifm-color-emphasis-100);
+  border-color: var(--ifm-color-emphasis-400);
+}
+
+.swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
+}
+
+.triggerLabel {
+  /* inherits from .trigger */
+}
+
+.chevron {
+  margin-left: 2px;
+  flex-shrink: 0;
+  color: var(--ifm-color-emphasis-600);
+  transition: transform 150ms ease;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 500;
+  min-width: 160px;
+  background: var(--ifm-background-color);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.12),
+    0 1px 4px rgba(0, 0, 0, 0.08);
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ifm-color-content);
+  cursor: pointer;
+  font-size: 13px;
+  font-family: inherit;
+  font-weight: 400;
+  text-align: left;
+  width: 100%;
+  transition: background 100ms;
+}
+
+.option:hover {
+  background: var(--ifm-color-emphasis-100);
+}
+
+.optionActive {
+  font-weight: 600;
+}
+
+.check {
+  margin-left: auto;
+  flex-shrink: 0;
+  color: var(--ifm-color-primary);
+}
+
+/* Hide pill button in mobile top bar — accessible via the drawer instead */
+@media (max-width: 996px) {
+  .root {
+    display: none;
+  }
+}
+
+/* ============================================================
+ * Mobile drawer — flat grid of labeled swatches
+ * ============================================================ */
+
+.mobileRoot {
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+  margin-top: 4px;
+}
+
+.mobileToggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  background: transparent;
+  color: var(--ifm-color-content);
+  cursor: pointer;
+  font-size: 14px;
+  font-family: inherit;
+  font-weight: 500;
+  text-align: left;
+}
+
+.mobileToggle:hover {
+  background: var(--ifm-color-emphasis-100);
+}
+
+.mobileToggleLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mobileChevron {
+  color: var(--ifm-color-emphasis-600);
+  transition: transform 200ms ease;
+  flex-shrink: 0;
+  transform: rotate(-90deg);
+}
+
+.mobileChevronOpen {
+  transform: rotate(0deg);
+}
+
+.mobileGrid {
+  padding: 4px 12px 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.mobileTile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ifm-color-content);
+  cursor: pointer;
+  font-size: 13px;
+  font-family: inherit;
+  font-weight: 400;
+  text-align: left;
+  transition: background 100ms;
+}
+
+.mobileTile:hover {
+  background: var(--ifm-color-emphasis-100);
+}
+
+.mobileTileActive {
+  border-color: var(--ifm-color-primary);
+  font-weight: 600;
+  background: var(--ifm-color-emphasis-100);
+}
+
+.mobileSwatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
+}
