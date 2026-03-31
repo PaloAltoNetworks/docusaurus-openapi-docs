@@ -1,6 +1,9 @@
 /* ============================================================================
  * PalettePicker — runtime color palette switcher for the navbar.
  *
+ * Desktop: pill button in the top bar that opens a dropdown.
+ * Mobile:  section rendered inside the hamburger drawer (mobile={true}).
+ *
  * Dynamically injects /themes/<id>.css into <head> and persists
  * the choice in localStorage under 'openapi-demo-palette'.
  * ========================================================================== */
@@ -47,7 +50,6 @@ export default function PalettePicker({
   const [active, setActive] = useState<ThemeId>(DEFAULT_PALETTE);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Read saved preference and apply on mount
   useEffect(() => {
     const saved =
       (localStorage.getItem(STORAGE_KEY) as ThemeId) ?? DEFAULT_PALETTE;
@@ -57,8 +59,9 @@ export default function PalettePicker({
     }
   }, []);
 
-  // Close on outside pointer-down
+  // Close dropdown on outside pointer-down (desktop only)
   useEffect(() => {
+    if (mobile) return;
     function onPointerDown(e: PointerEvent) {
       if (
         containerRef.current &&
@@ -69,16 +72,16 @@ export default function PalettePicker({
     }
     document.addEventListener("pointerdown", onPointerDown);
     return () => document.removeEventListener("pointerdown", onPointerDown);
-  }, []);
+  }, [mobile]);
 
-  // Close on Escape
   useEffect(() => {
+    if (mobile) return;
     function onKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") setOpen(false);
     }
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, []);
+  }, [mobile]);
 
   function select(id: ThemeId) {
     setActive(id);
@@ -86,13 +89,34 @@ export default function PalettePicker({
     setOpen(false);
   }
 
-  // Hide in mobile nav drawer
   const current = THEMES.find((t) => t.id === active) ?? THEMES[0];
 
-  // In the mobile drawer Docusaurus renders a flat list — skip there,
-  // the top-bar compact button is already accessible on mobile.
-  if (mobile) return null;
+  /* ---- Mobile drawer ---------------------------------------------------- */
+  if (mobile) {
+    return (
+      <div className={styles.mobileRoot}>
+        <p className={styles.mobileHeading}>Color Palette</p>
+        <div className={styles.mobileGrid}>
+          {THEMES.map((theme) => (
+            <button
+              key={theme.id}
+              className={`${styles.mobileTile} ${theme.id === active ? styles.mobileTileActive : ""}`}
+              onClick={() => select(theme.id)}
+              aria-pressed={theme.id === active}
+            >
+              <span
+                className={styles.mobileSwatch}
+                style={{ background: theme.color }}
+              />
+              <span>{theme.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
+  /* ---- Desktop dropdown ------------------------------------------------- */
   return (
     <div ref={containerRef} className={styles.root}>
       <button
