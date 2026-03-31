@@ -103,9 +103,57 @@
   color: var(--ifm-color-primary);
 }
 
-/* Hide in the mobile top bar — Docusaurus collapses the navbar at 996px */
+/* Mobile — collapse to swatch-only button, full-width dropdown */
 @media (max-width: 996px) {
-  .root {
+  .trigger {
+    padding: 6px;
+    width: 36px;
+    height: 36px;
+    justify-content: center;
+    border-radius: 50%;
+  }
+
+  .triggerLabel,
+  .chevron {
     display: none;
+  }
+
+  .swatch {
+    width: 14px;
+    height: 14px;
+  }
+
+  .dropdown {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    min-width: unset;
+    width: 100%;
+    border-radius: 16px 16px 0 0;
+    padding: 8px 8px 24px;
+    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.16);
+  }
+
+  /* Sheet handle */
+  .dropdown::before {
+    content: "";
+    display: block;
+    width: 36px;
+    height: 4px;
+    background: var(--ifm-color-emphasis-300);
+    border-radius: 2px;
+    margin: 4px auto 12px;
+  }
+
+  .option {
+    padding: 12px 16px;
+    font-size: 15px;
+  }
+
+  .swatch {
+    width: 12px;
+    height: 12px;
   }
 }

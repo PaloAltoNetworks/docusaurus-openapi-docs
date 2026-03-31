@@ -87,9 +87,11 @@ export default function PalettePicker({
   }
 
   // Hide in mobile nav drawer
-  if (mobile) return null;
-
   const current = THEMES.find((t) => t.id === active) ?? THEMES[0];
+
+  // In the mobile drawer Docusaurus renders a flat list — skip there,
+  // the top-bar compact button is already accessible on mobile.
+  if (mobile) return null;
 
   return (
     <div ref={containerRef} className={styles.root}>
