@@ -35,7 +35,7 @@ jobs:
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
       - name: Installation
-        run: yarn && yarn build-packages
+        run: yarn --frozen-lockfile --prefer-offline --ignore-scripts && yarn build-packages
       - name: Publish Canary release
         run: |
           yarn canaryBeta

@@ -112,7 +112,7 @@ jobs:
           cache: "yarn"
 
       - name: Install dependencies
-        run: yarn --prefer-offline --ignore-scripts
+        run: yarn --frozen-lockfile --prefer-offline --ignore-scripts
 
       - name: Build packages
         run: yarn build-packages
@@ -202,7 +202,7 @@ jobs:
           cache: "yarn"
 
       - name: Install dependencies
-        run: yarn --prefer-offline
+        run: yarn --frozen-lockfile --prefer-offline --ignore-scripts
 
       - name: Install Playwright
         run: npx playwright install --with-deps chromium
