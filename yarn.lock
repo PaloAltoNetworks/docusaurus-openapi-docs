@@ -5539,9 +5539,9 @@ algoliasearch@^5.28.0, algoliasearch@^5.37.0:
     "@algolia/requester-node-http" "5.46.3"
 
 allof-merge@^0.6.6:
-  version "0.6.7"
-  resolved "https://registry.yarnpkg.com/allof-merge/-/allof-merge-0.6.7.tgz#9acb1ea42257ddcf261a186f8ce47dc16e5a6832"
-  integrity sha512-slvjkM56OdeVkm1tllrnaumtSHwqyHrepXkAe6Am+CW4WdbHkNqdOKPF6cvY3/IouzvXk1BoLICT5LY7sCoFGw==
+  version "0.6.8"
+  resolved "https://registry.yarnpkg.com/allof-merge/-/allof-merge-0.6.8.tgz#5813a23c860407d279f85053ef541c8f946c5021"
+  integrity sha512-RJrHVDqITsU1kjE2L7s1hy4AYZSTlO1m9jTleYhVCEOfOpbbygRGfcEgrp+bW3oX/PcMUwVkt6MSJyXoyI6lRA==
   dependencies:
     json-crawl "^0.5.3"
 
