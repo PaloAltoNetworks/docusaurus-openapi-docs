@@ -1,0 +1,147 @@
+openapi: 3.1.0
+info:
+  title: Callback Examples Demo API
+  description: |
+    Demonstrates that `example` and `examples` defined on schemas referenced
+    by callback request bodies are rendered in the documentation.
+
+    **Cases covered:**
+    - Callback request body whose schema has a top-level `example`
+    - Callback request body with a MediaTypeObject-level `example`
+    - Regular request body with `example` on the schema (regression guard)
+  version: 1.0.0
+servers:
+  - url: https://httpbin.org
+    description: HTTPBin
+tags:
+  - name: callbackExamples
+    description: Callback example rendering tests
+paths:
+  /anything/webhook-source:
+    post:
+      tags:
+        - callbackExamples
+      summary: Register webhook (schema-level example on callback body)
+      description: |
+        Creates a resource and fires a callback to the provided URL.
+        The callback's request body schema has a top-level `example` —
+        verify it appears as an "Example" tab in the Callbacks section.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                callbackUrl:
+                  type: string
+                  format: uri
+                  description: URL to receive the callback POST.
+              required:
+                - callbackUrl
+      callbacks:
+        onEvent:
+          "{$request.body#/callbackUrl}":
+            post:
+              summary: Event callback
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      $ref: "#/components/schemas/EventPayload"
+              responses:
+                "200":
+                  description: Callback acknowledged
+      responses:
+        "201":
+          description: Registration created
+
+  /anything/webhook-media-example:
+    post:
+      tags:
+        - callbackExamples
+      summary: Register webhook (MediaTypeObject-level example on callback body)
+      description: |
+        Same as above but the `example` is on the MediaTypeObject, not the schema.
+        Verify the "Example" tab appears in the Callbacks section.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                callbackUrl:
+                  type: string
+                  format: uri
+              required:
+                - callbackUrl
+      callbacks:
+        onEvent:
+          "{$request.body#/callbackUrl}":
+            post:
+              summary: Event callback (media-level example)
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      $ref: "#/components/schemas/EventPayload"
+                    example:
+                      id: "evt_media_001"
+                      type: "order.completed"
+                      payload:
+                        orderId: "ORD-999"
+                        total: 49.99
+              responses:
+                "200":
+                  description: Callback acknowledged
+      responses:
+        "201":
+          description: Registration created
+
+  /anything/request-body-with-example:
+    post:
+      tags:
+        - callbackExamples
+      summary: Regular endpoint with schema-level example (regression guard)
+      description: |
+        Verifies that the schema-level `example` also renders for regular
+        (non-callback) request bodies — i.e. this fix doesn't regress
+        the existing request body display.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EventPayload"
+      responses:
+        "200":
+          description: OK
+
+components:
+  schemas:
+    EventPayload:
+      type: object
+      description: Payload delivered to the registered callback URL.
+      example:
+        id: "evt_001"
+        type: "order.created"
+        payload:
+          orderId: "ORD-123"
+          total: 29.99
+      properties:
+        id:
+          type: string
+          description: Unique event identifier.
+        type:
+          type: string
+          description: Event type slug.
+        payload:
+          type: object
+          description: Event-specific data.
+      required:
+        - id
+        - type
+        - payload
