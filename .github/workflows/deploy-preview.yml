@@ -176,8 +176,9 @@ jobs:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ steps.creds.outputs.sa_key }}"
           projectId: pandev
-          expires: 30d
+          expires: 7d
           channelId: "pr${{ github.event.number }}"
+          totalPreviewChannelLimit: 25
         env:
           FIREBASE_CLI_PREVIEWS: hostingchannels
 
