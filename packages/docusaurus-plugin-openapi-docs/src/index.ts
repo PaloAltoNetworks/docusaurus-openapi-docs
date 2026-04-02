@@ -764,7 +764,7 @@ custom_edit_url: null
           let targetDocsPluginId: any;
           if (pluginId) {
             try {
-              const pluginConfig = getPluginConfig(plugins, pluginId);
+              const pluginConfig = getPluginConfig(pluginInstances, pluginId);
               targetConfig = pluginConfig.config ?? {};
               targetDocsPluginId = pluginConfig.docsPluginId;
             } catch {
@@ -835,7 +835,7 @@ custom_edit_url: null
           let targetDocsPluginId: any;
           if (pluginId) {
             try {
-              const pluginConfig = getPluginConfig(plugins, pluginId);
+              const pluginConfig = getPluginConfig(pluginInstances, pluginId);
               targetConfig = pluginConfig.config ?? {};
               targetDocsPluginId = pluginConfig.docsPluginId;
             } catch {
@@ -933,7 +933,7 @@ custom_edit_url: null
           let targetConfig: any;
           if (pluginId) {
             try {
-              const pluginConfig = getPluginConfig(plugins, pluginId);
+              const pluginConfig = getPluginConfig(pluginInstances, pluginId);
               targetConfig = pluginConfig.config ?? {};
             } catch {
               console.error(
@@ -992,7 +992,7 @@ custom_edit_url: null
           let targetConfig: any;
           if (pluginId) {
             try {
-              const pluginConfig = getPluginConfig(plugins, pluginId);
+              const pluginConfig = getPluginConfig(pluginInstances, pluginId);
               targetConfig = pluginConfig.config ?? {};
             } catch {
               console.error(
