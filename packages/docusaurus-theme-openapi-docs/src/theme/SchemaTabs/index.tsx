@@ -25,13 +25,22 @@ import useIsBrowser from "@docusaurus/useIsBrowser";
 import clsx from "clsx";
 import flatten from "lodash/flatten";
 
+export interface SchemaTabsProps extends TabProps {
+  /**
+   * Optional callback fired when the selected tab changes.
+   * Receives the index of the newly selected tab.
+   */
+  onChange?: (index: number) => void;
+}
+
 function TabList({
   className,
   block,
   selectedValue,
   selectValue,
   tabValues,
-}: TabProps & ReturnType<typeof useTabs>) {
+  onChange,
+}: SchemaTabsProps & ReturnType<typeof useTabs>) {
   const tabRefs: (HTMLLIElement | null)[] = [];
   const { blockElementScrollPositionUntilNextRender } =
     useScrollPositionBlocker();
@@ -49,6 +58,8 @@ function TabList({
     if (newTabValue !== selectedValue) {
       blockElementScrollPositionUntilNextRender(newTab);
       selectValue(newTabValue);
+      // Notify parent component of the tab change
+      onChange?.(newTabIndex);
     }
   };
 
@@ -177,7 +188,7 @@ function TabContent({
   lazy,
   children,
   selectedValue,
-}: TabProps & ReturnType<typeof useTabs>) {
+}: SchemaTabsProps & ReturnType<typeof useTabs>) {
   const childTabs = (Array.isArray(children) ? children : [children]).filter(
     Boolean
   ) as ReactElement<TabItemProps>[];
@@ -203,7 +214,7 @@ function TabContent({
     </div>
   );
 }
-function TabsComponent(props: TabProps): React.JSX.Element {
+function TabsComponent(props: SchemaTabsProps): React.JSX.Element {
   const tabs = useTabs(props);
   return (
     <div className="openapi-tabs__schema-container">
@@ -212,8 +223,35 @@ function TabsComponent(props: TabProps): React.JSX.Element {
     </div>
   );
 }
-export default function SchemaTabs(props: TabProps): React.JSX.Element {
+export default function SchemaTabs(
+  props: SchemaTabsProps
+): React.JSX.Element | null {
   const isBrowser = useIsBrowser();
+
+  const children = Array.isArray(props.children)
+    ? props.children.filter(Boolean)
+    : props.children
+      ? [props.children]
+      : [];
+
+  if (children.length === 0) {
+    return null;
+  }
+
+  let sanitizedChildren;
+  try {
+    sanitizedChildren = sanitizeTabsChildren(children);
+  } catch {
+    return null;
+  }
+
+  if (
+    !sanitizedChildren ||
+    (Array.isArray(sanitizedChildren) && sanitizedChildren.length === 0)
+  ) {
+    return null;
+  }
+
   return (
     <TabsComponent
       // Remount tabs after hydration
@@ -221,7 +259,7 @@ export default function SchemaTabs(props: TabProps): React.JSX.Element {
       key={String(isBrowser)}
       {...props}
     >
-      {sanitizeTabsChildren(props.children)}
+      {sanitizedChildren}
     </TabsComponent>
   );
 }

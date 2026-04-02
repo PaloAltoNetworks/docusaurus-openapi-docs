@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React, { useState } from "react";
+import React, { useState, useId } from "react";
 
 import { translate } from "@docusaurus/Translate";
 import FormItem from "@theme/ApiExplorer/FormItem";
@@ -19,42 +19,125 @@ import { OPENAPI_PARAM_OPTIONS } from "@theme/translationIds";
 
 import { Param } from "./slice";
 
+export interface LabelProps {
+  label?: string;
+  type?: string;
+  required?: boolean;
+}
+
 export interface ParamProps {
   param: Param;
 }
 
-function ParamOption({ param }: ParamProps) {
-  if (param.schema?.type === "array" && param.schema.items?.enum) {
-    return <ParamMultiSelectFormItem param={param} />;
+/**
+ * Extracts enum values from a schema, including when wrapped in allOf.
+ * This handles cases where an enum is referenced via allOf for composition.
+ */
+export function getSchemaEnum(schema: any): any[] | undefined {
+  // Direct enum on schema
+  if (schema?.enum) {
+    return schema.enum;
+  }
+
+  // Enum inside allOf - check each item
+  if (schema?.allOf && Array.isArray(schema.allOf)) {
+    for (const item of schema.allOf) {
+      if (item.enum) {
+        return item.enum;
+      }
+    }
+  }
+
+  // const is semantically a single-value enum
+  if (schema?.const !== undefined) {
+    return [schema.const];
+  }
+
+  return undefined;
+}
+
+function ParamOption({
+  param,
+  label,
+  type,
+  required,
+}: ParamProps & LabelProps) {
+  const schemaEnum = getSchemaEnum(param.schema);
+  const itemsEnum = getSchemaEnum(param.schema?.items);
+
+  if (param.schema?.type === "array" && itemsEnum) {
+    return (
+      <ParamMultiSelectFormItem
+        param={param}
+        label={label}
+        type={type}
+        required={required}
+      />
+    );
   }
 
   if (param.schema?.type === "array") {
-    return <ParamArrayFormItem param={param} />;
+    return (
+      <ParamArrayFormItem
+        param={param}
+        label={label}
+        type={type}
+        required={required}
+      />
+    );
   }
 
-  if (param.schema?.enum) {
-    return <ParamSelectFormItem param={param} />;
+  if (schemaEnum) {
+    return (
+      <ParamSelectFormItem
+        param={param}
+        label={label}
+        type={type}
+        required={required}
+      />
+    );
   }
 
   if (param.schema?.type === "boolean") {
-    return <ParamBooleanFormItem param={param} />;
+    return (
+      <ParamBooleanFormItem
+        param={param}
+        label={label}
+        type={type}
+        required={required}
+      />
+    );
   }
 
   // integer, number, string, int32, int64, float, double, object, byte, binary,
   // date-time, date, password
-  return <ParamTextFormItem param={param} />;
+  return (
+    <ParamTextFormItem
+      param={param}
+      label={label}
+      type={type}
+      required={required}
+    />
+  );
 }
 
 function ParamOptionWrapper({ param }: ParamProps) {
   return (
-    <FormItem label={param.name} type={param.in} required={param.required}>
-      <ParamOption param={param} />
+    <FormItem>
+      <ParamOption
+        param={param}
+        label={param.name}
+        type={param.in}
+        required={param.required}
+      />
     </FormItem>
   );
 }
 
 function ParamOptions() {
   const [showOptional, setShowOptional] = useState(false);
+
+  const optionalId = useId();
 
   const pathParams = useTypedSelector((state: any) => state.params.path);
   const queryParams = useTypedSelector((state: any) => state.params.query);
@@ -84,6 +167,8 @@ function ParamOptions() {
           <button
             type="button"
             className="openapi-explorer__show-more-btn"
+            aria-expanded={showOptional}
+            aria-controls={optionalId}
             onClick={() => setShowOptional((prev) => !prev)}
           >
             <span
@@ -137,6 +222,7 @@ function ParamOptions() {
                 ? "openapi-explorer__show-options"
                 : "openapi-explorer__hide-options"
             }
+            id={optionalId}
           >
             {optionalParams.map((param) => (
               <ParamOptionWrapper

@@ -6,10 +6,11 @@
  * ========================================================================== */
 
 // @ts-nocheck
-import React from "react";
+import React, { useId } from "react";
 
 import { translate } from "@docusaurus/Translate";
 import { ErrorMessage } from "@hookform/error-message";
+import FormLabel from "@theme/ApiExplorer/FormLabel";
 import { OPENAPI_FORM } from "@theme/translationIds";
 import clsx from "clsx";
 import { useFormContext } from "react-hook-form";
@@ -21,6 +22,9 @@ export interface Props {
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   paramName?: string;
   isRequired?: boolean;
+  label?: string;
+  type?: string;
+  required?: boolean;
 }
 
 function FormTextInput({
@@ -30,7 +34,12 @@ function FormTextInput({
   password,
   onChange,
   paramName,
+  label,
+  type,
+  required,
 }: Props) {
+  const id = useId();
+
   placeholder = placeholder?.split("\n")[0];
 
   const {
@@ -42,6 +51,9 @@ function FormTextInput({
 
   return (
     <>
+      {label && (
+        <FormLabel htmlFor={id} label={label} type={type} required={required} />
+      )}
       {paramName ? (
         <input
           {...register(paramName, {
@@ -52,6 +64,7 @@ function FormTextInput({
                 })
               : false,
           })}
+          id={label ? id : undefined}
           className={clsx("openapi-explorer__form-item-input", {
             error: showErrorMessage,
           })}
@@ -64,6 +77,7 @@ function FormTextInput({
         />
       ) : (
         <input
+          id={label ? id : undefined}
           className="openapi-explorer__form-item-input"
           type={password ? "password" : "text"}
           placeholder={placeholder}

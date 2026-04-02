@@ -10,18 +10,22 @@ import accept from "@theme/ApiExplorer/Accept/slice";
 import auth from "@theme/ApiExplorer/Authorization/slice";
 import body from "@theme/ApiExplorer/Body/slice";
 import contentType from "@theme/ApiExplorer/ContentType/slice";
+import encodingSelection from "@theme/ApiExplorer/EncodingSelection/slice";
 import params from "@theme/ApiExplorer/ParamOptions/slice";
 import response from "@theme/ApiExplorer/Response/slice";
+import schemaSelection from "@theme/ApiExplorer/SchemaSelection/slice";
 import server from "@theme/ApiExplorer/Server/slice";
 
 const rootReducer = combineReducers({
   accept,
   contentType,
+  encodingSelection,
   response,
   server,
   body,
   params,
   auth,
+  schemaSelection,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

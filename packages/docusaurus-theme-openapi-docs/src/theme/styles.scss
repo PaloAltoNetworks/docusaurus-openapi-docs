@@ -9,6 +9,7 @@
 @use "./ApiExplorer/FloatingButton/FloatingButton";
 @use "./ApiExplorer/FormFileUpload/FormFileUpload";
 @use "./ApiExplorer/FormItem/FormItem";
+@use "./ApiExplorer/FormLabel/FormLabel";
 @use "./ApiExplorer/FormMultiSelect/FormMultiSelect";
 @use "./ApiExplorer/FormSelect/FormSelect";
 @use "./ApiExplorer/FormTextInput/FormTextInput";
@@ -41,6 +42,8 @@
 @use "./CodeSamples/CodeSamples";
 /* Markdown Styling */
 @use "./Markdown/Details/Details";
+/* Example Styling */
+@use "./Example/Example";
 
 :root {
   --openapi-required: var(--ifm-color-danger);
@@ -162,6 +165,16 @@
 
 .openapi-left-panel__container {
   border-right: thin solid var(--ifm-toc-border-color);
+}
+
+@media (min-width: 997px) {
+  .openapi-right-panel__container {
+    position: sticky;
+    top: calc(var(--ifm-navbar-height) + 1rem);
+    max-height: calc(100vh - var(--ifm-navbar-height) - 2rem);
+    overflow-y: auto;
+    align-self: flex-start;
+  }
 }
 
 @media (max-width: 997px) {

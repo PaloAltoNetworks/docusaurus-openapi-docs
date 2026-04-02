@@ -51,8 +51,17 @@ export interface APIOptions {
   proxy?: string;
   markdownGenerators?: MarkdownGenerator;
   showSchemas?: boolean;
+  showInfoPage?: boolean;
+  schemasOnly?: boolean;
   disableCompression?: boolean;
   maskCredentials?: boolean;
+  /**
+   * When enabled, large JSON props in generated MDX are written to external
+   * files and loaded via require(). This can significantly improve MDX
+   * compilation performance for large OpenAPI specs.
+   * @see https://github.com/facebook/docusaurus/discussions/11664
+   */
+  externalJsonProps?: boolean;
 }
 
 export interface MarkdownGenerator {

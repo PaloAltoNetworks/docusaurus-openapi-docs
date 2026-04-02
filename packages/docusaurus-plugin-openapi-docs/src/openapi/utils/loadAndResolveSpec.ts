@@ -6,9 +6,8 @@
  * ========================================================================== */
 
 import $RefParser from "@apidevtools/json-schema-ref-parser";
-import { bundle, Config } from "@redocly/openapi-core";
+import { bundle, createConfig } from "@redocly/openapi-core";
 import type { Source, Document } from "@redocly/openapi-core";
-import { ResolvedConfig } from "@redocly/openapi-core/lib/config";
 import chalk from "chalk";
 // @ts-ignore
 import { convertObj } from "swagger2openapi";
@@ -116,7 +115,7 @@ async function resolveJsonRefs(specUrlOrObject: object | string) {
 }
 
 export async function loadAndResolveSpec(specUrlOrObject: object | string) {
-  const config = new Config({} as ResolvedConfig);
+  const config = await createConfig({});
   const bundleOpts = {
     config,
     base: process.cwd(),
@@ -137,10 +136,13 @@ export async function loadAndResolveSpec(specUrlOrObject: object | string) {
   const {
     bundle: { parsed },
   } = await bundle(bundleOpts);
+  const parsedSpec = parsed as any;
 
   //Pre-processing before resolving JSON refs
-  if (parsed.components) {
-    for (let [component, type] of Object.entries(parsed.components) as any) {
+  if (parsedSpec.components) {
+    for (let [component, type] of Object.entries(
+      parsedSpec.components
+    ) as any) {
       if (component === "schemas") {
         for (let [schemaKey, schemaValue] of Object.entries(type) as any) {
           const title: string | undefined = schemaValue["title"];
@@ -152,7 +154,7 @@ export async function loadAndResolveSpec(specUrlOrObject: object | string) {
     }
   }
 
-  const resolved = await resolveJsonRefs(parsed);
+  const resolved = await resolveJsonRefs(parsedSpec);
 
   // Force serialization and replace circular $ref pointers
   // @ts-ignore

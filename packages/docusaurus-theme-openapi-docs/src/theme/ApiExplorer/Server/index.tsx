@@ -17,7 +17,11 @@ import { OPENAPI_SERVER } from "@theme/translationIds";
 
 import { setServer, setServerVariable } from "./slice";
 
-function Server() {
+interface ServerProps {
+  labelId?: string;
+}
+
+function Server({ labelId }: ServerProps) {
   const [isEditing, setIsEditing] = useState(false);
   const value = useTypedSelector((state: any) => state.server.value);
   const options = useTypedSelector((state: any) => state.server.options);
@@ -79,6 +83,7 @@ function Server() {
       >
         <FormItem>
           <FormSelect
+            ariaLabelledBy={labelId}
             options={options.map((s: any) => s.url)}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
               dispatch(
@@ -99,8 +104,9 @@ function Server() {
           Object.keys(value.variables).map((key) => {
             if (value.variables?.[key].enum !== undefined) {
               return (
-                <FormItem label={key}>
+                <FormItem>
                   <FormSelect
+                    label={key}
                     options={value.variables[key].enum}
                     onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                       dispatch(
@@ -115,8 +121,9 @@ function Server() {
               );
             }
             return (
-              <FormItem label={key}>
+              <FormItem>
                 <FormTextInput
+                  label={key}
                   placeholder={value.variables?.[key].default}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     dispatch(

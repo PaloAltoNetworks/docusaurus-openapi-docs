@@ -77,7 +77,8 @@ function groupByTags(
   sidebarOptions: SidebarOptions,
   options: APIOptions,
   tags: TagObject[][],
-  docPath: string
+  docPath: string,
+  tagGroupKey?: string
 ): ProcessedSidebar {
   let { outputDir, label, showSchemas } = options;
 
@@ -125,9 +126,21 @@ function groupByTags(
     apiTags = uniq(apiTags.concat(operationTags, schemaTags));
   }
 
-  const basePath = docPath
-    ? outputDir.split(docPath!)[1].replace(/^\/+/g, "")
-    : outputDir.slice(outputDir.indexOf("/", 1)).replace(/^\/+/g, "");
+  // Extract base path from outputDir, handling cases where docPath may not be in outputDir
+  const getBasePathFromOutput = (
+    output: string,
+    doc: string | undefined
+  ): string => {
+    if (doc && output.startsWith(doc + "/")) {
+      return output.substring((doc + "/").length);
+    }
+    const slashIndex = output.indexOf("/", 1);
+    return slashIndex === -1
+      ? ""
+      : output.slice(slashIndex).replace(/^\/+/g, "");
+  };
+
+  const basePath = getBasePathFromOutput(outputDir, docPath);
 
   const createDocItemFnContext = {
     sidebarOptions,
@@ -140,9 +153,11 @@ function groupByTags(
   if (infoItems.length === 1) {
     const infoItem = infoItems[0];
     const id = infoItem.id;
+    const docId = basePath === "" || undefined ? `${id}` : `${basePath}/${id}`;
     rootIntroDoc = {
       type: "doc" as const,
-      id: basePath === "" || undefined ? `${id}` : `${basePath}/${id}`,
+      id: docId,
+      ...(tagGroupKey && { key: kebabCase(`${tagGroupKey}-${docId}`) }),
     };
   }
 
@@ -207,15 +222,28 @@ function groupByTags(
         (item) => !!item.schema["x-tags"]?.includes(tag)
       );
 
+      const categoryLabel = tagObject?.["x-displayName"] ?? tag;
+      const categoryKey = tagGroupKey
+        ? kebabCase(`${tagGroupKey}-${categoryLabel}`)
+        : undefined;
+
       return {
         type: "category" as const,
-        label: tagObject?.["x-displayName"] ?? tag,
+        label: categoryLabel,
+        ...(categoryKey && { key: categoryKey }),
         link: linkConfig,
         collapsible: sidebarCollapsible,
         collapsed: sidebarCollapsed,
-        items: [...taggedSchemaItems, ...taggedApiItems].map((item) =>
-          createDocItemFn(item, createDocItemFnContext)
-        ),
+        items: [...taggedSchemaItems, ...taggedApiItems].map((item) => {
+          const docItem = createDocItemFn(item, createDocItemFnContext);
+          if (tagGroupKey && docItem.type === "doc") {
+            return {
+              ...docItem,
+              key: kebabCase(`${tagGroupKey}-${tag}-${docItem.id}`),
+            };
+          }
+          return docItem;
+        }),
       };
     })
     .filter((item) => item.items.length > 0); // Filter out any categories with no items.
@@ -284,6 +312,8 @@ export default function generateSidebarSlice(
         }
       });
 
+      const tagGroupKey = kebabCase(tagGroup.name);
+
       const groupCategory = {
         type: "category" as const,
         label: tagGroup.name,
@@ -294,7 +324,8 @@ export default function generateSidebarSlice(
           sidebarOptions,
           options,
           [filteredTags],
-          docPath
+          docPath,
+          tagGroupKey
         ),
       };
 

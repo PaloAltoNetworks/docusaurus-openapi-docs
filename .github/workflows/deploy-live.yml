@@ -9,6 +9,8 @@ jobs:
     if: github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs'
     name: Build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout repository
@@ -17,11 +19,11 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: "yarn"
 
       - name: Install dependencies
-        run: yarn --prefer-offline
+        run: yarn --frozen-lockfile --prefer-offline --ignore-scripts
 
       - name: Build packages
         run: yarn build-packages
@@ -49,7 +51,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: "yarn"
 
       - name: Authenticate to Google Cloud
@@ -59,8 +61,12 @@ jobs:
           workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
           service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
 
-      - name: Export Google Cloud Credentials
-        run: echo "GCP_SA_KEY=$(cat ${{ steps.auth.outputs.credentials_file_path }})" >> $GITHUB_ENV
+      - name: Read GCP credentials
+        id: creds
+        run: |
+          creds=$(cat "${{ steps.auth.outputs.credentials_file_path }}")
+          echo "::add-mask::$creds"
+          echo "sa_key=$creds" >> "$GITHUB_OUTPUT"
 
       - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4
         with:
@@ -74,7 +80,7 @@ jobs:
         uses: FirebaseExtended/action-hosting-deploy@e2eda2e106cfa35cdbcf4ac9ddaf6c4756df2c8c # v0.10.0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "${{ env.GCP_SA_KEY }}"
+          firebaseServiceAccount: "${{ steps.creds.outputs.sa_key }}"
           projectId: pandev
           channelId: live
           target: docusaurus-openapi.tryingpan.dev

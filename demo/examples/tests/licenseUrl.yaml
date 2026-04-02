@@ -1,0 +1,27 @@
+openapi: 3.1.0
+info:
+  title: License URL Demo API
+  description: |
+    Demonstrates `license.url` rendering (regression check).
+
+    Verifies that the existing `license.url` behavior is unaffected by the
+    addition of `license.identifier` support.
+  version: 1.0.0
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+tags:
+  - name: licenseUrl
+    description: License url tests
+paths:
+  /license-url:
+    get:
+      tags:
+        - licenseUrl
+      summary: License rendered via URL
+      description: |
+        Verifies that a spec using `license.url` renders a clickable license
+        link pointing to the provided URL.
+      responses:
+        "204":
+          description: No content

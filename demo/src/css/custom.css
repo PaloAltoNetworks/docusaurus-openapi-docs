@@ -1,42 +1,184 @@
 /**
- * Any CSS included here will be global. The classic template
- * bundles Infima by default. Infima is a CSS framework designed to
- * work well for content-centric websites.
+ * Structural CSS for the docusaurus-openapi-docs demo site.
+ *
+ * This file contains layout, component behavior, animations, and utilities.
+ * It is intentionally free of hard-coded colors and fonts — those live in
+ * a theme file loaded alongside this one via docusaurus.config.ts:
+ *
+ *   customCss: ["./src/css/custom.css", "./src/css/themes/panw.css"]
+ *
+ * To try a different palette, swap the theme file. The following CSS
+ * variables must be defined by the active theme:
+ *
+ *   --theme-primary-rgb          RGB triplet of primary color (for animations)
+ *   --theme-border-radius-sm/md  Border radius tokens
+ *   --site-primary-hue-saturation  Hue+saturation for the announcement bar
+ *
+ * Structure inspired by @gleanwork/docusaurus-theme-glean.
  */
 
-/* You can override the default Infima variables here. */
+/* ============================================================
+ * Typography
+ * ============================================================ */
 
-:root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
-  --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
-  --site-primary-hue-saturation: 167 68%;
+.markdown h1,
+article h1,
+.main-wrapper h1 {
+  letter-spacing: 0.025em;
+  font-weight: var(--ifm-heading-font-weight);
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+  color: var(--ifm-heading-color);
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
-[data-theme="dark"] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+.markdown h2,
+article h2,
+.markdown h3,
+article h3 {
+  font-weight: var(--ifm-font-weight-semibold);
 }
 
-/* Override --ifm text-decoration */
+.markdown strong,
+article strong,
+.markdown b,
+article b {
+  font-weight: var(--ifm-font-weight-semibold);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+  font-variant-ligatures: none;
+}
+
+.table-of-contents {
+  font-size: 0.95rem;
+}
+
+html {
+  scroll-padding-top: 50px;
+}
+
+/* ============================================================
+ * Links
+ * ============================================================ */
+
 a:any-link:hover {
   text-decoration: none;
 }
 
-/* Sidebar Method labels */
+article p a,
+article ul a,
+article li a,
+.markdown p a,
+.theme-doc-markdown p a {
+  text-decoration: underline 1px var(--ifm-color-primary);
+  transition: color 0.2s ease;
+}
+
+article p a:hover,
+article ul a:hover,
+article li a:hover,
+.markdown p a:hover,
+.theme-doc-markdown p a:hover {
+  text-decoration: underline 2px var(--ifm-color-primary);
+}
+
+/* ============================================================
+ * Sidebar structure
+ * ============================================================ */
+
+/* Slightly off-white sidebar in light mode */
+.theme-doc-sidebar-container {
+  background-color: #f6f6f6;
+}
+
+[data-theme="dark"] .theme-doc-sidebar-container {
+  background-color: unset;
+}
+
+/* Tighter nested indentation */
+.menu__list .menu__list {
+  padding-left: 10px;
+}
+
+/* No underlines on menu links */
+.menu__link {
+  text-decoration: none;
+  color: var(--ifm-color-emphasis-700);
+}
+
+/* Top-level category labels: uppercase, small caps, bold */
+.theme-doc-sidebar-item-category-level-1
+  > .menu__list-item-collapsible
+  > .menu__link,
+.theme-doc-sidebar-item-category-level-1
+  > .menu__list-item-collapsible
+  > .menu__link.menu__link--active {
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  line-height: 16px;
+  font-size: 12px;
+  color: var(--ifm-color-emphasis-900);
+}
+
+/* Hover: text darkens, no background fill */
+.menu__link:hover {
+  background-color: transparent;
+  color: var(--ifm-color-emphasis-800);
+  text-decoration: none;
+}
+
+/* Active item: primary-colored text, no background */
+.menu__link--active:not(
+  .theme-doc-sidebar-item-category-level-1
+    > .menu__list-item-collapsible
+    > .menu__link
+) {
+  color: var(--ifm-color-primary);
+  background-color: transparent;
+  font-weight: 500;
+}
+
+.menu__link--active:not(
+    .theme-doc-sidebar-item-category-level-1
+      > .menu__list-item-collapsible
+      > .menu__link
+  ):hover {
+  color: var(--ifm-color-primary);
+  background-color: transparent;
+}
+
+[data-theme="dark"]
+  .menu__link--active:not(
+    .theme-doc-sidebar-item-category-level-1
+      > .menu__list-item-collapsible
+      > .menu__link
+  ) {
+  color: var(--ifm-color-primary-light);
+}
+
+.menu__list-item-collapsible:hover,
+.menu__list-item-collapsible:active,
+.menu__list-item-collapsible:focus-within,
+.menu__list-item-collapsible.menu__list-item-collapsible--active {
+  background: transparent;
+}
+
+/* Custom caret */
+.menu__link--sublist-caret:after,
+.menu__caret::before {
+  --ifm-menu-link-sublist-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="8px" height="8px" viewBox="0 0 24 24"><path fill="rgba(0,0,0,0.5)" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path></svg>');
+  content: " ";
+  background-size: contain;
+}
+
+/* ============================================================
+ * Sidebar Method labels — Default (pill style)
+ *
+ * Shape and content labels only. Colors are in the theme file.
+ * ============================================================ */
+
 .api-method > .menu__link,
 .schema > .menu__link {
   align-items: center;
@@ -45,66 +187,67 @@ a:any-link:hover {
 
 .api-method > .menu__link::before,
 .schema > .menu__link::before {
-  width: 55px;
-  height: 20px;
-  font-size: 12px;
-  line-height: 20px;
+  font-size: 0.55rem;
+  font-weight: 700;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.375rem;
+  line-height: 1.25;
+  width: 2.25rem;
+  height: auto;
+  border: none;
   text-transform: uppercase;
-  font-weight: 600;
-  border-radius: 0.25rem;
-  border: 1px solid;
   margin-right: var(--ifm-spacing-horizontal);
-  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
-  border-color: transparent;
-  color: white;
+  text-align: center;
 }
 
+/* Content labels */
 .get > .menu__link::before {
   content: "get";
-  background-color: var(--ifm-color-primary);
 }
-
 .post > .menu__link::before {
   content: "post";
-  background-color: var(--openapi-code-green);
 }
-
 .delete > .menu__link::before {
   content: "del";
-  background-color: var(--openapi-code-red);
 }
-
 .put > .menu__link::before {
   content: "put";
-  background-color: var(--openapi-code-blue);
 }
-
 .patch > .menu__link::before {
   content: "patch";
-  background-color: var(--openapi-code-orange);
 }
 
+/* HEAD / EVENT / SCHEMA — neutral colors, no theme needed */
 .head > .menu__link::before {
   content: "head";
-  background-color: var(--ifm-color-secondary-darkest);
+  background-color: var(--ifm-color-emphasis-200);
+  color: var(--ifm-color-emphasis-700);
 }
-
 .event > .menu__link::before {
   content: "event";
-  background-color: var(--ifm-color-secondary-darkest);
+  background-color: var(--ifm-color-emphasis-200);
+  color: var(--ifm-color-emphasis-700);
 }
-
 .schema > .menu__link::before {
   content: "schema";
-  background-color: var(--ifm-color-secondary-darkest);
+  background-color: var(--ifm-color-emphasis-200);
+  color: var(--ifm-color-emphasis-700);
 }
 
+/* Deprecated */
 .menu__list-item--deprecated > .menu__link,
 .menu__list-item--deprecated > .menu__link:hover {
   text-decoration: line-through;
 }
-/* Sidebar Method labels High Contrast */
+
+/* ============================================================
+ * Sidebar Method labels — High Contrast variant (unchanged)
+ * ============================================================ */
+
 .api-method-contrast > .menu__link,
 .schema-contrast > .menu__link {
   align-items: center;
@@ -133,49 +276,42 @@ a:any-link:hover {
   color: var(--ifm-color-info-contrast-foreground);
   border-color: var(--ifm-color-info-dark);
 }
-
 .post-contrast > .menu__link::before {
   content: "post";
   background-color: var(--ifm-color-success-contrast-background);
   color: var(--ifm-color-success-contrast-foreground);
   border-color: var(--ifm-color-success-dark);
 }
-
 .delete-contrast > .menu__link::before {
   content: "del";
   background-color: var(--ifm-color-danger-contrast-background);
   color: var(--ifm-color-danger-contrast-foreground);
   border-color: var(--ifm-color-danger-dark);
 }
-
 .put-contrast > .menu__link::before {
   content: "put";
   background-color: var(--ifm-color-warning-contrast-background);
   color: var(--ifm-color-warning-contrast-foreground);
   border-color: var(--ifm-color-warning-dark);
 }
-
 .patch-contrast > .menu__link::before {
   content: "patch";
   background-color: var(--ifm-color-success-contrast-background);
   color: var(--ifm-color-success-contrast-foreground);
   border-color: var(--ifm-color-success-dark);
 }
-
 .head-contrast > .menu__link::before {
   content: "head";
   background-color: var(--ifm-color-secondary-contrast-background);
   color: var(--ifm-color-secondary-contrast-foreground);
   border-color: var(--ifm-color-secondary-dark);
 }
-
 .event-contrast > .menu__link::before {
   content: "event";
   background-color: var(--ifm-color-secondary-contrast-background);
   color: var(--ifm-color-secondary-contrast-foreground);
   border-color: var(--ifm-color-secondary-dark);
 }
-
 .schema-contrast > .menu__link::before {
   content: "schema";
   background-color: var(--ifm-color-secondary-contrast-background);
@@ -183,7 +319,10 @@ a:any-link:hover {
   border-color: var(--ifm-color-secondary-dark);
 }
 
-/* Simple */
+/* ============================================================
+ * Sidebar Method labels — Simple variant (unchanged)
+ * ============================================================ */
+
 .api-method-simple > .menu__link {
   align-items: center;
   justify-content: start;
@@ -207,43 +346,48 @@ a:any-link:hover {
   content: "get";
   color: var(--ifm-color-info);
 }
-
 .post-simple > .menu__link::before {
   content: "post";
   color: var(--ifm-color-success);
 }
-
 .delete-simple > .menu__link::before {
   content: "del";
   color: var(--ifm-color-danger);
 }
-
 .put-simple > .menu__link::before {
   content: "put";
   color: var(--ifm-color-warning);
 }
-
 .patch-simple > .menu__link::before {
   content: "patch";
   color: var(--ifm-color-warning);
 }
-
 .head-simple > .menu__link::before {
   content: "head";
   color: var(--ifm-color-secondary-contrast-foreground);
 }
-
 .event-simple > .menu__link::before {
   content: "event";
   color: var(--ifm-color-secondary-contrast-foreground);
 }
-
 .schema-simple > .menu__link::before {
   content: "schema";
   color: var(--ifm-color-secondary-contrast-foreground);
 }
 
-/* GitHub Header Link */
+/* ============================================================
+ * Admonitions
+ * ============================================================ */
+
+.alert {
+  border: none;
+  border-radius: var(--theme-border-radius-md, 8px);
+}
+
+/* ============================================================
+ * Navbar header icons
+ * ============================================================ */
+
 .header-github-link:hover {
   opacity: 0.6;
 }
@@ -262,7 +406,6 @@ html[data-theme="dark"] .header-github-link:before {
     no-repeat;
 }
 
-/* Medium Header Link */
 .header-medium-link:hover {
   opacity: 0.6;
 }
@@ -272,6 +415,10 @@ html[data-theme="dark"] .header-github-link:before {
   font-family: "Font Awesome 5 Brands";
   font-size: x-large;
 }
+
+/* ============================================================
+ * Announcement bar
+ * ============================================================ */
 
 div[class^="announcementBar_"] {
   --site-announcement-bar-stripe-color1: hsl(
@@ -290,6 +437,79 @@ div[class^="announcementBar_"] {
   font-weight: bold;
 }
 
+/* ============================================================
+ * Schema parameter highlight animation
+ *
+ * Color driven by --theme-primary-rgb (defined in the theme file).
+ * ============================================================ */
+
+[id]:target {
+  animation: highlight-flash 2s ease-out;
+  background-color: rgba(var(--theme-primary-rgb, 0, 76, 157), 0.08);
+  border-radius: 4px;
+  padding: 2px 4px;
+  margin: -2px -4px;
+}
+
+@keyframes highlight-flash {
+  0% {
+    background-color: rgba(var(--theme-primary-rgb, 0, 76, 157), 0.25);
+    box-shadow: 0 0 0 3px rgba(var(--theme-primary-rgb, 0, 76, 157), 0.25);
+  }
+  50% {
+    background-color: rgba(var(--theme-primary-rgb, 0, 76, 157), 0.15);
+    box-shadow: 0 0 0 2px rgba(var(--theme-primary-rgb, 0, 76, 157), 0.15);
+  }
+  100% {
+    background-color: rgba(var(--theme-primary-rgb, 0, 76, 157), 0.08);
+    box-shadow: none;
+  }
+}
+
+.openapi-markdown__details [id]:target,
+.openapi-schema__list-item [id]:target {
+  animation: highlight-flash 2s ease-out;
+  background-color: rgba(var(--theme-primary-rgb, 0, 76, 157), 0.08) !important;
+}
+
+/* ============================================================
+ * Code tab scrollbar
+ * ============================================================ */
+
+.tabs-container [role="tabpanel"] {
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.tabs-container [role="tabpanel"] pre {
+  overflow-x: auto;
+  white-space: pre;
+  word-wrap: normal;
+  max-width: 100%;
+}
+
+.tabs-container [role="tabpanel"] pre::-webkit-scrollbar {
+  height: 6px;
+}
+
+.tabs-container [role="tabpanel"] pre::-webkit-scrollbar-track {
+  background: var(--ifm-color-emphasis-200);
+  border-radius: var(--theme-border-radius-sm, 4px);
+}
+
+.tabs-container [role="tabpanel"] pre::-webkit-scrollbar-thumb {
+  background: var(--ifm-color-emphasis-400);
+  border-radius: var(--theme-border-radius-sm, 4px);
+}
+
+.tabs-container [role="tabpanel"] pre::-webkit-scrollbar-thumb:hover {
+  background: var(--ifm-color-emphasis-500);
+}
+
+/* ============================================================
+ * OpenAPI code tab language icons
+ * ============================================================ */
+
 .openapi-tabs__code-item--python {
   color: var(--ifm-color-success);
 }
@@ -304,4 +524,56 @@ div[class^="announcementBar_"] {
 .openapi-tabs__code-item--python.active {
   box-shadow: 0 0 0 3px var(--openapi-code-tab-shadow-color-python);
   border-color: var(--openapi-code-tab-border-color-python);
+}
+
+/* ============================================================
+ * Grid utilities
+ * ============================================================ */
+
+.grid {
+  display: grid;
+}
+.grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+.grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.grid-cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.gap-3 {
+  gap: 0.75rem;
+}
+.gap-6 {
+  gap: 1.5rem;
+}
+.my-4 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+.my-6 {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .md\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .lg\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }

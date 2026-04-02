@@ -7,7 +7,7 @@
 
 import { AuthState, Scheme } from "@theme/ApiExplorer/Authorization/slice";
 import { Body, Content } from "@theme/ApiExplorer/Body/slice";
-import {
+import type {
   ParameterObject,
   ServerObject,
 } from "docusaurus-plugin-openapi-docs/src/openapi/types";
@@ -293,12 +293,36 @@ function tryDecodeJsonParam(value: string): any {
 }
 
 // TODO: this is all a bit hacky
-function setBody(clonedPostman: sdk.Request, body: Body) {
+function setBody(
+  clonedPostman: sdk.Request,
+  body: Body,
+  encoding?: Record<string, { contentType?: string }>
+) {
   if (clonedPostman.body === undefined) {
     return;
   }
 
   if (body.type === "empty") {
+    // When the original request has formdata and encoding is declared, keep the
+    // placeholder params so the code snippet reflects the selected encoding even
+    // before the user has uploaded a file.
+    if (
+      clonedPostman.body?.mode === "formdata" &&
+      encoding &&
+      Object.keys(encoding).length > 0
+    ) {
+      const members: any[] =
+        (clonedPostman.body.formdata as any)?.members ?? [];
+      members.forEach((param: any) => {
+        const partContentType = encoding[param.key]?.contentType
+          ?.split(",")[0]
+          .trim();
+        if (partContentType) {
+          param.contentType = partContentType;
+        }
+      });
+      return;
+    }
     clonedPostman.body = undefined;
     return;
   }
@@ -313,7 +337,11 @@ function setBody(clonedPostman: sdk.Request, body: Body) {
   switch (clonedPostman.body.mode) {
     case "raw": {
       // check file even though it should already be set from above
-      if (body.type !== "raw" || body.content?.type === "file") {
+      if (
+        body.type !== "raw" ||
+        body.content?.type === "file" ||
+        body.content?.type === "file[]"
+      ) {
         clonedPostman.body = undefined;
         return;
       }
@@ -328,15 +356,44 @@ function setBody(clonedPostman: sdk.Request, body: Body) {
         clonedPostman.body.raw = `${body.content?.value}`;
         return;
       }
-      const params = Object.entries(body.content)
+      const params: sdk.FormParam[] = [];
+      Object.entries(body.content)
         .filter((entry): entry is [string, NonNullable<Content>] => !!entry[1])
-        .map(([key, content]) => {
+        .forEach(([key, content]) => {
+          const partContentType = encoding?.[key]?.contentType
+            ?.split(",")[0]
+            .trim();
           if (content.type === "file") {
-            return new sdk.FormParam({ key: key, ...content });
+            params.push(
+              new sdk.FormParam({
+                key: key,
+                ...content,
+                ...(partContentType && { contentType: partContentType }),
+              })
+            );
+          } else if (content.type === "file[]") {
+            content.value.forEach((file) =>
+              params.push(
+                new sdk.FormParam({
+                  key,
+                  value: file,
+                  ...(partContentType && { contentType: partContentType }),
+                })
+              )
+            );
+          } else {
+            params.push(
+              new sdk.FormParam({
+                key: key,
+                value: content.value,
+                ...(partContentType && { contentType: partContentType }),
+              })
+            );
           }
-          return new sdk.FormParam({ key: key, value: content.value });
         });
-      clonedPostman.body.formdata?.assimilate(params, false);
+      params.forEach((param) => {
+        clonedPostman.body?.formdata?.add(param);
+      });
       return;
     }
     case "urlencoded": {
@@ -350,7 +407,11 @@ function setBody(clonedPostman: sdk.Request, body: Body) {
       const params = Object.entries(body.content)
         .filter((entry): entry is [string, NonNullable<Content>] => !!entry[1])
         .map(([key, content]) => {
-          if (content.type !== "file" && content.value) {
+          if (
+            content.type !== "file" &&
+            content.type !== "file[]" &&
+            content.value
+          ) {
             return new sdk.QueryParam({ key: key, value: content.value });
           }
           return undefined;
@@ -375,6 +436,7 @@ interface Options {
   accept: string;
   body: Body;
   auth: AuthState;
+  encoding?: Record<string, { contentType?: string }>;
 }
 
 function buildPostmanRequest(
@@ -389,6 +451,7 @@ function buildPostmanRequest(
     body,
     server,
     auth,
+    encoding,
   }: Options
 ) {
   const clonedPostman = cloneDeep(postman);
@@ -516,7 +579,7 @@ function buildPostmanRequest(
     otherHeaders
   );
 
-  setBody(clonedPostman, body);
+  setBody(clonedPostman, body, encoding);
 
   return clonedPostman;
 }

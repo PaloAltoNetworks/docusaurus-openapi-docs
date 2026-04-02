@@ -5,9 +5,14 @@ on:
     branches:
       - main
       - v2.0.0
+  workflow_dispatch:
 
 env:
   FORCE_COLOR: true
+
+permissions:
+  contents: write
+  id-token: write
 
 jobs:
   release:
@@ -23,10 +28,46 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
       - uses: actions/setup-node@7c12f8017d5436eb855f1ed4399f037a36fbd9e8 # v2
         with:
-          node-version: "20"
+          node-version: "22"
           registry-url: "https://registry.npmjs.org"
       - name: Release
         run: npx ts-node --transpile-only scripts/publish.ts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+
+  canary:
+    name: Publish Canary
+    runs-on: ubuntu-latest
+    if: ${{ github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' && github.ref == 'refs/heads/main' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          fetch-depth: 0
+      - name: Check if packages changed
+        id: packages_changed
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]] || git diff --name-only HEAD~1 HEAD | grep -q "^packages/"; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+      - name: Set up Node
+        if: steps.packages_changed.outputs.changed == 'true'
+        uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4
+        with:
+          node-version: "22"
+          registry-url: "https://registry.npmjs.org"
+      - name: Prepare git
+        if: steps.packages_changed.outputs.changed == 'true'
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch
+          git checkout main
+      - name: Installation
+        if: steps.packages_changed.outputs.changed == 'true'
+        run: yarn && yarn build-packages
+      - name: Publish Canary release
+        if: steps.packages_changed.outputs.changed == 'true'
+        run: yarn canary

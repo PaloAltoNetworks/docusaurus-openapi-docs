@@ -15,12 +15,24 @@ export interface FileContent {
   };
 }
 
+export interface FileArrayContent {
+  type: "file[]";
+  value: {
+    src: string;
+    content: Blob;
+  }[];
+}
+
 export interface StringContent {
   type: "string";
   value?: string;
 }
 
-export type Content = FileContent | StringContent | undefined;
+export type Content =
+  | FileContent
+  | FileArrayContent
+  | StringContent
+  | undefined;
 
 export interface FormBody {
   type: "form";
@@ -118,6 +130,32 @@ export const slice = createSlice({
       };
       return state;
     },
+    setFileArrayFormBody: (
+      state,
+      action: PayloadAction<{
+        key: string;
+        value: FileArrayContent["value"];
+      }>
+    ) => {
+      if (state?.type !== "form") {
+        return {
+          type: "form",
+          content: {
+            [action.payload.key]: {
+              type: "file[]",
+              value: action.payload.value,
+            },
+          },
+        };
+      }
+
+      state.content[action.payload.key] = {
+        type: "file[]",
+        value: action.payload.value,
+      };
+
+      return state;
+    },
   },
 });
 
@@ -128,6 +166,7 @@ export const {
   clearFormBodyKey,
   setStringFormBody,
   setFileFormBody,
+  setFileArrayFormBody,
 } = slice.actions;
 
 export default slice.reducer;

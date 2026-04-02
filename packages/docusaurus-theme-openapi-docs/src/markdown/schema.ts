@@ -6,10 +6,55 @@
  * ========================================================================== */
 
 import { translate } from "@docusaurus/Translate";
+
 import { OPENAPI_SCHEMA_ITEM } from "../theme/translationIds";
 import { SchemaObject } from "../types";
 
+/**
+ * Extracts enum values from a schema, including when wrapped in allOf.
+ */
+function getEnumFromSchema(schema: SchemaObject): any[] | undefined {
+  if (schema.enum) {
+    return schema.enum;
+  }
+
+  if (schema.allOf && Array.isArray(schema.allOf)) {
+    for (const item of schema.allOf) {
+      if (item.enum) {
+        return item.enum;
+      }
+    }
+  }
+
+  return undefined;
+}
+
+/**
+ * Extracts the type from a schema, including when wrapped in allOf.
+ */
+function getTypeFromSchema(schema: SchemaObject): string | undefined {
+  if (schema.type) {
+    return schema.type as string;
+  }
+
+  if (schema.allOf && Array.isArray(schema.allOf)) {
+    for (const item of schema.allOf) {
+      if (item.type) {
+        return item.type as string;
+      }
+    }
+  }
+
+  return undefined;
+}
+
 function prettyName(schema: SchemaObject, circular?: boolean) {
+  // Handle enum-only schemas (valid in JSON Schema)
+  // When enum is present without explicit type, treat as string
+  if (schema.enum && !schema.type) {
+    return "string";
+  }
+
   if (schema.format) {
     return schema.format;
   }
@@ -20,6 +65,12 @@ function prettyName(schema: SchemaObject, circular?: boolean) {
       if (schema.allOf[0].includes("circular")) {
         return schema.allOf[0];
       }
+    }
+    // Check if allOf contains an enum - if so, return the type from allOf
+    const enumFromAllOf = getEnumFromSchema(schema);
+    if (enumFromAllOf) {
+      const typeFromAllOf = getTypeFromSchema(schema);
+      return typeFromAllOf ?? "string";
     }
     return "object";
   }
@@ -40,6 +91,10 @@ function prettyName(schema: SchemaObject, circular?: boolean) {
   if (schema.type === "array") {
     return schema.xml?.name ?? schema.type;
     // return schema.type;
+  }
+
+  if (Array.isArray(schema.type)) {
+    return schema.type.join(" | ");
   }
 
   return schema.title ?? schema.type;
@@ -81,11 +136,11 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
 
   let qualifierGroups = [];
 
-  if (schema.items && schema.items.enum) {
-    if (schema.items.enum) {
-      qualifierGroups.push(
-        `[${schema.items.enum.map((e) => `\`${e}\``).join(", ")}]`
-      );
+  // Check for enum in array items (directly or inside allOf)
+  if (schema.items) {
+    const itemsEnum = getEnumFromSchema(schema.items as SchemaObject);
+    if (itemsEnum) {
+      qualifierGroups.push(`[${itemsEnum.map((e) => `\`${e}\``).join(", ")}]`);
     }
   }
 
@@ -93,14 +148,22 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
     let lengthQualifier = "";
     let minLength;
     let maxLength;
+    const charactersMessage = translate({
+      id: OPENAPI_SCHEMA_ITEM.CHARACTERS,
+      message: "characters",
+    });
+    const nonEmptyMessage = translate({
+      id: OPENAPI_SCHEMA_ITEM.NON_EMPTY,
+      message: "non-empty",
+    });
     if (schema.minLength && schema.minLength > 1) {
-      minLength = `\`>= ${schema.minLength} characters\``;
+      minLength = `\`>= ${schema.minLength} ${charactersMessage}\``;
     }
     if (schema.minLength && schema.minLength === 1) {
-      minLength = `\`non-empty\``;
+      minLength = `\`${nonEmptyMessage}\``;
     }
     if (schema.maxLength) {
-      maxLength = `\`<= ${schema.maxLength} characters\``;
+      maxLength = `\`<= ${schema.maxLength} ${charactersMessage}\``;
     }
 
     if (minLength && !maxLength) {
@@ -154,9 +217,11 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
   }
 
   if (schema.pattern) {
-    qualifierGroups.push(
-      `Value must match regular expression \`${schema.pattern}\``
-    );
+    const expressionMessage = translate({
+      id: OPENAPI_SCHEMA_ITEM.EXPRESSION,
+      message: "Value must match regular expression",
+    });
+    qualifierGroups.push(`${expressionMessage} \`${schema.pattern}\``);
   }
 
   // Check if discriminator mapping
@@ -166,8 +231,10 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
     qualifierGroups.push(`[${values.map((e) => `\`${e}\``).join(", ")}]`);
   }
 
-  if (schema.enum) {
-    qualifierGroups.push(`[${schema.enum.map((e) => `\`${e}\``).join(", ")}]`);
+  // Check for enum directly on schema or inside allOf
+  const schemaEnum = getEnumFromSchema(schema);
+  if (schemaEnum) {
+    qualifierGroups.push(`[${schemaEnum.map((e) => `\`${e}\``).join(", ")}]`);
   }
 
   if (schema.minItems) {

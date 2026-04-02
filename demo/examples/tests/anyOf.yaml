@@ -20,7 +20,15 @@ paths:
           - type: integer
           - type: boolean
           - type: null
+          - enum:
+              - dealValue
+              - price
+              - userRating
+              - popularityScore
         ```
+
+        Note: The last option is an inline enum without an explicit type,
+        which is valid JSON Schema. The enum values should be displayed.
       responses:
         "200":
           description: Successful response
@@ -32,6 +40,11 @@ paths:
                   - type: integer
                   - type: boolean
                   - type: "null"
+                  - enum:
+                      - dealValue
+                      - price
+                      - userRating
+                      - popularityScore
 
   /anyof-oneof:
     get:

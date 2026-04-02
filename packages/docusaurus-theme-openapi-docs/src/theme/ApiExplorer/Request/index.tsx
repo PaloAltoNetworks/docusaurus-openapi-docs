@@ -6,10 +6,11 @@
  * ========================================================================== */
 
 // @ts-nocheck
-import React, { useState } from "react";
+import React, { useState, useId } from "react";
 
 import { useDoc } from "@docusaurus/plugin-content-docs/client";
 import { translate } from "@docusaurus/Translate";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Accept from "@theme/ApiExplorer/Accept";
 import Authorization from "@theme/ApiExplorer/Authorization";
 import Body from "@theme/ApiExplorer/Body";
@@ -24,19 +25,28 @@ import {
   clearHeaders,
 } from "@theme/ApiExplorer/Response/slice";
 import Server from "@theme/ApiExplorer/Server";
+import { useResolvedEncoding } from "@theme/ApiExplorer/EncodingSelection/useResolvedEncoding";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import { OPENAPI_REQUEST } from "@theme/translationIds";
-import { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
-import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
+import type { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
+import type { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
+import type { ThemeConfig } from "docusaurus-theme-openapi-docs/src/types";
 import * as sdk from "postman-collection";
 import { FormProvider, useForm } from "react-hook-form";
 
-import makeRequest from "./makeRequest";
+import makeRequest, { RequestError, RequestErrorType } from "./makeRequest";
 
 function Request({ item }: { item: ApiItem }) {
   const postman = new sdk.Request(item.postman);
   const metadata = useDoc();
-  const { proxy, hide_send_button: hideSendButton } = metadata.frontMatter;
+  const { proxy: frontMatterProxy, hide_send_button: hideSendButton } =
+    metadata.frontMatter;
+  const { siteConfig } = useDocusaurusContext();
+  const themeConfig = siteConfig.themeConfig as ThemeConfig;
+  const requestTimeout = themeConfig.api?.requestTimeout;
+  const requestCredentials = themeConfig.api?.requestCredentials;
+  // Frontmatter proxy (per-spec) takes precedence over theme config proxy (site-wide)
+  const proxy = frontMatterProxy ?? themeConfig.api?.proxy;
 
   const pathParams = useTypedSelector((state: any) => state.params.path);
   const queryParams = useTypedSelector((state: any) => state.params.query);
@@ -58,12 +68,16 @@ function Request({ item }: { item: ApiItem }) {
   const [expandParams, setExpandParams] = useState(true);
   const [expandServer, setExpandServer] = useState(true);
 
+  const serverLabelId = useId();
+
   const allParams = [
     ...pathParams,
     ...queryParams,
     ...cookieParams,
     ...headerParams,
   ];
+
+  const encoding = useResolvedEncoding(item.requestBody);
 
   const postmanRequest = buildPostmanRequest(postman, {
     queryParams,
@@ -75,6 +89,7 @@ function Request({ item }: { item: ApiItem }) {
     body,
     server,
     auth,
+    encoding,
   });
 
   const delay = (ms: number) =>
@@ -91,7 +106,7 @@ function Request({ item }: { item: ApiItem }) {
     (param: { in: "path" | "query" | "header" | "cookie" }) => {
       const paramType = param.in;
       const paramsArray: ParameterObject[] = paramsObject[paramType];
-      paramsArray.push(param as ParameterObject);
+      paramsArray?.push(param as ParameterObject);
     }
   );
 
@@ -118,6 +133,36 @@ function Request({ item }: { item: ApiItem }) {
     res.headers && dispatch(setHeaders(Object.fromEntries(res.headers)));
   };
 
+  const getErrorMessage = (errorType: RequestErrorType): string => {
+    switch (errorType) {
+      case "timeout":
+        return translate({
+          id: OPENAPI_REQUEST.ERROR_TIMEOUT,
+          message:
+            "The request timed out waiting for the server to respond. Please try again. If the issue persists, try using a different client (e.g., curl) with a longer timeout.",
+        });
+      case "network":
+        return translate({
+          id: OPENAPI_REQUEST.ERROR_NETWORK,
+          message:
+            "Unable to reach the server. Please check your network connection and verify the server URL is correct. If the server is running, this may be a CORS issue.",
+        });
+      case "cors":
+        return translate({
+          id: OPENAPI_REQUEST.ERROR_CORS,
+          message:
+            "The request was blocked, possibly due to CORS restrictions. Ensure the server allows requests from this origin, or try using a proxy.",
+        });
+      case "unknown":
+      default:
+        return translate({
+          id: OPENAPI_REQUEST.ERROR_UNKNOWN,
+          message:
+            "An unexpected error occurred while making the request. Please try again.",
+        });
+    }
+  };
+
   const onSubmit = async (data) => {
     dispatch(
       setResponse(
@@ -129,7 +174,14 @@ function Request({ item }: { item: ApiItem }) {
     );
     try {
       await delay(1200);
-      const res = await makeRequest(postmanRequest, proxy, body);
+      const res = await makeRequest(
+        postmanRequest,
+        proxy,
+        body,
+        requestTimeout,
+        requestCredentials,
+        encoding
+      );
       if (res.headers.get("content-type")?.includes("text/event-stream")) {
         await handleEventStream(res);
       } else {
@@ -137,14 +189,18 @@ function Request({ item }: { item: ApiItem }) {
       }
     } catch (e) {
       console.log(e);
-      dispatch(
-        setResponse(
-          translate({
-            id: OPENAPI_REQUEST.CONNECTION_FAILED,
-            message: "Connection failed",
-          })
-        )
-      );
+
+      let errorMessage: string;
+      if (e instanceof RequestError) {
+        errorMessage = getErrorMessage(e.type);
+      } else {
+        errorMessage = translate({
+          id: OPENAPI_REQUEST.CONNECTION_FAILED,
+          message: "Connection failed",
+        });
+      }
+
+      dispatch(setResponse(errorMessage));
       dispatch(clearCode());
       dispatch(clearHeaders());
     }
@@ -153,7 +209,7 @@ function Request({ item }: { item: ApiItem }) {
   const showServerOptions = serverOptions.length > 0;
   const showAcceptOptions = acceptOptions.length > 1;
   const showRequestBody = contentType !== undefined;
-  const showRequestButton = item.servers && !hideSendButton;
+  const showRequestButton = (item.servers || proxy) && !hideSendButton;
   const showAuth = authSelected !== undefined;
   const showParams = allParams.length > 0;
   const requestBodyRequired = item.requestBody?.required;
@@ -163,7 +219,8 @@ function Request({ item }: { item: ApiItem }) {
     !showAuth &&
     !showParams &&
     !showRequestBody &&
-    !showServerOptions
+    !showServerOptions &&
+    !showRequestButton
   ) {
     return null;
   }
@@ -201,7 +258,8 @@ function Request({ item }: { item: ApiItem }) {
             })}
           </span>
           {allDetailsExpanded ? (
-            <span
+            <button
+              type="button"
               className="openapi-explorer__expand-details-btn"
               onClick={collapseAllDetails}
             >
@@ -209,9 +267,10 @@ function Request({ item }: { item: ApiItem }) {
                 id: OPENAPI_REQUEST.COLLAPSE_ALL,
                 message: "Collapse all",
               })}
-            </span>
+            </button>
           ) : (
-            <span
+            <button
+              type="button"
               className="openapi-explorer__expand-details-btn"
               onClick={expandAllDetails}
             >
@@ -219,7 +278,7 @@ function Request({ item }: { item: ApiItem }) {
                 id: OPENAPI_REQUEST.EXPAND_ALL,
                 message: "Expand all",
               })}
-            </span>
+            </button>
           )}
         </div>
         <div className="openapi-explorer__details-outer-container">
@@ -229,6 +288,7 @@ function Request({ item }: { item: ApiItem }) {
               className="openapi-explorer__details-container"
             >
               <summary
+                id={serverLabelId}
                 className="openapi-explorer__details-summary"
                 onClick={(e) => {
                   e.preventDefault();
@@ -240,7 +300,7 @@ function Request({ item }: { item: ApiItem }) {
                   message: "Base URL",
                 })}
               </summary>
-              <Server />
+              <Server labelId={serverLabelId} />
             </details>
           )}
           {showAuth && (

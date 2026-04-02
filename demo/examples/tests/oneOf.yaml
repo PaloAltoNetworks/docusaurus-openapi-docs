@@ -39,6 +39,46 @@ paths:
                       - type: boolean
                       - type: "null"
 
+  /oneof-primitive-formats:
+    get:
+      tags:
+        - oneOf
+      summary: oneOf with Primitive Format Types
+      description: |
+        Primitive types with format should display as `type<format>` (e.g., `string<date-time>`).
+
+        Schema:
+        ```yaml
+        type: object
+        properties:
+          oneOfProperty:
+            oneOf:
+              - type: string
+                format: date-time
+              - type: string
+                format: email
+              - type: integer
+                format: int64
+              - type: string
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  oneOfProperty:
+                    oneOf:
+                      - type: string
+                        format: date-time
+                      - type: string
+                        format: email
+                      - type: integer
+                        format: int64
+                      - type: string
+
   /oneof-complex-types:
     get:
       tags:

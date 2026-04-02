@@ -14,14 +14,15 @@ import { HtmlClassNameProvider } from "@docusaurus/theme-common";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import useIsBrowser from "@docusaurus/useIsBrowser";
 import { createAuth } from "@theme/ApiExplorer/Authorization/slice";
-import { createPersistanceMiddleware } from "@theme/ApiExplorer/persistanceMiddleware";
+import { createPersistenceMiddleware } from "@theme/ApiExplorer/persistenceMiddleware";
+import { createStorage } from "@theme/ApiExplorer/storage-utils";
 import DocItemLayout from "@theme/ApiItem/Layout";
 import CodeBlock from "@theme/CodeBlock";
 import type { Props } from "@theme/DocItem";
 import DocItemMetadata from "@theme/DocItem/Metadata";
 import SkeletonLoader from "@theme/SkeletonLoader";
 import clsx from "clsx";
-import {
+import type {
   ParameterObject,
   ServerObject,
 } from "docusaurus-plugin-openapi-docs/src/openapi/types";
@@ -90,11 +91,11 @@ export default function ApiItem(props: Props): JSX.Element {
 
   // Define store2
   let store2: any = {};
-  const persistanceMiddleware = createPersistanceMiddleware(options);
+  const persistenceMiddleware = createPersistenceMiddleware(options);
 
   // Init store for SSR
   if (!isBrowser) {
-    store2 = createStoreWithoutState({}, [persistanceMiddleware]);
+    store2 = createStoreWithoutState({}, [persistenceMiddleware]);
   }
 
   // Init store for CSR to hydrate components
@@ -121,7 +122,7 @@ export default function ApiItem(props: Props): JSX.Element {
       (param: { in: "path" | "query" | "header" | "cookie" }) => {
         const paramType = param.in;
         const paramsArray: ParameterObject[] = params[paramType];
-        paramsArray.push(param as ParameterObject);
+        paramsArray?.push(param as ParameterObject);
       }
     );
     const auth = createAuth({
@@ -129,11 +130,15 @@ export default function ApiItem(props: Props): JSX.Element {
       securitySchemes: api?.securitySchemes,
       options,
     });
+
+    const storage = createStorage(options?.authPersistence ?? "sessionStorage");
     // TODO: determine way to rehydrate without flashing
     // const acceptValue = window?.sessionStorage.getItem("accept");
     // const contentTypeValue = window?.sessionStorage.getItem("contentType");
-    const server = window?.sessionStorage.getItem("server");
-    const serverObject = (JSON.parse(server!) as ServerObject) ?? {};
+    const server = storage.getItem("server");
+    const serverObject = server
+      ? (JSON.parse(server) as ServerObject)
+      : undefined;
 
     store2 = createStoreWithState(
       {
@@ -146,15 +151,17 @@ export default function ApiItem(props: Props): JSX.Element {
           options: contentTypeArray,
         },
         server: {
-          value: serverObject.url ? serverObject : undefined,
+          value: serverObject?.url ? serverObject : undefined,
           options: servers,
         },
         response: { value: undefined },
         body: { type: "empty" },
         params,
         auth,
+        schemaSelection: { selections: {} },
+        encodingSelection: {},
       },
-      [persistanceMiddleware]
+      [persistenceMiddleware]
     );
   }
 

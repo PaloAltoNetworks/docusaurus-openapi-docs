@@ -139,7 +139,7 @@ demo/**/*.info.mdx
 demo/**/*.tag.mdx
 demo/**/*.schema.mdx
 demo/**/sidebar.ts
-demo/**/versions.json
+demo/**/*.json
 
 .idea
 .tool-versions

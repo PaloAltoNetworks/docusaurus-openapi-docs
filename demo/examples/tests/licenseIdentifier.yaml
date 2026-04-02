@@ -1,0 +1,29 @@
+openapi: 3.1.0
+info:
+  title: License Identifier Demo API
+  description: |
+    Demonstrates OAS v3.1.0 `license.identifier` support (SPDX expression).
+
+    Per the OAS v3.1.0 spec, `identifier` and `url` are mutually exclusive.
+    When `identifier` is present, a link to the canonical SPDX license page
+    should be rendered in the License section.
+  version: 1.0.0
+  license:
+    name: Apache 2.0
+    identifier: Apache-2.0
+tags:
+  - name: licenseIdentifier
+    description: License identifier tests
+paths:
+  /license-identifier:
+    get:
+      tags:
+        - licenseIdentifier
+      summary: License rendered via SPDX identifier
+      description: |
+        This endpoint exists to verify that a spec using `license.identifier`
+        (instead of `license.url`) correctly renders a clickable license link
+        pointing to `https://spdx.org/licenses/Apache-2.0.html`.
+      responses:
+        "204":
+          description: No content

@@ -10,6 +10,7 @@ import React from "react";
 import { translate } from "@docusaurus/Translate";
 import { ErrorMessage } from "@hookform/error-message";
 import FormSelect from "@theme/ApiExplorer/FormSelect";
+import { getSchemaEnum } from "@theme/ApiExplorer/ParamOptions";
 import { Param, setParam } from "@theme/ApiExplorer/ParamOptions/slice";
 import { useTypedDispatch } from "@theme/ApiItem/hooks";
 import { OPENAPI_FORM } from "@theme/translationIds";
@@ -17,9 +18,17 @@ import { Controller, useFormContext } from "react-hook-form";
 
 export interface ParamProps {
   param: Param;
+  label?: string;
+  type?: string;
+  required?: boolean;
 }
 
-export default function ParamSelectFormItem({ param }: ParamProps) {
+export default function ParamSelectFormItem({
+  param,
+  label,
+  type,
+  required,
+}: ParamProps) {
   const {
     control,
     formState: { errors },
@@ -29,7 +38,7 @@ export default function ParamSelectFormItem({ param }: ParamProps) {
 
   const dispatch = useTypedDispatch();
 
-  const options = param.schema?.enum ?? [];
+  const options = getSchemaEnum(param.schema) ?? [];
 
   return (
     <>
@@ -46,6 +55,9 @@ export default function ParamSelectFormItem({ param }: ParamProps) {
         name="paramSelect"
         render={({ field: { onChange } }) => (
           <FormSelect
+            label={label}
+            type={type}
+            required={required}
             options={["---", ...(options as string[])]}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
               const val = e.target.value;

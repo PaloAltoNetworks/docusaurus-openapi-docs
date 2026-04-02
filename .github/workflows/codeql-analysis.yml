@@ -2,11 +2,13 @@ name: "CodeQL"
 
 on:
   push:
-    branches: [main, v3.0.0, v2.0.0]
+    branches: [main]
+  schedule:
+    - cron: "0 6 * * 1" # weekly Monday 6am UTC
 
 jobs:
   analyze:
-    if: github.repository_owner	 == 'PaloAltoNetworks'
+    if: github.repository_owner == 'PaloAltoNetworks'
     name: Analyze
     runs-on: ubuntu-latest
     permissions:
@@ -14,18 +16,18 @@ jobs:
       security-events: write
 
     strategy:
-      fail-fast: true
       matrix:
         language: ["javascript"]
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@28deaeda66b76a05916b6923827895f2b14ab387 # v3
+        uses: github/codeql-action/init@ebcb5b36ded6beda4ceefea6a8bc4cc885255bb3 # v3
         with:
           languages: ${{ matrix.language }}
+          queries: security-extended
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@1b549b9259bda1cb5ddde3b41741a82a2d15a841 # v3
+        uses: github/codeql-action/analyze@ebcb5b36ded6beda4ceefea6a8bc4cc885255bb3 # v3

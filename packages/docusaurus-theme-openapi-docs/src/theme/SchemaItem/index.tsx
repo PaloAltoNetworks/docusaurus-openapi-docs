@@ -7,11 +7,13 @@
 
 import React, { ReactNode } from "react";
 
-import Markdown from "@theme/Markdown";
-import clsx from "clsx";
 import { translate } from "@docusaurus/Translate";
+import { Example } from "@theme/Example";
+import Markdown from "@theme/Markdown";
 import { OPENAPI_SCHEMA_ITEM } from "@theme/translationIds";
+import clsx from "clsx";
 
+import { getQualifierMessage } from "../../markdown/schema";
 import { guard } from "../../markdown/utils";
 
 export interface Props {
@@ -73,6 +75,7 @@ export default function SchemaItem(props: Props) {
   let schemaDescription;
   let defaultValue: string | undefined;
   let example: string | undefined;
+  let examples: string[] | undefined;
   let nullable;
   let enumDescriptions: [string, string][] = [];
   let constValue: string | undefined;
@@ -83,6 +86,7 @@ export default function SchemaItem(props: Props) {
     enumDescriptions = transformEnumDescriptions(schema["x-enumDescriptions"]);
     defaultValue = schema.default;
     example = schema.example;
+    examples = schema.examples;
     nullable =
       schema.nullable ||
       (Array.isArray(schema.type) && schema.type.includes("null")); // support JSON Schema nullable
@@ -127,7 +131,11 @@ export default function SchemaItem(props: Props) {
     </>
   ));
 
-  const renderQualifierMessage = guard(qualifierMessage, (message) => (
+  // Generate qualifierMessage from schema if not provided
+  const effectiveQualifierMessage =
+    qualifierMessage ?? (schema ? getQualifierMessage(schema) : undefined);
+
+  const renderQualifierMessage = guard(effectiveQualifierMessage, (message) => (
     <>
       <Markdown>{message}</Markdown>
     </>
@@ -160,40 +168,6 @@ export default function SchemaItem(props: Props) {
           </strong>
           <span>
             <code>{JSON.stringify(defaultValue)}</code>
-          </span>
-        </div>
-      );
-    }
-    return undefined;
-  }
-
-  function renderExample() {
-    if (example !== undefined) {
-      if (typeof example === "string") {
-        return (
-          <div>
-            <strong>
-              {translate({
-                id: OPENAPI_SCHEMA_ITEM.EXAMPLE,
-                message: "Example:",
-              })}{" "}
-            </strong>
-            <span>
-              <code>{example}</code>
-            </span>
-          </div>
-        );
-      }
-      return (
-        <div>
-          <strong>
-            {translate({
-              id: OPENAPI_SCHEMA_ITEM.EXAMPLE,
-              message: "Example:",
-            })}{" "}
-          </strong>
-          <span>
-            <code>{JSON.stringify(example)}</code>
           </span>
         </div>
       );
@@ -260,7 +234,8 @@ export default function SchemaItem(props: Props) {
       {renderQualifierMessage}
       {renderConstValue()}
       {renderDefaultValue()}
-      {renderExample()}
+      <Example example={example} />
+      <Example examples={examples} />
       {collapsibleSchemaContent ?? collapsibleSchemaContent}
     </div>
   );

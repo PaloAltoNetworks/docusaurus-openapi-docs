@@ -29,6 +29,10 @@ export const OPENAPI_REQUEST = {
   PARAMETERS_TITLE: "theme.openapi.request.parameters.title",
   FETCHING_MESSAGE: "theme.openapi.request.fetchingMessage",
   CONNECTION_FAILED: "theme.openapi.request.connectionFailed",
+  ERROR_TIMEOUT: "theme.openapi.request.error.timeout",
+  ERROR_NETWORK: "theme.openapi.request.error.network",
+  ERROR_CORS: "theme.openapi.request.error.cors",
+  ERROR_UNKNOWN: "theme.openapi.request.error.unknown",
 };
 
 export const OPENAPI_SERVER = {
@@ -70,7 +74,13 @@ export const OPENAPI_STATUS_CODES = {
   SCHEMA_TITLE: "theme.openapi.statusCodes.schemaTitle",
 };
 
+export const OPENAPI_SCHEMA = {
+  NO_SCHEMA: "theme.openapi.schema.noSchema",
+};
+
 export const OPENAPI_SCHEMA_ITEM = {
+  CHARACTERS: "theme.openapi.schemaItem.characters",
+  NON_EMPTY: "theme.openapi.schemaItem.nonEmpty",
   REQUIRED: "theme.openapi.schemaItem.required",
   DEPRECATED: "theme.openapi.schemaItem.deprecated",
   NULLABLE: "theme.openapi.schemaItem.nullable",
@@ -82,6 +92,7 @@ export const OPENAPI_SCHEMA_ITEM = {
   ENUM_VALUE: "theme.openapi.schemaItem.enumValue",
   ENUM_DESCRIPTION: "theme.openapi.schemaItem.enumDescription",
   POSSIBLE_VALUES: "theme.openapi.schemaItem.possibleValues",
+  EXPRESSION: "theme.openapi.schemaItem.expression",
   ONE_OF: "theme.openapi.schemaItem.oneOf",
   ANY_OF: "theme.openapi.schemaItem.anyOf",
 };

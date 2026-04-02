@@ -10,6 +10,7 @@ import React from "react";
 import { translate } from "@docusaurus/Translate";
 import { ErrorMessage } from "@hookform/error-message";
 import FormMultiSelect from "@theme/ApiExplorer/FormMultiSelect";
+import { getSchemaEnum } from "@theme/ApiExplorer/ParamOptions";
 import { Param, setParam } from "@theme/ApiExplorer/ParamOptions/slice";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import { OPENAPI_FORM } from "@theme/translationIds";
@@ -17,9 +18,17 @@ import { Controller, useFormContext } from "react-hook-form";
 
 export interface ParamProps {
   param: Param;
+  label?: string;
+  type?: string;
+  required?: boolean;
 }
 
-export default function ParamMultiSelectFormItem({ param }: ParamProps) {
+export default function ParamMultiSelectFormItem({
+  param,
+  label,
+  type,
+  required,
+}: ParamProps) {
   const {
     control,
     formState: { errors },
@@ -29,7 +38,7 @@ export default function ParamMultiSelectFormItem({ param }: ParamProps) {
 
   const dispatch = useTypedDispatch();
 
-  const options = param.schema?.items?.enum ?? [];
+  const options = getSchemaEnum(param.schema?.items) ?? [];
 
   const pathParams = useTypedSelector((state: any) => state.params.path);
   const queryParams = useTypedSelector((state: any) => state.params.query);
@@ -74,6 +83,9 @@ export default function ParamMultiSelectFormItem({ param }: ParamProps) {
         name="paramMultiSelect"
         render={({ field: { onChange } }) => (
           <FormMultiSelect
+            label={label}
+            type={type}
+            required={required}
             options={options as string[]}
             onChange={(e: any) => handleChange(e, onChange)}
             showErrors={!!showErrorMessage}

@@ -7,7 +7,7 @@
 
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { createStorage, hashArray } from "@theme/ApiExplorer/storage-utils";
-import {
+import type {
   SecurityRequirementObject,
   SecuritySchemeObject,
 } from "docusaurus-plugin-openapi-docs/src/openapi/types";
@@ -58,7 +58,7 @@ export function createAuth({
   };
   options?: ThemeConfig["api"];
 }): AuthState {
-  const storage = createStorage("sessionStorage");
+  const storage = createStorage(opts?.authPersistence ?? "sessionStorage");
 
   let data: AuthState["data"] = {};
   let options: AuthState["options"] = {};

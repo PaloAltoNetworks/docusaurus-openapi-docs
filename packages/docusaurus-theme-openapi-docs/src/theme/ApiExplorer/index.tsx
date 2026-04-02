@@ -12,7 +12,7 @@ import CodeSnippets from "@theme/ApiExplorer/CodeSnippets";
 import Request from "@theme/ApiExplorer/Request";
 import Response from "@theme/ApiExplorer/Response";
 import SecuritySchemes from "@theme/ApiExplorer/SecuritySchemes";
-import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
+import type { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 import * as sdk from "postman-collection";
 
 function ApiExplorer({
@@ -41,6 +41,7 @@ function ApiExplorer({
           postman={postman}
           codeSamples={(item as any)["x-codeSamples"] ?? []}
           maskCredentials={mask_credentials}
+          requestBody={item.requestBody}
         />
       )}
       <Request item={item} />

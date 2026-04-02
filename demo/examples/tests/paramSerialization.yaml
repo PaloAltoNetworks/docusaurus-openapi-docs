@@ -122,6 +122,71 @@ paths:
         "200":
           description: Successful response
 
+  /api/resource:customVerb:
+    post:
+      tags:
+        - params
+      summary: Custom verb endpoint in path
+      description: |
+        Demonstrates a literal custom verb suffix in the path segment.
+        Example:
+        ```
+        Result: /api/resource:customVerb
+        ```
+      responses:
+        "200":
+          description: Successful response
+
+  /files/{name}.{ext}:
+    get:
+      tags:
+        - params
+      summary: Path parameters in the same segment
+      description: |
+        Demonstrates multiple path parameters in a single path segment.
+        Example:
+        ```
+        {name} = "report"
+        {ext} = "pdf"
+        Result: /files/report.pdf
+        ```
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: ext
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+
+  /jobs/{id}:cancel:
+    post:
+      tags:
+        - params
+      summary: Path template combined with custom verb
+      description: |
+        Demonstrates a path parameter with a verb-like suffix in the same segment.
+        Example:
+        ```
+        {id} = "123"
+        Result: /jobs/123:cancel
+        ```
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+
   /search:
     get:
       tags:
@@ -351,6 +416,64 @@ paths:
                 type: string
           style: simple
           explode: true
+      responses:
+        "200":
+          description: Successful response
+
+  /rfc3986/colon:
+    get:
+      tags:
+        - params
+      summary: Query param with RFC 3986 reserved char ':'
+      description: |
+        Verifies that `:` in a query parameter value is percent-encoded as `%3A`.
+
+        Example:
+        ```
+        filter = "status:active"
+        Result: /rfc3986/colon?filter=status%3Aactive
+        ```
+      parameters:
+        - name: filter
+          in: query
+          description: 'Try a value containing a colon, e.g. "status:active"'
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+
+  /rfc3986/reserved:
+    get:
+      tags:
+        - params
+      summary: Query params with multiple RFC 3986 reserved chars
+      description: |
+        Verifies that RFC 3986 reserved characters in query parameter values
+        are percent-encoded correctly.
+
+        Example:
+        ```
+        q    = "hello:world"   → q=hello%3Aworld
+        path = "a/b/c"         → path=a%2Fb%2Fc
+        ref  = "v1#section"    → ref=v1%23section
+        ```
+      parameters:
+        - name: q
+          in: query
+          description: 'Try a value with a colon, e.g. "hello:world"'
+          schema:
+            type: string
+        - name: path
+          in: query
+          description: 'Try a value with slashes, e.g. "a/b/c"'
+          schema:
+            type: string
+        - name: ref
+          in: query
+          description: 'Try a value with a hash, e.g. "v1#section"'
+          schema:
+            type: string
       responses:
         "200":
           description: Successful response

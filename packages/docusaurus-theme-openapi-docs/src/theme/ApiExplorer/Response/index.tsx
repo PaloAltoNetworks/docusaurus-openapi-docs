@@ -9,14 +9,16 @@ import React from "react";
 
 import { useDoc } from "@docusaurus/plugin-content-docs/client";
 import { usePrismTheme } from "@docusaurus/theme-common";
-import { translate } from "@docusaurus/Translate";
+import Translate, { translate } from "@docusaurus/Translate";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import ApiCodeBlock from "@theme/ApiExplorer/ApiCodeBlock";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
-import { OPENAPI_RESPONSE } from "@theme/translationIds";
+import { OPENAPI_REQUEST, OPENAPI_RESPONSE } from "@theme/translationIds";
 import clsx from "clsx";
-import { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
+import type { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
+import type { ThemeConfig } from "docusaurus-theme-openapi-docs/src/types";
 
 import { clearResponse, clearCode, clearHeaders } from "./slice";
 
@@ -42,7 +44,10 @@ function formatXml(xml: string) {
 
 function Response({ item }: { item: ApiItem }) {
   const metadata = useDoc();
+  const { siteConfig } = useDocusaurusContext();
+  const themeConfig = siteConfig.themeConfig as ThemeConfig;
   const hideSendButton = metadata.frontMatter.hide_send_button;
+  const proxy = metadata.frontMatter.proxy ?? themeConfig.api?.proxy;
   const prismTheme = usePrismTheme();
   const code = useTypedSelector((state: any) => state.response.code);
   const headers = useTypedSelector((state: any) => state.response.headers);
@@ -57,7 +62,7 @@ function Response({ item }: { item: ApiItem }) {
           ? "openapi-response__dot--success"
           : "openapi-response__dot--info");
 
-  if (!item.servers || hideSendButton) {
+  if ((!item.servers && !proxy) || hideSendButton) {
     return null;
   }
 
@@ -79,7 +84,8 @@ function Response({ item }: { item: ApiItem }) {
         <span className="openapi-explorer__response-title">
           {translate({ id: OPENAPI_RESPONSE.TITLE, message: "Response" })}
         </span>
-        <span
+        <button
+          type="button"
           className="openapi-explorer__response-clear-btn"
           onClick={() => {
             dispatch(clearResponse());
@@ -88,7 +94,7 @@ function Response({ item }: { item: ApiItem }) {
           }}
         >
           {translate({ id: OPENAPI_RESPONSE.CLEAR, message: "Clear" })}
-        </span>
+        </button>
       </div>
       <div
         style={{
@@ -121,11 +127,22 @@ function Response({ item }: { item: ApiItem }) {
               >
                 {prettyResponse || (
                   <p className="openapi-explorer__response-placeholder-message">
-                    {translate({
-                      id: OPENAPI_RESPONSE.PLACEHOLDER,
-                      message:
-                        "Click the <code>Send API Request</code> button above and see the response here!",
-                    })}
+                    <Translate
+                      id={OPENAPI_RESPONSE.PLACEHOLDER}
+                      values={{
+                        code: (
+                          <code>
+                            <Translate id={OPENAPI_REQUEST.SEND_BUTTON}>
+                              Send API Request
+                            </Translate>
+                          </code>
+                        ),
+                      }}
+                    >
+                      {
+                        "Click the {code} button above and see the response here!"
+                      }
+                    </Translate>
                   </p>
                 )}
               </ApiCodeBlock>
@@ -158,11 +175,20 @@ function Response({ item }: { item: ApiItem }) {
           </div>
         ) : (
           <p className="openapi-explorer__response-placeholder-message">
-            {translate({
-              id: OPENAPI_RESPONSE.PLACEHOLDER,
-              message:
-                "Click the <code>Send API Request</code> button above and see the response here!",
-            })}
+            <Translate
+              id={OPENAPI_RESPONSE.PLACEHOLDER}
+              values={{
+                code: (
+                  <code>
+                    <Translate id={OPENAPI_REQUEST.SEND_BUTTON}>
+                      Send API Request
+                    </Translate>
+                  </code>
+                ),
+              }}
+            >
+              {"Click the {code} button above and see the response here!"}
+            </Translate>
           </p>
         )}
       </div>

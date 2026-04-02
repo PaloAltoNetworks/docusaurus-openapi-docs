@@ -350,6 +350,99 @@ paths:
               schema:
                 $ref: "#/components/schemas/BaseEmptySubschema"
 
+  /discriminator-nested-allof:
+    post:
+      tags:
+        - discriminator
+      summary: Nested Discriminator in allOf
+      description: |
+        Tests discriminators nested within allOf structures, where the discriminator
+        and its property definition are inside an allOf item rather than at the top level.
+        This is a common pattern when combining shared properties with discriminated unions.
+
+        Schema:
+        ```yaml
+        allOf:
+          - $ref: '#/components/schemas/CommonProps'
+          - oneOf:
+              - $ref: '#/components/schemas/NestedVariantA'
+              - $ref: '#/components/schemas/NestedVariantB'
+            discriminator:
+              propertyName: variantType
+              mapping:
+                variant-a: '#/components/schemas/NestedVariantA'
+                variant-b: '#/components/schemas/NestedVariantB'
+        ```
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NestedDiscriminatorBase"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NestedDiscriminatorBase"
+
+  /discriminator-doubly-nested:
+    post:
+      tags:
+        - discriminator
+      summary: Doubly Nested Discriminators (Issue #1302 Full Scenario)
+      description: |
+        Tests the full scenario from issue #1302 with doubly-nested discriminators:
+        - Outer level: allOf with discriminator on "type" selecting TypeA/TypeB/TypeC
+        - TypeA: has allOf with its own nested discriminator on "mode"
+        - TypeB: has allOf with its own nested discriminator on "mode"
+        - TypeC: has discriminator on "mode" at root level (NOT in allOf)
+
+        This tests:
+        1. Discriminators nested in allOf are properly detected
+        2. Inner discriminators work after selecting outer type
+        3. TypeC pattern (discriminator at root) still works
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DoublyNestedBase"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DoublyNestedBase"
+
+  /discriminator-deeply-nested-allof:
+    post:
+      tags:
+        - discriminator
+      summary: Deeply Nested Discriminator in allOf chains
+      description: |
+        Tests discriminator discovery through nested allOf chains:
+        - top-level allOf
+        - inner allOf
+        - oneOf with discriminator
+
+        This validates recursive discriminator lookup beyond first-level allOf items.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeepNestedDiscriminatorBase"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeepNestedDiscriminatorBase"
+
 components:
   schemas:
     BaseBasic:
@@ -569,3 +662,278 @@ components:
       type: object
       allOf:
         - $ref: "#/components/schemas/BaseEmptySubschema"
+
+    # Schemas for nested discriminator test
+    CommonProps:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation timestamp
+      required:
+        - id
+
+    NestedDiscriminatorBase:
+      allOf:
+        - $ref: "#/components/schemas/CommonProps"
+        - oneOf:
+            - $ref: "#/components/schemas/NestedVariantA"
+            - $ref: "#/components/schemas/NestedVariantB"
+          discriminator:
+            propertyName: variantType
+            mapping:
+              variant-a: "#/components/schemas/NestedVariantA"
+              variant-b: "#/components/schemas/NestedVariantB"
+
+    DeepNestedDiscriminatorBase:
+      allOf:
+        - $ref: "#/components/schemas/CommonProps"
+        - allOf:
+            - $ref: "#/components/schemas/DeepLayerCommon"
+            - oneOf:
+                - $ref: "#/components/schemas/DeepNestedVariantA"
+                - $ref: "#/components/schemas/DeepNestedVariantB"
+              discriminator:
+                propertyName: deepVariantType
+                mapping:
+                  deep-a: "#/components/schemas/DeepNestedVariantA"
+                  deep-b: "#/components/schemas/DeepNestedVariantB"
+
+    DeepLayerCommon:
+      type: object
+      properties:
+        layer:
+          type: string
+          enum: ["inner"]
+      required:
+        - layer
+
+    DeepNestedVariantA:
+      type: object
+      properties:
+        deepVariantType:
+          type: string
+          enum: ["deep-a"]
+        deepAConfig:
+          type: object
+          properties:
+            enabled:
+              type: boolean
+      required:
+        - deepVariantType
+
+    DeepNestedVariantB:
+      type: object
+      properties:
+        deepVariantType:
+          type: string
+          enum: ["deep-b"]
+        deepBConfig:
+          type: object
+          properties:
+            threshold:
+              type: number
+      required:
+        - deepVariantType
+
+    NestedVariantA:
+      type: object
+      properties:
+        variantType:
+          type: string
+          enum: ["variant-a"]
+        configA:
+          type: object
+          properties:
+            settingA1:
+              type: string
+            settingA2:
+              type: integer
+      required:
+        - variantType
+
+    NestedVariantB:
+      type: object
+      properties:
+        variantType:
+          type: string
+          enum: ["variant-b"]
+        configB:
+          type: object
+          properties:
+            settingB1:
+              type: boolean
+            settingB2:
+              type: array
+              items:
+                type: string
+      required:
+        - variantType
+
+    # Test case for doubly-nested discriminators (issue #1302 full scenario)
+    # Outer: allOf with discriminator on "type"
+    # Inner: TypeA and TypeB each have their own discriminator on "mode"
+    DoublyNestedBase:
+      allOf:
+        - $ref: "#/components/schemas/OuterCommonProps"
+        - oneOf:
+            - $ref: "#/components/schemas/OuterTypeA"
+            - $ref: "#/components/schemas/OuterTypeB"
+            - $ref: "#/components/schemas/OuterTypeC"
+          discriminator:
+            propertyName: type
+            mapping:
+              type-a: "#/components/schemas/OuterTypeA"
+              type-b: "#/components/schemas/OuterTypeB"
+              type-c: "#/components/schemas/OuterTypeC"
+
+    OuterCommonProps:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+
+    # TypeA: has allOf with its own nested discriminator
+    OuterTypeA:
+      title: TypeA
+      allOf:
+        - $ref: "#/components/schemas/InnerCommonProps"
+        - oneOf:
+            - $ref: "#/components/schemas/ModeA1"
+            - $ref: "#/components/schemas/ModeA2"
+          discriminator:
+            propertyName: mode
+            mapping:
+              mode-a1: "#/components/schemas/ModeA1"
+              mode-a2: "#/components/schemas/ModeA2"
+      properties:
+        type:
+          type: string
+          enum: ["type-a"]
+      required:
+        - type
+
+    # TypeB: also has allOf with its own nested discriminator
+    OuterTypeB:
+      title: TypeB
+      allOf:
+        - $ref: "#/components/schemas/InnerCommonProps"
+        - oneOf:
+            - $ref: "#/components/schemas/ModeB1"
+            - $ref: "#/components/schemas/ModeB2"
+          discriminator:
+            propertyName: mode
+            mapping:
+              mode-b1: "#/components/schemas/ModeB1"
+              mode-b2: "#/components/schemas/ModeB2"
+      properties:
+        type:
+          type: string
+          enum: ["type-b"]
+      required:
+        - type
+
+    # TypeC: has discriminator at root (NOT in allOf)
+    OuterTypeC:
+      title: TypeC
+      type: object
+      oneOf:
+        - $ref: "#/components/schemas/ModeC1"
+        - $ref: "#/components/schemas/ModeC2"
+      discriminator:
+        propertyName: mode
+        mapping:
+          mode-c1: "#/components/schemas/ModeC1"
+          mode-c2: "#/components/schemas/ModeC2"
+      properties:
+        type:
+          type: string
+          enum: ["type-c"]
+      required:
+        - type
+
+    InnerCommonProps:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+
+    ModeA1:
+      type: object
+      properties:
+        mode:
+          type: string
+          enum: ["mode-a1"]
+        settingA1:
+          type: string
+      required:
+        - mode
+
+    ModeA2:
+      type: object
+      properties:
+        mode:
+          type: string
+          enum: ["mode-a2"]
+        settingA2:
+          type: number
+      required:
+        - mode
+
+    ModeB1:
+      type: object
+      properties:
+        mode:
+          type: string
+          enum: ["mode-b1"]
+        settingB1:
+          type: boolean
+      required:
+        - mode
+
+    ModeB2:
+      type: object
+      properties:
+        mode:
+          type: string
+          enum: ["mode-b2"]
+        settingB2:
+          type: array
+          items:
+            type: string
+      required:
+        - mode
+
+    ModeC1:
+      type: object
+      properties:
+        mode:
+          type: string
+          enum: ["mode-c1"]
+        settingC1:
+          type: integer
+      required:
+        - mode
+
+    ModeC2:
+      type: object
+      properties:
+        mode:
+          type: string
+          enum: ["mode-c2"]
+        settingC2:
+          type: object
+          properties:
+            nested:
+              type: string
+      required:
+        - mode

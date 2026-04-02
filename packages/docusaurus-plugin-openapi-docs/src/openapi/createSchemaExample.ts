@@ -91,7 +91,12 @@ function sampleFromProp(
 
   // TODO: handle discriminators
 
-  if (prop.oneOf) {
+  // Check for explicit example/examples first (OAS 3.1 support)
+  if (prop.example !== undefined) {
+    obj[name] = prop.example;
+  } else if (prop.examples !== undefined && prop.examples.length > 0) {
+    obj[name] = prop.examples[0];
+  } else if (prop.oneOf) {
     obj[name] = sampleFromSchema(prop.oneOf[0], context);
   } else if (prop.anyOf) {
     obj[name] = sampleFromSchema(prop.anyOf[0], context);
@@ -111,10 +116,25 @@ export const sampleFromSchema = (
   try {
     // deep copy schema before processing
     let schemaCopy = JSON.parse(JSON.stringify(schema));
-    let { type, example, allOf, properties, items, oneOf, anyOf } = schemaCopy;
+    let {
+      type,
+      example,
+      examples,
+      allOf,
+      properties,
+      items,
+      oneOf,
+      anyOf,
+      const: constant,
+    } = schemaCopy;
 
     if (example !== undefined) {
       return example;
+    }
+
+    // OAS 3.1 / JSON Schema: examples is an array
+    if (examples !== undefined && examples.length > 0) {
+      return examples[0];
     }
 
     if (oneOf) {
@@ -216,6 +236,10 @@ export const sampleFromSchema = (
 
     if (shouldExcludeProperty(schemaCopy, context)) {
       return undefined;
+    }
+
+    if (constant) {
+      return constant;
     }
 
     return primitive(schemaCopy);
