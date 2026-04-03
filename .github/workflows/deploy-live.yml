@@ -68,7 +68,7 @@ jobs:
           echo "::add-mask::$creds"
           echo "sa_key=$creds" >> "$GITHUB_OUTPUT"
 
-      - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v4
         with:
           name: build
 
