@@ -364,3 +364,86 @@ paths:
                       example: pencil
                   required:
                     - orderNo
+
+  /oneof-ref-allof-requestbody:
+    post:
+      tags:
+        - oneOf
+      summary: oneOf with $ref to allOf-composed schemas in requestBody
+      description: |
+        Reproduces issue #1241: a requestBody schema that is `oneOf` two `$ref`s,
+        where each ref resolves to an `allOf` that extends a shared base schema.
+        All composed properties (from the base and the extension) should be visible
+        in the rendered request body section.
+
+        Schema:
+        ```yaml
+        requestBody:
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/UploadRequest'
+                  - $ref: '#/components/schemas/UploadRequestTemplate'
+        components:
+          schemas:
+            UploadRequest:
+              allOf:
+                - $ref: '#/components/schemas/UploadRequestTemplate'
+                - type: object
+                  required: [contentType]
+                  properties:
+                    contentType:
+                      type: string
+                      enum: [text/plain, text/html]
+            UploadRequestTemplate:
+              type: object
+              required: [content, notificationChannel, subject, templateName]
+              properties:
+                notificationChannel:
+                  type: string
+                  example: email
+                templateName:
+                  type: string
+                subject:
+                  type: string
+                content:
+                  type: string
+        ```
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/UploadRequest"
+                - $ref: "#/components/schemas/UploadRequestTemplate"
+      responses:
+        "200":
+          description: Successful response
+
+components:
+  schemas:
+    UploadRequestTemplate:
+      type: object
+      required: [content, notificationChannel, subject, templateName]
+      properties:
+        notificationChannel:
+          type: string
+          example: email
+        templateName:
+          type: string
+        subject:
+          type: string
+        content:
+          type: string
+    UploadRequest:
+      allOf:
+        - $ref: "#/components/schemas/UploadRequestTemplate"
+        - type: object
+          required: [contentType]
+          properties:
+            contentType:
+              type: string
+              enum: [text/plain, text/html]
+              description: MIME type of the upload content
