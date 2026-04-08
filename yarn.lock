@@ -189,9 +189,9 @@
     "@algolia/client-common" "5.46.3"
 
 "@apidevtools/json-schema-ref-parser@^15.3.3":
-  version "15.3.3"
-  resolved "https://registry.yarnpkg.com/@apidevtools/json-schema-ref-parser/-/json-schema-ref-parser-15.3.3.tgz#00790fdc09676e5c3827c8f412bf2e102acc2880"
-  integrity sha512-kOE1RpKrv7VW3OxN6cSr1pqyDoxqXHC6OVy8tE5bfE47CelnStY4aBKEpA4NB9BYlaAXPLfx2Uz2wVXzAa4Kjg==
+  version "15.3.5"
+  resolved "https://registry.yarnpkg.com/@apidevtools/json-schema-ref-parser/-/json-schema-ref-parser-15.3.5.tgz#503726178d8d792eea7b195566272aaee6837e2f"
+  integrity sha512-orNOYXw3hYXxxisXMldjzjBzqqTLBPbwOtHg7ovBPvfBHDue1qM9YJENZ3W2BQuS+7z4ThogMbEzEsov57Itkg==
   dependencies:
     js-yaml "^4.1.1"
 
