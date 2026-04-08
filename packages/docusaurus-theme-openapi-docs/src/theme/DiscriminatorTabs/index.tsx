@@ -189,15 +189,7 @@ function TabContent({
     }
     return cloneElement(selectedTabItem, { className: "margin-top--md" });
   }
-  return (
-    <div className="margin-top--md">
-      {childTabs.map((tabItem, i) =>
-        cloneElement(tabItem, {
-          key: i,
-        })
-      )}
-    </div>
-  );
+  return <div className="margin-top--md">{childTabs}</div>;
 }
 function TabsComponent(props: TabProps): React.JSX.Element {
   const tabs = useTabsContextValue(props);
