@@ -268,8 +268,8 @@ const config: Config = {
       indexName: "docusaurus-openapi",
     },
     announcementBar: {
-      id: "announcementBar_1",
-      content: "First stable release for Docusaurus v3 now available!",
+      id: "announcementBar_2",
+      content: "v5.0.0 is now available! Requires Docusaurus 3.10.0+",
     },
   } satisfies Preset.ThemeConfig,
 

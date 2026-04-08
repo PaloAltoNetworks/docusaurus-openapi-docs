@@ -1,3 +1,104 @@
+## 5.0.0 (2026-04-08)
+
+**Breaking Change:** Minimum Docusaurus version is now `3.10.0`. Users on Docusaurus 3.5–3.9 must upgrade before updating to this release.
+
+This release adapts to the Tabs context API refactor in Docusaurus 3.10.0, upgrades core dependencies (`@redocly/openapi-core` v1→v2, `openapi-to-postmanv2` v5→v6), and includes numerous bug fixes, new features, and dependency updates.
+
+#### :boom: Breaking Change
+
+- Minimum Docusaurus peerDependency bumped from `^3.5.0` to `^3.10.0`
+- Updated internal Tabs API to use `useTabsContextValue` + `TabsProvider` context pattern
+
+#### :rocket: New Feature
+
+- feat(demo): modernized styles with swappable palettes and runtime theme switcher ([#1371](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1371))
+- feat(i18n): make QualifierMessage strings translatable ([#1364](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1364))
+- feat(theme): add requestCredentials option for API requests ([#1300](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1300))
+
+#### :bug: Bug Fix
+
+- fix: update Tabs API for Docusaurus 3.10.0 compatibility ([#1398](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1398))
+- fix(cli): pass pluginInstances to getPluginConfig to support non-array plugins (#1246) ([#1384](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1384))
+- fix(request-schema): render example/examples tabs for request bodies and callbacks ([#1370](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1370))
+- fix(explorer): respect encoding.contentType for multipart/form-data parts ([#1369](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1369))
+- fix(sidebars): use startsWith to extract basePath instead of split ([#1368](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1368))
+- fix(params): display const value in parameter description and Try It form ([#1367](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1367))
+- fix(explorer): encode RFC 3986 reserved chars in query parameter values ([#1366](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1366))
+- fix(license): support SPDX identifier field in OAS v3.1.0 License Object ([#1365](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1365))
+- fix: add React 19 / SSR compatibility guards ([#1363](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1363))
+- fix(theme): guard against unknown parameter `in` values to prevent crash ([#1360](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1360))
+- fix(plugin): generate unique sidebar keys for tagGroup items ([#1317](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1317))
+- fix(theme): improve accessibility of api explorer controls ([#1325](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1325))
+- fix(theme): add path-browserify webpack fallback for browser bundling ([#1344](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1344))
+- fix(theme): handle nested discriminators in allOf structures ([#1303](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1303))
+- fix: handle allOf with incompatible types ([#1308](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1308))
+- fix(plugin): support template-aware OpenAPI path binding ([#1311](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1311))
+- fix(theme): show dropdown for enum parameters wrapped in allOf ([#1301](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1301))
+- fix(theme): render code tag in Response placeholder message ([#1299](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1299))
+
+#### :test_tube: Testing
+
+- test(demo): add regression test for oneOf $ref to allOf-composed schemas in requestBody ([#1396](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1396))
+
+#### :robot: Dependencies
+
+- chore(deps): bump actions/checkout from 4.2.2 to 6.0.2 ([#1392](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1392))
+- chore(deps): bump actions/cache from 3.4.3 to 5.0.4 ([#1394](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1394))
+- chore(deps): bump actions/download-artifact from 4.2.1 to 8.0.1 ([#1393](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1393))
+- chore(deps): bump actions/setup-node from 2.5.2 to 6.3.0 ([#1391](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1391))
+- chore(deps): bump google-github-actions/auth from 2.1.12 to 3.0.0 ([#1390](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1390))
+- chore(deps): bump @redocly/openapi-core from 2.25.3 to 2.25.4 ([#1389](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1389))
+- chore(deps): bump @apidevtools/json-schema-ref-parser ([#1386](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1386))
+- chore(deps): bump sass-loader from 16.0.6 to 16.0.7 ([#1385](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1385))
+- chore(deps): bump ajv from 6.12.6 to 6.14.0 ([#1383](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1383))
+- chore(deps): bump lodash from 4.17.23 to 4.18.1 ([#1382](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1382))
+- chore(deps): upgrade eslint 7 → 8 and update related plugins
+- chore(deps): bump slugify from 1.6.6 to 1.6.9 ([#1381](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1381))
+- chore(deps): bump xml-formatter from 3.6.7 to 3.7.0 ([#1380](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1380))
+- chore(deps): bump sass from 1.97.2 to 1.98.0 ([#1374](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1374))
+- chore(deps): bump allof-merge from 0.6.7 to 0.6.8 ([#1373](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1373))
+- chore(deps): bump openapi-to-postmanv2 from ^5.0.0 to ^6.0.0 ([#1362](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1362))
+- chore(deps): upgrade @redocly/openapi-core from v1 to v2 ([#1361](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1361))
+- chore(deps): bump chalk from 4.1.2 to 5.6.2 ([#1357](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1357))
+- chore(deps): bump postman-collection from 5.2.0 to 5.3.0 ([#1358](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1358))
+- chore(deps): bump path-to-regexp from 0.1.12 to 0.1.13 ([#1354](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1354))
+- chore(deps): bump @apidevtools/json-schema-ref-parser ([#1352](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1352))
+- chore(deps): bump react-hook-form from 7.71.1 to 7.72.0
+- chore(deps): bump handlebars from 4.7.8 to 4.7.9 ([#1347](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1347))
+- chore(deps): bump fs-extra from 11.3.3 to 11.3.4 ([#1337](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1337))
+- chore(deps): bump clsx from 1.2.1 to 2.1.1 ([#1338](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1338))
+- chore(deps): bump the react group with 2 updates ([#1342](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1342))
+- chore(deps): bump immutable from 5.1.4 to 5.1.5 ([#1323](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1323))
+- chore(deps): bump svgo from 3.3.2 to 3.3.3 ([#1324](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1324))
+- chore(deps): bump flatted from 3.3.3 to 3.4.2 ([#1330](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1330))
+- chore(deps): bump qs from 6.14.1 to 6.14.2 ([#1310](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1310))
+
+#### :wrench: Maintenance
+
+- chore(deps-dev): bump fast-xml-parser from 5.5.9 to 5.5.10 ([#1388](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1388))
+- chore(deps-dev): bump @babel/core from 7.28.6 to 7.29.0 ([#1387](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1387))
+- chore(deps-dev): bump eslint-plugin-testing-library from 4.12.4 to 6.5.0 ([#1379](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1379))
+- chore(deps-dev): bump pixelmatch from 5.3.0 to 7.1.0 ([#1378](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1378))
+- chore(deps-dev): bump playwright from 1.58.2 to 1.59.1 ([#1377](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1377))
+- chore(deps-dev): bump fast-xml-parser from 5.5.7 to 5.5.9 ([#1376](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1376))
+- chore(deps-dev): bump prettier from 3.8.0 to 3.8.1 ([#1375](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1375))
+- chore(deps-dev): bump playwright from 1.57.0 to 1.58.2 ([#1372](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1372))
+- chore(deps-dev): bump @types/node from 17.0.45 to 25.5.0 ([#1356](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1356))
+- chore(deps-dev): bump start-server-and-test from 1.15.5 to 3.0.0 ([#1351](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1351))
+- chore(deps-dev): bump lerna from 8.2.4 to 9.0.7
+- chore(deps-dev): bump eslint-plugin-jest from 25.7.0 to 28.14.0
+- chore(deps-dev): bump eslint-plugin-jest-dom from 3.9.4 to 5.5.0 ([#1339](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1339))
+- chore(deps-dev): bump husky from 7.0.4 to 9.1.7 ([#1343](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1343))
+- chore(deps-dev): bump fast-xml-parser from 4.5.3 to 5.5.7 ([#1329](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1329))
+
+#### Committers: 5
+
+- dependabot[bot]
+- Emmanuel Ferdman
+- Emmanuel Roussel
+- Steven Serrata
+- vabrosimov
+
 ## 4.7.1 (2026-01-27)
 
 Hotfix release for build error in v4.7.0.
