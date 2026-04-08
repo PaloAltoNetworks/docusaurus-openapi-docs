@@ -98,17 +98,31 @@ function parseUrlsFromSitemap(xml: string): string[] {
 }
 
 async function screenshotFullPage(page: any, url: string, outputPath: string) {
-  await page.goto(url, { waitUntil: "networkidle" });
+  await page.goto(url, { waitUntil: "load" });
+  // Freeze all CSS animations and transitions before screenshotting so that
+  // mid-animation frames don't produce spurious pixel differences.
+  await page.addStyleTag({
+    content: `*, *::before, *::after {
+      animation-duration: 0s !important;
+      animation-delay: 0s !important;
+      transition-duration: 0s !important;
+      transition-delay: 0s !important;
+    }`,
+  });
+  // Expand details elements by setting the attribute directly; avoid
+  // simulating clicks, which can fire framework event handlers and cause
+  // re-renders that race with the subsequent screenshot.
   await page.evaluate(() => {
     document.querySelectorAll("div.container details").forEach((el) => {
-      const detail = el as HTMLDetailsElement;
-      const summary = detail.querySelector("summary");
-      if (!detail.open && summary) (summary as HTMLElement).click();
-      detail.open = true;
-      detail.setAttribute("data-collapsed", "false");
+      (el as HTMLDetailsElement).open = true;
     });
   });
-  await page.waitForTimeout(500);
+  // Wait until every details element is confirmed open before capturing.
+  await page.waitForFunction(
+    () =>
+      document.querySelectorAll("div.container details:not([open])").length ===
+      0
+  );
   await fs.promises.mkdir(path.dirname(outputPath), { recursive: true });
   const container = await page.$("div.container");
   if (container) {
@@ -201,7 +215,9 @@ async function run() {
   }
   console.log(`Found ${paths.length} paths.`);
 
-  const browser = await chromium.launch();
+  const browser = await chromium.launch({
+    args: ["--disable-font-subpixel-positioning", "--disable-lcd-text"],
+  });
   const context = await browser.newContext({
     viewport: { width: opts.width, height: opts.viewHeight },
   });
@@ -220,7 +236,11 @@ async function run() {
     const diffImg = path.join(opts.outputDir, "diff", `${cleanPath}.png`);
     const page = await context.newPage();
     try {
-      await screenshotFullPage(page, url, prodSnap);
+      if (fs.existsSync(prodSnap)) {
+        console.log(`CACHED prod: /${cleanPath}`);
+      } else {
+        await screenshotFullPage(page, url, prodSnap);
+      }
       await screenshotFullPage(
         page,
         new URL(cleanPath, opts.previewUrl).toString(),

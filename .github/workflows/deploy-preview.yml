@@ -208,6 +208,20 @@ jobs:
       - name: Install Playwright
         run: npx playwright install --with-deps chromium
 
+      - name: Get production sitemap hash
+        id: sitemap-hash
+        run: |
+          hash=$(curl -fsSL https://docusaurus-openapi.tryingpan.dev/sitemap.xml | sha256sum | cut -d' ' -f1)
+          echo "hash=$hash" >> "$GITHUB_OUTPUT"
+
+      - name: Restore cached production screenshots
+        uses: actions/cache@v4
+        with:
+          path: visual_diffs/prod
+          key: prod-screenshots-${{ steps.sitemap-hash.outputs.hash }}
+          restore-keys: |
+            prod-screenshots-
+
       - name: Run visual diff
         run: yarn ts-node scripts/sitemap-visual-diff.ts --preview-url ${{ needs.deploy.outputs.preview_url }} --summary-file visual_diffs/results.json --concurrency 4 --paths "/tests/"
 
