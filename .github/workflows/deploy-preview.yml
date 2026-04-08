@@ -215,7 +215,7 @@ jobs:
           echo "hash=$hash" >> "$GITHUB_OUTPUT"
 
       - name: Restore cached production screenshots
-        uses: actions/cache@v4
+        uses: actions/cache@v5.0.4
         with:
           path: visual_diffs/prod
           key: prod-screenshots-${{ steps.sitemap-hash.outputs.hash }}
