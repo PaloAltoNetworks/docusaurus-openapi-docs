@@ -21,6 +21,15 @@ declare module "@docusaurus/theme-common/internal" {
   import { Props as ILineProps } from "@theme/CodeBlock/Line";
   import { PrismTheme } from "prism-react-renderer";
 
+  export interface TabItemProps {
+    readonly children: ReactNode;
+    readonly value: string;
+    readonly default?: boolean;
+    readonly label?: string;
+    readonly className?: string;
+    readonly attributes?: { [key: string]: unknown };
+  }
+
   export interface TabProps extends ITabsProps {
     length?: number;
   }
@@ -53,11 +62,26 @@ declare module "@docusaurus/theme-common/internal" {
     content: PropDocContent;
   });
 
-  export function useTabs(props: TabProps): {
+  export function useTabsContextValue(props: TabProps): {
     selectedValue: string;
     selectValue: (value: string) => void;
     tabValues: readonly TabValue[];
+    lazy: boolean;
+    block: boolean;
   };
+
+  export function useTabs(): {
+    selectedValue: string;
+    selectValue: (value: string) => void;
+    tabValues: readonly TabValue[];
+    lazy: boolean;
+    block: boolean;
+  };
+
+  export function TabsProvider(props: {
+    children: ReactNode;
+    value: ReturnType<typeof useTabsContextValue>;
+  }): ReactNode;
 
   export function parseLines(
     content: string,

@@ -15,11 +15,12 @@ import React, {
 
 import {
   sanitizeTabsChildren,
+  type TabItemProps,
   TabProps,
+  TabsProvider,
   useScrollPositionBlocker,
-  useTabs,
+  useTabsContextValue,
 } from "@docusaurus/theme-common/internal";
-import { TabItemProps } from "@docusaurus/theme-common/lib/utils/tabsUtils";
 import { translate } from "@docusaurus/Translate";
 import useIsBrowser from "@docusaurus/useIsBrowser";
 import Heading from "@theme/Heading";
@@ -42,7 +43,7 @@ function TabList({
     message: "Responses",
   }),
   id = "responses",
-}: TabListProps & ReturnType<typeof useTabs>) {
+}: TabListProps & ReturnType<typeof useTabsContextValue>) {
   const tabRefs: (HTMLLIElement | null)[] = [];
   const { blockElementScrollPositionUntilNextRender } =
     useScrollPositionBlocker();
@@ -194,7 +195,8 @@ function TabContent({
   lazy,
   children,
   selectedValue,
-}: TabProps & ReturnType<typeof useTabs>): React.JSX.Element | null {
+}: TabProps &
+  ReturnType<typeof useTabsContextValue>): React.JSX.Element | null {
   const childTabs = (Array.isArray(children) ? children : [children]).filter(
     Boolean
   ) as ReactElement<TabItemProps>[];
@@ -208,24 +210,17 @@ function TabContent({
     }
     return cloneElement(selectedTabItem, { className: "margin-top--md" });
   }
-  return (
-    <div className="margin-top--md">
-      {childTabs.map((tabItem, i) =>
-        cloneElement(tabItem, {
-          key: i,
-          hidden: tabItem.props.value !== selectedValue,
-        })
-      )}
-    </div>
-  );
+  return <div className="margin-top--md">{childTabs}</div>;
 }
 function TabsComponent(props: TabListProps): React.JSX.Element {
-  const tabs = useTabs(props);
+  const tabs = useTabsContextValue(props);
   return (
-    <div className="openapi-tabs__container">
-      <TabList {...props} {...tabs} />
-      <TabContent {...props} {...tabs} />
-    </div>
+    <TabsProvider value={tabs}>
+      <div className="openapi-tabs__container">
+        <TabList {...props} {...tabs} />
+        <TabContent {...props} {...tabs} />
+      </div>
+    </TabsProvider>
   );
 }
 export default function ApiTabs(props: TabListProps): React.JSX.Element {
