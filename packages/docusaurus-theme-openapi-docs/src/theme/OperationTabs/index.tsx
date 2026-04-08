@@ -15,11 +15,12 @@ import React, {
 
 import {
   sanitizeTabsChildren,
+  type TabItemProps,
   TabProps,
+  TabsProvider,
   useScrollPositionBlocker,
-  useTabs,
+  useTabsContextValue,
 } from "@docusaurus/theme-common/internal";
-import { TabItemProps } from "@docusaurus/theme-common/lib/utils/tabsUtils";
 import useIsBrowser from "@docusaurus/useIsBrowser";
 import clsx from "clsx";
 
@@ -29,7 +30,7 @@ function TabList({
   selectedValue,
   selectValue,
   tabValues,
-}: TabProps & ReturnType<typeof useTabs>) {
+}: TabProps & ReturnType<typeof useTabsContextValue>) {
   const tabRefs: (HTMLLIElement | null)[] = [];
   const { blockElementScrollPositionUntilNextRender } =
     useScrollPositionBlocker();
@@ -171,7 +172,8 @@ function TabContent({
   lazy,
   children,
   selectedValue,
-}: TabProps & ReturnType<typeof useTabs>): React.JSX.Element | null {
+}: TabProps &
+  ReturnType<typeof useTabsContextValue>): React.JSX.Element | null {
   const childTabs = (Array.isArray(children) ? children : [children]).filter(
     Boolean
   ) as ReactElement<TabItemProps>[];
@@ -190,19 +192,20 @@ function TabContent({
       {childTabs.map((tabItem, i) =>
         cloneElement(tabItem, {
           key: i,
-          hidden: tabItem.props.value !== selectedValue,
         })
       )}
     </div>
   );
 }
 function TabsComponent(props: TabProps): React.JSX.Element {
-  const tabs = useTabs(props);
+  const tabs = useTabsContextValue(props);
   return (
-    <div className="tabs-container">
-      <TabList {...props} {...tabs} />
-      <TabContent {...props} {...tabs} />
-    </div>
+    <TabsProvider value={tabs}>
+      <div className="tabs-container">
+        <TabList {...props} {...tabs} />
+        <TabContent {...props} {...tabs} />
+      </div>
+    </TabsProvider>
   );
 }
 export default function OperationTabs(props: TabProps): React.JSX.Element {

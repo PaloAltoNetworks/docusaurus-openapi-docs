@@ -21,13 +21,13 @@
     "re-gen": "yarn clean-all-versions && yarn gen-all-versions"
   },
   "dependencies": {
-    "@docusaurus/core": "3.9.2",
-    "@docusaurus/faster": "3.9.2",
-    "@docusaurus/plugin-google-gtag": "3.9.2",
-    "@docusaurus/preset-classic": "3.9.2",
+    "@docusaurus/core": "3.10.0",
+    "@docusaurus/faster": "3.10.0",
+    "@docusaurus/plugin-google-gtag": "3.10.0",
+    "@docusaurus/preset-classic": "3.10.0",
     "clsx": "^2.1.1",
-    "docusaurus-plugin-openapi-docs": "^4.6.0",
-    "docusaurus-theme-openapi-docs": "^4.6.0",
+    "docusaurus-plugin-openapi-docs": "*",
+    "docusaurus-theme-openapi-docs": "*",
     "prism-react-renderer": "^2.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
