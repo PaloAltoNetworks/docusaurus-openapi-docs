@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
 
+concurrency:
+  group: deploy-live
+  cancel-in-progress: false
+
 jobs:
   build:
     if: github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs'
@@ -15,6 +19,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v4
+        with:
+          persist-credentials: false
 
       - name: Setup node
         uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v4
@@ -31,6 +37,9 @@ jobs:
       - name: Build site
         run: yarn build-demo && zip -r build.zip demo/build
 
+      - name: Check for tampered config
+        run: git diff --exit-code -- firebase.json .firebaserc package.json yarn.lock 'demo/docusaurus.config.*' 'scripts/**' '.github/**'
+
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: build
@@ -41,12 +50,16 @@ jobs:
     name: Deploy
     needs: build
     runs-on: ubuntu-latest
+    environment: production
     permissions:
+      contents: read
       id-token: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v4
+        with:
+          persist-credentials: false
 
       - name: Setup node
         uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v4
@@ -73,7 +86,7 @@ jobs:
           name: build
 
       - name: Unzip build artifact
-        run: unzip build.zip
+        run: unzip -n build.zip 'demo/build/*'
 
       - name: Deploy to Firebase
         id: deploy_live
@@ -86,3 +99,44 @@ jobs:
           target: docusaurus-openapi.tryingpan.dev
         env:
           FIREBASE_CLI_PREVIEWS: hostingchannels
+
+  cache_prod_screenshots:
+    name: Cache Prod Screenshots
+    needs: deploy
+    if: ${{ github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v4
+        with:
+          persist-credentials: false
+
+      - name: Setup node
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v4
+        with:
+          node-version: "22"
+          cache: "yarn"
+
+      - name: Install dependencies
+        run: yarn --frozen-lockfile --prefer-offline --ignore-scripts
+
+      - name: Install Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Get production sitemap hash
+        id: sitemap-hash
+        run: |
+          hash=$(curl -fsSL https://docusaurus-openapi.tryingpan.dev/sitemap.xml | sha256sum | cut -d' ' -f1)
+          echo "hash=$hash" >> "$GITHUB_OUTPUT"
+
+      - name: Capture production screenshots
+        run: yarn ts-node scripts/sitemap-visual-diff.ts --preview-url https://docusaurus-openapi.tryingpan.dev/ --concurrency 4 --paths "/tests/"
+
+      - name: Save production screenshots
+        uses: actions/cache/save@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
+        with:
+          path: visual_diffs/prod
+          key: prod-screenshots-${{ steps.sitemap-hash.outputs.hash }}
