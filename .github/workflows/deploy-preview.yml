@@ -17,12 +17,12 @@ jobs:
       - name: Check if actor is org member
         id: is-org-member
         run: |
-          if [ "${{ github.actor }}" = "dependabot[bot]" ]; then
+          if [ "$ACTOR" = "dependabot[bot]" ]; then
             echo "is-org-member-result=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           status=$(curl -s -o /dev/null -w "%{http_code}" -H "Authorization: Bearer $GH_TOKEN" \
-            https://api.github.com/orgs/PaloAltoNetworks/members/${{ github.actor }})
+            "https://api.github.com/orgs/PaloAltoNetworks/members/${ACTOR}")
           if [ "$status" = "204" ]; then
             echo "is-org-member-result=true" >> "$GITHUB_OUTPUT"
           else
@@ -30,6 +30,7 @@ jobs:
           fi
         env:
           GH_TOKEN: ${{ secrets.PAT }}
+          ACTOR: ${{ github.actor }}
 
   analyze:
     if: github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' && needs.precheck.outputs.is-org-member-result == 'true'
@@ -50,6 +51,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@1b549b9259bda1cb5ddde3b41741a82a2d15a841 # v3
@@ -79,6 +81,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@1b549b9259bda1cb5ddde3b41741a82a2d15a841 # v3
@@ -104,6 +107,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
 
       - name: Setup node
         uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v4
@@ -120,6 +124,9 @@ jobs:
       - name: Build site
         run: yarn build-demo && zip -r build.zip demo/build
 
+      - name: Check for tampered config
+        run: git diff --exit-code -- firebase.json .firebaserc package.json yarn.lock 'demo/docusaurus.config.*' 'scripts/**' '.github/**'
+
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: build
@@ -130,6 +137,7 @@ jobs:
     needs: build
     if: ${{ github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' && !failure() && !cancelled() }}
     runs-on: ubuntu-latest
+    environment: preview
     permissions:
       contents: read
       pull-requests: write
@@ -141,6 +149,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v4
+        with:
+          persist-credentials: false
 
       - name: Setup node
         uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v4
@@ -167,7 +177,7 @@ jobs:
           name: build
 
       - name: Unzip build artifact
-        run: unzip build.zip
+        run: unzip -n build.zip 'demo/build/*'
 
       - name: Deploy to Firebase
         id: deploy_preview
@@ -195,6 +205,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
 
       - name: Setup node
         uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v4
@@ -215,15 +226,15 @@ jobs:
           echo "hash=$hash" >> "$GITHUB_OUTPUT"
 
       - name: Restore cached production screenshots
-        uses: actions/cache@v5.0.4
+        uses: actions/cache/restore@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
         with:
           path: visual_diffs/prod
           key: prod-screenshots-${{ steps.sitemap-hash.outputs.hash }}
-          restore-keys: |
-            prod-screenshots-
 
       - name: Run visual diff
-        run: yarn ts-node scripts/sitemap-visual-diff.ts --preview-url ${{ needs.deploy.outputs.preview_url }} --summary-file visual_diffs/results.json --concurrency 4 --paths "/tests/"
+        run: yarn ts-node scripts/sitemap-visual-diff.ts --preview-url "$PREVIEW_URL" --summary-file visual_diffs/results.json --concurrency 4 --paths "/tests/"
+        env:
+          PREVIEW_URL: ${{ needs.deploy.outputs.preview_url }}
 
       - name: Generate report and summary
         run: yarn ts-node scripts/generate-visual-diff-report.ts visual_diffs/results.json visual_diffs/index.html

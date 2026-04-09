@@ -1,0 +1,10 @@
+# Build-critical paths require maintainer review
+/.github/               @PaloAltoNetworks/docusaurus-openapi-maintainers
+/scripts/               @PaloAltoNetworks/docusaurus-openapi-maintainers
+/packages/              @PaloAltoNetworks/docusaurus-openapi-maintainers
+/package.json           @PaloAltoNetworks/docusaurus-openapi-maintainers
+/yarn.lock              @PaloAltoNetworks/docusaurus-openapi-maintainers
+/demo/docusaurus.config.ts @PaloAltoNetworks/docusaurus-openapi-maintainers
+/firebase.json          @PaloAltoNetworks/docusaurus-openapi-maintainers
+/.firebaserc            @PaloAltoNetworks/docusaurus-openapi-maintainers
+/.github/CODEOWNERS     @PaloAltoNetworks/docusaurus-openapi-maintainers
