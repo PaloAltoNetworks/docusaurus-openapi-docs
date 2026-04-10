@@ -10,19 +10,24 @@ on:
 env:
   FORCE_COLOR: true
 
-permissions:
-  contents: write
-  id-token: write
+permissions: {}
+
+concurrency:
+  group: release
+  cancel-in-progress: false
 
 jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
     if: ${{ github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' }}
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v4
         with:
           fetch-depth: 0
+          persist-credentials: false
       - run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -39,11 +44,14 @@ jobs:
     name: Publish Canary
     runs-on: ubuntu-latest
     if: ${{ github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' && github.ref == 'refs/heads/main' }}
+    permissions:
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v4
         with:
           fetch-depth: 0
+          persist-credentials: false
       - name: Check if packages changed
         id: packages_changed
         run: |
@@ -54,7 +62,7 @@ jobs:
           fi
       - name: Set up Node
         if: steps.packages_changed.outputs.changed == 'true'
-        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v4
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
         with:
           node-version: "22"
           registry-url: "https://registry.npmjs.org"
