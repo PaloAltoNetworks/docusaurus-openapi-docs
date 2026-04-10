@@ -5,7 +5,7 @@ updates:
     schedule:
       interval: weekly
     cooldown:
-      days: 3
+      default-days: 3
     groups:
       react:
         patterns:
@@ -17,4 +17,4 @@ updates:
     schedule:
       interval: weekly
     cooldown:
-      days: 3
+      default-days: 3
