@@ -83,7 +83,7 @@
   },
   "resolutions": {
     "@cypress/request": "^3.0.0",
-    "axios": "^0.30.0",
+    "axios": "^1.15.0",
     "semver": "^7.5.2",
     "jpeg-js": "^0.4.4",
     "merge": "^2.1.1",
