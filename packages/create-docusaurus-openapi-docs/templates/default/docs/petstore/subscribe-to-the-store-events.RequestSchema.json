@@ -1,0 +1,27 @@
+{
+  "title": "Body",
+  "body": {
+    "content": {
+      "application/json": {
+        "schema": {
+          "type": "object",
+          "properties": {
+            "callbackUrl": {
+              "type": "string",
+              "format": "uri",
+              "description": "This URL will be called by the server when the desired event will occur",
+              "example": "https://myserver.com/send/callback/here"
+            },
+            "eventName": {
+              "type": "string",
+              "description": "Event name for the subscription",
+              "enum": ["orderInProgress", "orderShipped", "orderDelivered"],
+              "example": "orderInProgress"
+            }
+          },
+          "required": ["callbackUrl", "eventName"]
+        }
+      }
+    }
+  }
+}

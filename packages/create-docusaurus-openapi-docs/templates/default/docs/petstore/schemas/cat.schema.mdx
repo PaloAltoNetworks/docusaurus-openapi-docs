@@ -1,0 +1,30 @@
+---
+id: cat
+title: "Cat"
+description: "A representation of a cat"
+sidebar_label: "Cat"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample:
+  {
+    "id": 0,
+    "category": { "id": 0, "name": "string", "sub": { "prop1": "string" } },
+    "name": "Guru",
+    "photoUrls": ["string"],
+    "friend": {},
+    "tags": [{ "id": 0, "name": "string" }],
+    "status": "available",
+    "huntingSkill": "adventurous",
+  }
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading as={"h1"} className={"openapi__heading"} children={"Cat"}></Heading>
+
+A representation of a cat
+
+<Schema {...require("./cat.Schema.json")}></Schema>

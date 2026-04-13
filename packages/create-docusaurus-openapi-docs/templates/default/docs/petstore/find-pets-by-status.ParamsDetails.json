@@ -1,0 +1,21 @@
+{
+  "parameters": [
+    {
+      "name": "status",
+      "in": "query",
+      "description": "Status values that need to be considered for filter",
+      "required": true,
+      "style": "form",
+      "schema": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 3,
+        "items": {
+          "type": "string",
+          "enum": ["available", "pending", "sold"],
+          "default": "available"
+        }
+      }
+    }
+  ]
+}

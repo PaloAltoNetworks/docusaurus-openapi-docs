@@ -1,0 +1,28 @@
+{
+  "title": "Body",
+  "body": {
+    "content": {
+      "application/json": {
+        "schema": {
+          "type": "object",
+          "properties": {
+            "orderId": { "type": "string", "example": "123" },
+            "timestamp": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2018-10-19T16:46:45Z"
+            },
+            "status": { "type": "string", "example": "inProgress" }
+          }
+        }
+      },
+      "application/xml": {
+        "schema": {
+          "type": "object",
+          "properties": { "orderId": { "type": "string", "example": "123" } }
+        },
+        "example": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<root>\n  <orderId>123</orderId>\n  <status>inProgress</status>\n  <timestamp>2018-10-19T16:46:45Z</timestamp>\n</root>\n"
+      }
+    }
+  }
+}

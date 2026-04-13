@@ -1,0 +1,20 @@
+{
+  "responses": {
+    "201": {
+      "description": "Subscription added",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "subscriptionId": {
+                "type": "string",
+                "example": "AAA-123-BBB-456"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
