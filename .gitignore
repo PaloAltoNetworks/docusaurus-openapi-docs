@@ -143,6 +143,7 @@ demo/**/*.json
 
 .idea
 .tool-versions
+.claude
 
 # Playwright
 visual_diffs/
