@@ -9,7 +9,6 @@ import React, { useCallback, useState, useRef, useEffect } from "react";
 
 import { translate } from "@docusaurus/Translate";
 import clsx from "clsx";
-import copy from "copy-text-to-clipboard";
 
 interface CopyButtonProps {
   code: string;
@@ -22,8 +21,8 @@ export default function CopyButton({
 }: CopyButtonProps): React.JSX.Element {
   const [isCopied, setIsCopied] = useState(false);
   const copyTimeout = useRef<number | undefined>(undefined);
-  const handleCopyCode = useCallback(() => {
-    copy(code);
+  const handleCopyCode = useCallback(async () => {
+    await navigator.clipboard.writeText(code);
     setIsCopied(true);
     copyTimeout.current = window.setTimeout(() => {
       setIsCopied(false);
