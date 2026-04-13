@@ -1,0 +1,9 @@
+{
+  "id": "callbacks-responses",
+  "label": "Callbacks Responses",
+  "responses": {
+    "200": {
+      "description": "Callback successfully processed and no retries will be performed"
+    }
+  }
+}

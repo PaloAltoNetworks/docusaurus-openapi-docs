@@ -1,0 +1,25 @@
+{
+  "title": "Body",
+  "body": {
+    "content": {
+      "application/json": {
+        "schema": {
+          "type": "object",
+          "properties": {
+            "orderId": { "type": "string", "example": "123" },
+            "timestamp": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2018-10-19T16:46:45Z"
+            },
+            "estimatedDeliveryDate": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2018-11-11T16:00:00Z"
+            }
+          }
+        }
+      }
+    }
+  }
+}

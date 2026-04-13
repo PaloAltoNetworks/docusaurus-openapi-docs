@@ -7,6 +7,8 @@
  * ========================================================================== */
 
 import { execSync } from "child_process";
+import fs from "fs";
+import path from "path";
 
 import semver from "semver";
 
@@ -98,6 +100,24 @@ function main() {
     `lerna version ${nextVersion} --no-git-tag-version --no-push --yes`,
     { stdio: "ignore" }
   );
+
+  // Update the template's package.json with the new plugin/theme version
+  const templatePkgPath = path.resolve(
+    __dirname,
+    "../packages/create-docusaurus-openapi-docs/templates/default/package.json"
+  );
+  if (fs.existsSync(templatePkgPath)) {
+    const templatePkg = JSON.parse(fs.readFileSync(templatePkgPath, "utf-8"));
+    templatePkg.dependencies["docusaurus-plugin-openapi-docs"] = nextVersion;
+    templatePkg.dependencies["docusaurus-theme-openapi-docs"] = nextVersion;
+    fs.writeFileSync(
+      templatePkgPath,
+      JSON.stringify(templatePkg, null, 2) + "\n"
+    );
+    console.log(
+      `Updated template package.json with plugin/theme version ${nextVersion}`
+    );
+  }
 }
 
 main();

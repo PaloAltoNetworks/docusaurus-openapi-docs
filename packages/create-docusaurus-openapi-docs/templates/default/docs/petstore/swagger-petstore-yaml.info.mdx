@@ -1,0 +1,249 @@
+---
+id: swagger-petstore-yaml
+title: "Swagger Petstore YAML"
+description: "This is a sample server Petstore server."
+sidebar_label: Introduction
+sidebar_position: 0
+hide_title: true
+custom_edit_url: null
+---
+
+import ApiLogo from "@theme/ApiLogo";
+import Heading from "@theme/Heading";
+import SchemaTabs from "@theme/SchemaTabs";
+import TabItem from "@theme/TabItem";
+import Export from "@theme/ApiExplorer/Export";
+
+<span
+  className={"theme-doc-version-badge badge badge--secondary"}
+  children={"Version: 2.0.0"}
+></span>
+
+<Export
+  url={
+    "https://raw.githubusercontent.com/PaloAltoNetworks/docusaurus-template-openapi-docs/main/examples/petstore.yaml"
+  }
+  proxy={undefined}
+></Export>
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Swagger Petstore YAML"}
+></Heading>
+
+<ApiLogo
+  logo={{
+    url: "https://redocly.github.io/redoc/petstore-logo.png",
+    altText: "Petstore logo",
+  }}
+  darkLogo={{
+    url: "/img/petstore-logo-dark.png",
+    altText: "Petstore dark logo",
+  }}
+></ApiLogo>
+
+This is a sample server Petstore server.
+You can find out more about Swagger at
+[http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).
+For this sample, you can use the api key `special-key` to test the authorization filters.
+
+## Introduction
+
+This API is documented in **OpenAPI format** and is based on
+[Petstore sample](http://petstore.swagger.io/) provided by [swagger.io](http://swagger.io) team.
+It was **extended** to illustrate features of [generator-openapi-repo](https://github.com/Rebilly/generator-openapi-repo)
+tool and [ReDoc](https://github.com/Redocly/redoc) documentation. In addition to standard
+OpenAPI syntax we use a few [vendor extensions](https://github.com/Redocly/redoc/blob/master/docs/redoc-vendor-extensions.md).
+
+## OpenAPI Specification
+
+This API is documented in **OpenAPI format** and is based on
+[Petstore sample](http://petstore.swagger.io/) provided by [swagger.io](http://swagger.io) team.
+It was **extended** to illustrate features of [generator-openapi-repo](https://github.com/Rebilly/generator-openapi-repo)
+tool and [ReDoc](https://github.com/Redocly/redoc) documentation. In addition to standard
+OpenAPI syntax we use a few [vendor extensions](https://github.com/Redocly/redoc/blob/master/docs/redoc-vendor-extensions.md).
+
+## Cross-Origin Resource Sharing
+
+This API features Cross-Origin Resource Sharing (CORS) implemented in compliance with [W3C spec](https://www.w3.org/TR/cors/).
+And that allows cross-domain communication from the browser.
+All responses have a wildcard same-origin which makes them completely public and accessible to everyone, including any code on any site.
+
+## Authentication
+
+Petstore offers two forms of authentication:
+
+- API Key
+- OAuth2
+
+OAuth2 - an open protocol to allow secure authorization in a simple
+and standard method from web, mobile and desktop applications.
+
+<div style={{ marginBottom: "2rem" }}>
+  <Heading
+    id={"authentication"}
+    as={"h2"}
+    className={"openapi-tabs__heading"}
+    children={"Authentication"}
+  ></Heading>
+  <SchemaTabs className={"openapi-tabs__security-schemes"}>
+    <TabItem label={"OAuth 2.0: petstore_auth"} value={"petstore_auth"}>
+      Get access to data while protecting your account credentials. OAuth2 is
+      also a safer and more secure way to give you access.
+      <div>
+        <table>
+          <tbody>
+            <tr>
+              <th>Security Scheme Type:</th>
+              <td>oauth2</td>
+            </tr>
+            <tr>
+              <th>OAuth Flow (implicit):</th>
+              <td>
+                <div>
+                  Authorization URL: http://petstore.swagger.io/api/oauth/dialog
+                </div>
+                <span>Scopes:</span>
+                <ul>
+                  <li>write:pets: modify pets in your account</li>
+                  <li>read:pets: read your pets</li>
+                </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </TabItem>
+    <TabItem label={"API Key: api_key"} value={"api_key"}>
+      For this sample, you can use the api key `special-key` to test the
+      authorization filters.
+      <div>
+        <table>
+          <tbody>
+            <tr>
+              <th>Security Scheme Type:</th>
+              <td>apiKey</td>
+            </tr>
+            <tr>
+              <th>Header parameter name:</th>
+              <td>api_key</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </TabItem>
+    <TabItem label={"HTTP: Basic Auth"} value={"BasicAuth"}>
+      <div>
+        <table>
+          <tbody>
+            <tr>
+              <th>Security Scheme Type:</th>
+              <td>http</td>
+            </tr>
+            <tr>
+              <th>HTTP Authorization Scheme:</th>
+              <td>basic</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </TabItem>
+    <TabItem label={"HTTP: Bearer Auth"} value={"BearerAuth"}>
+      <div>
+        <table>
+          <tbody>
+            <tr>
+              <th>Security Scheme Type:</th>
+              <td>http</td>
+            </tr>
+            <tr>
+              <th>HTTP Authorization Scheme:</th>
+              <td>bearer</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </TabItem>
+    <TabItem label={"API Key: ApiKeyAuth"} value={"ApiKeyAuth"}>
+      <div>
+        <table>
+          <tbody>
+            <tr>
+              <th>Security Scheme Type:</th>
+              <td>apiKey</td>
+            </tr>
+            <tr>
+              <th>Header parameter name:</th>
+              <td>X-API-Key</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </TabItem>
+    <TabItem label={"OpenID Connect: OpenID"} value={"OpenID"}>
+      <div>
+        <table>
+          <tbody>
+            <tr>
+              <th>Security Scheme Type:</th>
+              <td>openIdConnect</td>
+            </tr>
+            <tr>
+              <th>OpenID Connect URL:</th>
+              <td>https://example.com/.well-known/openid-configuration</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </TabItem>
+    <TabItem label={"OAuth 2.0: OAuth2"} value={"OAuth2"}>
+      <div>
+        <table>
+          <tbody>
+            <tr>
+              <th>Security Scheme Type:</th>
+              <td>oauth2</td>
+            </tr>
+            <tr>
+              <th>OAuth Flow (authorizationCode):</th>
+              <td>
+                <div>Token URL: https://example.com/oauth/token</div>
+                <div>
+                  Authorization URL: https://example.com/oauth/authorize
+                </div>
+                <span>Scopes:</span>
+                <ul>
+                  <li>read: Grants read access</li>
+                  <li>write: Grants write access</li>
+                  <li>admin: Grants access to admin operations</li>
+                </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </TabItem>
+  </SchemaTabs>
+</div>
+<div
+  style={{
+    display: "flex",
+    flexDirection: "column",
+    marginBottom: "var(--ifm-paragraph-margin-bottom)",
+  }}
+>
+  <h3 style={{ marginBottom: "0.25rem" }}>Contact</h3>
+  <span>API Support: [apiteam@swagger.io](mailto:apiteam@swagger.io)</span>
+  <span>
+    URL: [https://github.com/Redocly/redoc](https://github.com/Redocly/redoc)
+  </span>
+</div>
+<div style={{ marginBottom: "var(--ifm-paragraph-margin-bottom)" }}>
+  <h3 style={{ marginBottom: "0.25rem" }}>Terms of Service</h3>
+  <a href={"http://swagger.io/terms/"}>{"http://swagger.io/terms/"}</a>
+</div>
+<div style={{ marginBottom: "var(--ifm-paragraph-margin-bottom)" }}>
+  <h3 style={{ marginBottom: "0.25rem" }}>License</h3>
+  <a href={"http://www.apache.org/licenses/LICENSE-2.0.html"}>Apache 2.0</a>
+</div>

@@ -1,0 +1,6 @@
+{
+  "responses": {
+    "400": { "description": "Invalid username supplied" },
+    "404": { "description": "User not found" }
+  }
+}

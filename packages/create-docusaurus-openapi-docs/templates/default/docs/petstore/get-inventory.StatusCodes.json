@@ -1,0 +1,15 @@
+{
+  "responses": {
+    "200": {
+      "description": "successful operation",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "additionalProperties": { "type": "integer", "format": "int32" }
+          }
+        }
+      }
+    }
+  }
+}

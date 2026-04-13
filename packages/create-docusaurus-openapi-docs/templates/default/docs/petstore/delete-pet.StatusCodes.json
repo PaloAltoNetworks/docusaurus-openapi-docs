@@ -1,0 +1,1 @@
+{ "responses": { "400": { "description": "Invalid pet value" } } }

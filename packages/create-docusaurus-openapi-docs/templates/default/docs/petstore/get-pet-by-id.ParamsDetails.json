@@ -1,0 +1,12 @@
+{
+  "parameters": [
+    {
+      "name": "petId",
+      "in": "path",
+      "description": "ID of pet to return",
+      "required": true,
+      "deprecated": true,
+      "schema": { "type": "integer", "format": "int64" }
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "parameters": [
+    {
+      "name": "api_key",
+      "in": "header",
+      "required": false,
+      "schema": { "type": "string" },
+      "example": "Bearer <TOKEN>"
+    },
+    {
+      "name": "petId",
+      "in": "path",
+      "description": "Pet id to delete",
+      "required": true,
+      "schema": { "type": "integer", "format": "int64" }
+    }
+  ]
+}

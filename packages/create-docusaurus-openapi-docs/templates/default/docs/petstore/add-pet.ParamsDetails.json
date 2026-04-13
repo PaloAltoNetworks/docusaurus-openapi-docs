@@ -1,0 +1,19 @@
+{
+  "parameters": [
+    {
+      "name": "Accept-Language",
+      "in": "header",
+      "description": "The language you prefer for messages. Supported values are en-AU, en-CA, en-GB, en-US",
+      "example": "en-US",
+      "required": false,
+      "schema": { "type": "string", "default": "en-AU" }
+    },
+    {
+      "name": "cookieParam",
+      "in": "cookie",
+      "description": "Some cookie",
+      "required": true,
+      "schema": { "type": "integer", "format": "int64" }
+    }
+  ]
+}

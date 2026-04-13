@@ -1,0 +1,17 @@
+{
+  "id": "callbacks-responses",
+  "label": "Callbacks Responses",
+  "responses": {
+    "200": {
+      "description": "Callback successfully processed and no retries will be performed",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": { "someProp": { "type": "string", "example": "123" } }
+          }
+        }
+      }
+    }
+  }
+}

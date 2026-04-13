@@ -1,0 +1,10 @@
+{
+  "title": "Body",
+  "body": {
+    "content": {
+      "application/octet-stream": {
+        "schema": { "type": "string", "format": "binary" }
+      }
+    }
+  }
+}
