@@ -1,0 +1,109 @@
+openapi: 3.1.1
+info:
+  title: Deprecated Description
+  description: Demonstrates x-deprecated-description extension.
+  version: 1.0.0
+tags:
+  - name: deprecated
+    description: deprecation tests
+paths:
+  /deprecated:
+    get:
+      tags:
+        - deprecated
+      summary: deprecated fields with x-deprecated-description
+      deprecated: true
+      x-deprecated-description: |
+        This endpoint is deprecated and will be removed in version 2.0. Please use the /new-endpoint instead.
+      description: |
+        Schema:
+        ```yaml
+        type: object
+        properties:
+          id:
+            type: string
+            description: Resource identifier
+          legacyField:
+            type: string
+            deprecated: true
+            x-deprecated-description: |
+              This field is deprecated. Use 'newField' instead.
+          newField:
+            type: string
+            description: |
+              Replacement for legacyField
+          status:
+            type: string
+            enum:
+              - active
+              - inactive
+              - deprecated
+            description: |
+              Resource status
+          metadata:
+            type: object
+            deprecated: true
+            x-deprecated-description: |
+              Metadata object is deprecated and will be removed in v2.0
+            properties:
+              tags:
+                type: array
+                items:
+                  type: string
+        required:
+          - id
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Resource identifier
+                  legacyField:
+                    type: string
+                    deprecated: true
+                    x-deprecated-description: |
+                      This field is deprecated and will be removed in version 2.0. Please use 'newField' instead.
+                  newField:
+                    type: string
+                    description: |
+                      Updated field that replaces legacyField
+                  status:
+                    type: string
+                    enum:
+                      - active
+                      - inactive
+                      - deprecated
+                    description: Resource status
+                  oldMetadata:
+                    type: object
+                    deprecated: true
+                    x-deprecated-description: |
+                      Legacy metadata object. Use the new 'attributes' field for future implementations.
+                    properties:
+                      version:
+                        type: string
+                        deprecated: true
+                        x-deprecated-description: Version tracking moved to header
+                      tags:
+                        type: array
+                        items:
+                          type: string
+                  attributes:
+                    type: object
+                    description: New attributes object replacing oldMetadata
+                    properties:
+                      category:
+                        type: string
+                      labels:
+                        type: array
+                        items:
+                          type: string
+                required:
+                  - id
+                  - status
