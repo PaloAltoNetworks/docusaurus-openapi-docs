@@ -170,10 +170,13 @@ jobs:
         with:
           workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
           service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+          export_environment_variables: false
 
       - name: Read GCP credentials
         id: creds
         run: |
+          echo "::add-mask::${{ steps.auth.outputs.credentials_file_path }}"
+          echo "::add-mask::${{ secrets.GCP_PROJECT_NUMBER }}"
           creds=$(cat "${{ steps.auth.outputs.credentials_file_path }}")
           echo "::add-mask::$creds"
           echo "sa_key=$creds" >> "$GITHUB_OUTPUT"
@@ -191,7 +194,7 @@ jobs:
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ steps.creds.outputs.sa_key }}"
-          projectId: pandev
+          projectId: ${{ secrets.FIREBASE_PROJECT_ID }}
           expires: 7d
           channelId: "pr${{ github.event.number }}"
           totalPreviewChannelLimit: 25
