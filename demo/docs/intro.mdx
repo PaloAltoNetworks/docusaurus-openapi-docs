@@ -85,26 +85,16 @@ Other ReDoc specific extensions such as `x-circular-ref`, `x-code-samples` (depr
 
 
 :::tip
-If you're building a Docusaurus site from scratch, the easiest way to get started is by [installing from template](#bootstrapping-from-template-new-docusaurus-site).
+If you're building a Docusaurus site from scratch, the easiest way to get started is with the [Quick Start](#quick-start-new-docusaurus-site) CLI.
 :::
 
-## Bootstrapping from Template (new Docusaurus site)
+## Quick Start (new Docusaurus site)
 
 Run the following to bootstrap a Docusaurus v3 site (classic theme) with `docusaurus-openapi-docs`:
 
 ```bash
-npx create-docusaurus@3.10.0 my-website --package-manager yarn
+npx create-docusaurus-openapi-docs my-website
 ```
-
-> When prompted to select a template choose `Git repository`.
-
-Template Repository URL:
-
-```bash
-https://github.com/PaloAltoNetworks/docusaurus-template-openapi-docs.git
-```
-
-> When asked how the template repo should be cloned choose "copy" (unless you know better).
 
 ```bash
 cd my-website
@@ -112,6 +102,13 @@ yarn start
 ```
 
 If all goes well, you should be greeted by a brand new Docusaurus site that includes API reference docs for the ubiquitous Petstore API!
+
+### CLI Options
+
+| Option                            | Description                                           |
+| --------------------------------- | ----------------------------------------------------- |
+| `-p, --package-manager <manager>` | Use a specific package manager (yarn, npm, pnpm, bun) |
+| `-s, --skip-install`              | Skip automatic dependency installation                |
 
 ## Installation (existing Docusaurus site)
 
