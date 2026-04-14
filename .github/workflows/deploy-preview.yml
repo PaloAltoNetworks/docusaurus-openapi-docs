@@ -200,6 +200,7 @@ jobs:
           totalPreviewChannelLimit: 25
         env:
           FIREBASE_CLI_PREVIEWS: hostingchannels
+          FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
   visual_diff:
     name: Visual Diff
