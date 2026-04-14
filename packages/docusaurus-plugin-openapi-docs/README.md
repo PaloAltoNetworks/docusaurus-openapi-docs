@@ -47,23 +47,13 @@ Key Features:
 | 2.2.3 (end-of-support)  | `2.4.1 - 2.4.3` |
 | 1.7.3 (end-of-support)  | `2.0.1 - 2.2.0` |
 
-## Bootstrapping from Template (new Docusaurus site)
+## Quick Start (new Docusaurus site)
 
 Run the following to bootstrap a Docusaurus v3 site (classic theme) with `docusaurus-openapi-docs`:
 
 ```bash
-npx create-docusaurus@3.10.0 my-website --package-manager yarn
+npx create-docusaurus-openapi-docs my-website
 ```
-
-> When prompted to select a template choose `Git repository`.
-
-Template Repository URL:
-
-```bash
-https://github.com/PaloAltoNetworks/docusaurus-template-openapi-docs.git
-```
-
-> When asked how the template repo should be cloned choose "copy".
 
 ```bash
 cd my-website
@@ -71,6 +61,13 @@ yarn start
 ```
 
 If all goes well, you should be greeted by a brand new Docusaurus site that includes API reference docs for the ubiquitous Petstore API!
+
+### CLI Options
+
+| Option                            | Description                                           |
+| --------------------------------- | ----------------------------------------------------- |
+| `-p, --package-manager <manager>` | Use a specific package manager (yarn, npm, pnpm, bun) |
+| `-s, --skip-install`              | Skip automatic dependency installation                |
 
 ## Installation (existing Docusaurus site)
 

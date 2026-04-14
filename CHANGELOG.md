@@ -1,3 +1,44 @@
+## 5.0.1 (2026-04-14)
+
+Patch release with a new scaffolding CLI, performance improvements, compatibility fixes for Docusaurus 3.10.0 strict admonition syntax, and a security fix for axios CVEs.
+
+#### :rocket: New Feature
+
+- feat: add create-docusaurus-openapi-docs CLI package ([#1413](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1413))
+
+#### :bug: Bug Fix
+
+- Fix deprecation notice for Docusaurus 3.10.0 strict admonition syntax ([#1423](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1423))
+- fix: rename experimental_faster to faster, remove --ignore from canary ([#1415](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1415))
+- fix: update axios resolution to ^1.15.0 to address critical CVEs
+
+#### :running_woman: Performance
+
+- perf: use Clipboard API ([#1416](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1416))
+
+#### :robot: Dependencies
+
+- chore(deps): bump follow-redirects from 1.15.11 to 1.16.0 ([#1424](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1424))
+- chore(deps): bump unist-util-visit from 5.0.0 to 5.1.0 ([#1422](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1422))
+- chore(deps): bump commander from 12.1.0 to 14.0.3 ([#1421](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1421))
+- chore(deps): bump react-hook-form from 7.72.0 to 7.72.1 ([#1409](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1409))
+
+#### :wrench: Maintenance
+
+- chore(deps-dev): bump @typescript-eslint/eslint-plugin ([#1419](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1419))
+- chore(deps-dev): bump eslint-plugin-cypress from 2.15.2 to 3.6.0 ([#1420](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1420))
+- chore(deps-dev): bump nodemon from 2.0.22 to 3.1.14 ([#1408](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1408))
+- chore(deps-dev): bump @types/lodash from 4.17.23 to 4.17.24 ([#1406](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1406))
+- chore(deps-dev): bump lint-staged from 11.2.6 to 16.4.0 ([#1411](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1411))
+- chore(deps-dev): bump eslint-plugin-testing-library from 6.5.0 to 7.16.2 ([#1410](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1410))
+
+#### Committers: 4
+
+- dependabot[bot]
+- Florian Lefebvre
+- Ollie Monk
+- Steven Serrata
+
 ## 5.0.0 (2026-04-08)
 
 **Breaking Change:** Minimum Docusaurus version is now `3.10.0`. Users on Docusaurus 3.5–3.9 must upgrade before updating to this release.
