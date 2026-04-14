@@ -9,11 +9,23 @@ import React, { useCallback, useState, useRef, useEffect } from "react";
 
 import { translate } from "@docusaurus/Translate";
 import clsx from "clsx";
-import copy from "copy-text-to-clipboard";
 
 interface CopyButtonProps {
   code: string;
   className?: string;
+}
+
+async function copyToClipboard(text: string) {
+  // The clipboard API is only defined in secure contexts (HTTPS / localhost).
+  // See https://developer.mozilla.org/en-US/docs/Web/API/Clipboard
+  if (navigator.clipboard) {
+    return navigator.clipboard.writeText(text);
+  }
+  // Fall back to copy-text-to-clipboard for non-secure contexts (e.g. HTTP
+  // on a local network). The fallback is lazily loaded to avoid bundle
+  // overhead for the common HTTPS case.
+  const { default: copy } = await import("copy-text-to-clipboard");
+  return copy(text);
 }
 
 export default function CopyButton({
@@ -22,8 +34,8 @@ export default function CopyButton({
 }: CopyButtonProps): React.JSX.Element {
   const [isCopied, setIsCopied] = useState(false);
   const copyTimeout = useRef<number | undefined>(undefined);
-  const handleCopyCode = useCallback(() => {
-    copy(code);
+  const handleCopyCode = useCallback(async () => {
+    await copyToClipboard(code);
     setIsCopied(true);
     copyTimeout.current = window.setTimeout(() => {
       setIsCopied(false);
