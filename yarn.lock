@@ -4093,20 +4093,20 @@
     json-schema-traverse "^1.0.0"
     require-from-string "^2.0.2"
 
-"@redocly/config@^0.46.0":
-  version "0.46.0"
-  resolved "https://registry.yarnpkg.com/@redocly/config/-/config-0.46.0.tgz#fce540428b5e4e1f5f20ddc7f4e46e756b3e77d5"
-  integrity sha512-FZEprNEkmLITKKdv5blIai1qiCcc4dn5+96AjWnmFQmH/oz/OyBiXBSi752/M+Wmype7aH2uRywSCuYlu4CgVA==
+"@redocly/config@^0.48.0":
+  version "0.48.0"
+  resolved "https://registry.yarnpkg.com/@redocly/config/-/config-0.48.0.tgz#d4ff534b0e4edfc6fc3d3fc93217f29471cfbc1e"
+  integrity sha512-8W3wz+Q7y4e9klJWlYOvQWK5r7P2Mo589vcjtlT5coOxsyAdt53k8Vb8iAqnRiGWExbjBQmSbL2XbuU747Nf6Q==
   dependencies:
     json-schema-to-ts "2.7.2"
 
 "@redocly/openapi-core@^2.25.2":
-  version "2.25.4"
-  resolved "https://registry.yarnpkg.com/@redocly/openapi-core/-/openapi-core-2.25.4.tgz#8d84423dd001b043890eb509e668c77ea5653f60"
-  integrity sha512-zYdKQEsowPNtkTixrfbn5DySWBLQpTsISthVBBEPAa3OZC75UI76CbHXEamJ8Kmlead9IkD5RbgeJvxqJ5/H6Q==
+  version "2.27.0"
+  resolved "https://registry.yarnpkg.com/@redocly/openapi-core/-/openapi-core-2.27.0.tgz#db559ff3a9eafd34988d741c6f0bc8be7b5063cf"
+  integrity sha512-kXv8alrQ/rfgnwGxjNBG1vDjSYOYUbKYNaDMj65KohQezt6AWzLpAhe6n6PSFYRo6jAz8/vqJr8LyphYTYfxqQ==
   dependencies:
     "@redocly/ajv" "^8.18.0"
-    "@redocly/config" "^0.46.0"
+    "@redocly/config" "^0.48.0"
     ajv "npm:@redocly/ajv@8.18.0"
     ajv-formats "^3.0.1"
     colorette "^1.2.0"
@@ -6164,9 +6164,9 @@ axe-core@^4.10.0:
   integrity sha512-BASOg+YwO2C+346x3LZOeoovTIoTrRqEsqMa6fmfAV0P+U9mFr9NsyOEpiYvFjbc64NMrSswhV50WdXzdb/Z5A==
 
 axios@^1.12.0, axios@^1.13.5, axios@^1.15.0:
-  version "1.15.0"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.15.0.tgz#0fcee91ef03d386514474904b27863b2c683bf4f"
-  integrity sha512-wWyJDlAatxk30ZJer+GeCWS209sA42X+N5jU2jy6oHTp7ufw8uzUTVFBX9+wTfAlhiJXGS0Bq7X6efruWjuK9Q==
+  version "1.15.1"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.15.1.tgz#075420b785da8adbdf545785b69f90c926b28542"
+  integrity sha512-WOG+Jj8ZOvR0a3rAn+Tuf1UQJRxw5venr6DgdbJzngJE3qG7X0kL83CZGpdHMxEm+ZK3seAbvFsw4FfOfP9vxg==
   dependencies:
     follow-redirects "^1.15.11"
     form-data "^4.0.5"
