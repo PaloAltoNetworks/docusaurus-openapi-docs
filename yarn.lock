@@ -5919,15 +5919,15 @@ arch@^2.2.0:
   resolved "https://registry.yarnpkg.com/arch/-/arch-2.2.0.tgz#1bc47818f305764f23ab3306b0bfc086c5a29d11"
   integrity sha512-Of/R0wqp83cgHozfIYLbBMnej79U/SVGOOyuB3VVFv1NRM/PSFMK12x9KVtiYzJqmnU5WR2qp0Z5rHb7sWGnFQ==
 
+arg@5.0.2, arg@^5.0.0:
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/arg/-/arg-5.0.2.tgz#c81433cc427c92c4dcf4865142dbca6f15acd59c"
+  integrity sha512-PYjyFOLKQ9y57JvQ6QLo8dAgNqswh8M1RMJYdQduT6xbWSgK36P/Z/v+p888pM69jMMfS8Xd8F6I1kQ/I9HUGg==
+
 arg@^4.1.0:
   version "4.1.3"
   resolved "https://registry.yarnpkg.com/arg/-/arg-4.1.3.tgz#269fc7ad5b8e42cb63c896d5666017261c144089"
   integrity sha512-58S9QDqG0Xx27YwPSt9fJxivjYl432YCwfDMfZ+71RAqUrZef7LrKQZ3LHLOwCS4FLNBplP533Zx895SeOCHvA==
-
-arg@^5.0.0, arg@^5.0.2:
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/arg/-/arg-5.0.2.tgz#c81433cc427c92c4dcf4865142dbca6f15acd59c"
-  integrity sha512-PYjyFOLKQ9y57JvQ6QLo8dAgNqswh8M1RMJYdQduT6xbWSgK36P/Z/v+p888pM69jMMfS8Xd8F6I1kQ/I9HUGg==
 
 argparse@^1.0.7:
   version "1.0.10"
@@ -6163,7 +6163,7 @@ axe-core@^4.10.0:
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.11.1.tgz#052ff9b2cbf543f5595028b583e4763b40c78ea7"
   integrity sha512-BASOg+YwO2C+346x3LZOeoovTIoTrRqEsqMa6fmfAV0P+U9mFr9NsyOEpiYvFjbc64NMrSswhV50WdXzdb/Z5A==
 
-axios@^1.12.0, axios@^1.13.5, axios@^1.15.0:
+axios@^1.12.0, axios@^1.15.0:
   version "1.15.1"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.15.1.tgz#075420b785da8adbdf545785b69f90c926b28542"
   integrity sha512-WOG+Jj8ZOvR0a3rAn+Tuf1UQJRxw5venr6DgdbJzngJE3qG7X0kL83CZGpdHMxEm+ZK3seAbvFsw4FfOfP9vxg==
@@ -11610,10 +11610,10 @@ joi@^17.9.2:
     "@sideway/formula" "^3.0.1"
     "@sideway/pinpoint" "^2.0.0"
 
-joi@^18.0.2:
-  version "18.1.1"
-  resolved "https://registry.yarnpkg.com/joi/-/joi-18.1.1.tgz#d9e2526271c07109065307002b3db4364d6be5ea"
-  integrity sha512-pJkBiPtNo+o0h19LfSvUN46Y5zY+ck99AtHwch9n2HqVLNRgP0ZMyIH8FRMoP+HV8hy/+AG99dXFfwpf83iZfQ==
+joi@^18.1.2:
+  version "18.1.2"
+  resolved "https://registry.yarnpkg.com/joi/-/joi-18.1.2.tgz#4735a384d7721fcda7a551d128862cf816541924"
+  integrity sha512-rF5MAmps5esSlhCA+N1b6IYHDw9j/btzGaqfgie522jS02Ju/HXBxamlXVlKEHAxoMKQL77HWI8jlqWsFuekZA==
   dependencies:
     "@hapi/address" "^5.1.1"
     "@hapi/formula" "^3.0.2"
@@ -12273,7 +12273,7 @@ lodash@4.17.23:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.23.tgz#f113b0378386103be4f6893388c73d0bde7f2c5a"
   integrity sha512-LgVTMpQtIopCi79SJeDiP0TfWi5CNEc/L/aRdTh3yIvmZXTnheWpKjSZhnvMl8iXbC1tFg9gdHHDMLoV7CnG+w==
 
-lodash@^4.17.13, lodash@^4.17.15, lodash@^4.17.20, lodash@^4.17.21, lodash@^4.17.23, lodash@^4.17.4, lodash@^4.7.0:
+lodash@^4.17.13, lodash@^4.17.15, lodash@^4.17.20, lodash@^4.17.21, lodash@^4.17.4, lodash@^4.18.1, lodash@^4.7.0:
   version "4.18.1"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.18.1.tgz#ff2b66c1f6326d59513de2407bf881439812771c"
   integrity sha512-dMInicTPVE8d1e5otfwmmjlxkZoUpiVLwyeTdUsi/Caj/gfzzblBcCE5sRHV/AsjuCmxWrte2TNGSYuCeCq+0Q==
@@ -16983,18 +16983,18 @@ stack-utils@^2.0.3:
     escape-string-regexp "^2.0.0"
 
 start-server-and-test@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/start-server-and-test/-/start-server-and-test-3.0.0.tgz#56bdc32e47ac15de0f41622faef7fde51b1c5466"
-  integrity sha512-R//IdnWC+H+raB6zJIqw5QbIsMAjjYFwJC/OIJO6kgZljguYe4n4LlA7vkPTO7zoctFlVPfymsNShjcPOIH8nw==
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/start-server-and-test/-/start-server-and-test-3.0.2.tgz#045c6fdcd249763813f9a8e05670d55536b28577"
+  integrity sha512-g6v4zPr1RRL5XxXJ+Wnk1GFLb+DGZLjFqse+5lNZ0X7m4SRMC6eOA+AXYboQDfNCEjpnTu0AGrvJb/JTUOg8dQ==
   dependencies:
-    arg "^5.0.2"
+    arg "5.0.2"
     bluebird "3.7.2"
     check-more-types "2.24.0"
     debug "4.4.3"
     execa "5.1.1"
     lazy-ass "1.6.0"
     tree-kill "1.2.2"
-    wait-on "9.0.4"
+    wait-on "9.0.5"
 
 "statuses@>= 1.4.0 < 2":
   version "1.5.0"
@@ -18278,14 +18278,14 @@ w3c-xmlserializer@^2.0.0:
   dependencies:
     xml-name-validator "^3.0.0"
 
-wait-on@9.0.4:
-  version "9.0.4"
-  resolved "https://registry.yarnpkg.com/wait-on/-/wait-on-9.0.4.tgz#ddf3a44ebd18f380621855d52973069ff2cb5b54"
-  integrity sha512-k8qrgfwrPVJXTeFY8tl6BxVHiclK11u72DVKhpybHfUL/K6KM4bdyK9EhIVYGytB5MJe/3lq4Tf0hrjM+pvJZQ==
+wait-on@9.0.5:
+  version "9.0.5"
+  resolved "https://registry.yarnpkg.com/wait-on/-/wait-on-9.0.5.tgz#9569a31ee3669abb67b1284622fd1d5b1f0163fc"
+  integrity sha512-qgnbHDfDTRIp73ANEJNRW/7kn8CrDUcvZz18xotJQku/P4saTGkbIzvnMZebPmVvVNUiRq1qWAPyqCH+W4H8KA==
   dependencies:
-    axios "^1.13.5"
-    joi "^18.0.2"
-    lodash "^4.17.23"
+    axios "^1.15.0"
+    joi "^18.1.2"
+    lodash "^4.18.1"
     minimist "^1.2.8"
     rxjs "^7.8.2"
 
