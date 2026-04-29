@@ -143,6 +143,12 @@ function createItems(
     const { $ref, description, parameters, servers, summary, ...rest } =
       pathObject;
     for (let [method, operationObject] of Object.entries({ ...rest })) {
+      if (method.startsWith("x-")) {
+        // skip vendor extensions at the path level
+
+        continue;
+      }
+
       const title =
         operationObject.summary ??
         operationObject.operationId ??

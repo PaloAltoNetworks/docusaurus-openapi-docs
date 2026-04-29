@@ -92,6 +92,8 @@ x-tagGroups:
       - store_model
 paths:
   /pet:
+    x-custom-string: hello
+    x-custom-bool: true
     parameters:
       - name: Accept-Language
         in: header
