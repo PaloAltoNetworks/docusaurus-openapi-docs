@@ -36,6 +36,7 @@ Key Features:
 - **Fast:** Convert large OpenAPI specs into MDX docs in seconds. 🔥
 - **Stylish:** Based on the same [Infima styling framework](https://infima.dev/) that powers the Docusaurus UI.
 - **Flexible:** Supports single, multi and _even micro_ OpenAPI specs.
+- **Extensible:** Recognizes common vendor extensions for customizing your docs. See [Supported Vendor Extensions](#supported-vendor-extensions) for details.
 
 ## Compatibility Matrix
 
@@ -125,6 +126,7 @@ import type * as OpenApiPlugin from "docusaurus-plugin-openapi-docs";
           petstore: {
             specPath: "examples/petstore.yaml",
             outputDir: "docs/petstore",
+            maskCredentials: false, // Disable credential masking in code snippets
             sidebarOptions: {
               groupPathsBy: "tag",
             },
@@ -165,6 +167,7 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 | `downloadUrl`        | `string`  | `null`  | _Optional:_ Designated URL for downloading OpenAPI specification. (requires `info` section/doc)                                                                |
 | `hideSendButton`     | `boolean` | `null`  | _Optional:_ If set to `true`, hides the “Send API Request” button in the API demo panel.                                                                       |
 | `showExtensions`     | `boolean` | `null`  | _Optional:_ If set to `true`, renders operation‑level vendor‑extensions in descriptions.                                                                       |
+| `maskCredentials`    | `boolean` | `true`  | _Optional:_ If set to `false`, disables credential masking in generated code snippets. By default, credentials are masked for security.                        |
 | `sidebarOptions`     | `object`  | `null`  | _Optional:_ Set of options for sidebar configuration. See below for a list of supported options.                                                               |
 | `version`            | `string`  | `null`  | _Optional:_ Version assigned to a single or micro‑spec API specified in `specPath`.                                                                            |
 | `label`              | `string`  | `null`  | _Optional:_ Version label used when generating the version‑selector dropdown menu.                                                                             |
@@ -174,7 +177,6 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 | `showSchemas`        | `boolean` | `null`  | _Optional:_ If set to `true`, generates standalone schema pages and adds them to the sidebar.                                                                  |
 | `showInfoPage`       | `boolean` | `true`  | _Optional:_ If set to `false`, disables generation of the info page (overview page with API title and description).                                            |
 | `schemasOnly`        | `boolean` | `false` | _Optional:_ If set to `true`, generates only schema pages (no API endpoint pages). Also available as `--schemas-only` CLI flag.                                |
-| `maskCredentials`    | `boolean` | `true`  | _Optional:_ If set to `false`, disables credential masking in generated code snippets. By default, credentials are masked for security.                        |
 | `externalJsonProps`  | `boolean` | `true`  | _Optional:_ If set to `false`, disables externalization of large JSON props. By default, large JSON is written to external files for better build performance. |
 
 ### sidebarOptions
@@ -191,6 +193,7 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 | `sidebarGenerators`  | `object`  | `null`  | Optional: Customize sidebar rendering with callback functions.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 
 > You may optionally configure a `sidebarOptions`. In doing so, an individual `sidebar.js` slice with the configured options will be generated within the respective `outputDir`.
+> Use `x-position` vendor extension (or the front matter `position`) on operations to explicitly order sidebar items.
 
 `versions` can be configured with the following options:
 
@@ -271,6 +274,24 @@ Example:
   },
 }
 ```
+
+## Supported Vendor Extensions
+
+The plugin extracts a number of vendor extensions from the OpenAPI spec to enrich the generated docs. The theme renders some of these values as part of the UI.
+
+| Extension                                  | Purpose                                                               |
+| ------------------------------------------ | --------------------------------------------------------------------- |
+| `x-codeSamples`                            | Operation level code snippets displayed in the API Explorer.          |
+| `x-tagGroups`                              | Groups tags in the sidebar navigation.                                |
+| `x-tags`                                   | Assigns tags to schema objects so they appear with tagged operations. |
+| `x-position`                               | Controls ordering of items in the sidebar.                            |
+| `x-logo` / `x-dark-logo`                   | Provides logos for light and dark themes on the intro page.           |
+| `x-deprecated-description`                 | Custom text shown for deprecated operations.                          |
+| `x-webhooks`                               | Defines webhook events.                                               |
+| `x-displayName`                            | Overrides tag display names.                                          |
+| `x-enumDescription` / `x-enumDescriptions` | Documents enum values.                                                |
+
+Other ReDoc specific extensions such as `x-circular-ref`, `x-code-samples` (deprecated), `x-examples`, `x-ignoredHeaderParameters`, `x-nullable`, `x-servers`, `x-traitTag`, `x-additionalPropertiesName`, and `x-explicitMappingOnly` are ignored when extracting custom data.
 
 ## CLI Usage
 
