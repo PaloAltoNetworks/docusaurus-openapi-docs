@@ -21,10 +21,10 @@
     "re-gen": "yarn clean-all-versions && yarn gen-all-versions"
   },
   "dependencies": {
-    "@docusaurus/core": "3.10.0",
-    "@docusaurus/faster": "3.10.0",
-    "@docusaurus/plugin-google-gtag": "3.10.0",
-    "@docusaurus/preset-classic": "3.10.0",
+    "@docusaurus/core": "3.10.1",
+    "@docusaurus/faster": "3.10.1",
+    "@docusaurus/plugin-google-gtag": "3.10.1",
+    "@docusaurus/preset-classic": "3.10.1",
     "clsx": "^2.1.1",
     "docusaurus-plugin-openapi-docs": "*",
     "docusaurus-theme-openapi-docs": "*",
