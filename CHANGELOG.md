@@ -1,6 +1,10 @@
 ## 5.0.2 (2026-05-01)
 
-Routine maintenance release. Bumps Docusaurus to `3.10.1` in the demo and the `create-docusaurus-openapi-docs` scaffolder template (picks up the upstream webpackbar/webpack bundler fix), plus a batch of dependency updates.
+Routine maintenance release. Bumps Docusaurus to `3.10.1` in the demo and the `create-docusaurus-openapi-docs` scaffolder template (picks up the upstream webpackbar/webpack bundler fix), plus a batch of dependency updates. Also fixes a build error in scaffolded sites caused by an HTML comment in the sample blog post.
+
+#### :bug: Bug Fix
+
+- fix(template): replace `<!--truncate-->` with MDX-safe `{/* truncate */}` in sample blog post so scaffolded sites build under MDX 3 / Docusaurus 3.10
 
 #### :robot: Dependencies
 
