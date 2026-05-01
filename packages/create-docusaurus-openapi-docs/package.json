@@ -1,7 +1,7 @@
 {
   "name": "create-docusaurus-openapi-docs",
   "description": "Create Docusaurus sites with OpenAPI docs.",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "license": "MIT",
   "keywords": [
     "openapi",
