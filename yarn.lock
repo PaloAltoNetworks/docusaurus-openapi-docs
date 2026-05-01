@@ -4106,9 +4106,9 @@
     json-schema-to-ts "2.7.2"
 
 "@redocly/openapi-core@^2.25.2":
-  version "2.27.0"
-  resolved "https://registry.yarnpkg.com/@redocly/openapi-core/-/openapi-core-2.27.0.tgz#db559ff3a9eafd34988d741c6f0bc8be7b5063cf"
-  integrity sha512-kXv8alrQ/rfgnwGxjNBG1vDjSYOYUbKYNaDMj65KohQezt6AWzLpAhe6n6PSFYRo6jAz8/vqJr8LyphYTYfxqQ==
+  version "2.29.0"
+  resolved "https://registry.yarnpkg.com/@redocly/openapi-core/-/openapi-core-2.29.0.tgz#ff4f79c0e87c91bcf50ea18781bd71e7768c0d49"
+  integrity sha512-hIbOw1ZY01NhjEGwAuG/OXy19EAY31W7J7b061aNpCzJ8+mFyyy52X4CTrpF2c0rbemSLobXowvAEddVSX1QzQ==
   dependencies:
     "@redocly/ajv" "^8.18.0"
     "@redocly/config" "^0.48.0"
