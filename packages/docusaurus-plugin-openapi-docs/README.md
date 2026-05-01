@@ -36,6 +36,7 @@ Key Features:
 - **Fast:** Convert large OpenAPI specs into MDX docs in seconds. 🔥
 - **Stylish:** Based on the same [Infima styling framework](https://infima.dev/) that powers the Docusaurus UI.
 - **Flexible:** Supports single, multi and _even micro_ OpenAPI specs.
+- **Extensible:** Recognizes common vendor extensions for customizing your docs. See [Supported Vendor Extensions](#supported-vendor-extensions) for details.
 
 ## Compatibility Matrix
 
@@ -437,7 +438,7 @@ yarn watch:demo
 
 ## Credits
 
-Special thanks to @bourdakos1 (Nick Bourdakos), the author of [docusaurus-openapi](https://github.com/cloud-annotations/docusaurus-openapi), which this project is heavily based on.
+Special thanks to [@bourdakos1](https://github.com/bourdakos1) (Nick Bourdakos), the author of [docusaurus-openapi](https://github.com/cloud-annotations/docusaurus-openapi), which this project is heavily based on.
 
 For more insight into why we decided to completely fork see [#47](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/47)
 
