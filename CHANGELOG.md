@@ -1,3 +1,30 @@
+## 5.0.2 (2026-05-01)
+
+Routine maintenance release. Bumps Docusaurus to `3.10.1` in the demo and the `create-docusaurus-openapi-docs` scaffolder template (picks up the upstream webpackbar/webpack bundler fix), plus a batch of dependency updates.
+
+#### :robot: Dependencies
+
+- chore(deps): bump @docusaurus/\* from 3.10.0 to 3.10.1 ([#1442](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1442))
+- chore(deps): bump postcss from 8.5.6 to 8.5.13 ([#1441](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1441))
+- chore(deps): bump @redocly/openapi-core from 2.25.4 to 2.29.0 ([#1430](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1430), [#1433](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1433))
+- chore(deps): bump react-hook-form from 7.72.1 to 7.73.1 ([#1436](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1436))
+- chore(deps): bump the react group with 2 updates ([#1426](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1426))
+- chore(deps): bump actions/setup-node from 6.3.0 to 6.4.0 ([#1438](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1438))
+- chore(deps): bump actions/cache from 5.0.4 to 5.0.5 ([#1431](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1431))
+- chore(deps): bump github/codeql-action from 4.35.1 to 4.35.2 ([#1439](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1439))
+
+#### :wrench: Maintenance
+
+- chore(deps-dev): bump fast-xml-parser from 5.5.10 to 5.7.1 ([#1429](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1429), [#1437](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1437))
+- chore(deps-dev): bump @types/node from 25.5.0 to 25.6.0 ([#1434](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1434))
+- chore(deps-dev): bump start-server-and-test from 3.0.0 to 3.0.2 ([#1428](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1428))
+- chore(deps-dev): bump eslint-plugin-react-hooks from 4.6.2 to 7.0.1 ([#1427](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1427))
+
+#### Committers: 2
+
+- dependabot[bot]
+- Steven Serrata
+
 ## 5.0.1 (2026-04-14)
 
 Patch release with a new scaffolding CLI, performance improvements, compatibility fixes for Docusaurus 3.10.0 strict admonition syntax, and a security fix for axios CVEs.
