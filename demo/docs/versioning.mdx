@@ -18,7 +18,7 @@ Finally, the OpenAPI Docs versioning implementation allows API docs to be versio
 
 The OpenAPI Docs plugin versioning system is driven by the CLI and is not unlike the experience of generating and cleaning non-versioned API docs.
 
-:::info TIP
+:::info[TIP]
 For details around how to configure versioning see the [Plugin Configuration Options](./intro.mdx#plugin-configuration-options) and [Versioning](./intro.mdx#versioning-openapi-docs) guides.
 :::
 
@@ -52,7 +52,7 @@ The `versions.json` file contains metadata that could be useful for building UI 
   - **Step 3**: Remove the version from the OpenAPI plugin config.
   - **Step 4**: Run the `gen-api-docs:version` command to update the `versions.json` file.
 
-:::info TIP
+:::info[TIP]
 The OpenAPI Docs plugin will **not** delete a versioned `outputDir` after executing the `clean-api-docs:version` command. This is by design, as the plugin tries to avoid removing non-API docs/files.
 :::
 
