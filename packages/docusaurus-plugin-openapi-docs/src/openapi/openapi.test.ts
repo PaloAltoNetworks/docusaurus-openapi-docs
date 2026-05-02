@@ -280,7 +280,7 @@ describe("openapi", () => {
         paths: {
           "/items": {
             "x-custom-string": "test",
-            "x-bool": true,
+            "x-custom-bool": true,
             unknownKey: { someField: true },
             get: {
               summary: "List items",
