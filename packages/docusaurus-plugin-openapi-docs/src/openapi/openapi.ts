@@ -139,13 +139,22 @@ function createItems(
     items.push(infoPage);
   }
 
+  const HTTP_METHODS = new Set([
+    "get",
+    "put",
+    "post",
+    "delete",
+    "options",
+    "head",
+    "patch",
+    "trace",
+  ]);
+
   for (let [path, pathObject] of Object.entries(openapiData.paths)) {
     const { $ref, description, parameters, servers, summary, ...rest } =
       pathObject;
     for (let [method, operationObject] of Object.entries({ ...rest })) {
-      if (method.startsWith("x-")) {
-        // skip vendor extensions at the path level
-
+      if (!HTTP_METHODS.has(method.toLowerCase())) {
         continue;
       }
 

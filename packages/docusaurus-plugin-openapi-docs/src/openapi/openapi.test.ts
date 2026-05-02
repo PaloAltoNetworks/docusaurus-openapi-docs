@@ -271,4 +271,41 @@ describe("openapi", () => {
       expect(templatedVerbItem.api.postman).toBeDefined();
     });
   });
+
+  describe("vendor extensions at path level", () => {
+    it("does not throw and skips x-* keys and unknown keys on path objects", async () => {
+      const openapiData = {
+        openapi: "3.0.0",
+        info: { title: "Vendor Ext API", version: "1.0.0" },
+        paths: {
+          "/items": {
+            "x-custom-string": "test",
+            "x-bool": true,
+            unknownKey: { someField: true },
+            get: {
+              summary: "List items",
+              operationId: "listItems",
+              responses: { "200": { description: "OK" } },
+            },
+          },
+        },
+      };
+
+      const options: APIOptions = {
+        specPath: "dummy",
+        outputDir: "build",
+      };
+      const sidebarOptions = {} as SidebarOptions;
+
+      const [items] = await processOpenapiFile(
+        openapiData as any,
+        options,
+        sidebarOptions
+      );
+
+      const apiItems = items.filter((item) => item.type === "api");
+      expect(apiItems).toHaveLength(1);
+      expect((apiItems[0] as any).api.method).toBe("get");
+    });
+  });
 });
