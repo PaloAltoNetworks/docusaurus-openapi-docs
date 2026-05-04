@@ -105,5 +105,9 @@
   > h3,
   > strong {
     margin-bottom: 0;
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
   }
 }
