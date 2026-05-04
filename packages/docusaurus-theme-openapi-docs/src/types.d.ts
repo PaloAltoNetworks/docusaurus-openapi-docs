@@ -34,6 +34,20 @@ export interface ThemeConfig {
      * - `"include"`: Always send cookies, even for cross-origin requests
      */
     requestCredentials?: "omit" | "same-origin" | "include";
+    /**
+     * Controls automatic expansion of nested schema trees in request/response
+     * documentation. Inspired by Redoc's `schemaExpansionLevel`.
+     */
+    schemaExpansion?: {
+      /** Show an interactive control on the page so readers can change depth at view time. Defaults to `false`. */
+      enabled?: boolean;
+      /** Initial expansion depth. Use `"all"` to expand everything. Defaults to `0` (all collapsed). */
+      default?: number | "all";
+      /** Maximum depth value offered by the UI control's pill buttons. Defaults to `4`. */
+      max?: number;
+      /** Persist the reader's selected depth in `localStorage`. Defaults to `true` when `enabled` is `true`. */
+      persist?: boolean;
+    };
   };
 }
 

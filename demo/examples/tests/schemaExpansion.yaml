@@ -1,0 +1,140 @@
+openapi: 3.0.0
+info:
+  title: Schema Expansion Demo API
+  version: 1.0.0
+  description: |
+    Exercises the configurable schema expansion control. Endpoints below return
+    deeply nested envelope-wrapped payloads where the useful fields live a few
+    levels under `data`. The expansion pill control on each page should let
+    readers reveal those fields without manual clicking.
+
+    Tracks: https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1222
+
+tags:
+  - name: expansion
+    description: Default schema expansion level demos
+
+paths:
+  /users/{id}:
+    get:
+      tags:
+        - expansion
+      summary: Get user (envelope-wrapped)
+      description: |
+        Wrapped in a typical `{ status, meta, data }` envelope where `data`
+        itself contains a nested `profile` object. With expansion level `1`,
+        `data` opens automatically; with level `2`, `profile` opens too.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: A wrapped user payload.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserEnvelope"
+  /users:
+    post:
+      tags:
+        - expansion
+      summary: Create user (nested request body)
+      description: |
+        The request body is also envelope-wrapped, exercising the expansion
+        control on the request side.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserEnvelope"
+      responses:
+        "201":
+          description: Created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserEnvelope"
+
+components:
+  schemas:
+    Status:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+
+    Meta:
+      type: object
+      properties:
+        requestId:
+          type: string
+          format: uuid
+        timestamp:
+          type: string
+          format: date-time
+
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+
+    Profile:
+      type: object
+      properties:
+        displayName:
+          type: string
+        bio:
+          type: string
+        address:
+          $ref: "#/components/schemas/Address"
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+          format: email
+        profile:
+          $ref: "#/components/schemas/Profile"
+
+    UserEnvelope:
+      type: object
+      properties:
+        status:
+          $ref: "#/components/schemas/Status"
+        meta:
+          $ref: "#/components/schemas/Meta"
+        data:
+          $ref: "#/components/schemas/User"
+
+    CreateUserInput:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          format: email
+        profile:
+          $ref: "#/components/schemas/Profile"
+
+    CreateUserEnvelope:
+      type: object
+      properties:
+        meta:
+          $ref: "#/components/schemas/Meta"
+        data:
+          $ref: "#/components/schemas/CreateUserInput"

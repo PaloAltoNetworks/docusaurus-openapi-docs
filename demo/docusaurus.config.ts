@@ -271,6 +271,13 @@ const config: Config = {
       id: "announcementBar_2",
       content: "v5.0.0 is now available! Requires Docusaurus 3.10.0+",
     },
+    api: {
+      schemaExpansion: {
+        enabled: true,
+        default: 1,
+        max: 4,
+      },
+    },
   } satisfies Preset.ThemeConfig,
 
   plugins: [

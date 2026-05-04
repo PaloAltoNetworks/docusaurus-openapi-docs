@@ -14,6 +14,11 @@ import { ClosingArrayBracket, OpeningArrayBracket } from "@theme/ArrayBrackets";
 import Details from "@theme/Details";
 import DiscriminatorTabs from "@theme/DiscriminatorTabs";
 import Markdown from "@theme/Markdown";
+import {
+  SchemaDepthProvider,
+  useSchemaDepth,
+  useSchemaExpansion,
+} from "@theme/SchemaExpansion";
 import SchemaItem from "@theme/SchemaItem";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
@@ -676,10 +681,15 @@ const SchemaNodeDetails: React.FC<SchemaEdgeProps> = ({
   schemaType,
   schemaPath,
 }) => {
+  const depth = useSchemaDepth();
+  const { level } = useSchemaExpansion();
+  const defaultOpen = depth < level;
   return (
     <SchemaItem collapsible={true}>
       <Details
+        key={`level-${level}`}
         className="openapi-markdown__details"
+        open={defaultOpen}
         summary={
           <Summary
             name={name}
@@ -694,11 +704,13 @@ const SchemaNodeDetails: React.FC<SchemaEdgeProps> = ({
           {getQualifierMessage(schema) && (
             <MarkdownWrapper text={getQualifierMessage(schema)} />
           )}
-          <SchemaNode
-            schema={schema}
-            schemaType={schemaType}
-            schemaPath={schemaPath}
-          />
+          <SchemaDepthProvider depth={depth + 1}>
+            <SchemaNode
+              schema={schema}
+              schemaType={schemaType}
+              schemaPath={schemaPath}
+            />
+          </SchemaDepthProvider>
         </div>
       </Details>
     </SchemaItem>

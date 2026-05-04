@@ -18,6 +18,7 @@ import {
   ResponseExamples,
 } from "@theme/ResponseExamples";
 import SchemaNode from "@theme/Schema";
+import SchemaExpansionControl from "@theme/SchemaExpansion";
 import SchemaTabs from "@theme/SchemaTabs";
 import SkeletonLoader from "@theme/SkeletonLoader";
 import TabItem from "@theme/TabItem";
@@ -77,24 +78,23 @@ const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
                       open={true}
                       style={style}
                       summary={
-                        <>
-                          <summary>
-                            <h3 className="openapi-markdown__details-summary-header-body">
-                              {translate({
-                                id: OPENAPI_REQUEST.BODY_TITLE,
-                                message: title,
-                              })}
-                              {body.required === true && (
-                                <span className="openapi-schema__required">
-                                  {translate({
-                                    id: OPENAPI_SCHEMA_ITEM.REQUIRED,
-                                    message: "required",
-                                  })}
-                                </span>
-                              )}
-                            </h3>
-                          </summary>
-                        </>
+                        <summary className="openapi-markdown__details-summary--with-control">
+                          <h3 className="openapi-markdown__details-summary-header-body">
+                            {translate({
+                              id: OPENAPI_REQUEST.BODY_TITLE,
+                              message: title,
+                            })}
+                            {body.required === true && (
+                              <span className="openapi-schema__required">
+                                {translate({
+                                  id: OPENAPI_SCHEMA_ITEM.REQUIRED,
+                                  message: "required",
+                                })}
+                              </span>
+                            )}
+                          </h3>
+                          <SchemaExpansionControl />
+                        </summary>
                       }
                     >
                       <div style={{ textAlign: "left", marginLeft: "1rem" }}>
@@ -164,27 +164,26 @@ const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
               open={true}
               style={style}
               summary={
-                <>
-                  <summary>
-                    <h3 className="openapi-markdown__details-summary-header-body">
-                      {translate({
-                        id: OPENAPI_REQUEST.BODY_TITLE,
-                        message: title,
-                      })}
-                      {firstBody.type === "array" && (
-                        <span style={{ opacity: "0.6" }}> array</span>
-                      )}
-                      {body.required && (
-                        <strong className="openapi-schema__required">
-                          {translate({
-                            id: OPENAPI_SCHEMA_ITEM.REQUIRED,
-                            message: "required",
-                          })}
-                        </strong>
-                      )}
-                    </h3>
-                  </summary>
-                </>
+                <summary className="openapi-markdown__details-summary--with-control">
+                  <h3 className="openapi-markdown__details-summary-header-body">
+                    {translate({
+                      id: OPENAPI_REQUEST.BODY_TITLE,
+                      message: title,
+                    })}
+                    {firstBody.type === "array" && (
+                      <span style={{ opacity: "0.6" }}> array</span>
+                    )}
+                    {body.required && (
+                      <strong className="openapi-schema__required">
+                        {translate({
+                          id: OPENAPI_SCHEMA_ITEM.REQUIRED,
+                          message: "required",
+                        })}
+                      </strong>
+                    )}
+                  </h3>
+                  <SchemaExpansionControl />
+                </summary>
               }
             >
               <div style={{ textAlign: "left", marginLeft: "1rem" }}>
