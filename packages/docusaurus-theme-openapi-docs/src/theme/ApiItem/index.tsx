@@ -122,7 +122,12 @@ export default function ApiItem(props: Props): JSX.Element {
       (param: { in: "path" | "query" | "header" | "cookie" }) => {
         const paramType = param.in;
         const paramsArray: ParameterObject[] = params[paramType];
-        paramsArray?.push(param as ParameterObject);
+        const defaultValue = (param as any).schema?.default;
+        const initialized =
+          defaultValue !== undefined
+            ? ({ ...param, value: defaultValue } as unknown as ParameterObject)
+            : (param as ParameterObject);
+        paramsArray?.push(initialized);
       }
     );
     const auth = createAuth({

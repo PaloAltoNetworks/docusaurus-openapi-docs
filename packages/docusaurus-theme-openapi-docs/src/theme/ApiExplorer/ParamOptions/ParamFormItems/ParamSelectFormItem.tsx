@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React from "react";
+import React, { useEffect } from "react";
 
 import { translate } from "@docusaurus/Translate";
 import { ErrorMessage } from "@hookform/error-message";
@@ -32,6 +32,7 @@ export default function ParamSelectFormItem({
   const {
     control,
     formState: { errors },
+    setValue,
   } = useFormContext();
 
   const showErrorMessage = errors?.paramSelect;
@@ -39,6 +40,16 @@ export default function ParamSelectFormItem({
   const dispatch = useTypedDispatch();
 
   const options = getSchemaEnum(param.schema) ?? [];
+
+  useEffect(() => {
+    if (
+      typeof param.value === "string" &&
+      (options as string[]).includes(param.value)
+    ) {
+      setValue("paramSelect", param.value);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -53,11 +64,12 @@ export default function ParamSelectFormItem({
             : false,
         }}
         name="paramSelect"
-        render={({ field: { onChange } }) => (
+        render={({ field: { onChange, value } }) => (
           <FormSelect
             label={label}
             type={type}
             required={required}
+            value={value ?? "---"}
             options={["---", ...(options as string[])]}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
               const val = e.target.value;
