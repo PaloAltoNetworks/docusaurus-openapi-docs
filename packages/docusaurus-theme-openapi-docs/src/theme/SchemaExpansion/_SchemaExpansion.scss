@@ -17,7 +17,10 @@
   background: transparent;
   border: none;
   border-radius: var(--ifm-global-radius);
-  padding: 4px;
+  padding: 0;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
