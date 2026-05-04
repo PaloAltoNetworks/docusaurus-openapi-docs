@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React from "react";
+import React, { useEffect } from "react";
 
 import { translate } from "@docusaurus/Translate";
 import { ErrorMessage } from "@hookform/error-message";
@@ -33,9 +33,25 @@ export default function ParamBooleanFormItem({
   const {
     control,
     formState: { errors },
+    setValue,
   } = useFormContext();
 
   const showErrorMessage = errors?.paramBoolean;
+
+  useEffect(() => {
+    if (param.value === undefined) return;
+    const initial =
+      typeof param.value === "boolean" ? String(param.value) : param.value;
+    if (initial === "true" || initial === "false") {
+      setValue("paramBoolean", initial);
+      // Boolean defaults arrive in redux as actual booleans; normalize to the
+      // string form the rest of the form uses.
+      if (typeof param.value === "boolean") {
+        dispatch(setParam({ ...param, value: initial }));
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -50,11 +66,12 @@ export default function ParamBooleanFormItem({
             : false,
         }}
         name="paramBoolean"
-        render={({ field: { onChange } }) => (
+        render={({ field: { onChange, value } }) => (
           <FormSelect
             label={label}
             type={type}
             required={required}
+            value={value ?? "---"}
             options={["---", "true", "false"]}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
               const val = e.target.value;

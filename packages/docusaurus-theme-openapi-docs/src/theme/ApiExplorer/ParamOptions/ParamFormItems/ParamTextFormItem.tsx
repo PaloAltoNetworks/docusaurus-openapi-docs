@@ -5,11 +5,12 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React from "react";
+import React, { useEffect } from "react";
 
 import FormTextInput from "@theme/ApiExplorer/FormTextInput";
 import { Param, setParam } from "@theme/ApiExplorer/ParamOptions/slice";
 import { useTypedDispatch } from "@theme/ApiItem/hooks";
+import { useFormContext } from "react-hook-form";
 
 export interface ParamProps {
   param: Param;
@@ -25,6 +26,15 @@ export default function ParamTextFormItem({
   required,
 }: ParamProps) {
   const dispatch = useTypedDispatch();
+  const { setValue } = useFormContext();
+
+  useEffect(() => {
+    if (param.value !== undefined && !Array.isArray(param.value)) {
+      setValue(param.name, param.value);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <FormTextInput
       label={label}

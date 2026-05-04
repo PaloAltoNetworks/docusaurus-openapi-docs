@@ -1,0 +1,111 @@
+openapi: 3.0.0
+info:
+  title: Parameter Defaults Demo API
+  version: 1.0.0
+  description: |
+    Validates that `schema.default` values are pre-populated in the API explorer
+    form for parameters in every location (header, query, path, cookie) and for
+    the common scalar/enum/boolean schema types.
+
+    Regression coverage for: https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1226
+
+tags:
+  - name: defaults
+    description: Parameter default value tests
+
+paths:
+  /headers:
+    get:
+      tags:
+        - defaults
+      summary: Header parameter defaults
+      description: |
+        Each header below declares a `schema.default`. The right-hand request
+        form should render those defaults pre-filled and the generated code
+        snippets should include them.
+      parameters:
+        - name: X-Api-Version
+          in: header
+          description: Free-form string default.
+          required: true
+          schema:
+            type: string
+            default: "2025-01-01"
+        - name: X-Region
+          in: header
+          description: Enum default — should appear pre-selected in the dropdown.
+          schema:
+            type: string
+            enum:
+              - us-east-1
+              - us-west-2
+              - eu-central-1
+            default: us-west-2
+        - name: X-Trace-Enabled
+          in: header
+          description: Boolean default — should appear pre-selected as "true".
+          schema:
+            type: boolean
+            default: true
+      responses:
+        "200":
+          description: OK
+
+  /query:
+    get:
+      tags:
+        - defaults
+      summary: Query parameter defaults
+      parameters:
+        - name: limit
+          in: query
+          description: Integer default.
+          schema:
+            type: integer
+            default: 25
+        - name: sort
+          in: query
+          description: Enum default.
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+      responses:
+        "200":
+          description: OK
+
+  /items/{itemId}:
+    get:
+      tags:
+        - defaults
+      summary: Path parameter default
+      description: |
+        Path defaults are unusual but legal — confirm the form pre-fills the
+        value rather than leaving the URL placeholder unresolved.
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          schema:
+            type: string
+            default: sample-item
+      responses:
+        "200":
+          description: OK
+
+  /session:
+    get:
+      tags:
+        - defaults
+      summary: Cookie parameter default
+      parameters:
+        - name: session_id
+          in: cookie
+          schema:
+            type: string
+            default: anonymous
+      responses:
+        "200":
+          description: OK
