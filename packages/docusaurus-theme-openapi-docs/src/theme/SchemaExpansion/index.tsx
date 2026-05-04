@@ -5,10 +5,17 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { translate } from "@docusaurus/Translate";
 import clsx from "clsx";
+import { createPortal } from "react-dom";
 
 import { useSchemaExpansion } from "./context";
 
@@ -42,16 +49,39 @@ const ExpandIcon: React.FC = () => (
 const SchemaExpansionControl: React.FC = () => {
   const { config, level, setLevel } = useSchemaExpansion();
   const [open, setOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [coords, setCoords] = useState<{ top: number; right: number } | null>(
+    null
+  );
   const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const popoverRef = useRef<HTMLDivElement | null>(null);
+
+  const updatePosition = useCallback(() => {
+    if (!buttonRef.current) return;
+    const rect = buttonRef.current.getBoundingClientRect();
+    setCoords({
+      top: rect.bottom + 4,
+      right: window.innerWidth - rect.right,
+    });
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!open) return;
+    updatePosition();
+    window.addEventListener("scroll", updatePosition, true);
+    window.addEventListener("resize", updatePosition);
+    return () => {
+      window.removeEventListener("scroll", updatePosition, true);
+      window.removeEventListener("resize", updatePosition);
+    };
+  }, [open, updatePosition]);
 
   useEffect(() => {
     if (!open) return;
     const handlePointer = (event: MouseEvent) => {
-      if (!containerRef.current) return;
-      if (!containerRef.current.contains(event.target as Node)) {
-        setOpen(false);
-      }
+      const target = event.target as Node;
+      if (buttonRef.current?.contains(target)) return;
+      if (popoverRef.current?.contains(target)) return;
+      setOpen(false);
     };
     const handleKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -90,8 +120,52 @@ const SchemaExpansionControl: React.FC = () => {
     description: "Label for the expand-all option",
   });
 
+  const popover =
+    open && coords && typeof document !== "undefined"
+      ? createPortal(
+          <div
+            ref={popoverRef}
+            role="menu"
+            className="openapi-schema-expansion__popover"
+            style={{ top: coords.top, right: coords.right }}
+            onClick={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+            }}
+          >
+            {levels.map((n) => (
+              <button
+                key={n}
+                type="button"
+                role="menuitemradio"
+                aria-checked={level === n}
+                className={clsx("openapi-schema-expansion__option", {
+                  "openapi-schema-expansion__option--active": level === n,
+                })}
+                onClick={() => choose(n)}
+              >
+                {n}
+              </button>
+            ))}
+            <button
+              type="button"
+              role="menuitemradio"
+              aria-checked={!Number.isFinite(level)}
+              className={clsx("openapi-schema-expansion__option", {
+                "openapi-schema-expansion__option--active":
+                  !Number.isFinite(level),
+              })}
+              onClick={() => choose(Infinity)}
+            >
+              {allLabel}
+            </button>
+          </div>,
+          document.body
+        )
+      : null;
+
   return (
-    <div className="openapi-schema-expansion" ref={containerRef}>
+    <span className="openapi-schema-expansion">
       <button
         ref={buttonRef}
         type="button"
@@ -108,44 +182,8 @@ const SchemaExpansionControl: React.FC = () => {
       >
         <ExpandIcon />
       </button>
-      {open && (
-        <div
-          role="menu"
-          className="openapi-schema-expansion__popover"
-          onClick={(event) => {
-            event.preventDefault();
-            event.stopPropagation();
-          }}
-        >
-          {levels.map((n) => (
-            <button
-              key={n}
-              type="button"
-              role="menuitemradio"
-              aria-checked={level === n}
-              className={clsx("openapi-schema-expansion__option", {
-                "openapi-schema-expansion__option--active": level === n,
-              })}
-              onClick={() => choose(n)}
-            >
-              {n}
-            </button>
-          ))}
-          <button
-            type="button"
-            role="menuitemradio"
-            aria-checked={!Number.isFinite(level)}
-            className={clsx("openapi-schema-expansion__option", {
-              "openapi-schema-expansion__option--active":
-                !Number.isFinite(level),
-            })}
-            onClick={() => choose(Infinity)}
-          >
-            {allLabel}
-          </button>
-        </div>
-      )}
-    </div>
+      {popover}
+    </span>
   );
 };
 
