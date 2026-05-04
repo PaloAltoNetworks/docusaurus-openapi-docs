@@ -15,7 +15,6 @@ import React, {
 
 import { translate } from "@docusaurus/Translate";
 import clsx from "clsx";
-import { createPortal } from "react-dom";
 
 import { useSchemaExpansion } from "./context";
 
@@ -56,7 +55,7 @@ const SchemaExpansionControl: React.FC = () => {
   const popoverRef = useRef<HTMLDivElement | null>(null);
 
   const updatePosition = useCallback(() => {
-    if (!buttonRef.current) return;
+    if (!buttonRef.current || typeof window === "undefined") return;
     const rect = buttonRef.current.getBoundingClientRect();
     setCoords({
       top: rect.bottom + 4,
@@ -120,50 +119,6 @@ const SchemaExpansionControl: React.FC = () => {
     description: "Label for the expand-all option",
   });
 
-  const popover =
-    open && coords && typeof document !== "undefined"
-      ? createPortal(
-          <div
-            ref={popoverRef}
-            role="menu"
-            className="openapi-schema-expansion__popover"
-            style={{ top: coords.top, right: coords.right }}
-            onClick={(event) => {
-              event.preventDefault();
-              event.stopPropagation();
-            }}
-          >
-            {levels.map((n) => (
-              <button
-                key={n}
-                type="button"
-                role="menuitemradio"
-                aria-checked={level === n}
-                className={clsx("openapi-schema-expansion__option", {
-                  "openapi-schema-expansion__option--active": level === n,
-                })}
-                onClick={() => choose(n)}
-              >
-                {n}
-              </button>
-            ))}
-            <button
-              type="button"
-              role="menuitemradio"
-              aria-checked={!Number.isFinite(level)}
-              className={clsx("openapi-schema-expansion__option", {
-                "openapi-schema-expansion__option--active":
-                  !Number.isFinite(level),
-              })}
-              onClick={() => choose(Infinity)}
-            >
-              {allLabel}
-            </button>
-          </div>,
-          document.body
-        )
-      : null;
-
   return (
     <span className="openapi-schema-expansion">
       <button
@@ -182,7 +137,45 @@ const SchemaExpansionControl: React.FC = () => {
       >
         <ExpandIcon />
       </button>
-      {popover}
+      {open && coords && (
+        <div
+          ref={popoverRef}
+          role="menu"
+          className="openapi-schema-expansion__popover"
+          style={{ top: coords.top, right: coords.right }}
+          onClick={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+          }}
+        >
+          {levels.map((n) => (
+            <button
+              key={n}
+              type="button"
+              role="menuitemradio"
+              aria-checked={level === n}
+              className={clsx("openapi-schema-expansion__option", {
+                "openapi-schema-expansion__option--active": level === n,
+              })}
+              onClick={() => choose(n)}
+            >
+              {n}
+            </button>
+          ))}
+          <button
+            type="button"
+            role="menuitemradio"
+            aria-checked={!Number.isFinite(level)}
+            className={clsx("openapi-schema-expansion__option", {
+              "openapi-schema-expansion__option--active":
+                !Number.isFinite(level),
+            })}
+            onClick={() => choose(Infinity)}
+          >
+            {allLabel}
+          </button>
+        </div>
+      )}
     </span>
   );
 };
