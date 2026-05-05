@@ -110,8 +110,8 @@ const SchemaExpansionControl: React.FC = () => {
   const levels = Array.from({ length: config.max + 1 }, (_, i) => i);
   const buttonLabel = translate({
     id: "theme.openapi.schema.expansion.button",
-    message: "Schema expansion depth",
-    description: "Aria/title for the schema expansion icon button",
+    message: "Set how deep schemas auto-expand",
+    description: "Aria/title tooltip for the schema expansion icon button",
   });
   const allLabel = translate({
     id: "theme.openapi.schema.expansion.all",
