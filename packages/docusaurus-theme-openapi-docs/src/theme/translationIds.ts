@@ -78,6 +78,13 @@ export const OPENAPI_SCHEMA = {
   NO_SCHEMA: "theme.openapi.schema.noSchema",
 };
 
+export const OPENAPI_SCHEMA_EXPANSION = {
+  BUTTON_LABEL: "theme.openapi.schema.expansion.button",
+  MENU_LABEL: "theme.openapi.schema.expansion.menu",
+  ALL: "theme.openapi.schema.expansion.all",
+  DEPTH_OPTION: "theme.openapi.schema.expansion.depthOption",
+};
+
 export const OPENAPI_SCHEMA_ITEM = {
   CHARACTERS: "theme.openapi.schemaItem.characters",
   NON_EMPTY: "theme.openapi.schemaItem.nonEmpty",

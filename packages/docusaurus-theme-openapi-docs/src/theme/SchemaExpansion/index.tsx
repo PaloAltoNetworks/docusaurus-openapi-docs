@@ -8,12 +8,15 @@
 import React, {
   useCallback,
   useEffect,
+  useId,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
 
 import { translate } from "@docusaurus/Translate";
+import { OPENAPI_SCHEMA_EXPANSION } from "@theme/translationIds";
 import clsx from "clsx";
 
 import { useSchemaExpansion } from "./context";
@@ -26,6 +29,8 @@ export {
   normalizeLevel,
   SCHEMA_EXPANSION_STORAGE_KEY,
 } from "./context";
+
+const ALL_VALUE = Number.POSITIVE_INFINITY;
 
 const ExpandIcon: React.FC = () => (
   <svg
@@ -53,6 +58,18 @@ const SchemaExpansionControl: React.FC = () => {
   );
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const popoverRef = useRef<HTMLDivElement | null>(null);
+  const optionRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const popoverId = useId();
+
+  const options = useMemo(() => {
+    const numbers = Array.from({ length: config.max + 1 }, (_, i) => i);
+    return [...numbers, ALL_VALUE];
+  }, [config.max]);
+
+  const activeIndex = useMemo(() => {
+    const idx = options.indexOf(level);
+    return idx >= 0 ? idx : 0;
+  }, [options, level]);
 
   const updatePosition = useCallback(() => {
     if (!buttonRef.current || typeof window === "undefined") return;
@@ -77,6 +94,11 @@ const SchemaExpansionControl: React.FC = () => {
 
   useEffect(() => {
     if (!open) return;
+    optionRefs.current[activeIndex]?.focus();
+  }, [open, activeIndex]);
+
+  useEffect(() => {
+    if (!open) return;
     const handlePointer = (event: MouseEvent) => {
       const target = event.target as Node;
       if (buttonRef.current?.contains(target)) return;
@@ -85,6 +107,7 @@ const SchemaExpansionControl: React.FC = () => {
     };
     const handleKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
+        event.stopPropagation();
         setOpen(false);
         buttonRef.current?.focus();
       }
@@ -106,16 +129,34 @@ const SchemaExpansionControl: React.FC = () => {
     [setLevel]
   );
 
+  const onMenuKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+    event.preventDefault();
+    const current = optionRefs.current.findIndex(
+      (el) => el === document.activeElement
+    );
+    if (current < 0) return;
+    const next =
+      event.key === "ArrowRight"
+        ? (current + 1) % options.length
+        : (current - 1 + options.length) % options.length;
+    optionRefs.current[next]?.focus();
+  };
+
   if (!config.enabled) return null;
 
-  const levels = Array.from({ length: config.max + 1 }, (_, i) => i);
   const buttonLabel = translate({
-    id: "theme.openapi.schema.expansion.button",
+    id: OPENAPI_SCHEMA_EXPANSION.BUTTON_LABEL,
     message: "Schema expansion depth",
     description: "Aria/title tooltip for the schema expansion icon button",
   });
+  const menuLabel = translate({
+    id: OPENAPI_SCHEMA_EXPANSION.MENU_LABEL,
+    message: "Schema expansion depth options",
+    description: "Accessible label for the expansion options menu",
+  });
   const allLabel = translate({
-    id: "theme.openapi.schema.expansion.all",
+    id: OPENAPI_SCHEMA_EXPANSION.ALL,
     message: "All",
     description: "Label for the expand-all option",
   });
@@ -126,8 +167,9 @@ const SchemaExpansionControl: React.FC = () => {
         ref={buttonRef}
         type="button"
         className="openapi-schema-expansion__trigger"
-        aria-haspopup="true"
+        aria-haspopup="menu"
         aria-expanded={open}
+        aria-controls={open ? popoverId : undefined}
         aria-label={buttonLabel}
         title={buttonLabel}
         onClick={(event) => {
@@ -141,40 +183,51 @@ const SchemaExpansionControl: React.FC = () => {
       {open && coords && (
         <div
           ref={popoverRef}
+          id={popoverId}
           role="menu"
+          aria-label={menuLabel}
           className="openapi-schema-expansion__popover"
           style={{ top: coords.top, right: coords.right }}
+          onKeyDown={onMenuKeyDown}
           onClick={(event) => {
             event.preventDefault();
             event.stopPropagation();
           }}
         >
-          {levels.map((n) => (
-            <button
-              key={n}
-              type="button"
-              role="menuitemradio"
-              aria-checked={level === n}
-              className={clsx("openapi-schema-expansion__option", {
-                "openapi-schema-expansion__option--active": level === n,
-              })}
-              onClick={() => choose(n)}
-            >
-              {n}
-            </button>
-          ))}
-          <button
-            type="button"
-            role="menuitemradio"
-            aria-checked={!Number.isFinite(level)}
-            className={clsx("openapi-schema-expansion__option", {
-              "openapi-schema-expansion__option--active":
-                !Number.isFinite(level),
-            })}
-            onClick={() => choose(Infinity)}
-          >
-            {allLabel}
-          </button>
+          {options.map((value, index) => {
+            const isAll = value === ALL_VALUE;
+            const label = isAll ? allLabel : String(value);
+            const optionAriaLabel = isAll
+              ? allLabel
+              : translate(
+                  {
+                    id: OPENAPI_SCHEMA_EXPANSION.DEPTH_OPTION,
+                    message: "Expand to depth {depth}",
+                    description: "Accessible label for a depth option",
+                  },
+                  { depth: value }
+                );
+            const isActive = level === value;
+            return (
+              <button
+                key={isAll ? "all" : value}
+                ref={(el) => {
+                  optionRefs.current[index] = el;
+                }}
+                type="button"
+                role="menuitemradio"
+                aria-checked={isActive}
+                aria-label={optionAriaLabel}
+                tabIndex={index === activeIndex ? 0 : -1}
+                className={clsx("openapi-schema-expansion__option", {
+                  "openapi-schema-expansion__option--active": isActive,
+                })}
+                onClick={() => choose(value)}
+              >
+                {label}
+              </button>
+            );
+          })}
         </div>
       )}
     </span>
