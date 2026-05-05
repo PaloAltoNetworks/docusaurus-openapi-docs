@@ -13865,9 +13865,9 @@ open@^8.4.0:
     is-wsl "^2.2.0"
 
 openapi-to-postmanv2@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/openapi-to-postmanv2/-/openapi-to-postmanv2-6.0.0.tgz#3bf4cc5cc9ea64e1136ea563b9c922bcdba468cc"
-  integrity sha512-PU676AZh/7A1CFi7MOsIRTnasEauK1EQL1c4ktAOZIknoPh7OZ3yC1NoRHfogoTfS/9WFXV+uOP1mg+402fuoQ==
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/openapi-to-postmanv2/-/openapi-to-postmanv2-6.0.1.tgz#ce14def40b16cd02f5656445cfe7d039f761a602"
+  integrity sha512-zAjaTwXo07az6jjvZTw4d26QMQsFxZBxTqjj3LQQMDCCuO6+peATQc9bSmAq3QbzvikP+h2WEjTphMcIrcSurg==
   dependencies:
     ajv "^8.11.0"
     ajv-draft-04 "1.0.0"
