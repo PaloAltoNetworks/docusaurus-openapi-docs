@@ -66,10 +66,11 @@ const SchemaExpansionControl: React.FC = () => {
   useLayoutEffect(() => {
     if (!open) return;
     updatePosition();
-    window.addEventListener("scroll", updatePosition, true);
+    const handleScroll = () => setOpen(false);
+    window.addEventListener("scroll", handleScroll, true);
     window.addEventListener("resize", updatePosition);
     return () => {
-      window.removeEventListener("scroll", updatePosition, true);
+      window.removeEventListener("scroll", handleScroll, true);
       window.removeEventListener("resize", updatePosition);
     };
   }, [open, updatePosition]);
@@ -110,7 +111,7 @@ const SchemaExpansionControl: React.FC = () => {
   const levels = Array.from({ length: config.max + 1 }, (_, i) => i);
   const buttonLabel = translate({
     id: "theme.openapi.schema.expansion.button",
-    message: "Set how deep schemas auto-expand",
+    message: "Schema expansion depth",
     description: "Aria/title tooltip for the schema expansion icon button",
   });
   const allLabel = translate({
