@@ -61,11 +61,16 @@ function readConfig(
 ): SchemaExpansionConfig {
   const raw = themeConfig?.api?.schemaExpansion;
   if (!raw) return DEFAULT_CONFIG;
+  const enabled = raw.enabled ?? false;
   return {
-    enabled: raw.enabled ?? false,
+    enabled,
     defaultLevel: normalizeLevel(raw.default),
     max: typeof raw.max === "number" && raw.max > 0 ? Math.floor(raw.max) : 4,
-    persist: raw.persist ?? true,
+    // Persistence only matters when the reader can change the level via the
+    // UI control. When the control is hidden, fall back to the configured
+    // default on every visit so it isn't shadowed by a stale localStorage
+    // value from a session where the control used to be enabled.
+    persist: enabled ? (raw.persist ?? true) : false,
   };
 }
 

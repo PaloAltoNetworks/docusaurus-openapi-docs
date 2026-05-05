@@ -37,15 +37,19 @@ export interface ThemeConfig {
     /**
      * Controls automatic expansion of nested schema trees in request/response
      * documentation. Inspired by Redoc's `schemaExpansionLevel`.
+     *
+     * `default` applies whether or not `enabled` is `true` — set
+     * `{ default: 1 }` alone to auto-expand the first level on every page
+     * without rendering the depth control.
      */
     schemaExpansion?: {
-      /** Show an interactive control on the page so readers can change depth at view time. Defaults to `false`. */
+      /** Render an interactive depth control next to each schema header so readers can change the depth at view time. Defaults to `false`. */
       enabled?: boolean;
-      /** Initial expansion depth. Use `"all"` to expand everything. Defaults to `0` (all collapsed). */
+      /** Initial expansion depth applied on every page load. Use `"all"` to expand everything. Defaults to `0` (all collapsed). */
       default?: number | "all";
-      /** Maximum depth value offered by the UI control's pill buttons. Defaults to `4`. */
+      /** Highest numeric depth offered by the UI control. Ignored when `enabled` is `false`. Defaults to `4`. */
       max?: number;
-      /** Persist the reader's selected depth in `localStorage`. Defaults to `true` when `enabled` is `true`. */
+      /** Persist the reader's selected depth in `localStorage`. Only meaningful when `enabled` is `true`; defaults to `true` in that case. */
       persist?: boolean;
     };
   };
