@@ -252,12 +252,13 @@ petstore: {
 
 The `docusaurus-theme-openapi-docs` theme can be configured with the following options in `themeConfig.api`:
 
-| Name                 | Type     | Default         | Description                                                                                                                        |
-| -------------------- | -------- | --------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `proxy`              | `string` | `null`          | _Optional:_ Site-wide proxy URL to prepend to base URL when performing API requests. Can be overridden per-spec via plugin config. |
-| `authPersistance`    | `string` | `null`          | _Optional:_ Determines how auth credentials are persisted. Options: `"localStorage"`, `"sessionStorage"`, or `false` to disable.   |
-| `requestTimeout`     | `number` | `30000`         | _Optional:_ Request timeout in milliseconds for API requests made from the browser. Defaults to 30 seconds.                        |
-| `requestCredentials` | `string` | `"same-origin"` | _Optional:_ Controls cookie behavior for API requests. Options: `"omit"`, `"same-origin"`, or `"include"`.                         |
+| Name                 | Type     | Default         | Description                                                                                                                                                                                 |
+| -------------------- | -------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `proxy`              | `string` | `null`          | _Optional:_ Site-wide proxy URL to prepend to base URL when performing API requests. Can be overridden per-spec via plugin config.                                                          |
+| `authPersistance`    | `string` | `null`          | _Optional:_ Determines how auth credentials are persisted. Options: `"localStorage"`, `"sessionStorage"`, or `false` to disable.                                                            |
+| `requestTimeout`     | `number` | `30000`         | _Optional:_ Request timeout in milliseconds for API requests made from the browser. Defaults to 30 seconds.                                                                                 |
+| `requestCredentials` | `string` | `"same-origin"` | _Optional:_ Controls cookie behavior for API requests. Options: `"omit"`, `"same-origin"`, or `"include"`.                                                                                  |
+| `schemaExpansion`    | `object` | `null`          | _Optional:_ Controls the default expansion depth of nested request/response schema trees and (optionally) renders an inline depth control. See [`schemaExpansion`](#schemaexpansion) below. |
 
 Example:
 
@@ -270,10 +271,28 @@ Example:
       authPersistance: "localStorage",
       requestTimeout: 60000, // 60 seconds
       requestCredentials: "omit", // Prevent cookies from being sent with requests
+      schemaExpansion: {
+        enabled: true, // render the inline depth control next to each schema header
+        default: 1,    // auto-expand the first level on page load
+        max: 4,        // highest numeric depth offered by the control
+      },
     },
   },
 }
 ```
+
+### schemaExpansion
+
+Inspired by Redoc's `schemaExpansionLevel`, `schemaExpansion` configures how deeply nested schema trees auto-expand and whether readers can change the depth at view time.
+
+| Name      | Type              | Default | Description                                                                                                                                                |
+| --------- | ----------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `enabled` | `boolean`         | `false` | Render an interactive depth control next to each schema header so readers can change the expansion depth at view time.                                     |
+| `default` | `number \| "all"` | `0`     | Initial expansion depth applied on every page load. Use `"all"` to expand everything. Applies whether or not `enabled` is `true`.                          |
+| `max`     | `number`          | `4`     | Highest numeric depth offered by the UI control. Ignored when `enabled` is `false`.                                                                        |
+| `persist` | `boolean`         | `true`  | Persist the reader's selected depth in `localStorage`. Only meaningful when `enabled` is `true`; persistence is implicitly off when the control is hidden. |
+
+You can set just `{ default: 1 }` to auto-expand the first level on every page load without rendering the depth control. When `schemaExpansion` is unset entirely, behavior is unchanged from prior releases (all schemas collapsed by default).
 
 ## Supported Vendor Extensions
 
