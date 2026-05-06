@@ -36,6 +36,33 @@ export function mergeAllOf(allOf: SchemaObject) {
 }
 
 /**
+ * Fold sibling fields into each `oneOf`/`anyOf` branch via allOf-merge, so each
+ * branch is self-contained. Mirrors Redoc's `SchemaModel.initOneOf` behavior.
+ * Without this, when an `allOf` override redefines a nested property with
+ * `oneOf`, the merged schema ends up with both `properties` and `oneOf` as
+ * siblings — and the renderer prints the shared properties twice.
+ *
+ * See https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1218
+ */
+function foldSiblingsIntoBranches(schema: SchemaObject): SchemaObject {
+  const branchKey = schema.oneOf ? "oneOf" : schema.anyOf ? "anyOf" : undefined;
+  if (!branchKey) return schema;
+
+  const branches = (schema as any)[branchKey];
+  if (!Array.isArray(branches) || branches.length === 0) return schema;
+
+  const siblings: SchemaObject = { ...schema };
+  delete (siblings as any)[branchKey];
+  if (Object.keys(siblings).length === 0) return schema;
+
+  const folded = branches.map((branch: SchemaObject) =>
+    mergeAllOf({ allOf: [siblings, branch] } as SchemaObject)
+  );
+
+  return { [branchKey]: folded } as SchemaObject;
+}
+
+/**
  * For handling nested anyOf/oneOf.
  */
 function createAnyOneOf(schema: SchemaObject): any {
@@ -249,7 +276,8 @@ function createItems(schema: SchemaObject) {
     // TODO: figure out if and how we should pass merged required array
     const mergedSchemas = mergeAllOf(schema.items) as SchemaObject;
 
-    // Handles combo anyOf/oneOf + properties
+    // Handles combo anyOf/oneOf + properties — fold siblings into branches
+    // to avoid duplicate property rendering. See issue #1218.
     if (
       (mergedSchemas.oneOf !== undefined ||
         mergedSchemas.anyOf !== undefined) &&
@@ -257,8 +285,7 @@ function createItems(schema: SchemaObject) {
     ) {
       return [
         createOpeningArrayBracket(),
-        createAnyOneOf(mergedSchemas),
-        createProperties(mergedSchemas),
+        createAnyOneOf(foldSiblingsIntoBranches(mergedSchemas)),
         createClosingArrayBracket(),
       ].flat();
     }
@@ -748,12 +775,20 @@ export function createNodes(
   //   return createDiscriminator(schema);
   // }
 
-  if (schema.oneOf !== undefined || schema.anyOf !== undefined) {
-    nodes.push(createAnyOneOf(schema));
-  }
+  if (
+    (schema.oneOf !== undefined || schema.anyOf !== undefined) &&
+    schema.properties !== undefined
+  ) {
+    // Fold siblings into branches to avoid duplicate properties — see issue #1218
+    nodes.push(createAnyOneOf(foldSiblingsIntoBranches(schema)));
+  } else {
+    if (schema.oneOf !== undefined || schema.anyOf !== undefined) {
+      nodes.push(createAnyOneOf(schema));
+    }
 
-  if (schema.properties !== undefined) {
-    nodes.push(createProperties(schema));
+    if (schema.properties !== undefined) {
+      nodes.push(createProperties(schema));
+    }
   }
 
   if (schema.additionalProperties !== undefined) {
@@ -769,14 +804,23 @@ export function createNodes(
     const mergedSchemas = mergeAllOf(schema) as SchemaObject;
 
     if (
-      mergedSchemas.oneOf !== undefined ||
-      mergedSchemas.anyOf !== undefined
+      (mergedSchemas.oneOf !== undefined ||
+        mergedSchemas.anyOf !== undefined) &&
+      mergedSchemas.properties !== undefined
     ) {
-      nodes.push(createAnyOneOf(mergedSchemas));
-    }
+      // Fold siblings into branches to avoid duplicate properties — see issue #1218
+      nodes.push(createAnyOneOf(foldSiblingsIntoBranches(mergedSchemas)));
+    } else {
+      if (
+        mergedSchemas.oneOf !== undefined ||
+        mergedSchemas.anyOf !== undefined
+      ) {
+        nodes.push(createAnyOneOf(mergedSchemas));
+      }
 
-    if (mergedSchemas.properties !== undefined) {
-      nodes.push(createProperties(mergedSchemas));
+      if (mergedSchemas.properties !== undefined) {
+        nodes.push(createProperties(mergedSchemas));
+      }
     }
   }
 

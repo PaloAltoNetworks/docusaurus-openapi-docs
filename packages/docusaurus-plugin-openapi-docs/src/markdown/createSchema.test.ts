@@ -487,6 +487,54 @@ describe("createNodes", () => {
     //   ).toMatchSnapshot();
     // });
 
+    // Regression test for https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1218
+    // When an array's `items.allOf` combines a base object with a `oneOf` of
+    // subtypes, the merged items schema has both `properties` (from the base)
+    // and `oneOf` (from the override). Prior to the fix, both were rendered,
+    // duplicating the shared base properties.
+    it("should not duplicate shared item properties when items.allOf combines base + oneOf (#1218)", async () => {
+      const schema: SchemaObject = {
+        type: "object",
+        properties: {
+          features: {
+            type: "array",
+            items: {
+              allOf: [
+                {
+                  type: "object",
+                  properties: {
+                    id: { type: "string" },
+                    type: { type: "string", enum: ["Feature"] },
+                  },
+                  required: ["type"],
+                },
+                {
+                  oneOf: [
+                    {
+                      type: "object",
+                      properties: { customA: { type: "string" } },
+                    },
+                    {
+                      type: "object",
+                      properties: { customB: { type: "number" } },
+                    },
+                  ],
+                },
+              ],
+            },
+          },
+        },
+      };
+
+      expect(
+        await Promise.all(
+          createNodes(schema, "response").map(
+            async (md: any) => await prettier.format(md, { parser: "babel" })
+          )
+        )
+      ).toMatchSnapshot();
+    });
+
     it("should correctly deep merge properties in allOf schemas", async () => {
       const schema: SchemaObject = {
         allOf: [
