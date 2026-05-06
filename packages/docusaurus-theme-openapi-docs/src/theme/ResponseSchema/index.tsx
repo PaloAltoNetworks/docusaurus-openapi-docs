@@ -18,6 +18,7 @@ import {
   ResponseExamples,
 } from "@theme/ResponseExamples";
 import SchemaNode from "@theme/Schema";
+import SchemaExpansionControl from "@theme/SchemaExpansion";
 import SchemaTabs from "@theme/SchemaTabs";
 import SkeletonLoader from "@theme/SkeletonLoader";
 import TabItem from "@theme/TabItem";
@@ -91,21 +92,20 @@ const ResponseSchemaComponent: React.FC<Props> = ({
                     open={true}
                     style={style}
                     summary={
-                      <>
-                        <summary>
-                          <strong className="openapi-markdown__details-summary-response">
-                            {title}
-                            {body.required === true && (
-                              <span className="openapi-schema__required">
-                                {translate({
-                                  id: OPENAPI_SCHEMA_ITEM.REQUIRED,
-                                  message: "required",
-                                })}
-                              </span>
-                            )}
-                          </strong>
-                        </summary>
-                      </>
+                      <summary className="openapi-markdown__details-summary--with-control">
+                        <strong className="openapi-markdown__details-summary-response">
+                          {title}
+                          {body.required === true && (
+                            <span className="openapi-schema__required">
+                              {translate({
+                                id: OPENAPI_SCHEMA_ITEM.REQUIRED,
+                                message: "required",
+                              })}
+                            </span>
+                          )}
+                        </strong>
+                        <SchemaExpansionControl />
+                      </summary>
                     }
                   >
                     <div style={{ textAlign: "left", marginLeft: "1rem" }}>

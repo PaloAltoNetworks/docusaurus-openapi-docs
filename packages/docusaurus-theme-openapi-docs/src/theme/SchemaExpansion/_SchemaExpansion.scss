@@ -1,0 +1,113 @@
+/* ============================================================================
+ * Copyright (c) Palo Alto Networks
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ * ========================================================================== */
+
+.openapi-schema-expansion {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.openapi-schema-expansion__trigger {
+  appearance: none;
+  background: transparent;
+  border: none;
+  border-radius: var(--ifm-global-radius);
+  padding: 0;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ifm-color-emphasis-600);
+  line-height: 0;
+  opacity: 0.7;
+  transition:
+    opacity 0.12s ease,
+    background-color 0.12s ease,
+    color 0.12s ease;
+
+  &:hover {
+    opacity: 1;
+    background-color: var(--ifm-color-emphasis-200);
+    color: var(--ifm-color-emphasis-900);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--ifm-color-primary);
+    outline-offset: 2px;
+    opacity: 1;
+  }
+
+  &[aria-expanded="true"] {
+    opacity: 1;
+    background-color: var(--ifm-color-emphasis-200);
+    color: var(--ifm-color-emphasis-900);
+  }
+}
+
+.openapi-schema-expansion__popover {
+  position: fixed;
+  z-index: 1000;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  background-color: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-global-radius);
+  box-shadow: var(--ifm-global-shadow-md);
+  white-space: nowrap;
+}
+
+.openapi-schema-expansion__option {
+  appearance: none;
+  background: transparent;
+  border: none;
+  border-radius: calc(var(--ifm-global-radius) - 2px);
+  padding: 2px 8px;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: var(--ifm-color-emphasis-800);
+  transition:
+    background-color 0.12s ease,
+    color 0.12s ease;
+
+  &:hover {
+    background-color: var(--ifm-color-emphasis-200);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--ifm-color-primary);
+    outline-offset: 1px;
+  }
+}
+
+.openapi-schema-expansion__option--active {
+  background-color: var(--ifm-color-primary);
+  color: var(--ifm-color-white);
+
+  &:hover {
+    background-color: var(--ifm-color-primary-dark);
+  }
+}
+
+.openapi-markdown__details-summary--with-control {
+  display: flex !important;
+  align-items: center;
+  gap: 0.5rem;
+
+  > h3,
+  > strong {
+    margin-bottom: 0;
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+}

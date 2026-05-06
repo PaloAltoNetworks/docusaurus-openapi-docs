@@ -20,6 +20,7 @@ import DocItemLayout from "@theme/ApiItem/Layout";
 import CodeBlock from "@theme/CodeBlock";
 import type { Props } from "@theme/DocItem";
 import DocItemMetadata from "@theme/DocItem/Metadata";
+import { SchemaExpansionProvider } from "@theme/SchemaExpansion";
 import SkeletonLoader from "@theme/SkeletonLoader";
 import clsx from "clsx";
 import type {
@@ -177,18 +178,20 @@ export default function ApiItem(props: Props): JSX.Element {
           <DocItemMetadata />
           <DocItemLayout>
             <Provider store={store2}>
-              <div className={clsx("row", "theme-api-markdown")}>
-                <div className="col col--7 openapi-left-panel__container">
-                  <MDXComponent />
+              <SchemaExpansionProvider>
+                <div className={clsx("row", "theme-api-markdown")}>
+                  <div className="col col--7 openapi-left-panel__container">
+                    <MDXComponent />
+                  </div>
+                  <div className="col col--5 openapi-right-panel__container">
+                    <BrowserOnly fallback={<SkeletonLoader size="lg" />}>
+                      {() => {
+                        return <ApiExplorer item={api} infoPath={infoPath} />;
+                      }}
+                    </BrowserOnly>
+                  </div>
                 </div>
-                <div className="col col--5 openapi-right-panel__container">
-                  <BrowserOnly fallback={<SkeletonLoader size="lg" />}>
-                    {() => {
-                      return <ApiExplorer item={api} infoPath={infoPath} />;
-                    }}
-                  </BrowserOnly>
-                </div>
-              </div>
+              </SchemaExpansionProvider>
             </Provider>
           </DocItemLayout>
         </HtmlClassNameProvider>
@@ -200,16 +203,18 @@ export default function ApiItem(props: Props): JSX.Element {
         <HtmlClassNameProvider className={docHtmlClassName}>
           <DocItemMetadata />
           <DocItemLayout>
-            <div className={clsx("row", "theme-api-markdown")}>
-              <div className="col col--7 openapi-left-panel__container schema">
-                <MDXComponent />
+            <SchemaExpansionProvider>
+              <div className={clsx("row", "theme-api-markdown")}>
+                <div className="col col--7 openapi-left-panel__container schema">
+                  <MDXComponent />
+                </div>
+                <div className="col col--5 openapi-right-panel__container">
+                  <CodeBlock language="json" title={`${frontMatter.title}`}>
+                    {JSON.stringify(sample, null, 2)}
+                  </CodeBlock>
+                </div>
               </div>
-              <div className="col col--5 openapi-right-panel__container">
-                <CodeBlock language="json" title={`${frontMatter.title}`}>
-                  {JSON.stringify(sample, null, 2)}
-                </CodeBlock>
-              </div>
-            </div>
+            </SchemaExpansionProvider>
           </DocItemLayout>
         </HtmlClassNameProvider>
       </DocProvider>
