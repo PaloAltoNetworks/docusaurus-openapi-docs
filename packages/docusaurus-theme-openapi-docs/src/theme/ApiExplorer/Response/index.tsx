@@ -22,6 +22,57 @@ import type { ThemeConfig } from "docusaurus-theme-openapi-docs/src/types";
 
 import { clearResponse, clearCode, clearHeaders } from "./slice";
 
+// Pretty-print a JSON string by re-indenting structural tokens only.
+// Numbers pass through verbatim, so values beyond Number.MAX_SAFE_INTEGER
+// (e.g. 19-digit IDs) keep their exact digits. Issue #1208.
+function prettyPrintJson(raw: string, indent = 2): string {
+  const pad = " ".repeat(indent);
+  let out = "";
+  let depth = 0;
+  let inString = false;
+  let escape = false;
+
+  for (let i = 0; i < raw.length; i++) {
+    const ch = raw[i];
+
+    if (inString) {
+      out += ch;
+      if (escape) escape = false;
+      else if (ch === "\\") escape = true;
+      else if (ch === '"') inString = false;
+      continue;
+    }
+
+    if (ch === " " || ch === "\t" || ch === "\n" || ch === "\r") continue;
+
+    if (ch === '"') {
+      out += ch;
+      inString = true;
+    } else if (ch === "{" || ch === "[") {
+      let j = i + 1;
+      while (j < raw.length && /\s/.test(raw[j])) j++;
+      if (raw[j] === "}" || raw[j] === "]") {
+        out += ch + raw[j];
+        i = j;
+      } else {
+        depth++;
+        out += ch + "\n" + pad.repeat(depth);
+      }
+    } else if (ch === "}" || ch === "]") {
+      depth--;
+      out += "\n" + pad.repeat(depth) + ch;
+    } else if (ch === ",") {
+      out += ",\n" + pad.repeat(depth);
+    } else if (ch === ":") {
+      out += ": ";
+    } else {
+      out += ch;
+    }
+  }
+
+  return out;
+}
+
 // TODO: We probably shouldn't attempt to format XML...
 function formatXml(xml: string) {
   const tab = "  ";
@@ -70,7 +121,8 @@ function Response({ item }: { item: ApiItem }) {
 
   if (prettyResponse) {
     try {
-      prettyResponse = JSON.stringify(JSON.parse(response), null, 2);
+      JSON.parse(response);
+      prettyResponse = prettyPrintJson(response);
     } catch {
       if (response.startsWith("<")) {
         prettyResponse = formatXml(response);
