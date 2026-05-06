@@ -45,6 +45,37 @@ const mergeAllOf = (allOf: any) => {
 };
 
 /**
+ * Fold sibling fields into each `oneOf`/`anyOf` branch via allOf-merge, so each
+ * branch is self-contained. Mirrors Redoc's `SchemaModel.initOneOf` behavior.
+ * Without this, when an `allOf` override redefines a nested property with
+ * `oneOf`, the merged schema ends up with both `properties` and `oneOf` as
+ * siblings — and the renderer prints the shared properties twice.
+ *
+ * See https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1218
+ */
+const foldSiblingsIntoBranches = (schema: any): any => {
+  const branchKey = schema?.oneOf
+    ? "oneOf"
+    : schema?.anyOf
+      ? "anyOf"
+      : undefined;
+  if (!branchKey) return schema;
+
+  const branches = schema[branchKey];
+  if (!Array.isArray(branches) || branches.length === 0) return schema;
+
+  const siblings = { ...schema };
+  delete siblings[branchKey];
+  if (Object.keys(siblings).length === 0) return schema;
+
+  const folded = branches.map((branch: any) =>
+    mergeAllOf({ allOf: [siblings, branch] })
+  );
+
+  return { [branchKey]: folded };
+};
+
+/**
  * Recursively searches for a property in a schema, including nested
  * oneOf, anyOf, and allOf structures. This is needed for discriminators
  * where the property definition may be in a nested schema.
@@ -737,17 +768,25 @@ const Items: React.FC<{
   const itemsSchemaPath = schemaPath ? `${schemaPath}.items` : undefined;
 
   if (hasOneOfAnyOf || hasProperties || hasAdditionalProperties) {
+    // Fold sibling properties into each oneOf/anyOf branch to avoid duplicate
+    // property rendering. See issue #1218.
+    const renderSchema =
+      hasOneOfAnyOf && hasProperties
+        ? foldSiblingsIntoBranches(itemsSchema)
+        : itemsSchema;
+    const renderHasProperties =
+      hasOneOfAnyOf && hasProperties ? false : hasProperties;
     return (
       <>
         <OpeningArrayBracket />
         {hasOneOfAnyOf && (
           <AnyOneOf
-            schema={itemsSchema}
+            schema={renderSchema}
             schemaType={schemaType}
             schemaPath={itemsSchemaPath}
           />
         )}
-        {hasProperties && (
+        {renderHasProperties && (
           <Properties
             schema={itemsSchema}
             schemaType={schemaType}
@@ -1032,23 +1071,31 @@ function renderChildren(
   schemaType: "request" | "response",
   schemaPath?: string
 ) {
+  // Fold sibling properties into each oneOf/anyOf branch to avoid duplicate
+  // property rendering. See issue #1218.
+  const hasOneOfAnyOf = !!(schema.oneOf || schema.anyOf);
+  const hasProperties = !!schema.properties;
+  const folded =
+    hasOneOfAnyOf && hasProperties ? foldSiblingsIntoBranches(schema) : schema;
+  const renderProperties =
+    hasOneOfAnyOf && hasProperties ? false : hasProperties;
   return (
     <>
-      {schema.oneOf && (
+      {folded.oneOf && (
         <AnyOneOf
-          schema={schema}
+          schema={folded}
           schemaType={schemaType}
           schemaPath={schemaPath}
         />
       )}
-      {schema.anyOf && (
+      {folded.anyOf && (
         <AnyOneOf
-          schema={schema}
+          schema={folded}
           schemaType={schemaType}
           schemaPath={schemaPath}
         />
       )}
-      {schema.properties && (
+      {renderProperties && (
         <Properties
           schema={schema}
           schemaType={schemaType}
@@ -1172,23 +1219,34 @@ const SchemaNode: React.FC<SchemaProps> = ({
       return null;
     }
 
+    // Fold sibling properties into each oneOf/anyOf branch to avoid duplicate
+    // property rendering. See issue #1218.
+    const hasOneOfAnyOf = !!(mergedSchemas.oneOf || mergedSchemas.anyOf);
+    const hasProperties = !!mergedSchemas.properties;
+    const folded =
+      hasOneOfAnyOf && hasProperties
+        ? foldSiblingsIntoBranches(mergedSchemas)
+        : mergedSchemas;
+    const renderProperties =
+      hasOneOfAnyOf && hasProperties ? false : hasProperties;
+
     return (
       <div>
-        {mergedSchemas.oneOf && (
+        {folded.oneOf && (
           <AnyOneOf
-            schema={mergedSchemas}
+            schema={folded}
             schemaType={schemaType}
             schemaPath={schemaPath}
           />
         )}
-        {mergedSchemas.anyOf && (
+        {folded.anyOf && (
           <AnyOneOf
-            schema={mergedSchemas}
+            schema={folded}
             schemaType={schemaType}
             schemaPath={schemaPath}
           />
         )}
-        {mergedSchemas.properties && (
+        {renderProperties && (
           <Properties
             schema={mergedSchemas}
             schemaType={schemaType}

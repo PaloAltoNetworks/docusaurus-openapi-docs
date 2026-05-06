@@ -742,6 +742,40 @@ paths:
                     type: string
                     example: Resource created successfully
 
+  /allof-array-items-oneof-override:
+    get:
+      tags:
+        - allOf
+      summary: allOf override of nested array items with oneOf
+      description: |
+        Regression coverage for [issue #1218](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1218).
+
+        A schema extends a base via `allOf` and overrides a nested array's `items`
+        with a `oneOf` of subtypes that each include the base's properties. Prior
+        to the fix, the shared base properties (`id`, `type`, `geometry`) rendered
+        twice — once at the array-item level and once inside each oneOf branch.
+
+        Schema:
+        ```yaml
+        type: object
+        allOf:
+          - $ref: '#/components/schemas/FeatureCollectionBase'
+          - type: object
+            properties:
+              features:
+                items:
+                  oneOf:
+                    - $ref: '#/components/schemas/PointFeature'
+                    - $ref: '#/components/schemas/PolygonFeature'
+        ```
+      responses:
+        "200":
+          description: A custom feature collection
+          content:
+            application/geo+json:
+              schema:
+                $ref: "#/components/schemas/CustomFeatureCollection"
+
 components:
   schemas:
     # Enum schemas for allOf parameter tests
@@ -818,3 +852,65 @@ components:
           type: string
           description: The category of the book
           example: "Fiction"
+
+    # GeoJSON-style schemas for issue #1218: allOf override of nested array items with oneOf
+    FeatureBase:
+      type: object
+      required: [type, geometry]
+      properties:
+        id:
+          type: string
+          description: Feature identifier
+        type:
+          type: string
+          enum: [Feature]
+        geometry:
+          type: object
+          description: GeoJSON geometry
+
+    PointFeature:
+      allOf:
+        - $ref: "#/components/schemas/FeatureBase"
+        - type: object
+          properties:
+            properties:
+              type: object
+              properties:
+                label:
+                  type: string
+                  description: Point label
+
+    PolygonFeature:
+      allOf:
+        - $ref: "#/components/schemas/FeatureBase"
+        - type: object
+          properties:
+            properties:
+              type: object
+              properties:
+                area:
+                  type: number
+                  description: Polygon area
+
+    FeatureCollectionBase:
+      type: object
+      required: [type, features]
+      properties:
+        type:
+          type: string
+          enum: [FeatureCollection]
+        features:
+          type: array
+          items:
+            $ref: "#/components/schemas/FeatureBase"
+
+    CustomFeatureCollection:
+      allOf:
+        - $ref: "#/components/schemas/FeatureCollectionBase"
+        - type: object
+          properties:
+            features:
+              items:
+                oneOf:
+                  - $ref: "#/components/schemas/PointFeature"
+                  - $ref: "#/components/schemas/PolygonFeature"
