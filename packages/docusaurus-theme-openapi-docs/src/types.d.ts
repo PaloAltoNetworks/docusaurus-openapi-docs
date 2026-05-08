@@ -42,15 +42,6 @@ export interface ThemeConfig {
      * `{ default: 1 }` alone to auto-expand the first level on every page
      * without rendering the depth control.
      */
-    /**
-     * When `true`, suppresses Postman-generated code snippets (HTTP, cURL,
-     * language variants, etc.) on a per-operation, per-language basis whenever
-     * `x-codeSamples` are provided for that language on that operation.
-     * Languages without custom samples render generated snippets normally.
-     * Defaults to `false` (both custom and generated snippets render side by
-     * side, preserving existing behavior).
-     */
-    hideGeneratedSnippets?: boolean;
     schemaExpansion?: {
       /** Render an interactive depth control next to each schema header so readers can change the depth at view time. Defaults to `false`. */
       enabled?: boolean;
@@ -61,6 +52,15 @@ export interface ThemeConfig {
       /** Persist the reader's selected depth in `localStorage`. Only meaningful when `enabled` is `true`; defaults to `true` in that case. */
       persist?: boolean;
     };
+    /**
+     * When `true`, suppresses Postman-generated code snippets (HTTP, cURL,
+     * language variants, etc.) on a per-operation, per-language basis whenever
+     * `x-codeSamples` are provided for that language on that operation.
+     * Languages without custom samples render generated snippets normally.
+     * Defaults to `false` (both custom and generated snippets render side by
+     * side, preserving existing behavior).
+     */
+    hideGeneratedSnippets?: boolean;
   };
 }
 
