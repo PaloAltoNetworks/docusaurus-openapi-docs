@@ -1,0 +1,245 @@
+openapi: 3.0.0
+info:
+  title: x-codeSamples Variations API
+  version: 1.0.0
+  description: |
+    Exercises every supported shape of the `x-codeSamples` vendor extension
+    so each path can be inspected in isolation in the demo.
+
+    Tracks:
+      - https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1204
+      - https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1036
+
+servers:
+  - url: https://api.example.com/v1
+    description: Example API server
+
+tags:
+  - name: codeSamples
+    description: x-codeSamples tests
+
+paths:
+  /no-samples:
+    get:
+      tags:
+        - codeSamples
+      summary: Control — no x-codeSamples
+      description: |
+        Sanity check. Only the Postman-generated language tabs should render;
+        no inner sample tabs.
+      responses:
+        "200":
+          description: OK
+
+  /single-sample-no-label:
+    get:
+      tags:
+        - codeSamples
+      summary: Single sample, no label
+      description: |
+        One C# sample with no `label`. Inner tab id falls back to indexed
+        form (`C#-0`) and the visible tab label is the bare language name.
+      responses:
+        "200":
+          description: OK
+      x-codeSamples:
+        - lang: "C#"
+          source: |
+            using System.Net.Http;
+            var client = new HttpClient();
+            var response = await client.GetAsync("https://api.example.com/v1/single-sample-no-label");
+
+  /single-sample-with-label:
+    get:
+      tags:
+        - codeSamples
+      summary: Single sample, with label
+      description: |
+        One PHP sample with `label: Custom`. Inner tab id is `PHP-Custom`
+        and the tab displays "Custom".
+      responses:
+        "200":
+          description: OK
+      x-codeSamples:
+        - lang: PHP
+          label: Custom
+          source: |
+            <?php
+            $client = new \GuzzleHttp\Client();
+            $response = $client->get('https://api.example.com/v1/single-sample-with-label');
+
+  /multiple-samples-with-labels:
+    post:
+      tags:
+        - codeSamples
+      summary: Multiple samples per language with distinct labels (#1204)
+      description: |
+        Three Python samples covering three auth flows. Before the fix this
+        crashed with `Duplicate values "Python, Python" found in <Tabs>`.
+        After the fix each renders as its own inner tab labeled by `label`.
+      responses:
+        "200":
+          description: OK
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      x-codeSamples:
+        - lang: Python
+          label: KeyPair Auth
+          source: |
+            import requests
+            from cryptography.hazmat.primitives.serialization import load_pem_private_key
+
+            with open("private_key.pem", "rb") as f:
+                key = load_pem_private_key(f.read(), password=None)
+            token = sign_jwt(key)
+            requests.post(
+                "https://api.example.com/v1/multiple-samples-with-labels",
+                headers={"Authorization": f"Bearer {token}"},
+                json={"name": "rex"},
+            )
+        - lang: Python
+          label: Basic Auth
+          source: |
+            import requests
+            from requests.auth import HTTPBasicAuth
+
+            requests.post(
+                "https://api.example.com/v1/multiple-samples-with-labels",
+                auth=HTTPBasicAuth("user", "password"),
+                json={"name": "rex"},
+            )
+        - lang: Python
+          label: OAuth
+          source: |
+            from requests_oauthlib import OAuth2Session
+
+            oauth = OAuth2Session(client_id, token=token)
+            oauth.post(
+                "https://api.example.com/v1/multiple-samples-with-labels",
+                json={"name": "rex"},
+            )
+
+  /multiple-samples-no-labels:
+    post:
+      tags:
+        - codeSamples
+      summary: Multiple samples per language, no labels
+      description: |
+        Two PowerShell samples without `label`. Inner tab ids fall back to
+        indexed form (`PowerShell-0`, `PowerShell-1`) so the page renders
+        without crashing — but both tabs display the bare language name,
+        which makes them visually identical. Adding `label` is recommended.
+      responses:
+        "200":
+          description: OK
+      x-codeSamples:
+        - lang: PowerShell
+          source: |
+            $body = @{ name = "rex" } | ConvertTo-Json
+            Invoke-RestMethod -Uri https://api.example.com/v1/multiple-samples-no-labels -Method Post -Body $body -ContentType application/json
+        - lang: PowerShell
+          source: |
+            $headers = @{ Authorization = "Bearer $token" }
+            $body = @{ name = "rex" } | ConvertTo-Json
+            Invoke-RestMethod -Uri https://api.example.com/v1/multiple-samples-no-labels -Method Post -Headers $headers -Body $body -ContentType application/json
+
+  /duplicate-label-collision:
+    post:
+      tags:
+        - codeSamples
+      summary: Duplicate lang+label (defensive collision suffix)
+      description: |
+        Two Java samples sharing both `lang: Java` and `label: Auth`. This
+        is an author bug, but the page still renders — a numeric suffix is
+        appended internally to keep the inner tab ids unique. The visible
+        labels remain identical and the author should fix the spec.
+      responses:
+        "200":
+          description: OK
+      x-codeSamples:
+        - lang: Java
+          label: Auth
+          source: |
+            // OkHttp + bearer token
+            Request request = new Request.Builder()
+                .url("https://api.example.com/v1/duplicate-label-collision")
+                .header("Authorization", "Bearer " + token)
+                .post(RequestBody.create("{}", JSON))
+                .build();
+        - lang: Java
+          label: Auth
+          source: |
+            // HttpClient (JDK 11+) with basic auth
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://api.example.com/v1/duplicate-label-collision"))
+                .header("Authorization", "Basic " + encoded)
+                .POST(BodyPublishers.ofString("{}"))
+                .build();
+
+  /mixed-languages:
+    post:
+      tags:
+        - codeSamples
+      summary: Mixed languages, some with multiple samples
+      description: |
+        Realistic mix: two Python entries (with labels), one Ruby (no
+        label), one Go (with label). Exercises the case where switching
+        between outer language tabs must not leak `selectedSample` from
+        another language.
+      responses:
+        "200":
+          description: OK
+      x-codeSamples:
+        - lang: Python
+          label: requests
+          source: |
+            import requests
+            requests.post("https://api.example.com/v1/mixed-languages")
+        - lang: Python
+          label: httpx
+          source: |
+            import httpx
+            httpx.post("https://api.example.com/v1/mixed-languages")
+        - lang: Ruby
+          source: |
+            require "net/http"
+            Net::HTTP.post(URI("https://api.example.com/v1/mixed-languages"), "")
+        - lang: Go
+          label: net/http
+          source: |
+            package main
+
+            import (
+              "net/http"
+              "strings"
+            )
+
+            func main() {
+              http.Post("https://api.example.com/v1/mixed-languages", "application/json", strings.NewReader(""))
+            }
+
+  /unmatched-language:
+    get:
+      tags:
+        - codeSamples
+      summary: Sample for a language not in languageTabs
+      description: |
+        A Dart sample is provided, but `Dart` is typically not in the
+        default `languageTabs`. The sample is silently dropped (existing
+        behavior — unchanged by this fix). Only the Postman-generated tabs
+        for configured languages should appear.
+      responses:
+        "200":
+          description: OK
+      x-codeSamples:
+        - lang: Dart
+          label: http
+          source: |
+            import 'package:http/http.dart' as http;
+            await http.get(Uri.parse('https://api.example.com/v1/unmatched-language'));
