@@ -52,6 +52,15 @@ export interface ThemeConfig {
       /** Persist the reader's selected depth in `localStorage`. Only meaningful when `enabled` is `true`; defaults to `true` in that case. */
       persist?: boolean;
     };
+    /**
+     * When `true`, suppresses Postman-generated code snippets (HTTP, cURL,
+     * language variants, etc.) on a per-operation, per-language basis whenever
+     * `x-codeSamples` are provided for that language on that operation.
+     * Languages without custom samples render generated snippets normally.
+     * Defaults to `false` (both custom and generated snippets render side by
+     * side, preserving existing behavior).
+     */
+    hideGeneratedSnippets?: boolean;
   };
 }
 

@@ -226,6 +226,42 @@ paths:
             } catch (UnprocessableEntityException $e) {
                 var_dump($e->getErrors());
             }
+        - lang: Python
+          label: KeyPair Auth
+          source: |
+            import requests
+            from cryptography.hazmat.primitives.serialization import load_pem_private_key
+
+            with open("private_key.pem", "rb") as f:
+                key = load_pem_private_key(f.read(), password=None)
+            token = sign_jwt(key)
+            requests.post(
+                "https://example.com/v1/pet",
+                headers={"Authorization": f"Bearer {token}"},
+                json={"name": "Rex", "photoUrls": []},
+            )
+        - lang: Python
+          label: Basic Auth
+          source: |
+            import requests
+            from requests.auth import HTTPBasicAuth
+
+            requests.post(
+                "https://example.com/v1/pet",
+                auth=HTTPBasicAuth("user", "password"),
+                json={"name": "Rex", "photoUrls": []},
+            )
+        - lang: Python
+          label: OAuth
+          source: |
+            import requests
+            from requests_oauthlib import OAuth2Session
+
+            oauth = OAuth2Session(client_id, token=token)
+            oauth.post(
+                "https://example.com/v1/pet",
+                json={"name": "Rex", "photoUrls": []},
+            )
       requestBody:
         $ref: "#/components/requestBodies/Pet"
     put:

@@ -22,11 +22,23 @@ export function mergeCodeSampleLanguage(
     );
 
     if (languageCodeSamples.length) {
-      const samples = languageCodeSamples.map(({ lang }) => lang);
       const samplesLabels = languageCodeSamples.map(
         ({ label, lang }) => label || lang
       );
       const samplesSources = languageCodeSamples.map(({ source }) => source);
+
+      // Build a unique id per sample for use as the inner Tab's `value`.
+      // Prefer `${lang}-${label}`; fall back to `${lang}-${index}` when no
+      // label is provided. Defensively suffix with `-${index}` on collision
+      // so duplicate-label specs render two visually identical tabs instead
+      // of crashing Docusaurus's unique-value check.
+      const seen = new Set<string>();
+      const samples = languageCodeSamples.map((cs, i) => {
+        const base = cs.label ? `${cs.lang}-${cs.label}` : `${cs.lang}-${i}`;
+        const id = seen.has(base) ? `${base}-${i}` : base;
+        seen.add(id);
+        return id;
+      });
 
       return {
         ...language,
