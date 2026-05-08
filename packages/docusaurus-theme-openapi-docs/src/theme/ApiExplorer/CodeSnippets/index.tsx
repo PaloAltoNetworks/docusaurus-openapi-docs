@@ -296,7 +296,11 @@ function CodeSnippets({
                   }}
                   includeSample={true}
                   currentLanguage={lang}
-                  defaultValue={selectedSample}
+                  defaultValue={
+                    selectedSample && lang.samples.includes(selectedSample)
+                      ? selectedSample
+                      : lang.samples[0]
+                  }
                   languageSet={mergedLangs}
                   lazy
                 >
