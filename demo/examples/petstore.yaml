@@ -197,7 +197,6 @@ paths:
         - OpenID: []
 
       x-codeSamples:
-        # Single sample, no label (existing case — fallback id is "C#-0")
         - lang: "C#"
           source: |
             PetStore.v1.Pet pet = new PetStore.v1.Pet();
@@ -215,7 +214,6 @@ paths:
               // Something wrong -- check response for errors
               Console.WriteLine(response.getRawResponse());
             }
-        # Single sample, with label (existing case — id is "PHP-Custom")
         - lang: PHP
           label: Custom
           source: |
@@ -228,8 +226,6 @@ paths:
             } catch (UnprocessableEntityException $e) {
                 var_dump($e->getErrors());
             }
-        # Multiple samples for the same language, each with a distinct label
-        # (issue #1204). Inner tabs render as KeyPair Auth / Basic Auth / OAuth.
         - lang: Python
           label: KeyPair Auth
           source: |
@@ -238,7 +234,7 @@ paths:
 
             with open("private_key.pem", "rb") as f:
                 key = load_pem_private_key(f.read(), password=None)
-            token = sign_jwt(key)  # implementation-specific
+            token = sign_jwt(key)
             requests.post(
                 "https://example.com/v1/pet",
                 headers={"Authorization": f"Bearer {token}"},
@@ -266,37 +262,6 @@ paths:
                 "https://example.com/v1/pet",
                 json={"name": "Rex", "photoUrls": []},
             )
-        # Multiple samples for the same language with NO labels
-        # (defensive indexed-id fallback — ids are PowerShell-7 and PowerShell-8).
-        - lang: PowerShell
-          source: |
-            $pet = @{ name = "Rex"; photoUrls = @() } | ConvertTo-Json
-            Invoke-RestMethod -Uri https://example.com/v1/pet -Method Post -Body $pet -ContentType application/json
-        - lang: PowerShell
-          source: |
-            $headers = @{ Authorization = "Bearer $token" }
-            $pet = @{ name = "Rex"; photoUrls = @() } | ConvertTo-Json
-            Invoke-RestMethod -Uri https://example.com/v1/pet -Method Post -Headers $headers -Body $pet -ContentType application/json
-        # Two samples sharing the same lang AND label (author bug — defensive
-        # collision suffix keeps the page rendering instead of crashing).
-        - lang: Java
-          label: Auth
-          source: |
-            // OkHttp + bearer token
-            Request request = new Request.Builder()
-                .url("https://example.com/v1/pet")
-                .header("Authorization", "Bearer " + token)
-                .post(RequestBody.create(json, JSON))
-                .build();
-        - lang: Java
-          label: Auth
-          source: |
-            // HttpClient (JDK 11+) with basic auth
-            HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://example.com/v1/pet"))
-                .header("Authorization", "Basic " + encoded)
-                .POST(BodyPublishers.ofString(json))
-                .build();
       requestBody:
         $ref: "#/components/requestBodies/Pet"
     put:
