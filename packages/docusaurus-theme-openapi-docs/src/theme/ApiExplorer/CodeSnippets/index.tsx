@@ -17,6 +17,8 @@ import cloneDeep from "lodash/cloneDeep";
 import codegen from "postman-code-generators";
 import * as sdk from "postman-collection";
 
+import type { ThemeConfig } from "docusaurus-theme-openapi-docs/src/types";
+
 import { CodeSample, Language } from "./code-snippets-types";
 import {
   getCodeSampleSourceFromLanguage,
@@ -114,6 +116,10 @@ function CodeSnippets({
     encoding,
   });
 
+  const themeConfig = siteConfig.themeConfig as ThemeConfig;
+  const hideGeneratedSnippets =
+    themeConfig?.api?.hideGeneratedSnippets ?? false;
+
   // User-defined languages array
   // Can override languageSet, change order of langs, override options and variants
   const userDefinedLanguageSet =
@@ -152,6 +158,14 @@ function CodeSnippets({
   const [codeSampleCodeText, setCodeSampleCodeText] = useState<string>(() =>
     getCodeSampleSourceFromLanguage(language)
   );
+
+  // Reset selectedSample whenever the active language changes so the inner
+  // tab strip falls back to its first sample instead of trying to match an
+  // id that belongs to a different language's samples.
+  useEffect(() => {
+    setSelectedSample(language?.samples?.[0]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [language?.language]);
 
   useEffect(() => {
     if (language && !!language.sample) {
@@ -295,7 +309,7 @@ function CodeSnippets({
                             ? lang.samplesLabels[index]
                             : sample
                         }
-                        key={`${lang.language}-${lang.sample}`}
+                        key={`${lang.language}-${sample}`}
                         attributes={{
                           className: `openapi-tabs__code-item--sample`,
                         }}
@@ -315,40 +329,42 @@ function CodeSnippets({
               )}
 
               {/* Inner generated code snippets */}
-              <CodeTabs
-                className="openapi-tabs__code-container-inner"
-                action={{
-                  setLanguage: setLanguage,
-                  setSelectedVariant: setSelectedVariant,
-                }}
-                includeVariant={true}
-                currentLanguage={lang}
-                defaultValue={selectedVariant}
-                languageSet={mergedLangs}
-                lazy
-              >
-                {lang.variants.map((variant, index) => {
-                  return (
-                    <CodeTab
-                      value={variant.toLowerCase()}
-                      label={variant.toUpperCase()}
-                      key={`${lang.language}-${lang.variant}`}
-                      attributes={{
-                        className: `openapi-tabs__code-item--variant`,
-                      }}
-                    >
-                      {/* @ts-ignore */}
-                      <ApiCodeBlock
-                        language={lang.highlight}
-                        className="openapi-explorer__code-block"
-                        showLineNumbers={true}
+              {!(hideGeneratedSnippets && lang.samples?.length) && (
+                <CodeTabs
+                  className="openapi-tabs__code-container-inner"
+                  action={{
+                    setLanguage: setLanguage,
+                    setSelectedVariant: setSelectedVariant,
+                  }}
+                  includeVariant={true}
+                  currentLanguage={lang}
+                  defaultValue={selectedVariant}
+                  languageSet={mergedLangs}
+                  lazy
+                >
+                  {lang.variants.map((variant, index) => {
+                    return (
+                      <CodeTab
+                        value={variant.toLowerCase()}
+                        label={variant.toUpperCase()}
+                        key={`${lang.language}-${variant}`}
+                        attributes={{
+                          className: `openapi-tabs__code-item--variant`,
+                        }}
                       >
-                        {codeText}
-                      </ApiCodeBlock>
-                    </CodeTab>
-                  );
-                })}
-              </CodeTabs>
+                        {/* @ts-ignore */}
+                        <ApiCodeBlock
+                          language={lang.highlight}
+                          className="openapi-explorer__code-block"
+                          showLineNumbers={true}
+                        >
+                          {codeText}
+                        </ApiCodeBlock>
+                      </CodeTab>
+                    );
+                  })}
+                </CodeTabs>
+              )}
             </CodeTab>
           );
         })}

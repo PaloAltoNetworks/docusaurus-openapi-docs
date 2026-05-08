@@ -22,3 +22,46 @@ The OpenAPI plugin and theme recognize several [vendor extensions](https://swagg
 | `x-enumDescription` / `x-enumDescriptions` | Document individual enum values. |
 
 Other ReDoc extensions such as `x-circular-ref`, `x-code-samples` (deprecated), `x-examples`, `x-ignoredHeaderParameters`, `x-nullable`, `x-servers`, `x-traitTag`, `x-additionalPropertiesName`, and `x-explicitMappingOnly` are detected but ignored when extracting custom extensions.
+
+## `x-codeSamples`
+
+`x-codeSamples` attaches one or more author-written code snippets to an operation. Each entry has a `lang`, an optional `label`, and a `source`. The plugin renders one outer tab per language and one inner tab per sample within that language.
+
+### Multiple samples per language
+
+Authors often want to show several variants of the same language — for example, three Python snippets covering different authentication flows. Provide a distinct `label` on each entry to disambiguate the inner tabs:
+
+```yaml
+x-codeSamples:
+  - lang: Python
+    label: KeyPair Auth
+    source: |
+      # ...
+  - lang: Python
+    label: Basic Auth
+    source: |
+      # ...
+  - lang: Python
+    label: OAuth
+    source: |
+      # ...
+```
+
+If `label` is omitted on entries that share a `lang`, the inner tabs fall back to indexed identifiers (`Python-0`, `Python-1`, …) and will display the bare language name on each tab. Adding a `label` is recommended whenever a language appears more than once.
+
+If two entries share both the same `lang` and the same `label`, the page still renders — a numeric suffix is appended internally to keep tab identifiers unique — but the visible labels will be identical. Use unique labels to avoid reader confusion.
+
+### Hiding generated snippets when custom samples exist
+
+By default, custom `x-codeSamples` and the Postman-generated snippets (HTTP, cURL, language variants, etc.) render side by side inside each language tab. Set `themeConfig.api.hideGeneratedSnippets` to `true` to suppress the generated block on a per-operation, per-language basis whenever `x-codeSamples` are provided for that language:
+
+```ts
+// docusaurus.config.ts
+themeConfig: {
+  api: {
+    hideGeneratedSnippets: true,
+  },
+}
+```
+
+Languages without any custom samples on a given operation continue to show the generated snippets normally. The default is `false`, which preserves existing behavior.
