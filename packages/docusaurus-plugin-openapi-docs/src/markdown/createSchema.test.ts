@@ -610,6 +610,109 @@ describe("createNodes", () => {
     //     )
     //   ).toMatchSnapshot();
     // });
+
+    // Regression coverage for issue #1119: NSwag/Swashbuckle emit allOf members
+    // with `additionalProperties: false` on every model. Strict allof-merge
+    // semantics treat that as an unsatisfiable constraint and drop the unioned
+    // properties, leaving the rendered schema blank. We strip the flag from
+    // multi-member allOf siblings to match Redoc/Swagger UI behavior.
+    // https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1119
+    it("should union properties across allOf members that all set additionalProperties:false", async () => {
+      const schema: SchemaObject = {
+        allOf: [
+          {
+            type: "object",
+            additionalProperties: false,
+            properties: {
+              ContinuationToken: { type: "string", nullable: true },
+            },
+            title: "ResponseBase",
+          },
+          {
+            type: "object",
+            additionalProperties: false,
+            properties: {
+              Items: {
+                type: "array",
+                items: { type: "string" },
+                nullable: true,
+              },
+            },
+            title: "ItemsWrap",
+          },
+        ],
+        title: "ActivitiesResponse",
+      };
+
+      expect(
+        await Promise.all(
+          createNodes(schema, "response").map(
+            async (md: any) => await prettier.format(md, { parser: "babel" })
+          )
+        )
+      ).toMatchSnapshot();
+    });
+
+    // Asymmetric variant: only one sibling is strict, but its property set is
+    // disjoint from the other — also collapses without the strip. Mirrors the
+    // inner `Items.items` allOf in the issue 1119 spec.
+    it("should union properties when only some allOf members set additionalProperties:false", async () => {
+      const schema: SchemaObject = {
+        allOf: [
+          {
+            type: "object",
+            properties: {
+              Guid: { type: "string", format: "guid" },
+              Revision: { type: "integer", format: "int64" },
+            },
+            title: "SystemFields",
+          },
+          {
+            type: "object",
+            additionalProperties: false,
+            properties: {
+              Name: { type: "string", nullable: true },
+              Code: { type: "string", nullable: true },
+            },
+            required: ["Name"],
+            title: "ConcreteFields",
+          },
+        ],
+        title: "ActivitiesResponseItem",
+      };
+
+      expect(
+        await Promise.all(
+          createNodes(schema, "response").map(
+            async (md: any) => await prettier.format(md, { parser: "babel" })
+          )
+        )
+      ).toMatchSnapshot();
+    });
+
+    // Negative case: a single-member allOf with additionalProperties:false is
+    // valid (nothing to conflict with) and must be left untouched.
+    it("should preserve additionalProperties:false on single-member allOf", async () => {
+      const schema: SchemaObject = {
+        allOf: [
+          {
+            type: "object",
+            additionalProperties: false,
+            properties: {
+              onlyProp: { type: "string" },
+            },
+          },
+        ],
+      };
+
+      expect(
+        await Promise.all(
+          createNodes(schema, "response").map(
+            async (md: any) => await prettier.format(md, { parser: "babel" })
+          )
+        )
+      ).toMatchSnapshot();
+    });
   });
 
   describe("discriminator", () => {

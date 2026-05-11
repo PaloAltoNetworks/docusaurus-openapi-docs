@@ -776,6 +776,97 @@ paths:
               schema:
                 $ref: "#/components/schemas/CustomFeatureCollection"
 
+  /allof-strict-additional-properties:
+    get:
+      tags:
+        - allOf
+      summary: allOf with additionalProperties false on every member
+      description: |
+        NSwag and Swashbuckle emit `additionalProperties: false` on every
+        object schema by default. Combined with `allOf` composition this
+        defines a JSON-Schema-unsatisfiable shape (each member rejects the
+        other's properties as "additional"), and strict allof-merge
+        implementations collapse the result to no properties — leaving the
+        rendered schema blank.
+
+        Regression coverage for
+        https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1119:
+        the docs renderer should union the properties across siblings the
+        same way Redoc and Swagger UI do.
+
+        Schema:
+        ```yaml
+        allOf:
+          - type: object
+            additionalProperties: false
+            properties:
+              ContinuationToken: { type: string, nullable: true }
+            title: ResponseBase
+          - type: object
+            additionalProperties: false
+            properties:
+              Items:
+                type: array
+                items:
+                  allOf:
+                    - type: object
+                      additionalProperties: false
+                      properties:
+                        Guid: { type: string, format: uuid }
+                        Revision: { type: integer, format: int64 }
+                    - type: object
+                      additionalProperties: false
+                      required: [Name]
+                      properties:
+                        Name: { type: string, nullable: true }
+                        Code: { type: string, nullable: true }
+            title: ItemsWrap
+        ```
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    additionalProperties: false
+                    properties:
+                      ContinuationToken:
+                        type: string
+                        nullable: true
+                    title: ResponseBase
+                  - type: object
+                    additionalProperties: false
+                    properties:
+                      Items:
+                        type: array
+                        nullable: true
+                        items:
+                          allOf:
+                            - type: object
+                              additionalProperties: false
+                              properties:
+                                Guid:
+                                  type: string
+                                  format: uuid
+                                Revision:
+                                  type: integer
+                                  format: int64
+                            - type: object
+                              additionalProperties: false
+                              required: [Name]
+                              properties:
+                                Name:
+                                  type: string
+                                  nullable: true
+                                Code:
+                                  type: string
+                                  nullable: true
+                          title: ResponseItem
+                    title: ItemsWrap
+                title: ActivitiesResponse
+
 components:
   schemas:
     # Enum schemas for allOf parameter tests
