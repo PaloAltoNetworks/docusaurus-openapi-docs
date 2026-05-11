@@ -399,6 +399,19 @@ Array [
 ]
 `;
 
+exports[`createNodes allOf should preserve additionalProperties:false on single-member allOf 1`] = `
+Array [
+  "<SchemaItem
+  collapsible={false}
+  name={\\"onlyProp\\"}
+  required={false}
+  schemaName={\\"string\\"}
+  schema={{ type: \\"string\\" }}
+></SchemaItem>;
+",
+]
+`;
+
 exports[`createNodes allOf should render same-level properties with allOf 1`] = `
 Array [
   "<SchemaItem
@@ -447,6 +460,64 @@ Array [
   required={false}
   schemaName={\\"string\\"}
   schema={{ type: \\"string\\" }}
+></SchemaItem>;
+",
+]
+`;
+
+exports[`createNodes allOf should union properties across allOf members that all set additionalProperties:false 1`] = `
+Array [
+  "<SchemaItem
+  collapsible={false}
+  name={\\"ContinuationToken\\"}
+  required={false}
+  schemaName={\\"string\\"}
+  schema={{ type: \\"string\\", nullable: true }}
+></SchemaItem>;
+",
+  "<SchemaItem
+  collapsible={false}
+  name={\\"Items\\"}
+  required={false}
+  schemaName={\\"string[]\\"}
+  schema={{ type: \\"array\\", items: { type: \\"string\\" }, nullable: true }}
+></SchemaItem>;
+",
+]
+`;
+
+exports[`createNodes allOf should union properties when only some allOf members set additionalProperties:false 1`] = `
+Array [
+  "<SchemaItem
+  collapsible={false}
+  name={\\"Guid\\"}
+  required={false}
+  schemaName={\\"string<guid>\\"}
+  schema={{ type: \\"string\\", format: \\"guid\\" }}
+></SchemaItem>;
+",
+  "<SchemaItem
+  collapsible={false}
+  name={\\"Revision\\"}
+  required={false}
+  schemaName={\\"integer<int64>\\"}
+  schema={{ type: \\"integer\\", format: \\"int64\\" }}
+></SchemaItem>;
+",
+  "<SchemaItem
+  collapsible={false}
+  name={\\"Name\\"}
+  required={true}
+  schemaName={\\"string\\"}
+  schema={{ type: \\"string\\", nullable: true }}
+></SchemaItem>;
+",
+  "<SchemaItem
+  collapsible={false}
+  name={\\"Code\\"}
+  required={false}
+  schemaName={\\"string\\"}
+  schema={{ type: \\"string\\", nullable: true }}
 ></SchemaItem>;
 ",
 ]

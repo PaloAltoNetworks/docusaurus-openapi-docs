@@ -24,6 +24,63 @@ import { SchemaObject } from "../openapi/types";
 let SCHEMA_TYPE: "request" | "response";
 
 /**
+ * Strip `additionalProperties: false` from sibling allOf members so the
+ * strict-AND semantics of `allof-merge` don't collapse the result to an
+ * unsatisfiable empty schema.
+ *
+ * Per JSON Schema, two allOf members that each set `additionalProperties: false`
+ * with disjoint `properties` sets define an unsatisfiable schema (no value can
+ * satisfy both — each member rejects the other's properties). `allof-merge` is
+ * technically correct to drop all properties in that case, but it leaves the
+ * rendered schema blank.
+ *
+ * NSwag and Swashbuckle emit this pattern by default whenever a model uses
+ * inheritance/composition, so it's the dominant style for .NET-generated specs.
+ * Redoc, Swagger UI, and Stoplight all union the properties and ignore the
+ * conflicting flag — the approach this helper emulates by stripping the flag
+ * before delegating to `allof-merge`. The flag is render-irrelevant anyway:
+ * `additionalProperties: false` is treated identically to `undefined` by the
+ * renderer (see AdditionalProperties in theme/Schema/index.tsx).
+ *
+ * Strips from every allOf member whenever the parent has ≥2 members. The
+ * collapse triggers symmetrically (both siblings strict) or asymmetrically
+ * (one strict member rejects another's properties as "additional"), so the
+ * presence of multiple members is the right gate. Single-member allOf is left
+ * alone — it can't conflict with anything.
+ *
+ * See https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1119
+ */
+function stripConflictingAdditionalProps(node: any): any {
+  if (Array.isArray(node)) return node.map(stripConflictingAdditionalProps);
+  if (!node || typeof node !== "object") return node;
+
+  let working: any = node;
+  if (Array.isArray(node.allOf) && node.allOf.length > 1) {
+    const hasStrictMember = node.allOf.some(
+      (m: any) => m && m.additionalProperties === false
+    );
+    if (hasStrictMember) {
+      working = {
+        ...node,
+        allOf: node.allOf.map((m: any) => {
+          if (m && m.additionalProperties === false) {
+            const { additionalProperties: _drop, ...rest } = m;
+            return rest;
+          }
+          return m;
+        }),
+      };
+    }
+  }
+
+  const result: any = {};
+  for (const [k, v] of Object.entries(working)) {
+    result[k] = stripConflictingAdditionalProps(v);
+  }
+  return result;
+}
+
+/**
  * Returns a merged representation of allOf array of schemas.
  */
 export function mergeAllOf(allOf: SchemaObject) {
@@ -31,7 +88,9 @@ export function mergeAllOf(allOf: SchemaObject) {
     console.warn(msg);
   };
 
-  const mergedSchemas = merge(allOf, { onMergeError }) as SchemaObject;
+  const mergedSchemas = merge(stripConflictingAdditionalProps(allOf), {
+    onMergeError,
+  }) as SchemaObject;
   return mergedSchemas ?? ({} as SchemaObject);
 }
 
