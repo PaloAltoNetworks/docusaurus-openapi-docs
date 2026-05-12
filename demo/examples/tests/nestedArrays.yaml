@@ -1,0 +1,91 @@
+openapi: 3.0.3
+info:
+  title: Nested Arrays
+  description: |
+    Demonstrates nested array types (array of arrays) in the Schema tab.
+
+    Tracks: https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1114
+  version: 1.0.0
+tags:
+  - name: nestedArrays
+    description: Nested array tests
+paths:
+  /swap:
+    post:
+      tags:
+        - nestedArrays
+      summary: Swap with nested array of routes
+      description: |
+        The `routes` property is an array of arrays of `Step` objects.
+        The Schema tab should render the type as `Step[][]` (or `object[][]`
+        for inline objects), not `array[]`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SwapData"
+      responses:
+        "200":
+          description: Echoes the request payload.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SwapData"
+  /matrices:
+    get:
+      tags:
+        - nestedArrays
+      summary: Get nested arrays of primitives
+      description: |
+        Exercises nested arrays of primitive types at two and three levels deep.
+      responses:
+        "200":
+          description: Matrix payload.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  matrix:
+                    type: array
+                    description: 2D array of integers (`integer[][]`).
+                    items:
+                      type: array
+                      items:
+                        type: integer
+                  cube:
+                    type: array
+                    description: 3D array of strings (`string[][][]`).
+                    items:
+                      type: array
+                      items:
+                        type: array
+                        items:
+                          type: string
+
+components:
+  schemas:
+    Step:
+      type: object
+      properties:
+        pool_address:
+          type: string
+        token_in:
+          type: string
+        token_out:
+          type: string
+
+    SwapData:
+      type: object
+      properties:
+        slippage_bps:
+          type: integer
+          description: Slippage in basis points for the overall route
+        routes:
+          type: array
+          description: Array of possible routes (each route is a sequence of steps)
+          items:
+            type: array
+            items:
+              $ref: "#/components/schemas/Step"

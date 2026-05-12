@@ -61,7 +61,7 @@ export function getSchemaName(
   circular?: boolean
 ): string {
   if (schema.items) {
-    return prettyName(schema.items, circular) + "[]";
+    return getSchemaName(schema.items as SchemaObject, circular) + "[]";
   }
 
   return prettyName(schema, circular) ?? "";
