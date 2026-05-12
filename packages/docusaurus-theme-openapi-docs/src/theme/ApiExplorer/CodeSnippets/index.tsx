@@ -7,17 +7,17 @@
 
 import React, { useState, useEffect } from "react";
 
+import { createStorageSlot } from "@docusaurus/theme-common";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import ApiCodeBlock from "@theme/ApiExplorer/ApiCodeBlock";
 import buildPostmanRequest from "@theme/ApiExplorer/buildPostmanRequest";
 import CodeTabs from "@theme/ApiExplorer/CodeTabs";
 import { useResolvedEncoding } from "@theme/ApiExplorer/EncodingSelection/useResolvedEncoding";
 import { useTypedSelector } from "@theme/ApiItem/hooks";
+import type { ThemeConfig } from "docusaurus-theme-openapi-docs/src/types";
 import cloneDeep from "lodash/cloneDeep";
 import codegen from "postman-code-generators";
 import * as sdk from "postman-collection";
-
-import type { ThemeConfig } from "docusaurus-theme-openapi-docs/src/types";
 
 import { CodeSample, Language } from "./code-snippets-types";
 import {
@@ -139,21 +139,29 @@ function CodeSnippets({
     codeSamples
   );
 
-  // Read defaultLang from localStorage
+  // Match Docusaurus <Tabs groupId="code-samples"> persistence (namespaced key).
+  const persistedOuterLanguage =
+    typeof window === "undefined"
+      ? null
+      : (() => {
+          try {
+            return createStorageSlot("docusaurus.tab.code-samples").get();
+          } catch {
+            return null;
+          }
+        })();
   const defaultLang: Language[] = mergedLangs.filter(
-    (lang) =>
-      lang.language === localStorage.getItem("docusaurus.tab.code-samples")
+    (lang) => lang.language === persistedOuterLanguage
   );
+  const initialOuterLanguage =
+    mergedLangs.length === 1
+      ? mergedLangs[0]
+      : (defaultLang[0] ??
+        mergedLangs.find((l) => l.language === "curl") ??
+        mergedLangs[0]);
   const [selectedVariant, setSelectedVariant] = useState<string | undefined>();
   const [selectedSample, setSelectedSample] = useState<string | undefined>();
-  const [language, setLanguage] = useState(() => {
-    // Return first index if only 1 user-defined language exists
-    if (mergedLangs.length === 1) {
-      return mergedLangs[0];
-    }
-    // Fall back to language in localStorage or first user-defined language
-    return defaultLang[0] ?? mergedLangs[0];
-  });
+  const [language, setLanguage] = useState(() => initialOuterLanguage);
   const [codeText, setCodeText] = useState<string>("");
   const [codeSampleCodeText, setCodeSampleCodeText] = useState<string>(() =>
     getCodeSampleSourceFromLanguage(language)
@@ -273,7 +281,7 @@ function CodeSnippets({
           setSelectedSample: setSelectedSample,
         }}
         languageSet={mergedLangs}
-        defaultValue={defaultLang[0]?.language ?? mergedLangs[0].language}
+        defaultValue={initialOuterLanguage.language}
         lazy
       >
         {mergedLangs.map((lang) => {
