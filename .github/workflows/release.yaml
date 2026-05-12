@@ -21,6 +21,7 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     if: ${{ github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' }}
+    environment: release
     permissions:
       contents: write
       id-token: write
@@ -35,8 +36,10 @@ jobs:
         with:
           node-version: "22"
           registry-url: "https://registry.npmjs.org"
+      - name: Install dependencies
+        run: yarn --frozen-lockfile --prefer-offline --ignore-scripts
       - name: Release
-        run: npx ts-node --transpile-only scripts/publish.ts
+        run: yarn ts-node --transpile-only scripts/publish.ts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -44,6 +47,7 @@ jobs:
     name: Publish Canary
     runs-on: ubuntu-latest
     if: ${{ github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' && github.ref == 'refs/heads/main' }}
+    environment: release
     permissions:
       contents: read
       id-token: write

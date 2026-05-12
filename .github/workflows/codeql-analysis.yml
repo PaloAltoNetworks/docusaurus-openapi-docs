@@ -8,6 +8,10 @@ on:
 
 permissions: {}
 
+concurrency:
+  group: codeql-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   analyze:
     if: github.repository_owner == 'PaloAltoNetworks'
