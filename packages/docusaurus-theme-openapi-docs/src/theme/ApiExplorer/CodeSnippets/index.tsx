@@ -5,9 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
-import { createStorageSlot } from "@docusaurus/theme-common";
+import { useStorageSlot } from "@docusaurus/theme-common";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import ApiCodeBlock from "@theme/ApiExplorer/ApiCodeBlock";
 import buildPostmanRequest from "@theme/ApiExplorer/buildPostmanRequest";
@@ -42,6 +42,21 @@ function CodeTab({ children, hidden, className }: any): React.JSX.Element {
       {children}
     </div>
   );
+}
+
+/** Align with Docusaurus `<Tabs groupId="code-samples">` persisted tab value. */
+function resolveOuterLanguageFromPersistedTab(
+  persistedTab: string | null,
+  langs: Language[]
+): Language {
+  if (langs.length === 1) {
+    return langs[0];
+  }
+  const matched = langs.find((lang) => lang.language === persistedTab);
+  if (matched) {
+    return matched;
+  }
+  return langs.find((l) => l.language === "curl") ?? langs[0];
 }
 
 function CodeSnippets({
@@ -126,42 +141,43 @@ function CodeSnippets({
     (siteConfig?.themeConfig?.languageTabs as Language[] | undefined) ??
     languageSet;
 
-  // Filter languageSet by user-defined langs
-  const filteredLanguageSet = languageSet.filter((ls) => {
-    return userDefinedLanguageSet?.some((lang) => {
-      return lang.language === ls.language;
+  const mergedLangs = useMemo(() => {
+    const filteredLanguageSet = languageSet.filter((ls) => {
+      return userDefinedLanguageSet?.some((lang) => {
+        return lang.language === ls.language;
+      });
     });
-  });
+    return mergeCodeSampleLanguage(
+      mergeArraysbyLanguage(userDefinedLanguageSet, filteredLanguageSet),
+      codeSamples
+    );
+  }, [userDefinedLanguageSet, codeSamples]);
 
-  // Merge user-defined langs into languageSet
-  const mergedLangs = mergeCodeSampleLanguage(
-    mergeArraysbyLanguage(userDefinedLanguageSet, filteredLanguageSet),
-    codeSamples
+  const [persistedOuterTab] = useStorageSlot("docusaurus.tab.code-samples");
+
+  const initialOuterLanguage = useMemo(
+    () => resolveOuterLanguageFromPersistedTab(persistedOuterTab, mergedLangs),
+    [persistedOuterTab, mergedLangs]
   );
 
-  // Match Docusaurus <Tabs groupId="code-samples"> persistence (namespaced key).
-  const persistedOuterLanguage =
-    typeof window === "undefined"
-      ? null
-      : (() => {
-          try {
-            return createStorageSlot("docusaurus.tab.code-samples").get();
-          } catch {
-            return null;
-          }
-        })();
-  const defaultLang: Language[] = mergedLangs.filter(
-    (lang) => lang.language === persistedOuterLanguage
-  );
-  const initialOuterLanguage =
-    mergedLangs.length === 1
-      ? mergedLangs[0]
-      : (defaultLang[0] ??
-        mergedLangs.find((l) => l.language === "curl") ??
-        mergedLangs[0]);
   const [selectedVariant, setSelectedVariant] = useState<string | undefined>();
   const [selectedSample, setSelectedSample] = useState<string | undefined>();
-  const [language, setLanguage] = useState(() => initialOuterLanguage);
+  const [language, setLanguage] = useState(() =>
+    resolveOuterLanguageFromPersistedTab(persistedOuterTab, mergedLangs)
+  );
+
+  useEffect(() => {
+    const next = resolveOuterLanguageFromPersistedTab(
+      persistedOuterTab,
+      mergedLangs
+    );
+    setLanguage((prev) => {
+      if (prev?.language !== next.language) {
+        return next;
+      }
+      return mergedLangs.find((l) => l.language === next.language) ?? next;
+    });
+  }, [persistedOuterTab, mergedLangs]);
   const [codeText, setCodeText] = useState<string>("");
   const [codeSampleCodeText, setCodeSampleCodeText] = useState<string>(() =>
     getCodeSampleSourceFromLanguage(language)
