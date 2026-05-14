@@ -3942,10 +3942,10 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.29.tgz#5a40109a1ab5f84d6fd8fc928b19f367cbe7e7b1"
   integrity sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==
 
-"@redocly/ajv@^8.18.0":
-  version "8.18.1"
-  resolved "https://registry.yarnpkg.com/@redocly/ajv/-/ajv-8.18.1.tgz#55f99831e6b37fcfdb1048aea497006c4af2d97f"
-  integrity sha512-Ifm/pP/tul1qmAecpbVxCBluVE32rKfjf8gYXH4xI2gCv9mRWFhJMHzkPDM4TXlxwPQYIFegymlsy8lXz7optA==
+"@redocly/ajv@^8.18.1":
+  version "8.18.3"
+  resolved "https://registry.yarnpkg.com/@redocly/ajv/-/ajv-8.18.3.tgz#a925753d9a33375219f1b2ba91aef320f9929577"
+  integrity sha512-l42u0of3hY98sN2A+M4qTX1O/KrpgGH32Hu9kP2GtHyD5Dfqq86PKFLe5dwaD8DEnNmlOlll2BAmeEtf0DaySg==
   dependencies:
     fast-deep-equal "^3.1.3"
     fast-uri "^3.0.1"
@@ -3960,13 +3960,13 @@
     json-schema-to-ts "2.7.2"
 
 "@redocly/openapi-core@^2.25.2":
-  version "2.30.1"
-  resolved "https://registry.yarnpkg.com/@redocly/openapi-core/-/openapi-core-2.30.1.tgz#c0b8b878ff66f541f37b8488dcc3190175b56a38"
-  integrity sha512-ggv0nRy9Y7D1PxsmXE8MWU/x6EOVC/njZw1s7Z5TVt7OzHzLUiB2AroZzsU1dIMl2KRm4n3ygdo2VlNAAovyGQ==
+  version "2.30.3"
+  resolved "https://registry.yarnpkg.com/@redocly/openapi-core/-/openapi-core-2.30.3.tgz#6f3744e7f66b88bfca4cfd668c4ed0a68d0b4926"
+  integrity sha512-roSwxkitl+JY3LajLEg6n9ujaFkCB4cqtjgrjXxedgk57Qde5t0Vn4HBYkOomw1bHOI7W+Ux2qfPQOpzK7BnLg==
   dependencies:
-    "@redocly/ajv" "^8.18.0"
+    "@redocly/ajv" "^8.18.1"
     "@redocly/config" "^0.48.1"
-    ajv "npm:@redocly/ajv@8.18.0"
+    ajv "npm:@redocly/ajv@8.18.1"
     ajv-formats "^3.0.1"
     colorette "^1.2.0"
     js-levenshtein "^1.1.6"
@@ -5643,10 +5643,20 @@ ajv@^6.12.4, ajv@^6.12.5:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-ajv@^8.0.0, ajv@^8.11.0, ajv@^8.9.0, "ajv@npm:@redocly/ajv@8.18.0":
+ajv@^8.0.0, ajv@^8.11.0, ajv@^8.9.0:
   version "8.18.0"
   resolved "https://registry.yarnpkg.com/@redocly/ajv/-/ajv-8.18.0.tgz#e6c7ba549111838baa950bc31acbc84b06f0239f"
   integrity sha512-F+LMD2IDIXuHxgpLJh3nkLj9+tSaEzoUWd+7fONGq5pe2169FUDjpEkOfEpoGLz1sbZni/69p07OsecNfAOpqA==
+  dependencies:
+    fast-deep-equal "^3.1.3"
+    fast-uri "^3.0.1"
+    json-schema-traverse "^1.0.0"
+    require-from-string "^2.0.2"
+
+"ajv@npm:@redocly/ajv@8.18.1":
+  version "8.18.1"
+  resolved "https://registry.yarnpkg.com/@redocly/ajv/-/ajv-8.18.1.tgz#55f99831e6b37fcfdb1048aea497006c4af2d97f"
+  integrity sha512-Ifm/pP/tul1qmAecpbVxCBluVE32rKfjf8gYXH4xI2gCv9mRWFhJMHzkPDM4TXlxwPQYIFegymlsy8lXz7optA==
   dependencies:
     fast-deep-equal "^3.1.3"
     fast-uri "^3.0.1"
