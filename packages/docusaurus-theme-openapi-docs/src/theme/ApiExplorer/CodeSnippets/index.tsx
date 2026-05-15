@@ -56,7 +56,7 @@ function resolveOuterLanguageFromPersistedTab(
   if (matched) {
     return matched;
   }
-  return langs.find((l) => l.language === "curl") ?? langs[0];
+  return langs[0];
 }
 
 function CodeSnippets({
