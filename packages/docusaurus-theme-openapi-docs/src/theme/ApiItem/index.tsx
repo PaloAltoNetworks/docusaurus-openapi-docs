@@ -123,10 +123,22 @@ export default function ApiItem(props: Props): JSX.Element {
       (param: { in: "path" | "query" | "header" | "cookie" }) => {
         const paramType = param.in;
         const paramsArray: ParameterObject[] = params[paramType];
-        const defaultValue = (param as any).schema?.default;
+        const p = param as any;
+        // Prefill order: schema.default, then example sources. `default` is
+        // semantically a server-side fallback, so for required params authors
+        // typically rely on `example` / `examples`. See #544 and #1079.
+        const firstNamedExample =
+          p.examples && typeof p.examples === "object"
+            ? (Object.values(p.examples)[0] as any)?.value
+            : undefined;
+        const prefill =
+          p.schema?.default ??
+          p.example ??
+          p.schema?.example ??
+          firstNamedExample;
         const initialized =
-          defaultValue !== undefined
-            ? ({ ...param, value: defaultValue } as unknown as ParameterObject)
+          prefill !== undefined
+            ? ({ ...param, value: prefill } as unknown as ParameterObject)
             : (param as ParameterObject);
         paramsArray?.push(initialized);
       }
