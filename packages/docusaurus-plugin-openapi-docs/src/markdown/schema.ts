@@ -7,6 +7,24 @@
 
 import { SchemaObject } from "../openapi/types";
 
+// OpenAPI 3.1 / JSON Schema 2020-12 allows `type` to be an array of type names
+// (e.g. `["string", "null"]`). Normalize to a `string | string[]` view and a
+// pretty-printed form joined with ` | `.
+function normalizeType(type: unknown): {
+  single?: string;
+  pretty?: string;
+  isUnion: boolean;
+} {
+  if (Array.isArray(type)) {
+    const filtered = type.filter((t): t is string => typeof t === "string");
+    if (filtered.length === 0) return { isUnion: false };
+    if (filtered.length === 1) return { single: filtered[0], isUnion: false };
+    return { pretty: filtered.join(" | "), isUnion: true };
+  }
+  if (typeof type === "string") return { single: type, isUnion: false };
+  return { isUnion: false };
+}
+
 function prettyName(schema: SchemaObject, circular?: boolean) {
   // Handle enum-only schemas (valid in JSON Schema)
   // When enum is present without explicit type, treat as string
@@ -14,9 +32,14 @@ function prettyName(schema: SchemaObject, circular?: boolean) {
     return "string";
   }
 
+  const t = normalizeType(schema.type);
+
   if (schema.format) {
-    if (schema.type) {
-      return `${schema.type}<${schema.format}>`;
+    if (t.single) {
+      return `${t.single}<${schema.format}>`;
+    }
+    if (t.isUnion) {
+      return `${t.pretty}<${schema.format}>`;
     }
     return schema.format;
   }
@@ -39,21 +62,23 @@ function prettyName(schema: SchemaObject, circular?: boolean) {
     return "object";
   }
 
-  if (schema.type === "object") {
-    return schema.xml?.name ?? schema.type;
-    // return schema.type;
+  if (t.single === "object") {
+    return schema.xml?.name ?? t.single;
   }
 
-  if (schema.type === "array") {
-    return schema.xml?.name ?? schema.type;
-    // return schema.type;
+  if (t.single === "array") {
+    return schema.xml?.name ?? t.single;
   }
 
-  if (schema.title && schema.type) {
-    return `${schema.title} (${schema.type})`;
+  if (t.isUnion) {
+    return schema.title ? `${schema.title} (${t.pretty})` : t.pretty;
   }
 
-  return schema.title ?? schema.type;
+  if (schema.title && t.single) {
+    return `${schema.title} (${t.single})`;
+  }
+
+  return schema.title ?? t.single;
 }
 
 export function getSchemaName(
