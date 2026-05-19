@@ -223,7 +223,7 @@ hide_table_of_contents: true
 api: {{{json}}}
 {{/json}}
 {{#api.method}}
-sidebar_class_name: "{{{api.method}}} api-method"
+sidebar_class_name: "{{{api.method}}} api-method{{#api.deprecated}} menu__list-item--deprecated{{/api.deprecated}}"
 {{/api.method}}
 {{#infoPath}}
 info_path: {{{infoPath}}}
