@@ -255,7 +255,12 @@ jobs:
         uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
         with:
           path: visual_diffs/prod
-          key: prod-screenshots-${{ steps.sitemap-hash.outputs.hash }}
+          # The capture script's content is part of the cache key so changes to
+          # capture behavior (settle waits, scrollbar handling, etc.) bust the
+          # cache automatically. Without this, cached prod screenshots taken
+          # under an older algorithm would be compared against fresh previews
+          # taken under a newer one, producing asymmetric phantom diffs.
+          key: prod-screenshots-${{ hashFiles('scripts/sitemap-visual-diff.ts') }}-${{ steps.sitemap-hash.outputs.hash }}
 
       - name: Run visual diff
         run: yarn ts-node scripts/sitemap-visual-diff.ts --preview-url "$PREVIEW_URL" --summary-file visual_diffs/results.json --concurrency 4 --paths "/tests/"
