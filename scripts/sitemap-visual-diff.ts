@@ -125,6 +125,23 @@ async function gotoSettled(page: any, url: string, maxAttempts: number) {
       await page
         .waitForLoadState("networkidle", { timeout: 15_000 })
         .catch(() => undefined);
+      // Async client-side work (e.g., Prism syntax highlighting, late hydration)
+      // can still be pending after networkidle. Wait until the browser is idle
+      // and the next two animation frames have painted before capturing.
+      await page.evaluate(
+        () =>
+          new Promise<void>((resolve) => {
+            const done = () =>
+              requestAnimationFrame(() =>
+                requestAnimationFrame(() => resolve())
+              );
+            if (typeof (window as any).requestIdleCallback === "function") {
+              (window as any).requestIdleCallback(done, { timeout: 2000 });
+            } else {
+              setTimeout(done, 500);
+            }
+          })
+      );
       return;
     } catch (e) {
       lastErr = e;
@@ -194,12 +211,17 @@ async function screenshotFullPage(
   }
 }
 
-function padImage(img: PNG, width: number, height: number): PNG {
+// Crop an image to the given dimensions (which must be <= the image's own).
+// Used to bring two captures to a common size by trimming overflow rather
+// than padding with transparent black — padding compares blank pixels against
+// real content and produces a massive phantom diff at the bottom/right when
+// the two captures rendered at different heights.
+function cropImage(img: PNG, width: number, height: number): PNG {
   if (img.width === width && img.height === height) {
     return img;
   }
   const out = new PNG({ width, height });
-  PNG.bitblt(img, out, 0, 0, img.width, img.height, 0, 0);
+  PNG.bitblt(img, out, 0, 0, width, height, 0, 0);
   return out;
 }
 
@@ -214,13 +236,13 @@ function compareImages(
   let prod = PNG.sync.read(fs.readFileSync(prodPath));
   let prev = PNG.sync.read(fs.readFileSync(prevPath));
   if (prod.width !== prev.width || prod.height !== prev.height) {
-    const width = Math.max(prod.width, prev.width);
-    const height = Math.max(prod.height, prev.height);
+    const width = Math.min(prod.width, prev.width);
+    const height = Math.min(prod.height, prev.height);
     console.warn(
-      `Size mismatch for ${prevPath}, padding images to ${width}x${height}`
+      `Size mismatch for ${prevPath}, cropping images to ${width}x${height}`
     );
-    prod = padImage(prod, width, height);
-    prev = padImage(prev, width, height);
+    prod = cropImage(prod, width, height);
+    prev = cropImage(prev, width, height);
   }
   const diff = new PNG({ width: prod.width, height: prod.height });
   const numDiff = pixelmatch(
@@ -285,6 +307,15 @@ async function run() {
   });
   const context = await browser.newContext({
     viewport: { width: opts.width, height: opts.viewHeight },
+  });
+  // Reserve scrollbar space whether or not a scrollbar is actually shown.
+  // Without this, captures where content barely fits the viewport toggle the
+  // scrollbar between runs, changing effective page width by ~15px and
+  // reflowing flex/grid layouts (e.g., card title ellipsis truncation).
+  await context.addInitScript(() => {
+    const style = document.createElement("style");
+    style.textContent = "html { scrollbar-gutter: stable; }";
+    document.documentElement.appendChild(style);
   });
   let total = 0;
   let matches = 0;
