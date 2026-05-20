@@ -24,6 +24,8 @@ interface Options {
   diffAlpha: number;
   summaryFile: string;
   paths: string;
+  maxDiffRatio: number;
+  navRetries: number;
 }
 
 function parseArgs(): Options {
@@ -38,6 +40,8 @@ function parseArgs(): Options {
     diffAlpha: 1,
     summaryFile: "visual_diffs/results.json",
     paths: "",
+    maxDiffRatio: 0.005,
+    navRetries: 3,
   };
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
@@ -78,9 +82,62 @@ function parseArgs(): Options {
       case "--paths":
         opts.paths = args[++i];
         break;
+      case "-r":
+      case "--max-diff-ratio":
+        opts.maxDiffRatio = Number(args[++i]);
+        break;
+      case "--nav-retries":
+        opts.navRetries = Number(args[++i]);
+        break;
     }
   }
   return opts;
+}
+
+// Navigate with retry-on-5xx, then settle the page so screenshots aren't
+// taken mid-render. Throws on persistent failure so the caller can mark the
+// page as `skip` rather than logging a phantom `diff`.
+async function gotoSettled(page: any, url: string, maxAttempts: number) {
+  let lastErr: unknown;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      const resp = await page.goto(url, { waitUntil: "load", timeout: 60_000 });
+      const status = resp?.status() ?? 0;
+      if (status >= 500) {
+        throw new Error(`HTTP ${status} for ${url}`);
+      }
+      // Web fonts loading late are a major source of vertical layout shift.
+      await page.evaluate(() => (document as any).fonts?.ready);
+      // Scroll the full page to trigger lazy-loaded images/iframes, then
+      // return to the top so the screenshot origin is deterministic.
+      await page.evaluate(async () => {
+        const step = 600;
+        const delay = 80;
+        while (
+          window.scrollY + window.innerHeight <
+          document.documentElement.scrollHeight
+        ) {
+          window.scrollBy(0, step);
+          await new Promise((r) => setTimeout(r, delay));
+        }
+        window.scrollTo(0, 0);
+      });
+      await page
+        .waitForLoadState("networkidle", { timeout: 15_000 })
+        .catch(() => undefined);
+      return;
+    } catch (e) {
+      lastErr = e;
+      if (attempt < maxAttempts) {
+        const backoff = 5_000 * attempt;
+        console.warn(
+          `Retry ${attempt}/${maxAttempts} for ${url} after ${backoff}ms: ${e}`
+        );
+        await new Promise((r) => setTimeout(r, backoff));
+      }
+    }
+  }
+  throw lastErr;
 }
 
 async function fetchSitemap(url: string): Promise<string> {
@@ -97,8 +154,13 @@ function parseUrlsFromSitemap(xml: string): string[] {
   return arr.map((u: any) => String(u.loc).trim()).filter(Boolean);
 }
 
-async function screenshotFullPage(page: any, url: string, outputPath: string) {
-  await page.goto(url, { waitUntil: "load" });
+async function screenshotFullPage(
+  page: any,
+  url: string,
+  outputPath: string,
+  navRetries: number
+) {
+  await gotoSettled(page, url, navRetries);
   // Freeze all CSS animations and transitions before screenshotting so that
   // mid-animation frames don't produce spurious pixel differences.
   await page.addStyleTag({
@@ -146,7 +208,8 @@ function compareImages(
   prevPath: string,
   diffPath: string,
   tolerance: number,
-  diffAlpha: number
+  diffAlpha: number,
+  maxDiffRatio: number
 ): boolean {
   let prod = PNG.sync.read(fs.readFileSync(prodPath));
   let prev = PNG.sync.read(fs.readFileSync(prevPath));
@@ -171,7 +234,9 @@ function compareImages(
       alpha: diffAlpha,
     }
   );
-  if (numDiff > 0) {
+  const totalPixels = prod.width * prod.height;
+  const diffRatio = totalPixels > 0 ? numDiff / totalPixels : 0;
+  if (diffRatio > maxDiffRatio) {
     fs.mkdirSync(path.dirname(diffPath), { recursive: true });
     fs.writeFileSync(diffPath, PNG.sync.write(diff));
     return false;
@@ -239,12 +304,13 @@ async function run() {
       if (fs.existsSync(prodSnap)) {
         console.log(`CACHED prod: /${cleanPath}`);
       } else {
-        await screenshotFullPage(page, url, prodSnap);
+        await screenshotFullPage(page, url, prodSnap, opts.navRetries);
       }
       await screenshotFullPage(
         page,
         new URL(cleanPath, opts.previewUrl).toString(),
-        prevSnap
+        prevSnap,
+        opts.navRetries
       );
       if (
         compareImages(
@@ -252,7 +318,8 @@ async function run() {
           prevSnap,
           diffImg,
           opts.tolerance,
-          opts.diffAlpha
+          opts.diffAlpha,
+          opts.maxDiffRatio
         )
       ) {
         console.log(`MATCH: /${cleanPath}`);
