@@ -26,6 +26,7 @@ article h1,
 .main-wrapper h1 {
   letter-spacing: 0.025em;
   font-weight: var(--ifm-heading-font-weight);
+  font-size: 2.25rem; /* visual-diff sanity test: bump from default ~2rem */
   line-height: 1.2;
   margin-bottom: 1.5rem;
   color: var(--ifm-heading-color);
