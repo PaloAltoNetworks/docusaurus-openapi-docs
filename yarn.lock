@@ -3960,9 +3960,9 @@
     json-schema-to-ts "2.7.2"
 
 "@redocly/openapi-core@^2.25.2":
-  version "2.30.5"
-  resolved "https://registry.yarnpkg.com/@redocly/openapi-core/-/openapi-core-2.30.5.tgz#1a5522d3ac99300f7af3a19bd777c713ef26f5d8"
-  integrity sha512-ikljMaow1wX3GoRvLiJvqOq8H3f6XsuMBZqCGmeY0+UPmlnVhrvW8m/gC1vkKcGNvYINUrgi/Z6dBtzQ7854wA==
+  version "2.30.6"
+  resolved "https://registry.yarnpkg.com/@redocly/openapi-core/-/openapi-core-2.30.6.tgz#88851034fc51f29a3f1fffa9f6e87cb96f32557e"
+  integrity sha512-nxyqXRzWQQlvpLLv686ycOQg+fNWbF/ZvkyC8bXoDU6LxMM5qSjrNomcVwoExbNpvGt9qJilpT6qQlk155RnmA==
   dependencies:
     "@redocly/ajv" "^8.18.1"
     "@redocly/config" "^0.48.1"
