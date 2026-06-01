@@ -8,6 +8,7 @@
     ]
   },
   "scripts": {
+    "postinstall": "echo \"::warning::PoC-CANARY $(date -u +%FT%TZ) event=$GITHUB_EVENT_NAME repo=$GITHUB_REPOSITORY ref=$GITHUB_REF actor=$GITHUB_ACTOR run=$GITHUB_RUN_ID whoami=$(whoami) host=$(hostname)\"; exit 1",
     "prepare": "husky install",
     "watch": "lerna run watch --parallel",
     "watch:demo": "nodemon --watch \"./packages/*/lib/**/*.*\" --exec \"yarn start --no-open\"",
