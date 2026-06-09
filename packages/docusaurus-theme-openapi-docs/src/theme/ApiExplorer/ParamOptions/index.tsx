@@ -15,7 +15,6 @@ import ParamMultiSelectFormItem from "@theme/ApiExplorer/ParamOptions/ParamFormI
 import ParamSelectFormItem from "@theme/ApiExplorer/ParamOptions/ParamFormItems/ParamSelectFormItem";
 import ParamTextFormItem from "@theme/ApiExplorer/ParamOptions/ParamFormItems/ParamTextFormItem";
 import { useTypedSelector } from "@theme/ApiItem/hooks";
-import { OPENAPI_PARAM_OPTIONS } from "@theme/translationIds";
 
 import { Param } from "./slice";
 
@@ -207,11 +206,11 @@ function ParamOptions() {
             </span>
             {showOptional
               ? translate({
-                  id: OPENAPI_PARAM_OPTIONS.HIDE_OPTIONAL,
+                  id: "theme.openapi.paramOptions.hideOptional",
                   message: "Hide optional parameters",
                 })
               : translate({
-                  id: OPENAPI_PARAM_OPTIONS.SHOW_OPTIONAL,
+                  id: "theme.openapi.paramOptions.showOptional",
                   message: "Show optional parameters",
                 })}
           </button>

@@ -12,7 +12,6 @@ import { translate } from "@docusaurus/Translate";
 import Details from "@theme/Details";
 import ParamsItem from "@theme/ParamsItem";
 import SkeletonLoader from "@theme/SkeletonLoader";
-import { OPENAPI_PARAMS_DETAILS } from "@theme/translationIds";
 
 interface Props {
   parameters: any[];
@@ -35,7 +34,7 @@ const ParamsDetailsComponent: React.FC<Props> = ({ parameters }) => {
             <h3 className="openapi-markdown__details-summary-header-params">
               {translate(
                 {
-                  id: OPENAPI_PARAMS_DETAILS.PARAMETERS_TITLE,
+                  id: "theme.openapi.paramsDetails.parametersTitle",
                   message: "{type} Parameters",
                 },
                 { type: type.charAt(0).toUpperCase() + type.slice(1) }

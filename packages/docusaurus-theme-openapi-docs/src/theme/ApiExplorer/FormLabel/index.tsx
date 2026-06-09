@@ -8,7 +8,6 @@
 import React from "react";
 
 import { translate } from "@docusaurus/Translate";
-import { OPENAPI_SCHEMA_ITEM } from "@theme/translationIds";
 
 export interface Props {
   htmlFor?: string;
@@ -31,7 +30,7 @@ function FormLabel({ htmlFor, label, type, required }: Props) {
       {required && (
         <span className="openapi-schema__required">
           {translate({
-            id: OPENAPI_SCHEMA_ITEM.REQUIRED,
+            id: "theme.openapi.schemaItem.required",
             message: "required",
           })}
         </span>

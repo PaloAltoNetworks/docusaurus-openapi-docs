@@ -16,7 +16,6 @@ import React, {
 } from "react";
 
 import { translate } from "@docusaurus/Translate";
-import { OPENAPI_SCHEMA_EXPANSION } from "@theme/translationIds";
 import clsx from "clsx";
 
 import { useSchemaExpansion } from "./context";
@@ -146,17 +145,17 @@ const SchemaExpansionControl: React.FC = () => {
   if (!config.enabled) return null;
 
   const buttonLabel = translate({
-    id: OPENAPI_SCHEMA_EXPANSION.BUTTON_LABEL,
+    id: "theme.openapi.schema.expansion.button",
     message: "Schema expansion depth",
     description: "Aria/title tooltip for the schema expansion icon button",
   });
   const menuLabel = translate({
-    id: OPENAPI_SCHEMA_EXPANSION.MENU_LABEL,
+    id: "theme.openapi.schema.expansion.menu",
     message: "Schema expansion depth options",
     description: "Accessible label for the expansion options menu",
   });
   const allLabel = translate({
-    id: OPENAPI_SCHEMA_EXPANSION.ALL,
+    id: "theme.openapi.schema.expansion.all",
     message: "All",
     description: "Label for the expand-all option",
   });
@@ -201,7 +200,7 @@ const SchemaExpansionControl: React.FC = () => {
               ? allLabel
               : translate(
                   {
-                    id: OPENAPI_SCHEMA_EXPANSION.DEPTH_OPTION,
+                    id: "theme.openapi.schema.expansion.depthOption",
                     message: "Expand to depth {depth}",
                     description: "Accessible label for a depth option",
                   },

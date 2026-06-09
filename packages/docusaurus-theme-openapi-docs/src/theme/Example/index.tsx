@@ -11,7 +11,6 @@ import { translate } from "@docusaurus/Translate";
 import { ExampleObject } from "@theme/ParamsItem";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
-import { OPENAPI_SCHEMA_ITEM } from "@theme/translationIds";
 
 const EXAMPLE_CLASS_NAME = "openapi-example";
 const EXAMPLES_CLASS_NAME = "openapi-examples";
@@ -58,7 +57,7 @@ const renderExample = (example: ExampleType) => {
     <div className={EXAMPLE_CLASS_NAME}>
       <strong>
         {translate({
-          id: OPENAPI_SCHEMA_ITEM.EXAMPLE,
+          id: "theme.openapi.schemaItem.example",
           message: "Example:",
         })}{" "}
       </strong>
@@ -121,7 +120,7 @@ export const renderExamplesRecord = (
     <div className={EXAMPLES_CLASS_NAME}>
       <strong>
         {translate({
-          id: OPENAPI_SCHEMA_ITEM.EXAMPLES,
+          id: "theme.openapi.schemaItem.examples",
           message: "Examples:",
         })}
       </strong>
@@ -153,7 +152,7 @@ const renderExampleObject = (
         <p>
           <strong>
             {translate({
-              id: OPENAPI_SCHEMA_ITEM.DESCRIPTION,
+              id: "theme.openapi.schemaItem.description",
               message: "Description:",
             })}{" "}
           </strong>

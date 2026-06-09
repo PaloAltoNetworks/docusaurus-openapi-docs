@@ -7,6 +7,7 @@
 
 import React from "react";
 
+import { translate } from "@docusaurus/Translate";
 import fileSaver from "file-saver";
 
 const saveFile = (url: string) => {
@@ -24,7 +25,7 @@ function Export({ url, proxy }: any) {
       className="dropdown dropdown--hoverable dropdown--right"
     >
       <button className="export-button button button--sm button--secondary">
-        Export
+        {translate({ id: "theme.openapi.export.button", message: "Export" })}
       </button>
       <ul className="export-dropdown dropdown__menu">
         <li>
@@ -36,7 +37,10 @@ function Export({ url, proxy }: any) {
             className="dropdown__link"
             href={`${url}`}
           >
-            OpenAPI Spec
+            {translate({
+              id: "theme.openapi.export.openapiSpec",
+              message: "OpenAPI Spec",
+            })}
           </a>
         </li>
       </ul>

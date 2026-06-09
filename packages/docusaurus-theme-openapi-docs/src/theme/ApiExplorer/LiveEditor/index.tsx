@@ -11,7 +11,6 @@ import { usePrismTheme } from "@docusaurus/theme-common";
 import { translate } from "@docusaurus/Translate";
 import useIsBrowser from "@docusaurus/useIsBrowser";
 import { ErrorMessage } from "@hookform/error-message";
-import { OPENAPI_FORM } from "@theme/translationIds";
 import clsx from "clsx";
 import { Controller, useFormContext } from "react-hook-form";
 import { LiveProvider, LiveEditor, withLive } from "react-live";
@@ -89,7 +88,7 @@ function App({
             required:
               isRequired && !code
                 ? translate({
-                    id: OPENAPI_FORM.FIELD_REQUIRED,
+                    id: "theme.openapi.form.fieldRequired",
                     message: "This field is required",
                   })
                 : false,
