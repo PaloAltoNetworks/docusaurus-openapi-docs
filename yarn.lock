@@ -3952,20 +3952,20 @@
     json-schema-traverse "^1.0.0"
     require-from-string "^2.0.2"
 
-"@redocly/config@^0.48.1":
-  version "0.48.1"
-  resolved "https://registry.yarnpkg.com/@redocly/config/-/config-0.48.1.tgz#40f08b0dac6055e5020c877196485e5bdc521da5"
-  integrity sha512-vq8GM3e0KiglqkwE5Lb9XayrmZY4dHCs21BsvV92yAZN68f1N9cZUuwY1SwnztPbH06dn9uLzubBl/JNfImqfA==
+"@redocly/config@^0.49.0":
+  version "0.49.0"
+  resolved "https://registry.yarnpkg.com/@redocly/config/-/config-0.49.0.tgz#532f4e735bba09d67621c87a70687f6ef2b8cd04"
+  integrity sha512-OI/rpEffX3fKUuy+OuBHPRspRI/S30b9aiqxfZLMpSWZzDncEGPxSEP1O2LrBVshnDX4hLjVjLvCZ4YT85+1rw==
   dependencies:
     json-schema-to-ts "2.7.2"
 
 "@redocly/openapi-core@^2.25.2":
-  version "2.30.6"
-  resolved "https://registry.yarnpkg.com/@redocly/openapi-core/-/openapi-core-2.30.6.tgz#88851034fc51f29a3f1fffa9f6e87cb96f32557e"
-  integrity sha512-nxyqXRzWQQlvpLLv686ycOQg+fNWbF/ZvkyC8bXoDU6LxMM5qSjrNomcVwoExbNpvGt9qJilpT6qQlk155RnmA==
+  version "2.31.5"
+  resolved "https://registry.yarnpkg.com/@redocly/openapi-core/-/openapi-core-2.31.5.tgz#e93166f29432d33801e36a37307004069d73a011"
+  integrity sha512-300dxFZLlaVd4KxrS7OGTIOTL7T20DBmhAnP3QuRYvL7gCchOevmPGRrk+sx48xtMc99hpgPcX5Ap0XiFIjf4A==
   dependencies:
     "@redocly/ajv" "^8.18.1"
-    "@redocly/config" "^0.48.1"
+    "@redocly/config" "^0.49.0"
     ajv "npm:@redocly/ajv@8.18.1"
     ajv-formats "^3.0.1"
     colorette "^1.2.0"
