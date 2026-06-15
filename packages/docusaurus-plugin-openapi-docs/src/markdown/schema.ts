@@ -39,7 +39,7 @@ function prettyName(schema: SchemaObject, circular?: boolean) {
       return `${t.single}<${schema.format}>`;
     }
     if (t.isUnion) {
-      return `${t.pretty}<${schema.format}>`;
+      return `(${t.pretty})<${schema.format}>`;
     }
     return schema.format;
   }

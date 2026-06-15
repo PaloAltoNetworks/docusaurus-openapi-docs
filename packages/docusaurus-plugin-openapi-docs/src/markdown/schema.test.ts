@@ -66,7 +66,7 @@ describe("getSchemaName", () => {
       type: ["string", "null"],
       format: "uuid",
     } as unknown as SchemaObject;
-    expect(getSchemaName(schema)).toBe("string | null<uuid>");
+    expect(getSchemaName(schema)).toBe("(string | null)<uuid>");
   });
 
   it("renders array of items whose type is a union", () => {

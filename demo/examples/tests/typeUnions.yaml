@@ -1,0 +1,106 @@
+openapi: 3.1.0
+info:
+  title: Type Unions (OpenAPI 3.1)
+  description: |
+    Demonstrates OpenAPI 3.1 / JSON Schema 2020-12 array-form `type`
+    (e.g. `["string", "null"]`) in the Schema tab.
+
+    The Schema tab should render unions joined with ` | ` (e.g. `string | null`),
+    unwrap single-element arrays to the bare type, and parenthesize unions when
+    combined with `format` (e.g. `(string | null)<uuid>`).
+
+    Tracks: https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/950
+  version: 1.0.0
+tags:
+  - name: typeUnions
+    description: OpenAPI 3.1 type union tests
+paths:
+  /users:
+    post:
+      tags:
+        - typeUnions
+      summary: Create user with nullable fields
+      description: |
+        Exercises array-form `type` on top-level and nested schema properties,
+        including unions with `format` and arrays of unions.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "200":
+          description: The created user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+  /echo:
+    get:
+      tags:
+        - typeUnions
+      summary: Echo inline union schemas
+      description: |
+        Inline schemas (no `$ref`) that exercise each union variant directly.
+      responses:
+        "200":
+          description: Echoed payload.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  nullableString:
+                    description: Top-level union — renders as `string | null`.
+                    type: ["string", "null"]
+                  singleElementArray:
+                    description: Single-element array unwraps to `integer`.
+                    type: ["integer"]
+                  unionWithFormat:
+                    description: Union + format — renders as `(string | null)<uuid>`.
+                    type: ["string", "null"]
+                    format: uuid
+                  arrayOfUnion:
+                    description: Array of union — renders as `string | null[]`.
+                    type: array
+                    items:
+                      type: ["string", "null"]
+
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          description: Required, non-nullable UUID.
+          type: string
+          format: uuid
+        email:
+          description: Nullable string with `email` format.
+          type: ["string", "null"]
+          format: email
+        nickname:
+          description: Nullable string (no format).
+          type: ["string", "null"]
+        age:
+          description: Nullable integer.
+          type: ["integer", "null"]
+        tags:
+          description: Array whose items are a `string | null` union.
+          type: array
+          items:
+            type: ["string", "null"]
+        address:
+          $ref: "#/components/schemas/Address"
+
+    Address:
+      type: object
+      properties:
+        street:
+          type: ["string", "null"]
+        zip:
+          description: Union of two concrete types (no `null`).
+          type: ["string", "integer"]
