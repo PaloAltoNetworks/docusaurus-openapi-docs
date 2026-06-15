@@ -69,6 +69,14 @@ describe("getSchemaName", () => {
     expect(getSchemaName(schema)).toBe("integer");
   });
 
+  it("renders single type with format as `type<format>`", () => {
+    const schema = {
+      type: "string",
+      format: "uuid",
+    } as SchemaObject;
+    expect(getSchemaName(schema)).toBe("string<uuid>");
+  });
+
   it("renders type union with format", () => {
     const schema = {
       type: ["string", "null"],

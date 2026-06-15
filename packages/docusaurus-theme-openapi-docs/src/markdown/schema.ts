@@ -76,6 +76,9 @@ function prettyName(schema: SchemaObject, circular?: boolean) {
   const t = normalizeType(schema.type);
 
   if (schema.format) {
+    if (t.single) {
+      return `${t.single}<${schema.format}>`;
+    }
     if (t.isUnion) {
       return `(${t.pretty})<${schema.format}>`;
     }
