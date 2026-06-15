@@ -13,7 +13,6 @@ import FormItem from "@theme/ApiExplorer/FormItem";
 import FormSelect from "@theme/ApiExplorer/FormSelect";
 import FormTextInput from "@theme/ApiExplorer/FormTextInput";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
-import { OPENAPI_SERVER } from "@theme/translationIds";
 
 import { setServer, setServerVariable } from "./slice";
 
@@ -65,7 +64,10 @@ function Server({ labelId }: ServerProps) {
     return (
       <FloatingButton
         onClick={() => setIsEditing(true)}
-        label={translate({ id: OPENAPI_SERVER.EDIT_BUTTON, message: "Edit" })}
+        label={translate({
+          id: "theme.openapi.server.editButton",
+          message: "Edit",
+        })}
       >
         <FormItem>
           <span className="openapi-explorer__server-url" title={url}>
@@ -79,7 +81,10 @@ function Server({ labelId }: ServerProps) {
     <div className="openapi-explorer__server-container">
       <FloatingButton
         onClick={() => setIsEditing(false)}
-        label={translate({ id: OPENAPI_SERVER.HIDE_BUTTON, message: "Hide" })}
+        label={translate({
+          id: "theme.openapi.server.hideButton",
+          message: "Hide",
+        })}
       >
         <FormItem>
           <FormSelect

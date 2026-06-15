@@ -7,7 +7,6 @@
 
 import { translate } from "@docusaurus/Translate";
 
-import { OPENAPI_SCHEMA_ITEM } from "../theme/translationIds";
 import { SchemaObject } from "../types";
 
 /**
@@ -158,7 +157,7 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
   }
 
   let message = `**${translate({
-    id: OPENAPI_SCHEMA_ITEM.POSSIBLE_VALUES,
+    id: "theme.openapi.schemaItem.possibleValues",
     message: "Possible values:",
   })}** `;
 
@@ -177,11 +176,11 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
     let minLength;
     let maxLength;
     const charactersMessage = translate({
-      id: OPENAPI_SCHEMA_ITEM.CHARACTERS,
+      id: "theme.openapi.schemaItem.characters",
       message: "characters",
     });
     const nonEmptyMessage = translate({
-      id: OPENAPI_SCHEMA_ITEM.NON_EMPTY,
+      id: "theme.openapi.schemaItem.nonEmpty",
       message: "non-empty",
     });
     if (schema.minLength && schema.minLength > 1) {
@@ -246,7 +245,7 @@ export function getQualifierMessage(schema?: SchemaObject): string | undefined {
 
   if (schema.pattern) {
     const expressionMessage = translate({
-      id: OPENAPI_SCHEMA_ITEM.EXPRESSION,
+      id: "theme.openapi.schemaItem.expression",
       message: "Value must match regular expression",
     });
     qualifierGroups.push(`${expressionMessage} \`${schema.pattern}\``);

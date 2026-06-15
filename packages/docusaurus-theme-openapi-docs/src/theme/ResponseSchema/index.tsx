@@ -22,7 +22,6 @@ import SchemaExpansionControl from "@theme/SchemaExpansion";
 import SchemaTabs from "@theme/SchemaTabs";
 import SkeletonLoader from "@theme/SkeletonLoader";
 import TabItem from "@theme/TabItem";
-import { OPENAPI_SCHEMA, OPENAPI_SCHEMA_ITEM } from "@theme/translationIds";
 import type { MediaTypeObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 
 interface Props {
@@ -72,7 +71,7 @@ const ResponseSchemaComponent: React.FC<Props> = ({
               <TabItem key={mimeType} label={mimeType} value={mimeType}>
                 <div>
                   {translate({
-                    id: OPENAPI_SCHEMA.NO_SCHEMA,
+                    id: "theme.openapi.schema.noSchema",
                     message: "No schema",
                   })}
                 </div>
@@ -98,7 +97,7 @@ const ResponseSchemaComponent: React.FC<Props> = ({
                           {body.required === true && (
                             <span className="openapi-schema__required">
                               {translate({
-                                id: OPENAPI_SCHEMA_ITEM.REQUIRED,
+                                id: "theme.openapi.schemaItem.required",
                                 message: "required",
                               })}
                             </span>

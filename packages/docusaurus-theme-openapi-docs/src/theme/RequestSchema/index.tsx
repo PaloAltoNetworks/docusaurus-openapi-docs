@@ -22,7 +22,6 @@ import SchemaExpansionControl from "@theme/SchemaExpansion";
 import SchemaTabs from "@theme/SchemaTabs";
 import SkeletonLoader from "@theme/SkeletonLoader";
 import TabItem from "@theme/TabItem";
-import { OPENAPI_REQUEST, OPENAPI_SCHEMA_ITEM } from "@theme/translationIds";
 import type { MediaTypeObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 
 interface Props {
@@ -81,13 +80,13 @@ const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
                         <summary className="openapi-markdown__details-summary--with-control">
                           <h3 className="openapi-markdown__details-summary-header-body">
                             {translate({
-                              id: OPENAPI_REQUEST.BODY_TITLE,
+                              id: "theme.openapi.request.body.title",
                               message: title,
                             })}
                             {body.required === true && (
                               <span className="openapi-schema__required">
                                 {translate({
-                                  id: OPENAPI_SCHEMA_ITEM.REQUIRED,
+                                  id: "theme.openapi.schemaItem.required",
                                   message: "required",
                                 })}
                               </span>
@@ -167,7 +166,7 @@ const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
                 <summary className="openapi-markdown__details-summary--with-control">
                   <h3 className="openapi-markdown__details-summary-header-body">
                     {translate({
-                      id: OPENAPI_REQUEST.BODY_TITLE,
+                      id: "theme.openapi.request.body.title",
                       message: title,
                     })}
                     {firstBody.type === "array" && (
@@ -176,7 +175,7 @@ const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
                     {body.required && (
                       <strong className="openapi-schema__required">
                         {translate({
-                          id: OPENAPI_SCHEMA_ITEM.REQUIRED,
+                          id: "theme.openapi.schemaItem.required",
                           message: "required",
                         })}
                       </strong>

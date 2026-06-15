@@ -10,7 +10,6 @@ import React, { ReactNode } from "react";
 import { translate } from "@docusaurus/Translate";
 import { Example } from "@theme/Example";
 import Markdown from "@theme/Markdown";
-import { OPENAPI_SCHEMA_ITEM } from "@theme/translationIds";
 import clsx from "clsx";
 
 import { getQualifierMessage } from "../../markdown/schema";
@@ -41,11 +40,11 @@ const transformEnumDescriptions = (
 const getEnumDescriptionMarkdown = (enumDescriptions?: [string, string][]) => {
   if (enumDescriptions?.length) {
     const enumValue = translate({
-      id: OPENAPI_SCHEMA_ITEM.ENUM_VALUE,
+      id: "theme.openapi.schemaItem.enumValue",
       message: "Enum Value",
     });
     const description = translate({
-      id: OPENAPI_SCHEMA_ITEM.ENUM_DESCRIPTION,
+      id: "theme.openapi.schemaItem.enumDescription",
       message: "Description",
     });
     return `| ${enumValue} | ${description} |
@@ -97,20 +96,29 @@ export default function SchemaItem(props: Props) {
     Array.isArray(required) ? required.includes(name) : required,
     () => (
       <span className="openapi-schema__required">
-        {translate({ id: OPENAPI_SCHEMA_ITEM.REQUIRED, message: "required" })}
+        {translate({
+          id: "theme.openapi.schemaItem.required",
+          message: "required",
+        })}
       </span>
     )
   );
 
   const renderDeprecated = guard(deprecated, () => (
     <span className="openapi-schema__deprecated">
-      {translate({ id: OPENAPI_SCHEMA_ITEM.DEPRECATED, message: "deprecated" })}
+      {translate({
+        id: "theme.openapi.schemaItem.deprecated",
+        message: "deprecated",
+      })}
     </span>
   ));
 
   const renderNullable = guard(nullable, () => (
     <span className="openapi-schema__nullable">
-      {translate({ id: OPENAPI_SCHEMA_ITEM.NULLABLE, message: "nullable" })}
+      {translate({
+        id: "theme.openapi.schemaItem.nullable",
+        message: "nullable",
+      })}
     </span>
   ));
 
@@ -148,7 +156,7 @@ export default function SchemaItem(props: Props) {
           <div>
             <strong>
               {translate({
-                id: OPENAPI_SCHEMA_ITEM.DEFAULT_VALUE,
+                id: "theme.openapi.schemaItem.defaultValue",
                 message: "Default value:",
               })}{" "}
             </strong>
@@ -162,7 +170,7 @@ export default function SchemaItem(props: Props) {
         <div>
           <strong>
             {translate({
-              id: OPENAPI_SCHEMA_ITEM.DEFAULT_VALUE,
+              id: "theme.openapi.schemaItem.defaultValue",
               message: "Default value:",
             })}{" "}
           </strong>
@@ -182,7 +190,7 @@ export default function SchemaItem(props: Props) {
           <div>
             <strong>
               {translate({
-                id: OPENAPI_SCHEMA_ITEM.CONSTANT_VALUE,
+                id: "theme.openapi.schemaItem.constantValue",
                 message: "Constant value:",
               })}{" "}
             </strong>
@@ -196,7 +204,7 @@ export default function SchemaItem(props: Props) {
         <div>
           <strong>
             {translate({
-              id: OPENAPI_SCHEMA_ITEM.CONSTANT_VALUE,
+              id: "theme.openapi.schemaItem.constantValue",
               message: "Constant value:",
             })}{" "}
           </strong>

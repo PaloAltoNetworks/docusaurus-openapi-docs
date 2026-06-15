@@ -24,7 +24,6 @@ import {
 import { translate } from "@docusaurus/Translate";
 import useIsBrowser from "@docusaurus/useIsBrowser";
 import Heading from "@theme/Heading";
-import { OPENAPI_TABS } from "@theme/translationIds";
 import clsx from "clsx";
 
 export interface TabListProps extends TabProps {
@@ -39,7 +38,7 @@ function TabList({
   selectValue,
   tabValues,
   label = translate({
-    id: OPENAPI_TABS.RESPONSES_LABEL,
+    id: "theme.openapi.tabs.responses.label",
     message: "Responses",
   }),
   id = "responses",

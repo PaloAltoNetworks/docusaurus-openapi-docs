@@ -15,7 +15,6 @@ import FormSelect from "@theme/ApiExplorer/FormSelect";
 import FormTextInput from "@theme/ApiExplorer/FormTextInput";
 import { Param, setParam } from "@theme/ApiExplorer/ParamOptions/slice";
 import { useTypedDispatch } from "@theme/ApiItem/hooks";
-import { OPENAPI_FORM } from "@theme/translationIds";
 import { Controller, useFormContext } from "react-hook-form";
 
 export interface ParamProps {
@@ -138,7 +137,7 @@ export default function ParamArrayFormItem({
         rules={{
           required: param.required
             ? translate({
-                id: OPENAPI_FORM.FIELD_REQUIRED,
+                id: "theme.openapi.form.fieldRequired",
                 message: "This field is required",
               })
             : false,
@@ -177,7 +176,10 @@ export default function ParamArrayFormItem({
               className="openapi-explorer__thin-btn"
               onClick={handleAddItem}
             >
-              Add item
+              {translate({
+                id: "theme.openapi.paramArray.addItem",
+                message: "Add item",
+              })}
             </button>
           </>
         )}

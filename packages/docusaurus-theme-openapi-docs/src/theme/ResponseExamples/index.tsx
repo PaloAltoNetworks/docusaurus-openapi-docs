@@ -11,7 +11,6 @@ import { translate } from "@docusaurus/Translate";
 import CodeSamples from "@theme/CodeSamples";
 import Markdown from "@theme/Markdown";
 import TabItem from "@theme/TabItem";
-import { OPENAPI_RESPONSE_EXAMPLES } from "@theme/translationIds";
 import { sampleResponseFromSchema } from "docusaurus-plugin-openapi-docs/lib/openapi/createResponseExample";
 import format from "xml-formatter";
 
@@ -115,7 +114,7 @@ export const ResponseExample: React.FC<ResponseExampleProps> = ({
     // @ts-ignore
     <TabItem
       label={translate({
-        id: OPENAPI_RESPONSE_EXAMPLES.EXAMPLE,
+        id: "theme.openapi.responseExamples.example",
         message: "Example",
       })}
       value="Example"
@@ -173,7 +172,7 @@ export const ExampleFromSchema: React.FC<ExampleFromSchemaProps> = ({
         // @ts-ignore
         <TabItem
           label={translate({
-            id: OPENAPI_RESPONSE_EXAMPLES.AUTO_EXAMPLE,
+            id: "theme.openapi.responseExamples.autoExample",
             message: "Example (auto)",
           })}
           value="Example (auto)"
@@ -192,7 +191,7 @@ export const ExampleFromSchema: React.FC<ExampleFromSchemaProps> = ({
       // @ts-ignore
       <TabItem
         label={translate({
-          id: OPENAPI_RESPONSE_EXAMPLES.AUTO_EXAMPLE,
+          id: "theme.openapi.responseExamples.autoExample",
           message: "Example (auto)",
         })}
         value="Example (auto)"

@@ -22,7 +22,6 @@ import {
 import SchemaItem from "@theme/SchemaItem";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
-import { OPENAPI_SCHEMA_ITEM } from "@theme/translationIds";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { merge } from "allof-merge";
 import clsx from "clsx";
@@ -261,7 +260,7 @@ const Summary: React.FC<SummaryProps> = ({
         {nullable && (
           <span className="openapi-schema__nullable">
             {translate({
-              id: OPENAPI_SCHEMA_ITEM.NULLABLE,
+              id: "theme.openapi.schemaItem.nullable",
               message: "nullable",
             })}
           </span>
@@ -269,7 +268,7 @@ const Summary: React.FC<SummaryProps> = ({
         {isRequired && (
           <span className="openapi-schema__required">
             {translate({
-              id: OPENAPI_SCHEMA_ITEM.REQUIRED,
+              id: "theme.openapi.schemaItem.required",
               message: "required",
             })}
           </span>
@@ -277,7 +276,7 @@ const Summary: React.FC<SummaryProps> = ({
         {deprecated && (
           <span className="openapi-schema__deprecated">
             {translate({
-              id: OPENAPI_SCHEMA_ITEM.DEPRECATED,
+              id: "theme.openapi.schemaItem.deprecated",
               message: "deprecated",
             })}
           </span>
@@ -314,8 +313,8 @@ const AnyOneOf: React.FC<SchemaProps> = ({
   }
 
   const type = schema.oneOf
-    ? translate({ id: OPENAPI_SCHEMA_ITEM.ONE_OF, message: "oneOf" })
-    : translate({ id: OPENAPI_SCHEMA_ITEM.ANY_OF, message: "anyOf" });
+    ? translate({ id: "theme.openapi.schemaItem.oneOf", message: "oneOf" })
+    : translate({ id: "theme.openapi.schemaItem.anyOf", message: "anyOf" });
 
   // Generate a unique ID for this anyOf/oneOf to prevent tab value collisions
   const uniqueId = React.useMemo(
@@ -364,12 +363,12 @@ const AnyOneOf: React.FC<SchemaProps> = ({
           if (!label) {
             if (anyOneSchema.oneOf) {
               label = translate({
-                id: OPENAPI_SCHEMA_ITEM.ONE_OF,
+                id: "theme.openapi.schemaItem.oneOf",
                 message: "oneOf",
               });
             } else if (anyOneSchema.anyOf) {
               label = translate({
-                id: OPENAPI_SCHEMA_ITEM.ANY_OF,
+                id: "theme.openapi.schemaItem.anyOf",
                 message: "anyOf",
               });
             } else {
@@ -550,7 +549,7 @@ const PropertyDiscriminator: React.FC<SchemaEdgeProps> = ({
             {required && (
               <span className="openapi-schema__required">
                 {translate({
-                  id: OPENAPI_SCHEMA_ITEM.REQUIRED,
+                  id: "theme.openapi.schemaItem.required",
                   message: "required",
                 })}
               </span>

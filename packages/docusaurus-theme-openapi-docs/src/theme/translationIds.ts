@@ -5,117 +5,41 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-export const OPENAPI_RESPONSE = {
-  TITLE: "theme.openapi.response.title",
-  CLEAR: "theme.openapi.response.clear",
-  PLACEHOLDER: "theme.openapi.response.placeholder",
-  HEADERS_TAB: "theme.openapi.response.headersTab",
-};
+/*
+ * The central dictionary of translation-id constants that used to live here
+ * (OPENAPI_REQUEST, OPENAPI_SCHEMA_ITEM, ...) has been removed. Each
+ * `translate({ id, message })` / `<Translate id="...">` call site now passes
+ * its id as an inline string literal instead.
+ *
+ * WHY THE DICTIONARY WAS REMOVED
+ * ------------------------------
+ * `docusaurus write-translations` only performs STATIC analysis of the source
+ * code (via @docusaurus/babel) — it never runs the site. To collect a string
+ * it evaluates the argument of every `translate()` / `<Translate>` call with
+ * Babel's `path.evaluate()` and keeps it only when the result is `confident`.
+ *
+ * An id referenced through an imported constant, e.g.
+ *
+ *     import { OPENAPI_REQUEST } from "@theme/translationIds";
+ *     translate({ id: OPENAPI_REQUEST.COLLAPSE_ALL, message: "Collapse all" });
+ *
+ * is a member expression on a binding imported from another module. Babel
+ * cannot statically resolve a cross-module binding, so `evaluate()` returns
+ * `confident === false`, the extractor skips the call (emitting a warning), and
+ * NOTHING is written to the locale `code.json`. As a result `write-translations`
+ * produced an empty template and downstream projects had no ids to translate,
+ * even though the strings rendered fine at runtime (the inlined constant value
+ * matched the runtime lookup key).
+ *
+ * The id and message must therefore be static string literals AT THE CALL SITE.
+ * This is the approach Docusaurus' own theme-classic uses and what its i18n
+ * guide mandates ("Text labels must be static"):
+ *
+ *   - https://docusaurus.io/docs/i18n/tutorial#translate-your-react-code
+ *   - https://docusaurus.io/docs/docusaurus-core#translate
+ *
+ * Keep this note here so the removal of the constants is discoverable; do not
+ * reintroduce a shared id dictionary for `translate()` arguments.
+ */
 
-export const OPENAPI_TABS = {
-  RESPONSES_LABEL: "theme.openapi.tabs.responses.label",
-};
-
-export const OPENAPI_REQUEST = {
-  BODY_TITLE: "theme.openapi.request.body.title",
-  ACCEPT_TITLE: "theme.openapi.request.accept.title",
-  SEND_BUTTON: "theme.openapi.request.sendButton",
-  REQUIRED_LABEL: "theme.openapi.request.requiredLabel",
-  REQUEST_TITLE: "theme.openapi.request.title",
-  COLLAPSE_ALL: "theme.openapi.request.collapseAll",
-  EXPAND_ALL: "theme.openapi.request.expandAll",
-  BASE_URL_TITLE: "theme.openapi.request.baseUrl.title",
-  AUTH_TITLE: "theme.openapi.request.auth.title",
-  PARAMETERS_TITLE: "theme.openapi.request.parameters.title",
-  FETCHING_MESSAGE: "theme.openapi.request.fetchingMessage",
-  CONNECTION_FAILED: "theme.openapi.request.connectionFailed",
-  ERROR_TIMEOUT: "theme.openapi.request.error.timeout",
-  ERROR_NETWORK: "theme.openapi.request.error.network",
-  ERROR_CORS: "theme.openapi.request.error.cors",
-  ERROR_UNKNOWN: "theme.openapi.request.error.unknown",
-};
-
-export const OPENAPI_SERVER = {
-  EDIT_BUTTON: "theme.openapi.server.editButton",
-  HIDE_BUTTON: "theme.openapi.server.hideButton",
-};
-
-export const OPENAPI_PARAM_OPTIONS = {
-  SHOW_OPTIONAL: "theme.openapi.paramOptions.showOptional",
-  HIDE_OPTIONAL: "theme.openapi.paramOptions.hideOptional",
-};
-
-export const OPENAPI_FORM_FILE_UPLOAD = {
-  CLEAR_BUTTON: "theme.openapi.formFileUpload.clearButton",
-};
-
-export const OPENAPI_FORM = {
-  FIELD_REQUIRED: "theme.openapi.form.fieldRequired",
-};
-
-export const OPENAPI_AUTH = {
-  BEARER_TOKEN: "theme.openapi.auth.bearerToken",
-  USERNAME: "theme.openapi.auth.username",
-  PASSWORD: "theme.openapi.auth.password",
-  SECURITY_SCHEME: "theme.openapi.auth.securityScheme",
-};
-
-export const OPENAPI_RESPONSE_EXAMPLES = {
-  EXAMPLE: "theme.openapi.responseExamples.example",
-  AUTO_EXAMPLE: "theme.openapi.responseExamples.autoExample",
-};
-
-export const OPENAPI_BODY = {
-  EXAMPLE_FROM_SCHEMA: "theme.openapi.body.exampleFromSchema",
-};
-
-export const OPENAPI_STATUS_CODES = {
-  RESPONSE_HEADERS: "theme.openapi.statusCodes.responseHeaders",
-  SCHEMA_TITLE: "theme.openapi.statusCodes.schemaTitle",
-};
-
-export const OPENAPI_SCHEMA = {
-  NO_SCHEMA: "theme.openapi.schema.noSchema",
-};
-
-export const OPENAPI_SCHEMA_EXPANSION = {
-  BUTTON_LABEL: "theme.openapi.schema.expansion.button",
-  MENU_LABEL: "theme.openapi.schema.expansion.menu",
-  ALL: "theme.openapi.schema.expansion.all",
-  DEPTH_OPTION: "theme.openapi.schema.expansion.depthOption",
-};
-
-export const OPENAPI_SCHEMA_ITEM = {
-  CHARACTERS: "theme.openapi.schemaItem.characters",
-  NON_EMPTY: "theme.openapi.schemaItem.nonEmpty",
-  REQUIRED: "theme.openapi.schemaItem.required",
-  DEPRECATED: "theme.openapi.schemaItem.deprecated",
-  NULLABLE: "theme.openapi.schemaItem.nullable",
-  DEFAULT_VALUE: "theme.openapi.schemaItem.defaultValue",
-  EXAMPLE: "theme.openapi.schemaItem.example",
-  EXAMPLES: "theme.openapi.schemaItem.examples",
-  DESCRIPTION: "theme.openapi.schemaItem.description",
-  CONSTANT_VALUE: "theme.openapi.schemaItem.constantValue",
-  ENUM_VALUE: "theme.openapi.schemaItem.enumValue",
-  ENUM_DESCRIPTION: "theme.openapi.schemaItem.enumDescription",
-  POSSIBLE_VALUES: "theme.openapi.schemaItem.possibleValues",
-  EXPRESSION: "theme.openapi.schemaItem.expression",
-  ONE_OF: "theme.openapi.schemaItem.oneOf",
-  ANY_OF: "theme.openapi.schemaItem.anyOf",
-};
-
-export const OPENAPI_PARAMS_DETAILS = {
-  PARAMETERS_TITLE: "theme.openapi.paramsDetails.parametersTitle",
-};
-
-export const OPENAPI_SECURITY_SCHEMES = {
-  NAME: "theme.openapi.securitySchemes.name",
-  TYPE: "theme.openapi.securitySchemes.type",
-  SCOPES: "theme.openapi.securitySchemes.scopes",
-  IN: "theme.openapi.securitySchemes.in",
-  FLOWS: "theme.openapi.securitySchemes.flows",
-  DESCRIPTION: "theme.openapi.securitySchemes.description",
-  SCHEME: "theme.openapi.securitySchemes.scheme",
-  BEARER_FORMAT: "theme.openapi.securitySchemes.bearerFormat",
-  OPEN_ID_CONNECT_URL: "theme.openapi.securitySchemes.openIdConnectUrl",
-};
+export {};
