@@ -6041,7 +6041,7 @@ axe-core@^4.10.0:
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.11.1.tgz#052ff9b2cbf543f5595028b583e4763b40c78ea7"
   integrity sha512-BASOg+YwO2C+346x3LZOeoovTIoTrRqEsqMa6fmfAV0P+U9mFr9NsyOEpiYvFjbc64NMrSswhV50WdXzdb/Z5A==
 
-axios@^1.12.0, axios@^1.15.0:
+axios@^1.12.0, axios@^1.15.0, axios@^1.16.0:
   version "1.16.0"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.16.0.tgz#f8e5dd931cef2a5f8c32216d5784eda2f8750eb7"
   integrity sha512-6hp5CwvTPlN2A31g5dxnwAX0orzM7pmCRDLnZSX772mv8WDqICwFjowHuPs04Mc8deIld1+ejhtaMn5vp6b+1w==
@@ -11404,10 +11404,10 @@ joi@^17.9.2:
     "@sideway/formula" "^3.0.1"
     "@sideway/pinpoint" "^2.0.0"
 
-joi@^18.1.2:
-  version "18.1.2"
-  resolved "https://registry.yarnpkg.com/joi/-/joi-18.1.2.tgz#4735a384d7721fcda7a551d128862cf816541924"
-  integrity sha512-rF5MAmps5esSlhCA+N1b6IYHDw9j/btzGaqfgie522jS02Ju/HXBxamlXVlKEHAxoMKQL77HWI8jlqWsFuekZA==
+joi@^18.2.1:
+  version "18.2.1"
+  resolved "https://registry.yarnpkg.com/joi/-/joi-18.2.1.tgz#a022e39496e25b010a6d4649975c160a4315bd79"
+  integrity sha512-2/OKlogiESf2Nh3TFCrRjrr9z1DRHeW0I+KReF67+4J0Ns+8hBtHRmoWAZ2OFU6I5+TWLEe6sVlSdXPjHm5UbQ==
   dependencies:
     "@hapi/address" "^5.1.1"
     "@hapi/formula" "^3.0.2"
@@ -16711,9 +16711,9 @@ stack-utils@^2.0.3:
     escape-string-regexp "^2.0.0"
 
 start-server-and-test@^3.0.0:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/start-server-and-test/-/start-server-and-test-3.0.2.tgz#045c6fdcd249763813f9a8e05670d55536b28577"
-  integrity sha512-g6v4zPr1RRL5XxXJ+Wnk1GFLb+DGZLjFqse+5lNZ0X7m4SRMC6eOA+AXYboQDfNCEjpnTu0AGrvJb/JTUOg8dQ==
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/start-server-and-test/-/start-server-and-test-3.0.5.tgz#b8b7a132ff192934975df90a87549cb40209fbba"
+  integrity sha512-2SvI2UR+rVM4FQ3GqEnjjfVATln6JgJGsZjRRyAqgl1EI6fJFH5zVCawqJLcmU9vBxwI0ZX9i3M+GFpY+sxWcw==
   dependencies:
     arg "5.0.2"
     bluebird "3.7.2"
@@ -16722,7 +16722,7 @@ start-server-and-test@^3.0.0:
     execa "5.1.1"
     lazy-ass "1.6.0"
     tree-kill "1.2.2"
-    wait-on "9.0.5"
+    wait-on "9.0.10"
 
 "statuses@>= 1.4.0 < 2":
   version "1.5.0"
@@ -18004,13 +18004,13 @@ w3c-xmlserializer@^2.0.0:
   dependencies:
     xml-name-validator "^3.0.0"
 
-wait-on@9.0.5:
-  version "9.0.5"
-  resolved "https://registry.yarnpkg.com/wait-on/-/wait-on-9.0.5.tgz#9569a31ee3669abb67b1284622fd1d5b1f0163fc"
-  integrity sha512-qgnbHDfDTRIp73ANEJNRW/7kn8CrDUcvZz18xotJQku/P4saTGkbIzvnMZebPmVvVNUiRq1qWAPyqCH+W4H8KA==
+wait-on@9.0.10:
+  version "9.0.10"
+  resolved "https://registry.yarnpkg.com/wait-on/-/wait-on-9.0.10.tgz#9c73ad1908b8e46e853e1271b2c9563f2c2d8e02"
+  integrity sha512-rCoJEhvMr0X6alHmwc9abbrA5ZrLZFKpFQVKPNFwl2h7DapXOGdmimIHDtLOWhT4PjhZhxFEtZoQgEXbkDWdZw==
   dependencies:
-    axios "^1.15.0"
-    joi "^18.1.2"
+    axios "^1.16.0"
+    joi "^18.2.1"
     lodash "^4.18.1"
     minimist "^1.2.8"
     rxjs "^7.8.2"
