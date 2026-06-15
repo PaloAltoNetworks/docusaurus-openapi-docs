@@ -86,7 +86,11 @@ export function getSchemaName(
   circular?: boolean
 ): string {
   if (schema.items) {
-    return getSchemaName(schema.items as SchemaObject, circular) + "[]";
+    const items = schema.items as SchemaObject;
+    const inner = getSchemaName(items, circular);
+    const needsParens =
+      Array.isArray((items as any).type) && (items as any).type.length > 1;
+    return needsParens ? `(${inner})[]` : `${inner}[]`;
   }
 
   return prettyName(schema, circular) ?? "";

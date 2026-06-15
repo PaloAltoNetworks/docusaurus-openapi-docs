@@ -74,6 +74,6 @@ describe("getSchemaName", () => {
       type: "array",
       items: { type: ["string", "null"] } as any,
     } as SchemaObject;
-    expect(getSchemaName(schema)).toBe("string | null[]");
+    expect(getSchemaName(schema)).toBe("(string | null)[]");
   });
 });

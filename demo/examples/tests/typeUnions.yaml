@@ -62,7 +62,7 @@ paths:
                     type: ["string", "null"]
                     format: uuid
                   arrayOfUnion:
-                    description: Array of union — renders as `string | null[]`.
+                    description: Array of union — renders as `(string | null)[]`.
                     type: array
                     items:
                       type: ["string", "null"]
