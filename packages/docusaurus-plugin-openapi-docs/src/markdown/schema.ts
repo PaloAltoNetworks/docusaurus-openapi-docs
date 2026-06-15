@@ -7,9 +7,47 @@
 
 import { SchemaObject } from "../openapi/types";
 
+/**
+ * Extracts enum values from a schema, including when wrapped in allOf.
+ */
+function getEnumFromSchema(schema: SchemaObject): any[] | undefined {
+  if (schema.enum) {
+    return schema.enum;
+  }
+
+  if (schema.allOf && Array.isArray(schema.allOf)) {
+    for (const item of schema.allOf) {
+      if (item.enum) {
+        return item.enum;
+      }
+    }
+  }
+
+  return undefined;
+}
+
+/**
+ * Extracts the type from a schema, including when wrapped in allOf.
+ */
+function getTypeFromSchema(schema: SchemaObject): string | undefined {
+  if (schema.type) {
+    return schema.type as string;
+  }
+
+  if (schema.allOf && Array.isArray(schema.allOf)) {
+    for (const item of schema.allOf) {
+      if (item.type) {
+        return item.type as string;
+      }
+    }
+  }
+
+  return undefined;
+}
+
 // OpenAPI 3.1 / JSON Schema 2020-12 allows `type` to be an array of type names
-// (e.g. `["string", "null"]`). Normalize to a `string | string[]` view and a
-// pretty-printed form joined with ` | `.
+// (e.g. `["string", "null"]`). Normalize to a single name and a pretty-printed
+// union form joined with ` | `.
 function normalizeType(type: unknown): {
   single?: string;
   pretty?: string;
@@ -50,6 +88,12 @@ function prettyName(schema: SchemaObject, circular?: boolean) {
       if (schema.allOf[0].includes("circular")) {
         return schema.allOf[0];
       }
+    }
+    // Check if allOf contains an enum - if so, return the type from allOf
+    const enumFromAllOf = getEnumFromSchema(schema);
+    if (enumFromAllOf) {
+      const typeFromAllOf = getTypeFromSchema(schema);
+      return typeFromAllOf ?? "string";
     }
     return "object";
   }

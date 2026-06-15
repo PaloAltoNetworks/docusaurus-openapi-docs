@@ -85,6 +85,13 @@ describe("getSchemaName", () => {
     expect(getSchemaName(schema)).toBe("(string | null)<uuid>");
   });
 
+  it("resolves type from an allOf wrapper that contains an enum", () => {
+    const schema = {
+      allOf: [{ type: "string", enum: ["a", "b"] }],
+    } as unknown as SchemaObject;
+    expect(getSchemaName(schema)).toBe("string");
+  });
+
   it("renders array of items whose type is a union", () => {
     const schema: SchemaObject = {
       type: "array",
