@@ -7,17 +7,17 @@
 
 import React, { cloneElement, ReactElement, useEffect, useRef } from "react";
 
+import useIsBrowser from "@docusaurus/useIsBrowser";
+import clsx from "clsx";
+
+import { useScrollPositionBlocker } from "../../../utils/scrollUtils";
 import {
   sanitizeTabsChildren,
   type TabItemProps,
   type TabProps,
   TabsProvider,
-  useScrollPositionBlocker,
   useTabsContextValue,
-} from "@docusaurus/theme-common/internal";
-import useIsBrowser from "@docusaurus/useIsBrowser";
-import clsx from "clsx";
-
+} from "../../../utils/tabsUtils";
 import { Language } from "../CodeSnippets/code-snippets-types";
 
 export interface Props {

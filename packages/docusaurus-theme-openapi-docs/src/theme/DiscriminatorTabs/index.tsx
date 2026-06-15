@@ -13,17 +13,18 @@ import React, {
   ReactElement,
 } from "react";
 
+import useIsBrowser from "@docusaurus/useIsBrowser";
+import clsx from "clsx";
+import flatten from "lodash/flatten";
+
+import { useScrollPositionBlocker } from "../../utils/scrollUtils";
 import {
   sanitizeTabsChildren,
   type TabItemProps,
   TabProps,
   TabsProvider,
-  useScrollPositionBlocker,
   useTabsContextValue,
-} from "@docusaurus/theme-common/internal";
-import useIsBrowser from "@docusaurus/useIsBrowser";
-import clsx from "clsx";
-import flatten from "lodash/flatten";
+} from "../../utils/tabsUtils";
 
 function TabList({
   className,

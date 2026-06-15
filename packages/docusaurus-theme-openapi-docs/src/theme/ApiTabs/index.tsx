@@ -13,18 +13,19 @@ import React, {
   ReactElement,
 } from "react";
 
+import { translate } from "@docusaurus/Translate";
+import useIsBrowser from "@docusaurus/useIsBrowser";
+import Heading from "@theme/Heading";
+import clsx from "clsx";
+
+import { useScrollPositionBlocker } from "../../utils/scrollUtils";
 import {
   sanitizeTabsChildren,
   type TabItemProps,
   TabProps,
   TabsProvider,
-  useScrollPositionBlocker,
   useTabsContextValue,
-} from "@docusaurus/theme-common/internal";
-import { translate } from "@docusaurus/Translate";
-import useIsBrowser from "@docusaurus/useIsBrowser";
-import Heading from "@theme/Heading";
-import clsx from "clsx";
+} from "../../utils/tabsUtils";
 
 export interface TabListProps extends TabProps {
   label: string;

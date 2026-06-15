@@ -8,13 +8,6 @@
 import React from "react";
 
 import { useThemeConfig, usePrismTheme } from "@docusaurus/theme-common";
-import {
-  parseCodeBlockTitle,
-  parseLanguage,
-  parseLines,
-  containsLineNumbers,
-  useCodeWordWrap,
-} from "@docusaurus/theme-common/internal";
 import Container from "@theme/ApiExplorer/ApiCodeBlock/Container";
 import CopyButton from "@theme/ApiExplorer/ApiCodeBlock/CopyButton";
 import ExpandButton from "@theme/ApiExplorer/ApiCodeBlock/ExpandButton";
@@ -23,6 +16,14 @@ import WordWrapButton from "@theme/ApiExplorer/ApiCodeBlock/WordWrapButton";
 import type { Props } from "@theme/CodeBlock/Content/String";
 import clsx from "clsx";
 import { Highlight, Language } from "prism-react-renderer";
+
+import {
+  containsLineNumbers,
+  parseCodeBlockTitle,
+  parseLanguage,
+  parseLines,
+} from "../../../../utils/codeBlockUtils";
+import { useCodeWordWrap } from "../../../../utils/useCodeWordWrap";
 
 export default function CodeBlockString({
   children,
