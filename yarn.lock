@@ -5056,13 +5056,6 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@types/yauzl@^2.9.1":
-  version "2.10.3"
-  resolved "https://registry.yarnpkg.com/@types/yauzl/-/yauzl-2.10.3.tgz#e9b2808b4f109504a03cda958259876f61017999"
-  integrity sha512-oJoftv0LSuaDZE3Le4DbKX+KS9G36NzOeSap90UIK0yMA/NhKJhqlSGtNDORNRaIbQfzjXDrQa0ytJ6mNRGz/Q==
-  dependencies:
-    "@types/node" "*"
-
 "@typescript-eslint/eslint-plugin@^5.5.0":
   version "5.62.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-5.62.0.tgz#aeef0328d172b9e37d9bab6dbc13b87ed88977db"
@@ -6447,11 +6440,6 @@ bser@2.1.1:
   dependencies:
     node-int64 "^0.4.0"
 
-buffer-crc32@~0.2.3:
-  version "0.2.13"
-  resolved "https://registry.yarnpkg.com/buffer-crc32/-/buffer-crc32-0.2.13.tgz#0d333e3f00eac50aa1454abd30ef8c2a5d9a7242"
-  integrity sha512-VO9Ht/+p3SN7SKWqcrgEzjGbRSJYTx+Q1pTQC0wrWqHx0vpJraQ6GtHx8tvcg1rlK1byhU5gccxgOgj7B0TDkQ==
-
 buffer-equal@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/buffer-equal/-/buffer-equal-0.0.1.tgz#91bc74b11ea405bc916bc6aa908faafa5b4aac4b"
@@ -7590,9 +7578,9 @@ cypress-plugin-snapshots@^1.4.4:
     unidiff "1.0.2"
 
 cypress@^15.15.0:
-  version "15.15.0"
-  resolved "https://registry.yarnpkg.com/cypress/-/cypress-15.15.0.tgz#5f9d9e8304636f7add7cb296130c0262960648bc"
-  integrity sha512-N8qBv3AUYn6xfIG73O5O58kTClUBSZ7a3C08IQFkSGTUdEauJ3BqwTFb/f9KPZgadftoZjllC0XSwD7xNNolbA==
+  version "15.16.0"
+  resolved "https://registry.yarnpkg.com/cypress/-/cypress-15.16.0.tgz#482f77e6f85aee98b94a5ad844d36f69dc212c28"
+  integrity sha512-fy0M0c9xDLEp4v9y7LLKFeAQhIdDsobxDSKpD3JcZpqQefjy9TSzEyVV3HA0zu7hUi0bGHlSYlI7ASub8wgR9A==
   dependencies:
     "@cypress/request" "^4.0.0"
     "@cypress/xvfb" "^1.2.4"
@@ -7614,7 +7602,6 @@ cypress@^15.15.0:
     eventemitter2 "6.4.7"
     execa "4.1.0"
     executable "^4.1.1"
-    extract-zip "2.0.1"
     fs-extra "^9.1.0"
     hasha "5.2.2"
     is-installed-globally "~0.4.0"
@@ -7633,7 +7620,7 @@ cypress@^15.15.0:
     tree-kill "1.2.2"
     tslib "1.14.1"
     untildify "^4.0.0"
-    yauzl "^2.10.0"
+    yauzl "^3.3.1"
 
 damerau-levenshtein@^1.0.8:
   version "1.0.8"
@@ -8996,17 +8983,6 @@ extend@^3.0.0, extend@~3.0.2:
   resolved "https://registry.yarnpkg.com/extend/-/extend-3.0.2.tgz#f8b1136b4071fbd8eb140aff858b1019ec2915fa"
   integrity sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g==
 
-extract-zip@2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/extract-zip/-/extract-zip-2.0.1.tgz#663dca56fe46df890d5f131ef4a06d22bb8ba13a"
-  integrity sha512-GDhU9ntwuKyGXdZBUgTIe+vXnWj0fppUEtMDL0+idd5Sta8TGpHssn/eusA9mrPr9qNDym6SxAYZjNvCn/9RBg==
-  dependencies:
-    debug "^4.1.1"
-    get-stream "^5.1.0"
-    yauzl "^2.10.0"
-  optionalDependencies:
-    "@types/yauzl" "^2.9.1"
-
 extsprintf@1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.3.0.tgz#96918440e3041a7a414f8c52e3c574eb3c3e1e05"
@@ -9103,13 +9079,6 @@ fb-watchman@^2.0.0:
   integrity sha512-p5161BqbuCaSnB8jIbzQHOlpgsPmK5rJVDfDKO91Axs5NC1uu3HRQm6wt9cd9/+GtQQIO53JdGXXoyDpTAsgYA==
   dependencies:
     bser "2.1.1"
-
-fd-slicer@~1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/fd-slicer/-/fd-slicer-1.1.0.tgz#25c7c89cb1f9077f8891bbe61d8f390eae256f1e"
-  integrity sha512-cE1qsB/VwyQozZ+q1dGxR8LBYNZeofhEdUNGSMbQD3Gw2lAzX9Zb3uIU6Ebc/Fmyjo9AWWfnn0AUCHqtevs/8g==
-  dependencies:
-    pend "~1.2.0"
 
 fdir@^6.4.3, fdir@^6.5.0:
   version "6.5.0"
@@ -9475,7 +9444,7 @@ get-stream@6.0.0:
   resolved "https://registry.yarnpkg.com/get-stream/-/get-stream-6.0.0.tgz#3e0012cb6827319da2706e601a1583e8629a6718"
   integrity sha512-A1B3Bh1UmL0bidM/YX2NsCOTnGJePL9rO/M+Mw3m9f2gUpfokS0hi5Eah0WSUEWZdZhIZtMjkIYS7mDfOqNHbg==
 
-get-stream@^5.0.0, get-stream@^5.1.0:
+get-stream@^5.0.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/get-stream/-/get-stream-5.2.0.tgz#4966a1795ee5ace65e706c4b7beb71257d6e22d3"
   integrity sha512-nBF+F1rAZVCu/p7rjzgA+Yb4lfYXrpl7a6VmJrU8wF9I1CKvP/QwPNZHnOlwbTkY6dvtFIzFMSyQXbLoTQPRpA==
@@ -18631,13 +18600,12 @@ yargs@^16.2.0:
     y18n "^5.0.5"
     yargs-parser "^20.2.2"
 
-yauzl@^2.10.0:
-  version "2.10.0"
-  resolved "https://registry.yarnpkg.com/yauzl/-/yauzl-2.10.0.tgz#c7eb17c93e112cb1086fa6d8e51fb0667b79a5f9"
-  integrity sha512-p4a9I6X6nu6IhoGmBqAcbJy1mlC4j27vEPZX9F4L4/vZT3Lyq1VkFHw/V/PUcB9Buo+DG3iHkT0x3Qya58zc3g==
+yauzl@^3.3.1:
+  version "3.3.2"
+  resolved "https://registry.yarnpkg.com/yauzl/-/yauzl-3.3.2.tgz#ec30f276da0380406527796a6fb4b2c5461b3929"
+  integrity sha512-Md9ankxxN23wncAN8s7+Tn3Co52zLUPMtnrLAbVCnfG5d2tKBFfmygYSgXlqFgXObtzIgqkx7aNgDBpso9+4qA==
   dependencies:
-    buffer-crc32 "~0.2.3"
-    fd-slicer "~1.1.0"
+    pend "~1.2.0"
 
 yeast@0.1.2:
   version "0.1.2"
