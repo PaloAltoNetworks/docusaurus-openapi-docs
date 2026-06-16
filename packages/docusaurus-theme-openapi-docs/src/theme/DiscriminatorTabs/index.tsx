@@ -17,14 +17,14 @@ import useIsBrowser from "@docusaurus/useIsBrowser";
 import clsx from "clsx";
 import flatten from "lodash/flatten";
 
-import { useScrollPositionBlocker } from "../../utils/scrollUtils";
+import { useScrollPositionBlocker } from "@theme/utils/scrollUtils";
 import {
   sanitizeTabsChildren,
   type TabItemProps,
   TabProps,
   TabsProvider,
   useTabsContextValue,
-} from "../../utils/tabsUtils";
+} from "@theme/utils/tabsUtils";
 
 function TabList({
   className,

@@ -22,8 +22,8 @@ import {
   parseCodeBlockTitle,
   parseLanguage,
   parseLines,
-} from "../../../../utils/codeBlockUtils";
-import { useCodeWordWrap } from "../../../../utils/useCodeWordWrap";
+} from "@theme/utils/codeBlockUtils";
+import { useCodeWordWrap } from "@theme/utils/useCodeWordWrap";
 
 export default function CodeBlockString({
   children,

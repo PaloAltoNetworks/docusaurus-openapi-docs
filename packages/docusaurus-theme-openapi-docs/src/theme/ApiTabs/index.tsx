@@ -18,14 +18,14 @@ import useIsBrowser from "@docusaurus/useIsBrowser";
 import Heading from "@theme/Heading";
 import clsx from "clsx";
 
-import { useScrollPositionBlocker } from "../../utils/scrollUtils";
+import { useScrollPositionBlocker } from "@theme/utils/scrollUtils";
 import {
   sanitizeTabsChildren,
   type TabItemProps,
   TabProps,
   TabsProvider,
   useTabsContextValue,
-} from "../../utils/tabsUtils";
+} from "@theme/utils/tabsUtils";
 
 export interface TabListProps extends TabProps {
   label: string;

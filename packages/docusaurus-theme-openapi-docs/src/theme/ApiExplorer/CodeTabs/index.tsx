@@ -10,14 +10,14 @@ import React, { cloneElement, ReactElement, useEffect, useRef } from "react";
 import useIsBrowser from "@docusaurus/useIsBrowser";
 import clsx from "clsx";
 
-import { useScrollPositionBlocker } from "../../../utils/scrollUtils";
+import { useScrollPositionBlocker } from "@theme/utils/scrollUtils";
 import {
   sanitizeTabsChildren,
   type TabItemProps,
   type TabProps,
   TabsProvider,
   useTabsContextValue,
-} from "../../../utils/tabsUtils";
+} from "@theme/utils/tabsUtils";
 import { Language } from "../CodeSnippets/code-snippets-types";
 
 export interface Props {

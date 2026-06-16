@@ -20,14 +20,14 @@ import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import { RootState } from "@theme/ApiItem/store";
 import clsx from "clsx";
 
-import { useScrollPositionBlocker } from "../../utils/scrollUtils";
+import { useScrollPositionBlocker } from "@theme/utils/scrollUtils";
 import {
   sanitizeTabsChildren,
   type TabItemProps,
   TabProps,
   TabsProvider,
   useTabsContextValue,
-} from "../../utils/tabsUtils";
+} from "@theme/utils/tabsUtils";
 
 export interface Props {
   schemaType: any;

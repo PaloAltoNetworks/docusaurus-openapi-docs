@@ -18,14 +18,14 @@ import { ThemeClassNames } from "@docusaurus/theme-common";
 import useIsBrowser from "@docusaurus/useIsBrowser";
 import clsx from "clsx";
 
-import { useScrollPositionBlocker } from "../../utils/scrollUtils";
+import { useScrollPositionBlocker } from "@theme/utils/scrollUtils";
 import {
   sanitizeTabsChildren,
   type TabsProps,
   TabsProvider,
   useTabs,
   useTabsContextValue,
-} from "../../utils/tabsUtils";
+} from "@theme/utils/tabsUtils";
 import styles from "./styles.module.css";
 
 type Props = TabsProps;

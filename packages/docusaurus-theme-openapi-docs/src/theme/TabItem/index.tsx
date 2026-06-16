@@ -16,7 +16,7 @@ import React, { type ReactNode } from "react";
 
 import clsx from "clsx";
 
-import { type TabItemProps, useTabs } from "../../utils/tabsUtils";
+import { type TabItemProps, useTabs } from "@theme/utils/tabsUtils";
 
 type Props = TabItemProps;
 import styles from "./styles.module.css";
