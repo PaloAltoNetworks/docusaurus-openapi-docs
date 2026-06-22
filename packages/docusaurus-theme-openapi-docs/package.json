@@ -37,7 +37,7 @@
     "@types/pako": "^2.0.3",
     "@types/postman-collection": "^3.5.11",
     "@types/react-modal": "^3.16.3",
-    "concurrently": "^9.2.0",
+    "concurrently": "^10.0.3",
     "docusaurus-plugin-openapi-docs": "^5.0.2",
     "docusaurus-plugin-sass": "^0.2.6",
     "eslint-plugin-prettier": "^5.5.1"
