@@ -23,8 +23,7 @@ import React, {
 } from "react";
 
 import useIsomorphicLayoutEffect from "@docusaurus/useIsomorphicLayoutEffect";
-
-import { ReactContextError } from "./reactUtils";
+import { ReactContextError } from "@docusaurus/theme-common";
 
 type ScrollController = {
   scrollEventsEnabledRef: React.RefObject<boolean>;

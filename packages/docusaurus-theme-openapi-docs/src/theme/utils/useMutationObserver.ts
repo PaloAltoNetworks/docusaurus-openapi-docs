@@ -12,7 +12,9 @@
 
 import { useEffect } from "react";
 
-import { useEvent, useShallowMemoObject } from "./reactUtils";
+import { useEvent } from "@docusaurus/theme-common";
+
+import { useShallowMemoObject } from "./reactUtils";
 
 type Options = MutationObserverInit;
 
