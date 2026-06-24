@@ -1,3 +1,98 @@
+## 5.0.3 (2026-06-24)
+
+Patch release with a configurable schema expansion level, numerous schema rendering fixes, improved i18n support, Docusaurus v4 readiness work, and a batch of dependency updates. Also fixes the version script to ensure `create-docusaurus-openapi-docs` is always bumped in lockstep with the plugin and theme.
+
+#### :rocket: New Feature
+
+- feat(theme): configurable schema expansion level (#1222) ([#1449](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1449))
+
+#### :bug: Bug Fix
+
+- fix(theme): vendor theme-common/internal usages ahead of Docusaurus v4 (#1140) ([#1502](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1502))
+- fix(theme): make i18n strings extractable by write-translations ([#1499](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1499))
+- fix(plugin): render OpenAPI 3.1 type unions in schema names (#950) ([#1475](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1475))
+- fix(theme): prefill Send API Request from example fields (#544, #1079) ([#1476](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1476))
+- fix(plugin): restore menu\_\_list-item--deprecated class on sidebar items ([#1474](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1474))
+- fix(theme): align CodeSnippets outer tab with Docusaurus storage slot ([#1464](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1464))
+- fix: render nested arrays as Type[][] in Schema tab (#1114) ([#1465](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1465))
+- fix: render allOf schemas with additionalProperties:false on every member (#1119) ([#1463](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1463))
+- fix(theme): support multiple x-codeSamples per language (#1204) ([#1459](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1459))
+- fix(theme): preserve large integer precision in response panel (#1208) ([#1458](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1458))
+- fix: dedupe properties when allOf override redefines nested array items (#1218) ([#1457](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1457))
+- fix(theme): pre-populate parameter defaults in API explorer form (#1226) ([#1448](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1448))
+- fix: skip vendor extensions at the path level (#891) ([#1440](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1440))
+- fix(demo): use bracketed admonition title syntax for Docusaurus 3.10 ([#1445](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1445))
+
+#### :memo: Documentation
+
+- docs: document themeConfig.api.schemaExpansion option
+- docs: correct categoryLinkSource supported values ([#1447](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1447))
+- docs: harmonize top-level README with plugin README ([#1446](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1446))
+
+#### :robot: Dependencies
+
+- chore(deps): bump ws from 7.5.10 to 7.5.11 ([#1514](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1514))
+- chore(deps): bump @redocly/openapi-core from 2.32.2 to 2.33.0 ([#1515](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1515))
+- chore(deps): bump react-hook-form from 7.75.0 to 7.79.0 ([#1517](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1517))
+- chore(deps): bump the react group across 1 directory with 2 updates ([#1503](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1503))
+- chore(deps): bump sass from 1.99.0 to 1.101.0 ([#1504](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1504))
+- chore(deps): bump @redocly/openapi-core from 2.31.5 to 2.32.2 ([#1505](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1505))
+- chore(deps): bump http-proxy-middleware from 2.0.9 to 2.0.10 ([#1511](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1511))
+- chore(deps): bump webpack-dev-server from 5.2.4 to 5.2.5 ([#1512](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1512))
+- chore(deps): bump github/codeql-action from 4.36.1 to 4.36.2 ([#1506](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1506))
+- chore(deps): bump launch-editor from 2.12.0 to 2.14.1 ([#1510](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1510))
+- chore(deps): bump @redocly/openapi-core from 2.30.6 to 2.31.5 ([#1497](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1497))
+- chore(deps): bump github/codeql-action from 4.35.5 to 4.36.1 ([#1501](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1501))
+- chore(deps): bump @reduxjs/toolkit from 2.11.2 to 2.12.0 ([#1498](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1498))
+- chore(deps): bump actions/checkout from 6.0.2 to 6.0.3 ([#1500](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1500))
+- chore(deps): bump tmp from 0.2.5 to 0.2.7 ([#1490](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1490))
+- chore(deps): bump github/codeql-action from 4.35.4 to 4.35.5 ([#1489](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1489))
+- chore(deps): bump sass-loader from 16.0.7 to 16.0.8 ([#1486](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1486))
+- chore(deps): bump @redocly/openapi-core from 2.30.5 to 2.30.6 ([#1484](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1484))
+- chore(deps): bump the react group across 1 directory with 2 updates ([#1477](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1477))
+- chore(deps): bump github/codeql-action from 4.35.3 to 4.35.4 ([#1482](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1482))
+- chore(deps): bump @redocly/openapi-core from 2.30.3 to 2.30.5 ([#1479](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1479))
+- chore(deps): bump fs-extra from 11.3.4 to 11.3.5 ([#1480](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1480))
+- chore(deps): bump github/codeql-action from 4.35.2 to 4.35.3 ([#1471](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1471))
+- chore(deps): bump @redocly/openapi-core from 2.30.1 to 2.30.3 ([#1469](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1469))
+- chore(deps): bump react-hook-form from 7.74.0 to 7.75.0 ([#1468](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1468))
+- chore(deps): bump sass from 1.98.0 to 1.99.0 ([#1467](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1467))
+- chore(deps): bump fast-uri from 3.1.0 to 3.1.2 ([#1461](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1461))
+- chore(deps): bump fast-xml-builder from 1.1.5 to 1.2.0 ([#1460](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1460))
+- chore(deps): bump @babel/plugin-transform-modules-systemjs ([#1462](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1462))
+- chore(deps): bump ip-address from 10.1.0 to 10.2.0 ([#1456](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1456))
+- chore(deps): bump axios from 1.15.1 to 1.16.0 ([#1455](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1455))
+- chore(deps): bump react-hook-form from 7.73.1 to 7.74.0 ([#1452](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1452))
+- chore(deps): bump @redocly/openapi-core from 2.29.0 to 2.30.1 ([#1453](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1453))
+- chore(deps): bump openapi-to-postmanv2 from 6.0.0 to 6.0.1 ([#1454](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1454))
+
+#### :wrench: Maintenance
+
+- chore(deps-dev): bump @types/node from 25.7.0 to 25.9.3 ([#1516](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1516))
+- chore(deps-dev): bump @babel/core from 7.29.0 to 7.29.7 ([#1518](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1518))
+- chore(deps-dev): bump concurrently from 9.2.1 to 10.0.3 ([#1508](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1508))
+- chore(deps-dev): bump semver from 7.8.1 to 7.8.3 ([#1507](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1507))
+- chore(deps-dev): bump start-server-and-test from 3.0.2 to 3.0.5 ([#1493](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1493))
+- chore(deps-dev): bump fast-xml-parser from 5.7.1 to 5.8.0 ([#1495](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1495))
+- chore(deps-dev): bump cypress from 15.15.0 to 15.16.0 ([#1494](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1494))
+- chore(deps-dev): bump @types/node from 25.6.0 to 25.7.0 ([#1488](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1488))
+- chore(deps-dev): bump cypress and @testing-library/cypress ([#1487](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1487))
+- chore(deps-dev): bump playwright from 1.59.1 to 1.60.0 ([#1485](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1485))
+- chore(deps-dev): bump lint-staged from 16.4.0 to 17.0.4 ([#1481](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1481))
+- chore(deps-dev): bump eslint-plugin-jest from 28.14.0 to 29.15.2 ([#1478](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1478))
+- chore(deps-dev): bump cypress from 8.7.0 to 11.2.0 ([#1470](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1470))
+- chore(deps-dev): bump pixelmatch from 7.1.0 to 7.2.0 ([#1466](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1466))
+- chore(deps-dev): bump eslint-plugin-react-hooks from 7.0.1 to 7.1.1 ([#1450](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1450))
+- chore(deps-dev): bump prettier from 3.8.1 to 3.8.3 ([#1451](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1451))
+
+#### Committers: 5
+
+- dependabot[bot]
+- Nicu Micle
+- Steven Serrata
+- Vladislav Nawrocki
+- zohuyhieuzo03
+
 ## 5.0.2 (2026-05-01)
 
 Routine maintenance release. Bumps Docusaurus to `3.10.1` in the demo and the `create-docusaurus-openapi-docs` scaffolder template (picks up the upstream webpackbar/webpack bundler fix), plus a batch of dependency updates. Also fixes a build error in scaffolded sites caused by an HTML comment in the sample blog post.
