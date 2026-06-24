@@ -97,7 +97,7 @@ jobs:
 
       - name: Deploy to Firebase
         id: deploy_live
-        uses: FirebaseExtended/action-hosting-deploy@e2eda2e106cfa35cdbcf4ac9ddaf6c4756df2c8c # v0.10.0
+        uses: FirebaseExtended/action-hosting-deploy@500ac625ca2dd40cbd15f7659af953801858032a # v0.10.0+node24 (pending release)
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ steps.creds.outputs.sa_key }}"
@@ -106,7 +106,6 @@ jobs:
           target: ${{ secrets.FIREBASE_SITE }}
         env:
           FIREBASE_CLI_PREVIEWS: hostingchannels
-          FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
   cache_prod_screenshots:
     name: Cache Prod Screenshots
