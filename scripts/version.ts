@@ -101,6 +101,20 @@ function main() {
     { stdio: "ignore" }
   );
 
+  // Bump create-docusaurus-openapi-docs version (lerna may skip it in fixed mode)
+  const createPkgPath = path.resolve(
+    __dirname,
+    "../packages/create-docusaurus-openapi-docs/package.json"
+  );
+  if (fs.existsSync(createPkgPath)) {
+    const createPkg = JSON.parse(fs.readFileSync(createPkgPath, "utf-8"));
+    createPkg.version = nextVersion;
+    fs.writeFileSync(createPkgPath, JSON.stringify(createPkg, null, 2) + "\n");
+    console.log(
+      `Updated create-docusaurus-openapi-docs version to ${nextVersion}`
+    );
+  }
+
   // Update the template's package.json with the new plugin/theme version
   const templatePkgPath = path.resolve(
     __dirname,
