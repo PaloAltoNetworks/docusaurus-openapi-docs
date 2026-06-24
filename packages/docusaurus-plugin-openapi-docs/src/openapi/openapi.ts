@@ -602,7 +602,9 @@ function bindCollectionToApiItems(
       apiItem: item,
       method: item.api.method.toLowerCase(),
       pathMatcher: pathTemplateToRegex(item.api.path),
-    }));
+      hasParams: /\{[^}]+\}/.test(item.api.path),
+    }))
+    .sort((a, b) => Number(a.hasParams) - Number(b.hasParams));
 
   postmanCollection.forEachItem((item: any) => {
     const method = item.request.method.toLowerCase();
