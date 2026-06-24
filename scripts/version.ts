@@ -110,6 +110,9 @@ function main() {
     const createPkg = JSON.parse(fs.readFileSync(createPkgPath, "utf-8"));
     createPkg.version = nextVersion;
     fs.writeFileSync(createPkgPath, JSON.stringify(createPkg, null, 2) + "\n");
+    console.log(
+      `Updated create-docusaurus-openapi-docs version to ${nextVersion}`
+    );
   }
 
   // Update the template's package.json with the new plugin/theme version
