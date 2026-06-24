@@ -7,7 +7,7 @@
 
 import React from "react";
 
-import { LineProps } from "@docusaurus/theme-common/internal";
+import type { Props as LineProps } from "@theme/CodeBlock/Line";
 import clsx from "clsx";
 
 export default function CodeBlockLine({

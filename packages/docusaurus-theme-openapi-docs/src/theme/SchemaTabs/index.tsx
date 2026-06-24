@@ -14,17 +14,18 @@ import React, {
   LegacyRef,
 } from "react";
 
+import useIsBrowser from "@docusaurus/useIsBrowser";
+import clsx from "clsx";
+import flatten from "lodash/flatten";
+
+import { useScrollPositionBlocker } from "@theme/utils/scrollUtils";
 import {
   sanitizeTabsChildren,
   type TabItemProps,
   TabProps,
   TabsProvider,
-  useScrollPositionBlocker,
   useTabsContextValue,
-} from "@docusaurus/theme-common/internal";
-import useIsBrowser from "@docusaurus/useIsBrowser";
-import clsx from "clsx";
-import flatten from "lodash/flatten";
+} from "@theme/utils/tabsUtils";
 
 export interface SchemaTabsProps extends TabProps {
   /**

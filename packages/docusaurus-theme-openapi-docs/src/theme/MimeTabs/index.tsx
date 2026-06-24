@@ -13,20 +13,21 @@ import React, {
   ReactElement,
 } from "react";
 
-import {
-  sanitizeTabsChildren,
-  type TabItemProps,
-  TabProps,
-  TabsProvider,
-  useScrollPositionBlocker,
-  useTabsContextValue,
-} from "@docusaurus/theme-common/internal";
 import useIsBrowser from "@docusaurus/useIsBrowser";
 import { setAccept } from "@theme/ApiExplorer/Accept/slice";
 import { setContentType } from "@theme/ApiExplorer/ContentType/slice";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import { RootState } from "@theme/ApiItem/store";
 import clsx from "clsx";
+
+import { useScrollPositionBlocker } from "@theme/utils/scrollUtils";
+import {
+  sanitizeTabsChildren,
+  type TabItemProps,
+  TabProps,
+  TabsProvider,
+  useTabsContextValue,
+} from "@theme/utils/tabsUtils";
 
 export interface Props {
   schemaType: any;
