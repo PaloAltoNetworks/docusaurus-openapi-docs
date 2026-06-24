@@ -1,0 +1,94 @@
+openapi: 3.0.1
+info:
+  title: Path Ordering Tests
+  version: 1.0.0
+  description: |
+    Validates that static path segments are correctly resolved when declared
+    after parametric paths at the same nesting level. The `/pet/findByTags`
+    endpoint must show the full URL in code samples, not just the base server.
+
+    Regression coverage for: https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1519
+
+servers:
+  - url: https://petstore.swagger.io/v2
+
+tags:
+  - name: path-ordering
+    description: Path ordering regression tests
+
+paths:
+  /pet/findByStatus:
+    get:
+      tags:
+        - path-ordering
+      summary: Finds Pets by status
+      description: |
+        Expected URL in code samples:
+        `https://petstore.swagger.io/v2/pet/findByStatus`
+      operationId: findPetsByStatus
+      parameters:
+        - name: status
+          in: query
+          description: Status values that need to be considered for filter.
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - available
+                - pending
+                - sold
+            default:
+              - available
+      responses:
+        "200":
+          description: Success
+
+  /pet/{petId}:
+    get:
+      tags:
+        - path-ordering
+      summary: Find pet by ID
+      description: |
+        Expected URL in code samples:
+        `https://petstore.swagger.io/v2/pet/{petId}`
+      operationId: getPetById
+      parameters:
+        - name: petId
+          in: path
+          description: ID of pet to return.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Success
+
+  /pet/findByTags:
+    get:
+      tags:
+        - path-ordering
+      summary: Finds Pets by tags
+      description: |
+        This endpoint is declared after `/pet/{petId}` in the spec to verify
+        that path ordering does not affect URL construction.
+
+        Expected URL in code samples:
+        `https://petstore.swagger.io/v2/pet/findByTags`
+      operationId: findPetsByTags
+      parameters:
+        - name: tags
+          in: query
+          description: Tags to filter by.
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        "200":
+          description: Success
