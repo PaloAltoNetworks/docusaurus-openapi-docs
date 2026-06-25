@@ -15,7 +15,7 @@ import {
 } from "@docusaurus/plugin-content-docs/src/sidebars/types";
 import { posixPath } from "@docusaurus/utils";
 import clsx from "clsx";
-import { kebabCase } from "lodash";
+import kebabCase from "lodash/kebabCase";
 
 import { TagGroupObject, TagObject } from "../openapi/types";
 import type {
