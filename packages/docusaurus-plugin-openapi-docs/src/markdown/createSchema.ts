@@ -8,7 +8,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { merge } from "allof-merge";
 import clsx from "clsx";
-import isEmpty from "lodash/isEmpty";
 
 import {
   createClosingArrayBracket,
@@ -249,7 +248,10 @@ function createAdditionalProperties(schema: SchemaObject) {
   if (!additionalProperties) return [];
 
   // Handle free-form objects
-  if (additionalProperties === true || isEmpty(additionalProperties)) {
+  if (
+    additionalProperties === true ||
+    Object.keys(additionalProperties).length === 0
+  ) {
     return create("SchemaItem", {
       name: "property name*",
       required: false,

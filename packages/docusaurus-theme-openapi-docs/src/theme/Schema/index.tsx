@@ -25,7 +25,6 @@ import TabItem from "@theme/TabItem";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { merge } from "allof-merge";
 import clsx from "clsx";
-import isEmpty from "lodash/isEmpty";
 
 import { getQualifierMessage, getSchemaName } from "../../markdown/schema";
 import type { SchemaObject } from "../../types.d";
@@ -700,7 +699,10 @@ const AdditionalProperties: React.FC<SchemaProps> = ({
   if (!additionalProperties) return null;
 
   // Handle free-form objects
-  if (additionalProperties === true || isEmpty(additionalProperties)) {
+  if (
+    additionalProperties === true ||
+    Object.keys(additionalProperties).length === 0
+  ) {
     return (
       <SchemaItem
         name="property name*"
