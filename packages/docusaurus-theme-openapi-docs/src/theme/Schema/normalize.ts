@@ -208,7 +208,16 @@ export function normalizeSchema(
   let working: any = schema;
 
   if (Array.isArray(working.allOf) && working.allOf.length > 0) {
-    working = mergeAllOf(working);
+    // Skip merge when allOf contains circular-reference string markers
+    // produced by loadAndResolveSpec's JSON.stringify roundtrip (e.g.
+    // `allOf: ["circular(Title)"]`). allof-merge doesn't handle string
+    // members and would discard the marker.
+    const hasCircularMember = working.allOf.some(
+      (m: any) => typeof m === "string"
+    );
+    if (!hasCircularMember) {
+      working = mergeAllOf(working);
+    }
   }
 
   if ((working.oneOf || working.anyOf) && working.properties) {
