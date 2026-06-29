@@ -274,6 +274,57 @@ describe("normalizeSchema", () => {
     });
   });
 
+  describe("discriminator property in branch only", () => {
+    it("promotes discriminator property to top level via sibling folding", () => {
+      const schema = {
+        discriminator: { propertyName: "petType" },
+        properties: { name: { type: "string" } },
+        oneOf: [
+          {
+            properties: {
+              petType: { type: "string", enum: ["dog"] },
+              breed: { type: "string" },
+            },
+          },
+          {
+            properties: {
+              petType: { type: "string", enum: ["cat"] },
+              indoor: { type: "boolean" },
+            },
+          },
+        ],
+      };
+      const result = normalizeSchema(schema);
+      expect(result.discriminator).toEqual({ propertyName: "petType" });
+      expect(result.oneOf[0].properties.petType).toBeDefined();
+      expect(result.oneOf[0].properties.name).toBeDefined();
+    });
+
+    it("keeps discriminator property accessible when defined only in oneOf branches without siblings", () => {
+      const schema = {
+        discriminator: { propertyName: "type" },
+        oneOf: [
+          {
+            properties: {
+              type: { type: "string", enum: ["A"] },
+              a: { type: "number" },
+            },
+          },
+          {
+            properties: {
+              type: { type: "string", enum: ["B"] },
+              b: { type: "boolean" },
+            },
+          },
+        ],
+      };
+      const result = normalizeSchema(schema);
+      expect(result.discriminator).toEqual({ propertyName: "type" });
+      expect(result.oneOf[0].properties.type).toBeDefined();
+      expect(result.oneOf[1].properties.type).toBeDefined();
+    });
+  });
+
   describe("identity and caching", () => {
     it("short-circuits already-normalized schemas", () => {
       const schema = {

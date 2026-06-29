@@ -8,6 +8,10 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { merge } from "allof-merge";
 
+export function isCircularMarker(value: unknown): value is string {
+  return typeof value === "string" && value.startsWith("circular(");
+}
+
 /**
  * Strip `additionalProperties: false` from sibling allOf members so
  * allof-merge doesn't collapse to an unsatisfiable empty schema. See #1119.
@@ -194,15 +198,13 @@ export function normalizeSchema(
   if (Array.isArray(working.allOf) && working.allOf.length > 0) {
     // Skip merge when allOf contains circular-reference string markers
     // (e.g. `allOf: ["circular(Title)"]`) — allof-merge can't handle them.
-    const hasCircularMember = working.allOf.some(
-      (m: any) => typeof m === "string"
-    );
+    const hasCircularMember = working.allOf.some(isCircularMarker);
     if (!hasCircularMember) {
       working = mergeAllOf(working);
     }
   }
 
-  if ((working.oneOf || working.anyOf) && working.properties) {
+  if (working.oneOf || working.anyOf) {
     working = foldSiblingsIntoBranches(working);
   }
 

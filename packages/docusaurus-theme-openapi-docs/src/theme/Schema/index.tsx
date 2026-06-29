@@ -17,6 +17,7 @@ import Markdown from "@theme/Markdown";
 import {
   foldSiblingsIntoBranches,
   getDiscriminator,
+  isCircularMarker,
   mergeAllOf,
   normalizeSchema,
 } from "@theme/Schema/normalize";
@@ -524,7 +525,7 @@ const AdditionalProperties: React.FC<SchemaProps> = ({
 
   if (!additionalProperties) return null;
 
-  if (typeof additionalProperties === "string") {
+  if (isCircularMarker(additionalProperties)) {
     return (
       <SchemaItem
         name="property name*"
@@ -651,7 +652,7 @@ const Items: React.FC<{
   schemaType: "request" | "response";
   schemaPath?: string;
 }> = ({ schema, schemaType, schemaPath }) => {
-  if (typeof schema.items === "string") {
+  if (isCircularMarker(schema.items)) {
     return (
       <div style={{ marginLeft: ".5rem" }}>
         <OpeningArrayBracket />
@@ -788,7 +789,7 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
     return null;
   }
 
-  if (typeof schema === "string") {
+  if (isCircularMarker(schema)) {
     return (
       <SchemaItem
         collapsible={false}
@@ -888,7 +889,7 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
     );
   }
 
-  if (typeof schema.items === "string") {
+  if (isCircularMarker(schema.items)) {
     return (
       <SchemaNodeDetails
         name={name}
