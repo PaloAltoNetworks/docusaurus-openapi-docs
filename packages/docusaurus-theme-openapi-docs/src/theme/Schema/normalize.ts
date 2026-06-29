@@ -85,6 +85,10 @@ const METADATA_KEYS = new Set([
 /**
  * Fold sibling fields into each oneOf/anyOf branch via allOf-merge so each
  * branch is self-contained. See #1218.
+ *
+ * Called by normalizeSchema after allOf resolution. Uses mergeAllOf internally
+ * to compose `{ allOf: [siblings, branch] }` per branch — the WeakMap caches
+ * in stripConflictingAdditionalProps prevent redundant work on shared subtrees.
  */
 export function foldSiblingsIntoBranches(schema: any): any {
   const branchKey = schema?.oneOf
@@ -123,43 +127,26 @@ const discriminatorCache = new WeakMap<object, any | null>();
  * Cached recursive discriminator lookup. Returns O(1) on repeated calls
  * with the same object reference (common after normalizeSchema).
  */
+const BRANCH_KEYS = ["oneOf", "anyOf", "allOf"] as const;
+
 export function getDiscriminator(schema: any): any | undefined {
   if (!schema || typeof schema !== "object") return undefined;
   if (discriminatorCache.has(schema)) {
     const cached = discriminatorCache.get(schema);
     return cached === null ? undefined : cached;
   }
-  // Sentinel for cycle detection.
   discriminatorCache.set(schema, null);
 
-  let result: any | undefined;
-  if (schema.discriminator) {
-    result = schema.discriminator;
-  } else if (Array.isArray(schema.oneOf)) {
-    for (const s of schema.oneOf) {
-      const found = getDiscriminator(s);
-      if (found) {
-        result = found;
-        break;
+  let result: any | undefined = schema.discriminator;
+  if (!result) {
+    for (const key of BRANCH_KEYS) {
+      const branches = schema[key];
+      if (!Array.isArray(branches)) continue;
+      for (const branch of branches) {
+        result = getDiscriminator(branch);
+        if (result) break;
       }
-    }
-  }
-  if (!result && Array.isArray(schema.anyOf)) {
-    for (const s of schema.anyOf) {
-      const found = getDiscriminator(s);
-      if (found) {
-        result = found;
-        break;
-      }
-    }
-  }
-  if (!result && Array.isArray(schema.allOf)) {
-    for (const s of schema.allOf) {
-      const found = getDiscriminator(s);
-      if (found) {
-        result = found;
-        break;
-      }
+      if (result) break;
     }
   }
 
@@ -172,16 +159,17 @@ export function getDiscriminator(schema: any): any | undefined {
  * and folds siblings into oneOf/anyOf branches. Cached by object identity so
  * nested SchemaNode renders short-circuit in O(1). See #1525.
  */
-export function normalizeSchema(
-  schema: any,
-  cache: WeakMap<object, any> = normalizeCache
-): any {
+export function normalizeSchema(schema: any): any {
+  return normalizeSchemaImpl(schema, normalizeCache);
+}
+
+function normalizeSchemaImpl(schema: any, cache: WeakMap<object, any>): any {
   if (Array.isArray(schema)) {
     const hit = cache.get(schema);
     if (hit) return hit;
     const result: any[] = [];
     cache.set(schema, result);
-    for (const s of schema) result.push(normalizeSchema(s, cache));
+    for (const s of schema) result.push(normalizeSchemaImpl(s, cache));
 
     return result;
   }
@@ -212,18 +200,20 @@ export function normalizeSchema(
     if (k === "properties" && v && typeof v === "object") {
       const props: any = {};
       for (const [pk, pv] of Object.entries(v)) {
-        props[pk] = normalizeSchema(pv, cache);
+        props[pk] = normalizeSchemaImpl(pv, cache);
       }
       result[k] = props;
     } else if (k === "items" || k === "not") {
-      result[k] = v && typeof v === "object" ? normalizeSchema(v, cache) : v;
+      result[k] =
+        v && typeof v === "object" ? normalizeSchemaImpl(v, cache) : v;
     } else if (k === "additionalProperties") {
-      result[k] = v && typeof v === "object" ? normalizeSchema(v, cache) : v;
+      result[k] =
+        v && typeof v === "object" ? normalizeSchemaImpl(v, cache) : v;
     } else if (
       (k === "oneOf" || k === "anyOf" || k === "allOf") &&
       Array.isArray(v)
     ) {
-      result[k] = v.map((s: any) => normalizeSchema(s, cache));
+      result[k] = v.map((s: any) => normalizeSchemaImpl(s, cache));
     } else {
       result[k] = v;
     }
