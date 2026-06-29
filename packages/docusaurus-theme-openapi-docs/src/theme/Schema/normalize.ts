@@ -113,11 +113,9 @@ function foldSiblingsIntoBranches(schema: any): any {
  *
  * See https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1525
  */
-// Tracks objects that are already normalized so recursive `SchemaNode`
-// renders (each of which calls `normalizeSchema` on its `schema` prop via
-// `useMemo`) short-circuit instead of re-walking. This is what keeps the
-// per-render cost O(1) on children after a single O(N) top-level pass.
-const normalizedSet = new WeakSet<object>();
+// Module-level cache shared across all `normalizeSchema` calls so nested
+// `SchemaNode` renders short-circuit in O(1) after the top-level O(N) pass.
+const normalizeCache = new WeakMap<object, any>();
 
 /**
  * Memoized variant of `findDiscriminator` from `Schema/index.tsx`. The
@@ -184,7 +182,7 @@ export function getDiscriminator(schema: any): any | undefined {
 
 export function normalizeSchema(
   schema: any,
-  cache: WeakMap<object, any> = new WeakMap()
+  cache: WeakMap<object, any> = normalizeCache
 ): any {
   if (Array.isArray(schema)) {
     const hit = cache.get(schema);
@@ -192,11 +190,10 @@ export function normalizeSchema(
     const result: any[] = [];
     cache.set(schema, result);
     for (const s of schema) result.push(normalizeSchema(s, cache));
-    normalizedSet.add(result);
+
     return result;
   }
   if (!schema || typeof schema !== "object") return schema;
-  if (normalizedSet.has(schema)) return schema;
   const hit = cache.get(schema);
   if (hit) return hit;
 
@@ -246,6 +243,7 @@ export function normalizeSchema(
     }
   }
 
-  normalizedSet.add(result);
+  // Self-register so re-normalizing the output is an identity no-op.
+  cache.set(result, result);
   return result;
 }
