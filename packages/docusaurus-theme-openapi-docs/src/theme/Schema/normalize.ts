@@ -55,7 +55,7 @@ function stripConflictingAdditionalProps(node: any): any {
   return result;
 }
 
-function mergeAllOf(allOf: any) {
+export function mergeAllOf(allOf: any) {
   const onMergeError = (msg: string) => console.warn(msg);
   const merged = merge(stripConflictingAdditionalProps(allOf), {
     onMergeError,
@@ -67,7 +67,7 @@ function mergeAllOf(allOf: any) {
  * Fold sibling fields into each `oneOf`/`anyOf` branch via allOf-merge so each
  * branch is self-contained. See issue #1218.
  */
-function foldSiblingsIntoBranches(schema: any): any {
+export function foldSiblingsIntoBranches(schema: any): any {
   const branchKey = schema?.oneOf
     ? "oneOf"
     : schema?.anyOf

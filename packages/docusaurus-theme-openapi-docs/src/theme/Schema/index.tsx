@@ -14,7 +14,11 @@ import { ClosingArrayBracket, OpeningArrayBracket } from "@theme/ArrayBrackets";
 import Details from "@theme/Details";
 import DiscriminatorTabs from "@theme/DiscriminatorTabs";
 import Markdown from "@theme/Markdown";
-import { normalizeSchema } from "@theme/Schema/normalize";
+import {
+  foldSiblingsIntoBranches,
+  mergeAllOf,
+  normalizeSchema,
+} from "@theme/Schema/normalize";
 import {
   SchemaDepthProvider,
   useSchemaDepth,
@@ -23,138 +27,11 @@ import {
 import SchemaItem from "@theme/SchemaItem";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { merge } from "allof-merge";
 import clsx from "clsx";
 import isEmpty from "lodash/isEmpty";
 
 import { getQualifierMessage, getSchemaName } from "../../markdown/schema";
 import type { SchemaObject } from "../../types.d";
-
-// eslint-disable-next-line import/no-extraneous-dependencies
-// const jsonSchemaMergeAllOf = require("json-schema-merge-allof");
-
-/**
- * Strip `additionalProperties: false` from sibling allOf members so the
- * strict-AND semantics of `allof-merge` don't collapse the result to an
- * unsatisfiable empty schema.
- *
- * Per JSON Schema, two allOf members that each set `additionalProperties: false`
- * with disjoint `properties` sets define an unsatisfiable schema (no value can
- * satisfy both — each member rejects the other's properties). `allof-merge` is
- * technically correct to drop all properties in that case, but it leaves the
- * rendered schema blank.
- *
- * NSwag and Swashbuckle emit this pattern by default whenever a model uses
- * inheritance/composition, so it's the dominant style for .NET-generated specs.
- * Redoc, Swagger UI, and Stoplight all union the properties and ignore the
- * conflicting flag — the approach this helper emulates by stripping the flag
- * before delegating to `allof-merge`. The flag is render-irrelevant anyway:
- * `additionalProperties: false` is treated identically to `undefined` by the
- * AdditionalProperties component below (line ~641).
- *
- * Strips from every allOf member whenever the parent has ≥2 members. The
- * collapse triggers symmetrically (both siblings strict) or asymmetrically
- * (one strict member rejects another's properties as "additional"), so the
- * presence of multiple members is the right gate. Single-member allOf is left
- * alone — it can't conflict with anything.
- *
- * See https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1119
- * Mirrored in plugin: docusaurus-plugin-openapi-docs/src/markdown/createSchema.ts
- */
-// Memoize by input identity so deeply-shared subtrees (typical of
-// dereferenced specs with recursive $refs) are walked at most once across
-// every render and every mergeAllOf call on the page. Without this, specs
-// like Komga's that fan a recursive search-filter schema into ~17K nodes
-// hang the browser: the strip is invoked per-render per-Schema-component,
-// each call deep-walks the full subtree, and the work compounds with depth.
-// See https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1525
-const stripCache = new WeakMap<object, any>();
-
-const stripConflictingAdditionalProps = (node: any): any => {
-  if (Array.isArray(node)) {
-    const cached = stripCache.get(node);
-    if (cached) return cached;
-    const result = node.map(stripConflictingAdditionalProps);
-    stripCache.set(node, result);
-    return result;
-  }
-  if (!node || typeof node !== "object") return node;
-  const cached = stripCache.get(node);
-  if (cached) return cached;
-
-  let working: any = node;
-  if (Array.isArray(node.allOf) && node.allOf.length > 1) {
-    const hasStrictMember = node.allOf.some(
-      (m: any) => m && m.additionalProperties === false
-    );
-    if (hasStrictMember) {
-      working = {
-        ...node,
-        allOf: node.allOf.map((m: any) => {
-          if (m && m.additionalProperties === false) {
-            const { additionalProperties: _drop, ...rest } = m;
-            return rest;
-          }
-          return m;
-        }),
-      };
-    }
-  }
-
-  const result: any = {};
-  // Cache before recursing so cycles in shared-reference subtrees resolve
-  // to the in-progress object instead of recursing forever.
-  stripCache.set(node, result);
-  for (const [k, v] of Object.entries(working)) {
-    result[k] = stripConflictingAdditionalProps(v);
-  }
-  return result;
-};
-
-const mergeAllOf = (allOf: any) => {
-  const onMergeError = (msg: string) => {
-    console.warn(msg);
-  };
-
-  const mergedSchemas = merge(stripConflictingAdditionalProps(allOf), {
-    onMergeError,
-  });
-
-  return mergedSchemas ?? {};
-};
-
-/**
- * Fold sibling fields into each `oneOf`/`anyOf` branch via allOf-merge, so each
- * branch is self-contained. Mirrors Redoc's `SchemaModel.initOneOf` behavior.
- * Without this, when an `allOf` override redefines a nested property with
- * `oneOf`, the merged schema ends up with both `properties` and `oneOf` as
- * siblings — and the renderer prints the shared properties twice.
- *
- * See https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1218
- */
-const foldSiblingsIntoBranches = (schema: any): any => {
-  const branchKey = schema?.oneOf
-    ? "oneOf"
-    : schema?.anyOf
-      ? "anyOf"
-      : undefined;
-  if (!branchKey) return schema;
-
-  const branches = schema[branchKey];
-  if (!Array.isArray(branches) || branches.length === 0) return schema;
-
-  const siblings = { ...schema };
-  delete siblings[branchKey];
-  if (Object.keys(siblings).length === 0) return schema;
-
-  const folded = branches.map((branch: any) =>
-    mergeAllOf({ allOf: [siblings, branch] })
-  );
-
-  const { properties: _, required: _r, type: _t, ...metadata } = schema;
-  return { ...metadata, [branchKey]: folded };
-};
 
 /**
  * Recursively searches for a property in a schema, including nested
