@@ -5,7 +5,11 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { normalizeSchema, getDiscriminator } from "./normalize";
+import {
+  foldSiblingsIntoBranches,
+  getDiscriminator,
+  normalizeSchema,
+} from "./normalize";
 
 describe("normalizeSchema", () => {
   describe("allOf merging", () => {
@@ -88,6 +92,34 @@ describe("normalizeSchema", () => {
       expect(result.title).toBe("MySchema");
       expect(result.description).toBe("A polymorphic schema");
       expect(result.discriminator).toEqual({ propertyName: "type" });
+      expect(result.properties).toBeUndefined();
+    });
+
+    it("does not leak non-metadata sibling keys into the result", () => {
+      const schema = {
+        type: "object",
+        properties: { shared: { type: "string" } },
+        additionalProperties: { type: "number" },
+        oneOf: [
+          { properties: { a: { type: "number" } } },
+          { properties: { b: { type: "boolean" } } },
+        ],
+      };
+      const result = normalizeSchema(schema);
+      expect(result.type).toBeUndefined();
+      expect(result.additionalProperties).toBeUndefined();
+      expect(result.properties).toBeUndefined();
+      expect(result.oneOf).toHaveLength(2);
+    });
+
+    it("preserves x-* extension keys as metadata", () => {
+      const schema = {
+        "x-custom": "value",
+        properties: { shared: { type: "string" } },
+        oneOf: [{ properties: { a: { type: "number" } } }],
+      };
+      const result = normalizeSchema(schema);
+      expect(result["x-custom"]).toBe("value");
       expect(result.properties).toBeUndefined();
     });
 
@@ -259,6 +291,55 @@ describe("normalizeSchema", () => {
       expect(normalizeSchema("string")).toBe("string");
       expect(normalizeSchema(42)).toBe(42);
     });
+  });
+});
+
+describe("foldSiblingsIntoBranches", () => {
+  it("returns schema unchanged when no oneOf/anyOf is present", () => {
+    const schema = { type: "object", properties: { a: { type: "string" } } };
+    expect(foldSiblingsIntoBranches(schema)).toBe(schema);
+  });
+
+  it("returns schema unchanged when branches have no siblings", () => {
+    const schema = {
+      oneOf: [{ properties: { a: { type: "string" } } }],
+    };
+    expect(foldSiblingsIntoBranches(schema)).toBe(schema);
+  });
+
+  it("strips non-metadata keys from result", () => {
+    const schema = {
+      type: "object",
+      required: ["shared"],
+      properties: { shared: { type: "string" } },
+      items: { type: "string" },
+      oneOf: [{ properties: { a: { type: "number" } } }],
+    };
+    const result = foldSiblingsIntoBranches(schema);
+    expect(result.type).toBeUndefined();
+    expect(result.required).toBeUndefined();
+    expect(result.properties).toBeUndefined();
+    expect(result.items).toBeUndefined();
+    expect(result.oneOf).toHaveLength(1);
+  });
+
+  it("preserves metadata and x-extension keys", () => {
+    const schema = {
+      title: "Test",
+      description: "desc",
+      discriminator: { propertyName: "type" },
+      deprecated: true,
+      "x-vendor": true,
+      properties: { shared: { type: "string" } },
+      anyOf: [{ properties: { a: { type: "number" } } }],
+    };
+    const result = foldSiblingsIntoBranches(schema);
+    expect(result.title).toBe("Test");
+    expect(result.description).toBe("desc");
+    expect(result.discriminator).toEqual({ propertyName: "type" });
+    expect(result.deprecated).toBe(true);
+    expect(result["x-vendor"]).toBe(true);
+    expect(result.properties).toBeUndefined();
   });
 });
 

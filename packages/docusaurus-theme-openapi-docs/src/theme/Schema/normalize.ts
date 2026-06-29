@@ -9,10 +9,8 @@
 import { merge } from "allof-merge";
 
 /**
- * Strip `additionalProperties: false` from sibling allOf members so the
- * strict-AND semantics of `allof-merge` don't collapse the result to an
- * unsatisfiable empty schema. See issue #1119 for full rationale and
- * Schema/index.tsx for the historical inline copy.
+ * Strip `additionalProperties: false` from sibling allOf members so
+ * allof-merge doesn't collapse to an unsatisfiable empty schema. See #1119.
  */
 const stripCache = new WeakMap<object, any>();
 
@@ -48,6 +46,7 @@ function stripConflictingAdditionalProps(node: any): any {
   }
 
   const result: any = {};
+  // Cache before recursing so shared-identity cycles don't loop forever.
   stripCache.set(node, result);
   for (const [k, v] of Object.entries(working)) {
     result[k] = stripConflictingAdditionalProps(v);
@@ -55,17 +54,33 @@ function stripConflictingAdditionalProps(node: any): any {
   return result;
 }
 
-export function mergeAllOf(allOf: any) {
+export function mergeAllOf(schema: any) {
   const onMergeError = (msg: string) => console.warn(msg);
-  const merged = merge(stripConflictingAdditionalProps(allOf), {
+  const merged = merge(stripConflictingAdditionalProps(schema), {
     onMergeError,
   });
   return merged ?? {};
 }
 
+// Keys that are parent-level metadata and should NOT be folded into branches.
+const METADATA_KEYS = new Set([
+  "title",
+  "description",
+  "discriminator",
+  "deprecated",
+  "externalDocs",
+  "example",
+  "examples",
+  "xml",
+  "nullable",
+  "readOnly",
+  "writeOnly",
+  "default",
+]);
+
 /**
- * Fold sibling fields into each `oneOf`/`anyOf` branch via allOf-merge so each
- * branch is self-contained. See issue #1218.
+ * Fold sibling fields into each oneOf/anyOf branch via allOf-merge so each
+ * branch is self-contained. See #1218.
  */
 export function foldSiblingsIntoBranches(schema: any): any {
   const branchKey = schema?.oneOf
@@ -86,64 +101,31 @@ export function foldSiblingsIntoBranches(schema: any): any {
     mergeAllOf({ allOf: [siblings, branch] })
   );
 
-  const { properties: _, required: _r, type: _t, ...metadata } = schema;
-  return { ...metadata, [branchKey]: folded };
+  const result: any = { [branchKey]: folded };
+  for (const key of Object.keys(schema)) {
+    if (key !== branchKey && (METADATA_KEYS.has(key) || key.startsWith("x-"))) {
+      result[key] = schema[key];
+    }
+  }
+  return result;
 }
 
-/**
- * Deeply normalize a schema in one pass so the renderer never has to run
- * `mergeAllOf` or `foldSiblingsIntoBranches` itself.
- *
- * - Eliminates `allOf` (merged into the parent).
- * - Eliminates oneOf/anyOf + sibling collisions (folded into branches).
- * - Recurses through every schema-bearing key (properties, items,
- *   additionalProperties, oneOf, anyOf, not).
- *
- * Designed to run once per top-level schema (memoized via `useMemo` at
- * `RequestSchema` / `ResponseSchema`). The existing inline `if (schema.allOf)`
- * and `hasProperties && hasOneOfAnyOf` gates in `Schema/index.tsx` become
- * dead-by-precondition on the normalized output, so the per-render
- * deep-walk that caused issue #1525 never fires.
- *
- * Internally cache-keyed by input identity (WeakMap) so shared-reference
- * subtrees produced by `$RefParser.dereference({ circular: true })` are
- * normalized once and shared, and so reference cycles short-circuit safely.
- * For specs that lose identity through a `JSON.stringify` roundtrip (as
- * happens in `loadAndResolveSpec.ts`), the cache provides no dedup but is
- * still negligible cost.
- *
- * See https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1525
- */
-// Module-level cache shared across all `normalizeSchema` calls so nested
-// `SchemaNode` renders short-circuit in O(1) after the top-level O(N) pass.
+// WeakMap caches keyed by object identity — shared-reference subtrees from
+// $RefParser.dereference are normalized/looked up once, and cycles short-circuit.
 const normalizeCache = new WeakMap<object, any>();
-
-/**
- * Memoized variant of `findDiscriminator` from `Schema/index.tsx`. The
- * original walks `oneOf`/`anyOf`/`allOf` recursively from every recursive
- * `SchemaNode` render — for deeply recursive specs like Komga's, this
- * compounds to O(N²) across the 17K nested renders and contributes to the
- * browser hang in issue #1525 even after `normalizeSchema` removes the
- * `mergeAllOf` work.
- *
- * The cache is keyed by input identity. Because `normalizeSchema` produces a
- * tree with stable inner-node identity (each child object is reused in the
- * parent's `properties`/`items`/etc.), recursive `SchemaNode` renders pass
- * the same object reference here and get a cached result in O(1).
- *
- * `null` cache entries mean "no discriminator found" and short-circuit
- * negative lookups the same way positives do.
- */
 const discriminatorCache = new WeakMap<object, any | null>();
 
+/**
+ * Cached recursive discriminator lookup. Returns O(1) on repeated calls
+ * with the same object reference (common after normalizeSchema).
+ */
 export function getDiscriminator(schema: any): any | undefined {
   if (!schema || typeof schema !== "object") return undefined;
   if (discriminatorCache.has(schema)) {
     const cached = discriminatorCache.get(schema);
     return cached === null ? undefined : cached;
   }
-  // Mark in-progress as null so cycles in shared-reference subtrees don't
-  // recurse forever.
+  // Sentinel for cycle detection.
   discriminatorCache.set(schema, null);
 
   let result: any | undefined;
@@ -181,6 +163,11 @@ export function getDiscriminator(schema: any): any | undefined {
   return result;
 }
 
+/**
+ * Single O(N) pass that merges allOf, strips conflicting additionalProperties,
+ * and folds siblings into oneOf/anyOf branches. Cached by object identity so
+ * nested SchemaNode renders short-circuit in O(1). See #1525.
+ */
 export function normalizeSchema(
   schema: any,
   cache: WeakMap<object, any> = normalizeCache
@@ -198,8 +185,7 @@ export function normalizeSchema(
   const hit = cache.get(schema);
   if (hit) return hit;
 
-  // Allocate the result placeholder first so cycles resolve to the
-  // in-progress object instead of recursing forever.
+  // Placeholder for cycle detection.
   const result: any = {};
   cache.set(schema, result);
 
@@ -207,9 +193,7 @@ export function normalizeSchema(
 
   if (Array.isArray(working.allOf) && working.allOf.length > 0) {
     // Skip merge when allOf contains circular-reference string markers
-    // produced by loadAndResolveSpec's JSON.stringify roundtrip (e.g.
-    // `allOf: ["circular(Title)"]`). allof-merge doesn't handle string
-    // members and would discard the marker.
+    // (e.g. `allOf: ["circular(Title)"]`) — allof-merge can't handle them.
     const hasCircularMember = working.allOf.some(
       (m: any) => typeof m === "string"
     );
@@ -232,7 +216,6 @@ export function normalizeSchema(
     } else if (k === "items" || k === "not") {
       result[k] = v && typeof v === "object" ? normalizeSchema(v, cache) : v;
     } else if (k === "additionalProperties") {
-      // additionalProperties can be true | false | SchemaObject.
       result[k] = v && typeof v === "object" ? normalizeSchema(v, cache) : v;
     } else if (
       (k === "oneOf" || k === "anyOf" || k === "allOf") &&

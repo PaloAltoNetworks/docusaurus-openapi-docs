@@ -16,6 +16,7 @@ import DiscriminatorTabs from "@theme/DiscriminatorTabs";
 import Markdown from "@theme/Markdown";
 import {
   foldSiblingsIntoBranches,
+  getDiscriminator,
   mergeAllOf,
   normalizeSchema,
 } from "@theme/Schema/normalize";
@@ -32,80 +33,6 @@ import isEmpty from "lodash/isEmpty";
 
 import { getQualifierMessage, getSchemaName } from "../../markdown/schema";
 import type { SchemaObject } from "../../types.d";
-
-/**
- * Recursively searches for a property in a schema, including nested
- * oneOf, anyOf, and allOf structures. This is needed for discriminators
- * where the property definition may be in a nested schema.
- */
-const findProperty = (
-  schema: SchemaObject,
-  propertyName: string
-): SchemaObject | undefined => {
-  // Check direct properties first
-  if (schema.properties?.[propertyName]) {
-    return schema.properties[propertyName];
-  }
-
-  // Search in oneOf schemas
-  if (schema.oneOf) {
-    for (const subschema of schema.oneOf) {
-      const found = findProperty(subschema as SchemaObject, propertyName);
-      if (found) return found;
-    }
-  }
-
-  // Search in anyOf schemas
-  if (schema.anyOf) {
-    for (const subschema of schema.anyOf) {
-      const found = findProperty(subschema as SchemaObject, propertyName);
-      if (found) return found;
-    }
-  }
-
-  // Search in allOf schemas
-  if (schema.allOf) {
-    for (const subschema of schema.allOf) {
-      const found = findProperty(subschema as SchemaObject, propertyName);
-      if (found) return found;
-    }
-  }
-
-  return undefined;
-};
-
-/**
- * Recursively searches for a discriminator in a schema, including nested
- * oneOf, anyOf, and allOf structures.
- */
-const findDiscriminator = (schema: SchemaObject): any | undefined => {
-  if (schema.discriminator) {
-    return schema.discriminator;
-  }
-
-  if (schema.oneOf) {
-    for (const subschema of schema.oneOf) {
-      const found = findDiscriminator(subschema as SchemaObject);
-      if (found) return found;
-    }
-  }
-
-  if (schema.anyOf) {
-    for (const subschema of schema.anyOf) {
-      const found = findDiscriminator(subschema as SchemaObject);
-      if (found) return found;
-    }
-  }
-
-  if (schema.allOf) {
-    for (const subschema of schema.allOf) {
-      const found = findDiscriminator(subschema as SchemaObject);
-      if (found) return found;
-    }
-  }
-
-  return undefined;
-};
 
 interface MarkdownProps {
   text: string | undefined;
@@ -515,9 +442,6 @@ const DiscriminatorNode: React.FC<DiscriminatorNodeProps> = ({
   let discriminatedSchemas: any = {};
   let inferredMapping: any = {};
 
-  // Direct O(1) lookup — after normalizeSchema merges allOf, properties are at
-  // the top level. The recursive findProperty walk from #1303 is no longer
-  // needed and was contributing to O(N²) cost (issue #1525).
   const discriminatorProperty =
     schema.properties?.[discriminator.propertyName] ?? {};
 
@@ -600,7 +524,6 @@ const AdditionalProperties: React.FC<SchemaProps> = ({
 
   if (!additionalProperties) return null;
 
-  // Handle circular-reference string markers
   if (typeof additionalProperties === "string") {
     return (
       <SchemaItem
@@ -728,8 +651,6 @@ const Items: React.FC<{
   schemaType: "request" | "response";
   schemaPath?: string;
 }> = ({ schema, schemaType, schemaPath }) => {
-  // Handle circular-reference string markers in items position
-  // (e.g. `"items": "circular(TreeNode)"`)
   if (typeof schema.items === "string") {
     return (
       <div style={{ marginLeft: ".5rem" }}>
@@ -867,8 +788,6 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
     return null;
   }
 
-  // Handle circular-reference string markers in property position
-  // (e.g. `"parent": "circular(Category)"`)
   if (typeof schema === "string") {
     return (
       <SchemaItem
@@ -969,7 +888,6 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
     );
   }
 
-  // Handle arrays whose items is a circular-reference string marker
   if (typeof schema.items === "string") {
     return (
       <SchemaNodeDetails
@@ -1146,13 +1064,6 @@ const SchemaNode: React.FC<SchemaProps> = ({
   schemaType,
   schemaPath,
 }) => {
-  // Hoist normalization (allOf merge, additionalProperties strip, sibling
-  // fold into oneOf/anyOf branches) out of the recursive render path so the
-  // existing inline calls below become dead-by-precondition. A WeakSet inside
-  // `normalizeSchema` short-circuits already-normalized subtrees, so the
-  // top-level SchemaNode pays the O(N) walk once and every nested SchemaNode
-  // returns the same object identity from useMemo in O(1).
-  // See https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1525
   const schema = useMemo(() => normalizeSchema(rawSchema), [rawSchema]);
 
   if (
@@ -1162,13 +1073,10 @@ const SchemaNode: React.FC<SchemaProps> = ({
     return null;
   }
 
-  // Use direct O(1) check — after normalizeSchema merges allOf, any
-  // discriminator that was inside an allOf member is promoted to the top level.
-  // Discriminators inside oneOf/anyOf branches are handled when those branches
-  // render as their own SchemaNode. The recursive findDiscriminator walk from
-  // #1303 is no longer needed and was causing O(N²) compound cost (issue #1525).
-  if (schema.discriminator) {
-    const { discriminator } = schema;
+  // Check top-level first (O(1)), then fall back to cached recursive lookup
+  // for discriminators that allof-merge doesn't promote (e.g. inside oneOf).
+  const discriminator = schema.discriminator ?? getDiscriminator(schema);
+  if (discriminator) {
     return (
       <DiscriminatorNode
         discriminator={discriminator}

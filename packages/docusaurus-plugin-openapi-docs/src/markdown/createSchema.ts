@@ -50,13 +50,6 @@ let SCHEMA_TYPE: "request" | "response";
  *
  * See https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1119
  */
-// Memoize by input identity so deeply-shared subtrees in dereferenced specs
-// (e.g. recursive search-filter schemas like Komga's, which fan out to ~17K
-// nodes) are walked at most once across every mergeAllOf call during MDX
-// generation. Mirrors the theme-side cache in Schema/index.tsx — kept in
-// lockstep until both copies are consolidated into the shared
-// schemaNormalization module planned for phase 1.
-// See https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1525
 const stripCache = new WeakMap<object, any>();
 
 function stripConflictingAdditionalProps(node: any): any {
@@ -91,8 +84,6 @@ function stripConflictingAdditionalProps(node: any): any {
   }
 
   const result: any = {};
-  // Cache before recursing so reference cycles in shared-identity subtrees
-  // resolve to the in-progress object instead of recursing forever.
   stripCache.set(node, result);
   for (const [k, v] of Object.entries(working)) {
     result[k] = stripConflictingAdditionalProps(v);
