@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 
 import { translate } from "@docusaurus/Translate";
 import { setSchemaSelection } from "@theme/ApiExplorer/SchemaSelection/slice";
@@ -14,6 +14,7 @@ import { ClosingArrayBracket, OpeningArrayBracket } from "@theme/ArrayBrackets";
 import Details from "@theme/Details";
 import DiscriminatorTabs from "@theme/DiscriminatorTabs";
 import Markdown from "@theme/Markdown";
+import { normalizeSchema } from "@theme/Schema/normalize";
 import {
   SchemaDepthProvider,
   useSchemaDepth,
@@ -61,9 +62,26 @@ import type { SchemaObject } from "../../types.d";
  * See https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1119
  * Mirrored in plugin: docusaurus-plugin-openapi-docs/src/markdown/createSchema.ts
  */
+// Memoize by input identity so deeply-shared subtrees (typical of
+// dereferenced specs with recursive $refs) are walked at most once across
+// every render and every mergeAllOf call on the page. Without this, specs
+// like Komga's that fan a recursive search-filter schema into ~17K nodes
+// hang the browser: the strip is invoked per-render per-Schema-component,
+// each call deep-walks the full subtree, and the work compounds with depth.
+// See https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1525
+const stripCache = new WeakMap<object, any>();
+
 const stripConflictingAdditionalProps = (node: any): any => {
-  if (Array.isArray(node)) return node.map(stripConflictingAdditionalProps);
+  if (Array.isArray(node)) {
+    const cached = stripCache.get(node);
+    if (cached) return cached;
+    const result = node.map(stripConflictingAdditionalProps);
+    stripCache.set(node, result);
+    return result;
+  }
   if (!node || typeof node !== "object") return node;
+  const cached = stripCache.get(node);
+  if (cached) return cached;
 
   let working: any = node;
   if (Array.isArray(node.allOf) && node.allOf.length > 1) {
@@ -85,6 +103,9 @@ const stripConflictingAdditionalProps = (node: any): any => {
   }
 
   const result: any = {};
+  // Cache before recursing so cycles in shared-reference subtrees resolve
+  // to the in-progress object instead of recursing forever.
+  stripCache.set(node, result);
   for (const [k, v] of Object.entries(working)) {
     result[k] = stripConflictingAdditionalProps(v);
   }
@@ -616,9 +637,11 @@ const DiscriminatorNode: React.FC<DiscriminatorNodeProps> = ({
   let discriminatedSchemas: any = {};
   let inferredMapping: any = {};
 
-  // Search for the discriminator property in the schema, including nested structures
+  // Direct O(1) lookup — after normalizeSchema merges allOf, properties are at
+  // the top level. The recursive findProperty walk from #1303 is no longer
+  // needed and was contributing to O(N²) cost (issue #1525).
   const discriminatorProperty =
-    findProperty(schema, discriminator.propertyName) ?? {};
+    schema.properties?.[discriminator.propertyName] ?? {};
 
   if (schema.allOf) {
     const mergedSchemas = mergeAllOf(schema) as SchemaObject;
@@ -1176,10 +1199,19 @@ function renderChildren(
 }
 
 const SchemaNode: React.FC<SchemaProps> = ({
-  schema,
+  schema: rawSchema,
   schemaType,
   schemaPath,
 }) => {
+  // Hoist normalization (allOf merge, additionalProperties strip, sibling
+  // fold into oneOf/anyOf branches) out of the recursive render path so the
+  // existing inline calls below become dead-by-precondition. A WeakSet inside
+  // `normalizeSchema` short-circuits already-normalized subtrees, so the
+  // top-level SchemaNode pays the O(N) walk once and every nested SchemaNode
+  // returns the same object identity from useMemo in O(1).
+  // See https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1525
+  const schema = useMemo(() => normalizeSchema(rawSchema), [rawSchema]);
+
   if (
     (schemaType === "request" && schema.readOnly) ||
     (schemaType === "response" && schema.writeOnly)
@@ -1187,24 +1219,17 @@ const SchemaNode: React.FC<SchemaProps> = ({
     return null;
   }
 
-  // Resolve discriminator recursively so nested oneOf/anyOf/allOf compositions
-  // can still render discriminator tabs.
-  let workingSchema = schema;
-  const resolvedDiscriminator =
-    schema.discriminator ?? findDiscriminator(schema);
-  if (schema.allOf && !schema.discriminator && resolvedDiscriminator) {
-    workingSchema = mergeAllOf(schema) as SchemaObject;
-  }
-  if (!workingSchema.discriminator && resolvedDiscriminator) {
-    workingSchema.discriminator = resolvedDiscriminator;
-  }
-
-  if (workingSchema.discriminator) {
-    const { discriminator } = workingSchema;
+  // Use direct O(1) check — after normalizeSchema merges allOf, any
+  // discriminator that was inside an allOf member is promoted to the top level.
+  // Discriminators inside oneOf/anyOf branches are handled when those branches
+  // render as their own SchemaNode. The recursive findDiscriminator walk from
+  // #1303 is no longer needed and was causing O(N²) compound cost (issue #1525).
+  if (schema.discriminator) {
+    const { discriminator } = schema;
     return (
       <DiscriminatorNode
         discriminator={discriminator}
-        schema={workingSchema}
+        schema={schema}
         schemaType={schemaType}
       />
     );
