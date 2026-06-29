@@ -722,6 +722,21 @@ const AdditionalProperties: React.FC<SchemaProps> = ({
 
   if (!additionalProperties) return null;
 
+  // Handle circular-reference string markers
+  if (typeof additionalProperties === "string") {
+    return (
+      <SchemaItem
+        name="property name*"
+        required={false}
+        schemaName={additionalProperties}
+        schema={additionalProperties}
+        collapsible={false}
+        discriminator={false}
+        children={null}
+      />
+    );
+  }
+
   // Handle free-form objects
   if (additionalProperties === true || isEmpty(additionalProperties)) {
     return (
@@ -835,6 +850,25 @@ const Items: React.FC<{
   schemaType: "request" | "response";
   schemaPath?: string;
 }> = ({ schema, schemaType, schemaPath }) => {
+  // Handle circular-reference string markers in items position
+  // (e.g. `"items": "circular(TreeNode)"`)
+  if (typeof schema.items === "string") {
+    return (
+      <div style={{ marginLeft: ".5rem" }}>
+        <OpeningArrayBracket />
+        <SchemaItem
+          collapsible={false}
+          name=""
+          schemaName={schema.items}
+          schema={schema.items}
+          discriminator={false}
+          children={null}
+        />
+        <ClosingArrayBracket />
+      </div>
+    );
+  }
+
   // Process schema.items to handle allOf merging
   let itemsSchema = schema.items;
   if (schema.items?.allOf) {
@@ -955,6 +989,22 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
     return null;
   }
 
+  // Handle circular-reference string markers in property position
+  // (e.g. `"parent": "circular(Category)"`)
+  if (typeof schema === "string") {
+    return (
+      <SchemaItem
+        collapsible={false}
+        name={name}
+        required={Array.isArray(required) ? required.includes(name) : required}
+        schemaName={schema}
+        schema={schema}
+        discriminator={false}
+        children={null}
+      />
+    );
+  }
+
   const schemaName = getSchemaName(schema);
 
   if (discriminator && discriminator.propertyName === name) {
@@ -1028,6 +1078,21 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
   }
 
   if (schema.items?.anyOf || schema.items?.oneOf || schema.items?.allOf) {
+    return (
+      <SchemaNodeDetails
+        name={name}
+        schemaName={schemaName}
+        required={required}
+        nullable={schema.nullable}
+        schema={schema}
+        schemaType={schemaType}
+        schemaPath={schemaPath}
+      />
+    );
+  }
+
+  // Handle arrays whose items is a circular-reference string marker
+  if (typeof schema.items === "string") {
     return (
       <SchemaNodeDetails
         name={name}

@@ -19,6 +19,21 @@ paths:
       description: |
         A tree node whose `children` array references itself. The simplest
         circular reference pattern.
+
+        Schema:
+        ```yaml
+        TreeNode:
+          type: object
+          properties:
+            id:
+              type: integer
+            label:
+              type: string
+            children:
+              type: array
+              items:
+                $ref: "#/components/schemas/TreeNode"
+        ```
       responses:
         "200":
           description: A tree node
@@ -36,6 +51,23 @@ paths:
         A category that references itself through both `parent` (single ref)
         and `subcategories` (array of refs). Tests circular refs in both
         property and items positions.
+
+        Schema:
+        ```yaml
+        Category:
+          type: object
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+            parent:
+              $ref: "#/components/schemas/Category"
+            subcategories:
+              type: array
+              items:
+                $ref: "#/components/schemas/Category"
+        ```
       responses:
         "200":
           description: A category
@@ -53,6 +85,32 @@ paths:
         `Person` has an `address` referencing `Address`, and `Address` has an
         `occupants` array referencing `Person`. Tests circular refs across two
         mutually recursive schemas.
+
+        Schema:
+        ```yaml
+        Person:
+          type: object
+          properties:
+            name:
+              type: string
+            email:
+              type: string
+              format: email
+            address:
+              $ref: "#/components/schemas/Address"
+
+        Address:
+          type: object
+          properties:
+            street:
+              type: string
+            city:
+              type: string
+            occupants:
+              type: array
+              items:
+                $ref: "#/components/schemas/Person"
+        ```
       responses:
         "200":
           description: A person
@@ -69,6 +127,19 @@ paths:
       description: |
         An org chart where the value type of `additionalProperties` references
         the parent schema. Tests circular refs in the additionalProperties position.
+
+        Schema:
+        ```yaml
+        OrgChart:
+          type: object
+          properties:
+            name:
+              type: string
+            title:
+              type: string
+          additionalProperties:
+            $ref: "#/components/schemas/OrgChart"
+        ```
       responses:
         "200":
           description: An org chart node
@@ -86,6 +157,25 @@ paths:
         A comment that uses `allOf` to compose shared metadata with a `replies`
         array that references the composed schema. Tests that circular markers
         inside allOf are preserved during normalization.
+
+        Schema:
+        ```yaml
+        Comment:
+          allOf:
+            - $ref: "#/components/schemas/TimestampMixin"
+            - type: object
+              properties:
+                id:
+                  type: integer
+                author:
+                  type: string
+                body:
+                  type: string
+                replies:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/Comment"
+        ```
       requestBody:
         required: true
         content:
@@ -109,6 +199,28 @@ paths:
         A linked list node with `next` referencing itself through a wrapper
         object. Tests circular refs that are not direct self-references but
         go through an intermediate schema.
+
+        Schema:
+        ```yaml
+        LinkedListNode:
+          type: object
+          properties:
+            value:
+              type: string
+            next:
+              $ref: "#/components/schemas/ListNodeWrapper"
+
+        ListNodeWrapper:
+          type: object
+          properties:
+            node:
+              $ref: "#/components/schemas/LinkedListNode"
+            metadata:
+              type: object
+              properties:
+                position:
+                  type: integer
+        ```
       responses:
         "200":
           description: A linked list
@@ -195,6 +307,7 @@ components:
         $ref: "#/components/schemas/OrgChart"
 
     TimestampMixin:
+      title: TimestampMixin
       type: object
       properties:
         createdAt:
