@@ -86,7 +86,8 @@ function foldSiblingsIntoBranches(schema: any): any {
     mergeAllOf({ allOf: [siblings, branch] })
   );
 
-  return { [branchKey]: folded };
+  const { properties: _, required: _r, type: _t, ...metadata } = schema;
+  return { ...metadata, [branchKey]: folded };
 }
 
 /**

@@ -73,6 +73,24 @@ describe("normalizeSchema", () => {
       expect(result.anyOf[1].properties.b).toBeDefined();
     });
 
+    it("preserves metadata keys like title and discriminator", () => {
+      const schema = {
+        title: "MySchema",
+        description: "A polymorphic schema",
+        discriminator: { propertyName: "type" },
+        properties: { shared: { type: "string" } },
+        oneOf: [
+          { properties: { a: { type: "number" } } },
+          { properties: { b: { type: "boolean" } } },
+        ],
+      };
+      const result = normalizeSchema(schema);
+      expect(result.title).toBe("MySchema");
+      expect(result.description).toBe("A polymorphic schema");
+      expect(result.discriminator).toEqual({ propertyName: "type" });
+      expect(result.properties).toBeUndefined();
+    });
+
     it("leaves schema unchanged when no siblings exist", () => {
       const schema = {
         oneOf: [
