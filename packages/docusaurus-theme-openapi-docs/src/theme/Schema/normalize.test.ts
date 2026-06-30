@@ -77,11 +77,10 @@ describe("normalizeSchema", () => {
       expect(result.anyOf[1].properties.b).toBeDefined();
     });
 
-    it("preserves metadata keys like title and discriminator", () => {
+    it("preserves metadata keys like title at the top level", () => {
       const schema = {
         title: "MySchema",
         description: "A polymorphic schema",
-        discriminator: { propertyName: "type" },
         properties: { shared: { type: "string" } },
         oneOf: [
           { properties: { a: { type: "number" } } },
@@ -91,8 +90,29 @@ describe("normalizeSchema", () => {
       const result = normalizeSchema(schema);
       expect(result.title).toBe("MySchema");
       expect(result.description).toBe("A polymorphic schema");
-      expect(result.discriminator).toEqual({ propertyName: "type" });
+      // No discriminator → siblings still fold into branches.
       expect(result.properties).toBeUndefined();
+      expect(result.oneOf[0].properties.shared).toBeDefined();
+    });
+
+    it("preserves top-level properties when a discriminator is present", () => {
+      const schema = {
+        title: "MySchema",
+        discriminator: { propertyName: "type" },
+        properties: { shared: { type: "string" } },
+        oneOf: [
+          { properties: { a: { type: "number" } } },
+          { properties: { b: { type: "boolean" } } },
+        ],
+      };
+      const result = normalizeSchema(schema);
+      // Discriminator schemas keep top-level properties intact so
+      // DiscriminatorNode can locate the discriminator property and render
+      // shared siblings outside the tab content.
+      expect(result.discriminator).toEqual({ propertyName: "type" });
+      expect(result.properties.shared).toBeDefined();
+      expect(result.oneOf[0].properties.shared).toBeUndefined();
+      expect(result.oneOf[0].properties.a).toBeDefined();
     });
 
     it("does not leak non-metadata sibling keys into the result", () => {
@@ -274,8 +294,8 @@ describe("normalizeSchema", () => {
     });
   });
 
-  describe("discriminator property in branch only", () => {
-    it("promotes discriminator property to top level via sibling folding", () => {
+  describe("discriminator schemas", () => {
+    it("leaves discriminator schemas alone (no sibling folding)", () => {
       const schema = {
         discriminator: { propertyName: "petType" },
         properties: { name: { type: "string" } },
@@ -296,11 +316,15 @@ describe("normalizeSchema", () => {
       };
       const result = normalizeSchema(schema);
       expect(result.discriminator).toEqual({ propertyName: "petType" });
+      // Top-level sibling properties stay at top level so DiscriminatorNode
+      // can render them outside the tabs.
+      expect(result.properties.name).toBeDefined();
+      // Branches retain their own properties without sibling pollution.
       expect(result.oneOf[0].properties.petType).toBeDefined();
-      expect(result.oneOf[0].properties.name).toBeDefined();
+      expect(result.oneOf[0].properties.name).toBeUndefined();
     });
 
-    it("keeps discriminator property accessible when defined only in oneOf branches without siblings", () => {
+    it("keeps discriminator property accessible when defined only in oneOf branches", () => {
       const schema = {
         discriminator: { propertyName: "type" },
         oneOf: [
@@ -374,11 +398,10 @@ describe("foldSiblingsIntoBranches", () => {
     expect(result.oneOf).toHaveLength(1);
   });
 
-  it("preserves metadata and x-extension keys", () => {
+  it("preserves metadata and x-extension keys when folding", () => {
     const schema = {
       title: "Test",
       description: "desc",
-      discriminator: { propertyName: "type" },
       deprecated: true,
       "x-vendor": true,
       properties: { shared: { type: "string" } },
@@ -387,10 +410,18 @@ describe("foldSiblingsIntoBranches", () => {
     const result = foldSiblingsIntoBranches(schema);
     expect(result.title).toBe("Test");
     expect(result.description).toBe("desc");
-    expect(result.discriminator).toEqual({ propertyName: "type" });
     expect(result.deprecated).toBe(true);
     expect(result["x-vendor"]).toBe(true);
     expect(result.properties).toBeUndefined();
+  });
+
+  it("returns schema unchanged when a discriminator is present", () => {
+    const schema = {
+      discriminator: { propertyName: "type" },
+      properties: { shared: { type: "string" } },
+      oneOf: [{ properties: { a: { type: "number" } } }],
+    };
+    expect(foldSiblingsIntoBranches(schema)).toBe(schema);
   });
 });
 

@@ -86,6 +86,11 @@ const METADATA_KEYS = new Set([
  * Fold sibling fields into each oneOf/anyOf branch via allOf-merge so each
  * branch is self-contained. See #1218.
  *
+ * Skipped when a discriminator is present: DiscriminatorNode already renders
+ * sibling properties at the top level, and folding would duplicate the
+ * discriminator metadata into each branch (causing nested DiscriminatorNode
+ * renders inside tabs — see #1525 follow-up).
+ *
  * Called by normalizeSchema after allOf resolution. Uses mergeAllOf internally
  * to compose `{ allOf: [siblings, branch] }` per branch — the WeakMap caches
  * in stripConflictingAdditionalProps prevent redundant work on shared subtrees.
@@ -101,8 +106,19 @@ export function foldSiblingsIntoBranches(schema: any): any {
   const branches = schema[branchKey];
   if (!Array.isArray(branches) || branches.length === 0) return schema;
 
-  const siblings = { ...schema };
-  delete siblings[branchKey];
+  // Discriminator schemas rely on top-level properties being intact so
+  // DiscriminatorNode can locate the discriminator property and render
+  // shared siblings at the top level. Leave them alone.
+  if (schema.discriminator) return schema;
+
+  // Build siblings from non-metadata keys only. Metadata (title, description,
+  // examples, etc.) belongs at the top level and must not be folded.
+  const siblings: any = {};
+  for (const [key, value] of Object.entries(schema)) {
+    if (key !== branchKey && !METADATA_KEYS.has(key) && !key.startsWith("x-")) {
+      siblings[key] = value;
+    }
+  }
   if (Object.keys(siblings).length === 0) return schema;
 
   const folded = branches.map((branch: any) =>
