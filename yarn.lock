@@ -6341,7 +6341,7 @@ blob@0.0.5:
   resolved "https://registry.yarnpkg.com/blob/-/blob-0.0.5.tgz#d680eeef25f8cd91ad533f5b01eed48e64caf683"
   integrity sha512-gaqbzQPqOoamawKg0LGVd7SzLgXS+JH61oWprSLH+P+abTczqJbhTR8CmJ2u9/bUYNmHTGJx/UEmn6doAvvuig==
 
-bluebird@3.7.2, bluebird@^3.7.2:
+bluebird@^3.7.2:
   version "3.7.2"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.7.2.tgz#9f229c15be272454ffa973ace0dbee79a1b0c36f"
   integrity sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==
@@ -11744,10 +11744,10 @@ launch-editor@^2.6.1:
     picocolors "^1.1.1"
     shell-quote "^1.8.4"
 
-lazy-ass@1.6.0:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/lazy-ass/-/lazy-ass-1.6.0.tgz#7999655e8646c17f089fdd187d150d3324d54513"
-  integrity sha512-cc8oEVoctTvsFZ/Oje/kGnHbpWHYBe8IAJe4C0QNc3t8uM/0Y8+erSz/7Y1ALuXTEZTMvxXwO6YbX1ey3ujiZw==
+lazy-ass@2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/lazy-ass/-/lazy-ass-2.0.3.tgz#1e8451729f2bebdff1218bb18921566a08f81b36"
+  integrity sha512-/O3/DoQmI1XAhklDvF1dAjFf/epE8u3lzOZegQfLZ8G7Ud5bTRSZiFOpukHCu6jODrCA4gtIdwUCC7htxcDACA==
 
 lerna@^9.0.7:
   version "9.0.7"
@@ -16749,16 +16749,15 @@ stack-utils@^2.0.3:
     escape-string-regexp "^2.0.0"
 
 start-server-and-test@^3.0.0:
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/start-server-and-test/-/start-server-and-test-3.0.5.tgz#b8b7a132ff192934975df90a87549cb40209fbba"
-  integrity sha512-2SvI2UR+rVM4FQ3GqEnjjfVATln6JgJGsZjRRyAqgl1EI6fJFH5zVCawqJLcmU9vBxwI0ZX9i3M+GFpY+sxWcw==
+  version "3.0.11"
+  resolved "https://registry.yarnpkg.com/start-server-and-test/-/start-server-and-test-3.0.11.tgz#25aeaea872575a8f6e0d7b0b22d0c26500eff5bf"
+  integrity sha512-NRapOwJl6jr1DNSaQ+SRukHI2OKcFZA2Iv2tfTW9fI/S+6YmJGiwacR+0MG3o5p39lY4xWUOE5JFkKJBZUjxuQ==
   dependencies:
     arg "5.0.2"
-    bluebird "3.7.2"
     check-more-types "2.24.0"
     debug "4.4.3"
     execa "5.1.1"
-    lazy-ass "1.6.0"
+    lazy-ass "2.0.3"
     tree-kill "1.2.2"
     wait-on "9.0.10"
 
