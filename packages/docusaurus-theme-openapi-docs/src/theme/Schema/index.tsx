@@ -437,21 +437,20 @@ interface DiscriminatorNodeProps {
 
 const DiscriminatorNode: React.FC<DiscriminatorNodeProps> = ({
   discriminator,
-  schema,
+  schema: rawSchema,
   schemaType,
 }) => {
+  // Eagerly merge top-level allOf so shared properties contributed by allOf
+  // members (e.g. CommonProps in nested-discriminator-in-all-of) are accessible
+  // to PropertyDiscriminator's top-level rendering.
+  const schema = rawSchema.allOf
+    ? (mergeAllOf(rawSchema) as SchemaObject)
+    : rawSchema;
+
   let discriminatedSchemas: any = {};
   let inferredMapping: any = {};
 
-  const discriminatorProperty =
-    schema.properties?.[discriminator.propertyName] ?? {};
-
-  if (schema.allOf) {
-    const mergedSchemas = mergeAllOf(schema) as SchemaObject;
-    if (mergedSchemas.oneOf || mergedSchemas.anyOf) {
-      discriminatedSchemas = mergedSchemas.oneOf || mergedSchemas.anyOf;
-    }
-  } else if (schema.oneOf || schema.anyOf) {
+  if (schema.oneOf || schema.anyOf) {
     discriminatedSchemas = schema.oneOf || schema.anyOf;
   }
 
@@ -499,8 +498,12 @@ const DiscriminatorNode: React.FC<DiscriminatorNodeProps> = ({
   });
 
   const name = discriminator.propertyName;
+  // Compute discriminatorProperty AFTER the merge loop so it picks up the
+  // definition populated from branches (handles cases where the discriminator
+  // property is defined only inside oneOf/anyOf branches, not at top level).
+  const discriminatorProperty =
+    schema.properties?.[discriminator.propertyName] ?? {};
   const schemaName = getSchemaName(discriminatorProperty);
-  // Default case for discriminator without oneOf/anyOf/allOf
   return (
     <PropertyDiscriminator
       name={name}

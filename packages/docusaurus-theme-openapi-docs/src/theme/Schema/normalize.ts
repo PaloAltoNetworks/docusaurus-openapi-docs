@@ -58,7 +58,7 @@ function stripConflictingAdditionalProps(node: any): any {
   return result;
 }
 
-export function mergeAllOf(schema: any) {
+export function mergeAllOf(schema: any): any {
   const onMergeError = (msg: string) => console.warn(msg);
   const merged = merge(stripConflictingAdditionalProps(schema), {
     onMergeError,
@@ -134,9 +134,8 @@ export function foldSiblingsIntoBranches(schema: any): any {
   return result;
 }
 
-// WeakMap caches keyed by object identity — shared-reference subtrees from
-// $RefParser.dereference are normalized/looked up once, and cycles short-circuit.
-const normalizeCache = new WeakMap<object, any>();
+// WeakMap cache keyed by object identity — shared-reference subtrees from
+// $RefParser.dereference are looked up once, and cycles short-circuit.
 const discriminatorCache = new WeakMap<object, any | null>();
 
 /**
@@ -171,71 +170,21 @@ export function getDiscriminator(schema: any): any | undefined {
 }
 
 /**
- * Single O(N) pass that merges allOf, strips conflicting additionalProperties,
- * and folds siblings into oneOf/anyOf branches. Cached by object identity so
- * nested SchemaNode renders short-circuit in O(1). See #1525.
+ * Identity-stable schema pass-through. Returns the input as-is so SchemaNode
+ * useMemo dependencies stay stable across renders.
+ *
+ * Earlier iterations of this function eagerly merged allOf and folded
+ * siblings into oneOf/anyOf branches, but those operations need to stay
+ * conditional inside SchemaNode and DiscriminatorNode — eager versions
+ * caused cartesian product expansion (allOf with multiple oneOfs) and
+ * double-folding regressions. The render-time helpers below
+ * (mergeAllOf, foldSiblingsIntoBranches) are still cached via the WeakMap
+ * inside stripConflictingAdditionalProps, so per-render cost stays bounded.
+ *
+ * The perf win for #1525 comes from getDiscriminator's WeakMap cache
+ * replacing the O(subtree) findDiscriminator walk, not from eager
+ * normalization here.
  */
 export function normalizeSchema(schema: any): any {
-  return normalizeSchemaImpl(schema, normalizeCache);
-}
-
-function normalizeSchemaImpl(schema: any, cache: WeakMap<object, any>): any {
-  if (Array.isArray(schema)) {
-    const hit = cache.get(schema);
-    if (hit) return hit;
-    const result: any[] = [];
-    cache.set(schema, result);
-    for (const s of schema) result.push(normalizeSchemaImpl(s, cache));
-
-    return result;
-  }
-  if (!schema || typeof schema !== "object") return schema;
-  const hit = cache.get(schema);
-  if (hit) return hit;
-
-  // Placeholder for cycle detection.
-  const result: any = {};
-  cache.set(schema, result);
-
-  let working: any = schema;
-
-  if (Array.isArray(working.allOf) && working.allOf.length > 0) {
-    // Skip merge when allOf contains circular-reference string markers
-    // (e.g. `allOf: ["circular(Title)"]`) — allof-merge can't handle them.
-    const hasCircularMember = working.allOf.some(isCircularMarker);
-    if (!hasCircularMember) {
-      working = mergeAllOf(working);
-    }
-  }
-
-  if (working.oneOf || working.anyOf) {
-    working = foldSiblingsIntoBranches(working);
-  }
-
-  for (const [k, v] of Object.entries(working)) {
-    if (k === "properties" && v && typeof v === "object") {
-      const props: any = {};
-      for (const [pk, pv] of Object.entries(v)) {
-        props[pk] = normalizeSchemaImpl(pv, cache);
-      }
-      result[k] = props;
-    } else if (k === "items" || k === "not") {
-      result[k] =
-        v && typeof v === "object" ? normalizeSchemaImpl(v, cache) : v;
-    } else if (k === "additionalProperties") {
-      result[k] =
-        v && typeof v === "object" ? normalizeSchemaImpl(v, cache) : v;
-    } else if (
-      (k === "oneOf" || k === "anyOf" || k === "allOf") &&
-      Array.isArray(v)
-    ) {
-      result[k] = v.map((s: any) => normalizeSchemaImpl(s, cache));
-    } else {
-      result[k] = v;
-    }
-  }
-
-  // Self-register so re-normalizing the output is an identity no-op.
-  cache.set(result, result);
-  return result;
+  return schema;
 }
