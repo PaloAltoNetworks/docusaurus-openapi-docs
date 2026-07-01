@@ -50,9 +50,19 @@ let SCHEMA_TYPE: "request" | "response";
  *
  * See https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1119
  */
+const stripCache = new WeakMap<object, any>();
+
 function stripConflictingAdditionalProps(node: any): any {
-  if (Array.isArray(node)) return node.map(stripConflictingAdditionalProps);
+  if (Array.isArray(node)) {
+    const cached = stripCache.get(node);
+    if (cached) return cached;
+    const result = node.map(stripConflictingAdditionalProps);
+    stripCache.set(node, result);
+    return result;
+  }
   if (!node || typeof node !== "object") return node;
+  const cached = stripCache.get(node);
+  if (cached) return cached;
 
   let working: any = node;
   if (Array.isArray(node.allOf) && node.allOf.length > 1) {
@@ -74,6 +84,7 @@ function stripConflictingAdditionalProps(node: any): any {
   }
 
   const result: any = {};
+  stripCache.set(node, result);
   for (const [k, v] of Object.entries(working)) {
     result[k] = stripConflictingAdditionalProps(v);
   }
