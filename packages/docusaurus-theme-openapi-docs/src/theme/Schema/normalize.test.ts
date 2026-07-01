@@ -6,6 +6,7 @@
  * ========================================================================== */
 
 import {
+  findPropertyDeep,
   foldSiblingsIntoBranches,
   getDiscriminator,
   isCircularMarker,
@@ -219,6 +220,55 @@ describe("getDiscriminator", () => {
     a.properties.b = b;
     expect(() => getDiscriminator(a)).not.toThrow();
     expect(getDiscriminator(a)).toBeUndefined();
+  });
+});
+
+describe("findPropertyDeep", () => {
+  it("returns property at top level", () => {
+    const schema = { properties: { foo: { type: "string" } } };
+    expect(findPropertyDeep(schema, "foo")).toEqual({ type: "string" });
+  });
+
+  it("finds property in oneOf branches", () => {
+    const schema = {
+      oneOf: [
+        { properties: { a: { type: "string" } } },
+        { properties: { b: { type: "number" } } },
+      ],
+    };
+    expect(findPropertyDeep(schema, "a")).toEqual({ type: "string" });
+    expect(findPropertyDeep(schema, "b")).toEqual({ type: "number" });
+  });
+
+  it("finds property in anyOf branches", () => {
+    const schema = {
+      anyOf: [{ properties: { x: { type: "integer" } } }],
+    };
+    expect(findPropertyDeep(schema, "x")).toEqual({ type: "integer" });
+  });
+
+  it("finds property in allOf branches", () => {
+    const schema = {
+      allOf: [{ properties: { y: { type: "boolean" } } }],
+    };
+    expect(findPropertyDeep(schema, "y")).toEqual({ type: "boolean" });
+  });
+
+  it("returns undefined when property not found", () => {
+    const schema = { properties: { foo: { type: "string" } } };
+    expect(findPropertyDeep(schema, "bar")).toBeUndefined();
+  });
+
+  it("returns undefined for null/primitive input", () => {
+    expect(findPropertyDeep(null, "foo")).toBeUndefined();
+    expect(findPropertyDeep("string", "foo")).toBeUndefined();
+  });
+
+  it("handles cycles without infinite recursion", () => {
+    const a: any = { properties: {} };
+    a.oneOf = [a];
+    expect(() => findPropertyDeep(a, "foo")).not.toThrow();
+    expect(findPropertyDeep(a, "foo")).toBeUndefined();
   });
 });
 

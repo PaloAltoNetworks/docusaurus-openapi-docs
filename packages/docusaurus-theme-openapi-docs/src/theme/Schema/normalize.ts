@@ -134,9 +134,10 @@ export function foldSiblingsIntoBranches(schema: any): any {
   return result;
 }
 
-// WeakMap cache keyed by object identity — shared-reference subtrees from
+// WeakMap caches keyed by object identity — shared-reference subtrees from
 // $RefParser.dereference are looked up once, and cycles short-circuit.
 const discriminatorCache = new WeakMap<object, any | null>();
+const findPropertyCache = new WeakMap<object, Map<string, any>>();
 
 /**
  * Cached recursive discriminator lookup. Returns O(1) on repeated calls
@@ -166,6 +167,45 @@ export function getDiscriminator(schema: any): any | undefined {
   }
 
   discriminatorCache.set(schema, result ?? null);
+  return result;
+}
+
+/**
+ * Cached recursive property lookup. Searches schema.properties first, then
+ * into oneOf/anyOf/allOf branches. Returns O(1) on repeated calls with the
+ * same (schema, propertyName) pair — replaces the O(subtree) findProperty
+ * walk that caused #1525's O(N^2) render cost.
+ */
+export function findPropertyDeep(
+  schema: any,
+  propertyName: string
+): any | undefined {
+  if (!schema || typeof schema !== "object") return undefined;
+  let cache = findPropertyCache.get(schema);
+  if (cache && cache.has(propertyName)) {
+    const cached = cache.get(propertyName);
+    return cached === null ? undefined : cached;
+  }
+  if (!cache) {
+    cache = new Map();
+    findPropertyCache.set(schema, cache);
+  }
+  cache.set(propertyName, null);
+
+  let result: any | undefined = schema.properties?.[propertyName];
+  if (!result) {
+    for (const key of BRANCH_KEYS) {
+      const branches = schema[key];
+      if (!Array.isArray(branches)) continue;
+      for (const branch of branches) {
+        result = findPropertyDeep(branch, propertyName);
+        if (result) break;
+      }
+      if (result) break;
+    }
+  }
+
+  cache.set(propertyName, result ?? null);
   return result;
 }
 

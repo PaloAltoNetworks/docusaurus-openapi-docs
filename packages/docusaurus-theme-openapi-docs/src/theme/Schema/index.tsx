@@ -15,6 +15,7 @@ import Details from "@theme/Details";
 import DiscriminatorTabs from "@theme/DiscriminatorTabs";
 import Markdown from "@theme/Markdown";
 import {
+  findPropertyDeep,
   foldSiblingsIntoBranches,
   getDiscriminator,
   isCircularMarker,
@@ -437,27 +438,19 @@ interface DiscriminatorNodeProps {
 
 const DiscriminatorNode: React.FC<DiscriminatorNodeProps> = ({
   discriminator,
-  schema: rawSchema,
+  schema,
   schemaType,
 }) => {
-  // Merge top-level allOf only when the discriminator is nested inside allOf
-  // (rawSchema.discriminator is undefined). This matches prod behavior where
-  // SchemaNode merged allOf via `workingSchema = mergeAllOf(schema)` to
-  // promote nested discriminators. When the discriminator is at the raw
-  // top level (rawSchema.discriminator exists), skip the merge to avoid
-  // pulling in unrelated allOf-derived properties.
-  const schema =
-    rawSchema.allOf && !rawSchema.discriminator
-      ? (mergeAllOf(rawSchema) as SchemaObject)
-      : rawSchema;
-
   let discriminatedSchemas: any = {};
   let inferredMapping: any = {};
 
+  // Search for the discriminator property in the schema, including nested
+  // structures. Cached recursive lookup replaces the O(subtree) findProperty
+  // walk that caused #1525's O(N^2) render cost.
+  const discriminatorProperty =
+    findPropertyDeep(schema, discriminator.propertyName) ?? {};
+
   if (schema.allOf) {
-    // Discriminator is at top level and schema still has allOf. Merge just to
-    // extract the discriminated oneOf/anyOf branches, without replacing
-    // `schema` — matches prod's DiscriminatorNode behavior.
     const mergedSchemas = mergeAllOf(schema) as SchemaObject;
     if (mergedSchemas.oneOf || mergedSchemas.anyOf) {
       discriminatedSchemas = mergedSchemas.oneOf || mergedSchemas.anyOf;
@@ -510,12 +503,8 @@ const DiscriminatorNode: React.FC<DiscriminatorNodeProps> = ({
   });
 
   const name = discriminator.propertyName;
-  // Compute discriminatorProperty AFTER the merge loop so it picks up the
-  // definition populated from branches (handles cases where the discriminator
-  // property is defined only inside oneOf/anyOf branches, not at top level).
-  const discriminatorProperty =
-    schema.properties?.[discriminator.propertyName] ?? {};
   const schemaName = getSchemaName(discriminatorProperty);
+  // Default case for discriminator without oneOf/anyOf/allOf
   return (
     <PropertyDiscriminator
       name={name}
@@ -1089,14 +1078,25 @@ const SchemaNode: React.FC<SchemaProps> = ({
     return null;
   }
 
-  // Check top-level first (O(1)), then fall back to cached recursive lookup
-  // for discriminators that allof-merge doesn't promote (e.g. inside oneOf).
-  const discriminator = schema.discriminator ?? getDiscriminator(schema);
-  if (discriminator) {
+  // Resolve discriminator recursively so nested oneOf/anyOf/allOf compositions
+  // can still render discriminator tabs. Cached via getDiscriminator so per-
+  // render cost is O(1) amortized (see #1525).
+  let workingSchema = schema;
+  const resolvedDiscriminator =
+    schema.discriminator ?? getDiscriminator(schema);
+  if (schema.allOf && !schema.discriminator && resolvedDiscriminator) {
+    workingSchema = mergeAllOf(schema) as SchemaObject;
+  }
+  if (!workingSchema.discriminator && resolvedDiscriminator) {
+    workingSchema.discriminator = resolvedDiscriminator;
+  }
+
+  if (workingSchema.discriminator) {
+    const { discriminator } = workingSchema;
     return (
       <DiscriminatorNode
         discriminator={discriminator}
-        schema={schema}
+        schema={workingSchema}
         schemaType={schemaType}
       />
     );
