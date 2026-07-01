@@ -440,17 +440,29 @@ const DiscriminatorNode: React.FC<DiscriminatorNodeProps> = ({
   schema: rawSchema,
   schemaType,
 }) => {
-  // Eagerly merge top-level allOf so shared properties contributed by allOf
-  // members (e.g. CommonProps in nested-discriminator-in-all-of) are accessible
-  // to PropertyDiscriminator's top-level rendering.
-  const schema = rawSchema.allOf
-    ? (mergeAllOf(rawSchema) as SchemaObject)
-    : rawSchema;
+  // Merge top-level allOf only when the discriminator is nested inside allOf
+  // (rawSchema.discriminator is undefined). This matches prod behavior where
+  // SchemaNode merged allOf via `workingSchema = mergeAllOf(schema)` to
+  // promote nested discriminators. When the discriminator is at the raw
+  // top level (rawSchema.discriminator exists), skip the merge to avoid
+  // pulling in unrelated allOf-derived properties.
+  const schema =
+    rawSchema.allOf && !rawSchema.discriminator
+      ? (mergeAllOf(rawSchema) as SchemaObject)
+      : rawSchema;
 
   let discriminatedSchemas: any = {};
   let inferredMapping: any = {};
 
-  if (schema.oneOf || schema.anyOf) {
+  if (schema.allOf) {
+    // Discriminator is at top level and schema still has allOf. Merge just to
+    // extract the discriminated oneOf/anyOf branches, without replacing
+    // `schema` — matches prod's DiscriminatorNode behavior.
+    const mergedSchemas = mergeAllOf(schema) as SchemaObject;
+    if (mergedSchemas.oneOf || mergedSchemas.anyOf) {
+      discriminatedSchemas = mergedSchemas.oneOf || mergedSchemas.anyOf;
+    }
+  } else if (schema.oneOf || schema.anyOf) {
     discriminatedSchemas = schema.oneOf || schema.anyOf;
   }
 
