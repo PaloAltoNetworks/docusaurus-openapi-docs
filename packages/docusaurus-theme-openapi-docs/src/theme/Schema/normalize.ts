@@ -15,20 +15,16 @@ export function isCircularMarker(value: unknown): value is string {
 /**
  * Strip `additionalProperties: false` from sibling allOf members so
  * allof-merge doesn't collapse to an unsatisfiable empty schema. See #1119.
+ *
+ * NOT cached: DiscriminatorNode mutates raw subschemas (deletes the
+ * discriminator property from each branch to avoid duplicate rendering).
+ * A WeakMap cache would return the pre-mutation deep clone on subsequent
+ * mergeAllOf calls, causing deleted properties to reappear inside tab
+ * content. Matches prod's per-call behavior.
  */
-const stripCache = new WeakMap<object, any>();
-
 function stripConflictingAdditionalProps(node: any): any {
-  if (Array.isArray(node)) {
-    const cached = stripCache.get(node);
-    if (cached) return cached;
-    const result = node.map(stripConflictingAdditionalProps);
-    stripCache.set(node, result);
-    return result;
-  }
+  if (Array.isArray(node)) return node.map(stripConflictingAdditionalProps);
   if (!node || typeof node !== "object") return node;
-  const cached = stripCache.get(node);
-  if (cached) return cached;
 
   let working: any = node;
   if (Array.isArray(node.allOf) && node.allOf.length > 1) {
@@ -50,8 +46,6 @@ function stripConflictingAdditionalProps(node: any): any {
   }
 
   const result: any = {};
-  // Cache before recursing so shared-identity cycles don't loop forever.
-  stripCache.set(node, result);
   for (const [k, v] of Object.entries(working)) {
     result[k] = stripConflictingAdditionalProps(v);
   }
