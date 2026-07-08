@@ -2,6 +2,8 @@
 
 Patch release with schema rendering and path-matching fixes: branch descriptions now render for `oneOf`/`anyOf` and discriminator mappings, schema normalization is hoisted out of the render path for better performance, and Postman path matchers are ranked by per-segment specificity to prioritize the most specific match. Also includes a batch of dependency updates.
 
+Thanks to [@Mikurosama](https://github.com/Mikurosama) (#1526), [@Compaurum](https://github.com/Compaurum) (#1540), and [@gotson](https://github.com/gotson) (#1525, and for confirming the fix) for reporting the issues addressed in this release.
+
 #### :bug: Bug Fix
 
 - fix(plugin): rank path matchers by per-segment specificity (#1526) ([#1546](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1546))
