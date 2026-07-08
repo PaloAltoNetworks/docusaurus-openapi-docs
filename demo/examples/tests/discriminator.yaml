@@ -606,10 +606,7 @@ components:
 
     TypeA:
       type: object
-      description: |
-        **TypeA** — a discriminator variant carrying a single string property `propA`.
-        This description should render in the `TypeA`/`typeA` tab of every
-        discriminator/oneOf path that references this schema (issue #1540).
+      description: A variant carrying a single string property `propA`.
       properties:
         type:
           type: string
@@ -621,10 +618,7 @@ components:
 
     TypeB:
       type: object
-      description: |
-        **TypeB** — a discriminator variant carrying a numeric property `propB`.
-        Present here to verify branch descriptions render for the second tab as
-        well (issue #1540).
+      description: A variant carrying a numeric property `propB`.
       properties:
         type:
           type: string
@@ -636,10 +630,7 @@ components:
 
     NestedTypeA:
       type: object
-      description: |
-        **NestedTypeA** — variant whose payload nests an object under `nestedA`.
-        Its description should render even when the branch itself contains
-        nested object schemas.
+      description: A variant whose payload nests an object under `nestedA`.
       properties:
         type:
           type: string
@@ -656,9 +647,7 @@ components:
 
     NestedTypeB:
       type: object
-      description: |
-        **NestedTypeB** — companion variant to `NestedTypeA` with a differently
-        shaped nested payload under `nestedB`.
+      description: A variant whose payload nests an object under `nestedB`.
       properties:
         type:
           type: string
@@ -675,9 +664,7 @@ components:
 
     EmptyType:
       type: object
-      description: |
-        **EmptyType** — variant that inherits all fields from the base schema
-        via `allOf` and adds nothing of its own. Description should still render.
+      description: A variant that inherits all fields from the base schema and adds none of its own.
       allOf:
         - $ref: "#/components/schemas/BaseEmptySubschema"
 
@@ -761,10 +748,7 @@ components:
 
     NestedVariantA:
       type: object
-      description: |
-        **NestedVariantA** — used inside an `allOf`+`oneOf`+discriminator
-        combination. Verifies that mapping-target descriptions render when the
-        discriminator itself is nested inside `allOf`.
+      description: A variant selected by a discriminator that is nested inside `allOf`.
       properties:
         variantType:
           type: string
@@ -781,9 +765,7 @@ components:
 
     NestedVariantB:
       type: object
-      description: |
-        **NestedVariantB** — companion to `NestedVariantA` for the nested
-        discriminator case.
+      description: A second variant selected by a discriminator nested inside `allOf`.
       properties:
         variantType:
           type: string
