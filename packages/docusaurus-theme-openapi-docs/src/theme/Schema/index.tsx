@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 
 import { translate } from "@docusaurus/Translate";
 import { setSchemaSelection } from "@theme/ApiExplorer/SchemaSelection/slice";
@@ -15,6 +15,14 @@ import Details from "@theme/Details";
 import DiscriminatorTabs from "@theme/DiscriminatorTabs";
 import Markdown from "@theme/Markdown";
 import {
+  findPropertyDeep,
+  foldSiblingsIntoBranches,
+  getDiscriminator,
+  isCircularMarker,
+  mergeAllOf,
+  normalizeSchema,
+} from "@theme/Schema/normalize";
+import {
   SchemaDepthProvider,
   useSchemaDepth,
   useSchemaExpansion,
@@ -22,191 +30,11 @@ import {
 import SchemaItem from "@theme/SchemaItem";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { merge } from "allof-merge";
 import clsx from "clsx";
 import isEmpty from "lodash/isEmpty";
 
 import { getQualifierMessage, getSchemaName } from "../../markdown/schema";
 import type { SchemaObject } from "../../types.d";
-
-// eslint-disable-next-line import/no-extraneous-dependencies
-// const jsonSchemaMergeAllOf = require("json-schema-merge-allof");
-
-/**
- * Strip `additionalProperties: false` from sibling allOf members so the
- * strict-AND semantics of `allof-merge` don't collapse the result to an
- * unsatisfiable empty schema.
- *
- * Per JSON Schema, two allOf members that each set `additionalProperties: false`
- * with disjoint `properties` sets define an unsatisfiable schema (no value can
- * satisfy both — each member rejects the other's properties). `allof-merge` is
- * technically correct to drop all properties in that case, but it leaves the
- * rendered schema blank.
- *
- * NSwag and Swashbuckle emit this pattern by default whenever a model uses
- * inheritance/composition, so it's the dominant style for .NET-generated specs.
- * Redoc, Swagger UI, and Stoplight all union the properties and ignore the
- * conflicting flag — the approach this helper emulates by stripping the flag
- * before delegating to `allof-merge`. The flag is render-irrelevant anyway:
- * `additionalProperties: false` is treated identically to `undefined` by the
- * AdditionalProperties component below (line ~641).
- *
- * Strips from every allOf member whenever the parent has ≥2 members. The
- * collapse triggers symmetrically (both siblings strict) or asymmetrically
- * (one strict member rejects another's properties as "additional"), so the
- * presence of multiple members is the right gate. Single-member allOf is left
- * alone — it can't conflict with anything.
- *
- * See https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1119
- * Mirrored in plugin: docusaurus-plugin-openapi-docs/src/markdown/createSchema.ts
- */
-const stripConflictingAdditionalProps = (node: any): any => {
-  if (Array.isArray(node)) return node.map(stripConflictingAdditionalProps);
-  if (!node || typeof node !== "object") return node;
-
-  let working: any = node;
-  if (Array.isArray(node.allOf) && node.allOf.length > 1) {
-    const hasStrictMember = node.allOf.some(
-      (m: any) => m && m.additionalProperties === false
-    );
-    if (hasStrictMember) {
-      working = {
-        ...node,
-        allOf: node.allOf.map((m: any) => {
-          if (m && m.additionalProperties === false) {
-            const { additionalProperties: _drop, ...rest } = m;
-            return rest;
-          }
-          return m;
-        }),
-      };
-    }
-  }
-
-  const result: any = {};
-  for (const [k, v] of Object.entries(working)) {
-    result[k] = stripConflictingAdditionalProps(v);
-  }
-  return result;
-};
-
-const mergeAllOf = (allOf: any) => {
-  const onMergeError = (msg: string) => {
-    console.warn(msg);
-  };
-
-  const mergedSchemas = merge(stripConflictingAdditionalProps(allOf), {
-    onMergeError,
-  });
-
-  return mergedSchemas ?? {};
-};
-
-/**
- * Fold sibling fields into each `oneOf`/`anyOf` branch via allOf-merge, so each
- * branch is self-contained. Mirrors Redoc's `SchemaModel.initOneOf` behavior.
- * Without this, when an `allOf` override redefines a nested property with
- * `oneOf`, the merged schema ends up with both `properties` and `oneOf` as
- * siblings — and the renderer prints the shared properties twice.
- *
- * See https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1218
- */
-const foldSiblingsIntoBranches = (schema: any): any => {
-  const branchKey = schema?.oneOf
-    ? "oneOf"
-    : schema?.anyOf
-      ? "anyOf"
-      : undefined;
-  if (!branchKey) return schema;
-
-  const branches = schema[branchKey];
-  if (!Array.isArray(branches) || branches.length === 0) return schema;
-
-  const siblings = { ...schema };
-  delete siblings[branchKey];
-  if (Object.keys(siblings).length === 0) return schema;
-
-  const folded = branches.map((branch: any) =>
-    mergeAllOf({ allOf: [siblings, branch] })
-  );
-
-  return { [branchKey]: folded };
-};
-
-/**
- * Recursively searches for a property in a schema, including nested
- * oneOf, anyOf, and allOf structures. This is needed for discriminators
- * where the property definition may be in a nested schema.
- */
-const findProperty = (
-  schema: SchemaObject,
-  propertyName: string
-): SchemaObject | undefined => {
-  // Check direct properties first
-  if (schema.properties?.[propertyName]) {
-    return schema.properties[propertyName];
-  }
-
-  // Search in oneOf schemas
-  if (schema.oneOf) {
-    for (const subschema of schema.oneOf) {
-      const found = findProperty(subschema as SchemaObject, propertyName);
-      if (found) return found;
-    }
-  }
-
-  // Search in anyOf schemas
-  if (schema.anyOf) {
-    for (const subschema of schema.anyOf) {
-      const found = findProperty(subschema as SchemaObject, propertyName);
-      if (found) return found;
-    }
-  }
-
-  // Search in allOf schemas
-  if (schema.allOf) {
-    for (const subschema of schema.allOf) {
-      const found = findProperty(subschema as SchemaObject, propertyName);
-      if (found) return found;
-    }
-  }
-
-  return undefined;
-};
-
-/**
- * Recursively searches for a discriminator in a schema, including nested
- * oneOf, anyOf, and allOf structures.
- */
-const findDiscriminator = (schema: SchemaObject): any | undefined => {
-  if (schema.discriminator) {
-    return schema.discriminator;
-  }
-
-  if (schema.oneOf) {
-    for (const subschema of schema.oneOf) {
-      const found = findDiscriminator(subschema as SchemaObject);
-      if (found) return found;
-    }
-  }
-
-  if (schema.anyOf) {
-    for (const subschema of schema.anyOf) {
-      const found = findDiscriminator(subschema as SchemaObject);
-      if (found) return found;
-    }
-  }
-
-  if (schema.allOf) {
-    for (const subschema of schema.allOf) {
-      const found = findDiscriminator(subschema as SchemaObject);
-      if (found) return found;
-    }
-  }
-
-  return undefined;
-};
 
 interface MarkdownProps {
   text: string | undefined;
@@ -616,9 +444,11 @@ const DiscriminatorNode: React.FC<DiscriminatorNodeProps> = ({
   let discriminatedSchemas: any = {};
   let inferredMapping: any = {};
 
-  // Search for the discriminator property in the schema, including nested structures
+  // Search for the discriminator property in the schema, including nested
+  // structures. Cached recursive lookup replaces the O(subtree) findProperty
+  // walk that caused #1525's O(N^2) render cost.
   const discriminatorProperty =
-    findProperty(schema, discriminator.propertyName) ?? {};
+    findPropertyDeep(schema, discriminator.propertyName) ?? {};
 
   if (schema.allOf) {
     const mergedSchemas = mergeAllOf(schema) as SchemaObject;
@@ -698,6 +528,20 @@ const AdditionalProperties: React.FC<SchemaProps> = ({
   const additionalProperties = schema.additionalProperties;
 
   if (!additionalProperties) return null;
+
+  if (isCircularMarker(additionalProperties)) {
+    return (
+      <SchemaItem
+        name="property name*"
+        required={false}
+        schemaName={additionalProperties}
+        schema={additionalProperties}
+        collapsible={false}
+        discriminator={false}
+        children={null}
+      />
+    );
+  }
 
   // Handle free-form objects
   if (additionalProperties === true || isEmpty(additionalProperties)) {
@@ -812,6 +656,23 @@ const Items: React.FC<{
   schemaType: "request" | "response";
   schemaPath?: string;
 }> = ({ schema, schemaType, schemaPath }) => {
+  if (isCircularMarker(schema.items)) {
+    return (
+      <div style={{ marginLeft: ".5rem" }}>
+        <OpeningArrayBracket />
+        <SchemaItem
+          collapsible={false}
+          name=""
+          schemaName={schema.items}
+          schema={schema.items}
+          discriminator={false}
+          children={null}
+        />
+        <ClosingArrayBracket />
+      </div>
+    );
+  }
+
   // Process schema.items to handle allOf merging
   let itemsSchema = schema.items;
   if (schema.items?.allOf) {
@@ -932,6 +793,20 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
     return null;
   }
 
+  if (isCircularMarker(schema)) {
+    return (
+      <SchemaItem
+        collapsible={false}
+        name={name}
+        required={Array.isArray(required) ? required.includes(name) : required}
+        schemaName={schema}
+        schema={schema}
+        discriminator={false}
+        children={null}
+      />
+    );
+  }
+
   const schemaName = getSchemaName(schema);
 
   if (discriminator && discriminator.propertyName === name) {
@@ -1005,6 +880,20 @@ const SchemaEdge: React.FC<SchemaEdgeProps> = ({
   }
 
   if (schema.items?.anyOf || schema.items?.oneOf || schema.items?.allOf) {
+    return (
+      <SchemaNodeDetails
+        name={name}
+        schemaName={schemaName}
+        required={required}
+        nullable={schema.nullable}
+        schema={schema}
+        schemaType={schemaType}
+        schemaPath={schemaPath}
+      />
+    );
+  }
+
+  if (isCircularMarker(schema.items)) {
     return (
       <SchemaNodeDetails
         name={name}
@@ -1176,10 +1065,12 @@ function renderChildren(
 }
 
 const SchemaNode: React.FC<SchemaProps> = ({
-  schema,
+  schema: rawSchema,
   schemaType,
   schemaPath,
 }) => {
+  const schema = useMemo(() => normalizeSchema(rawSchema), [rawSchema]);
+
   if (
     (schemaType === "request" && schema.readOnly) ||
     (schemaType === "response" && schema.writeOnly)
@@ -1188,10 +1079,11 @@ const SchemaNode: React.FC<SchemaProps> = ({
   }
 
   // Resolve discriminator recursively so nested oneOf/anyOf/allOf compositions
-  // can still render discriminator tabs.
+  // can still render discriminator tabs. Cached via getDiscriminator so per-
+  // render cost is O(1) amortized (see #1525).
   let workingSchema = schema;
   const resolvedDiscriminator =
-    schema.discriminator ?? findDiscriminator(schema);
+    schema.discriminator ?? getDiscriminator(schema);
   if (schema.allOf && !schema.discriminator && resolvedDiscriminator) {
     workingSchema = mergeAllOf(schema) as SchemaObject;
   }
