@@ -1,3 +1,39 @@
+## 5.1.1 (2026-07-08)
+
+Patch release with schema rendering and path-matching fixes: branch descriptions now render for `oneOf`/`anyOf` and discriminator mappings, schema normalization is hoisted out of the render path for better performance, and Postman path matchers are ranked by per-segment specificity to prioritize the most specific match. Also includes a batch of dependency updates.
+
+#### :bug: Bug Fix
+
+- fix(plugin): rank path matchers by per-segment specificity (#1526) ([#1546](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1546))
+- fix(theme): render branch descriptions for oneOf/anyOf and discriminator mappings ([#1545](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1545))
+- fix(theme): hoist schema normalization out of render path ([#1527](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1527))
+
+#### :robot: Dependencies
+
+- chore(deps): bump sigstore from 4.1.0 to 4.1.1 ([#1541](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1541))
+- chore(deps): bump fs-extra from 11.3.5 to 11.3.6 ([#1543](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1543))
+- chore(deps): bump @sigstore/core from 3.2.0 to 3.2.1 ([#1538](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1538))
+- chore(deps): bump commander from 14.0.3 to 15.0.0 ([#1532](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1532))
+- chore(deps): bump preactjs/compressed-size-action from 2.9.1 to 2.10.0 ([#1528](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1528))
+- chore(deps): bump actions/cache/restore from 5.0.5 to 6.1.0 ([#1537](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1537))
+- chore(deps): bump actions/cache/save from 5.0.5 to 6.1.0 ([#1533](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1533))
+- chore(deps): bump actions/cache from 5.0.5 to 6.1.0 ([#1531](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1531))
+- chore(deps): bump actions/checkout from 6.0.3 to 7.0.0 ([#1530](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1530))
+
+#### :wrench: Maintenance
+
+- chore(deps-dev): bump cypress from 15.16.0 to 15.18.0 ([#1544](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1544))
+- chore(deps-dev): bump @types/node from 26.0.0 to 26.0.1 ([#1542](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1542))
+- chore(deps-dev): bump @types/node from 25.9.3 to 26.0.0 ([#1529](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1529))
+- chore(deps-dev): bump start-server-and-test from 3.0.5 to 3.0.11 ([#1536](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1536))
+- chore(deps-dev): bump playwright from 1.60.0 to 1.61.0 ([#1535](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1535))
+- chore(deps-dev): bump prettier from 3.8.3 to 3.8.4 ([#1534](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1534))
+
+#### Committers: 2
+
+- Steven Serrata
+- dependabot[bot]
+
 ## 5.1.0 (2026-06-24)
 
 Minor release adding configurable schema expansion depth, numerous schema rendering fixes, improved i18n support, Docusaurus v4 readiness work, and a batch of dependency updates. Also fixes the version script to ensure `create-docusaurus-openapi-docs` is always bumped in lockstep with the plugin and theme.
