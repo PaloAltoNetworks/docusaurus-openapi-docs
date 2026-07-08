@@ -606,6 +606,7 @@ components:
 
     TypeA:
       type: object
+      description: A variant carrying a single string property `propA`.
       properties:
         type:
           type: string
@@ -617,6 +618,7 @@ components:
 
     TypeB:
       type: object
+      description: A variant carrying a numeric property `propB`.
       properties:
         type:
           type: string
@@ -628,6 +630,7 @@ components:
 
     NestedTypeA:
       type: object
+      description: A variant whose payload nests an object under `nestedA`.
       properties:
         type:
           type: string
@@ -644,6 +647,7 @@ components:
 
     NestedTypeB:
       type: object
+      description: A variant whose payload nests an object under `nestedB`.
       properties:
         type:
           type: string
@@ -660,6 +664,7 @@ components:
 
     EmptyType:
       type: object
+      description: A variant that inherits all fields from the base schema and adds none of its own.
       allOf:
         - $ref: "#/components/schemas/BaseEmptySubschema"
 
@@ -743,6 +748,7 @@ components:
 
     NestedVariantA:
       type: object
+      description: A variant selected by a discriminator that is nested inside `allOf`.
       properties:
         variantType:
           type: string
@@ -759,6 +765,7 @@ components:
 
     NestedVariantB:
       type: object
+      description: A second variant selected by a discriminator nested inside `allOf`.
       properties:
         variantType:
           type: string

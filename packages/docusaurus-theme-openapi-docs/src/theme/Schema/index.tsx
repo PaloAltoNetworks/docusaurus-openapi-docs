@@ -216,6 +216,11 @@ const AnyOneOf: React.FC<SchemaProps> = ({
               label={label}
               value={`${uniqueId}-${index}-item`}
             >
+              {anyOneSchema.description && (
+                <div style={{ marginLeft: "1rem" }}>
+                  <MarkdownWrapper text={anyOneSchema.description} />
+                </div>
+              )}
               {/* Handle primitive types directly */}
               {(isPrimitive(anyOneSchema) || anyOneSchema.const) && (
                 <SchemaItem
@@ -399,6 +404,13 @@ const PropertyDiscriminator: React.FC<SchemaEdgeProps> = ({
                 label={key}
                 value={`${index}-item-discriminator`}
               >
+                {discriminator.mapping[key]?.description && (
+                  <div style={{ marginLeft: "1rem" }}>
+                    <MarkdownWrapper
+                      text={discriminator.mapping[key].description}
+                    />
+                  </div>
+                )}
                 <SchemaNode
                   schema={discriminator.mapping[key]}
                   schemaType={schemaType}

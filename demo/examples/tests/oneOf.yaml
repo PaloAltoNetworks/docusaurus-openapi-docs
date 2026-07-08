@@ -110,10 +110,12 @@ paths:
                   oneOfProperty:
                     oneOf:
                       - type: object
+                        description: An object variant containing a single string property.
                         properties:
                           objectProp:
                             type: string
                       - type: array
+                        description: An array variant whose items are numbers.
                         items:
                           type: number
 
@@ -253,10 +255,12 @@ paths:
                   oneOfProperty:
                     oneOf:
                       - type: object
+                        description: A variant carrying `specificPropA`.
                         properties:
                           specificPropA:
                             type: string
                       - type: object
+                        description: A variant carrying `specificPropB`.
                         properties:
                           specificPropB:
                             type: number
@@ -426,6 +430,7 @@ components:
   schemas:
     UploadRequestTemplate:
       type: object
+      description: The template variant of an upload request, without a fixed `contentType`.
       required: [content, notificationChannel, subject, templateName]
       properties:
         notificationChannel:
@@ -438,6 +443,7 @@ components:
         content:
           type: string
     UploadRequest:
+      description: A concrete upload request that extends `UploadRequestTemplate` with a required `contentType`.
       allOf:
         - $ref: "#/components/schemas/UploadRequestTemplate"
         - type: object
