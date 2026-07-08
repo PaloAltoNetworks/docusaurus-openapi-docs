@@ -592,6 +592,16 @@ function pathTemplateToRegex(pathTemplate: string): RegExp {
   return new RegExp(`^${templatePattern}$`);
 }
 
+// Per-segment specificity: 1 for a literal segment, 0 for a `{param}` segment.
+// Anchored path regexes only cross-match when segment counts are equal, so
+// disambiguation ranks literal segments ahead of parameter segments at the
+// same position (e.g. `/pet/{id}/summary` before `/pet/{id}/{tagId}`).
+function pathSpecificity(pathTemplate: string): number[] {
+  return pathTemplate
+    .split("/")
+    .map((segment) => (/^\{[^}]+\}$/.test(segment) ? 0 : 1));
+}
+
 function bindCollectionToApiItems(
   items: ApiMetadata[],
   postmanCollection: sdk.Collection
@@ -602,9 +612,17 @@ function bindCollectionToApiItems(
       apiItem: item,
       method: item.api.method.toLowerCase(),
       pathMatcher: pathTemplateToRegex(item.api.path),
-      hasParams: /\{[^}]+\}/.test(item.api.path),
+      specificity: pathSpecificity(item.api.path),
     }))
-    .sort((a, b) => Number(a.hasParams) - Number(b.hasParams));
+    .sort((a, b) => {
+      const len = Math.max(a.specificity.length, b.specificity.length);
+      for (let i = 0; i < len; i++) {
+        const av = a.specificity[i] ?? -1;
+        const bv = b.specificity[i] ?? -1;
+        if (av !== bv) return bv - av;
+      }
+      return 0;
+    });
 
   postmanCollection.forEachItem((item: any) => {
     const method = item.request.method.toLowerCase();
