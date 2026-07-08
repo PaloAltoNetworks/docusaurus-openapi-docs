@@ -110,10 +110,18 @@ paths:
                   oneOfProperty:
                     oneOf:
                       - type: object
+                        description: |
+                          **Object branch** — expected to render this description
+                          text at the top of the tab, above its property table
+                          (issue #1540).
                         properties:
                           objectProp:
                             type: string
                       - type: array
+                        description: |
+                          **Array branch** — expected to render this description
+                          text at the top of the tab, above the array items
+                          (issue #1540).
                         items:
                           type: number
 
@@ -253,10 +261,17 @@ paths:
                   oneOfProperty:
                     oneOf:
                       - type: object
+                        description: |
+                          **Branch A** — carries `specificPropA`. Description
+                          should appear in the tab body above the property list
+                          (issue #1540).
                         properties:
                           specificPropA:
                             type: string
                       - type: object
+                        description: |
+                          **Branch B** — carries `specificPropB`. Included so
+                          both tabs exercise branch-description rendering.
                         properties:
                           specificPropB:
                             type: number
@@ -426,6 +441,10 @@ components:
   schemas:
     UploadRequestTemplate:
       type: object
+      description: |
+        **UploadRequestTemplate** — template variant of an upload request.
+        Description should render for this branch under the `oneOf` on
+        `POST /oneof-ref-allof-requestbody` (issue #1540).
       required: [content, notificationChannel, subject, templateName]
       properties:
         notificationChannel:
@@ -438,6 +457,10 @@ components:
         content:
           type: string
     UploadRequest:
+      description: |
+        **UploadRequest** — `allOf`-composed variant that extends
+        `UploadRequestTemplate` with a required `contentType`. Verifies branch
+        descriptions render when the branch is itself `allOf`-composed.
       allOf:
         - $ref: "#/components/schemas/UploadRequestTemplate"
         - type: object
