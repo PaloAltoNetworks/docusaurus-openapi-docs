@@ -251,8 +251,16 @@ const AnyOneOf: React.FC<SchemaProps> = ({
 
               {/* Handle actual object types with properties or nested schemas */}
               {/* Note: In OpenAPI, properties implies type: object even if not explicitly set */}
+              {/* When the branch also has a nested oneOf/anyOf/allOf, skip
+                  Properties here and delegate to SchemaNode below —
+                  foldSiblingsIntoBranches will merge these properties into
+                  each inner variant, so rendering them inline as well would
+                  duplicate them per variant tab. See #1548. */}
               {(anyOneSchema.type === "object" || !anyOneSchema.type) &&
-                anyOneSchema.properties && (
+                anyOneSchema.properties &&
+                !anyOneSchema.oneOf &&
+                !anyOneSchema.anyOf &&
+                !anyOneSchema.allOf && (
                   <Properties
                     schema={anyOneSchema}
                     schemaType={schemaType}

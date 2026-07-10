@@ -158,6 +158,78 @@ describe("foldSiblingsIntoBranches", () => {
     expect(result.items).toBeUndefined();
     expect(result.oneOf).toHaveLength(1);
   });
+
+  // Regression for #1548 (property duplication in nested anyOf-of-oneOf):
+  // when the outer schema is `{ properties, anyOf: [{oneOf:[...]}, ...] }`,
+  // fold merges the outer properties into each anyOf branch, giving each
+  // branch its own inner `oneOf` alongside merged properties. The AnyOneOf
+  // render layer then delegates the branch to SchemaNode, which folds again
+  // into each inner variant. If AnyOneOf were to *also* render the branch's
+  // properties directly at that outer level, the same fields would appear
+  // twice per selected inner variant tab — hence the check in Schema/index.tsx
+  // that skips <Properties> when the branch has a nested oneOf/anyOf/allOf.
+  it("folds outer properties into each anyOf branch when branches contain nested oneOf", () => {
+    const schema = {
+      type: "object",
+      properties: {
+        name: { type: "string" },
+        default_value: { type: "string" },
+      },
+      anyOf: [
+        {
+          oneOf: [
+            {
+              title: "aggregate_group",
+              properties: {
+                aggregate_group: { type: "string" },
+              },
+            },
+            {
+              title: "tap",
+              properties: {
+                tap: { type: "object" },
+              },
+            },
+          ],
+        },
+        {
+          oneOf: [
+            {
+              title: "folder",
+              properties: { folder: { type: "string" } },
+            },
+            {
+              title: "snippet",
+              properties: { snippet: { type: "string" } },
+            },
+          ],
+        },
+      ],
+    };
+
+    const outer = foldSiblingsIntoBranches(schema);
+    expect(outer.properties).toBeUndefined();
+    expect(outer.anyOf).toHaveLength(2);
+
+    for (const branch of outer.anyOf) {
+      // Each anyOf branch retains its own inner oneOf and picks up the
+      // merged outer properties as siblings — this is the shape that
+      // AnyOneOf must NOT render <Properties> for directly, because
+      // SchemaNode will fold them into the inner variants below.
+      expect(branch.oneOf).toBeDefined();
+      expect(branch.properties.name).toBeDefined();
+      expect(branch.properties.default_value).toBeDefined();
+
+      const inner = foldSiblingsIntoBranches(branch);
+      expect(inner.properties).toBeUndefined();
+      expect(inner.oneOf).toBeDefined();
+      for (const variant of inner.oneOf) {
+        // Merged outer properties appear exactly once — inside each variant.
+        expect(variant.properties.name).toBeDefined();
+        expect(variant.properties.default_value).toBeDefined();
+      }
+    }
+  });
 });
 
 describe("getDiscriminator", () => {
