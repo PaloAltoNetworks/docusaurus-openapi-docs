@@ -1,3 +1,15 @@
+## 5.1.2 (2026-07-10)
+
+Patch release fixing a regression in nested `anyOf`/`oneOf` schema rendering where branch properties were duplicated across sibling branches.
+
+#### :bug: Bug Fix
+
+- fix(theme): stop duplicating branch properties in nested anyOf/oneOf renders ([#1549](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1549))
+
+#### Committers: 1
+
+- Steven Serrata
+
 ## 5.1.1 (2026-07-08)
 
 Patch release with schema rendering and path-matching fixes: branch descriptions now render for `oneOf`/`anyOf` and discriminator mappings, schema normalization is hoisted out of the render path for better performance, and Postman path matchers are ranked by per-segment specificity to prioritize the most specific match. Also includes a batch of dependency updates.
