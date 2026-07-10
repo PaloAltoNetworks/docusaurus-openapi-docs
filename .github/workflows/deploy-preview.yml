@@ -217,8 +217,11 @@ jobs:
     needs: deploy
     if: ${{ github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' && !failure() && !cancelled() }}
     runs-on: ubuntu-latest
+    environment: preview
     permissions:
       contents: read
+      id-token: write
+      pull-requests: write
 
     steps:
       - name: Checkout repository
@@ -277,3 +280,97 @@ jobs:
         with:
           name: visual_diffs
           path: visual_diffs
+
+      # ------------------------------------------------------------------
+      # Publish diff images to a per-PR Firebase channel so the sticky PR
+      # comment below can hotlink prod/preview/diff PNGs side by side.
+      # Uses a separate `pr<N>-diffs` channel on the existing Hosting site;
+      # both channels auto-expire on the same 7-day clock.
+      # ------------------------------------------------------------------
+      - name: Prepare Firebase entrypoint for diff images
+        run: |
+          cp .firebaserc visual_diffs/.firebaserc
+          cat > visual_diffs/firebase.json <<'JSON'
+          {
+            "hosting": {
+              "target": "docusaurus-openapi.tryingpan.dev",
+              "public": ".",
+              "ignore": ["firebase.json", ".firebaserc"]
+            }
+          }
+          JSON
+
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3.0.0
+        with:
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+          export_environment_variables: false
+
+      - name: Read GCP credentials
+        id: creds
+        run: |
+          echo "::add-mask::$CREDS_FILE"
+          creds=$(cat "$CREDS_FILE")
+          echo "::add-mask::$creds"
+          echo "sa_key=$creds" >> "$GITHUB_OUTPUT"
+        env:
+          CREDS_FILE: ${{ steps.auth.outputs.credentials_file_path }}
+
+      - name: Deploy diff images to Firebase
+        id: deploy_diffs
+        uses: FirebaseExtended/action-hosting-deploy@500ac625ca2dd40cbd15f7659af953801858032a # v0.10.0+node24 (pending release)
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ steps.creds.outputs.sa_key }}"
+          projectId: ${{ secrets.FIREBASE_PROJECT_ID }}
+          expires: 7d
+          channelId: "pr${{ github.event.number }}-diffs"
+          entryPoint: visual_diffs
+          disableComment: true
+        env:
+          FIREBASE_CLI_PREVIEWS: hostingchannels
+
+      - name: Build visual diff comment body
+        run: yarn ts-node scripts/build-visual-diff-comment.ts visual_diffs/results.json visual_diffs/comment.md
+        env:
+          DIFFS_URL: ${{ steps.deploy_diffs.outputs.details_url }}
+          PREVIEW_URL: ${{ needs.deploy.outputs.preview_url }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+      - name: Post or update sticky visual diff comment
+        uses: actions/github-script@d746ffe35508b1917358783b479e04febd2b8f71 # v9.0.0
+        with:
+          script: |
+            const fs = require("fs");
+            const body = fs.readFileSync("visual_diffs/comment.md", "utf8");
+            const marker = "<!-- visual-diff-report -->";
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+
+            const comments = await github.paginate(
+              github.rest.issues.listComments,
+              { owner, repo, issue_number, per_page: 100 }
+            );
+            const existing = comments.find(
+              (c) => c.user?.type === "Bot" && c.body?.includes(marker)
+            );
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner,
+                repo,
+                comment_id: existing.id,
+                body,
+              });
+              core.info(`Updated sticky comment #${existing.id}`);
+            } else {
+              const created = await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number,
+                body,
+              });
+              core.info(`Created sticky comment #${created.data.id}`);
+            }
