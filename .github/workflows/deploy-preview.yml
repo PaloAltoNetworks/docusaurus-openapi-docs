@@ -220,6 +220,7 @@ jobs:
     environment: preview
     permissions:
       contents: read
+      checks: write
       id-token: write
       pull-requests: write
 
@@ -281,12 +282,6 @@ jobs:
           name: visual_diffs
           path: visual_diffs
 
-      # ------------------------------------------------------------------
-      # Publish diff images to a per-PR Firebase channel so the sticky PR
-      # comment below can hotlink prod/preview/diff PNGs side by side.
-      # Uses a separate `pr<N>-diffs` channel on the existing Hosting site;
-      # both channels auto-expire on the same 7-day clock.
-      # ------------------------------------------------------------------
       - name: Prepare Firebase entrypoint for diff images
         run: |
           cp .firebaserc visual_diffs/.firebaserc
