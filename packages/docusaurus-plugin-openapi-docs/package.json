@@ -48,7 +48,7 @@
     "fs-extra": "^11.3.0",
     "json-pointer": "^0.6.2",
     "json5": "^2.2.3",
-    "lodash": "^4.17.21",
+    "lodash": "^4.18.1",
     "mustache": "^4.2.0",
     "openapi-to-postmanv2": "^6.0.0",
     "postman-collection": "^5.0.2",

@@ -31,7 +31,6 @@ import SchemaItem from "@theme/SchemaItem";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
 import clsx from "clsx";
-import isEmpty from "lodash/isEmpty";
 
 import { getQualifierMessage, getSchemaName } from "../../markdown/schema";
 import type { SchemaObject } from "../../types.d";
@@ -564,7 +563,10 @@ const AdditionalProperties: React.FC<SchemaProps> = ({
   }
 
   // Handle free-form objects
-  if (additionalProperties === true || isEmpty(additionalProperties)) {
+  if (
+    additionalProperties === true ||
+    Object.keys(additionalProperties).length === 0
+  ) {
     return (
       <SchemaItem
         name="property name*"
