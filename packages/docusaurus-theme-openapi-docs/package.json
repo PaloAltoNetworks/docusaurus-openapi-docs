@@ -52,7 +52,7 @@
     "crypto-js": "^4.2.0",
     "file-saver": "^2.0.5",
     "lodash": "^4.17.21",
-    "pako": "^2.1.0",
+    "pako": "^3.0.1",
     "path-browserify": "^1.0.1",
     "postman-code-generators": "^2.0.0",
     "postman-collection": "^5.0.2",
