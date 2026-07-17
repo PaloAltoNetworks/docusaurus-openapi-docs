@@ -3980,25 +3980,26 @@
     json-schema-traverse "^1.0.0"
     require-from-string "^2.0.2"
 
-"@redocly/config@^0.49.0":
-  version "0.49.0"
-  resolved "https://registry.yarnpkg.com/@redocly/config/-/config-0.49.0.tgz#532f4e735bba09d67621c87a70687f6ef2b8cd04"
-  integrity sha512-OI/rpEffX3fKUuy+OuBHPRspRI/S30b9aiqxfZLMpSWZzDncEGPxSEP1O2LrBVshnDX4hLjVjLvCZ4YT85+1rw==
+"@redocly/config@^0.50.1":
+  version "0.50.1"
+  resolved "https://registry.yarnpkg.com/@redocly/config/-/config-0.50.1.tgz#0c975b827730b6ceefc99f97cb14f6d429fce568"
+  integrity sha512-TrdZUK50baxIjJB/y2ROOqfg35ex+GbkHPoJ40kXQXKMOjrfxfYQ9IliiaLqT5H/Y8qbajPrYQN2DLfvcMaHSw==
   dependencies:
     json-schema-to-ts "2.7.2"
 
 "@redocly/openapi-core@^2.25.2":
-  version "2.33.0"
-  resolved "https://registry.yarnpkg.com/@redocly/openapi-core/-/openapi-core-2.33.0.tgz#67f5dee43ca06a52341f299f1b11c7c806a3934c"
-  integrity sha512-HpLTZ/PrSHXc99TMZaG2tV7j/ItfPLZC4w8HCXsa5sPswJ4PQ4DXAufTZ6SRMoQJDx2BqTdCr6kbShTSDHe2wQ==
+  version "2.38.0"
+  resolved "https://registry.yarnpkg.com/@redocly/openapi-core/-/openapi-core-2.38.0.tgz#b864739ce52035d0be0f953bac58a81b521086c8"
+  integrity sha512-VvUCotkNqVpJwW0zSzxp012a6dgv7dmgeCRCNk3BZ6tpwglLG93Vq6s1Hz6bnCexYwRjWU8NBvS/JBmDewr79Q==
   dependencies:
     "@redocly/ajv" "^8.18.1"
-    "@redocly/config" "^0.49.0"
+    "@redocly/config" "^0.50.1"
     ajv "npm:@redocly/ajv@8.18.1"
     ajv-formats "^3.0.1"
     colorette "^1.2.0"
+    graphql "^16.14.1"
     js-levenshtein "^1.1.6"
-    js-yaml "^4.1.0"
+    js-yaml "^4.2.0"
     picomatch "^4.0.4"
     pluralize "^8.0.0"
     yaml-ast-parser "0.0.43"
@@ -9716,6 +9717,11 @@ graphlib@2.1.8:
   integrity sha512-jcLLfkpoVGmH7/InMC/1hIvOPSUh38oJtGhvrOFGzioE1DZ+0YW16RgmOJhHiuWTvGiJQ9Z1Ik43JvkRPRvE+A==
   dependencies:
     lodash "^4.17.15"
+
+graphql@^16.14.1:
+  version "16.14.2"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.14.2.tgz#83faf25869e3df727cc855161db5da85b0e5b2c0"
+  integrity sha512-Chq1s4CY7jmh8gO2qvLIJyfCDIN+EHLFW/9iShnp1z8FjBQMoodWP1kDC36VAMXXIvAjj4ARa7ntfAV2BrjsbA==
 
 gray-matter@^4.0.3:
   version "4.0.3"
