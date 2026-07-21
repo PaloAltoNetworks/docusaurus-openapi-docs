@@ -21,7 +21,7 @@
     "re-gen": "yarn clean-all-versions && yarn gen-all-versions"
   },
   "dependencies": {
-    "@docusaurus/core": "3.10.1",
+    "@docusaurus/core": "3.10.2",
     "@docusaurus/faster": "3.10.1",
     "@docusaurus/plugin-google-gtag": "3.10.1",
     "@docusaurus/preset-classic": "3.10.1",
