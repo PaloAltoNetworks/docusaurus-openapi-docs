@@ -36,7 +36,8 @@ jobs:
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: "22"
-          registry-url: "https://registry.npmjs.org"
+      - name: Upgrade npm for OIDC trusted publishing
+        run: npm install -g npm@latest
       - name: Install dependencies
         run: yarn --frozen-lockfile --prefer-offline --ignore-scripts
       - name: Release
@@ -71,7 +72,9 @@ jobs:
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: "22"
-          registry-url: "https://registry.npmjs.org"
+      - name: Upgrade npm for OIDC trusted publishing
+        if: steps.packages_changed.outputs.changed == 'true'
+        run: npm install -g npm@latest
       - name: Prepare git
         if: steps.packages_changed.outputs.changed == 'true'
         run: |
