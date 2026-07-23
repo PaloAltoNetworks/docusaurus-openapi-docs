@@ -236,6 +236,7 @@ const AnyOneOf: React.FC<SchemaProps> = ({
               {/* Handle empty object as a primitive type */}
               {anyOneSchema.type === "object" &&
                 !anyOneSchema.properties &&
+                !anyOneSchema.additionalProperties &&
                 !anyOneSchema.allOf &&
                 !anyOneSchema.oneOf &&
                 !anyOneSchema.anyOf && (
@@ -265,6 +266,17 @@ const AnyOneOf: React.FC<SchemaProps> = ({
                     schema={anyOneSchema}
                     schemaType={schemaType}
                     schemaPath={childSchemaPath}
+                  />
+                )}
+              {/* Render a map variant's `additionalProperties` */}
+              {(anyOneSchema.type === "object" || !anyOneSchema.type) &&
+                anyOneSchema.additionalProperties &&
+                !anyOneSchema.oneOf &&
+                !anyOneSchema.anyOf &&
+                !anyOneSchema.allOf && (
+                  <AdditionalProperties
+                    schema={anyOneSchema}
+                    schemaType={schemaType}
                   />
                 )}
               {anyOneSchema.allOf && (
@@ -1265,8 +1277,7 @@ const SchemaNode: React.FC<SchemaProps> = ({
 export default SchemaNode;
 
 type PrimitiveSchemaType =
-  | Exclude<NonNullable<SchemaObject["type"]>, "object" | "array">
-  | "null";
+  Exclude<NonNullable<SchemaObject["type"]>, "object" | "array"> | "null";
 
 const PRIMITIVE_TYPES: Record<PrimitiveSchemaType, true> = {
   string: true,
