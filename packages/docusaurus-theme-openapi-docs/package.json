@@ -67,7 +67,7 @@
     "rehype-raw": "^7.0.0",
     "remark-gfm": "4.0.1",
     "sass": "^1.89.2",
-    "sass-loader": "^16.0.5",
+    "sass-loader": "^17.0.0",
     "unist-util-visit": "^5.0.0",
     "url": "^0.11.4",
     "xml-formatter": "^3.6.6"
