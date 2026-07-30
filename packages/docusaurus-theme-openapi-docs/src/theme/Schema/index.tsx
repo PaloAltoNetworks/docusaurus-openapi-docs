@@ -1120,7 +1120,11 @@ const SchemaNode: React.FC<SchemaProps> = ({
     workingSchema = mergeAllOf(schema) as SchemaObject;
   }
   if (!workingSchema.discriminator && resolvedDiscriminator) {
-    workingSchema.discriminator = resolvedDiscriminator;
+    // Clone: getDiscriminator returns a nested branch's discriminator by
+    // reference, and DiscriminatorNode mutates `.mapping` when inferring
+    // variants. Without cloning, a branch that declares its own discriminator
+    // gets a mapping pointing back to itself and recurses forever.
+    workingSchema.discriminator = { ...resolvedDiscriminator };
   }
 
   if (workingSchema.discriminator) {
