@@ -1,8 +1,4 @@
-// Language icons are inlined as base64 SVG data URIs (vendored from devicon
-// v2.17.0, MIT). They were previously hot-linked from raw.githubusercontent.com,
-// which serves .svg as text/plain with nosniff, so browsers returned HTTP 200
-// but refused to render them. Inlining keeps them self-contained and avoids
-// css url() resolution differences between bundlers (rspack/webpack).
+// Language icons are inlined base64 SVGs from devicon v2.17.0 (MIT).
 
 :root {
   --bash-background-color: transparent;
