@@ -1,3 +1,5 @@
+@use "sass:string";
+
 .openapi-explorer__form-item-input {
   margin-top: calc(var(--ifm-pre-padding) / 2);
   background-color: var(--openapi-input-background);
@@ -29,6 +31,6 @@
 
   &::before {
     display: inline;
-    content: "⚠ ";
+    content: string.unquote('"\\26a0  "');
   }
 }
