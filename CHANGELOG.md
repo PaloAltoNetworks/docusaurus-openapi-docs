@@ -1,3 +1,26 @@
+## 5.2.0 (2026-08-11)
+
+Minor release adding support for OpenAPI 3.2 hierarchical tags. You can now group the sidebar by `tagParent` via `groupPathsBy`, using the new `tags[].parent` field to build nested tag hierarchies. Also includes a theme fix that bundles code snippet language icons locally (no more external icon requests) and a batch of dependency updates.
+
+#### :rocket: New Feature
+
+- feat(plugin): support OpenAPI 3.2 hierarchical tags (`tags[].parent`) ([#1603](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1603))
+
+#### :bug: Bug Fix
+
+- fix(theme): bundle code snippet language icons locally ([#1595](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1595))
+
+#### :robot: Dependencies
+
+- chore(deps): bump the react group across 1 directory with 2 updates ([#1590](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1590))
+- chore(deps): bump postman-collection from 5.3.0 to 5.3.1 ([#1591](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1591))
+- chore(deps): bump fast-uri from 3.1.4 to 3.1.5 ([#1594](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1594))
+- chore(deps): bump github/codeql-action/init from 4.37.2 to 4.37.3 ([#1593](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1593))
+- chore(deps): bump github/codeql-action/analyze from 4.37.2 to 4.37.3 ([#1592](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1592))
+- chore(deps): bump ip-address from 10.2.0 to 10.4.0 ([#1589](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1589))
+- chore(deps): bump nx from 22.6.2 to 22.7.8 ([#1587](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1587))
+- chore(deps): bump postcss from 8.5.13 to 8.5.25 ([#1583](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/pull/1583))
+
 ## 5.1.3 (2026-07-30)
 
 Patch release with two schema-rendering bug fixes: operation pages no longer freeze the browser when a `oneOf`'s branches each declare their own self-referential `discriminator` (surfaced on specs like PANW DLP Data Profiles), and `additionalProperties` now renders correctly inside discriminator map variants. Also includes a batch of dependency updates.
