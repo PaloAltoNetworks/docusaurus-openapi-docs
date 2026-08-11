@@ -1,0 +1,48 @@
+openapi: 3.2.0
+info:
+  title: Bakery Example
+  version: 1.0.0
+  description: >-
+    Demonstrates OpenAPI 3.2 hierarchical tags via the `tags[].parent` field,
+    rendered as nested sidebar categories with `groupPathsBy: "tagParent"`.
+paths:
+  /cakes:
+    get:
+      tags:
+        - Cakes
+      summary: List Cakes
+      description: Return every cake we bake.
+      responses:
+        200:
+          description: OK
+  /cakes/seasonal:
+    get:
+      tags:
+        - Seasonal Cakes
+      summary: List Seasonal Cakes
+      description: Return cakes available for the current season.
+      responses:
+        200:
+          description: OK
+  /breads:
+    get:
+      tags:
+        - Breads
+      summary: List Breads
+      description: Return every loaf on the shelf.
+      responses:
+        200:
+          description: OK
+
+tags:
+  - name: Products
+    description: Everything we sell.
+  - name: Cakes
+    parent: Products
+    description: Cakes of all kinds.
+  - name: Seasonal Cakes
+    parent: Cakes
+    description: Cakes available only at certain times of the year.
+  - name: Breads
+    parent: Products
+    description: Freshly baked breads.

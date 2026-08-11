@@ -365,6 +365,13 @@ const config: Config = {
             },
             showSchemas: true,
           } satisfies OpenApiPlugin.Options,
+          bakery: {
+            specPath: "examples/food/bakery/openapi.yaml",
+            outputDir: "docs/food/bakery",
+            sidebarOptions: {
+              groupPathsBy: "tagParent",
+            },
+          } satisfies OpenApiPlugin.Options,
           httpbin: {
             specPath: "examples/httpbin.yaml",
             outputDir: "docs/httpbin",

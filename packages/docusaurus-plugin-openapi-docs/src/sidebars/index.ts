@@ -291,6 +291,89 @@ function groupByTags(
   return [...tagged, ...untagged, ...schemas];
 }
 
+function nestByTagParents(
+  flatSidebar: ProcessedSidebar,
+  tags: TagObject[][],
+  sidebarOptions: SidebarOptions
+): ProcessedSidebar {
+  const { sidebarCollapsed, sidebarCollapsible } = sidebarOptions;
+
+  const seen = new Set<string>();
+  const uniqueTags: TagObject[] = [];
+  tags.flat().forEach((tag) => {
+    if (tag.name && !seen.has(tag.name)) {
+      seen.add(tag.name);
+      uniqueTags.push(tag);
+    }
+  });
+  const tagByName = new Map(uniqueTags.map((t) => [t.name!, t]));
+
+  const effectiveParent = (tag: TagObject): string | undefined => {
+    if (!tag.parent || !tagByName.has(tag.parent)) return undefined;
+    const chain = new Set<string>([tag.name!]);
+    let cursor: TagObject | undefined = tagByName.get(tag.parent);
+    while (cursor) {
+      if (chain.has(cursor.name!)) return undefined;
+      chain.add(cursor.name!);
+      if (!cursor.parent || !tagByName.has(cursor.parent)) break;
+      cursor = tagByName.get(cursor.parent);
+    }
+    return tag.parent;
+  };
+
+  const isTrailing = (item: ProcessedSidebarItem) =>
+    item.type === "category" &&
+    (item.label === "UNTAGGED" || item.label === "Schemas");
+  const leading = flatSidebar.filter((item) => item.type === "doc");
+  const trailing = flatSidebar.filter((item) => isTrailing(item));
+  const tagCategories = flatSidebar.filter(
+    (item) => item.type === "category" && !isTrailing(item)
+  ) as SidebarItemCategory[];
+
+  const claimed = new Set<SidebarItemCategory>();
+  const categoryByTag = new Map<string, SidebarItemCategory>();
+  uniqueTags.forEach((tag) => {
+    const label = tag["x-displayName"] ?? tag.name;
+    const match = tagCategories.find(
+      (cat) => !claimed.has(cat) && cat.label === label
+    );
+    if (match) {
+      claimed.add(match);
+      categoryByTag.set(tag.name!, match);
+    }
+  });
+
+  const childrenOf = (name: string | undefined) =>
+    uniqueTags.filter((tag) => effectiveParent(tag) === name);
+
+  const buildNode = (tag: TagObject): ProcessedSidebarItem | null => {
+    const childNodes = childrenOf(tag.name)
+      .map(buildNode)
+      .filter((node): node is ProcessedSidebarItem => node !== null);
+    const flatCategory = categoryByTag.get(tag.name!);
+    const docItems = flatCategory ? flatCategory.items : [];
+    if (docItems.length === 0 && childNodes.length === 0) {
+      return null;
+    }
+    return {
+      type: "category" as const,
+      label: flatCategory?.label ?? tag["x-displayName"] ?? tag.name,
+      ...(flatCategory?.link && { link: flatCategory.link }),
+      collapsible: sidebarCollapsible,
+      collapsed: sidebarCollapsed,
+      items: [...docItems, ...childNodes],
+    } as ProcessedSidebarItem;
+  };
+
+  const roots = childrenOf(undefined)
+    .map(buildNode)
+    .filter((node): node is ProcessedSidebarItem => node !== null);
+
+  const orphans = tagCategories.filter((cat) => !claimed.has(cat));
+
+  return [...leading, ...roots, ...orphans, ...trailing];
+}
+
 export default function generateSidebarSlice(
   sidebarOptions: SidebarOptions,
   options: APIOptions,
@@ -345,6 +428,9 @@ export default function generateSidebarSlice(
     });
     // Add `schemasGroup` to the end of the sidebar.
     sidebarSlice.push(...schemasGroup);
+  } else if (sidebarOptions.groupPathsBy === "tagParent") {
+    const flat = groupByTags(api, sidebarOptions, options, tags, docPath);
+    sidebarSlice = nestByTagParents(flat, tags, sidebarOptions);
   } else if (sidebarOptions.groupPathsBy === "tag") {
     sidebarSlice = groupByTags(api, sidebarOptions, options, tags, docPath);
   }

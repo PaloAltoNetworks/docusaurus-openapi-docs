@@ -23,6 +23,8 @@ import petstoreSidebar31 from "./docs/petstore31/sidebar";
 
 import cloudObjectStorageSidebar from "./docs/cos/sidebar";
 
+import bakerySidebar from "./docs/food/bakery/sidebar";
+
 const sidebars: SidebarsConfig = {
   tutorialSidebar: [
     {
@@ -128,6 +130,16 @@ const sidebars: SidebarsConfig = {
           dirName: "food/yogurtstore", // '.' means the current docs folder
         },
       ],
+    },
+    {
+      type: "category",
+      label: "Bakery",
+      link: {
+        type: "generated-index",
+        title: "Bakery API",
+        slug: "/category/bakery-api",
+      },
+      items: bakerySidebar,
     },
     {
       type: "category",

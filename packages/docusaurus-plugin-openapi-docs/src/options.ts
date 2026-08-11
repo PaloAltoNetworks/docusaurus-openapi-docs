@@ -12,7 +12,7 @@ const sidebarGenerators = Joi.object({
 });
 
 const sidebarOptions = Joi.object({
-  groupPathsBy: Joi.string().valid("tag", "tagGroup"),
+  groupPathsBy: Joi.string().valid("tag", "tagGroup", "tagParent"),
   categoryLinkSource: Joi.string().valid("tag", "info", "auto"),
   customProps: Joi.object(),
   sidebarCollapsible: Joi.boolean(),

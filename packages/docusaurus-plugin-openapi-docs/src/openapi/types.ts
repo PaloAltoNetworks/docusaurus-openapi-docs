@@ -313,7 +313,10 @@ export type HeaderObjectWithRef = Omit<ParameterObjectWithRef, "name" | "in">;
 
 export interface TagObject {
   name?: string;
+  summary?: string;
   description?: string;
+  parent?: string;
+  kind?: string;
   externalDocs?: ExternalDocumentationObject;
   "x-displayName"?: string;
 }
