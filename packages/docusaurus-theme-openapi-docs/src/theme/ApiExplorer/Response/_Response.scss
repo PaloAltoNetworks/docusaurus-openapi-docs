@@ -1,3 +1,5 @@
+@use "sass:string";
+
 .openapi-explorer__response-container {
   background-color: var(--ifm-pre-background);
   border-radius: var(--openapi-card-border-radius);
@@ -68,7 +70,7 @@
 .openapi-response__dot::before {
   margin-right: 0.2rem;
   margin-bottom: 0.15rem;
-  content: "⬤";
+  content: string.unquote('"\\2b24"');
   color: var(--ifm-color-primary);
   font-size: 8px;
 }
