@@ -35,7 +35,6 @@ paths:
           description: OK
 
 tags:
-  # "Products" is a pure container tag with no operations of its own.
   - name: Products
     description: Everything we sell.
   - name: Cakes

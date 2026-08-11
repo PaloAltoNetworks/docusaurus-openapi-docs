@@ -118,7 +118,6 @@ describe("generateSidebarSlice", () => {
       apiItem("get-seasonal", "/cakes/seasonal", "Seasonal Cakes"),
     ];
 
-    // "Products" is a pure container tag with no operations of its own.
     const mockTags: TagObject[][] = [
       [
         { name: "Products" },
@@ -149,14 +148,12 @@ describe("generateSidebarSlice", () => {
         ""
       );
 
-      // Root should be the container "Products".
       expect(labelsOf(result)).toEqual(["Products"]);
 
       const products = findCategory(result, "Products");
       const cakes = findCategory(products.items, "Cakes");
       expect(cakes).toBeDefined();
 
-      // "Cakes" holds its operation doc followed by the "Seasonal Cakes" child.
       const cakesTypes = cakes.items.map((i: any) => i.type);
       expect(cakesTypes).toContain("doc");
       expect(cakesTypes).toContain("category");
@@ -171,7 +168,7 @@ describe("generateSidebarSlice", () => {
         [
           { name: "Products" },
           { name: "Cakes", parent: "Products" },
-          { name: "Empty" }, // no operations, no children
+          { name: "Empty" },
         ],
       ];
 
@@ -203,7 +200,6 @@ describe("generateSidebarSlice", () => {
         ""
       );
 
-      // Both surface as top-level categories; neither nests the other.
       expect(findCategory(result, "A")).toBeDefined();
       expect(findCategory(result, "B")).toBeDefined();
       expect(

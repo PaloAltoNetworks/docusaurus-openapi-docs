@@ -369,7 +369,7 @@ const config: Config = {
             specPath: "examples/food/bakery/openapi.yaml",
             outputDir: "docs/food/bakery",
             sidebarOptions: {
-              groupPathsBy: "tagParent", // OpenAPI 3.2 hierarchical tags
+              groupPathsBy: "tagParent",
             },
           } satisfies OpenApiPlugin.Options,
           httpbin: {

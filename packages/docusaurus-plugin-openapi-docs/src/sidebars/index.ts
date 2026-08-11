@@ -291,8 +291,6 @@ function groupByTags(
   return [...tagged, ...untagged, ...schemas];
 }
 
-// Nest the flat tag categories produced by `groupByTags` into a hierarchy
-// driven by the OpenAPI 3.2 `tags[].parent` field.
 function nestByTagParents(
   flatSidebar: ProcessedSidebar,
   tags: TagObject[][],
@@ -300,7 +298,6 @@ function nestByTagParents(
 ): ProcessedSidebar {
   const { sidebarCollapsed, sidebarCollapsible } = sidebarOptions;
 
-  // Dedupe global tags by name, preserving declaration order.
   const seen = new Set<string>();
   const uniqueTags: TagObject[] = [];
   tags.flat().forEach((tag) => {
@@ -311,14 +308,12 @@ function nestByTagParents(
   });
   const tagByName = new Map(uniqueTags.map((t) => [t.name!, t]));
 
-  // Resolve a tag's effective parent, guarding against dangling refs and
-  // cycles (both are treated as "no parent" so the tag becomes a root).
   const effectiveParent = (tag: TagObject): string | undefined => {
     if (!tag.parent || !tagByName.has(tag.parent)) return undefined;
     const chain = new Set<string>([tag.name!]);
     let cursor: TagObject | undefined = tagByName.get(tag.parent);
     while (cursor) {
-      if (chain.has(cursor.name!)) return undefined; // cycle -> treat as root
+      if (chain.has(cursor.name!)) return undefined;
       chain.add(cursor.name!);
       if (!cursor.parent || !tagByName.has(cursor.parent)) break;
       cursor = tagByName.get(cursor.parent);
@@ -326,8 +321,6 @@ function nestByTagParents(
     return tag.parent;
   };
 
-  // Keep the root intro doc(s) at the front and the UNTAGGED/Schemas
-  // categories at the end; only the remaining tag categories get nested.
   const isTrailing = (item: ProcessedSidebarItem) =>
     item.type === "category" &&
     (item.label === "UNTAGGED" || item.label === "Schemas");
@@ -337,7 +330,6 @@ function nestByTagParents(
     (item) => item.type === "category" && !isTrailing(item)
   ) as SidebarItemCategory[];
 
-  // Claim each generated category to a tag, matched by its display label.
   const claimed = new Set<SidebarItemCategory>();
   const categoryByTag = new Map<string, SidebarItemCategory>();
   uniqueTags.forEach((tag) => {
@@ -360,7 +352,6 @@ function nestByTagParents(
       .filter((node): node is ProcessedSidebarItem => node !== null);
     const flatCategory = categoryByTag.get(tag.name!);
     const docItems = flatCategory ? flatCategory.items : [];
-    // Prune tags that have neither their own operations nor any children.
     if (docItems.length === 0 && childNodes.length === 0) {
       return null;
     }
@@ -378,8 +369,6 @@ function nestByTagParents(
     .map(buildNode)
     .filter((node): node is ProcessedSidebarItem => node !== null);
 
-  // Preserve any categories that couldn't be matched to a declared tag
-  // (e.g. operation-only tags never listed under top-level `tags`).
   const orphans = tagCategories.filter((cat) => !claimed.has(cat));
 
   return [...leading, ...roots, ...orphans, ...trailing];
