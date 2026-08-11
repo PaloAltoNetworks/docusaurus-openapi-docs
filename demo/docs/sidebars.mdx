@@ -59,6 +59,46 @@ Use `x-tagGroups` to group tags in the [Reference](https://redocly.com/docs/api-
 
 If `x-tagGroups` is used for grouping API paths, and you've also configured `showSchemas: true` for your OpenAPI Docs plugin, an additional "sibling" category labelled `Schemas` will be created and placed at the end of sidebar, after all the `tagGroups` categories.
 
+### Grouping by Tag Parent
+
+For OpenAPI 3.2 specifications, the plugin supports grouping paths into a **nested** hierarchy using the standardized [`tags[].parent`](https://learn.openapis.org/specification/tags.html) field, instead of the vendor-specific `x-tagGroups` extension. Set the `groupPathsBy` sidebar option to `tagParent`:
+
+```ts
+sidebarOptions: {
+  groupPathsBy: "tagParent",
+},
+```
+
+Each tag becomes a sidebar category nested under the category of the tag named in its `parent` field. A tag with no `parent` becomes a top-level category. Unlike `tagGroup` (which supports a single level of nesting), `tagParent` supports arbitrary depth.
+
+Given the following tags:
+
+```yaml
+openapi: 3.2.0
+tags:
+  - name: Products
+  - name: Cakes
+    parent: Products
+  - name: Seasonal Cakes
+    parent: Cakes
+```
+
+the plugin produces a sidebar like:
+
+```text
+Products
+└── Cakes
+    ├── GET /cakes
+    └── Seasonal Cakes
+        └── GET /cakes/seasonal
+```
+
+Notes:
+
+- A `parent` tag that has no operations of its own (a pure container, such as `Products` above) still renders as a category, provided it has at least one descendant with content. Empty tags with neither operations nor children are omitted.
+- A `parent` reference to a tag that isn't declared is treated as "no parent" (the tag becomes top-level).
+- Cyclic `parent` references (for example `A → B → A`) are detected and the affected tags are rendered as top-level categories instead of recursing.
+
 ### Category Links
 
 Docusaurus now supports the ability to designate or customize what page gets displayed when a category is clicked.
