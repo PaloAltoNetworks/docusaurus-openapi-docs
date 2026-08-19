@@ -9,8 +9,8 @@
 import fs from "fs";
 import path from "path";
 
+import blazediff from "@blazediff/core";
 import { XMLParser } from "fast-xml-parser";
-import pixelmatch from "pixelmatch";
 import { chromium } from "playwright";
 import { PNG } from "pngjs";
 
@@ -245,7 +245,7 @@ function compareImages(
     prev = cropImage(prev, width, height);
   }
   const diff = new PNG({ width: prod.width, height: prod.height });
-  const numDiff = pixelmatch(
+  const numDiff = blazediff(
     prod.data,
     prev.data,
     diff.data,
