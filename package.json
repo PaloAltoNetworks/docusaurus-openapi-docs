@@ -40,7 +40,7 @@
     "clean": "yarn workspace demo clean-all && rm -rf node_modules build demo/.docusaurus demo/build demo/node_modules && find packages -name node_modules -type d -maxdepth 2 -exec rm -rf {} + && find packages -name dist -type d -maxdepth 2 -exec rm -rf {} + && find packages -name lib -type d -maxdepth 2 -exec rm -rf {} + && find packages -name lib-next -type d -maxdepth 2 -exec rm -rf {} +"
   },
   "devDependencies": {
-    "@babel/core": "^7.16.0",
+    "@babel/core": "^8.0.1",
     "@eslint-community/eslint-utils": "^4.4.0",
     "@testing-library/cypress": "^10.1.3",
     "@types/jest": "^27.0.2",
