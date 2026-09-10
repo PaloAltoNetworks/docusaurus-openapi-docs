@@ -21,7 +21,11 @@ import {
   createSchemaPageMD,
   createTagPageMD,
 } from "./markdown";
-import { ExternalFile, runWithExternalization } from "./markdown/utils";
+import {
+  EXTERNALIZABLE_COMPONENTS,
+  ExternalFile,
+  runWithExternalization,
+} from "./markdown/utils";
 import { processOpenapiFiles, readOpenapiFiles } from "./openapi";
 import { OptionsSchema } from "./options";
 import generateSidebarSlice from "./sidebars";
@@ -39,6 +43,11 @@ import type {
 export function isURL(str: string): boolean {
   return /^(https?:)\/\//m.test(str);
 }
+
+// The JSON files create() externalizes: "<id>.<Component>.json" and numbered siblings
+const externalizedJsonGlobs = [...EXTERNALIZABLE_COMPONENTS].flatMap(
+  (component) => [`*.${component}.json`, `*.${component}.[0-9]*.json`]
+);
 
 export function getDocsPluginConfig(
   presetsPlugins: any[],
@@ -556,7 +565,7 @@ custom_edit_url: null
         deep: 1,
       });
       // Clean up externalized JSON files
-      const jsonFiles = await Globby(["*.json", "!versions.json"], {
+      const jsonFiles = await Globby(externalizedJsonGlobs, {
         cwd: path.resolve(apiDir),
         deep: 1,
       });
@@ -607,15 +616,39 @@ custom_edit_url: null
       );
     }
 
-    try {
-      fs.rmSync(`${apiDir}/schemas`, { recursive: true });
-      console.log(chalk.green(`Cleanup succeeded for "${apiDir}/schemas"`));
-    } catch (err: any) {
-      if (err.code !== "ENOENT") {
-        console.error(
-          chalk.red(`Cleanup failed for "${apiDir}/schemas"`),
-          chalk.yellow(err)
-        );
+    // Clean up generated schema docs, then the directory only if that emptied it
+    const schemasDir = `${apiDir}/schemas`;
+    if (fs.existsSync(schemasDir)) {
+      const schemaFiles = await Globby(
+        ["*.schema.mdx", ...externalizedJsonGlobs],
+        {
+          cwd: path.resolve(schemasDir),
+          deep: 1,
+        }
+      );
+      for (const schemaFile of schemaFiles) {
+        try {
+          fs.unlinkSync(`${schemasDir}/${schemaFile}`);
+          console.log(
+            chalk.green(`Cleanup succeeded for "${schemasDir}/${schemaFile}"`)
+          );
+        } catch (err) {
+          console.error(
+            chalk.red(`Cleanup failed for "${schemasDir}/${schemaFile}"`),
+            chalk.yellow(err)
+          );
+        }
+      }
+      if (fs.readdirSync(schemasDir).length === 0) {
+        try {
+          fs.rmdirSync(schemasDir);
+          console.log(chalk.green(`Cleanup succeeded for "${schemasDir}"`));
+        } catch (err) {
+          console.error(
+            chalk.red(`Cleanup failed for "${schemasDir}"`),
+            chalk.yellow(err)
+          );
+        }
       }
     }
   }
