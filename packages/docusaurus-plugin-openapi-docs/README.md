@@ -405,6 +405,8 @@ yarn docusaurus clean-api-docs petstore
 
 > The example above will remove all API docs relative to `burgers`.
 
+> `clean-api-docs` removes only the file names `gen-api-docs` writes: `*.api.mdx`, `*.info.mdx`, `*.tag.mdx`, `sidebar.ts`, `sidebar.js`, `schemas/*.schema.mdx`, and the externalized component JSON. Anything else in the output directory, such as a hand-authored `_category_.json`, is left alone.
+
 If you have multiple versions of the same API, `clean-api-docs` only cleans the latest. To clean all versions, use the `--all-versions` flag.
 
 Example:
