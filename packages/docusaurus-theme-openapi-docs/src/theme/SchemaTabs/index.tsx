@@ -16,7 +16,6 @@ import React, {
 
 import useIsBrowser from "@docusaurus/useIsBrowser";
 import clsx from "clsx";
-import flatten from "lodash/flatten";
 
 import { useScrollPositionBlocker } from "@theme/utils/scrollUtils";
 import {
@@ -194,7 +193,7 @@ function TabContent({
   const childTabs = (Array.isArray(children) ? children : [children]).filter(
     Boolean
   ) as ReactElement<TabItemProps>[];
-  const flattenedChildTabs = flatten(childTabs);
+  const flattenedChildTabs = childTabs.flat();
   if (lazy) {
     const selectedTabItem = flattenedChildTabs.find(
       (tabItem) => tabItem.props.value === selectedValue

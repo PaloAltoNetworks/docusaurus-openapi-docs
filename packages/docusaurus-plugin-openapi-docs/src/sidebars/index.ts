@@ -15,8 +15,7 @@ import {
 } from "@docusaurus/plugin-content-docs/src/sidebars/types";
 import { posixPath } from "@docusaurus/utils";
 import clsx from "clsx";
-import { kebabCase } from "lodash";
-import uniq from "lodash/uniq";
+import kebabCase from "lodash/kebabCase";
 
 import { TagGroupObject, TagObject } from "../openapi/types";
 import type {
@@ -101,16 +100,20 @@ function groupByTags(
   });
 
   // TODO: make sure we only take the first tag
-  const operationTags = uniq(
-    apiItems
-      .flatMap((item) => item.api.tags)
-      .filter((item): item is string => !!item)
-  );
-  const schemaTags = uniq(
-    schemaItems
-      .flatMap((item) => item.schema["x-tags"])
-      .filter((item): item is string => !!item)
-  );
+  const operationTags = [
+    ...new Set(
+      apiItems
+        .flatMap((item) => item.api.tags)
+        .filter((item): item is string => !!item)
+    ),
+  ];
+  const schemaTags = [
+    ...new Set(
+      schemaItems
+        .flatMap((item) => item.schema["x-tags"])
+        .filter((item): item is string => !!item)
+    ),
+  ];
 
   // Combine globally defined tags with operation and schema tags
   // Only include global tag if referenced in operation/schema tags
@@ -123,7 +126,7 @@ function groupByTags(
   });
 
   if (sidebarOptions.groupPathsBy !== "tagGroup") {
-    apiTags = uniq(apiTags.concat(operationTags, schemaTags));
+    apiTags = [...new Set(apiTags.concat(operationTags, schemaTags))];
   }
 
   // Extract base path from outputDir, handling cases where docPath may not be in outputDir
