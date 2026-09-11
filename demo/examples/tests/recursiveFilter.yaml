@@ -1,0 +1,171 @@
+openapi: 3.0.3
+info:
+  title: Recursive Filter API
+  description: |
+    Reproduces the recursive search-filter schema shape from Komga (issue #1525).
+    The `SearchCondition` schema references itself via oneOf branches, creating a
+    deeply recursive tree after `$ref` dereferencing. Without the normalizeSchema
+    optimisation this causes O(N²) render cost and hangs the browser.
+  version: 1.0.0
+tags:
+  - name: recursive-filter
+    description: Recursive filter tests (issue 1525)
+paths:
+  /search:
+    post:
+      tags:
+        - recursive-filter
+      operationId: search
+      summary: Search with recursive filter
+      description: |
+        Accepts a recursive search condition that mirrors Komga's filter schema.
+        The condition uses a discriminator on `operator` with `allOf`, `anyOf`,
+        and `not` branches that recurse back into `SearchCondition`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SearchCondition"
+      responses:
+        "200":
+          description: Search results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalCount:
+                    type: integer
+                  results:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/SearchResult"
+
+components:
+  schemas:
+    SearchCondition:
+      title: SearchCondition
+      type: object
+      discriminator:
+        propertyName: operator
+        mapping:
+          AND: "#/components/schemas/AllOfCondition"
+          OR: "#/components/schemas/AnyOfCondition"
+          NOT: "#/components/schemas/NotCondition"
+          EQUALS: "#/components/schemas/EqualsCondition"
+          CONTAINS: "#/components/schemas/ContainsCondition"
+          GREATER_THAN: "#/components/schemas/GreaterThanCondition"
+      oneOf:
+        - $ref: "#/components/schemas/AllOfCondition"
+        - $ref: "#/components/schemas/AnyOfCondition"
+        - $ref: "#/components/schemas/NotCondition"
+        - $ref: "#/components/schemas/EqualsCondition"
+        - $ref: "#/components/schemas/ContainsCondition"
+        - $ref: "#/components/schemas/GreaterThanCondition"
+
+    AllOfCondition:
+      title: AllOfCondition
+      type: object
+      properties:
+        operator:
+          type: string
+          enum: ["AND"]
+        conditions:
+          type: array
+          items:
+            $ref: "#/components/schemas/SearchCondition"
+      required:
+        - operator
+        - conditions
+
+    AnyOfCondition:
+      title: AnyOfCondition
+      type: object
+      properties:
+        operator:
+          type: string
+          enum: ["OR"]
+        conditions:
+          type: array
+          items:
+            $ref: "#/components/schemas/SearchCondition"
+      required:
+        - operator
+        - conditions
+
+    NotCondition:
+      title: NotCondition
+      type: object
+      properties:
+        operator:
+          type: string
+          enum: ["NOT"]
+        condition:
+          $ref: "#/components/schemas/SearchCondition"
+      required:
+        - operator
+        - condition
+
+    EqualsCondition:
+      title: EqualsCondition
+      type: object
+      properties:
+        operator:
+          type: string
+          enum: ["EQUALS"]
+        field:
+          type: string
+        value:
+          type: string
+      required:
+        - operator
+        - field
+        - value
+
+    ContainsCondition:
+      title: ContainsCondition
+      type: object
+      properties:
+        operator:
+          type: string
+          enum: ["CONTAINS"]
+        field:
+          type: string
+        value:
+          type: string
+        caseSensitive:
+          type: boolean
+          default: false
+      required:
+        - operator
+        - field
+        - value
+
+    GreaterThanCondition:
+      title: GreaterThanCondition
+      type: object
+      properties:
+        operator:
+          type: string
+          enum: ["GREATER_THAN"]
+        field:
+          type: string
+        value:
+          type: number
+      required:
+        - operator
+        - field
+        - value
+
+    SearchResult:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        score:
+          type: number
+          format: double

@@ -383,6 +383,111 @@ describe("openapi", () => {
     });
   });
 
+  describe("mixed parametric paths at same depth (#1526)", () => {
+    it("binds correct postman requests when a static tail collides with a parametric tail", async () => {
+      const openapiData = {
+        openapi: "3.0.1",
+        info: {
+          title: "Petstore",
+          version: "0.0.1",
+          description: "This is a sample server Petstore server.",
+        },
+        servers: [{ url: "https://petstore.swagger.io/v2" }],
+        paths: {
+          "/pet/{petId}": {
+            get: {
+              summary: "Find pet by ID",
+              operationId: "getPetById",
+              parameters: [
+                {
+                  name: "petId",
+                  in: "path",
+                  required: true,
+                  schema: { type: "integer", format: "int64" },
+                },
+              ],
+              responses: { "200": { description: "Success" } },
+            },
+          },
+          "/pet/{petId}/{tagId}": {
+            get: {
+              summary: "Find pet tag by ID",
+              operationId: "getPetTagById",
+              parameters: [
+                {
+                  name: "petId",
+                  in: "path",
+                  required: true,
+                  schema: { type: "integer", format: "int64" },
+                },
+                {
+                  name: "tagId",
+                  in: "path",
+                  required: true,
+                  schema: { type: "integer", format: "int64" },
+                },
+              ],
+              responses: { "200": { description: "Success" } },
+            },
+          },
+          "/pet/{petIds}/summary": {
+            get: {
+              summary: "Get summary for multiple pets",
+              operationId: "getPetsSummary",
+              parameters: [
+                {
+                  name: "petIds",
+                  in: "path",
+                  required: true,
+                  schema: { type: "string", example: "1,2,3" },
+                },
+              ],
+              responses: { "200": { description: "Success" } },
+            },
+          },
+        },
+      };
+
+      const options: APIOptions = {
+        specPath: "dummy",
+        outputDir: "build",
+      };
+      const sidebarOptions = {} as SidebarOptions;
+      const [items] = await processOpenapiFile(
+        openapiData as any,
+        options,
+        sidebarOptions
+      );
+
+      const apiItems = items.filter((item) => item.type === "api");
+      expect(apiItems).toHaveLength(3);
+
+      const getPetById = apiItems.find(
+        (item) => item.type === "api" && item.id === "get-pet-by-id"
+      ) as any;
+      expect(getPetById.api.postman).toBeDefined();
+      expect(getPetById.api.postman.url.getPath({ unresolved: true })).toBe(
+        "/pet/:petId"
+      );
+
+      const getPetTagById = apiItems.find(
+        (item) => item.type === "api" && item.id === "get-pet-tag-by-id"
+      ) as any;
+      expect(getPetTagById.api.postman).toBeDefined();
+      expect(getPetTagById.api.postman.url.getPath({ unresolved: true })).toBe(
+        "/pet/:petId/:tagId"
+      );
+
+      const getPetsSummary = apiItems.find(
+        (item) => item.type === "api" && item.id === "get-pets-summary"
+      ) as any;
+      expect(getPetsSummary.api.postman).toBeDefined();
+      expect(getPetsSummary.api.postman.url.getPath({ unresolved: true })).toBe(
+        "/pet/:petIds/summary"
+      );
+    });
+  });
+
   describe("vendor extensions at path level", () => {
     it("does not throw and skips x-* keys and unknown keys on path objects", async () => {
       const openapiData = {

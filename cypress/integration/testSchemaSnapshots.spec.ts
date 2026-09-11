@@ -29,6 +29,7 @@ describe("Schema Snapshots", () => {
     "https://docusaurus-openapi.tryingpan.dev/tests/multiple-all-of-with-nested-properties",
     "https://docusaurus-openapi.tryingpan.dev/tests/one-of-with-complex-types",
     "https://docusaurus-openapi.tryingpan.dev/tests/one-of-with-nested-one-of",
+    "https://docusaurus-openapi.tryingpan.dev/tests/create-rule",
     "https://docusaurus-openapi.tryingpan.dev/tests/one-of-with-primitive-types",
     "https://docusaurus-openapi.tryingpan.dev/tests/one-of-with-required-properties",
     "https://docusaurus-openapi.tryingpan.dev/tests/one-of-with-shared-properties",

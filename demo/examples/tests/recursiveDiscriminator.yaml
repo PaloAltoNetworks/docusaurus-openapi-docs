@@ -1,0 +1,93 @@
+openapi: 3.0.3
+info:
+  title: Recursive Discriminator API
+  description: |
+    Reproduces a crash where each `oneOf` branch under `rule_item` declares its
+    *own* `discriminator` on the same property (`technique`) with no mapping.
+    `getDiscriminator` borrows a branch's discriminator by reference for the
+    parent `oneOf`, and DiscriminatorNode then mutates that shared object's
+    `mapping` to the parent's variant set, which includes the branch itself.
+    Rendering the branch then re-enters DiscriminatorNode with a mapping pointing
+    back to itself and recurses until the tab crashes. The fix clones the
+    borrowed discriminator so the inferred mapping stays local to the node.
+  version: 1.0.0
+tags:
+  - name: recursive-discriminator
+    description: Self-owned discriminator variants inside a oneOf
+paths:
+  /rules:
+    post:
+      tags:
+        - recursive-discriminator
+      operationId: createRule
+      summary: Create a rule
+      description: |
+        Accepts a rule container whose `rule_item` is a `oneOf` of variants that
+        each carry their own `discriminator: technique`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RuleContainer"
+      responses:
+        "200":
+          description: The created rule container
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RuleContainer"
+
+components:
+  schemas:
+    RuleItemBase:
+      title: RuleItemBase
+      type: object
+      discriminator:
+        propertyName: technique
+      properties:
+        technique:
+          type: string
+        id:
+          type: string
+      required:
+        - technique
+
+    PatternRule:
+      title: PatternRule
+      allOf:
+        - $ref: "#/components/schemas/RuleItemBase"
+        - type: object
+          properties:
+            pattern:
+              type: string
+      discriminator:
+        propertyName: technique
+      required:
+        - pattern
+
+    DictionaryRule:
+      title: DictionaryRule
+      allOf:
+        - $ref: "#/components/schemas/RuleItemBase"
+        - type: object
+          properties:
+            dictionary:
+              type: string
+      discriminator:
+        propertyName: technique
+      required:
+        - dictionary
+
+    RuleContainer:
+      title: RuleContainer
+      type: object
+      properties:
+        name:
+          type: string
+        rule_item:
+          oneOf:
+            - $ref: "#/components/schemas/PatternRule"
+            - $ref: "#/components/schemas/DictionaryRule"
+      required:
+        - name

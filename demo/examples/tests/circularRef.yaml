@@ -1,0 +1,360 @@
+openapi: 3.0.3
+info:
+  title: Circular Reference API
+  description: |
+    Tests various circular `$ref` patterns that produce `circular(Title)` markers
+    after dereferencing. Validates that the schema renderer handles self-references,
+    mutual recursion, and nested circular structures without hanging or losing the
+    circular badge.
+  version: 1.0.0
+tags:
+  - name: circular-ref
+    description: Circular reference tests
+paths:
+  /tree-node:
+    get:
+      tags:
+        - circular-ref
+      summary: Self-referencing tree node
+      description: |
+        A tree node whose `children` array references itself. The simplest
+        circular reference pattern.
+
+        Schema:
+        ```yaml
+        TreeNode:
+          type: object
+          properties:
+            id:
+              type: integer
+            label:
+              type: string
+            children:
+              type: array
+              items:
+                $ref: "#/components/schemas/TreeNode"
+        ```
+      responses:
+        "200":
+          description: A tree node
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TreeNode"
+
+  /category:
+    get:
+      tags:
+        - circular-ref
+      summary: Self-referencing category with parent
+      description: |
+        A category that references itself through both `parent` (single ref)
+        and `subcategories` (array of refs). Tests circular refs in both
+        property and items positions.
+
+        Schema:
+        ```yaml
+        Category:
+          type: object
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+            parent:
+              $ref: "#/components/schemas/Category"
+            subcategories:
+              type: array
+              items:
+                $ref: "#/components/schemas/Category"
+        ```
+      responses:
+        "200":
+          description: A category
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+
+  /person:
+    get:
+      tags:
+        - circular-ref
+      summary: Mutual recursion between Person and Address
+      description: |
+        `Person` has an `address` referencing `Address`, and `Address` has an
+        `occupants` array referencing `Person`. Tests circular refs across two
+        mutually recursive schemas.
+
+        Schema:
+        ```yaml
+        Person:
+          type: object
+          properties:
+            name:
+              type: string
+            email:
+              type: string
+              format: email
+            address:
+              $ref: "#/components/schemas/Address"
+
+        Address:
+          type: object
+          properties:
+            street:
+              type: string
+            city:
+              type: string
+            occupants:
+              type: array
+              items:
+                $ref: "#/components/schemas/Person"
+        ```
+      responses:
+        "200":
+          description: A person
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Person"
+
+  /org-chart:
+    get:
+      tags:
+        - circular-ref
+      summary: Circular ref via additionalProperties
+      description: |
+        An org chart where the value type of `additionalProperties` references
+        the parent schema. Tests circular refs in the additionalProperties position.
+
+        Schema:
+        ```yaml
+        OrgChart:
+          type: object
+          properties:
+            name:
+              type: string
+            title:
+              type: string
+          additionalProperties:
+            $ref: "#/components/schemas/OrgChart"
+        ```
+      responses:
+        "200":
+          description: An org chart node
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrgChart"
+
+  /comment-thread:
+    post:
+      tags:
+        - circular-ref
+      summary: Circular ref inside allOf composition
+      description: |
+        A comment that uses `allOf` to compose shared metadata with a `replies`
+        array that references the composed schema. Tests that circular markers
+        inside allOf are preserved during normalization.
+
+        Schema:
+        ```yaml
+        Comment:
+          allOf:
+            - $ref: "#/components/schemas/TimestampMixin"
+            - type: object
+              properties:
+                id:
+                  type: integer
+                author:
+                  type: string
+                body:
+                  type: string
+                replies:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/Comment"
+        ```
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Comment"
+      responses:
+        "201":
+          description: Created comment
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Comment"
+
+  /linked-list:
+    get:
+      tags:
+        - circular-ref
+      summary: Deeply nested circular ref
+      description: |
+        A linked list node with `next` referencing itself through a wrapper
+        object. Tests circular refs that are not direct self-references but
+        go through an intermediate schema.
+
+        Schema:
+        ```yaml
+        LinkedListNode:
+          type: object
+          properties:
+            value:
+              type: string
+            next:
+              $ref: "#/components/schemas/ListNodeWrapper"
+
+        ListNodeWrapper:
+          type: object
+          properties:
+            node:
+              $ref: "#/components/schemas/LinkedListNode"
+            metadata:
+              type: object
+              properties:
+                position:
+                  type: integer
+        ```
+      responses:
+        "200":
+          description: A linked list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LinkedListNode"
+
+components:
+  schemas:
+    TreeNode:
+      title: TreeNode
+      type: object
+      properties:
+        id:
+          type: integer
+        label:
+          type: string
+        children:
+          type: array
+          items:
+            $ref: "#/components/schemas/TreeNode"
+      required:
+        - id
+        - label
+
+    Category:
+      title: Category
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        parent:
+          $ref: "#/components/schemas/Category"
+        subcategories:
+          type: array
+          items:
+            $ref: "#/components/schemas/Category"
+      required:
+        - id
+        - name
+
+    Person:
+      title: Person
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        address:
+          $ref: "#/components/schemas/Address"
+      required:
+        - name
+
+    Address:
+      title: Address
+      type: object
+      properties:
+        street:
+          type: string
+        city:
+          type: string
+        occupants:
+          type: array
+          items:
+            $ref: "#/components/schemas/Person"
+      required:
+        - street
+        - city
+
+    OrgChart:
+      title: OrgChart
+      type: object
+      properties:
+        name:
+          type: string
+        title:
+          type: string
+      additionalProperties:
+        $ref: "#/components/schemas/OrgChart"
+
+    TimestampMixin:
+      title: TimestampMixin
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    Comment:
+      title: Comment
+      allOf:
+        - $ref: "#/components/schemas/TimestampMixin"
+        - type: object
+          properties:
+            id:
+              type: integer
+            author:
+              type: string
+            body:
+              type: string
+            replies:
+              type: array
+              items:
+                $ref: "#/components/schemas/Comment"
+          required:
+            - id
+            - author
+            - body
+
+    LinkedListNode:
+      title: LinkedListNode
+      type: object
+      properties:
+        value:
+          type: string
+        next:
+          $ref: "#/components/schemas/ListNodeWrapper"
+
+    ListNodeWrapper:
+      title: ListNodeWrapper
+      type: object
+      properties:
+        node:
+          $ref: "#/components/schemas/LinkedListNode"
+        metadata:
+          type: object
+          properties:
+            position:
+              type: integer

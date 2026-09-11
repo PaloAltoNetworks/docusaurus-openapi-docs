@@ -7,7 +7,13 @@ info:
     after parametric paths at the same nesting level. The `/pet/findByTags`
     endpoint must show the full URL in code samples, not just the base server.
 
-    Regression coverage for: https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1519
+    Also validates that a static tail (`/{petIds}/summary`) does not steal a
+    binding from a fully-parametric sibling (`/{petId}/{tagId}`), and vice
+    versa, when both share the same segment count.
+
+    Regression coverage for:
+    - https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1519
+    - https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1526
 
 servers:
   - url: https://petstore.swagger.io/v2
@@ -89,6 +95,55 @@ paths:
             type: array
             items:
               type: string
+      responses:
+        "200":
+          description: Success
+
+  /pet/{petId}/{tagId}:
+    get:
+      tags:
+        - path-ordering
+      summary: Find pet tag by ID
+      description: |
+        Expected URL in code samples:
+        `https://petstore.swagger.io/v2/pet/{petId}/{tagId}`
+      operationId: getPetTagById
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: tagId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Success
+
+  /pet/{petIds}/summary:
+    get:
+      tags:
+        - path-ordering
+      summary: Get summary for multiple pets
+      description: |
+        Shares segment count with `/pet/{petId}/{tagId}`, but the trailing
+        static `summary` segment must win over the fully-parametric sibling.
+
+        Expected URL in code samples:
+        `https://petstore.swagger.io/v2/pet/{petIds}/summary`
+      operationId: getPetsSummary
+      parameters:
+        - name: petIds
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "1,2,3"
       responses:
         "200":
           description: Success
