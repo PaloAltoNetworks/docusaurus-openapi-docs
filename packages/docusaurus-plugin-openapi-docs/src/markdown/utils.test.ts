@@ -8,6 +8,20 @@
 import { clean } from "./utils";
 
 describe("clean", () => {
+  it.each(["{", "}", "<", ">"])(
+    "preserves the single-character inline code %s",
+    (character) => {
+      const inlineCode = "`" + character + "`";
+
+      expect(clean(`${inlineCode} and {text}`)).toBe(
+        `${inlineCode} and \\{text\\}`
+      );
+      expect(clean(`Before {text} and ${inlineCode}`)).toBe(
+        `Before \\{text\\} and ${inlineCode}`
+      );
+    }
+  );
+
   it("escapes curly brackets outside code", () => {
     expect(
       clean("Use {value}, `const value = {}`, and ~removed~ {text}.")
