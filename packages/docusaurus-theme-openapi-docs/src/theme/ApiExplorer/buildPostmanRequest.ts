@@ -77,14 +77,8 @@ function setQueryParams(postman: sdk.Request, queryParams: Param[]) {
                 value: String(val),
               })
           );
-        } else {
-          return new sdk.QueryParam({
-            key: param.name,
-            value: Object.entries(jsonResult)
-              .map(([key, val]) => `${key},${val}`)
-              .join(","),
-          });
         }
+        // A scalar has nothing to explode; fall through to the scalar handling
       }
 
       // Parameter allows empty value: "/hello?extended"
@@ -251,7 +245,7 @@ function setHeaders(
             });
           }
         }
-      } else if (typeof jsonResult === "object") {
+      } else if (jsonResult && typeof jsonResult === "object") {
         if (param.style === "simple") {
           if (param.explode) {
             // Each key-value pair in the object is a separate header
