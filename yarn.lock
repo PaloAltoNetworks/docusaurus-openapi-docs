@@ -6137,9 +6137,9 @@ axe-core@^4.10.0:
   integrity sha512-BASOg+YwO2C+346x3LZOeoovTIoTrRqEsqMa6fmfAV0P+U9mFr9NsyOEpiYvFjbc64NMrSswhV50WdXzdb/Z5A==
 
 axios@1.18.1, axios@^1.15.0, axios@^1.16.0:
-  version "1.19.0"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.19.0.tgz#ddf864d4c8233c0e6873746ab59361537d05ad39"
-  integrity sha512-ht/iuYZXEjFxLH/Hkezgd7m6JKlHHXEUSneaDz8uZe1Gj5QZtCnpyDsckvAiEnT89OEbCLmnte4R4sn7P0EKFw==
+  version "1.20.0"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.20.0.tgz#515513445aa60e71d04b6521ca6210829ccb4786"
+  integrity sha512-r8aOh8j9cGKpgQAqpzrUHnSIc6a59Y3Xf/cv8sy1DrHCkZHzQGEuoq1tARk6qSyDdtQGSDgpb9kFlruzPvrgwg==
   dependencies:
     follow-redirects "^1.16.0"
     form-data "^4.0.6"
@@ -14021,9 +14021,9 @@ open@^10.0.3:
     wsl-utils "^0.1.0"
 
 openapi-to-postmanv2@^6.0.0:
-  version "6.3.2"
-  resolved "https://registry.yarnpkg.com/openapi-to-postmanv2/-/openapi-to-postmanv2-6.3.2.tgz#c0ad9aebb500c3e488b6a7afcf1bd11a6745f733"
-  integrity sha512-5F8l6OIFlBvhpFwq7tqo2LAkY1t0kx34/I8foTVcmglmI3cd4065va/FTKjlJiRa+y80V79sCeCKdLdrXZ3e3g==
+  version "6.3.3"
+  resolved "https://registry.yarnpkg.com/openapi-to-postmanv2/-/openapi-to-postmanv2-6.3.3.tgz#b249c923a3093f316bc0e191d92abf49bb3736b9"
+  integrity sha512-o0u6qqMMRLt7eAyFBpL/lCresQ1VqQFGe6/iPMBvNkWDXrpgGo5jo+YnP1e0MwF3tdUKLfkHssufGWMdojpPLg==
   dependencies:
     ajv "^8.11.0"
     ajv-draft-04 "1.0.0"
