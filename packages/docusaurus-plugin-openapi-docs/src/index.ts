@@ -29,6 +29,7 @@ import {
 import { processOpenapiFiles, readOpenapiFiles } from "./openapi";
 import { OptionsSchema } from "./options";
 import generateSidebarSlice from "./sidebars";
+import { getBasePathFromOutput } from "./sidebars/utils";
 import type {
   ApiMetadata,
   APIOptions,
@@ -48,6 +49,19 @@ export function isURL(str: string): boolean {
 const externalizedJsonGlobs = [...EXTERNALIZABLE_COMPONENTS].flatMap(
   (component) => [`*.${component}.json`, `*.${component}.[0-9]*.json`]
 );
+
+export function getInfoPath(
+  docRouteBasePath: string,
+  outputDir: string,
+  docPath: string | undefined,
+  infoId: string | undefined
+): string {
+  return [docRouteBasePath, getBasePathFromOutput(outputDir, docPath), infoId]
+    .filter(Boolean)
+    .join("/")
+    .replace(/\/{2,}/g, "/")
+    .replace(/^\/+/g, "");
+}
 
 export function getDocsPluginConfig(
   presetsPlugins: any[],
@@ -376,18 +390,12 @@ custom_edit_url: null
                 .toString("base64"));
           let infoBasePath = `${outputDir}/${item.infoId}`;
           if (docRouteBasePath) {
-            // Safely extract path segment, handling cases where docPath may not be in outputDir
-            const outputSegment =
-              docPath && outputDir.includes(docPath)
-                ? (outputDir.split(docPath)[1]?.replace(/^\/+/g, "") ?? "")
-                : outputDir
-                    .slice(outputDir.indexOf("/", 1))
-                    .replace(/^\/+/g, "");
-            infoBasePath =
-              `${docRouteBasePath}/${outputSegment}/${item.infoId}`.replace(
-                /^\/+/g,
-                ""
-              );
+            infoBasePath = getInfoPath(
+              docRouteBasePath,
+              outputDir,
+              docPath,
+              item.infoId
+            );
           }
           if (item.infoId) item.infoPath = infoBasePath;
         }
