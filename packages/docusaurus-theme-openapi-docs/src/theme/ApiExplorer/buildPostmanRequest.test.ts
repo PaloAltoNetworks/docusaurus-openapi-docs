@@ -10,7 +10,6 @@ import * as sdk from "postman-collection";
 
 import buildPostmanRequest from "./buildPostmanRequest";
 
-// The plugin types declare `explode` as a string, but specs and the code use booleans
 type Options = { [K in keyof Parameters<typeof buildPostmanRequest>[1]]?: any };
 
 beforeAll(() => {
