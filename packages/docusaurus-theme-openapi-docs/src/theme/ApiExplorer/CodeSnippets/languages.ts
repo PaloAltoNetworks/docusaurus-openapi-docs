@@ -5,7 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import find from "lodash/find";
 import mergeWith from "lodash/mergeWith";
 import unionBy from "lodash/unionBy";
 import codegen from "postman-code-generators";
@@ -58,8 +57,8 @@ export const mergeArraysbyLanguage = (arr1: any, arr2: any) => {
 
   return mergedArray.map((item: any) => {
     const matchingItems = [
-      find(arr1, ["language", item["language"]]),
-      find(arr2, ["language", item["language"]]),
+      arr1?.find((el: any) => el["language"] === item["language"]),
+      arr2?.find((el: any) => el["language"] === item["language"]),
     ];
     return mergeWith({}, ...matchingItems, (objValue: any) => {
       return objValue;
