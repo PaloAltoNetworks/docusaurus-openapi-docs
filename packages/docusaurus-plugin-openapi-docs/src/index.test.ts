@@ -9,7 +9,7 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 
-import pluginOpenAPIDocs from "./index";
+import pluginOpenAPIDocs, { getInfoPath } from "./index";
 
 const GENERATED = [
   "petstore.api.mdx",
@@ -121,4 +121,22 @@ describe("clean-api-docs", () => {
     await run();
     expect(fs.existsSync(schemasDir)).toBe(false);
   });
+});
+
+describe("getInfoPath", () => {
+  it.each([
+    ["docs", "docs/petstore", "docs", "docs/petstore/petstore-api"],
+    ["docs", "docs/test/docspace", "docs", "docs/test/docspace/petstore-api"],
+    ["docs", "docs/api/docs-v2", "docs", "docs/api/docs-v2/petstore-api"],
+    ["/", "docs/petstore", "docs", "petstore/petstore-api"],
+    ["api/", "docs/petstore", "docs", "api/petstore/petstore-api"],
+    ["docs", "docs", "docs", "docs/petstore-api"],
+  ])(
+    "builds the info path for routeBasePath %s and outputDir %s",
+    (routeBasePath, outputDir, docPath, expected) => {
+      expect(
+        getInfoPath(routeBasePath, outputDir, docPath, "petstore-api")
+      ).toBe(expected);
+    }
+  );
 });
