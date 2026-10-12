@@ -438,6 +438,8 @@ Example:
 yarn docusaurus clean-api-docs petstore
 ```
 
+> `clean-api-docs` removes only the file names `gen-api-docs` writes: `*.api.mdx`, `*.info.mdx`, `*.tag.mdx`, `sidebar.ts`, `sidebar.js`, `schemas/*.schema.mdx`, and the externalized component JSON. Anything else in the output directory, such as a hand-authored `_category_.json`, is left alone.
+
 To clean only schema docs while leaving API, info, and tag docs untouched, use the `--schemas-only` flag:
 
 ```bash title="cleaning only schema docs for 'petstore'"

@@ -46,8 +46,9 @@ let externalizationContext: ExternalizationContext | null = null;
 /**
  * Components whose props should be externalized to separate JSON files.
  * These are the components that typically receive large JSON objects.
+ * Exported so that clean-api-docs deletes exactly these files.
  */
-const EXTERNALIZABLE_COMPONENTS = new Set([
+export const EXTERNALIZABLE_COMPONENTS = new Set([
   "StatusCodes",
   "ParamsDetails",
   "RequestSchema",

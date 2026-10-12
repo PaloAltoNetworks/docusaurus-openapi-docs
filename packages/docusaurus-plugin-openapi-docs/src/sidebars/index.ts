@@ -27,6 +27,7 @@ import type {
   SchemaPageMetadata,
   ApiDocItemGenerator,
 } from "../types";
+import { getBasePathFromOutput } from "./utils";
 
 function isApiItem(item: ApiMetadata): item is ApiMetadata {
   return item.type === "api";
@@ -128,20 +129,6 @@ function groupByTags(
   if (sidebarOptions.groupPathsBy !== "tagGroup") {
     apiTags = [...new Set(apiTags.concat(operationTags, schemaTags))];
   }
-
-  // Extract base path from outputDir, handling cases where docPath may not be in outputDir
-  const getBasePathFromOutput = (
-    output: string,
-    doc: string | undefined
-  ): string => {
-    if (doc && output.startsWith(doc + "/")) {
-      return output.substring((doc + "/").length);
-    }
-    const slashIndex = output.indexOf("/", 1);
-    return slashIndex === -1
-      ? ""
-      : output.slice(slashIndex).replace(/^\/+/g, "");
-  };
 
   const basePath = getBasePathFromOutput(outputDir, docPath);
 
