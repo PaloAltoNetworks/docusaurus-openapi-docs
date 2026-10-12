@@ -164,6 +164,18 @@ describe("buildPostmanRequest", () => {
         query({ queryParams: [{ name: "status", in: "query", value: "" }] })
       ).toEqual([]);
     });
+
+    it.each([
+      ["number", 25, "25"],
+      ["zero", 0, "0"],
+      ["boolean false", false, "false"],
+    ])("serializes a %s scalar value", (_name, value, expected) => {
+      expect(
+        query({
+          queryParams: [{ name: "limit", in: "query", value }],
+        })
+      ).toEqual([["limit", expected]]);
+    });
   });
 
   describe("header parameters", () => {
