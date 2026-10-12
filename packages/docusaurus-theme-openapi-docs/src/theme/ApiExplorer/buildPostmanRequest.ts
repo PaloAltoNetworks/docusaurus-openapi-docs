@@ -23,7 +23,7 @@ function setQueryParams(postman: sdk.Request, queryParams: Param[]) {
 
   const qp = queryParams
     .map((param) => {
-      if (!param.value) {
+      if (param.value === undefined || param.value === "") {
         return undefined;
       }
 
@@ -94,7 +94,7 @@ function setQueryParams(postman: sdk.Request, queryParams: Param[]) {
 
       return new sdk.QueryParam({
         key: param.name,
-        value: param.value,
+        value: String(param.value),
       });
     })
     .flat() // Flatten the array in case of nested arrays from map
