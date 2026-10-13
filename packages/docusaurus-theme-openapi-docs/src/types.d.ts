@@ -61,6 +61,16 @@ export interface ThemeConfig {
      * side, preserving existing behavior).
      */
     hideGeneratedSnippets?: boolean;
+    /**
+     * When to show a generated schema sample.
+     * - `"always"`: Show it beside a published example. Try-it signs the schema
+     *   sample. Default when unset.
+     * - `"fallback"`: Show a published example when one exists; otherwise show
+     *   the schema sample. Try-it signs the published example.
+     * - `"never"`: Show only a published example. When nothing is published,
+     *   omit the sample and send an empty try-it body.
+     */
+    generateExamples?: "always" | "fallback" | "never";
   };
 }
 

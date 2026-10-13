@@ -252,13 +252,14 @@ petstore: {
 
 The `docusaurus-theme-openapi-docs` theme can be configured with the following options in `themeConfig.api`:
 
-| Name                 | Type     | Default            | Description                                                                                                                                                                                 |
-| -------------------- | -------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `proxy`              | `string` | `null`             | _Optional:_ Site-wide proxy URL to prepend to base URL when performing API requests. Can be overridden per-spec via plugin config.                                                          |
-| `authPersistence`    | `string` | `"sessionStorage"` | _Optional:_ Determines how auth credentials are persisted. Options: `"localStorage"`, `"sessionStorage"`, or `false` to disable persistence entirely.                                       |
-| `requestTimeout`     | `number` | `30000`            | _Optional:_ Request timeout in milliseconds for API requests made from the browser. Defaults to 30 seconds.                                                                                 |
-| `requestCredentials` | `string` | `"same-origin"`    | _Optional:_ Controls cookie behavior for API requests. Options: `"omit"`, `"same-origin"`, or `"include"`.                                                                                  |
-| `schemaExpansion`    | `object` | `null`             | _Optional:_ Controls the default expansion depth of nested request/response schema trees and (optionally) renders an inline depth control. See [`schemaExpansion`](#schemaexpansion) below. |
+| Name                 | Type     | Default            | Description                                                                                                                                                                                                                                                                                                                     |
+| -------------------- | -------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `proxy`              | `string` | `null`             | _Optional:_ Site-wide proxy URL to prepend to base URL when performing API requests. Can be overridden per-spec via plugin config.                                                                                                                                                                                              |
+| `authPersistence`    | `string` | `"sessionStorage"` | _Optional:_ Determines how auth credentials are persisted. Options: `"localStorage"`, `"sessionStorage"`, or `false` to disable persistence entirely.                                                                                                                                                                           |
+| `requestTimeout`     | `number` | `30000`            | _Optional:_ Request timeout in milliseconds for API requests made from the browser. Defaults to 30 seconds.                                                                                                                                                                                                                     |
+| `requestCredentials` | `string` | `"same-origin"`    | _Optional:_ Controls cookie behavior for API requests. Options: `"omit"`, `"same-origin"`, or `"include"`.                                                                                                                                                                                                                      |
+| `schemaExpansion`    | `object` | `null`             | _Optional:_ Controls the default expansion depth of nested request/response schema trees and (optionally) renders an inline depth control. See [`schemaExpansion`](#schemaexpansion) below.                                                                                                                                     |
+| `generateExamples`   | `string` | `"always"`         | _Optional:_ When to show generated schema samples. `"always"` shows the schema sample beside a published example and signs it in try-it. `"fallback"` shows a published example when one exists, otherwise the schema sample. `"never"` shows only published examples and sends an empty try-it body when nothing is published. |
 
 Example:
 
@@ -271,6 +272,7 @@ Example:
       authPersistence: "localStorage",
       requestTimeout: 60000, // 60 seconds
       requestCredentials: "omit", // Prevent cookies from being sent with requests
+      generateExamples: "fallback",
       schemaExpansion: {
         enabled: true, // render the inline depth control next to each schema header
         default: 1,    // auto-expand the first level on page load
