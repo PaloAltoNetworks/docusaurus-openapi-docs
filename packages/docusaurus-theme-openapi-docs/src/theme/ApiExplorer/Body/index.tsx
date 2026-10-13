@@ -23,6 +23,10 @@ import format from "xml-formatter";
 import FormBodyItem from "./FormBodyItem";
 import { resolveSchemaWithSelections } from "./resolveSchemaWithSelections";
 import { clearRawBody, setFileRawBody, setStringRawBody } from "./slice";
+import {
+  showGeneratedExample,
+  useGenerateExamples,
+} from "../../utils/generateExamples";
 import { getMediaType } from "../utils/mediaType";
 
 export interface Props {
@@ -68,6 +72,7 @@ function Body({
     (state: any) => state.schemaSelection?.selections ?? {}
   );
   const dispatch = useTypedDispatch();
+  const generateExamples = useGenerateExamples();
 
   // Lot's of possible content-types:
   // - application/json
@@ -112,7 +117,13 @@ function Body({
 
   // Compute the default body based on content type and schema
   // This needs to be computed before early returns so the useEffect can use it
-  const { defaultBody, exampleBody, examplesBodies, language } = useMemo(() => {
+  const {
+    defaultBody,
+    exampleBody,
+    examplesBodies,
+    language,
+    hasSchemaExample,
+  } = useMemo(() => {
     let lang = "plaintext";
     let defBody = "";
     let exBody;
@@ -125,6 +136,7 @@ function Body({
         exampleBody: exBody,
         examplesBodies: exBodies,
         language: lang,
+        hasSchemaExample: false,
       };
     }
     if (
@@ -137,6 +149,7 @@ function Body({
         exampleBody: exBody,
         examplesBodies: exBodies,
         language: lang,
+        hasSchemaExample: false,
       };
     }
 
@@ -266,6 +279,7 @@ function Body({
       exampleBody: exBody,
       examplesBodies: exBodies,
       language: lang,
+      hasSchemaExample,
     };
   }, [
     schema,
@@ -283,14 +297,22 @@ function Body({
     [schemaSelections]
   );
 
-  // Update body in Redux when content type or schema selection changes
+  const hasPublishedExample =
+    exampleBody !== undefined || examplesBodies.length > 0;
+  // A schema-level example makes the schema tab a published example too.
+  const showSchemaTab =
+    hasSchemaExample ||
+    showGeneratedExample(generateExamples, hasPublishedExample);
+
+  // Update body in Redux when content type or schema selection changes.
+  // Without the schema tab, the selected example's editor sets the body.
   useEffect(() => {
-    if (defaultBody) {
+    if (showSchemaTab && defaultBody) {
       dispatch(setStringRawBody(defaultBody));
     }
     // Re-run when contentType, schemaSelections, or defaultBody change
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [contentType, schemaSelections, defaultBody]);
+  }, [contentType, schemaSelections, defaultBody, showSchemaTab]);
 
   // Now handle early returns after all hooks have been called
   if (schema?.format === "binary") {
@@ -419,24 +441,26 @@ function Body({
     return (
       <FormItem>
         <SchemaTabs className="openapi-tabs__schema" lazy>
-          {/* @ts-ignore */}
-          <TabItem
-            label={translate({
-              id: "theme.openapi.body.exampleFromSchema",
-              message: "Example (from schema)",
-            })}
-            value="Example (from schema)"
-            default
-          >
-            <LiveApp
-              key={`${contentType}-${schemaSelectionKey}`}
-              action={(code: string) => dispatch(setStringRawBody(code))}
-              language={language}
-              required={required}
+          {showSchemaTab && (
+            // @ts-ignore
+            <TabItem
+              label={translate({
+                id: "theme.openapi.body.exampleFromSchema",
+                message: "Example (from schema)",
+              })}
+              value="Example (from schema)"
+              default
             >
-              {defaultBody}
-            </LiveApp>
-          </TabItem>
+              <LiveApp
+                key={`${contentType}-${schemaSelectionKey}`}
+                action={(code: string) => dispatch(setStringRawBody(code))}
+                language={language}
+                required={required}
+              >
+                {defaultBody}
+              </LiveApp>
+            </TabItem>
+          )}
           {/* @ts-ignore */}
           <TabItem label="Example" value="example">
             {exampleBody !== undefined && (
@@ -459,24 +483,26 @@ function Body({
     return (
       <FormItem className="openapi-explorer__form-item-body-container">
         <SchemaTabs className="openapi-tabs__schema" lazy>
-          {/* @ts-ignore */}
-          <TabItem
-            label={translate({
-              id: "theme.openapi.body.exampleFromSchema",
-              message: "Example (from schema)",
-            })}
-            value="Example (from schema)"
-            default
-          >
-            <LiveApp
-              key={`${contentType}-${schemaSelectionKey}`}
-              action={(code: string) => dispatch(setStringRawBody(code))}
-              language={language}
-              required={required}
+          {showSchemaTab && (
+            // @ts-ignore
+            <TabItem
+              label={translate({
+                id: "theme.openapi.body.exampleFromSchema",
+                message: "Example (from schema)",
+              })}
+              value="Example (from schema)"
+              default
             >
-              {defaultBody}
-            </LiveApp>
-          </TabItem>
+              <LiveApp
+                key={`${contentType}-${schemaSelectionKey}`}
+                action={(code: string) => dispatch(setStringRawBody(code))}
+                language={language}
+                required={required}
+              >
+                {defaultBody}
+              </LiveApp>
+            </TabItem>
+          )}
           {examplesBodies.map((ex: any) => {
             return (
               // @ts-ignore
@@ -487,6 +513,7 @@ function Body({
                     key={`${contentType}-${ex.label}`}
                     action={(code: string) => dispatch(setStringRawBody(code))}
                     language={language}
+                    required={required}
                   >
                     {ex.body}
                   </LiveApp>
@@ -495,6 +522,23 @@ function Body({
             );
           })}
         </SchemaTabs>
+      </FormItem>
+    );
+  }
+
+  if (!showSchemaTab) {
+    return (
+      <FormItem>
+        <LiveApp
+          key={`${contentType}-empty`}
+          action={(code: string) =>
+            dispatch(code ? setStringRawBody(code) : clearRawBody())
+          }
+          language={language}
+          required={required}
+        >
+          {""}
+        </LiveApp>
       </FormItem>
     );
   }

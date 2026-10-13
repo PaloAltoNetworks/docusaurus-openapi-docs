@@ -49,6 +49,14 @@ jest.mock(
   () => ({ translate: ({ message }: { message: string }) => message }),
   { virtual: true }
 );
+let mockGenerateExamples: string | undefined;
+jest.mock(
+  "@docusaurus/theme-common",
+  () => ({
+    useThemeConfig: () => ({ api: { generateExamples: mockGenerateExamples } }),
+  }),
+  { virtual: true }
+);
 jest.mock("@theme/ApiExplorer/LiveEditor", () => ({
   __esModule: true,
   default: (props: EditorProps) => mockEditor(props),
@@ -88,6 +96,7 @@ beforeAll(() => {
 });
 
 afterEach(() => {
+  mockGenerateExamples = undefined;
   act(() => mountedRoot?.unmount());
   host?.remove();
   mountedRoot = undefined;
@@ -503,5 +512,108 @@ describe("JSON request examples", () => {
       "application/octet-stream"
     );
     expect(editors).toHaveLength(0);
+  });
+});
+
+describe("generateExamples", () => {
+  const generatedSchema = {
+    type: "object" as const,
+    properties: { message: { type: "string" as const, example: "generated" } },
+  };
+  const generatedBody = '{\n  "message": "generated"\n}';
+  const sources: Record<string, MediaType> = {
+    example: { schema: generatedSchema, example: { message: "published" } },
+    examples: {
+      schema: generatedSchema,
+      examples: { named: { value: { message: "published" } } },
+    },
+    none: { schema: generatedSchema },
+  };
+  const schemaTab = "Example (from schema)";
+
+  function tabLabels(host: HTMLElement) {
+    return Array.from(host.querySelectorAll("[data-tab-label]")).map((tab) =>
+      tab.getAttribute("data-tab-label")
+    );
+  }
+
+  it.each<[string | undefined, "example" | "examples", string[]]>([
+    [undefined, "example", [schemaTab, "Example"]],
+    ["always", "example", [schemaTab, "Example"]],
+    ["fallback", "example", ["Example"]],
+    ["never", "example", ["Example"]],
+    [undefined, "examples", [schemaTab, "named"]],
+    ["always", "examples", [schemaTab, "named"]],
+    ["fallback", "examples", ["named"]],
+    ["never", "examples", ["named"]],
+  ])("%s mode with a published %s", (mode, source, expectedTabs) => {
+    mockGenerateExamples = mode;
+    const { editors, host, store } = renderBody(sources[source]);
+    expect(tabLabels(host)).toEqual(expectedTabs);
+
+    const showsSchemaTab = expectedTabs.includes(schemaTab);
+    expect(store.getState().body).toEqual(
+      showsSchemaTab
+        ? { type: "raw", content: { type: "string", value: generatedBody } }
+        : { type: "empty" }
+    );
+    expect(editors[0].children).toContain(
+      showsSchemaTab ? "generated" : "published"
+    );
+  });
+
+  it.each([undefined, "always", "fallback"])(
+    "%s mode without a published example sends the schema sample",
+    (mode) => {
+      mockGenerateExamples = mode;
+      const { editors, store } = renderBody(sources.none);
+      expect(editors).toHaveLength(1);
+      expect(editors[0].children).toBe(generatedBody);
+      expect(store.getState().body).toEqual({
+        type: "raw",
+        content: { type: "string", value: generatedBody },
+      });
+    }
+  );
+
+  it("never mode without a published example starts empty", () => {
+    mockGenerateExamples = "never";
+    const { editors, store } = renderBody(sources.none);
+    expect(editors).toHaveLength(1);
+    expect(editors[0].children).toBe("");
+    expect(store.getState().body).toEqual({ type: "empty" });
+
+    act(() => editors[0].action('{"typed":true}'));
+    expect(store.getState().body).toEqual({
+      type: "raw",
+      content: { type: "string", value: '{"typed":true}' },
+    });
+    act(() => editors[0].action(""));
+    expect(store.getState().body).toEqual({ type: "empty" });
+  });
+
+  it("never mode keeps a schema-level example", () => {
+    mockGenerateExamples = "never";
+    const { editors, store } = renderBody({
+      schema: { example: { message: "schema example" } },
+    });
+    expect(editors).toHaveLength(1);
+    expect(editors[0].children).toContain("schema example");
+    expect(store.getState().body).toEqual({
+      type: "raw",
+      content: { type: "string", value: editors[0].children },
+    });
+  });
+
+  it("fallback mode keeps form bodies unchanged", () => {
+    mockGenerateExamples = "fallback";
+    const { host } = renderBody(
+      {
+        schema: generatedSchema,
+        example: { message: "published" },
+      },
+      "multipart/form-data"
+    );
+    expect(tabLabels(host)).toEqual([schemaTab, "Example"]);
   });
 });
