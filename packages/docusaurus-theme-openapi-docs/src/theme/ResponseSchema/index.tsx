@@ -9,6 +9,7 @@ import React from "react";
 
 import BrowserOnly from "@docusaurus/BrowserOnly";
 import { translate } from "@docusaurus/Translate";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Details from "@theme/Details";
 import Markdown from "@theme/Markdown";
 import MimeTabs from "@theme/MimeTabs"; // Assume these components exist
@@ -23,6 +24,7 @@ import SchemaTabs from "@theme/SchemaTabs";
 import SkeletonLoader from "@theme/SkeletonLoader";
 import TabItem from "@theme/TabItem";
 import type { MediaTypeObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
+import type { ThemeConfig } from "docusaurus-theme-openapi-docs/src/types";
 
 interface Props {
   style?: React.CSSProperties;
@@ -41,6 +43,10 @@ const ResponseSchemaComponent: React.FC<Props> = ({
   body,
   style,
 }): any => {
+  const { siteConfig } = useDocusaurusContext();
+  const themeConfig = siteConfig.themeConfig as ThemeConfig;
+  const generateExamples = themeConfig?.api?.generateExamples ?? "always";
+
   if (
     body === undefined ||
     body.content === undefined ||
@@ -60,6 +66,11 @@ const ResponseSchemaComponent: React.FC<Props> = ({
           const responseExamples = mediaTypeObject?.examples;
           const responseExample = mediaTypeObject?.example;
           const firstBody = mediaTypeObject?.schema;
+          const showExampleFromSchema =
+            generateExamples === "always" ||
+            (generateExamples === "fallback" &&
+              !responseExample &&
+              !responseExamples);
 
           if (
             !firstBody ||
@@ -122,6 +133,7 @@ const ResponseSchemaComponent: React.FC<Props> = ({
                   </Details>
                 </TabItem>
                 {firstBody &&
+                  showExampleFromSchema &&
                   ExampleFromSchema({
                     schema: firstBody,
                     mimeType: mimeType,

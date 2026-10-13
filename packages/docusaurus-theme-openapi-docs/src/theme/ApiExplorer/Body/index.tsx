@@ -8,6 +8,7 @@
 import React, { useEffect, useMemo } from "react";
 
 import { translate } from "@docusaurus/Translate";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import json2xml from "@theme/ApiExplorer/Body/json2xml";
 import FormFileUpload from "@theme/ApiExplorer/FormFileUpload";
 import FormItem from "@theme/ApiExplorer/FormItem";
@@ -18,6 +19,7 @@ import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
 import { sampleFromSchema } from "docusaurus-plugin-openapi-docs/lib/openapi/createSchemaExample";
 import type { RequestBodyObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
+import type { ThemeConfig } from "docusaurus-theme-openapi-docs/src/types";
 import format from "xml-formatter";
 
 import FormBodyItem from "./FormBodyItem";
@@ -67,6 +69,9 @@ function Body({
     (state: any) => state.schemaSelection?.selections ?? {}
   );
   const dispatch = useTypedDispatch();
+  const { siteConfig } = useDocusaurusContext();
+  const themeConfig = siteConfig.themeConfig as ThemeConfig;
+  const generateExamples = themeConfig?.api?.generateExamples ?? "always";
 
   // Lot's of possible content-types:
   // - application/json
@@ -268,6 +273,17 @@ function Body({
     jsonRequestBodyExample,
   ]);
 
+  const publishedExampleBodies = examples
+    ? examplesBodies.slice(0, Object.keys(examples).length)
+    : [];
+  const hasPublishedExample =
+    Boolean(example) || publishedExampleBodies.length > 0;
+  const signedPublishedBody = exampleBody ?? publishedExampleBodies[0]?.body;
+  const leavesFormBodyUnchanged =
+    schema?.format === "binary" ||
+    contentType === "multipart/form-data" ||
+    contentType === "application/x-www-form-urlencoded";
+
   // Create a stable key for the LiveApp component that changes when schema selection changes
   // This forces the editor to remount and pick up the new defaultBody
   const schemaSelectionKey = useMemo(
@@ -275,14 +291,44 @@ function Body({
     [schemaSelections]
   );
 
-  // Update body in Redux when content type or schema selection changes
+  // Update body in Redux when content type, schema selection, or example mode changes.
+  // Form and binary bodies keep today's behavior. Otherwise:
+  // always   -> schema sample
+  // fallback -> published example when present, otherwise schema sample
+  // never    -> published example when present, otherwise an empty body
   useEffect(() => {
+    if (leavesFormBodyUnchanged) {
+      if (defaultBody) {
+        dispatch(setStringRawBody(defaultBody));
+      }
+      return;
+    }
+
+    if (generateExamples !== "always" && hasPublishedExample) {
+      if (typeof signedPublishedBody === "string") {
+        dispatch(setStringRawBody(signedPublishedBody));
+      }
+      return;
+    }
+
+    if (generateExamples === "never") {
+      dispatch(clearRawBody());
+      return;
+    }
+
     if (defaultBody) {
       dispatch(setStringRawBody(defaultBody));
     }
-    // Re-run when contentType, schemaSelections, or defaultBody change
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [contentType, schemaSelections, defaultBody]);
+  }, [
+    contentType,
+    schemaSelections,
+    defaultBody,
+    generateExamples,
+    hasPublishedExample,
+    signedPublishedBody,
+    leavesFormBodyUnchanged,
+  ]);
 
   // Now handle early returns after all hooks have been called
   if (schema?.format === "binary") {
@@ -402,6 +448,78 @@ function Body({
                 </TabItem>
               );
             })}
+        </SchemaTabs>
+      </FormItem>
+    );
+  }
+
+  if (generateExamples === "never" && !hasPublishedExample) {
+    return (
+      <FormItem>
+        <LiveApp
+          key={`${contentType}-empty`}
+          action={(code: string) => {
+            if (code) {
+              dispatch(setStringRawBody(code));
+              return;
+            }
+            dispatch(clearRawBody());
+          }}
+          language={language}
+          required={required}
+        >
+          {""}
+        </LiveApp>
+      </FormItem>
+    );
+  }
+
+  if (generateExamples !== "always" && hasPublishedExample) {
+    if (exampleBody || publishedExampleBodies.length <= 1) {
+      const summary = exampleBody
+        ? example?.summary
+        : publishedExampleBodies[0]?.summary;
+      const editorBody = exampleBody || publishedExampleBodies[0]?.body || "";
+      return (
+        <FormItem>
+          {summary && <Markdown>{summary}</Markdown>}
+          <LiveApp
+            key={`${contentType}-example`}
+            action={(code: string) => dispatch(setStringRawBody(code))}
+            language={language}
+            required={required}
+          >
+            {editorBody}
+          </LiveApp>
+        </FormItem>
+      );
+    }
+
+    return (
+      <FormItem className="openapi-explorer__form-item-body-container">
+        <SchemaTabs className="openapi-tabs__schema" lazy>
+          {publishedExampleBodies.map((ex: any, index: number) => {
+            return (
+              // @ts-ignore
+              <TabItem
+                label={ex.label}
+                value={ex.label}
+                key={ex.label}
+                default={index === 0}
+              >
+                {ex.summary && <Markdown>{ex.summary}</Markdown>}
+                {ex.body && (
+                  <LiveApp
+                    key={`${contentType}-${ex.label}`}
+                    action={(code: string) => dispatch(setStringRawBody(code))}
+                    language={language}
+                  >
+                    {ex.body}
+                  </LiveApp>
+                )}
+              </TabItem>
+            );
+          })}
         </SchemaTabs>
       </FormItem>
     );
