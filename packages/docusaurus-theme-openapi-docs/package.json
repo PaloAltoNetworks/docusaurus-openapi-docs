@@ -59,7 +59,7 @@
     "prism-react-renderer": "^2.4.1",
     "process": "^0.11.10",
     "react-hook-form": "^7.59.0",
-    "react-live": "^4.1.8",
+    "react-live": "^5.0.1",
     "react-magic-dropzone": "^1.0.1",
     "react-markdown": "^10.1.0",
     "react-modal": "^3.16.3",
