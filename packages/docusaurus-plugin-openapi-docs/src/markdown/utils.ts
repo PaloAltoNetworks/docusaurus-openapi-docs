@@ -5,6 +5,14 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import jiti from "jiti";
+import type { Nodes } from "mdast";
+
+// Keep this synchronous CommonJS API compatible with the ESM Markdown parser.
+const { fromMarkdown } = jiti(__filename)(
+  "mdast-util-from-markdown"
+) as typeof import("mdast-util-from-markdown");
+
 /**
  * Represents an external JSON file to be written alongside the MDX.
  */
@@ -225,118 +233,42 @@ function cleanText(value: string): string {
     .replace(curlyBrackets, "\\$1");
 }
 
-function cleanInlineCode(value: string): string {
-  const runs = Array.from(value.matchAll(/(\\*)(`+)/g));
-  const nextRuns = new Map<number, number>();
-  const closingRuns: number[] = [];
-
-  // Pair entire runs of equal length, without rescanning unmatched runs.
-  for (let index = runs.length - 1; index >= 0; index--) {
-    const length = runs[index][2].length;
-    const escaped = runs[index][1].length % 2;
-    closingRuns[index] = nextRuns.get(length - escaped) ?? -1;
-    nextRuns.set(length, index);
-  }
-
-  let result = "";
-  let textStart = 0;
-  for (let index = 0; index < runs.length; index++) {
-    const opening = runs[index];
-    const closingIndex = closingRuns[index];
-    if (closingIndex === -1) {
-      continue;
-    }
-
-    const closing = runs[closingIndex];
-    const codeEnd = closing.index + closing[0].length;
-    const codeStart =
-      opening.index + opening[1].length + (opening[1].length % 2);
-    result += cleanText(value.slice(textStart, codeStart));
-    result += value.slice(codeStart, codeEnd);
-    textStart = codeEnd;
-    index = closingIndex;
-  }
-  return result + cleanText(value.slice(textStart));
-}
-
 export function clean(value: string | undefined): string {
   if (!value) {
     return "";
   }
 
+  const source = value;
   let result = "";
-  let text = "";
-  let fence = "";
-  let listIndent: number | undefined;
-  let fenceListIndent: number | undefined;
-  const lines = value.match(/[^\r\n]*(?:\r\n|\r|\n|$)/g) ?? [];
-  for (const line of lines) {
-    const content = line.replace(/[\r\n]+$/, "");
-    const indent = content.match(/^ */)![0].length;
-    if (
-      fenceListIndent !== undefined &&
-      content.trim() &&
-      indent < fenceListIndent
-    ) {
-      // An unclosed fence in a list ends with its containing list item.
-      fence = "";
-      fenceListIndent = undefined;
-    }
-    if (fence) {
-      result += line;
-      const closing = content.match(/^ {0,3}(`{3,}|~{3,})[ \t]*$/);
-      if (
-        closing &&
-        closing[1][0] === fence[0] &&
-        closing[1].length >= fence.length
-      ) {
-        fence = "";
-        fenceListIndent = undefined;
-      }
-      continue;
-    }
-
-    const list = content.match(/^ {0,3}(?:[-+*]|\d{1,9}[.)])[ \t]+/);
-    if (list) {
-      listIndent = list[0].length;
-    } else if (
-      content.trim() &&
-      listIndent !== undefined &&
-      indent < listIndent
-    ) {
-      listIndent = undefined;
-    }
-
-    const opening = content.match(/^ {0,3}(`{3,}|~{3,})(.*)$/);
-    if (opening && (opening[1][0] !== "`" || !opening[2].includes("`"))) {
-      result += cleanInlineCode(text) + line;
-      text = "";
-      fence = opening[1];
-      fenceListIndent = listIndent;
-    } else if (/^[ \t]*$/.test(content)) {
-      // Inline code cannot span separate paragraphs.
-      result += cleanInlineCode(text) + line;
-      text = "";
-    } else if (
-      /^ {0,3}#{1,6}(?:[ \t]|$)/.test(content) ||
-      /^ {0,3}(?:(?:\*[ \t]*){3,}|(?:-[ \t]*){3,}|(?:_[ \t]*){3,}|[-=]+[ \t]*)$/.test(
-        content
-      )
-    ) {
-      result += cleanInlineCode(text) + cleanInlineCode(line);
-      text = "";
-    } else {
-      if (
-        (list && /^ {0,3}(?:[-+*]|1[.)])[ \t]+/.test(content)) ||
-        (/^ {0,3}>/.test(content) && !/^(?:\r\n|\r|\n)? {0,3}>/.test(text))
-      ) {
-        // Keep the preceding newline as context for angle-bracket escaping.
-        const newline = text.match(/(?:\r\n|\r|\n)$/)?.[0] ?? "";
-        result += cleanInlineCode(text.slice(0, text.length - newline.length));
-        text = newline;
-      }
-      text += line;
+  let cursor = 0;
+  function visit(node: Nodes): void {
+    const autolink =
+      node.type === "link" && source[node.position!.start.offset!] === "<";
+    if (node.type === "text" || autolink) {
+      const start = node.position!.start.offset!;
+      const end = node.position!.end.offset!;
+      result += source.slice(cursor, start);
+      // Use source offsets so entities, escapes, and line endings stay intact.
+      result += autolink
+        ? `&lt;${cleanText(source.slice(start + 1, end - 1))}&gt;`
+        : cleanText(source.slice(start, end));
+      cursor = end;
+    } else if ("children" in node) {
+      node.children.forEach(visit);
     }
   }
-  return result + cleanInlineCode(text);
+
+  visit(
+    fromMarkdown(value, {
+      // Match MDX blocks and expose image alt text without rewriting syntax.
+      extensions: [
+        {
+          disable: {
+            null: ["htmlFlow", "htmlText", "codeIndented", "labelStartImage"],
+          },
+        },
+      ],
+    })
+  );
+  return result + value.slice(cursor);
 }

@@ -75,9 +75,14 @@ describe("clean", () => {
       ["suffixed text", `${fence}suffix`],
       ["a different character", fence === "```" ? "~~~" : "```"],
       ["too few characters", fence.slice(1)],
-      ["four spaces of indentation", `    ${fence}`],
     ])("does not close at %s", (_name, falseCloser) => {
       const block = `${fence}sh\n${falseCloser}\n{a}\n${fence}`;
+
+      expect(clean(`${block}\nafter {b}`)).toBe(`${block}\nafter \\{b\\}`);
+    });
+
+    it("matches MDX handling of indented closing fences", () => {
+      const block = `${fence}\n{a}\n    ${fence}`;
 
       expect(clean(`${block}\nafter {b}`)).toBe(`${block}\nafter \\{b\\}`);
     });
@@ -179,9 +184,7 @@ describe("clean", () => {
     ["a blockquote", "> `multi\n> line {a}` and {b}"],
     ["an indented blockquote", " > `multi\n > line {a}` and {b}"],
   ])("preserves multiline inline code continuing within %s", (_name, input) => {
-    expect(clean(input)).toBe(
-      input.replace("{b}", "\\{b\\}").replace(/^>/, "&gt;")
-    );
+    expect(clean(input)).toBe(input.replace("{b}", "\\{b\\}"));
   });
 
   it.each(["```", "~~~"])(
@@ -211,5 +214,93 @@ describe("clean", () => {
     const block = "~~~js `metadata`\n{a}\n~~~";
 
     expect(clean(`${block}\n{b}`)).toBe(`${block}\n\\{b\\}`);
+  });
+
+  it.each(["> quote", "para\n\n> quote", "# Title\n> quote"])(
+    "preserves blockquote markers in %j",
+    (input) => {
+      expect(clean(input)).toBe(input);
+    }
+  );
+
+  it.each([
+    [
+      "ordered items",
+      "1. use `foo\n2. bar {x} `baz",
+      "1. use `foo\n2. bar \\{x\\} `baz",
+    ],
+    [
+      "nested items",
+      "- a\n  - b `x\n    - c {y} `z",
+      "- a\n  - b `x\n    - c \\{y\\} `z",
+    ],
+  ])("does not pair backticks across %s", (_name, input, expected) => {
+    expect(clean(input)).toBe(expected);
+  });
+
+  it.each([
+    ["a list marker", "- ~~~\n  {a}\n  ~~~"],
+    ["a blockquote", "> ~~~\n> {a}\n> ~~~"],
+    ["tabs", "-\titem\n\t~~~\n\t{a}\n\t~~~"],
+    ["nested quote and list", "> - ~~~\n>   {a}\n>   ~~~"],
+  ])("preserves fenced code inside %s", (_name, input) => {
+    expect(clean(input)).toBe(input);
+  });
+
+  it("keeps source spelling of entities and Markdown escapes", () => {
+    expect(clean("&#123;x&#125; &amp; \\*text\\* {a}")).toBe(
+      "&#123;x&#125; &amp; \\*text\\* \\{a\\}"
+    );
+  });
+
+  it.each(["```", "~~~"])(
+    "preserves %s fenced examples inside HTML",
+    (fence) => {
+      const block = `<div>\n${fence}\n{a}\n${fence}\n</div>`;
+
+      expect(clean(`${block}\n\nOutside {b}`)).toBe(
+        `${block}\n\nOutside \\{b\\}`
+      );
+      expect(clean("<div>{a}</div>")).toBe("<div>\\{a\\}</div>");
+    }
+  );
+
+  it.each(["https://example.com", "user@example.com", "dev@example.com"])(
+    "escapes the angle brackets around the autolink %s",
+    (link) => {
+      expect(clean(`See <${link}> and {a}`)).toBe(
+        `See &lt;${link}&gt; and \\{a\\}`
+      );
+    }
+  );
+
+  it("preserves Markdown links and autolinks inside code", () => {
+    expect(
+      clean("[link](<https://example.com>) and `<user@example.com>`")
+    ).toBe("[link](<https://example.com>) and `<user@example.com>`");
+  });
+
+  it.each([
+    ["![{](image.png)", "![\\{](image.png)"],
+    ["![<custom> {a}](image.png)", "![&lt;custom&gt; \\{a\\}](image.png)"],
+    [
+      "![<https://example.com>](image.png)",
+      "![&lt;https://example.com&gt;](image.png)",
+    ],
+    ["![`{a}` and {b}](image.png)", "![`{a}` and \\{b\\}](image.png)"],
+    [
+      '![{a}][image]\n\n[image]: image.png "title {b}"',
+      '![\\{a\\}][image]\n\n[image]: image.png "title {b}"',
+    ],
+  ])("escapes image alt prose in %j", (input, expected) => {
+    expect(clean(input)).toBe(expected);
+  });
+
+  it.each([
+    ['    {"a": 1}', '    \\{"a": 1\\}'],
+    ["    <custom>", "    &lt;custom&gt;"],
+    ["- item\n\n      {a}", "- item\n\n      \\{a\\}"],
+  ])("escapes indented MDX prose in %j", (input, expected) => {
+    expect(clean(input)).toBe(expected);
   });
 });
