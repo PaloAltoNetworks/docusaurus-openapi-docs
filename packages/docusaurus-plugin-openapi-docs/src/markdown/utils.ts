@@ -5,6 +5,14 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import jiti from "jiti";
+import type { Nodes } from "mdast";
+
+// Keep this synchronous CommonJS API compatible with the ESM Markdown parser.
+const { fromMarkdown } = jiti(__filename)(
+  "mdast-util-from-markdown"
+) as typeof import("mdast-util-from-markdown");
+
 /**
  * Represents an external JSON file to be written alongside the MDX.
  */
@@ -217,26 +225,51 @@ export const lessThan =
   /<=?(?!(=|button|\s?\/button|code|\s?\/code|details|\s?\/details|summary|\s?\/summary|hr|\s?\/hr|br|\s?\/br|span|\s?\/span|strong|\s?\/strong|small|\s?\/small|table|\s?\/table|thead|\s?\/thead|tbody|\s?\/tbody|td|\s?\/td|tr|\s?\/tr|th|\s?\/th|h1|\s?\/h1|h2|\s?\/h2|h3|\s?\/h3|h4|\s?\/h4|h5|\s?\/h5|h6|\s?\/h6|title|\s?\/title|p|\s?\/p|em|\s?\/em|b|\s?\/b|i|\s?\/i|u|\s?\/u|strike|\s?\/strike|bold|\s?\/bold|a|\s?\/a|table|\s?\/table|li|\s?\/li|ol|\s?\/ol|ul|\s?\/ul|img|\s?\/img|svg|\s?\/svg|div|\s?\/div|center|\s?\/center))/gu;
 export const greaterThan =
   /(?<!(button|code|details|summary|hr|br|span|strong|small|table|thead|tbody|td|tr|th|h1|h2|h3|h4|h5|h6|title|p|em|b|i|u|strike|bold|a|li|ol|ul|img|svg|div|center|\/|\s|"|'))>/gu;
-export const codeFence = /`{1,3}[\s\S]*?`{1,3}/g;
 export const curlyBrackets = /([{}])/g;
-export const codeBlock = /(^```.*[\s\S]*?```$|`[^`].+?`)/gm;
+
+function cleanText(value: string): string {
+  return value
+    .replace(lessThan, "&lt;")
+    .replace(greaterThan, "&gt;")
+    .replace(curlyBrackets, "\\$1");
+}
 
 export function clean(value: string | undefined): string {
   if (!value) {
     return "";
   }
 
-  let sections = value.split(codeBlock);
-  for (let sectionIndex in sections) {
-    if (!sections[sectionIndex].startsWith("`")) {
-      sections[sectionIndex] = sections[sectionIndex]
-        .replace(lessThan, "&lt;")
-        .replace(greaterThan, "&gt;")
-        .replace(codeFence, function (match) {
-          return match.replace(/\\>/g, ">");
-        })
-        .replace(curlyBrackets, "\\$1");
+  const source = value;
+  let result = "";
+  let cursor = 0;
+  function visit(node: Nodes): void {
+    const autolink =
+      node.type === "link" && source[node.position!.start.offset!] === "<";
+    if (node.type === "text" || autolink) {
+      const start = node.position!.start.offset!;
+      const end = node.position!.end.offset!;
+      result += source.slice(cursor, start);
+      // Use source offsets so entities, escapes, and line endings stay intact.
+      result += autolink
+        ? `&lt;${cleanText(source.slice(start + 1, end - 1))}&gt;`
+        : cleanText(source.slice(start, end));
+      cursor = end;
+    } else if ("children" in node) {
+      node.children.forEach(visit);
     }
   }
-  return sections.join("");
+
+  visit(
+    fromMarkdown(value, {
+      // Match MDX blocks and expose image alt text without rewriting syntax.
+      extensions: [
+        {
+          disable: {
+            null: ["htmlFlow", "htmlText", "codeIndented", "labelStartImage"],
+          },
+        },
+      ],
+    })
+  );
+  return result + value.slice(cursor);
 }
