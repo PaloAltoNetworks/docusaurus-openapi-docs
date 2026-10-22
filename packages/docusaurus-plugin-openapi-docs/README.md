@@ -252,13 +252,13 @@ petstore: {
 
 The `docusaurus-theme-openapi-docs` theme can be configured with the following options in `themeConfig.api`:
 
-| Name                 | Type     | Default         | Description                                                                                                                                                                                 |
-| -------------------- | -------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `proxy`              | `string` | `null`          | _Optional:_ Site-wide proxy URL to prepend to base URL when performing API requests. Can be overridden per-spec via plugin config.                                                          |
-| `authPersistance`    | `string` | `null`          | _Optional:_ Determines how auth credentials are persisted. Options: `"localStorage"`, `"sessionStorage"`, or `false` to disable.                                                            |
-| `requestTimeout`     | `number` | `30000`         | _Optional:_ Request timeout in milliseconds for API requests made from the browser. Defaults to 30 seconds.                                                                                 |
-| `requestCredentials` | `string` | `"same-origin"` | _Optional:_ Controls cookie behavior for API requests. Options: `"omit"`, `"same-origin"`, or `"include"`.                                                                                  |
-| `schemaExpansion`    | `object` | `null`          | _Optional:_ Controls the default expansion depth of nested request/response schema trees and (optionally) renders an inline depth control. See [`schemaExpansion`](#schemaexpansion) below. |
+| Name                 | Type     | Default            | Description                                                                                                                                                                                 |
+| -------------------- | -------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `proxy`              | `string` | `null`             | _Optional:_ Site-wide proxy URL to prepend to base URL when performing API requests. Can be overridden per-spec via plugin config.                                                          |
+| `authPersistence`    | `string` | `"sessionStorage"` | _Optional:_ Determines how auth credentials are persisted. Options: `"localStorage"`, `"sessionStorage"`, or `false` to disable persistence entirely.                                       |
+| `requestTimeout`     | `number` | `30000`            | _Optional:_ Request timeout in milliseconds for API requests made from the browser. Defaults to 30 seconds.                                                                                 |
+| `requestCredentials` | `string` | `"same-origin"`    | _Optional:_ Controls cookie behavior for API requests. Options: `"omit"`, `"same-origin"`, or `"include"`.                                                                                  |
+| `schemaExpansion`    | `object` | `null`             | _Optional:_ Controls the default expansion depth of nested request/response schema trees and (optionally) renders an inline depth control. See [`schemaExpansion`](#schemaexpansion) below. |
 
 Example:
 
@@ -268,7 +268,7 @@ Example:
   themeConfig: {
     api: {
       proxy: "https://cors.pan.dev",  // Site-wide proxy (can be overridden per-spec in plugin config)
-      authPersistance: "localStorage",
+      authPersistence: "localStorage",
       requestTimeout: 60000, // 60 seconds
       requestCredentials: "omit", // Prevent cookies from being sent with requests
       schemaExpansion: {
@@ -404,6 +404,8 @@ yarn docusaurus clean-api-docs petstore
 ```
 
 > The example above will remove all API docs relative to `burgers`.
+
+> `clean-api-docs` removes only the file names `gen-api-docs` writes: `*.api.mdx`, `*.info.mdx`, `*.tag.mdx`, `sidebar.ts`, `sidebar.js`, `schemas/*.schema.mdx`, and the externalized component JSON. Anything else in the output directory, such as a hand-authored `_category_.json`, is left alone.
 
 If you have multiple versions of the same API, `clean-api-docs` only cleans the latest. To clean all versions, use the `--all-versions` flag.
 

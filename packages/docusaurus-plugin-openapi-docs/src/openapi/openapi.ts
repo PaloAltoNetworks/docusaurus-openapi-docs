@@ -13,7 +13,6 @@ import fs from "fs-extra";
 import cloneDeep from "lodash/cloneDeep";
 import kebabCase from "lodash/kebabCase";
 import unionBy from "lodash/unionBy";
-import uniq from "lodash/uniq";
 import Converter from "openapi-to-postmanv2";
 import { Collection } from "postman-collection";
 import * as sdk from "postman-collection";
@@ -516,11 +515,13 @@ function createItems(
     const apiItems = items.filter((item) => {
       return item.type === "api";
     }) as ApiPageMetadata[];
-    const operationTags = uniq(
-      apiItems
-        .flatMap((item) => item.api.tags)
-        .filter((item): item is string => !!item)
-    );
+    const operationTags = [
+      ...new Set(
+        apiItems
+          .flatMap((item) => item.api.tags)
+          .filter((item): item is string => !!item)
+      ),
+    ];
 
     // eslint-disable-next-line array-callback-return
     tags

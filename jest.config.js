@@ -8,11 +8,28 @@
 module.exports = {
   preset: "ts-jest",
   testEnvironment: "node",
+  globals: {
+    "ts-jest": {
+      tsconfig: {
+        target: "ES2019",
+        module: "commonjs",
+        resolveJsonModule: true,
+        esModuleInterop: true,
+        jsx: "react",
+        baseUrl: __dirname,
+        paths: {
+          "@theme/*": ["packages/docusaurus-theme-openapi-docs/src/theme/*"],
+        },
+      },
+    },
+  },
   roots: [
     "<rootDir>/packages/docusaurus-plugin-openapi-docs/src",
     "<rootDir>/packages/docusaurus-theme-openapi-docs/src",
   ],
   moduleNameMapper: {
+    "^@theme/(.*)$":
+      "<rootDir>/packages/docusaurus-theme-openapi-docs/src/theme/$1",
     "^chalk$": "<rootDir>/__mocks__/chalk.js",
     "^@apidevtools/json-schema-ref-parser$":
       "<rootDir>/__mocks__/@apidevtools/json-schema-ref-parser.js",

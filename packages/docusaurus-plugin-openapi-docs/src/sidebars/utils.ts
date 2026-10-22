@@ -27,3 +27,15 @@ export function versionCrumb(version: string) {
   const view = render(template, version);
   return view;
 }
+
+// Extract base path from outputDir, handling cases where docPath may not be in outputDir
+export function getBasePathFromOutput(
+  output: string,
+  doc: string | undefined
+): string {
+  if (doc && output.startsWith(doc + "/")) {
+    return output.substring((doc + "/").length);
+  }
+  const slashIndex = output.indexOf("/", 1);
+  return slashIndex === -1 ? "" : output.slice(slashIndex).replace(/^\/+/g, "");
+}
