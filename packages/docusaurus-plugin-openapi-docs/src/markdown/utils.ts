@@ -216,29 +216,127 @@ export const lessThan =
   /<=?(?!(=|button|\s?\/button|code|\s?\/code|details|\s?\/details|summary|\s?\/summary|hr|\s?\/hr|br|\s?\/br|span|\s?\/span|strong|\s?\/strong|small|\s?\/small|table|\s?\/table|thead|\s?\/thead|tbody|\s?\/tbody|td|\s?\/td|tr|\s?\/tr|th|\s?\/th|h1|\s?\/h1|h2|\s?\/h2|h3|\s?\/h3|h4|\s?\/h4|h5|\s?\/h5|h6|\s?\/h6|title|\s?\/title|p|\s?\/p|em|\s?\/em|b|\s?\/b|i|\s?\/i|u|\s?\/u|strike|\s?\/strike|bold|\s?\/bold|a|\s?\/a|table|\s?\/table|li|\s?\/li|ol|\s?\/ol|ul|\s?\/ul|img|\s?\/img|svg|\s?\/svg|div|\s?\/div|center|\s?\/center))/gu;
 export const greaterThan =
   /(?<!(button|code|details|summary|hr|br|span|strong|small|table|thead|tbody|td|tr|th|h1|h2|h3|h4|h5|h6|title|p|em|b|i|u|strike|bold|a|li|ol|ul|img|svg|div|center|\/|\s|"|'))>/gu;
-export const codeFence = /`{1,3}[\s\S]*?`{1,3}/g;
 export const curlyBrackets = /([{}])/g;
-export const codeBlock =
-  /(^```.*[\s\S]*?```$|^~~~.*[\s\S]*?~~~$|`[^`\r\n]+`)/gm;
+
+function cleanText(value: string): string {
+  return value
+    .replace(lessThan, "&lt;")
+    .replace(greaterThan, "&gt;")
+    .replace(curlyBrackets, "\\$1");
+}
+
+function cleanInlineCode(value: string): string {
+  const runs = Array.from(value.matchAll(/(\\*)(`+)/g));
+  const nextRuns = new Map<number, number>();
+  const closingRuns: number[] = [];
+
+  // Pair entire runs of equal length, without rescanning unmatched runs.
+  for (let index = runs.length - 1; index >= 0; index--) {
+    const length = runs[index][2].length;
+    const escaped = runs[index][1].length % 2;
+    closingRuns[index] = nextRuns.get(length - escaped) ?? -1;
+    nextRuns.set(length, index);
+  }
+
+  let result = "";
+  let textStart = 0;
+  for (let index = 0; index < runs.length; index++) {
+    const opening = runs[index];
+    const closingIndex = closingRuns[index];
+    if (closingIndex === -1) {
+      continue;
+    }
+
+    const closing = runs[closingIndex];
+    const codeEnd = closing.index + closing[0].length;
+    const codeStart =
+      opening.index + opening[1].length + (opening[1].length % 2);
+    result += cleanText(value.slice(textStart, codeStart));
+    result += value.slice(codeStart, codeEnd);
+    textStart = codeEnd;
+    index = closingIndex;
+  }
+  return result + cleanText(value.slice(textStart));
+}
 
 export function clean(value: string | undefined): string {
   if (!value) {
     return "";
   }
 
-  const sections = value.split(codeBlock);
-  for (
-    let sectionIndex = 0;
-    sectionIndex < sections.length;
-    sectionIndex += 2
-  ) {
-    sections[sectionIndex] = sections[sectionIndex]
-      .replace(lessThan, "&lt;")
-      .replace(greaterThan, "&gt;")
-      .replace(codeFence, function (match) {
-        return match.replace(/\\>/g, ">");
-      })
-      .replace(curlyBrackets, "\\$1");
+  let result = "";
+  let text = "";
+  let fence = "";
+  let listIndent: number | undefined;
+  let fenceListIndent: number | undefined;
+  const lines = value.match(/[^\r\n]*(?:\r\n|\r|\n|$)/g) ?? [];
+  for (const line of lines) {
+    const content = line.replace(/[\r\n]+$/, "");
+    const indent = content.match(/^ */)![0].length;
+    if (
+      fenceListIndent !== undefined &&
+      content.trim() &&
+      indent < fenceListIndent
+    ) {
+      // An unclosed fence in a list ends with its containing list item.
+      fence = "";
+      fenceListIndent = undefined;
+    }
+    if (fence) {
+      result += line;
+      const closing = content.match(/^ {0,3}(`{3,}|~{3,})[ \t]*$/);
+      if (
+        closing &&
+        closing[1][0] === fence[0] &&
+        closing[1].length >= fence.length
+      ) {
+        fence = "";
+        fenceListIndent = undefined;
+      }
+      continue;
+    }
+
+    const list = content.match(/^ {0,3}(?:[-+*]|\d{1,9}[.)])[ \t]+/);
+    if (list) {
+      listIndent = list[0].length;
+    } else if (
+      content.trim() &&
+      listIndent !== undefined &&
+      indent < listIndent
+    ) {
+      listIndent = undefined;
+    }
+
+    const opening = content.match(/^ {0,3}(`{3,}|~{3,})(.*)$/);
+    if (opening && (opening[1][0] !== "`" || !opening[2].includes("`"))) {
+      result += cleanInlineCode(text) + line;
+      text = "";
+      fence = opening[1];
+      fenceListIndent = listIndent;
+    } else if (/^[ \t]*$/.test(content)) {
+      // Inline code cannot span separate paragraphs.
+      result += cleanInlineCode(text) + line;
+      text = "";
+    } else if (
+      /^ {0,3}#{1,6}(?:[ \t]|$)/.test(content) ||
+      /^ {0,3}(?:(?:\*[ \t]*){3,}|(?:-[ \t]*){3,}|(?:_[ \t]*){3,}|[-=]+[ \t]*)$/.test(
+        content
+      )
+    ) {
+      result += cleanInlineCode(text) + cleanInlineCode(line);
+      text = "";
+    } else {
+      if (
+        (list && /^ {0,3}(?:[-+*]|1[.)])[ \t]+/.test(content)) ||
+        (/^ {0,3}>/.test(content) && !/^(?:\r\n|\r|\n)? {0,3}>/.test(text))
+      ) {
+        // Keep the preceding newline as context for angle-bracket escaping.
+        const newline = text.match(/(?:\r\n|\r|\n)$/)?.[0] ?? "";
+        result += cleanInlineCode(text.slice(0, text.length - newline.length));
+        text = newline;
+      }
+      text += line;
+    }
   }
-  return sections.join("");
+  return result + cleanInlineCode(text);
 }
