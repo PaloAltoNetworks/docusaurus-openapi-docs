@@ -5,6 +5,10 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import { Blob } from "buffer";
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { processOpenapiFile } from "docusaurus-plugin-openapi-docs/src/openapi/openapi";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import * as sdk from "postman-collection";
 
@@ -487,6 +491,298 @@ describe("buildPostmanRequest", () => {
         "{}",
         "application/json",
       ]);
+    });
+
+    describe("selected form content type", () => {
+      const multipart = "multipart/form-data";
+      const urlencoded = "application/x-www-form-urlencoded";
+      const fields = {
+        type: "form",
+        content: { name: { type: "string", value: "Rex" } },
+      };
+      const file = {
+        src: "/path/to/pets.csv",
+        content: new Blob(["id,name\n1,Rex\n"], { type: "text/csv" }),
+      };
+      const formFields = (request: sdk.Request) =>
+        request.body?.[request.body.mode as "formdata" | "urlencoded"]
+          ?.all()
+          .map(({ key, value }) => [key, value]);
+      const formRequest = (mode: string) =>
+        new sdk.Request({
+          url: "http://example.com/pets",
+          method: "POST",
+          body: { mode },
+        });
+
+      it.each([
+        [multipart, urlencoded],
+        [urlencoded, multipart],
+      ])(
+        "uploads a file with mixed types in order %s, %s",
+        async (first, second) => {
+          const formSchema = {
+            schema: {
+              type: "object",
+              properties: {
+                name: { type: "string" },
+                file: { type: "string", format: "binary" },
+              },
+            },
+          };
+          const [items] = await processOpenapiFile(
+            {
+              openapi: "3.0.0",
+              info: { title: "Mixed forms", version: "1.0.0" },
+              paths: {
+                "/pets": {
+                  post: {
+                    operationId: "uploadPets",
+                    requestBody: {
+                      content: { [first]: formSchema, [second]: formSchema },
+                    },
+                    responses: { "200": { description: "OK" } },
+                  },
+                },
+              },
+            } as any,
+            { specPath: "unused", outputDir: "unused" },
+            {}
+          );
+          const original = (items.find((item) => item.type === "api") as any)
+            .api.postman as sdk.Request;
+          const before = original.toJSON();
+          const request = build(
+            {
+              contentType: multipart,
+              body: {
+                type: "form",
+                content: {
+                  ...fields.content,
+                  file: { type: "file", value: file },
+                },
+              },
+            },
+            original
+          );
+          expect(request.body?.mode).toBe("formdata");
+          expect(formFields(request)).toEqual([
+            ["name", "Rex"],
+            ["file", file],
+          ]);
+          expect(original.toJSON()).toEqual(before);
+        }
+      );
+
+      it.each([
+        ["urlencoded", multipart, "formdata"],
+        ["formdata", urlencoded, "urlencoded"],
+        ["raw", multipart, "formdata"],
+        ["raw", urlencoded, "urlencoded"],
+      ])(
+        "switches %s to %s while preserving body metadata",
+        (from, contentType, mode) => {
+          const original = new sdk.Request({
+            url: "http://example.com/pets",
+            method: "POST",
+            body: {
+              mode: from,
+              [from]:
+                from === "raw"
+                  ? "old raw body"
+                  : [{ key: "old", value: "stale" }],
+              options: { raw: { language: "json" } },
+              disabled: true,
+            } as any,
+          });
+          const before = original.toJSON();
+          const request = build({ contentType, body: fields }, original);
+          expect(request.body?.mode).toBe(mode);
+          expect(formFields(request)).toEqual([["name", "Rex"]]);
+          expect(
+            request.body?.[mode === "formdata" ? "urlencoded" : "formdata"]
+          ).toBeUndefined();
+          expect(request.body?.raw).toBeUndefined();
+          expect(request.body?.toJSON()).toMatchObject({
+            options: { raw: { language: "json" } },
+            disabled: true,
+          });
+          expect(original.toJSON()).toEqual(before);
+        }
+      );
+
+      it("can switch back to urlencoded and rebuild from the original request", () => {
+        const original = formRequest("urlencoded");
+        const before = original.toJSON();
+        const uploaded = build(
+          {
+            contentType: multipart,
+            body: {
+              type: "form",
+              content: {
+                ...fields.content,
+                file: { type: "file", value: file },
+              },
+            },
+          },
+          original
+        );
+        const returned = build(
+          { contentType: urlencoded, body: fields },
+          uploaded
+        );
+        const repeated = build(
+          { contentType: urlencoded, body: fields },
+          original
+        );
+        expect(uploaded.body?.mode).toBe("formdata");
+        expect(uploaded.body?.formdata?.all()).toHaveLength(2);
+        expect(returned.body?.mode).toBe("urlencoded");
+        expect(returned.body?.formdata).toBeUndefined();
+        expect(formFields(returned)).toEqual([["name", "Rex"]]);
+        expect(formFields(repeated)).toEqual([["name", "Rex"]]);
+        expect(original.toJSON()).toEqual(before);
+      });
+
+      it("keeps individual files, file arrays, and per-part encodings", () => {
+        const second = {
+          src: "/path/to/more.csv",
+          content: new Blob(["id,name\n2,Spot\n"], { type: "text/csv" }),
+        };
+        const request = build(
+          {
+            contentType: multipart,
+            body: {
+              type: "form",
+              content: {
+                file: { type: "file", value: file },
+                files: { type: "file[]", value: [file, second] },
+                meta: { type: "string", value: "{}" },
+              },
+            },
+            encoding: {
+              file: { contentType: "text/csv" },
+              files: { contentType: "text/csv, text/plain" },
+              meta: { contentType: "application/json" },
+            },
+          },
+          formRequest("urlencoded")
+        );
+        expect(request.body?.mode).toBe("formdata");
+        expect(request.body?.formdata?.all()).toMatchObject([
+          { key: "file", value: file, contentType: "text/csv" },
+          { key: "files", value: file, contentType: "text/csv" },
+          {
+            key: "files",
+            value: second,
+            contentType: "text/csv",
+          },
+          {
+            key: "meta",
+            value: "{}",
+            contentType: "application/json",
+          },
+        ]);
+      });
+
+      it("keeps metadata when the mode is already correct", () => {
+        const original = formRequest("formdata");
+        original.body?.update({
+          mode: "formdata",
+          options: { raw: { language: "json" } },
+          disabled: true,
+        } as any);
+        const request = build(
+          { contentType: multipart, body: fields },
+          original
+        );
+        expect(formFields(request)).toEqual([["name", "Rex"]]);
+        expect(request.body?.toJSON()).toMatchObject({
+          options: { raw: { language: "json" } },
+          disabled: true,
+        });
+      });
+
+      it.each([
+        ["urlencoded", multipart],
+        ["formdata", urlencoded],
+      ])(
+        "keeps an empty %s body absent when selecting %s",
+        (mode, contentType) => {
+          expect(
+            build({ contentType }, formRequest(mode)).body
+          ).toBeUndefined();
+        }
+      );
+
+      it("preserves existing encoded placeholders before files are uploaded", () => {
+        const original = new sdk.Request({
+          url: "http://example.com/pets",
+          body: { mode: "formdata", formdata: [{ key: "meta", value: "{}" }] },
+        });
+        const request = build(
+          {
+            contentType: multipart,
+            encoding: { meta: { contentType: "application/json, text/plain" } },
+          },
+          original
+        );
+        expect(request.body?.mode).toBe("formdata");
+        expect(request.body?.formdata?.all()).toMatchObject([
+          { key: "meta", value: "{}", contentType: "application/json" },
+        ]);
+      });
+
+      it("does not create a body when the original request has none", () => {
+        expect(
+          build({ contentType: multipart, body: fields }).body
+        ).toBeUndefined();
+      });
+
+      it.each(["", "application/json", "multipart/form-data; charset=utf-8"])(
+        "keeps the original form mode for unsupported selection %s",
+        (contentType) => {
+          const request = build(
+            { contentType, body: fields },
+            formRequest("urlencoded")
+          );
+          expect(request.body?.mode).toBe("urlencoded");
+          expect(formFields(request)).toEqual([["name", "Rex"]]);
+        }
+      );
+
+      it.each([
+        ["formdata", urlencoded],
+        ["urlencoded", multipart],
+      ])(
+        "keeps raw strings when selecting a form type from %s",
+        (mode, contentType) => {
+          const request = build(
+            {
+              contentType,
+              body: {
+                type: "raw",
+                content: { type: "string", value: "raw text" },
+              },
+            },
+            formRequest(mode)
+          );
+          expect(request.body?.mode).toBe("raw");
+          expect(request.body?.raw).toBe("raw text");
+        }
+      );
+
+      it("keeps raw file uploads", () => {
+        const request = build(
+          {
+            contentType: multipart,
+            body: { type: "raw", content: { type: "file", value: file } },
+          },
+          formRequest("urlencoded")
+        );
+        expect(request.body?.mode).toBe("file");
+        expect(request.body?.file).toEqual({ src: file.src });
+      });
     });
   });
 });

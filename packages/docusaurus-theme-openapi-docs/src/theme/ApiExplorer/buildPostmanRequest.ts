@@ -12,6 +12,7 @@ import type {
   ServerObject,
 } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import cloneDeep from "lodash/cloneDeep";
+import pick from "lodash/pick";
 import * as sdk from "postman-collection";
 
 type Param = {
@@ -291,6 +292,7 @@ function tryDecodeJsonParam(value: string): any {
 function setBody(
   clonedPostman: sdk.Request,
   body: Body,
+  contentType: string,
   encoding?: Record<string, { contentType?: string }>
 ) {
   if (clonedPostman.body === undefined) {
@@ -327,6 +329,21 @@ function setBody(
     clonedPostman.body.mode = "file";
     clonedPostman.body.file = { src: body.content.value.src };
     return;
+  }
+
+  if (body.type === "form") {
+    const mode =
+      contentType === "multipart/form-data"
+        ? "formdata"
+        : contentType === "application/x-www-form-urlencoded"
+          ? "urlencoded"
+          : undefined;
+    if (mode && mode !== clonedPostman.body.mode) {
+      clonedPostman.body.update({
+        mode,
+        ...pick(clonedPostman.body, ["options", "disabled"]),
+      });
+    }
   }
 
   switch (clonedPostman.body.mode) {
@@ -574,7 +591,7 @@ function buildPostmanRequest(
     otherHeaders
   );
 
-  setBody(clonedPostman, body, encoding);
+  setBody(clonedPostman, body, contentType, encoding);
 
   return clonedPostman;
 }
