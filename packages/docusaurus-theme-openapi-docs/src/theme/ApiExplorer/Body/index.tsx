@@ -111,6 +111,7 @@ function Body({
   // Compute the default body based on content type and schema
   // This needs to be computed before early returns so the useEffect can use it
   const { defaultBody, exampleBody, examplesBodies, language } = useMemo(() => {
+    const mediaType = contentType?.split(";", 1)[0].trim().toLowerCase();
     let lang = "plaintext";
     let defBody = "";
     let exBody;
@@ -147,10 +148,7 @@ function Body({
       contentTypeExample = jsonRequestBodyExample;
     }
 
-    if (
-      contentType?.includes("application/json") ||
-      contentType?.endsWith("+json")
-    ) {
+    if (mediaType === "application/json" || mediaType?.endsWith("+json")) {
       if (contentTypeExample) {
         defBody = JSON.stringify(contentTypeExample, null, 2);
       }
@@ -188,7 +186,7 @@ function Body({
       lang = "json";
     }
 
-    if (contentType === "application/xml" || contentType?.endsWith("+xml")) {
+    if (mediaType === "application/xml" || mediaType?.endsWith("+xml")) {
       if (contentTypeExample) {
         try {
           defBody = format(json2xml(contentTypeExample, ""), {
