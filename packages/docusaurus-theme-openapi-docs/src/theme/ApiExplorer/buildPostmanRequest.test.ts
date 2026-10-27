@@ -6,6 +6,8 @@
  * ========================================================================== */
 
 // eslint-disable-next-line import/no-extraneous-dependencies
+import { processOpenapiFile } from "docusaurus-plugin-openapi-docs/src/openapi/openapi";
+// eslint-disable-next-line import/no-extraneous-dependencies
 import * as sdk from "postman-collection";
 
 import buildPostmanRequest from "./buildPostmanRequest";
@@ -58,6 +60,34 @@ function pathVariable(options: Options, name = "petId") {
 
 function cookie(options: Options) {
   return build(options).headers.get("Cookie");
+}
+
+async function generatedRequest(template: string, names: string[]) {
+  const [items] = await processOpenapiFile(
+    {
+      openapi: "3.0.0",
+      info: { title: "Path API", version: "1.0.0" },
+      paths: {
+        [template]: {
+          get: {
+            operationId: "getPath",
+            parameters: names.map((name) => ({
+              name,
+              in: "path",
+              required: true,
+              schema: { type: "string" },
+            })),
+            responses: { "200": { description: "OK" } },
+          },
+        },
+      },
+    } as any,
+    { specPath: "dummy", outputDir: "build" } as any,
+    {} as any
+  );
+  const apiItem = items.find((item) => item.type === "api") as any;
+  expect(apiItem?.api.postman).toBeInstanceOf(sdk.Request);
+  return apiItem.api.postman as sdk.Request;
 }
 
 describe("buildPostmanRequest", () => {
@@ -253,6 +283,189 @@ describe("buildPostmanRequest", () => {
   });
 
   describe("path parameters", () => {
+    describe("embedded OpenAPI parameters", () => {
+      it.each([
+        ["/records/{id}:publish", { id: "9527" }, "/records/9527:publish"],
+        [
+          "/records/{id}:publish.json",
+          { id: "9527" },
+          "/records/9527:publish.json",
+        ],
+        [
+          "/files/{name}.{ext}",
+          { name: "report", ext: "pdf" },
+          "/files/report.pdf",
+        ],
+        ["/records/{id}{part}", { id: "one", part: "two" }, "/records/onetwo"],
+        [
+          "/records/{id}:{part}",
+          { id: "one", part: "two" },
+          "/records/one:two",
+        ],
+        [
+          "/records/{id:publish}:cancel",
+          { "id:publish": "exact" },
+          "/records/exact:cancel",
+        ],
+        [
+          "/records/{id}/{id2}:publish",
+          { id: "one", id2: "two" },
+          "/records/one/two:publish",
+        ],
+        [
+          "/records/{id}/{id}:publish",
+          { id: "one" },
+          "/records/one/one:publish",
+        ],
+        ["/records/prefix{id}", { id: "value" }, "/records/prefixvalue"],
+        [
+          "/records/{id}:publish",
+          { id: "\u03b1$&" },
+          "/records/\u03b1$&:publish",
+        ],
+        [
+          "/records/{id}:publish",
+          { id: "{{other}}" },
+          "/records/{{other}}:publish",
+        ],
+        ["/User/{id}/page:get", { id: "9527" }, "/User/9527/page:get"],
+        ["/records/{id:publish}", { "id:publish": "exact" }, "/records/exact"],
+      ] as [string, Record<string, string>, string][])(
+        "resolves %s through the converter and SDK",
+        async (template, values, expected) => {
+          const request = await generatedRequest(template, Object.keys(values));
+          expect(
+            build(
+              {
+                pathParams: Object.entries(values).map(([name, value]) => ({
+                  name,
+                  in: "path",
+                  value,
+                })),
+              },
+              request
+            ).url.getPath()
+          ).toBe(expected);
+        }
+      );
+
+      it("does not re-interpret a value starting with a colon as another parameter", async () => {
+        const request = await generatedRequest(
+          "/records/{other}/{id}:publish",
+          ["other", "id"]
+        );
+        expect(
+          build(
+            {
+              pathParams: [
+                { name: "other", in: "path", value: "different" },
+                { name: "id", in: "path", value: ":other" },
+              ],
+            },
+            request
+          ).url.getPath()
+        ).toBe("/records/different/:other:publish");
+      });
+
+      it("preserves missing values in embedded parameters", async () => {
+        const request = await generatedRequest("/records/{id}:publish", ["id"]);
+        expect(
+          build(
+            { pathParams: [{ name: "id", in: "path", value: "" }] },
+            request
+          ).url.getPath()
+        ).toBe("/records/{{id}}:publish");
+      });
+
+      it("preserves an unresolved adjacent parameter", async () => {
+        const request = await generatedRequest("/records/{id}{part}", [
+          "id",
+          "part",
+        ]);
+        expect(
+          build(
+            { pathParams: [{ name: "id", in: "path", value: "one" }] },
+            request
+          ).url.getPath()
+        ).toBe("/records/one{{part}}");
+      });
+
+      it.each([[[]], ["{}"]])(
+        "allows empty serialized values: %p",
+        async (value) => {
+          const request = await generatedRequest("/records/{a}{b}", ["a", "b"]);
+          expect(
+            build(
+              {
+                pathParams: [
+                  { name: "a", in: "path", value },
+                  { name: "b", in: "path", value },
+                ],
+              },
+              request
+            ).url.getPath()
+          ).toBe("/records/");
+        }
+      );
+
+      it("avoids internal variable collisions", async () => {
+        const names = ["__openapi_path_2", "__openapi_path_2_", "id"];
+        const request = await generatedRequest(
+          "/{__openapi_path_2}/{__openapi_path_2_}/{id}:publish",
+          names
+        );
+        expect(
+          build(
+            {
+              pathParams: names.map((name, index) => ({
+                name,
+                in: "path",
+                value: String(index),
+              })),
+            },
+            request
+          ).url.getPath()
+        ).toBe("/0/1/2:publish");
+      });
+
+      it("keeps repeated builds independent and leaves the original request unchanged", async () => {
+        const request = await generatedRequest("/records/{id}:publish", ["id"]);
+        request.body = new sdk.RequestBody({ mode: "raw", raw: "original" });
+        const original = request.toJSON();
+        const first = build(
+          {
+            pathParams: [{ name: "id", in: "path", value: "first" }],
+            body: { type: "raw", content: { type: "string", value: "new" } },
+          },
+          request
+        );
+        const second = build(
+          { pathParams: [{ name: "id", in: "path", value: "second" }] },
+          request
+        );
+        expect(first.url.getPath()).toBe("/records/first:publish");
+        expect(second.url.getPath()).toBe("/records/second:publish");
+        expect(request.toJSON()).toEqual(original);
+      });
+
+      it("keeps the server, port, query, and fragment outside path substitution", async () => {
+        const request = await generatedRequest("/records/{id}:publish", ["id"]);
+        request.url.hash = "{{id}}:publish";
+        expect(
+          build(
+            {
+              server: { url: "https://api.example.com:8443/base" },
+              pathParams: [{ name: "id", in: "path", value: "9527" }],
+              queryParams: [{ name: "id", in: "query", value: "{{id}}" }],
+            },
+            request
+          ).url.toString()
+        ).toBe(
+          "https://api.example.com:8443/base/records/9527:publish?id={{id}}#{{id}}:publish"
+        );
+      });
+    });
+
     it.each([
       ["simple", "1,2"],
       ["label", ".1.2"],

@@ -151,10 +151,29 @@ function setPathParams(postman: sdk.Request, pathParams: Param[]) {
     });
   });
 
-  postman.url.variables.assimilate(
-    source.filter((v): v is sdk.Variable => v !== undefined),
-    false
+  const variables = source.filter((v): v is sdk.Variable => v !== undefined);
+  postman.url.variables.assimilate(variables, false);
+
+  // The converter keeps parameters embedded in a segment as {{name}}.
+  const values = new Map(
+    variables.map((variable) => [variable.key, variable.value])
   );
+  postman.url.path = postman.url.path?.map((segment, index) => {
+    let substituted = false;
+    const resolved = segment.replace(/\{\{([^{}]+)\}\}/g, (token, name) => {
+      const value = values.get(name);
+      if (typeof value !== "string") return token;
+      substituted = true;
+      return value;
+    });
+    if (!substituted || resolved === "") return resolved;
+
+    // Bind once so a leading colon in the value cannot be interpreted again.
+    let key = `__openapi_path_${index}`;
+    while (postman.url.variables.has(key)) key += "_";
+    postman.url.variables.add(new sdk.Variable({ key, value: resolved }));
+    return `:${key}`;
+  });
 }
 
 function buildCookie(cookieParams: Param[]) {
