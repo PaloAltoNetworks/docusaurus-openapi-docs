@@ -8,13 +8,11 @@
 import { Body } from "@theme/ApiExplorer/Body/slice";
 import * as sdk from "postman-collection";
 
+import { getDownloadFilename } from "./downloadFilename";
+
 // Custom error types for better error handling
 export type RequestErrorType =
-  | "timeout"
-  | "network"
-  | "cors"
-  | "abort"
-  | "unknown";
+  "timeout" | "network" | "cors" | "abort" | "unknown";
 
 export class RequestError extends Error {
   type: RequestErrorType;
@@ -313,8 +311,13 @@ async function makeRequest(
 
         const link = document.createElement("a");
         link.href = url;
-        // Now the file name includes the extension
-        link.setAttribute("download", `file${fileExtension}`);
+        link.setAttribute(
+          "download",
+          getDownloadFilename(
+            response.headers.get("content-disposition"),
+            `file${fileExtension}`
+          )
+        );
 
         // These two lines are necessary to make the link click in Firefox
         link.style.display = "none";
