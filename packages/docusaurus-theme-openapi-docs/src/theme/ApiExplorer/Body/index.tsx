@@ -151,20 +151,24 @@ function Body({
       contentType?.includes("application/json") ||
       contentType?.endsWith("+json")
     ) {
-      if (contentTypeExample) {
+      if (contentTypeExample !== undefined) {
         defBody = JSON.stringify(contentTypeExample, null, 2);
       }
-      if (example) {
+      if (example !== undefined) {
         exBody = JSON.stringify(example, null, 2);
       }
       if (examples) {
         for (const [key, ex] of Object.entries(examples)) {
           let body = ex.value;
-          try {
-            // If the value is already valid JSON we shouldn't double encode the value
-            JSON.parse(ex.value);
-          } catch (e) {
-            body = JSON.stringify(ex.value, null, 2);
+          if (typeof body === "string") {
+            try {
+              // If the value is already valid JSON we shouldn't double encode the value
+              JSON.parse(body);
+            } catch (e) {
+              body = JSON.stringify(body, null, 2);
+            }
+          } else {
+            body = JSON.stringify(body, null, 2);
           }
 
           exBodies.push({
@@ -431,7 +435,7 @@ function Body({
           </TabItem>
           {/* @ts-ignore */}
           <TabItem label="Example" value="example">
-            {example.summary && <Markdown>{example.summary}</Markdown>}
+            {example?.summary && <Markdown>{example.summary}</Markdown>}
             {exampleBody && (
               <LiveApp
                 key={`${contentType}-example`}

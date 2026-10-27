@@ -6,11 +6,12 @@
  * ========================================================================== */
 
 module.exports = {
-  preset: "ts-jest",
+  preset: "ts-jest/presets/js-with-ts",
   testEnvironment: "node",
   globals: {
     "ts-jest": {
       tsconfig: {
+        allowJs: true,
         target: "ES2019",
         module: "commonjs",
         resolveJsonModule: true,
@@ -19,6 +20,9 @@ module.exports = {
         baseUrl: __dirname,
         paths: {
           "@theme/*": ["packages/docusaurus-theme-openapi-docs/src/theme/*"],
+          "docusaurus-plugin-openapi-docs/lib/openapi/createSchemaExample": [
+            "packages/docusaurus-plugin-openapi-docs/src/openapi/createSchemaExample.ts",
+          ],
         },
       },
     },
@@ -28,6 +32,8 @@ module.exports = {
     "<rootDir>/packages/docusaurus-theme-openapi-docs/src",
   ],
   moduleNameMapper: {
+    "^docusaurus-plugin-openapi-docs/lib/openapi/createSchemaExample$":
+      "<rootDir>/packages/docusaurus-plugin-openapi-docs/src/openapi/createSchemaExample.ts",
     "^@theme/(.*)$":
       "<rootDir>/packages/docusaurus-theme-openapi-docs/src/theme/$1",
     "^chalk$": "<rootDir>/__mocks__/chalk.js",
