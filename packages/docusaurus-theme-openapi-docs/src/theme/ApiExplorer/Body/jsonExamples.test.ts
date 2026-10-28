@@ -7,7 +7,7 @@
 
 /* eslint-disable import/no-extraneous-dependencies -- Declared by this theme workspace. */
 
-import React from "react";
+import React, { act } from "react";
 
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
@@ -17,11 +17,15 @@ import bodyReducer from "./slice";
 import contentTypeReducer from "../ContentType/slice";
 import schemaSelectionReducer from "../SchemaSelection/slice";
 
+type MountedRoot = {
+  render: (children: React.ReactNode) => void;
+  unmount: () => void;
+};
 const {
-  renderToStaticMarkup,
+  createRoot,
 }: {
-  renderToStaticMarkup: (children: React.ReactNode) => string;
-} = require("react-dom/server");
+  createRoot: (host: HTMLElement) => MountedRoot;
+} = require("react-dom/client");
 
 type EditorProps = {
   children: string;
@@ -36,6 +40,9 @@ const mockEditor = jest.fn(({ children, language }: EditorProps) => {
 });
 const mockContainer = ({ children }: { children?: React.ReactNode }) =>
   children;
+const mockMarkdown = jest.fn((props: any) => mockContainer(props));
+const mockTabItem = ({ children, label }: any) =>
+  React.createElement("section", { "data-tab-label": label }, children);
 
 jest.mock(
   "@docusaurus/Translate",
@@ -53,7 +60,7 @@ jest.mock("@theme/ApiExplorer/FormItem", () => ({
 }));
 jest.mock("@theme/Markdown", () => ({
   __esModule: true,
-  default: (props: any) => mockContainer(props),
+  default: (props: any) => mockMarkdown(props),
 }));
 jest.mock("@theme/SchemaTabs", () => ({
   __esModule: true,
@@ -61,7 +68,7 @@ jest.mock("@theme/SchemaTabs", () => ({
 }));
 jest.mock("@theme/TabItem", () => ({
   __esModule: true,
-  default: (props: any) => mockContainer(props),
+  default: (props: any) => mockTabItem(props),
 }));
 jest.mock("./FormBodyItem", () => () => null);
 
@@ -73,6 +80,19 @@ const falsyExamples: [string, any, string][] = [
   ["null", null, "null"],
   ["empty string", "", '""'],
 ];
+let mountedRoot: MountedRoot | undefined;
+let host: HTMLDivElement | undefined;
+
+beforeAll(() => {
+  (globalThis as any).IS_REACT_ACT_ENVIRONMENT = true;
+});
+
+afterEach(() => {
+  act(() => mountedRoot?.unmount());
+  host?.remove();
+  mountedRoot = undefined;
+  host = undefined;
+});
 
 function renderBody(
   mediaType: MediaType,
@@ -80,6 +100,7 @@ function renderBody(
   legacyExample = ""
 ) {
   mockEditor.mockClear();
+  mockMarkdown.mockClear();
   const store = configureStore({
     reducer: {
       body: bodyReducer,
@@ -91,19 +112,60 @@ function renderBody(
       contentType: { value: contentType, options: [contentType] },
     },
   });
-  renderToStaticMarkup(
-    React.createElement(Provider, {
-      store,
-      children: React.createElement(Body, {
-        jsonRequestBodyExample: legacyExample,
-        requestBodyMetadata: { content: { [contentType]: mediaType } },
-      }),
-    })
-  );
-  return { editors: mockEditor.mock.calls.map(([props]) => props), store };
+  const holder = document.createElement("div");
+  host = holder;
+  document.body.appendChild(holder);
+  const view = createRoot(holder);
+  mountedRoot = view;
+  // eslint-disable-next-line testing-library/no-unnecessary-act -- Direct ReactDOM rendering needs act to flush Body effects.
+  act(() => {
+    view.render(
+      React.createElement(Provider, {
+        store,
+        children: React.createElement(Body, {
+          jsonRequestBodyExample: legacyExample,
+          requestBodyMetadata: { content: { [contentType]: mediaType } },
+        }),
+      })
+    );
+  });
+  return {
+    editors: mockEditor.mock.calls.map(([props]) => props),
+    store,
+    host: holder,
+  };
+}
+
+function selectExample(editor: EditorProps) {
+  act(() => editor.action(editor.children));
 }
 
 describe("JSON request examples", () => {
+  it.each<[string, any, string]>([
+    ["integer", { type: "integer" }, ""],
+    ["number", { type: "number" }, ""],
+    ["boolean", { type: "boolean" }, "true"],
+    ["false default", { type: "boolean", default: false }, ""],
+    ["false enum", { type: "boolean", enum: [false] }, ""],
+    ["null", { type: "null" }, '"null"'],
+    ["string", { type: "string" }, '"string"'],
+    ["object", { type: "object" }, "{}"],
+  ])(
+    "retains the generated %s sampler default",
+    (_name, generatedSchema, expected) => {
+      const { editors, store } = renderBody({ schema: generatedSchema });
+      expect(editors[0].children).toBe(expected);
+      expect(store.getState().body).toEqual(
+        expected === ""
+          ? { type: "empty" }
+          : {
+              type: "raw",
+              content: { type: "string", value: expected },
+            }
+      );
+    }
+  );
+
   it.each(falsyExamples)(
     "keeps schema.example %s",
     (_name, value, expected) => {
@@ -128,14 +190,14 @@ describe("JSON request examples", () => {
     }
   );
 
-  it.each(falsyExamples)(
+  it.each(falsyExamples.filter(([, value]) => value !== null))(
     "keeps media-type example %s",
     (_name, value, expected) => {
       const { editors, store } = renderBody({ schema, example: value });
       expect(editors).toHaveLength(2);
       expect(editors[0].children).toBe('"schema control"');
       expect(editors[1].children).toBe(expected);
-      editors[1].action(editors[1].children);
+      selectExample(editors[1]);
       expect(store.getState().body).toEqual({
         type: "raw",
         content: { type: "string", value: expected },
@@ -157,14 +219,14 @@ describe("JSON request examples", () => {
     });
     expect(editors).toHaveLength(2);
     expect(editors[1].children).toBe(expected);
-    editors[1].action(editors[1].children);
+    selectExample(editors[1]);
     expect(store.getState().body).toEqual({
       type: "raw",
       content: { type: "string", value: expected },
     });
   });
 
-  it.each(["false", "0", "null", '""', "[1]", '{"ok":true}'])(
+  it.each(["[1]", '{"ok":true}'])(
     "preserves pre-encoded named JSON %s",
     (value) => {
       const { editors } = renderBody({
@@ -173,6 +235,132 @@ describe("JSON request examples", () => {
       });
       expect(editors).toHaveLength(2);
       expect(editors[1].children).toBe(value);
+    }
+  );
+
+  it.each(["123", "true", "null", '{"id":1}', "[1]"])(
+    "preserves string-schema value %s in single and named examples",
+    (value) => {
+      const { editors, store } = renderBody({
+        schema: { type: "string", example: "schema control" },
+        example: value,
+        examples: { named: { value } },
+      });
+      expect(editors[1].children).toBe(JSON.stringify(value));
+      selectExample(editors[1]);
+      expect(store.getState().body).toEqual({
+        type: "raw",
+        content: { type: "string", value: JSON.stringify(value) },
+      });
+      expect(host?.querySelector('[data-tab-label="named"]')).toBeNull();
+    }
+  );
+
+  it.each(["123", "true", "null", '{"id":1}', "[1]"])(
+    "preserves named string-schema value %s",
+    (value) => {
+      const { editors, store } = renderBody({
+        schema: { type: "string", example: "schema control" },
+        examples: { named: { value } },
+      });
+      expect(editors[1].children).toBe(JSON.stringify(value));
+      selectExample(editors[1]);
+      expect(store.getState().body).toEqual({
+        type: "raw",
+        content: { type: "string", value: JSON.stringify(value) },
+      });
+    }
+  );
+
+  it("preserves a string value for an OAS 3.1 string/null type union", () => {
+    const value = '{"id":1}';
+    const { editors } = renderBody({
+      schema: { type: ["string", "null"] as any, example: "schema control" },
+      examples: { named: { value } },
+    });
+    expect(editors[1].children).toBe(JSON.stringify(value));
+  });
+
+  it.each(["[1]", '{"id":1}'])(
+    "uses the same pre-encoded host rule for a single example %s",
+    (value) => {
+      const { editors } = renderBody({ schema, example: value });
+      expect(editors[1].children).toBe(value);
+    }
+  );
+
+  it.each(["123", "true", "null"])(
+    "quotes scalar-looking named strings without a string schema: %s",
+    (value) => {
+      const { editors } = renderBody({
+        schema,
+        examples: { named: { value } },
+      });
+      expect(editors[1].children).toBe(JSON.stringify(value));
+    }
+  );
+
+  it.each(["example", "examples"])(
+    "uses the provided formatter for schema.%s",
+    (source) => {
+      const value = '{"id":1}';
+      const { editors } = renderBody({
+        schema: {
+          type: "object",
+          [source]: source === "example" ? value : [value],
+        },
+      });
+      expect(editors.map(({ children }) => children)).toEqual(
+        source === "example" ? [value] : [value, value]
+      );
+    }
+  );
+
+  it("does not let an explicit null hide named examples", () => {
+    const { editors, host } = renderBody({
+      schema,
+      example: null,
+      examples: { named: { value: false } },
+    });
+    expect(editors.map(({ children }) => children)).toEqual([
+      '"schema control"',
+      "false",
+    ]);
+    expect(host.querySelector('[data-tab-label="named"]')).not.toBeNull();
+    expect(host.querySelector('[data-tab-label="Example"]')).toBeNull();
+  });
+
+  it("does not render a tab or summary for an externalValue-only example", () => {
+    const { editors, host } = renderBody({
+      schema,
+      examples: {
+        external: {
+          externalValue: "https://example.invalid/example.json",
+          summary: "External description",
+        },
+      },
+    });
+    expect(editors).toHaveLength(1);
+    expect(host.querySelector('[data-tab-label="external"]')).toBeNull();
+    expect(mockMarkdown).not.toHaveBeenCalled();
+  });
+
+  it("keeps named Example Object summaries", () => {
+    renderBody({
+      schema,
+      examples: { named: { value: 0, summary: "Named description" } },
+    });
+    expect(mockMarkdown.mock.calls[0][0].children).toBe("Named description");
+    expect(mockMarkdown).toHaveBeenCalledTimes(1);
+  });
+
+  it.each(["Payload summary", { nested: true }])(
+    "treats payload.summary %p as data",
+    (summary) => {
+      const payload = { summary, id: 1 };
+      const { editors } = renderBody({ schema, example: payload });
+      expect(editors[1].children).toBe(JSON.stringify(payload, null, 2));
+      expect(mockMarkdown).not.toHaveBeenCalled();
     }
   );
 
@@ -209,13 +397,14 @@ describe("JSON request examples", () => {
     expect(editors[0].children).toBe("");
   });
 
-  it("leaves XML false-value handling unchanged", () => {
+  it("preserves explicit XML false values", () => {
     const { editors } = renderBody(
       { schema: { example: false }, example: false },
       "application/xml"
     );
-    expect(editors).toHaveLength(1);
-    expect(editors[0]).toMatchObject({ language: "xml", children: "" });
+    expect(editors).toHaveLength(2);
+    expect(editors[0]).toMatchObject({ language: "xml", children: "false" });
+    expect(editors[1]).toMatchObject({ language: "xml", children: "false" });
   });
 
   it("keeps named XML examples", () => {
@@ -227,6 +416,74 @@ describe("JSON request examples", () => {
       language: "xml",
       children: "<value>control</value>",
     });
+  });
+
+  it.each<[string, any, string]>([
+    ["zero", 0, "0"],
+    ["false", false, "false"],
+    ["true", true, "true"],
+    ["null", null, "null"],
+    ["empty string", "", ""],
+    ["object", { value: "control" }, "<value>control</value>"],
+    ["array", [1], "<0>1</0>"],
+  ])("safely renders named XML %s", (_name, value, expected) => {
+    const { editors, store } = renderBody(
+      { schema, examples: { named: { value } } },
+      "application/xml"
+    );
+    expect(editors[1]).toMatchObject({ language: "xml", children: expected });
+    selectExample(editors[1]);
+    expect(store.getState().body).toEqual({
+      type: "raw",
+      content: { type: "string", value: expected },
+    });
+  });
+
+  it("keeps XML single strings consistent with named XML strings", () => {
+    const value = "<value>control</value>";
+    const { editors } = renderBody(
+      { schema, example: value },
+      "application/xml"
+    );
+    expect(editors[1].children).toBe(value);
+  });
+
+  it.each([false, 0])("renders a single XML primitive %p", (value) => {
+    const { editors, store } = renderBody(
+      { schema, example: value },
+      "application/xml"
+    );
+    expect(editors[1].children).toBe(String(value));
+    selectExample(editors[1]);
+    expect(store.getState().body).toEqual({
+      type: "raw",
+      content: { type: "string", value: String(value) },
+    });
+  });
+
+  it("renders XML schema.examples false and zero as strings", () => {
+    const { editors } = renderBody(
+      { schema: { examples: [false, 0] } },
+      "application/xml"
+    );
+    expect(editors.map(({ children }) => children)).toEqual([
+      "false",
+      "false",
+      "0",
+    ]);
+  });
+
+  it("skips externalValue-only XML examples", () => {
+    const { host } = renderBody(
+      {
+        schema,
+        examples: {
+          external: { externalValue: "https://example.invalid/example.xml" },
+        },
+      },
+      "application/xml"
+    );
+    expect(host.querySelector('[data-tab-label="external"]')).toBeNull();
   });
 
   it.each(["multipart/form-data", "application/x-www-form-urlencoded"])(

@@ -138,6 +138,10 @@ function Body({
       };
     }
 
+    const hasSchemaExample =
+      schema?.example !== undefined ||
+      (Array.isArray(schemaExamples) && schemaExamples.length > 0);
+
     // Generate example from the schema for the current content type
     let contentTypeExample;
     if (schema) {
@@ -151,29 +155,38 @@ function Body({
       contentType?.includes("application/json") ||
       contentType?.endsWith("+json")
     ) {
-      if (contentTypeExample !== undefined) {
+      const isStringSchema =
+        schema?.type === "string" ||
+        (Array.isArray(schema?.type) && schema.type.includes("string"));
+      const stringifyExample = (value: any) => {
+        if (typeof value === "string" && !isStringSchema) {
+          try {
+            const parsed = JSON.parse(value);
+            if (parsed !== null && typeof parsed === "object") {
+              return value;
+            }
+          } catch {
+            // Plain strings are JSON values, not pre-encoded request bodies.
+          }
+        }
+        return JSON.stringify(value, null, 2);
+      };
+
+      if (hasSchemaExample) {
+        defBody = stringifyExample(contentTypeExample);
+      } else if (contentTypeExample) {
         defBody = JSON.stringify(contentTypeExample, null, 2);
       }
-      if (example !== undefined) {
-        exBody = JSON.stringify(example, null, 2);
+      if (example != null) {
+        exBody = stringifyExample(example);
       }
       if (examples) {
         for (const [key, ex] of Object.entries(examples)) {
-          let body = ex.value;
-          if (typeof body === "string") {
-            try {
-              // If the value is already valid JSON we shouldn't double encode the value
-              JSON.parse(body);
-            } catch (e) {
-              body = JSON.stringify(body, null, 2);
-            }
-          } else {
-            body = JSON.stringify(body, null, 2);
-          }
+          if (ex.value === undefined) continue;
 
           exBodies.push({
             label: key,
-            body,
+            body: stringifyExample(ex.value),
             summary: ex.summary,
           });
         }
@@ -181,7 +194,7 @@ function Body({
       // OpenAPI 3.1: schema.examples is an array of example values
       if (schemaExamples && Array.isArray(schemaExamples)) {
         schemaExamples.forEach((schemaExample, index) => {
-          const body = JSON.stringify(schemaExample, null, 2);
+          const body = stringifyExample(schemaExample);
           exBodies.push({
             label: `Example ${index + 1}`,
             body,
@@ -193,43 +206,42 @@ function Body({
     }
 
     if (contentType === "application/xml" || contentType?.endsWith("+xml")) {
-      if (contentTypeExample) {
+      const formatXmlBody = (body: string) => {
         try {
-          defBody = format(json2xml(contentTypeExample, ""), {
+          return format(body, {
             indentation: "  ",
             lineSeparator: "\n",
             collapseContent: true,
           });
         } catch {
-          defBody = json2xml(contentTypeExample);
+          return body;
         }
+      };
+      const formatExample = (value: any) => {
+        const body =
+          typeof value === "string"
+            ? value
+            : value !== null && typeof value === "object"
+              ? json2xml(value, "")
+              : String(value);
+        return formatXmlBody(body);
+      };
+
+      if (hasSchemaExample) {
+        defBody = formatExample(contentTypeExample);
+      } else if (contentTypeExample) {
+        defBody = formatXmlBody(json2xml(contentTypeExample, ""));
       }
-      if (example) {
-        try {
-          exBody = format(json2xml(example, ""), {
-            indentation: "  ",
-            lineSeparator: "\n",
-            collapseContent: true,
-          });
-        } catch {
-          exBody = json2xml(example);
-        }
+      if (example != null) {
+        exBody = formatExample(example);
       }
       if (examples) {
         for (const [key, ex] of Object.entries(examples)) {
-          let formattedXmlBody;
-          try {
-            formattedXmlBody = format(ex.value, {
-              indentation: "  ",
-              lineSeparator: "\n",
-              collapseContent: true,
-            });
-          } catch {
-            formattedXmlBody = ex.value;
-          }
+          if (ex.value === undefined) continue;
+
           exBodies.push({
             label: key,
-            body: formattedXmlBody,
+            body: formatExample(ex.value),
             summary: ex.summary,
           });
         }
@@ -237,19 +249,9 @@ function Body({
       // OpenAPI 3.1: schema.examples is an array of example values
       if (schemaExamples && Array.isArray(schemaExamples)) {
         schemaExamples.forEach((schemaExample, index) => {
-          let formattedXmlBody;
-          try {
-            formattedXmlBody = format(json2xml(schemaExample, ""), {
-              indentation: "  ",
-              lineSeparator: "\n",
-              collapseContent: true,
-            });
-          } catch {
-            formattedXmlBody = json2xml(schemaExample);
-          }
           exBodies.push({
             label: `Example ${index + 1}`,
-            body: formattedXmlBody,
+            body: formatExample(schemaExample),
             summary: undefined,
           });
         });
@@ -411,7 +413,7 @@ function Body({
     );
   }
 
-  if (exampleBody) {
+  if (exampleBody !== undefined) {
     return (
       <FormItem>
         <SchemaTabs className="openapi-tabs__schema" lazy>
@@ -435,8 +437,7 @@ function Body({
           </TabItem>
           {/* @ts-ignore */}
           <TabItem label="Example" value="example">
-            {example?.summary && <Markdown>{example.summary}</Markdown>}
-            {exampleBody && (
+            {exampleBody !== undefined && (
               <LiveApp
                 key={`${contentType}-example`}
                 action={(code: string) => dispatch(setStringRawBody(code))}
@@ -479,7 +480,7 @@ function Body({
               // @ts-ignore
               <TabItem label={ex.label} value={ex.label} key={ex.label}>
                 {ex.summary && <Markdown>{ex.summary}</Markdown>}
-                {ex.body && (
+                {ex.body !== undefined && (
                   <LiveApp
                     key={`${contentType}-${ex.label}`}
                     action={(code: string) => dispatch(setStringRawBody(code))}
