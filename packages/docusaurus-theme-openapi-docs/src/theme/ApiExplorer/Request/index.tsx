@@ -79,6 +79,7 @@ function Request({ item }: { item: ApiItem }) {
   const encoding = useResolvedEncoding(item.requestBody);
 
   const postmanRequest = buildPostmanRequest(postman, {
+    pathTemplate: item.path,
     queryParams,
     pathParams,
     cookieParams,

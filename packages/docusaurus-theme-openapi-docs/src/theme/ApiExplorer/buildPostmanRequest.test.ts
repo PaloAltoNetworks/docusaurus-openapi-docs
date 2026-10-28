@@ -12,7 +12,17 @@ import * as sdk from "postman-collection";
 
 import buildPostmanRequest from "./buildPostmanRequest";
 
-type Options = { [K in keyof Parameters<typeof buildPostmanRequest>[1]]?: any };
+type Options = {
+  [K in keyof Parameters<typeof buildPostmanRequest>[1]]?: any;
+} & {
+  pathTemplate?: string;
+};
+
+const requestTemplates = new WeakMap<sdk.Request, string>();
+const convertedRequests = new Map<
+  string,
+  Promise<ReturnType<sdk.Request["toJSON"]>>
+>();
 
 beforeAll(() => {
   (global as any).window = {
@@ -30,6 +40,7 @@ function build(options: Options = {}, request?: sdk.Request) {
     request ??
     new sdk.Request({ url: "http://example.com/pets/:petId", method: "GET" });
   return buildPostmanRequest(postman, {
+    pathTemplate: request && requestTemplates.get(request),
     queryParams: [],
     pathParams: [],
     cookieParams: [],
@@ -63,31 +74,42 @@ function cookie(options: Options) {
 }
 
 async function generatedRequest(template: string, names: string[]) {
-  const [items] = await processOpenapiFile(
-    {
-      openapi: "3.0.0",
-      info: { title: "Path API", version: "1.0.0" },
-      paths: {
-        [template]: {
-          get: {
-            operationId: "getPath",
-            parameters: names.map((name) => ({
-              name,
-              in: "path",
-              required: true,
-              schema: { type: "string" },
-            })),
-            responses: { "200": { description: "OK" } },
+  const key = JSON.stringify([template, names]);
+  let converted = convertedRequests.get(key);
+  if (!converted) {
+    converted = (async () => {
+      const [items] = await processOpenapiFile(
+        {
+          openapi: "3.0.0",
+          info: { title: "Path API", version: "1.0.0" },
+          paths: {
+            [template]: {
+              get: {
+                operationId: "getPath",
+                parameters: names.map((name) => ({
+                  name,
+                  in: "path",
+                  required: true,
+                  schema: { type: "string" },
+                })),
+                responses: { "200": { description: "OK" } },
+              },
+            },
           },
-        },
-      },
-    } as any,
-    { specPath: "dummy", outputDir: "build" } as any,
-    {} as any
-  );
-  const apiItem = items.find((item) => item.type === "api") as any;
-  expect(apiItem?.api.postman).toBeInstanceOf(sdk.Request);
-  return apiItem.api.postman as sdk.Request;
+        } as any,
+        { specPath: "dummy", outputDir: "build" } as any,
+        {} as any
+      );
+      const apiItem = items.find((item) => item.type === "api") as any;
+      expect(apiItem?.api.postman).toBeDefined();
+      return apiItem.api.postman.toJSON();
+    })();
+    convertedRequests.set(key, converted);
+  }
+  // Serialize across package boundaries; do not rely on SDK constructor identity.
+  const request = new sdk.Request(JSON.parse(JSON.stringify(await converted)));
+  requestTemplates.set(request, template);
+  return request;
 }
 
 describe("buildPostmanRequest", () => {
@@ -283,6 +305,184 @@ describe("buildPostmanRequest", () => {
   });
 
   describe("path parameters", () => {
+    describe("authoritative OpenAPI path templates", () => {
+      const request = (segment: string, fallback?: string | number | boolean) =>
+        new sdk.Request({
+          method: "GET",
+          url: {
+            protocol: "https",
+            host: ["example.com"],
+            path: ["records", segment, "items"],
+            variable:
+              fallback === undefined ? [] : [{ key: "id", value: fallback }],
+          },
+        });
+
+      it("materializes the stored path and every ordinary SDK serialization", () => {
+        const original = request("{{id}}:publish");
+        const before = original.toJSON();
+        const built = build(
+          {
+            pathTemplate: "/records/{id}:publish/items",
+            pathParams: [{ name: "id", in: "path", value: "9527" }],
+          },
+          original
+        );
+        expect(built.url.getPath()).toBe("/records/9527:publish/items");
+        expect(built.url.getPath({ unresolved: true })).toBe(
+          "/records/9527:publish/items"
+        );
+        expect(built.url.toString(true)).toContain(
+          "/records/9527:publish/items"
+        );
+        expect(built.toJSON().url).toMatchObject({
+          path: ["records", "9527:publish", "items"],
+        });
+        expect(built.url.variables.count()).toBe(0);
+        expect(original.toJSON()).toEqual(before);
+      });
+
+      it("keeps a colon-leading value literal without internal aliases", () => {
+        const original = request(":id");
+        original.url.variables.add(
+          new sdk.Variable({ key: "other", value: "WRONG" })
+        );
+        const built = build(
+          {
+            pathTemplate: "/records/{id}/items",
+            pathParams: [{ name: "id", in: "path", value: ":other" }],
+          },
+          original
+        );
+        expect(built.url.getPath()).toBe("/records/:other/items");
+        expect(built.url.getPath({ unresolved: true })).toBe(
+          "/records/:other/items"
+        );
+        expect(built.toJSON().url).toMatchObject({
+          path: ["records", ":other", "items"],
+        });
+        expect(built.url.variables.count()).toBe(0);
+      });
+
+      it("does not rewrite a literal collection token in the template", () => {
+        expect(
+          build(
+            {
+              pathTemplate: "/records/{{id}}/{id}:publish",
+              pathParams: [{ name: "id", in: "path", value: "9527" }],
+            },
+            request("{{id}}:publish")
+          ).url.getPath()
+        ).toBe("/records/{{id}}/9527:publish");
+      });
+
+      it("does not guess that collection tokens are path parameters without a template", () => {
+        expect(
+          build(
+            { pathParams: [{ name: "id", in: "path", value: "9527" }] },
+            request("{{id}}")
+          ).url.getPath()
+        ).toBe("/records/{{id}}/items");
+      });
+
+      it("leaves native-looking literal segments unbound", () => {
+        const original = request("{{id}}:publish");
+        original.url.path!.unshift(":__openapi_path_2");
+        expect(
+          build(
+            {
+              pathTemplate: "/:__openapi_path_2/records/{id}:publish/items",
+              pathParams: [{ name: "id", in: "path", value: "9527" }],
+            },
+            original
+          ).url.getPath()
+        ).toBe("/:__openapi_path_2/records/9527:publish/items");
+      });
+
+      it.each(["EXAMPLE", 0, false])(
+        "uses the existing SDK fallback %p in native and embedded positions",
+        (fallback) => {
+          for (const [segment, template, expected] of [
+            [":id", "/records/{id}/items", `/records/${fallback}/items`],
+            [
+              "{{id}}:publish",
+              "/records/{id}:publish/items",
+              `/records/${fallback}:publish/items`,
+            ],
+          ]) {
+            expect(
+              build(
+                {
+                  pathTemplate: template,
+                  pathParams: [{ name: "id", in: "path", value: "" }],
+                },
+                request(segment, fallback)
+              ).url.getPath()
+            ).toBe(expected);
+          }
+        }
+      );
+
+      it.each([undefined, "", [], "{}"])(
+        "keeps a placeholder for an unfilled middle value %p",
+        (value) => {
+          expect(
+            build(
+              {
+                pathTemplate: "/records/{id}/items",
+                pathParams: [{ name: "id", in: "path", value }],
+              },
+              request(":id")
+            ).url.getPath()
+          ).toBe("/records/{{id}}/items");
+        }
+      );
+
+      it("uses a nonempty fallback for an empty serialized user value", () => {
+        expect(
+          build(
+            {
+              pathTemplate: "/records/{id}/items",
+              pathParams: [{ name: "id", in: "path", value: [] }],
+            },
+            request(":id", "EXAMPLE")
+          ).url.getPath()
+        ).toBe("/records/EXAMPLE/items");
+      });
+
+      it("keeps literal empty segments in the authored path", () => {
+        expect(
+          build(
+            {
+              pathTemplate: "/records//{id}",
+              pathParams: [{ name: "id", in: "path", value: "9527" }],
+            },
+            request(":id")
+          ).url.getPath()
+        ).toBe("/records//9527");
+      });
+
+      it("preserves a server base path, server variables, query and fragment", () => {
+        const original = request("{{id}}:publish");
+        original.url.hash = "{{id}}";
+        const built = build(
+          {
+            pathTemplate: "/records/{id}:publish/items",
+            server: {
+              url: "https://{host}:8443/base/",
+              variables: { host: { default: "api.example.com" } },
+            },
+            pathParams: [{ name: "id", in: "path", value: "9527" }],
+            queryParams: [{ name: "q", in: "query", value: "{{id}}" }],
+          },
+          original
+        );
+        expect(built.url.toString()).toBe(
+          "https://api.example.com:8443/base/records/9527:publish/items?q={{id}}#{{id}}"
+        );
+      });
+    });
+
     describe("embedded OpenAPI parameters", () => {
       it.each([
         ["/records/{id}:publish", { id: "9527" }, "/records/9527:publish"],
@@ -391,7 +591,7 @@ describe("buildPostmanRequest", () => {
       });
 
       it.each([[[]], ["{}"]])(
-        "allows empty serialized values: %p",
+        "keeps named placeholders for empty serialized values: %p",
         async (value) => {
           const request = await generatedRequest("/records/{a}{b}", ["a", "b"]);
           expect(
@@ -404,7 +604,7 @@ describe("buildPostmanRequest", () => {
               },
               request
             ).url.getPath()
-          ).toBe("/records/");
+          ).toBe("/records/{{a}}{{b}}");
         }
       );
 

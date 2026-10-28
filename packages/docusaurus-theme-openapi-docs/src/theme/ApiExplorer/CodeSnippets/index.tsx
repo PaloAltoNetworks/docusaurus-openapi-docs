@@ -30,6 +30,7 @@ import {
 export const languageSet: Language[] = generateLanguageSet();
 
 export interface Props {
+  pathTemplate?: string;
   postman: sdk.Request;
   codeSamples: CodeSample[];
   maskCredentials?: boolean;
@@ -60,6 +61,7 @@ function resolveOuterLanguageFromPersistedTab(
 }
 
 function CodeSnippets({
+  pathTemplate,
   postman,
   codeSamples,
   maskCredentials: propMaskCredentials,
@@ -119,6 +121,7 @@ function CodeSnippets({
 
   // Create a Postman request object using cleanedAuth or original auth
   const cleanedPostmanRequest = buildPostmanRequest(postman, {
+    pathTemplate,
     queryParams,
     pathParams,
     cookieParams,

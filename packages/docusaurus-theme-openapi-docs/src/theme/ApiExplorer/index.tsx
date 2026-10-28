@@ -38,6 +38,7 @@ function ApiExplorer({
       <SecuritySchemes infoPath={infoPath} />
       {item.method !== "event" && (
         <CodeSnippets
+          pathTemplate={item.path}
           postman={postman}
           codeSamples={(item as any)["x-codeSamples"] ?? []}
           maskCredentials={mask_credentials}
