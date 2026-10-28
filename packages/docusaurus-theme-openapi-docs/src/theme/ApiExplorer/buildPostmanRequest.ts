@@ -7,12 +7,12 @@
 
 import { AuthState, Scheme } from "@theme/ApiExplorer/Authorization/slice";
 import { Body, Content } from "@theme/ApiExplorer/Body/slice";
+import { getMediaType } from "docusaurus-plugin-openapi-docs/lib/utils/mediaType";
 import type {
   ParameterObject,
   ServerObject,
 } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import cloneDeep from "lodash/cloneDeep";
-import pick from "lodash/pick";
 import * as sdk from "postman-collection";
 
 type Param = {
@@ -295,8 +295,48 @@ function setBody(
   contentType: string,
   encoding?: Record<string, { contentType?: string }>
 ) {
+  const mediaType = getMediaType(contentType);
+  const mode =
+    mediaType === "multipart/form-data"
+      ? "formdata"
+      : mediaType === "application/x-www-form-urlencoded"
+        ? "urlencoded"
+        : undefined;
+
   if (clonedPostman.body === undefined) {
     return;
+  }
+
+  if (mode) {
+    clonedPostman.body.mode = mode;
+    if (mode === "formdata") {
+      clonedPostman.body.formdata ??= new sdk.PropertyList<sdk.FormParam>(
+        sdk.FormParam as any,
+        clonedPostman.body,
+        []
+      );
+      // Reuse existing examples when the original mode only had urlencoded data.
+      if (
+        body.type === "empty" &&
+        encoding &&
+        clonedPostman.body.formdata.all().length === 0
+      ) {
+        clonedPostman.body.urlencoded?.all().forEach((param) => {
+          clonedPostman.body?.formdata?.add(
+            new sdk.FormParam({
+              ...param.toJSON(),
+              key: param.key ?? undefined,
+            })
+          );
+        });
+      }
+    } else {
+      clonedPostman.body.urlencoded ??= new sdk.PropertyList<sdk.QueryParam>(
+        sdk.QueryParam as any,
+        clonedPostman.body,
+        []
+      );
+    }
   }
 
   if (body.type === "empty") {
@@ -325,25 +365,20 @@ function setBody(
   }
 
   if (body.type === "raw" && body.content?.type === "file") {
-    // treat it like file.
-    clonedPostman.body.mode = "file";
-    clonedPostman.body.file = { src: body.content.value.src };
-    return;
-  }
-
-  if (body.type === "form") {
-    const mode =
-      contentType === "multipart/form-data"
-        ? "formdata"
-        : contentType === "application/x-www-form-urlencoded"
-          ? "urlencoded"
-          : undefined;
-    if (mode && mode !== clonedPostman.body.mode) {
-      clonedPostman.body.update({
-        mode,
-        ...pick(clonedPostman.body, ["options", "disabled"]),
-      });
+    if (!mode) {
+      clonedPostman.body.mode = "file";
+      clonedPostman.body.file = { src: body.content.value.src };
+      return;
     }
+    // A raw upload has no field name; prefer the metadata's file placeholder.
+    const key =
+      clonedPostman.body.formdata
+        ?.all()
+        .find(
+          (param) =>
+            (param as sdk.FormParam & { type?: string }).type === "file"
+        )?.key || "file";
+    body = { type: "form", content: { [key]: body.content } };
   }
 
   switch (clonedPostman.body.mode) {
