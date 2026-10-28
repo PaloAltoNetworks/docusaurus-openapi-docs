@@ -21,7 +21,7 @@ Let's say you're working on supporting documentation for your API and you want t
 ### Standalone Schema
 
 ```mdx title="Standalone Schema"
-import PetSchema from './petstore/schemas/pet.schema.mdx';
+import PetSchema from "./petstore/schemas/pet.schema.mdx";
 
 <PetSchema />
 ```
@@ -39,8 +39,8 @@ The `BrowserWindow` component implemented by [docusaurus.io](https://github.com/
 :::
 
 ```mdx title="Schema wrapped in BrowserWindow component"
-import PetSchema from './petstore/schemas/pet.schema.mdx';
-import BrowserWindow from '@site/src/components/BrowserWindow';
+import PetSchema from "./petstore/schemas/pet.schema.mdx";
+import BrowserWindow from "@site/src/components/BrowserWindow";
 
 <BrowserWindow bodyStyle={{height: 350, overflow: "auto", fontSize: "80%"}} url="https://docusaurus-openapi.tryingpan.dev/advanced#schema-inside-browserwindow">
 
@@ -56,3 +56,15 @@ import BrowserWindow from '@site/src/components/BrowserWindow';
 
 </BrowserWindow>
 ```
+
+## Downloading API responses
+
+The API explorer downloads responses with a `Content-Disposition: attachment` header, as well as supported binary content types. It uses the server's `filename*` or `filename` when available and adds a known Content-Type extension if the name has none.
+
+For a cross-origin API, the server must expose the header so the browser can read it:
+
+```http
+Access-Control-Expose-Headers: Content-Disposition
+```
+
+This is in addition to the API's usual CORS configuration. Without it, the explorer cannot read the suggested filename or attachment disposition and falls back to its MIME-based download behavior.

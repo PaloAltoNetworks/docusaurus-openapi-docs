@@ -8,7 +8,7 @@
 import { Body } from "@theme/ApiExplorer/Body/slice";
 import * as sdk from "postman-collection";
 
-import { getDownloadFilename } from "./downloadFilename";
+import { getDownloadFilename, isAttachment } from "./downloadFilename";
 
 // Custom error types for better error handling
 export type RequestErrorType =
@@ -277,61 +277,60 @@ async function makeRequest(
 
   try {
     const response = await fetchWithtimeout(finalUrl, requestOptions, timeout);
-    const contentType = response.headers.get("content-type");
-    let fileExtension = "";
+    const contentType = response.headers
+      .get("content-type")
+      ?.split(";", 1)[0]
+      .trim()
+      .toLowerCase();
+    const disposition = response.headers.get("content-disposition");
+    const attachment = isAttachment(disposition);
+    const binaryExtensions: Record<string, string> = {
+      "application/pdf": ".pdf",
+      "image/jpeg": ".jpg",
+      "image/png": ".png",
+      "image/gif": ".gif",
+      "image/webp": ".webp",
+      "video/mpeg": ".mpeg",
+      "video/mp4": ".mp4",
+      "audio/mpeg": ".mp3",
+      "audio/ogg": ".ogg",
+      "application/octet-stream": ".bin",
+      "application/zip": ".zip",
+    };
+    const fileExtension = binaryExtensions[contentType ?? ""] ?? "";
 
-    if (contentType) {
-      if (contentType.includes("application/pdf")) {
-        fileExtension = ".pdf";
-      } else if (contentType.includes("image/jpeg")) {
-        fileExtension = ".jpg";
-      } else if (contentType.includes("image/png")) {
-        fileExtension = ".png";
-      } else if (contentType.includes("image/gif")) {
-        fileExtension = ".gif";
-      } else if (contentType.includes("image/webp")) {
-        fileExtension = ".webp";
-      } else if (contentType.includes("video/mpeg")) {
-        fileExtension = ".mpeg";
-      } else if (contentType.includes("video/mp4")) {
-        fileExtension = ".mp4";
-      } else if (contentType.includes("audio/mpeg")) {
-        fileExtension = ".mp3";
-      } else if (contentType.includes("audio/ogg")) {
-        fileExtension = ".ogg";
-      } else if (contentType.includes("application/octet-stream")) {
-        fileExtension = ".bin";
-      } else if (contentType.includes("application/zip")) {
-        fileExtension = ".zip";
-      }
+    if (fileExtension || attachment) {
+      const attachmentExtensions: Record<string, string> = {
+        "text/csv": ".csv",
+        "text/plain": ".txt",
+        "application/json": ".json",
+        "application/xml": ".xml",
+        "text/xml": ".xml",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+          ".xlsx",
+      };
+      const extension =
+        fileExtension || attachmentExtensions[contentType ?? ""] || "";
+      // Keep the original response readable by the explorer's response handler.
+      const blob = await response.clone().blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = getDownloadFilename(
+        disposition,
+        `file${extension}`,
+        extension
+      );
 
-      if (fileExtension) {
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
+      // Appending the link is necessary to trigger downloads in Firefox.
+      link.style.display = "none";
+      document.body.appendChild(link);
+      link.click();
 
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute(
-          "download",
-          getDownloadFilename(
-            response.headers.get("content-disposition"),
-            `file${fileExtension}`
-          )
-        );
-
-        // These two lines are necessary to make the link click in Firefox
-        link.style.display = "none";
-        document.body.appendChild(link);
-
-        link.click();
-
-        // After link is clicked, it's safe to remove it.
-        setTimeout(() => document.body.removeChild(link), 0);
-
-        return response;
-      } else {
-        return response;
-      }
+      setTimeout(() => {
+        link.remove();
+        window.URL.revokeObjectURL(url);
+      }, 0);
     }
 
     return response;

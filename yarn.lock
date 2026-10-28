@@ -4806,11 +4806,6 @@
   dependencies:
     "@types/node" "*"
 
-"@types/content-disposition@^0.5.9":
-  version "0.5.9"
-  resolved "https://registry.yarnpkg.com/@types/content-disposition/-/content-disposition-0.5.9.tgz#00ca14939432869de829a4ccf6fd380fa9181750"
-  integrity sha512-8uYXI3Gw35MhiVYhG3s295oihrxRyytcRHjSjqnqZVDDy/xcGBRny7+Xj1Wgfhv5QzRtN2hB2dVRBUX9XW3UcQ==
-
 "@types/cross-spawn@^6.0.6":
   version "6.0.6"
   resolved "https://registry.yarnpkg.com/@types/cross-spawn/-/cross-spawn-6.0.6.tgz#0163d0b79a6f85409e0decb8dcca17147f81fd22"
@@ -7287,7 +7282,7 @@ content-disposition@0.5.2:
   resolved "https://registry.yarnpkg.com/content-disposition/-/content-disposition-0.5.2.tgz#0cf68bb9ddf5f2be7961c3a85178cb85dba78cb4"
   integrity sha512-kRGRZw3bLlFISDBgwTSA1TMBFN6J6GWDeubmDE3AF+3+yXL8hTWv8r5rkLbqYXY4RjPk/EzHnClI3zQf1cFmHA==
 
-content-disposition@^0.5.4, content-disposition@~0.5.4:
+content-disposition@~0.5.4:
   version "0.5.4"
   resolved "https://registry.yarnpkg.com/content-disposition/-/content-disposition-0.5.4.tgz#8b82b4efac82512a02bb0b1dcec9d2c5e8eb5bfe"
   integrity sha512-FveZTNuGw04cxlAiWbzi6zTAL/lhehaWbTtgluJh4/E95DqMwTmha3KZN1aAWA8cFIhHzMZUvLevkw5Rqk+tSQ==
