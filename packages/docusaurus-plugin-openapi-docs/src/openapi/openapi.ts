@@ -30,6 +30,7 @@ import {
   TagPageMetadata,
 } from "../types";
 import { sampleResponseFromSchema } from "./createResponseExample";
+import { getMediaType } from "../utils/mediaType";
 import { loadAndResolveSpec } from "./utils/loadAndResolveSpec";
 
 /**
@@ -200,10 +201,7 @@ function createItems(
       const content = operationObject.requestBody?.content;
       let body;
       for (let key in content) {
-        if (
-          key.toLowerCase() === "application/json" ||
-          key.toLowerCase() === "application/json; charset=utf-8"
-        ) {
+        if (getMediaType(key).startsWith("application/json")) {
           body = content[key];
           break;
         }
@@ -218,7 +216,7 @@ function createItems(
 
       if (bodyContent && Object.keys(bodyContent).length > 0) {
         const firstBodyContentKey = Object.keys(bodyContent)[0];
-        if (firstBodyContentKey.endsWith("+json")) {
+        if (getMediaType(firstBodyContentKey).endsWith("+json")) {
           const firstBody = bodyContent[firstBodyContentKey];
           if (firstBody?.schema) {
             jsonRequestBodyExample = sampleRequestFromSchema(firstBody.schema);
@@ -357,10 +355,7 @@ function createItems(
       const content = operationObject.requestBody?.content;
       let body;
       for (let key in content) {
-        if (
-          key.toLowerCase() === "application/json" ||
-          key.toLowerCase() === "application/json; charset=utf-8"
-        ) {
+        if (getMediaType(key).startsWith("application/json")) {
           body = content[key];
           break;
         }
@@ -374,7 +369,7 @@ function createItems(
       const bodyContent = operationObject.requestBody?.content;
       if (bodyContent) {
         const firstBodyContentKey = Object.keys(bodyContent)[0];
-        if (firstBodyContentKey.endsWith("+json")) {
+        if (getMediaType(firstBodyContentKey).endsWith("+json")) {
           const firstBody = bodyContent[firstBodyContentKey];
           if (firstBody?.schema) {
             jsonRequestBodyExample = sampleRequestFromSchema(firstBody.schema);

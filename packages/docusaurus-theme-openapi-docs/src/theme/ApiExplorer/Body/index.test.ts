@@ -35,6 +35,7 @@ const mockEditor = jest.fn(({ children, language }: EditorProps) =>
 );
 const mockContainer = ({ children }: { children?: React.ReactNode }) =>
   children;
+const mockFormBodyItem = jest.fn((_props: any) => null);
 
 jest.mock(
   "@docusaurus/Translate",
@@ -62,7 +63,7 @@ jest.mock("@theme/TabItem", () => ({
   __esModule: true,
   default: (props: any) => mockContainer(props),
 }));
-jest.mock("./FormBodyItem", () => () => null);
+jest.mock("./FormBodyItem", () => (props: any) => mockFormBodyItem(props));
 
 type Content = NonNullable<Props["requestBodyMetadata"]>["content"];
 const schema = {
@@ -80,6 +81,7 @@ afterAll(() => {
 
 function renderBody(contentType: string, content: Content) {
   mockEditor.mockClear();
+  mockFormBodyItem.mockClear();
   const store = configureStore({
     reducer: {
       body: bodyReducer,
@@ -103,6 +105,7 @@ function renderBody(contentType: string, content: Content) {
   );
   return {
     editors: mockEditor.mock.calls.map(([props]) => props),
+    formFields: mockFormBodyItem.mock.calls.map(([props]) => props),
     store,
   };
 }
@@ -110,6 +113,13 @@ function renderBody(contentType: string, content: Content) {
 describe("request body media types", () => {
   it.each([
     ["application/json", "json", '{\n  "message": "from schema"\n}'],
+    ["application/json-seq", "json", '{\n  "message": "from schema"\n}'],
+    ["application/jsonl", "json", '{\n  "message": "from schema"\n}'],
+    [
+      "APPLICATION/JSON-SEQ; charset=UTF-8",
+      "json",
+      '{\n  "message": "from schema"\n}',
+    ],
     [
       "application/json; charset=utf-8",
       "json",
@@ -226,15 +236,38 @@ describe("request body media types", () => {
     expect(editors[0]).toMatchObject({ language: "plaintext", children: "" });
   });
 
-  it.each(["multipart/form-data", "application/x-www-form-urlencoded"])(
-    "keeps the %s form",
-    (contentType) => {
-      const { editors } = renderBody(contentType, {
-        [contentType]: { schema },
-      });
-      expect(editors).toHaveLength(0);
-    }
-  );
+  it.each([
+    "multipart/form-data",
+    "application/x-www-form-urlencoded",
+    "multipart/form-data; boundary=x",
+    "application/x-www-form-urlencoded; charset=utf-8",
+    "MULTIPART/FORM-DATA ; boundary=x",
+  ])("keeps the %s form", (contentType) => {
+    const { editors, formFields } = renderBody(contentType, {
+      [contentType]: { schema },
+    });
+    expect(editors).toHaveLength(0);
+    expect(formFields).toHaveLength(1);
+    expect(formFields[0].label).toBe("message");
+  });
+
+  it("keeps form fields and encoding under the original content key", () => {
+    const contentType = "Multipart/Form-Data; boundary=x";
+    const { formFields } = renderBody(contentType, {
+      "multipart/form-data": {
+        schema: { type: "object", properties: { wrong: { type: "string" } } },
+      },
+      [contentType]: {
+        schema,
+        encoding: { message: { contentType: "text/plain; charset=utf-8" } },
+      },
+    });
+    expect(formFields).toHaveLength(1);
+    expect(formFields[0]).toMatchObject({
+      label: "message",
+      fieldEncoding: "text/plain; charset=utf-8",
+    });
+  });
 
   it("keeps binary uploads", () => {
     const { editors } = renderBody("application/pdf", {

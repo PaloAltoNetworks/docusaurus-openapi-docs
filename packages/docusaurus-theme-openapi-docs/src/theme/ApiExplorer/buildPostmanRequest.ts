@@ -7,6 +7,7 @@
 
 import { AuthState, Scheme } from "@theme/ApiExplorer/Authorization/slice";
 import { Body, Content } from "@theme/ApiExplorer/Body/slice";
+import { getMediaType } from "docusaurus-plugin-openapi-docs/lib/utils/mediaType";
 import type {
   ParameterObject,
   ServerObject,
@@ -291,6 +292,7 @@ function tryDecodeJsonParam(value: string): any {
 function setBody(
   clonedPostman: sdk.Request,
   body: Body,
+  contentType: string,
   encoding?: Record<string, { contentType?: string }>
 ) {
   if (clonedPostman.body === undefined) {
@@ -327,6 +329,25 @@ function setBody(
     clonedPostman.body.mode = "file";
     clonedPostman.body.file = { src: body.content.value.src };
     return;
+  }
+
+  if (body.type === "form") {
+    const mediaType = getMediaType(contentType);
+    if (mediaType === "multipart/form-data") {
+      clonedPostman.body.mode = "formdata";
+      clonedPostman.body.formdata ??= new sdk.PropertyList<sdk.FormParam>(
+        sdk.FormParam as any,
+        clonedPostman.body,
+        []
+      );
+    } else if (mediaType === "application/x-www-form-urlencoded") {
+      clonedPostman.body.mode = "urlencoded";
+      clonedPostman.body.urlencoded ??= new sdk.PropertyList<sdk.QueryParam>(
+        sdk.QueryParam as any,
+        clonedPostman.body,
+        []
+      );
+    }
   }
 
   switch (clonedPostman.body.mode) {
@@ -574,7 +595,7 @@ function buildPostmanRequest(
     otherHeaders
   );
 
-  setBody(clonedPostman, body, encoding);
+  setBody(clonedPostman, body, contentType, encoding);
 
   return clonedPostman;
 }
