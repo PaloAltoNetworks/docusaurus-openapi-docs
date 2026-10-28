@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-module.exports = {
+const config = {
   preset: "ts-jest",
   testEnvironment: "node",
   globals: {
@@ -37,4 +37,65 @@ module.exports = {
     "^neotraverse/legacy$":
       "<rootDir>/node_modules/neotraverse/dist/legacy/legacy.cjs",
   },
+};
+
+const bodyExamplesTest =
+  "<rootDir>/packages/docusaurus-theme-openapi-docs/src/theme/ApiExplorer/Body/jsonExamples.test.ts";
+const samplerModule =
+  "docusaurus-plugin-openapi-docs/lib/openapi/createSchemaExample";
+const samplerSource =
+  "packages/docusaurus-plugin-openapi-docs/src/openapi/createSchemaExample.ts";
+const markdownTests = [
+  "<rootDir>/packages/docusaurus-plugin-openapi-docs/src/markdown/utils.test.ts",
+];
+
+module.exports = {
+  projects: [
+    {
+      ...config,
+      displayName: "default",
+      testPathIgnorePatterns: [
+        "/node_modules/",
+        bodyExamplesTest.replace(/\./g, "\\.") + "$",
+        ...markdownTests.map((test) => test.replace(/\./g, "\\.") + "$"),
+      ],
+    },
+    {
+      ...config,
+      displayName: "body-examples",
+      testEnvironment: "jsdom",
+      testMatch: [bodyExamplesTest],
+      globals: {
+        "ts-jest": {
+          ...config.globals["ts-jest"],
+          tsconfig: {
+            ...config.globals["ts-jest"].tsconfig,
+            allowJs: true,
+            paths: {
+              ...config.globals["ts-jest"].tsconfig.paths,
+              [samplerModule]: [samplerSource],
+            },
+          },
+        },
+      },
+      transform: {
+        "[/\\\\]ApiExplorer[/\\\\]Body[/\\\\]json2xml\\.js$": "ts-jest",
+      },
+      moduleNameMapper: {
+        ...config.moduleNameMapper,
+        [`^${samplerModule}$`]: `<rootDir>/${samplerSource}`,
+      },
+    },
+    {
+      ...config,
+      displayName: "markdown",
+      testMatch: markdownTests,
+      moduleNameMapper: {
+        ...config.moduleNameMapper,
+        // Jest 27 does not resolve this package's conditional Node export.
+        "^unist-util-visit-parents/do-not-use-color$":
+          "<rootDir>/node_modules/unist-util-visit-parents/lib/color.node.js",
+      },
+    },
+  ],
 };

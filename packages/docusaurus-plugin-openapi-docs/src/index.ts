@@ -24,6 +24,7 @@ import {
 import {
   EXTERNALIZABLE_COMPONENTS,
   ExternalFile,
+  loadMarkdownParser,
   runWithExternalization,
 } from "./markdown/utils";
 import { processOpenapiFiles, readOpenapiFiles } from "./openapi";
@@ -168,6 +169,7 @@ export default function pluginOpenAPIDocs(
       : path.resolve(siteDir, specPath);
 
     try {
+      const parseMarkdown = await loadMarkdownParser();
       const openapiFiles = await readOpenapiFiles(contentPath);
       const [loadedApi, tags, tagGroups] = await processOpenapiFiles(
         openapiFiles,
@@ -329,13 +331,21 @@ custom_edit_url: null
             `;
 
       const apiPageGenerator =
-        markdownGenerators?.createApiPageMD ?? createApiPageMD;
+        markdownGenerators?.createApiPageMD ??
+        ((pageData: ApiPageMetadata) =>
+          createApiPageMD(pageData, parseMarkdown));
       const infoPageGenerator =
-        markdownGenerators?.createInfoPageMD ?? createInfoPageMD;
+        markdownGenerators?.createInfoPageMD ??
+        ((pageData: InfoPageMetadata) =>
+          createInfoPageMD(pageData, parseMarkdown));
       const tagPageGenerator =
-        markdownGenerators?.createTagPageMD ?? createTagPageMD;
+        markdownGenerators?.createTagPageMD ??
+        ((pageData: TagPageMetadata) =>
+          createTagPageMD(pageData, parseMarkdown));
       const schemaPageGenerator =
-        markdownGenerators?.createSchemaPageMD ?? createSchemaPageMD;
+        markdownGenerators?.createSchemaPageMD ??
+        ((pageData: SchemaPageMetadata) =>
+          createSchemaPageMD(pageData, parseMarkdown));
 
       const pageGeneratorByType: {
         [key in ApiMetadata["type"]]: (

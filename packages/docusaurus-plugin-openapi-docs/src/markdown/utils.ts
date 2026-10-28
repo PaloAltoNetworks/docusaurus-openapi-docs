@@ -5,13 +5,62 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import jiti from "jiti";
-import type { Nodes } from "mdast";
+import type { Nodes, Root } from "mdast";
 
-// Keep this synchronous CommonJS API compatible with the ESM Markdown parser.
-const { fromMarkdown } = jiti(__filename)(
-  "mdast-util-from-markdown"
-) as typeof import("mdast-util-from-markdown");
+export type MarkdownParser = (value: string) => Root;
+
+let markdownParserPromise: Promise<MarkdownParser> | undefined;
+
+/** Load the ESM parser on the asynchronous generation path, without a transpiler. */
+export function loadMarkdownParser(): Promise<MarkdownParser> {
+  if (!markdownParserPromise) {
+    // CommonJS TypeScript output rewrites import() to require(). Keep native
+    // imports here; all module specifiers are fixed, never supplied by users.
+    // eslint-disable-next-line no-new-func
+    const load = new Function(
+      `return Promise.all([
+        import("mdast-util-from-markdown"),
+        import("micromark-extension-gfm"),
+        import("mdast-util-gfm")
+      ])`
+    ) as () => Promise<
+      [
+        typeof import("mdast-util-from-markdown"),
+        typeof import("micromark-extension-gfm"),
+        typeof import("mdast-util-gfm"),
+      ]
+    >;
+    markdownParserPromise = load().then(
+      ([{ fromMarkdown }, { gfm }, { gfmFromMarkdown }]) => {
+        const options = {
+          extensions: [
+            gfm(),
+            {
+              // Match MDX blocks and expose image alt text without rewriting syntax.
+              disable: {
+                null: [
+                  "htmlFlow",
+                  "htmlText",
+                  "codeIndented",
+                  "labelStartImage",
+                ],
+              },
+            },
+          ],
+          mdastExtensions: [gfmFromMarkdown()],
+        };
+        return (value) => fromMarkdown(value, options);
+      }
+    );
+  }
+  return markdownParserPromise;
+}
+
+/** Create an AST-based cleaner while keeping each description's rendering synchronous. */
+export async function createMarkdownCleaner() {
+  const parseMarkdown = await loadMarkdownParser();
+  return (value: string | undefined) => clean(value, parseMarkdown);
+}
 
 /**
  * Represents an external JSON file to be written alongside the MDX.
@@ -225,51 +274,70 @@ export const lessThan =
   /<=?(?!(=|button|\s?\/button|code|\s?\/code|details|\s?\/details|summary|\s?\/summary|hr|\s?\/hr|br|\s?\/br|span|\s?\/span|strong|\s?\/strong|small|\s?\/small|table|\s?\/table|thead|\s?\/thead|tbody|\s?\/tbody|td|\s?\/td|tr|\s?\/tr|th|\s?\/th|h1|\s?\/h1|h2|\s?\/h2|h3|\s?\/h3|h4|\s?\/h4|h5|\s?\/h5|h6|\s?\/h6|title|\s?\/title|p|\s?\/p|em|\s?\/em|b|\s?\/b|i|\s?\/i|u|\s?\/u|strike|\s?\/strike|bold|\s?\/bold|a|\s?\/a|table|\s?\/table|li|\s?\/li|ol|\s?\/ol|ul|\s?\/ul|img|\s?\/img|svg|\s?\/svg|div|\s?\/div|center|\s?\/center))/gu;
 export const greaterThan =
   /(?<!(button|code|details|summary|hr|br|span|strong|small|table|thead|tbody|td|tr|th|h1|h2|h3|h4|h5|h6|title|p|em|b|i|u|strike|bold|a|li|ol|ul|img|svg|div|center|\/|\s|"|'))>/gu;
+/** @deprecated Use the Markdown parser to identify code instead. */
+export const codeFence = /`{1,3}[\s\S]*?`{1,3}/g;
 export const curlyBrackets = /([{}])/g;
+/** @deprecated Use the Markdown parser to identify code instead. */
+export const codeBlock = /(^```.*[\s\S]*?```$|`[^`].+?`)/gm;
+
+const textToClean = new RegExp(
+  String.raw`\\[\\{}<>]|${lessThan.source}|${greaterThan.source}|${curlyBrackets.source}`,
+  "gu"
+);
 
 function cleanText(value: string): string {
-  return value
-    .replace(lessThan, "&lt;")
-    .replace(greaterThan, "&gt;")
-    .replace(curlyBrackets, "\\$1");
+  return value.replace(textToClean, (match) => {
+    if (match.startsWith("\\")) return match;
+    if (match.startsWith("<")) return "&lt;";
+    if (match === ">") return "&gt;";
+    return `\\${match}`;
+  });
 }
 
-export function clean(value: string | undefined): string {
+/**
+ * Escape description prose while leaving Markdown code unchanged.
+ * @deprecated The one-argument form retains the legacy regex behavior. Use
+ * createMarkdownCleaner(), or pass a parser from loadMarkdownParser(), for GFM
+ * footnotes, tables and complete code-fence handling.
+ */
+export function clean(
+  value: string | undefined,
+  parseMarkdown?: MarkdownParser
+): string {
   if (!value) {
     return "";
   }
+  if (!/[{}<>]/.test(value)) {
+    return value;
+  }
+  if (!parseMarkdown) {
+    return value
+      .split(codeBlock)
+      .map((section) =>
+        section.startsWith("`") ? section : cleanText(section)
+      )
+      .join("");
+  }
 
-  const source = value;
   let result = "";
   let cursor = 0;
-  function visit(node: Nodes): void {
+  const visit = (node: Nodes): void => {
     const autolink =
-      node.type === "link" && source[node.position!.start.offset!] === "<";
+      node.type === "link" && value[node.position!.start.offset!] === "<";
     if (node.type === "text" || autolink) {
       const start = node.position!.start.offset!;
       const end = node.position!.end.offset!;
-      result += source.slice(cursor, start);
+      result += value.slice(cursor, start);
       // Use source offsets so entities, escapes, and line endings stay intact.
       result += autolink
-        ? `&lt;${cleanText(source.slice(start + 1, end - 1))}&gt;`
-        : cleanText(source.slice(start, end));
+        ? `&lt;${cleanText(value.slice(start + 1, end - 1))}&gt;`
+        : cleanText(value.slice(start, end));
       cursor = end;
     } else if ("children" in node) {
       node.children.forEach(visit);
     }
-  }
+  };
 
-  visit(
-    fromMarkdown(value, {
-      // Match MDX blocks and expose image alt text without rewriting syntax.
-      extensions: [
-        {
-          disable: {
-            null: ["htmlFlow", "htmlText", "codeIndented", "labelStartImage"],
-          },
-        },
-      ],
-    })
-  );
+  visit(parseMarkdown(value));
   return result + value.slice(cursor);
 }

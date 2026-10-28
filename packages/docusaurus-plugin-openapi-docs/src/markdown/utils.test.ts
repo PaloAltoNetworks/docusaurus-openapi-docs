@@ -5,9 +5,43 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { clean } from "./utils";
+import fs from "fs";
+import os from "os";
+import path from "path";
+
+import * as markdownUtils from "./utils";
+import {
+  clean as cleanMarkdown,
+  createMarkdownCleaner,
+  loadMarkdownParser,
+  MarkdownParser,
+} from "./utils";
+import pluginOpenAPIDocs from "../index";
+import { MarkdownGenerator } from "../types";
+
+let parseMarkdown: MarkdownParser;
+const clean = (value: string | undefined) =>
+  cleanMarkdown(value, parseMarkdown);
+
+beforeAll(async () => {
+  parseMarkdown = await loadMarkdownParser();
+});
 
 describe("clean", () => {
+  it.each([
+    ["See[^1]\n\n[^1]: {x}", "See[^1]\n\n[^1]: \\{x\\}"],
+    ["| value |\n| --- |\n| `a|{b}` |", "| value |\n| --- |\n| `a|\\{b\\}` |"],
+    ["\\{x\\}", "\\{x\\}"],
+    ["\\<", "\\<"],
+    ["\\>", "\\>"],
+    ["\\<custom\\> and {x}", "\\<custom\\> and \\{x\\}"],
+    ["\\\\{x}", "\\\\\\{x\\}"],
+    ["\\\\<custom>", "\\\\&lt;custom&gt;"],
+    ["\\\\\\{x\\}", "\\\\\\{x\\}"],
+  ])("respects GFM and author escapes in %j", (input, expected) => {
+    expect(clean(input)).toBe(expected);
+  });
+
   it.each(["{", "}", "<", ">"])(
     "preserves the single-character inline code %s",
     (character) => {
@@ -302,5 +336,194 @@ describe("clean", () => {
     ["- item\n\n      {a}", "- item\n\n      \\{a\\}"],
   ])("escapes indented MDX prose in %j", (input, expected) => {
     expect(clean(input)).toBe(expected);
+  });
+});
+
+describe("Markdown parser loading and compatibility", () => {
+  it("shares asynchronous parser loading", () => {
+    expect(loadMarkdownParser()).toBe(loadMarkdownParser());
+  });
+
+  it("provides an asynchronous factory for synchronous description cleaning", async () => {
+    const cleaner = await createMarkdownCleaner();
+    expect(cleaner("See[^1]\n\n[^1]: {x}")).toBe("See[^1]\n\n[^1]: \\{x\\}");
+  });
+
+  it.each([
+    undefined,
+    "",
+    "Plain description",
+    "# Heading\n\n- item",
+    "`code`",
+  ])("does not parse descriptions without target characters: %j", (value) => {
+    const parser = jest.fn(parseMarkdown);
+    expect(cleanMarkdown(value, parser)).toBe(value ?? "");
+    expect(parser).not.toHaveBeenCalled();
+  });
+
+  it("keeps the published synchronous one-argument regex behavior", () => {
+    expect(cleanMarkdown("Use {a} and `{b}`")).toBe("Use \\{a\\} and `{b}`");
+    expect(cleanMarkdown("~~~\n{a}\n~~~")).toBe("~~~\n\\{a\\}\n~~~");
+  });
+
+  it("retains the deprecated regex exports", () => {
+    expect(markdownUtils).toMatchObject({
+      codeFence: expect.any(RegExp),
+      codeBlock: expect.any(RegExp),
+    });
+  });
+});
+
+const description = (name: string) => `See[^${name}]\n\n[^${name}]: {${name}}`;
+
+describe("asynchronous Markdown generation", () => {
+  let siteDir: string;
+  let outputDir: string;
+  let errors: jest.SpyInstance;
+
+  beforeEach(() => {
+    siteDir = fs.mkdtempSync(path.join(os.tmpdir(), "openapi-markdown-"));
+    outputDir = path.join(siteDir, "docs");
+    errors = jest.spyOn(console, "error").mockImplementation(() => {});
+    jest.spyOn(console, "log").mockImplementation(() => {});
+    fs.writeFileSync(
+      path.join(siteDir, "spec.json"),
+      JSON.stringify({
+        openapi: "3.0.3",
+        info: {
+          title: "Parser",
+          version: "1",
+          description: description("info"),
+        },
+        tags: [{ name: "pets", description: description("tag") }],
+        paths: {
+          "/pets": {
+            get: {
+              operationId: "getPets",
+              tags: ["pets"],
+              description: description("api"),
+              deprecated: true,
+              "x-deprecated-description": description("deprecated"),
+              responses: { "200": { description: "OK" } },
+              callbacks: {
+                notification: {
+                  "{$request.body#/url}": {
+                    post: {
+                      description: description("callback"),
+                      responses: { "200": { description: "OK" } },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        components: {
+          schemas: {
+            Pet: {
+              title: "Pet",
+              type: "object",
+              description: description("schema"),
+            },
+          },
+          securitySchemes: {
+            token: {
+              type: "apiKey",
+              in: "header",
+              name: "Authorization",
+              description: description("authentication"),
+            },
+          },
+        },
+      })
+    );
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+    fs.rmSync(siteDir, { recursive: true, force: true });
+  });
+
+  async function generate(markdownGenerators?: MarkdownGenerator) {
+    const plugin = pluginOpenAPIDocs(
+      { siteDir, siteConfig: { presets: [], plugins: [] } } as any,
+      {
+        id: "openapi",
+        config: {
+          test: {
+            specPath: "spec.json",
+            outputDir,
+            showSchemas: true,
+            sidebarOptions: { groupPathsBy: "tag", categoryLinkSource: "tag" },
+            markdownGenerators,
+          },
+        },
+      } as any
+    );
+    const actions: Record<string, (...args: any[]) => Promise<void>> = {};
+    let command = "";
+    const cli: any = {
+      command: (name: string) => {
+        command = name;
+        return cli;
+      },
+      description: () => cli,
+      usage: () => cli,
+      arguments: () => cli,
+      option: () => cli,
+      action: (fn: (...args: any[]) => Promise<void>) => {
+        actions[command] = fn;
+        return cli;
+      },
+    };
+    plugin.extendCli!(cli);
+    await actions["gen-api-docs"]("test", { opts: () => ({}) });
+    expect(errors).not.toHaveBeenCalled();
+  }
+
+  function page(suffix: string, directory = outputDir) {
+    const file = fs
+      .readdirSync(directory)
+      .find((name) => name.endsWith(suffix));
+    expect(file).toBeDefined();
+    return fs.readFileSync(path.join(directory, file!), "utf8");
+  }
+
+  it("loads the parser and passes it through all default page generators", async () => {
+    await generate();
+    const api = page(".api.mdx");
+    const info = page(".info.mdx");
+    const tag = page(".tag.mdx");
+    const schema = page(".schema.mdx", path.join(outputDir, "schemas"));
+    for (const name of ["api", "deprecated", "callback"]) {
+      expect(api).toContain(`[^${name}]: \\{${name}\\}`);
+    }
+    for (const name of ["info", "authentication"]) {
+      expect(info).toContain(`[^${name}]: \\{${name}\\}`);
+    }
+    expect(tag).toContain("[^tag]: \\{tag\\}");
+    expect(schema).toContain("[^schema]: \\{schema\\}");
+  });
+
+  it("keeps custom generators synchronous and passes only page metadata", async () => {
+    const generators = {
+      createApiPageMD: jest.fn(() => "custom api"),
+      createInfoPageMD: jest.fn(() => "custom info"),
+      createTagPageMD: jest.fn(() => "custom tag"),
+      createSchemaPageMD: jest.fn(() => "custom schema"),
+    };
+    await generate(generators);
+    for (const generator of Object.values(generators)) {
+      expect(generator).toHaveBeenCalledTimes(1);
+      expect(generator).toHaveBeenCalledWith(
+        expect.objectContaining({ type: expect.any(String) })
+      );
+    }
+    expect(page(".api.mdx")).toContain("custom api");
+    expect(page(".info.mdx")).toContain("custom info");
+    expect(page(".tag.mdx")).toContain("custom tag");
+    expect(page(".schema.mdx", path.join(outputDir, "schemas"))).toContain(
+      "custom schema"
+    );
   });
 });
