@@ -7,13 +7,14 @@
 
 import { AuthState, Scheme } from "@theme/ApiExplorer/Authorization/slice";
 import { Body, Content } from "@theme/ApiExplorer/Body/slice";
-import { getMediaType } from "docusaurus-plugin-openapi-docs/lib/utils/mediaType";
 import type {
   ParameterObject,
   ServerObject,
 } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import cloneDeep from "lodash/cloneDeep";
 import * as sdk from "postman-collection";
+
+import { getContentTypeHeader, getMediaType } from "./utils/mediaType";
 
 type Param = {
   value?: string | string[];
@@ -219,7 +220,13 @@ function setHeaders(
   postman.headers.clear();
 
   if (contentType) {
-    postman.addHeader({ key: "Content-Type", value: contentType });
+    postman.addHeader({
+      key: "Content-Type",
+      value:
+        postman.body?.mode === "formdata"
+          ? getContentTypeHeader(contentType)
+          : contentType,
+    });
   }
 
   if (accept) {
@@ -288,6 +295,20 @@ function tryDecodeJsonParam(value: string): any {
   }
 }
 
+function setBodyMode(body: sdk.RequestBody, mode: string) {
+  body.mode = mode;
+  if (mode !== "raw") body.raw = undefined;
+  if (mode !== "urlencoded") {
+    body.urlencoded?.clear();
+    body.urlencoded = undefined;
+  }
+  if (mode !== "formdata") {
+    body.formdata?.clear();
+    body.formdata = undefined;
+  }
+  if (mode !== "file") body.file = undefined;
+}
+
 // TODO: this is all a bit hacky
 function setBody(
   clonedPostman: sdk.Request,
@@ -326,7 +347,7 @@ function setBody(
 
   if (body.type === "raw" && body.content?.type === "file") {
     // treat it like file.
-    clonedPostman.body.mode = "file";
+    setBodyMode(clonedPostman.body, "file");
     clonedPostman.body.file = { src: body.content.value.src };
     return;
   }
@@ -334,14 +355,14 @@ function setBody(
   if (body.type === "form") {
     const mediaType = getMediaType(contentType);
     if (mediaType === "multipart/form-data") {
-      clonedPostman.body.mode = "formdata";
+      setBodyMode(clonedPostman.body, "formdata");
       clonedPostman.body.formdata ??= new sdk.PropertyList<sdk.FormParam>(
         sdk.FormParam as any,
         clonedPostman.body,
         []
       );
     } else if (mediaType === "application/x-www-form-urlencoded") {
-      clonedPostman.body.mode = "urlencoded";
+      setBodyMode(clonedPostman.body, "urlencoded");
       clonedPostman.body.urlencoded ??= new sdk.PropertyList<sdk.QueryParam>(
         sdk.QueryParam as any,
         clonedPostman.body,
@@ -352,6 +373,7 @@ function setBody(
 
   switch (clonedPostman.body.mode) {
     case "raw": {
+      setBodyMode(clonedPostman.body, "raw");
       // check file even though it should already be set from above
       if (
         body.type !== "raw" ||
@@ -365,10 +387,11 @@ function setBody(
       return;
     }
     case "formdata": {
+      setBodyMode(clonedPostman.body, "formdata");
       clonedPostman.body.formdata?.clear();
       if (body.type !== "form") {
         // treat it like raw.
-        clonedPostman.body.mode = "raw";
+        setBodyMode(clonedPostman.body, "raw");
         clonedPostman.body.raw = `${body.content?.value}`;
         return;
       }
@@ -413,10 +436,11 @@ function setBody(
       return;
     }
     case "urlencoded": {
+      setBodyMode(clonedPostman.body, "urlencoded");
       clonedPostman.body.urlencoded?.clear();
       if (body.type !== "form") {
         // treat it like raw.
-        clonedPostman.body.mode = "raw";
+        setBodyMode(clonedPostman.body, "raw");
         clonedPostman.body.raw = `${body.content?.value}`;
         return;
       }
@@ -586,6 +610,8 @@ function buildPostmanRequest(
   // Use enhanced cookie params that might include API keys
   const cookie = buildCookie(enhancedCookieParams);
 
+  setBody(clonedPostman, body, contentType, encoding);
+
   setHeaders(
     clonedPostman,
     contentType,
@@ -594,8 +620,6 @@ function buildPostmanRequest(
     headerParams,
     otherHeaders
   );
-
-  setBody(clonedPostman, body, contentType, encoding);
 
   return clonedPostman;
 }

@@ -17,13 +17,13 @@ import Markdown from "@theme/Markdown";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
 import { sampleFromSchema } from "docusaurus-plugin-openapi-docs/lib/openapi/createSchemaExample";
-import { getMediaType } from "docusaurus-plugin-openapi-docs/lib/utils/mediaType";
 import type { RequestBodyObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import format from "xml-formatter";
 
 import FormBodyItem from "./FormBodyItem";
 import { resolveSchemaWithSelections } from "./resolveSchemaWithSelections";
 import { clearRawBody, setFileRawBody, setStringRawBody } from "./slice";
+import { getMediaType } from "../utils/mediaType";
 
 export interface Props {
   jsonRequestBodyExample: string;

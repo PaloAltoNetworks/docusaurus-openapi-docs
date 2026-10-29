@@ -471,15 +471,21 @@ describe("buildPostmanRequest", () => {
     });
 
     it.each([
-      ["MULTIPART/FORM-DATA; boundary=x", "urlencoded", "formdata"],
+      [
+        "MULTIPART/FORM-DATA; boundary=x",
+        "urlencoded",
+        "formdata",
+        "MULTIPART/FORM-DATA",
+      ],
       [
         "Application/X-WWW-Form-Urlencoded; charset=UTF-8",
         "formdata",
         "urlencoded",
+        "Application/X-WWW-Form-Urlencoded; charset=UTF-8",
       ],
     ])(
       "uses the selected %s form type with parameters",
-      (contentType, originalMode, expectedMode) => {
+      (contentType, originalMode, expectedMode, expectedHeader) => {
         const original = new sdk.Request({
           url: "http://example.com/pets",
           method: "POST",
@@ -505,7 +511,7 @@ describe("buildPostmanRequest", () => {
             .all()
             .map(({ key, value }: any) => [key, value])
         ).toEqual([["name", "Rex"]]);
-        expect(request.headers.get("Content-Type")).toBe(contentType);
+        expect(request.headers.get("Content-Type")).toBe(expectedHeader);
         expect(original.toJSON()).toEqual(before);
       }
     );

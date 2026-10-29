@@ -181,7 +181,10 @@ export function isJsonLike(contentType: string): boolean {
 }
 
 export function isFormUrlEncoded(contentType: string): boolean {
-  return contentType === "application/x-www-form-urlencoded";
+  return (
+    contentType.split(";", 1)[0].trim().toLowerCase() ===
+    "application/x-www-form-urlencoded"
+  );
 }
 
 function delimitedEncodeField(
