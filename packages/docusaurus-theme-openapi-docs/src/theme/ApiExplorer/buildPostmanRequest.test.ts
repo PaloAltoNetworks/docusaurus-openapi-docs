@@ -14,11 +14,7 @@ import buildPostmanRequest from "./buildPostmanRequest";
 
 type Options = {
   [K in keyof Parameters<typeof buildPostmanRequest>[1]]?: any;
-} & {
-  pathTemplate?: string;
 };
-
-const requestTemplates = new WeakMap<sdk.Request, string>();
 const convertedRequests = new Map<
   string,
   Promise<ReturnType<sdk.Request["toJSON"]>>
@@ -40,7 +36,6 @@ function build(options: Options = {}, request?: sdk.Request) {
     request ??
     new sdk.Request({ url: "http://example.com/pets/:petId", method: "GET" });
   return buildPostmanRequest(postman, {
-    pathTemplate: request && requestTemplates.get(request),
     queryParams: [],
     pathParams: [],
     cookieParams: [],
@@ -108,7 +103,6 @@ async function generatedRequest(template: string, names: string[]) {
   }
   // Serialize across package boundaries; do not rely on SDK constructor identity.
   const request = new sdk.Request(JSON.parse(JSON.stringify(await converted)));
-  requestTemplates.set(request, template);
   return request;
 }
 
@@ -342,7 +336,7 @@ describe("buildPostmanRequest", () => {
         expect(original.toJSON()).toEqual(before);
       });
 
-      it("keeps a colon-leading value literal without internal aliases", () => {
+      it("keeps legacy SDK bindings for a standalone colon-leading value", () => {
         const original = request(":id");
         original.url.variables.add(
           new sdk.Variable({ key: "other", value: "WRONG" })
@@ -356,12 +350,12 @@ describe("buildPostmanRequest", () => {
         );
         expect(built.url.getPath()).toBe("/records/:other/items");
         expect(built.url.getPath({ unresolved: true })).toBe(
-          "/records/:other/items"
+          "/records/:id/items"
         );
         expect(built.toJSON().url).toMatchObject({
-          path: ["records", ":other", "items"],
+          path: ["records", ":id", "items"],
         });
-        expect(built.url.variables.count()).toBe(0);
+        expect(built.url.variables.get("id")).toBe(":other");
       });
 
       it("does not rewrite a literal collection token in the template", () => {
@@ -400,10 +394,16 @@ describe("buildPostmanRequest", () => {
       });
 
       it.each(["EXAMPLE", 0, false])(
-        "uses the existing SDK fallback %p in native and embedded positions",
+        "preserves native SDK and embedded-template fallback behavior for %p",
         (fallback) => {
           for (const [segment, template, expected] of [
-            [":id", "/records/{id}/items", `/records/${fallback}/items`],
+            [
+              ":id",
+              "/records/{id}/items",
+              typeof fallback === "string"
+                ? `/records/${fallback}/items`
+                : "/records/:id/items",
+            ],
             [
               "{{id}}:publish",
               "/records/{id}:publish/items",
@@ -434,7 +434,7 @@ describe("buildPostmanRequest", () => {
               },
               request(":id")
             ).url.getPath()
-          ).toBe("/records/{{id}}/items");
+          ).toBe("/records/:id/items");
         }
       );
 
@@ -450,6 +450,139 @@ describe("buildPostmanRequest", () => {
         ).toBe("/records/EXAMPLE/items");
       });
 
+      it("retains raw native tokens and SDK bindings for standalone-only paths", async () => {
+        const original = await generatedRequest("/pets/{petId}", ["petId"]);
+        const built = build(
+          {
+            pathTemplate: "/pets/{petId}",
+            pathParams: [{ name: "petId", in: "path", value: "9527" }],
+          },
+          original
+        );
+        expect(built.url.getPath()).toBe("/pets/9527");
+        expect(built.url.getPath({ unresolved: true })).toBe("/pets/:petId");
+        expect(built.url.toString(true)).toContain("/pets/9527");
+        expect(built.toJSON().url).toMatchObject({ path: ["pets", ":petId"] });
+        expect(built.url.variables.get("petId")).toBe("9527");
+      });
+
+      it("keeps an unfilled native parameter beside an embedded parameter", () => {
+        const built = build(
+          {
+            pathTemplate: "/records/{missing}/{id}:publish/items",
+            pathParams: [
+              { name: "missing", in: "path", value: "" },
+              { name: "id", in: "path", value: "9527" },
+            ],
+          },
+          request("{{id}}:publish")
+        );
+        expect(built.url.getPath()).toBe(
+          "/records/:missing/9527:publish/items"
+        );
+        expect(built.url.getPath({ unresolved: true })).toBe(
+          "/records/:missing/9527:publish/items"
+        );
+        expect(built.toJSON().url).toMatchObject({
+          path: ["records", ":missing", "9527:publish", "items"],
+        });
+      });
+
+      it.each([
+        ["a/b", "a%2Fb"],
+        ["a?b", "a%3Fb"],
+        ["a#b", "a%23b"],
+        ["%2F?x#y/z", "%2F%3Fx%23y%2Fz"],
+      ])(
+        "escapes reserved delimiters in embedded value %s",
+        (value, escaped) => {
+          const built = build(
+            {
+              pathTemplate: "/records/{id}:publish/items",
+              pathParams: [{ name: "id", in: "path", value }],
+              queryParams: [{ name: "q", in: "query", value: "keep" }],
+              server: { url: "https://example.com" },
+            },
+            request("{{id}}:publish")
+          );
+          const expected = `/records/${escaped}:publish/items`;
+          expect(built.url.getPath()).toBe(expected);
+          expect(built.url.getPath({ unresolved: true })).toBe(expected);
+          expect(built.url.toString()).toBe(
+            `https://example.com${expected}?q=keep`
+          );
+          expect(built.url.toString(true)).toContain(expected);
+          expect(built.toJSON().url).toMatchObject({
+            path: ["records", `${escaped}:publish`, "items"],
+          });
+          const parsed = new URL(built.url.toString());
+          expect(parsed.pathname).toBe(expected);
+          expect(parsed.search).toBe("?q=keep");
+          expect(parsed.hash).toBe("");
+        }
+      );
+
+      it.each([
+        ["/a/{{id}", "/a/{9527"],
+        ["/a/{id}}", "/a/9527}"],
+      ])(
+        "resolves the parameter next to a literal brace in %s",
+        (pathTemplate, expected) => {
+          const built = build(
+            {
+              pathTemplate,
+              pathParams: [{ name: "id", in: "path", value: "9527" }],
+            },
+            request("{{id}}")
+          );
+          expect(built.url.getPath()).toBe(expected);
+          expect(built.url.getPath({ unresolved: true })).toBe(expected);
+          expect(built.url.toString(true)).toContain(expected);
+          expect(built.url.variables.count()).toBe(0);
+        }
+      );
+
+      it("warns and retains the converted path for an unclosed parameter", async () => {
+        const pathTemplate = "/a/{{id";
+        const original = await generatedRequest(pathTemplate, ["id"]);
+        const warning = jest
+          .spyOn(console, "warn")
+          .mockImplementation(() => {});
+        try {
+          const built = build(
+            {
+              pathTemplate,
+              pathParams: [{ name: "id", in: "path", value: "9527" }],
+            },
+            original
+          );
+          expect(built.url.getPath()).toBe("/a/{{id");
+          expect(built.toJSON().url).toMatchObject({ path: ["a", "{{id"] });
+          expect(warning).toHaveBeenCalledWith(
+            `Unable to resolve an unclosed path parameter in "${pathTemplate}". Using the converted request path.`
+          );
+        } finally {
+          warning.mockRestore();
+        }
+      });
+
+      it("keeps a complete collection token literal even without embedded parameters", () => {
+        const pathTemplate = "/a/{{id}}";
+        const original = new sdk.Request({
+          method: "GET",
+          url: "https://example.com/a/:id",
+        });
+        expect(
+          build(
+            {
+              pathTemplate,
+              pathParams: [{ name: "id", in: "path", value: "9527" }],
+            },
+            original
+          ).url.getPath()
+        ).toBe("/a/{{id}}");
+      });
+
       it("keeps literal empty segments in the authored path", () => {
         expect(
           build(
@@ -457,7 +590,14 @@ describe("buildPostmanRequest", () => {
               pathTemplate: "/records//{id}",
               pathParams: [{ name: "id", in: "path", value: "9527" }],
             },
-            request(":id")
+            new sdk.Request({
+              method: "GET",
+              url: {
+                protocol: "https",
+                host: ["example.com"],
+                path: ["records", "", ":id"],
+              },
+            })
           ).url.getPath()
         ).toBe("/records//9527");
       });
@@ -537,6 +677,7 @@ describe("buildPostmanRequest", () => {
           expect(
             build(
               {
+                pathTemplate: template,
                 pathParams: Object.entries(values).map(([name, value]) => ({
                   name,
                   in: "path",
@@ -557,6 +698,7 @@ describe("buildPostmanRequest", () => {
         expect(
           build(
             {
+              pathTemplate: "/records/{other}/{id}:publish",
               pathParams: [
                 { name: "other", in: "path", value: "different" },
                 { name: "id", in: "path", value: ":other" },
@@ -571,7 +713,10 @@ describe("buildPostmanRequest", () => {
         const request = await generatedRequest("/records/{id}:publish", ["id"]);
         expect(
           build(
-            { pathParams: [{ name: "id", in: "path", value: "" }] },
+            {
+              pathTemplate: "/records/{id}:publish",
+              pathParams: [{ name: "id", in: "path", value: "" }],
+            },
             request
           ).url.getPath()
         ).toBe("/records/{{id}}:publish");
@@ -584,7 +729,10 @@ describe("buildPostmanRequest", () => {
         ]);
         expect(
           build(
-            { pathParams: [{ name: "id", in: "path", value: "one" }] },
+            {
+              pathTemplate: "/records/{id}{part}",
+              pathParams: [{ name: "id", in: "path", value: "one" }],
+            },
             request
           ).url.getPath()
         ).toBe("/records/one{{part}}");
@@ -597,6 +745,7 @@ describe("buildPostmanRequest", () => {
           expect(
             build(
               {
+                pathTemplate: "/records/{a}{b}",
                 pathParams: [
                   { name: "a", in: "path", value },
                   { name: "b", in: "path", value },
@@ -617,6 +766,8 @@ describe("buildPostmanRequest", () => {
         expect(
           build(
             {
+              pathTemplate:
+                "/{__openapi_path_2}/{__openapi_path_2_}/{id}:publish",
               pathParams: names.map((name, index) => ({
                 name,
                 in: "path",
@@ -634,13 +785,17 @@ describe("buildPostmanRequest", () => {
         const original = request.toJSON();
         const first = build(
           {
+            pathTemplate: "/records/{id}:publish",
             pathParams: [{ name: "id", in: "path", value: "first" }],
             body: { type: "raw", content: { type: "string", value: "new" } },
           },
           request
         );
         const second = build(
-          { pathParams: [{ name: "id", in: "path", value: "second" }] },
+          {
+            pathTemplate: "/records/{id}:publish",
+            pathParams: [{ name: "id", in: "path", value: "second" }],
+          },
           request
         );
         expect(first.url.getPath()).toBe("/records/first:publish");
@@ -654,6 +809,7 @@ describe("buildPostmanRequest", () => {
         expect(
           build(
             {
+              pathTemplate: "/records/{id}:publish",
               server: { url: "https://api.example.com:8443/base" },
               pathParams: [{ name: "id", in: "path", value: "9527" }],
               queryParams: [{ name: "id", in: "query", value: "{{id}}" }],

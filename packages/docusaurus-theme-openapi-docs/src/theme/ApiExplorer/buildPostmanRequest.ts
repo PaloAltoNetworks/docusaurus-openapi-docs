@@ -110,11 +110,6 @@ function setPathParams(
   pathParams: Param[],
   pathTemplate?: string
 ) {
-  const fallbackValues = new Map(
-    postman.url.variables
-      .all()
-      .map((variable) => [variable.key, variable.value])
-  );
   // Map through the path parameters
   const source = pathParams.map((param) => {
     if (!param.value) {
@@ -160,40 +155,60 @@ function setPathParams(
     });
   });
 
-  const variables = source.filter((v): v is sdk.Variable => v !== undefined);
-  postman.url.variables.assimilate(variables, false);
-
-  if (pathTemplate === undefined) return;
-
-  const values = new Map(
-    variables.map((variable) => [variable.key, variable.value])
+  const variables = source.filter(
+    (variable): variable is sdk.Variable =>
+      variable !== undefined && String(variable.value) !== ""
   );
+  if (pathTemplate === undefined) {
+    postman.url.variables.assimilate(variables, false);
+    return;
+  }
+
+  if (/\{[^{}]*$/.test(pathTemplate)) {
+    console.warn(
+      `Unable to resolve an unclosed path parameter in "${pathTemplate}". Using the converted request path.`
+    );
+    postman.url.variables.assimilate(variables, false);
+    return;
+  }
+
   const path = pathTemplate.startsWith("/")
     ? pathTemplate.slice(1)
     : pathTemplate;
-  postman.url.path = path.split("/").map((segment) =>
-    segment.replace(/\{([^{}]+)\}/g, (token, name, offset) => {
-      // Only OpenAPI placeholders are path parameters; collection tokens are literal.
-      if (
-        segment[offset - 1] === "{" ||
-        segment[offset + token.length] === "}"
-      ) {
-        return token;
-      }
+  const segments = path.split("/");
+  const parameter = /\{\{[^{}]+\}\}|\{([^{}]+)\}/g;
+  const needsTemplatePath = segments.some((segment) =>
+    (segment.match(parameter) ?? []).some(
+      (token) =>
+        token.startsWith("{{") ||
+        token !== segment ||
+        token.slice(1, -1).includes(":")
+    )
+  );
+  if (!needsTemplatePath) {
+    // Ordinary standalone parameters retain the SDK's :name representation.
+    postman.url.variables.assimilate(variables, false);
+    return;
+  }
+
+  const values = new Map(
+    postman.url.variables
+      .all()
+      .map((variable) => [variable.key, variable.value])
+  );
+  variables.forEach((variable) => values.set(variable.key, variable.value));
+  postman.url.path = segments.map((segment) =>
+    segment.replace(parameter, (token, name) => {
+      // Complete collection-variable tokens are literal OpenAPI path text.
+      if (name === undefined) return token;
       const value = values.get(name);
       if (value !== undefined && value !== null && String(value) !== "") {
-        return String(value);
+        return String(value).replace(/[/?#]/g, encodeURIComponent);
       }
-      const fallback = fallbackValues.get(name);
-      return fallback !== undefined &&
-        fallback !== null &&
-        String(fallback) !== ""
-        ? String(fallback)
-        : `{{${name}}}`;
+      return token === segment ? `:${name}` : `{{${name}}}`;
     })
   );
-  // The cloned URL is now concrete. Keep colon-leading values literal in SDK
-  // serialization and snippets instead of binding them a second time.
+  // Materialized segments must not be rebound when their value starts with :.
   postman.url.variables.clear();
 }
 
@@ -462,7 +477,7 @@ function setBody(
 
 // TODO: finish these types
 interface Options {
-  /** Materialize this OpenAPI path into the cloned URL and clear its path variables. */
+  /** Use the authored path when parameters are embedded in a segment. */
   pathTemplate?: string;
   server?: ServerObject;
   queryParams: Param[];
