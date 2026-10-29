@@ -331,21 +331,13 @@ custom_edit_url: null
             `;
 
       const apiPageGenerator =
-        markdownGenerators?.createApiPageMD ??
-        ((pageData: ApiPageMetadata) =>
-          createApiPageMD(pageData, parseMarkdown));
+        markdownGenerators?.createApiPageMD ?? createApiPageMD;
       const infoPageGenerator =
-        markdownGenerators?.createInfoPageMD ??
-        ((pageData: InfoPageMetadata) =>
-          createInfoPageMD(pageData, parseMarkdown));
+        markdownGenerators?.createInfoPageMD ?? createInfoPageMD;
       const tagPageGenerator =
-        markdownGenerators?.createTagPageMD ??
-        ((pageData: TagPageMetadata) =>
-          createTagPageMD(pageData, parseMarkdown));
+        markdownGenerators?.createTagPageMD ?? createTagPageMD;
       const schemaPageGenerator =
-        markdownGenerators?.createSchemaPageMD ??
-        ((pageData: SchemaPageMetadata) =>
-          createSchemaPageMD(pageData, parseMarkdown));
+        markdownGenerators?.createSchemaPageMD ?? createSchemaPageMD;
 
       const pageGeneratorByType: {
         [key in ApiMetadata["type"]]: (
@@ -357,10 +349,10 @@ custom_edit_url: null
           }[key]
         ) => string;
       } = {
-        api: apiPageGenerator,
-        info: infoPageGenerator,
-        tag: tagPageGenerator,
-        schema: schemaPageGenerator,
+        api: (pageData) => apiPageGenerator(pageData, parseMarkdown),
+        info: (pageData) => infoPageGenerator(pageData, parseMarkdown),
+        tag: (pageData) => tagPageGenerator(pageData, parseMarkdown),
+        schema: (pageData) => schemaPageGenerator(pageData, parseMarkdown),
       };
 
       loadedApi.map(async (item) => {

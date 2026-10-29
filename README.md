@@ -211,16 +211,18 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 
 `markdownGenerators` can be configured with the following options:
 
-| Name                 | Type       | Default | Description                                                                                                                                    |
-| -------------------- | ---------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `createApiPageMD`    | `function` | `null`  | _Optional:_ Returns a string of the raw markdown body for API pages.<br/><br/>**Function type:** `(pageData: ApiPageMetadata) => string`       |
-| `createInfoPageMD`   | `function` | `null`  | _Optional:_ Returns a string of the raw markdown body for info pages.<br/><br/>**Function type:** `(pageData: InfoPageMetadata) => string`     |
-| `createTagPageMD`    | `function` | `null`  | _Optional:_ Returns a string of the raw markdown body for tag pages.<br/><br/>**Function type:** `(pageData: TagPageMetadata) => string`       |
-| `createSchemaPageMD` | `function` | `null`  | _Optional:_ Returns a string of the raw markdown body for schema pages.<br/><br/>**Function type:** `(pageData: SchemaPageMetadata) => string` |
+| Name                 | Type       | Default | Description                                                                                                                                                                    |
+| -------------------- | ---------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `createApiPageMD`    | `function` | `null`  | _Optional:_ Returns a string of the raw markdown body for API pages.<br/><br/>**Function type:** `(pageData: ApiPageMetadata, parseMarkdown?: MarkdownParser) => string`       |
+| `createInfoPageMD`   | `function` | `null`  | _Optional:_ Returns a string of the raw markdown body for info pages.<br/><br/>**Function type:** `(pageData: InfoPageMetadata, parseMarkdown?: MarkdownParser) => string`     |
+| `createTagPageMD`    | `function` | `null`  | _Optional:_ Returns a string of the raw markdown body for tag pages.<br/><br/>**Function type:** `(pageData: TagPageMetadata, parseMarkdown?: MarkdownParser) => string`       |
+| `createSchemaPageMD` | `function` | `null`  | _Optional:_ Returns a string of the raw markdown body for schema pages.<br/><br/>**Function type:** `(pageData: SchemaPageMetadata, parseMarkdown?: MarkdownParser) => string` |
 
 The default generators load a GFM-aware Markdown parser asynchronously, then render
-pages synchronously. Custom generators still receive one metadata argument and
-return a string.
+pages synchronously. Custom generators receive the page metadata and the optional parser, and return
+a string synchronously. A wrapper around a default generator should forward the
+parser as its second argument. If the runtime prevents parser loading, generation
+uses the legacy cleaner and a later run can retry the import.
 
 For custom code that imports `lib/markdown/utils`, the one-argument `clean(value)`
 form and the `codeFence` / `codeBlock` regex exports are deprecated and retain
@@ -232,8 +234,29 @@ synchronously when rendering descriptions:
 const {
   createMarkdownCleaner,
 } = require("docusaurus-plugin-openapi-docs/lib/markdown/utils");
-const cleanDescription = await createMarkdownCleaner();
-const markdown = cleanDescription(description);
+module.exports = async function createConfig() {
+  const cleanDescription = await createMarkdownCleaner();
+  return {
+    // Other Docusaurus options...
+    plugins: [
+      [
+        "docusaurus-plugin-openapi-docs",
+        {
+          config: {
+            api: {
+              specPath: "openapi.yaml",
+              outputDir: "docs/api",
+              markdownGenerators: {
+                createInfoPageMD: (pageData) =>
+                  cleanDescription(pageData.description),
+              },
+            },
+          },
+        },
+      ],
+    ],
+  };
+};
 ```
 
 ### sidebarGenerators

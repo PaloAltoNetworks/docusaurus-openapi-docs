@@ -9,49 +9,52 @@ import type { Nodes, Root } from "mdast";
 
 export type MarkdownParser = (value: string) => Root;
 
-let markdownParserPromise: Promise<MarkdownParser> | undefined;
+let markdownParserPromise: Promise<MarkdownParser | undefined> | undefined;
 
 /** Load the ESM parser on the asynchronous generation path, without a transpiler. */
-export function loadMarkdownParser(): Promise<MarkdownParser> {
+export function loadMarkdownParser(): Promise<MarkdownParser | undefined> {
   if (!markdownParserPromise) {
     // CommonJS TypeScript output rewrites import() to require(). Keep native
     // imports here; all module specifiers are fixed, never supplied by users.
-    // eslint-disable-next-line no-new-func
-    const load = new Function(
-      `return Promise.all([
+    markdownParserPromise = Promise.resolve()
+      .then(() => {
+        // eslint-disable-next-line no-new-func
+        const load = new Function(
+          `return Promise.all([
         import("mdast-util-from-markdown"),
         import("micromark-extension-gfm"),
         import("mdast-util-gfm")
       ])`
-    ) as () => Promise<
-      [
-        typeof import("mdast-util-from-markdown"),
-        typeof import("micromark-extension-gfm"),
-        typeof import("mdast-util-gfm"),
-      ]
-    >;
-    markdownParserPromise = load().then(
-      ([{ fromMarkdown }, { gfm }, { gfmFromMarkdown }]) => {
+        ) as () => Promise<
+          [
+            typeof import("mdast-util-from-markdown"),
+            typeof import("micromark-extension-gfm"),
+            typeof import("mdast-util-gfm"),
+          ]
+        >;
+        return load();
+      })
+      .then(([{ fromMarkdown }, { gfm }, { gfmFromMarkdown }]) => {
         const options = {
           extensions: [
             gfm(),
             {
               // Match MDX blocks and expose image alt text without rewriting syntax.
               disable: {
-                null: [
-                  "htmlFlow",
-                  "htmlText",
-                  "codeIndented",
-                  "labelStartImage",
-                ],
+                null: ["htmlFlow", "codeIndented", "labelStartImage"],
               },
             },
           ],
           mdastExtensions: [gfmFromMarkdown()],
         };
-        return (value) => fromMarkdown(value, options);
-      }
-    );
+        return (value: string) => fromMarkdown(value, options);
+      })
+      .catch(() => {
+        // Restricted VM contexts may not support native imports. Keep generation
+        // working with the legacy cleaner, and allow a later watch run to retry.
+        markdownParserPromise = undefined;
+        return undefined;
+      });
   }
   return markdownParserPromise;
 }
@@ -269,9 +272,15 @@ export function render(children: Children): string {
   return children ?? "";
 }
 
-// Regex to selectively URL-encode '>' and '<' chars
-export const lessThan =
-  /<=?(?!(=|button|\s?\/button|code|\s?\/code|details|\s?\/details|summary|\s?\/summary|hr|\s?\/hr|br|\s?\/br|span|\s?\/span|strong|\s?\/strong|small|\s?\/small|table|\s?\/table|thead|\s?\/thead|tbody|\s?\/tbody|td|\s?\/td|tr|\s?\/tr|th|\s?\/th|h1|\s?\/h1|h2|\s?\/h2|h3|\s?\/h3|h4|\s?\/h4|h5|\s?\/h5|h6|\s?\/h6|title|\s?\/title|p|\s?\/p|em|\s?\/em|b|\s?\/b|i|\s?\/i|u|\s?\/u|strike|\s?\/strike|bold|\s?\/bold|a|\s?\/a|table|\s?\/table|li|\s?\/li|ol|\s?\/ol|ul|\s?\/ul|img|\s?\/img|svg|\s?\/svg|div|\s?\/div|center|\s?\/center))/gu;
+const htmlTagNames =
+  "button|code|details|summary|hr|br|span|strong|small|table|thead|tbody|td|tr|th|h1|h2|h3|h4|h5|h6|title|p|em|b|i|u|strike|bold|a|li|ol|ul|img|svg|div|center";
+const allowedHtmlTag = new RegExp(`^<\\/?(?:${htmlTagNames})(?=[\\s/>])`, "u");
+
+// Match the whole HTML tag name, without consuming a comparison's equals sign.
+export const lessThan = new RegExp(
+  `<(?!\\/?(?:${htmlTagNames})(?=[\\s/>]))`,
+  "gu"
+);
 export const greaterThan =
   /(?<!(button|code|details|summary|hr|br|span|strong|small|table|thead|tbody|td|tr|th|h1|h2|h3|h4|h5|h6|title|p|em|b|i|u|strike|bold|a|li|ol|ul|img|svg|div|center|\/|\s|"|'))>/gu;
 /** @deprecated Use the Markdown parser to identify code instead. */
@@ -285,13 +294,19 @@ const textToClean = new RegExp(
   "gu"
 );
 
+function escapeText(match: string): string {
+  if (match.startsWith("\\")) return match;
+  if (match.startsWith("<")) return "&lt;";
+  if (match === ">") return "&gt;";
+  return `\\${match}`;
+}
+
 function cleanText(value: string): string {
-  return value.replace(textToClean, (match) => {
-    if (match.startsWith("\\")) return match;
-    if (match.startsWith("<")) return "&lt;";
-    if (match === ">") return "&gt;";
-    return `\\${match}`;
-  });
+  return value.replace(textToClean, escapeText);
+}
+
+function cleanProse(value: string): string {
+  return value.replace(/\\[\\{}<>]|[<>{}]/gu, escapeText);
 }
 
 /**
@@ -324,14 +339,18 @@ export function clean(
   const visit = (node: Nodes): void => {
     const autolink =
       node.type === "link" && value[node.position!.start.offset!] === "<";
-    if (node.type === "text" || autolink) {
+    if (node.type === "text" || node.type === "html" || autolink) {
       const start = node.position!.start.offset!;
       const end = node.position!.end.offset!;
       result += value.slice(cursor, start);
       // Use source offsets so entities, escapes, and line endings stay intact.
-      result += autolink
-        ? `&lt;${cleanText(value.slice(start + 1, end - 1))}&gt;`
-        : cleanText(value.slice(start, end));
+      const source = value.slice(start, end);
+      result +=
+        node.type === "html" && allowedHtmlTag.test(source)
+          ? source
+          : autolink
+            ? `&lt;${cleanProse(value.slice(start + 1, end - 1))}&gt;`
+            : cleanProse(source);
       cursor = end;
     } else if ("children" in node) {
       node.children.forEach(visit);

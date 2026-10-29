@@ -90,12 +90,8 @@ module.exports = {
       ...config,
       displayName: "markdown",
       testMatch: markdownTests,
-      moduleNameMapper: {
-        ...config.moduleNameMapper,
-        // Jest 27 does not resolve this package's conditional Node export.
-        "^unist-util-visit-parents/do-not-use-color$":
-          "<rootDir>/node_modules/unist-util-visit-parents/lib/color.node.js",
-      },
+      // Resolve the package's public conditional export from its importing module.
+      resolver: "<rootDir>/jest.markdown-resolver.js",
     },
   ],
 };

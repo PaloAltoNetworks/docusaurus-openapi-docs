@@ -5,9 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import { spawnSync } from "child_process";
 import fs from "fs";
 import os from "os";
 import path from "path";
+import vm from "vm";
+
+import ts from "typescript";
 
 import * as markdownUtils from "./utils";
 import {
@@ -18,13 +22,22 @@ import {
 } from "./utils";
 import pluginOpenAPIDocs from "../index";
 import { MarkdownGenerator } from "../types";
+import {
+  createApiPageMD,
+  createInfoPageMD,
+  createTagPageMD,
+  createSchemaPageMD,
+} from "./index";
 
 let parseMarkdown: MarkdownParser;
 const clean = (value: string | undefined) =>
   cleanMarkdown(value, parseMarkdown);
 
 beforeAll(async () => {
-  parseMarkdown = await loadMarkdownParser();
+  const loaded = await loadMarkdownParser();
+  if (!loaded)
+    throw new Error("Markdown parser unavailable in test environment");
+  parseMarkdown = loaded;
 });
 
 describe("clean", () => {
@@ -505,7 +518,38 @@ describe("asynchronous Markdown generation", () => {
     expect(schema).toContain("[^schema]: \\{schema\\}");
   });
 
-  it("keeps custom generators synchronous and passes only page metadata", async () => {
+  it("review regressions: passes the parser to custom wrappers of every default generator", async () => {
+    const specPath = path.join(siteDir, "spec.json");
+    const spec = JSON.parse(fs.readFileSync(specPath, "utf8"));
+    const fenced = (name: string) => `~~~\n{${name}Code}\n~~~\n\n{${name}Text}`;
+    spec.info.description = fenced("info");
+    spec.tags[0].description = fenced("tag");
+    spec.paths["/pets"].get.description = fenced("api");
+    spec.components.schemas.Pet.description = fenced("schema");
+    fs.writeFileSync(specPath, JSON.stringify(spec));
+    await generate({
+      createApiPageMD: (data, parser?: MarkdownParser) =>
+        createApiPageMD(data, parser),
+      createInfoPageMD: (data, parser?: MarkdownParser) =>
+        createInfoPageMD(data, parser),
+      createTagPageMD: (data, parser?: MarkdownParser) =>
+        createTagPageMD(data, parser),
+      createSchemaPageMD: (data, parser?: MarkdownParser) =>
+        createSchemaPageMD(data, parser),
+    });
+    for (const [name, output] of [
+      ["api", page(".api.mdx")],
+      ["info", page(".info.mdx")],
+      ["tag", page(".tag.mdx")],
+      ["schema", page(".schema.mdx", path.join(outputDir, "schemas"))],
+    ]) {
+      expect(output).toContain(`{${name}Code}`);
+      expect(output).not.toContain(`\\{${name}Code\\}`);
+      expect(output).toContain(`\\{${name}Text\\}`);
+    }
+  });
+
+  it("keeps custom generators synchronous and passes the parser explicitly", async () => {
     const generators = {
       createApiPageMD: jest.fn(() => "custom api"),
       createInfoPageMD: jest.fn(() => "custom info"),
@@ -516,7 +560,8 @@ describe("asynchronous Markdown generation", () => {
     for (const generator of Object.values(generators)) {
       expect(generator).toHaveBeenCalledTimes(1);
       expect(generator).toHaveBeenCalledWith(
-        expect.objectContaining({ type: expect.any(String) })
+        expect.objectContaining({ type: expect.any(String) }),
+        expect.any(Function)
       );
     }
     expect(page(".api.mdx")).toContain("custom api");
@@ -524,6 +569,112 @@ describe("asynchronous Markdown generation", () => {
     expect(page(".tag.mdx")).toContain("custom tag");
     expect(page(".schema.mdx", path.join(outputDir, "schemas"))).toContain(
       "custom schema"
+    );
+  });
+});
+
+describe("review regressions: HTML and parser fallback", () => {
+  it.each(["uuid", "id", "integer", "a-b", "aside"])(
+    "escapes the complete non-allowlisted tag %s",
+    (name) => {
+      expect(clean(`Use <${name}> here`)).toBe(`Use &lt;${name}&gt; here`);
+    }
+  );
+
+  it("keeps the equals sign in a less-than-or-equal comparison", () => {
+    expect(clean("a <= b")).toBe("a &lt;= b");
+  });
+
+  it.each([
+    [
+      '<a href="https://x/{id}">link {label}</a>',
+      '<a href="https://x/{id}">link \\{label\\}</a>',
+    ],
+    [
+      '<span title="{value}">text {value}</span>',
+      '<span title="{value}">text \\{value\\}</span>',
+    ],
+    ["<a href='https://x/{id}'>link</a>", "<a href='https://x/{id}'>link</a>"],
+  ])("preserves quoted HTML attributes in %s", (input, expected) => {
+    expect(clean(input)).toBe(expected);
+  });
+
+  function isolatedUtils(strings = true) {
+    const source = fs.readFileSync(path.join(__dirname, "utils.ts"), "utf8");
+    const code = ts.transpileModule(source, {
+      compilerOptions: {
+        target: ts.ScriptTarget.ES2019,
+        module: ts.ModuleKind.CommonJS,
+      },
+    }).outputText;
+    const context = vm.createContext(
+      { exports: {} },
+      { codeGeneration: { strings, wasm: false } }
+    );
+    new vm.Script(code, {
+      filename: path.join(__dirname, "isolated-utils.cjs"),
+    }).runInContext(context);
+    return { context, utils: context.exports as typeof markdownUtils };
+  }
+
+  it.each(["vm", "string-code-generation"])(
+    "uses legacy cleaning when %s prevents parser loading",
+    (mode) => {
+      const source = fs.readFileSync(path.join(__dirname, "utils.ts"), "utf8");
+      const code = ts.transpileModule(source, {
+        compilerOptions: {
+          target: ts.ScriptTarget.ES2019,
+          module: ts.ModuleKind.CommonJS,
+        },
+      }).outputText;
+      const temp = fs.mkdtempSync(path.join(__dirname, ".parser-runtime-"));
+      const file = path.join(temp, "utils.cjs");
+      fs.writeFileSync(file, code);
+      try {
+        const script =
+          mode === "vm"
+            ? `const fs=require("fs"),vm=require("vm");const context=vm.createContext({exports:{}});new vm.Script(fs.readFileSync(${JSON.stringify(file)},"utf8"),{filename:${JSON.stringify(file)}}).runInContext(context);context.exports.createMarkdownCleaner().then(fn=>console.log(JSON.stringify(fn("Use {a} and ` +
+              "`{b}`" +
+              `")))).catch(error=>{console.error(error);process.exitCode=1;});`
+            : `require(${JSON.stringify(file)}).createMarkdownCleaner().then(fn=>console.log(JSON.stringify(fn("Use {a} and ` +
+              "`{b}`" +
+              `")))).catch(error=>{console.error(error);process.exitCode=1;});`;
+        const child = spawnSync(
+          process.execPath,
+          [
+            ...(mode === "string-code-generation"
+              ? ["--disallow-code-generation-from-strings"]
+              : []),
+            "-e",
+            script,
+          ],
+          { encoding: "utf8" }
+        );
+        expect({ status: child.status, stderr: child.stderr }).toEqual({
+          status: 0,
+          stderr: "",
+        });
+        expect(JSON.parse(child.stdout)).toBe("Use \\{a\\} and `{b}`");
+      } finally {
+        fs.rmSync(temp, { recursive: true, force: true });
+      }
+    }
+  );
+
+  it("retries parser initialization after an unavailable VM import", async () => {
+    const { context, utils } = isolatedUtils();
+    context.Function = function () {
+      return () => Promise.reject(new Error("native imports unavailable"));
+    };
+    const failed = utils.loadMarkdownParser();
+    await expect(failed).resolves.toBeUndefined();
+    context.Function = Function;
+    const retried = utils.loadMarkdownParser();
+    expect(retried).not.toBe(failed);
+    const parser = await retried;
+    expect(typeof parser).toBe("function");
+    expect(utils.clean("See[^1]\n\n[^1]: {x}", parser)).toBe(
+      "See[^1]\n\n[^1]: \\{x\\}"
     );
   });
 });
