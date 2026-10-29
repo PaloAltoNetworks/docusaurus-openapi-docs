@@ -10,7 +10,10 @@ import { runInThisContext } from "vm";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import * as sdk from "postman-collection";
 
-import buildPostmanRequest from "./buildPostmanRequest";
+import buildPostmanRequest, {
+  RequestBodyError,
+  tryBuildPostmanRequest,
+} from "./buildPostmanRequest";
 import makeRequest from "./Request/makeRequest";
 
 type Options = { [K in keyof Parameters<typeof buildPostmanRequest>[1]]?: any };
@@ -23,7 +26,7 @@ const native = runInThisContext(
   "Blob" | "FormData" | "Headers" | "Request" | "Response" | "URLSearchParams"
 >;
 
-async function sendForm(
+async function sendRequest(
   request: sdk.Request,
   body: Parameters<typeof makeRequest>[2],
   encoding?: Parameters<typeof makeRequest>[5]
@@ -41,16 +44,48 @@ async function sendForm(
   try {
     await makeRequest(request, undefined, body, 1000, undefined, encoding);
     const [url, options] = fetch.mock.calls[0];
-    const wire = new native.Request(url, options);
-    return {
-      contentType: wire.headers.get("Content-Type"),
-      form: await wire.formData(),
-    };
+    return new native.Request(url, options);
   } finally {
     for (const [key, value] of Object.entries(original)) {
       if (value === undefined) delete (global as any)[key];
       else (global as any)[key] = value;
     }
+  }
+}
+
+async function sendForm(
+  request: sdk.Request,
+  body: Parameters<typeof makeRequest>[2],
+  encoding?: Parameters<typeof makeRequest>[5]
+) {
+  const wire = await sendRequest(request, body, encoding);
+  return {
+    contentType: wire.headers.get("Content-Type"),
+    form: await wire.formData(),
+  };
+}
+
+async function sendRawFile(
+  request: sdk.Request,
+  body: Parameters<typeof makeRequest>[2]
+) {
+  // Node has no FileReader. This adapter only reads the real Blob's bytes.
+  const originalReader = global.FileReader;
+  (global as any).FileReader = class {
+    result?: ArrayBuffer;
+    onload?: () => void;
+    readAsArrayBuffer(blob: Blob) {
+      void blob.arrayBuffer().then((bytes) => {
+        this.result = bytes;
+        this.onload?.();
+      });
+    }
+  };
+  try {
+    return await sendRequest(request, body);
+  } finally {
+    if (originalReader === undefined) delete (global as any).FileReader;
+    else global.FileReader = originalReader;
   }
 }
 
@@ -620,19 +655,16 @@ describe("buildPostmanRequest", () => {
           const request = build({ contentType, body: fields }, original);
           expect(request.body?.mode).toBe(mode);
           expect(formFields(request)).toEqual([["name", "Rex"]]);
-          const inactive =
-            from === "raw"
-              ? undefined
-              : request.body?.[from as "formdata" | "urlencoded"]
-                  ?.all()
-                  .map(({ key, value }) => [key, value]);
-          expect(inactive).toEqual(
-            from === "raw" ? undefined : [["old", "stale"]]
+          expect(request.body?.raw).toBeUndefined();
+          expect(request.body?.file).toBeUndefined();
+          expect(
+            request.body?.[mode === "formdata" ? "urlencoded" : "formdata"]
+          ).toBeUndefined();
+          expect(request.body?.toJSON()).not.toHaveProperty("raw");
+          expect(request.body?.toJSON()).not.toHaveProperty("file");
+          expect(request.body?.toJSON()).not.toHaveProperty(
+            mode === "formdata" ? "urlencoded" : "formdata"
           );
-          expect(request.body?.raw).toBe(
-            from === "raw" ? "old raw body" : undefined
-          );
-          expect(request.body?.file).toEqual({ src: "/path/to/retained.bin" });
           expect(request.body?.toJSON()).toMatchObject({
             graphql: { query: "query { node }" },
           });
@@ -671,7 +703,19 @@ describe("buildPostmanRequest", () => {
         expect(uploaded.body?.mode).toBe("formdata");
         expect(uploaded.body?.formdata?.all()).toHaveLength(2);
         expect(returned.body?.mode).toBe("urlencoded");
-        expect(returned.body?.formdata?.all()).toHaveLength(2);
+        expect(returned.body?.formdata).toBeUndefined();
+        expect(returned.body?.toJSON()).not.toHaveProperty("formdata");
+        const emptyMultipart = build(
+          {
+            contentType: multipart,
+            encoding: { file: { contentType: "text/csv" } },
+          },
+          returned
+        );
+        expect(emptyMultipart.body?.formdata?.all()).toMatchObject([
+          { key: "name", value: "Rex" },
+        ]);
+        expect(emptyMultipart.body?.formdata?.all()).toHaveLength(1);
         expect(formFields(returned)).toEqual([["name", "Rex"]]);
         expect(formFields(repeated)).toEqual([["name", "Rex"]]);
         expect(original.toJSON()).toEqual(before);
@@ -810,17 +854,29 @@ describe("buildPostmanRequest", () => {
       );
 
       it.each([
-        ["MULTIPART/FORM-DATA; charset=utf-8", "formdata"],
-        [" multipart/form-data ; boundary=server", "formdata"],
-        ["Application/X-WWW-Form-Urlencoded; charset=UTF-8", "urlencoded"],
-      ])("normalizes selected form type %s", (contentType, mode) => {
+        [
+          "MULTIPART/FORM-DATA; charset=utf-8",
+          "formdata",
+          "MULTIPART/FORM-DATA; charset=utf-8",
+        ],
+        [
+          " multipart/form-data ; boundary=server",
+          "formdata",
+          " multipart/form-data ",
+        ],
+        [
+          "Application/X-WWW-Form-Urlencoded; charset=UTF-8",
+          "urlencoded",
+          "Application/X-WWW-Form-Urlencoded; charset=UTF-8",
+        ],
+      ])("normalizes selected form type %s", (contentType, mode, header) => {
         const request = build(
           { contentType, body: fields },
           formRequest("raw")
         );
         expect(request.body?.mode).toBe(mode);
         expect(formFields(request)).toEqual([["name", "Rex"]]);
-        expect(request.headers.get("Content-Type")).toBe(contentType);
+        expect(request.headers.get("Content-Type")).toBe(header);
       });
 
       it("drops multipart encoding placeholders for an empty urlencoded selection", async () => {
@@ -877,26 +933,15 @@ describe("buildPostmanRequest", () => {
       );
 
       it.each(["urlencoded", "raw"])(
-        "sends a raw upload as the fallback file multipart field from %s metadata",
-        async (mode) => {
+        "rejects a raw multipart upload without a named file field in %s metadata",
+        (mode) => {
           const body = {
             type: "raw" as const,
             content: { type: "file" as const, value: file },
           };
-          const encoding = { file: { contentType: "text/csv" } };
-          const request = build(
-            { contentType: multipart, body, encoding },
-            formRequest(mode)
-          );
-          expect(request.body?.mode).toBe("formdata");
-          expect(formFields(request)).toEqual([["file", file]]);
-          const sent = await sendForm(request, body, encoding);
-          expect(sent.contentType).toMatch(/^multipart\/form-data; boundary=/);
-          const part = sent.form.get("file");
-          if (!part || typeof part === "string")
-            throw new Error("Missing uploaded file");
-          await expect(part.text()).resolves.toBe("id,name\n1,Rex\n");
-          expect(part.type).toBe("text/csv");
+          expect(() =>
+            build({ contentType: multipart, body }, formRequest(mode))
+          ).toThrow(RequestBodyError);
         }
       );
 
@@ -914,35 +959,271 @@ describe("buildPostmanRequest", () => {
           type: "raw" as const,
           content: { type: "file" as const, value: file },
         };
-        const encoding = { upload: { contentType: "text/csv" } };
+        const encoding = {
+          upload: { contentType: "application/octet-stream, text/csv" },
+        };
         const request = build(
           { contentType: multipart, body, encoding },
           original
         );
         expect(request.body?.mode).toBe("formdata");
+        expect(request.body?.formdata?.all()).toMatchObject([
+          { key: "upload", contentType: "application/octet-stream" },
+        ]);
         const sent = await sendForm(request, body, encoding);
         expect(formKeys(sent.form)).toEqual(["upload"]);
         const part = sent.form.get("upload");
         if (!part || typeof part === "string")
           throw new Error("Missing uploaded file");
         await expect(part.text()).resolves.toBe("id,name\n1,Rex\n");
+        expect(part.type).toBe("application/octet-stream");
         expect(original.toJSON()).toEqual(before);
       });
 
-      it("filters a raw file when the selected type is urlencoded", async () => {
+      it("preserves a raw file's bytes when the selected type is urlencoded", async () => {
+        const bytes = [0, 255, 128, 65, 13, 10];
         const body = {
           type: "raw" as const,
-          content: { type: "file" as const, value: file },
+          content: {
+            type: "file" as const,
+            value: {
+              src: "/path/to/raw.bin",
+              content: new native.Blob([new Uint8Array(bytes)]),
+            },
+          },
         };
         const request = build(
           { contentType: urlencoded, body },
           formRequest("formdata")
         );
-        expect(request.body?.mode).toBe("urlencoded");
-        expect(formFields(request)).toEqual([]);
-        const sent = await sendForm(request, body);
-        expect(sent.contentType).toBe(urlencoded);
-        expect(formKeys(sent.form)).toEqual([]);
+        expect(request.body?.mode).toBe("file");
+        expect(request.body?.file).toEqual({ src: body.content.value.src });
+        expect(request.body?.formdata).toBeUndefined();
+        expect(request.body?.urlencoded).toBeUndefined();
+        const wire = await sendRawFile(request, body);
+        expect(wire.headers.get("Content-Type")).toBe(urlencoded);
+        expect([...new Uint8Array(await wire.arrayBuffer())]).toEqual(bytes);
+      });
+
+      it.each([
+        { formdata: [] },
+        {
+          formdata: [
+            { key: "first", type: "file" },
+            { key: "second", type: "file" },
+          ],
+        },
+        { formdata: [{ key: "", type: "file" }] },
+        { formdata: [{ key: "disabled", type: "file", disabled: true }] },
+      ])(
+        "reports an ambiguous raw multipart upload without guessing: %j",
+        ({ formdata }) => {
+          const original = new sdk.Request({
+            url: "http://example.com/pets",
+            method: "POST",
+            body: { mode: "formdata", formdata } as any,
+          });
+          const before = original.toJSON();
+          const body = { type: "raw", content: { type: "file", value: file } };
+          expect(() =>
+            build({ contentType: multipart, body }, original)
+          ).toThrow(RequestBodyError);
+          const result = tryBuildPostmanRequest(original, {
+            queryParams: [],
+            pathParams: [],
+            cookieParams: [],
+            headerParams: [],
+            contentType: multipart,
+            accept: "",
+            body: body as any,
+            auth: { data: {}, options: {} },
+          });
+          expect(result.request).toBeUndefined();
+          expect(result.error).toMatch(/named file field/);
+          expect(original.toJSON()).toEqual(before);
+        }
+      );
+
+      it("ignores disabled and unnamed file placeholders when one field remains", async () => {
+        const original = new sdk.Request({
+          url: "http://example.com/pets",
+          method: "POST",
+          body: {
+            mode: "formdata",
+            formdata: [
+              { key: "wrong", type: "file", disabled: true },
+              { key: "", type: "file" },
+              { key: "upload", type: "file" },
+            ],
+          } as any,
+        });
+        const body = {
+          type: "raw" as const,
+          content: { type: "file" as const, value: file },
+        };
+        const encoding = {
+          upload: { contentType: "application/octet-stream, text/csv" },
+        };
+        const request = build(
+          { contentType: multipart, body, encoding },
+          original
+        );
+        expect(request.body?.formdata?.all()).toMatchObject([
+          {
+            key: "upload",
+            value: file,
+            contentType: "application/octet-stream",
+          },
+        ]);
+        const sent = await sendForm(request, body, encoding);
+        expect(formKeys(sent.form)).toEqual(["upload"]);
+        const part = sent.form.get("upload");
+        if (!part || typeof part === "string") throw new Error("Missing file");
+        await expect(part.text()).resolves.toBe("id,name\n1,Rex\n");
+        expect(part.type).toBe("application/octet-stream");
+      });
+
+      it.each([undefined, {}])(
+        "drops empty multipart placeholders without a nonempty encoding: %j",
+        (encoding) => {
+          const original = new sdk.Request({
+            url: "http://example.com/pets",
+            method: "POST",
+            body: {
+              mode: "urlencoded",
+              urlencoded: [{ key: "meta", value: "{}" }],
+            },
+          });
+          expect(
+            build({ contentType: multipart, encoding }, original).body
+          ).toBeUndefined();
+        }
+      );
+
+      it("removes every inactive collection when retaining encoded placeholders", () => {
+        const original = new sdk.Request({
+          url: "http://example.com/pets",
+          method: "POST",
+          body: {
+            mode: "urlencoded",
+            raw: "stale raw",
+            file: { src: "stale.bin" },
+            urlencoded: [{ key: "meta", value: "{}" }],
+            options: { raw: { language: "json" } },
+            disabled: true,
+          } as any,
+        });
+        const before = original.toJSON();
+        const request = build(
+          {
+            contentType: multipart,
+            encoding: { meta: { contentType: "application/json" } },
+          },
+          original
+        );
+        expect(request.body?.formdata?.all()).toMatchObject([
+          { key: "meta", value: "{}", contentType: "application/json" },
+        ]);
+        expect(request.body?.raw).toBeUndefined();
+        expect(request.body?.file).toBeUndefined();
+        expect(request.body?.urlencoded).toBeUndefined();
+        expect(request.body?.toJSON()).toMatchObject({
+          options: { raw: { language: "json" } },
+          disabled: true,
+        });
+        expect(original.toJSON()).toEqual(before);
+      });
+
+      it("replaces inactive multipart parts with the active urlencoded examples", () => {
+        const original = new sdk.Request({
+          url: "http://example.com/pets",
+          method: "POST",
+          body: {
+            mode: "urlencoded",
+            urlencoded: [{ key: "meta", value: "{}" }],
+            formdata: [{ key: "stale", type: "file", value: file }],
+          } as any,
+        });
+        const before = original.toJSON();
+        const request = build(
+          {
+            contentType: multipart,
+            encoding: { meta: { contentType: "application/json" } },
+          },
+          original
+        );
+        expect(request.body?.formdata?.all()).toMatchObject([
+          { key: "meta", value: "{}", contentType: "application/json" },
+        ]);
+        expect(request.body?.formdata?.all()).toHaveLength(1);
+        expect(request.body?.urlencoded).toBeUndefined();
+        expect(original.toJSON()).toEqual(before);
+      });
+
+      it("does not resurrect inactive urlencoded examples in an active empty multipart body", () => {
+        const original = new sdk.Request({
+          url: "http://example.com/pets",
+          method: "POST",
+          body: {
+            mode: "formdata",
+            formdata: [],
+            urlencoded: [{ key: "stale", value: "{}" }],
+          } as any,
+        });
+        const before = original.toJSON();
+        const request = build(
+          {
+            contentType: multipart,
+            encoding: { meta: { contentType: "application/json" } },
+          },
+          original
+        );
+        expect(request.body?.formdata?.all()).toEqual([]);
+        expect(request.body?.urlencoded).toBeUndefined();
+        expect(original.toJSON()).toEqual(before);
+      });
+
+      it.each(["raw", "file"])(
+        "preserves a pre-encoded multipart body's boundary from %s metadata",
+        async (mode) => {
+          const contentType = "multipart/form-data; boundary=encoded-boundary";
+          const payload =
+            '--encoded-boundary\r\nContent-Disposition: form-data; name="name"\r\n\r\nRex\r\n--encoded-boundary--\r\n';
+          const body = {
+            type: "raw" as const,
+            content: { type: "string" as const, value: payload },
+          };
+          const request = build({ contentType, body }, formRequest(mode));
+          expect(request.body?.mode).toBe("raw");
+          expect(request.body?.raw).toBe(payload);
+          expect(request.headers.get("Content-Type")).toBe(contentType);
+          const sent = await sendForm(request, body);
+          expect(sent.contentType).toBe(contentType);
+          expect(formKeys(sent.form)).toEqual(["name"]);
+          expect(sent.form.get("name")).toBe("Rex");
+        }
+      );
+
+      it("preserves a file upload's supplied nonform boundary header and bytes", async () => {
+        const contentType =
+          "application/octet-stream; boundary=encoded-boundary";
+        const bytes = [0, 255, 128, 65, 13, 10];
+        const body = {
+          type: "raw" as const,
+          content: {
+            type: "file" as const,
+            value: {
+              src: "/path/to/encoded.bin",
+              content: new native.Blob([new Uint8Array(bytes)]),
+            },
+          },
+        };
+        const request = build({ contentType, body }, formRequest("file"));
+        expect(request.body?.mode).toBe("file");
+        expect(request.headers.get("Content-Type")).toBe(contentType);
+        const wire = await sendRawFile(request, body);
+        expect(wire.headers.get("Content-Type")).toBe(contentType);
+        expect([...new Uint8Array(await wire.arrayBuffer())]).toEqual(bytes);
       });
 
       it("keeps raw file uploads for a nonform media type", () => {

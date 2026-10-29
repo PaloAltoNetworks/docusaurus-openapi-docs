@@ -5,10 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-const mediaTypeModule = "docusaurus-plugin-openapi-docs/lib/utils/mediaType";
-const mediaTypeSource =
-  "packages/docusaurus-plugin-openapi-docs/src/utils/mediaType.ts";
-
 const config = {
   preset: "ts-jest",
   testEnvironment: "node",
@@ -23,7 +19,6 @@ const config = {
         baseUrl: __dirname,
         paths: {
           "@theme/*": ["packages/docusaurus-theme-openapi-docs/src/theme/*"],
-          [mediaTypeModule]: [mediaTypeSource],
         },
       },
     },
@@ -33,7 +28,6 @@ const config = {
     "<rootDir>/packages/docusaurus-theme-openapi-docs/src",
   ],
   moduleNameMapper: {
-    [`^${mediaTypeModule}$`]: `<rootDir>/${mediaTypeSource}`,
     "^@theme/(.*)$":
       "<rootDir>/packages/docusaurus-theme-openapi-docs/src/theme/$1",
     "^chalk$": "<rootDir>/__mocks__/chalk.js",
@@ -47,6 +41,8 @@ const config = {
 
 const bodyExamplesTest =
   "<rootDir>/packages/docusaurus-theme-openapi-docs/src/theme/ApiExplorer/Body/jsonExamples.test.ts";
+const requestBodyTest =
+  "<rootDir>/packages/docusaurus-theme-openapi-docs/src/theme/ApiExplorer/buildPostmanRequest.consumer.test.ts";
 const samplerModule =
   "docusaurus-plugin-openapi-docs/lib/openapi/createSchemaExample";
 const samplerSource =
@@ -60,7 +56,14 @@ module.exports = {
       testPathIgnorePatterns: [
         "/node_modules/",
         bodyExamplesTest.replace(/\./g, "\\.") + "$",
+        requestBodyTest.replace(/\./g, "\\.") + "$",
       ],
+    },
+    {
+      ...config,
+      displayName: "request-body",
+      testEnvironment: "jsdom",
+      testMatch: [requestBodyTest],
     },
     {
       ...config,
