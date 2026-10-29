@@ -10,51 +10,49 @@ import { runInThisContext } from "vm";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import * as sdk from "postman-collection";
 
-import makeRequest from "./makeRequest";
+import makeRequest, {
+  isStreamingResponse,
+  readResponseBody,
+} from "./makeRequest";
 
 // Jest 27's Node sandbox does not expose the runtime's Fetch API globals.
-const native = runInThisContext("({ Headers, Response })") as Pick<
+const native = runInThisContext("({ Headers, Response, TextDecoder })") as Pick<
   typeof globalThis,
-  "Headers" | "Response"
+  "Headers" | "Response" | "TextDecoder"
 >;
 const originalGlobals = Object.fromEntries(
-  ["window", "document", "Headers", "fetch"].map((key) => [
-    key,
-    (global as any)[key],
-  ])
+  ["Headers", "fetch"].map((key) => [key, (global as any)[key]])
 );
-type TestDom = { window: Window & typeof globalThis };
-const { JSDOM } = jest.requireActual("jsdom") as {
-  JSDOM: new (html: string) => TestDom;
+const originalObjectURLs = {
+  createObjectURL: window.URL.createObjectURL,
+  revokeObjectURL: window.URL.revokeObjectURL,
 };
-let dom: TestDom;
 let click: jest.SpyInstance;
 let createObjectURL: jest.Mock;
 let revokeObjectURL: jest.Mock;
 
 beforeEach(() => {
   jest.useFakeTimers();
-  dom = new JSDOM("<!doctype html><body></body>");
+  document.body.innerHTML = "";
   createObjectURL = jest.fn(() => "blob:download");
   revokeObjectURL = jest.fn();
-  dom.window.URL.createObjectURL = createObjectURL;
-  dom.window.URL.revokeObjectURL = revokeObjectURL;
+  window.URL.createObjectURL = createObjectURL;
+  window.URL.revokeObjectURL = revokeObjectURL;
   click = jest
-    .spyOn(dom.window.HTMLAnchorElement.prototype, "click")
+    .spyOn(window.HTMLAnchorElement.prototype, "click")
     .mockImplementation(() => {});
   (global as any).Headers = native.Headers;
-  (global as any).window = dom.window;
-  (global as any).document = dom.window.document;
 });
 
 afterEach(() => {
   jest.runOnlyPendingTimers();
   jest.useRealTimers();
   click.mockRestore();
-  dom.window.close();
 });
 
 afterAll(() => {
+  window.URL.createObjectURL = originalObjectURLs.createObjectURL;
+  window.URL.revokeObjectURL = originalObjectURLs.revokeObjectURL;
   for (const [key, value] of Object.entries(originalGlobals)) {
     if (value === undefined) {
       delete (global as any)[key];
@@ -64,28 +62,40 @@ afterAll(() => {
   }
 });
 
-async function download(
+async function requestResponse(
   disposition: string | null,
   contentType: string | null = "application/pdf",
-  content = "response contents"
+  content: BodyInit | null = "response contents",
+  status = 201,
+  extraHeaders: Record<string, string> = {}
 ) {
-  const headers = new native.Headers();
+  const headers = new native.Headers(extraHeaders);
   if (contentType !== null) headers.set("Content-Type", contentType);
   if (disposition !== null) headers.set("Content-Disposition", disposition);
-  const response = new native.Response(content, { status: 201, headers });
+  const response = new native.Response(content, { status, headers });
   if (contentType === null) response.headers.delete("Content-Type");
+  const text = jest.spyOn(response, "text");
+  const blob = jest.spyOn(response, "blob");
+  const clone = jest.spyOn(response, "clone");
   (global as any).fetch = jest.fn().mockResolvedValue(response);
   const request = new sdk.Request({
     url: "https://example.com/report",
     method: "GET",
   });
   const result = await makeRequest(request, undefined, { type: "empty" });
-  expect(result).toBe(response);
-  return result;
+  return { result, response, text, blob, clone };
+}
+
+async function download(
+  disposition: string | null,
+  contentType: string | null = "application/pdf",
+  content = "response contents"
+) {
+  return (await requestResponse(disposition, contentType, content)).result;
 }
 
 function filename() {
-  return dom.window.document.querySelector("a")?.download;
+  return document.querySelector("a")?.download;
 }
 
 describe("download filenames", () => {
@@ -205,7 +215,9 @@ describe("download filenames", () => {
         contentType
       );
       expect(click).not.toHaveBeenCalled();
-      await expect(response.text()).resolves.toBe("response contents");
+      await expect(readResponseBody(response)).resolves.toBe(
+        "response contents"
+      );
     }
   );
 
@@ -217,24 +229,163 @@ describe("download filenames", () => {
     }
   );
 
-  it("preserves a readable successful response after downloading", async () => {
-    const response = await download("attachment; filename=report.pdf");
-    expect(response.status).toBe(201);
-    expect(response.headers.get("Content-Disposition")).toBe(
+  it("displays a short placeholder without decoding or cloning downloaded bytes", async () => {
+    const content = new Uint8Array([0, 255, 254, 10]).buffer;
+    const { result, response, text, blob, clone } = await requestResponse(
+      "attachment; filename=report.pdf",
+      "application/pdf",
+      content
+    );
+    const display = await readResponseBody(result);
+    expect(text).not.toHaveBeenCalled();
+    expect(clone).not.toHaveBeenCalled();
+    expect(blob).toHaveBeenCalledTimes(1);
+    expect(display).toBe("Response body downloaded.");
+    expect(display.length).toBeLessThan(100);
+    expect(response.bodyUsed).toBe(true);
+    expect("downloadedBody" in result).toBe(true);
+    if (!("downloadedBody" in result))
+      throw new Error("Missing download result");
+    expect(result.response).toBe(response);
+    expect(result.response.status).toBe(201);
+    expect(result.response.headers.get("Content-Disposition")).toBe(
       "attachment; filename=report.pdf"
     );
-    await expect(response.text()).resolves.toBe("response contents");
-    const blob = createObjectURL.mock.calls[0][0];
-    await expect(blob.text()).resolves.toBe("response contents");
+    await expect(
+      createObjectURL.mock.calls[0][0].arrayBuffer()
+    ).resolves.toEqual(content);
   });
 
   it("removes the real anchor and revokes its object URL after clicking", async () => {
     await download("attachment; filename=report.pdf");
-    expect(dom.window.document.querySelector("a")).not.toBeNull();
+    expect(document.querySelector("a")).not.toBeNull();
     expect(revokeObjectURL).not.toHaveBeenCalled();
-    jest.runOnlyPendingTimers();
-    expect(dom.window.document.querySelector("a")).toBeNull();
+    jest.advanceTimersByTime(999);
+    expect(document.querySelector("a")).not.toBeNull();
+    expect(revokeObjectURL).not.toHaveBeenCalled();
+    jest.advanceTimersByTime(1);
+    expect(document.querySelector("a")).toBeNull();
     expect(revokeObjectURL).toHaveBeenCalledTimes(1);
     expect(revokeObjectURL).toHaveBeenCalledWith("blob:download");
+  });
+
+  it.each([
+    ["attachment; filename=report.pdf;", "report.pdf"],
+    ["attachment; filename=report (1).pdf", "report (1).pdf"],
+    ["attachment; filename=résumé.pdf", "résumé.pdf"],
+    ["attachment; filename=report (1).pdf; ", "report (1).pdf"],
+    ["attachment; filename=résumé.pdf;", "résumé.pdf"],
+    ["attachment; filename=report.v2", "report.v2.pdf"],
+    ["attachment; filename=report.V2", "report.V2.pdf"],
+    ["attachment; filename=export.2024-10", "export.2024-10.pdf"],
+    ["attachment; filename=archive.tar.gz", "archive.tar.gz"],
+    ["attachment; filename=archive.7z", "archive.7z"],
+  ])("accepts the browser filename %s", async (disposition, expected) => {
+    await download(disposition);
+    expect(filename()).toBe(expected);
+  });
+
+  it.each([
+    ["application/pdf, application/pdf", "file.pdf"],
+    [" APPLICATION/PDF ; charset=utf-8, application/pdf", "file.pdf"],
+  ])("uses the first MIME list item in %s", async (contentType, expected) => {
+    await download(null, contentType);
+    expect(filename()).toBe(expected);
+  });
+
+  it("does not use a later binary MIME list item", async () => {
+    const { result, response } = await requestResponse(
+      null,
+      "text/plain, application/pdf"
+    );
+    expect(result).toBe(response);
+    expect(click).not.toHaveBeenCalled();
+    await expect(readResponseBody(result)).resolves.toBe("response contents");
+  });
+
+  it.each([401, 500])(
+    "shows an attachment error with status %s without downloading",
+    async (status) => {
+      const { result, response, text, blob, clone } = await requestResponse(
+        "attachment; filename=error.pdf",
+        "application/pdf",
+        "request failed",
+        status
+      );
+      expect(result).toBe(response);
+      expect(response.status).toBe(status);
+      expect(click).not.toHaveBeenCalled();
+      expect(blob).not.toHaveBeenCalled();
+      expect(clone).not.toHaveBeenCalled();
+      await expect(readResponseBody(result)).resolves.toBe("request failed");
+      expect(text).toHaveBeenCalledTimes(1);
+    }
+  );
+
+  it.each([204, 205])(
+    "preserves status %s for an empty downloaded body",
+    async (status) => {
+      const { result, response, text, clone } = await requestResponse(
+        "attachment; filename=report.pdf",
+        "application/pdf",
+        null,
+        status,
+        { "Transfer-Encoding": "chunked" }
+      );
+      expect(isStreamingResponse(response)).toBe(false);
+      expect("downloadedBody" in result).toBe(true);
+      if (!("downloadedBody" in result))
+        throw new Error("Missing download result");
+      expect(result.response).toBe(response);
+      expect(result.response.status).toBe(status);
+      await expect(readResponseBody(result)).resolves.toBe(
+        "Response body downloaded."
+      );
+      expect(text).not.toHaveBeenCalled();
+      expect(clone).not.toHaveBeenCalled();
+    }
+  );
+
+  it.each([
+    ["text/event-stream", {}],
+    ["TEXT/EVENT-STREAM; charset=utf-8", {}],
+    ["application/pdf", { "Transfer-Encoding": "chunked" }],
+    ["application/pdf", { "Transfer-Encoding": "gzip, Chunked" }],
+  ])(
+    "leaves %s streams for the incremental reader",
+    async (contentType, extraHeaders) => {
+      const { result, response, text, blob, clone } = await requestResponse(
+        "attachment; filename=stream.pdf",
+        contentType,
+        "data: first\n\n",
+        200,
+        extraHeaders
+      );
+      expect(result).toBe(response);
+      expect(isStreamingResponse(response)).toBe(true);
+      expect(click).not.toHaveBeenCalled();
+      expect(blob).not.toHaveBeenCalled();
+      expect(clone).not.toHaveBeenCalled();
+      expect(text).not.toHaveBeenCalled();
+      const reader = response.body!.getReader();
+      const chunk = await reader.read();
+      expect(new native.TextDecoder().decode(chunk.value)).toBe(
+        "data: first\n\n"
+      );
+      await reader.cancel();
+    }
+  );
+
+  it("does not mistake a similarly named transfer encoding for chunked", async () => {
+    const { result, response } = await requestResponse(
+      "attachment; filename=report.pdf",
+      "application/pdf",
+      "response contents",
+      200,
+      { "Transfer-Encoding": "chunked-extra" }
+    );
+    expect(isStreamingResponse(response)).toBe(false);
+    expect("downloadedBody" in result).toBe(true);
+    expect(click).toHaveBeenCalledTimes(1);
   });
 });

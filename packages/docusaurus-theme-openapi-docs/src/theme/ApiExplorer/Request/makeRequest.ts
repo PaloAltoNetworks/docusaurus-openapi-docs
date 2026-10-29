@@ -11,8 +11,13 @@ import * as sdk from "postman-collection";
 import { getDownloadFilename, isAttachment } from "./downloadFilename";
 
 // Custom error types for better error handling
+// prettier-ignore
 export type RequestErrorType =
-  "timeout" | "network" | "cors" | "abort" | "unknown";
+  | "timeout"
+  | "network"
+  | "cors"
+  | "abort"
+  | "unknown";
 
 export class RequestError extends Error {
   type: RequestErrorType;
@@ -24,6 +29,66 @@ export class RequestError extends Error {
     this.type = type;
     this.originalError = originalError;
   }
+}
+
+export type RequestResponse =
+  Response | { response: Response; downloadedBody: string };
+
+const MIME_EXTENSIONS: Record<
+  string,
+  { extension: string; attachmentOnly?: boolean }
+> = {
+  "application/pdf": { extension: ".pdf" },
+  "image/jpeg": { extension: ".jpg" },
+  "image/png": { extension: ".png" },
+  "image/gif": { extension: ".gif" },
+  "image/webp": { extension: ".webp" },
+  "video/mpeg": { extension: ".mpeg" },
+  "video/mp4": { extension: ".mp4" },
+  "audio/mpeg": { extension: ".mp3" },
+  "audio/ogg": { extension: ".ogg" },
+  "application/octet-stream": { extension: ".bin" },
+  "application/zip": { extension: ".zip" },
+  "text/csv": { extension: ".csv", attachmentOnly: true },
+  "text/plain": { extension: ".txt", attachmentOnly: true },
+  "application/json": { extension: ".json", attachmentOnly: true },
+  "application/xml": { extension: ".xml", attachmentOnly: true },
+  "text/xml": { extension: ".xml", attachmentOnly: true },
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+    extension: ".xlsx",
+    attachmentOnly: true,
+  },
+};
+
+function getContentType(response: Response): string {
+  return (
+    response.headers
+      .get("content-type")
+      ?.split(",", 1)[0]
+      .split(";", 1)[0]
+      .trim()
+      .toLowerCase() ?? ""
+  );
+}
+
+/** Stream bodies must reach the explorer's incremental response reader. */
+export function isStreamingResponse(response: Response): boolean {
+  return (
+    response.body !== null &&
+    (getContentType(response) === "text/event-stream" ||
+      (response.headers
+        .get("transfer-encoding")
+        ?.split(",")
+        .some((value) => value.trim().toLowerCase() === "chunked") ??
+        false))
+  );
+}
+
+/** Downloaded binary bodies are never decoded into the response pane. */
+export function readResponseBody(response: RequestResponse): Promise<string> {
+  return "downloadedBody" in response
+    ? Promise.resolve(response.downloadedBody)
+    : response.text();
 }
 
 const DEFAULT_REQUEST_TIMEOUT = 30000; // 30 seconds
@@ -115,7 +180,7 @@ async function makeRequest(
   timeout: number = DEFAULT_REQUEST_TIMEOUT,
   credentials?: RequestCredentials,
   encoding?: Record<string, { contentType?: string }>
-) {
+): Promise<RequestResponse> {
   const headers = request.toJSON().header;
 
   let myHeaders = new Headers();
@@ -277,42 +342,18 @@ async function makeRequest(
 
   try {
     const response = await fetchWithtimeout(finalUrl, requestOptions, timeout);
-    const contentType = response.headers
-      .get("content-type")
-      ?.split(";", 1)[0]
-      .trim()
-      .toLowerCase();
+    const contentType = getContentType(response);
     const disposition = response.headers.get("content-disposition");
     const attachment = isAttachment(disposition);
-    const binaryExtensions: Record<string, string> = {
-      "application/pdf": ".pdf",
-      "image/jpeg": ".jpg",
-      "image/png": ".png",
-      "image/gif": ".gif",
-      "image/webp": ".webp",
-      "video/mpeg": ".mpeg",
-      "video/mp4": ".mp4",
-      "audio/mpeg": ".mp3",
-      "audio/ogg": ".ogg",
-      "application/octet-stream": ".bin",
-      "application/zip": ".zip",
-    };
-    const fileExtension = binaryExtensions[contentType ?? ""] ?? "";
+    const downloadType = MIME_EXTENSIONS[contentType];
 
-    if (fileExtension || attachment) {
-      const attachmentExtensions: Record<string, string> = {
-        "text/csv": ".csv",
-        "text/plain": ".txt",
-        "application/json": ".json",
-        "application/xml": ".xml",
-        "text/xml": ".xml",
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
-          ".xlsx",
-      };
-      const extension =
-        fileExtension || attachmentExtensions[contentType ?? ""] || "";
-      // Keep the original response readable by the explorer's response handler.
-      const blob = await response.clone().blob();
+    if (
+      response.ok &&
+      !isStreamingResponse(response) &&
+      (attachment || (downloadType && !downloadType.attachmentOnly))
+    ) {
+      const extension = downloadType?.extension ?? "";
+      const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
@@ -330,7 +371,9 @@ async function makeRequest(
       setTimeout(() => {
         link.remove();
         window.URL.revokeObjectURL(url);
-      }, 0);
+      }, 1000);
+
+      return { response, downloadedBody: "Response body downloaded." };
     }
 
     return response;

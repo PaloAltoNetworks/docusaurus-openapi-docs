@@ -21,7 +21,7 @@ Let's say you're working on supporting documentation for your API and you want t
 ### Standalone Schema
 
 ```mdx title="Standalone Schema"
-import PetSchema from "./petstore/schemas/pet.schema.mdx";
+import PetSchema from './petstore/schemas/pet.schema.mdx';
 
 <PetSchema />
 ```
@@ -39,8 +39,8 @@ The `BrowserWindow` component implemented by [docusaurus.io](https://github.com/
 :::
 
 ```mdx title="Schema wrapped in BrowserWindow component"
-import PetSchema from "./petstore/schemas/pet.schema.mdx";
-import BrowserWindow from "@site/src/components/BrowserWindow";
+import PetSchema from './petstore/schemas/pet.schema.mdx';
+import BrowserWindow from '@site/src/components/BrowserWindow';
 
 <BrowserWindow bodyStyle={{height: 350, overflow: "auto", fontSize: "80%"}} url="https://docusaurus-openapi.tryingpan.dev/advanced#schema-inside-browserwindow">
 
@@ -59,7 +59,7 @@ import BrowserWindow from "@site/src/components/BrowserWindow";
 
 ## Downloading API responses
 
-The API explorer downloads responses with a `Content-Disposition: attachment` header, as well as supported binary content types. It uses the server's `filename*` or `filename` when available and adds a known Content-Type extension if the name has none.
+The API explorer downloads successful responses with a `Content-Disposition: attachment` header, as well as supported binary content types. Downloaded bodies show a short placeholder instead of being decoded as text. Event streams and responses with an exposed `Transfer-Encoding: chunked` header use the explorer’s streaming reader instead. It uses the server's `filename*` or `filename` when available and adds a known Content-Type extension if the name has none or ends in a version/date suffix such as `.v2` or `.2024-10`.
 
 For a cross-origin API, the server must expose the header so the browser can read it:
 

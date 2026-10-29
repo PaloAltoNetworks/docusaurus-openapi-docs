@@ -41,16 +41,17 @@ export function getDownloadFilename(
 
   // Match complete parameters so semicolons inside quoted values stay local.
   const parameter =
-    /;\s*([\w!#$%&'*+.^`|~-]+)\s*=\s*("(?:[^"\\\r\n]|\\[^\r\n])*"|[\w!#$%&'*+.^`|~-]+)\s*/gy;
+    /;\s*([\w!#$%&'*+.^`|~-]+)\s*=\s*("(?:[^"\\\r\n]|\\[^\r\n])*"|[^;"\r\n]*)\s*/gy;
   const values = new Map<string, string>();
   let index = type[0].length;
   while (index < header.length) {
+    if (/^[;\s]*$/.test(header.slice(index))) break;
     parameter.lastIndex = index;
     const match = parameter.exec(header);
     if (!match) return fallback;
     const key = match[1].toLowerCase();
     if (values.has(key)) return fallback;
-    const value = match[2];
+    const value = match[2].trim();
     values.set(
       key,
       value.startsWith('"') ? value.slice(1, -1).replace(/\\(.)/g, "$1") : value
@@ -69,5 +70,7 @@ export function getDownloadFilename(
     .pop()
     ?.trim();
   if (!basename || basename === "." || basename === "..") return fallback;
-  return /\.[^.]+$/.test(basename) ? basename : basename + extension;
+  const suffix = /\.([^.]+)$/.exec(basename)?.[1];
+  const hasExtension = suffix && !/^v?\d+(?:[-_]\d+)*$/i.test(suffix);
+  return hasExtension ? basename : basename + extension;
 }
