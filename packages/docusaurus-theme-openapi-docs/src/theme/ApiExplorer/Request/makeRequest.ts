@@ -74,13 +74,7 @@ function getContentType(response: Response): string {
 /** Stream bodies must reach the explorer's incremental response reader. */
 export function isStreamingResponse(response: Response): boolean {
   return (
-    response.body !== null &&
-    (getContentType(response) === "text/event-stream" ||
-      (response.headers
-        .get("transfer-encoding")
-        ?.split(",")
-        .some((value) => value.trim().toLowerCase() === "chunked") ??
-        false))
+    response.body !== null && getContentType(response) === "text/event-stream"
   );
 }
 

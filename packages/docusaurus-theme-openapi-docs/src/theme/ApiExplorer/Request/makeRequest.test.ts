@@ -349,8 +349,6 @@ describe("download filenames", () => {
   it.each([
     ["text/event-stream", {}],
     ["TEXT/EVENT-STREAM; charset=utf-8", {}],
-    ["application/pdf", { "Transfer-Encoding": "chunked" }],
-    ["application/pdf", { "Transfer-Encoding": "gzip, Chunked" }],
   ])(
     "leaves %s streams for the incremental reader",
     async (contentType, extraHeaders) => {
@@ -373,6 +371,40 @@ describe("download filenames", () => {
         "data: first\n\n"
       );
       await reader.cancel();
+    }
+  );
+
+  it.each([
+    [null, "chunked", "file.pdf"],
+    ["attachment; filename=report.pdf", "gzip, Chunked", "report.pdf"],
+  ])(
+    "downloads a chunked PDF with disposition %s",
+    async (disposition, transferEncoding, expectedFilename) => {
+      const content = new Uint8Array([37, 80, 68, 70, 0, 255, 254, 10]).buffer;
+      const { result, response, text, blob, clone } = await requestResponse(
+        disposition,
+        "application/pdf",
+        content,
+        200,
+        { "Transfer-Encoding": transferEncoding }
+      );
+      expect(isStreamingResponse(response)).toBe(false);
+      expect("downloadedBody" in result).toBe(true);
+      if (!("downloadedBody" in result))
+        throw new Error("Missing download result");
+      expect(result.response).toBe(response);
+      expect(result.response.status).toBe(200);
+      expect(filename()).toBe(expectedFilename);
+      expect(click).toHaveBeenCalledTimes(1);
+      expect(blob).toHaveBeenCalledTimes(1);
+      expect(text).not.toHaveBeenCalled();
+      expect(clone).not.toHaveBeenCalled();
+      await expect(readResponseBody(result)).resolves.toBe(
+        "Response body downloaded."
+      );
+      await expect(
+        createObjectURL.mock.calls[0][0].arrayBuffer()
+      ).resolves.toEqual(content);
     }
   );
 
