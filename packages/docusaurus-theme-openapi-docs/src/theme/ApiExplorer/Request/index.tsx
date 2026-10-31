@@ -14,7 +14,7 @@ import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Accept from "@theme/ApiExplorer/Accept";
 import Authorization from "@theme/ApiExplorer/Authorization";
 import Body from "@theme/ApiExplorer/Body";
-import buildPostmanRequest from "@theme/ApiExplorer/buildPostmanRequest";
+import { tryBuildPostmanRequest } from "@theme/ApiExplorer/buildPostmanRequest";
 import ContentType from "@theme/ApiExplorer/ContentType";
 import { useResolvedEncoding } from "@theme/ApiExplorer/EncodingSelection/useResolvedEncoding";
 import ParamOptions from "@theme/ApiExplorer/ParamOptions";
@@ -78,19 +78,22 @@ function Request({ item }: { item: ApiItem }) {
 
   const encoding = useResolvedEncoding(item.requestBody);
 
-  const postmanRequest = buildPostmanRequest(postman, {
-    pathTemplate: item.path,
-    queryParams,
-    pathParams,
-    cookieParams,
-    contentType,
-    accept,
-    headerParams,
-    body,
-    server,
-    auth,
-    encoding,
-  });
+  const { request: postmanRequest, error: bodyError } = tryBuildPostmanRequest(
+    postman,
+    {
+      pathTemplate: item.path,
+      queryParams,
+      pathParams,
+      cookieParams,
+      contentType,
+      accept,
+      headerParams,
+      body,
+      server,
+      auth,
+      encoding,
+    }
+  );
 
   const delay = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
@@ -164,6 +167,7 @@ function Request({ item }: { item: ApiItem }) {
   };
 
   const onSubmit = async (data) => {
+    if (!postmanRequest) return;
     dispatch(
       setResponse(
         translate({
@@ -401,8 +405,20 @@ function Request({ item }: { item: ApiItem }) {
               <Accept />
             </details>
           )}
+          {bodyError && (
+            <p role="alert">
+              {translate({
+                id: "theme.openapi.request.body.fileFieldError",
+                message: bodyError,
+              })}
+            </p>
+          )}
           {showRequestButton && item.method !== "event" && (
-            <button className="openapi-explorer__request-btn" type="submit">
+            <button
+              className="openapi-explorer__request-btn"
+              type="submit"
+              disabled={!!bodyError}
+            >
               {translate({
                 id: "theme.openapi.request.sendButton",
                 message: "Send API Request",

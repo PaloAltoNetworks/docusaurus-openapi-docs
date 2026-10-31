@@ -8,9 +8,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 
 import { useStorageSlot } from "@docusaurus/theme-common";
+import { translate } from "@docusaurus/Translate";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import ApiCodeBlock from "@theme/ApiExplorer/ApiCodeBlock";
-import buildPostmanRequest from "@theme/ApiExplorer/buildPostmanRequest";
+import { tryBuildPostmanRequest } from "@theme/ApiExplorer/buildPostmanRequest";
 import CodeTabs from "@theme/ApiExplorer/CodeTabs";
 import { useResolvedEncoding } from "@theme/ApiExplorer/EncodingSelection/useResolvedEncoding";
 import { useTypedSelector } from "@theme/ApiItem/hooks";
@@ -120,19 +121,20 @@ function CodeSnippets({
   const encoding = useResolvedEncoding(requestBody);
 
   // Create a Postman request object using cleanedAuth or original auth
-  const cleanedPostmanRequest = buildPostmanRequest(postman, {
-    pathTemplate,
-    queryParams,
-    pathParams,
-    cookieParams,
-    contentType,
-    accept,
-    headerParams,
-    body,
-    server,
-    auth: cleanedAuth,
-    encoding,
-  });
+  const { request: cleanedPostmanRequest, error: bodyError } =
+    tryBuildPostmanRequest(postman, {
+      pathTemplate,
+      queryParams,
+      pathParams,
+      cookieParams,
+      contentType,
+      accept,
+      headerParams,
+      body,
+      server,
+      auth: cleanedAuth,
+      encoding,
+    });
 
   const themeConfig = siteConfig.themeConfig as ThemeConfig;
   const hideGeneratedSnippets =
@@ -195,6 +197,10 @@ function CodeSnippets({
   }, [language?.language]);
 
   useEffect(() => {
+    if (!cleanedPostmanRequest) {
+      setCodeText("");
+      return;
+    }
     if (language && !!language.sample) {
       setCodeSampleCodeText(getCodeSampleSourceFromLanguage(language));
     }
@@ -252,7 +258,11 @@ function CodeSnippets({
   ]);
   // no dependencies was intentionally set for this particular hook. it's safe as long as if conditions are set
   useEffect(function onSelectedVariantUpdate() {
-    if (selectedVariant && selectedVariant !== language?.variant) {
+    if (
+      cleanedPostmanRequest &&
+      selectedVariant &&
+      selectedVariant !== language?.variant
+    ) {
       codegen.convert(
         language.language,
         selectedVariant,
@@ -284,6 +294,17 @@ function CodeSnippets({
       setCodeSampleCodeText(language.samplesSources[sampleIndex]);
     }
   });
+
+  if (bodyError) {
+    return (
+      <p role="alert">
+        {translate({
+          id: "theme.openapi.request.body.fileFieldError",
+          message: bodyError,
+        })}
+      </p>
+    );
+  }
 
   if (language === undefined) {
     return null;
