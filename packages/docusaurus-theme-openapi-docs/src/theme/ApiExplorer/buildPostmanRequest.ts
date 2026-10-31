@@ -5,6 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import { normalizeParamValue } from "@theme/ApiExplorer/normalizeParamValue";
 import { AuthState, Scheme } from "@theme/ApiExplorer/Authorization/slice";
 import { Body, Content } from "@theme/ApiExplorer/Body/slice";
 import type {
@@ -15,10 +16,19 @@ import cloneDeep from "lodash/cloneDeep";
 import * as sdk from "postman-collection";
 
 type Param = {
-  value?: string | string[];
+  value?: unknown;
 } & ParameterObject;
 
-function setQueryParams(postman: sdk.Request, queryParams: Param[]) {
+type NormalizedParam = Omit<Param, "value"> & { value?: string | string[] };
+
+function normalizeParams(params: Param[]): NormalizedParam[] {
+  return params.map((param) => ({
+    ...param,
+    value: normalizeParamValue(param.value),
+  }));
+}
+
+function setQueryParams(postman: sdk.Request, queryParams: NormalizedParam[]) {
   postman.url.query.clear();
 
   const qp = queryParams
@@ -105,7 +115,7 @@ function setQueryParams(postman: sdk.Request, queryParams: Param[]) {
   }
 }
 
-function setPathParams(postman: sdk.Request, pathParams: Param[]) {
+function setPathParams(postman: sdk.Request, pathParams: NormalizedParam[]) {
   // Map through the path parameters
   const source = pathParams.map((param) => {
     if (!param.value) {
@@ -157,13 +167,13 @@ function setPathParams(postman: sdk.Request, pathParams: Param[]) {
   );
 }
 
-function buildCookie(cookieParams: Param[]) {
+function buildCookie(cookieParams: NormalizedParam[]) {
   const cookies = cookieParams
     .map((param) => {
       if (param.value) {
         const jsonResult = tryDecodeJsonParam(param.value as string);
         if (jsonResult && typeof jsonResult === "object") {
-          if (param.style === "form") {
+          if (param.style === "form" || param.style === undefined) {
             // Handle form style
             if (param.explode) {
               // Serialize each key-value pair as a separate cookie
@@ -212,7 +222,7 @@ function setHeaders(
   contentType: string,
   accept: string,
   cookie: string,
-  headerParams: Param[],
+  headerParams: NormalizedParam[],
   other: { key: string; value: string }[]
 ) {
   postman.headers.clear();
@@ -228,7 +238,7 @@ function setHeaders(
   headerParams.forEach((param) => {
     if (param.value) {
       if (Array.isArray(param.value)) {
-        if (param.style === "simple") {
+        if (param.style === "simple" || param.style === undefined) {
           if (param.explode) {
             // Each item in the array is a separate header
             param.value.forEach((val) => {
@@ -247,7 +257,7 @@ function setHeaders(
 
       const jsonResult = tryDecodeJsonParam(param.value);
       if (jsonResult && typeof jsonResult === "object") {
-        if (param.style === "simple") {
+        if (param.style === "simple" || param.style === undefined) {
           if (param.explode) {
             // Each key-value pair in the object is a separate header
             Object.entries(jsonResult).forEach(([key, val]) => {
@@ -465,8 +475,8 @@ function buildPostmanRequest(
     clonedPostman.url.host = [url];
   }
 
-  const enhancedQueryParams = [...queryParams];
-  const enhancedCookieParams = [...cookieParams];
+  const enhancedQueryParams = normalizeParams(queryParams);
+  const enhancedCookieParams = normalizeParams(cookieParams);
 
   let otherHeaders = [];
 
@@ -560,7 +570,7 @@ function buildPostmanRequest(
 
   // Use the enhanced params that might include API keys
   setQueryParams(clonedPostman, enhancedQueryParams);
-  setPathParams(clonedPostman, pathParams);
+  setPathParams(clonedPostman, normalizeParams(pathParams));
 
   // Use enhanced cookie params that might include API keys
   const cookie = buildCookie(enhancedCookieParams);
@@ -570,7 +580,7 @@ function buildPostmanRequest(
     contentType,
     accept,
     cookie,
-    headerParams,
+    normalizeParams(headerParams),
     otherHeaders
   );
 

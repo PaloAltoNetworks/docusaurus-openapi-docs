@@ -178,6 +178,41 @@ describe("buildPostmanRequest", () => {
     });
   });
 
+  it.each([0, false])(
+    "preserves %s in path, header and cookie parameters",
+    (value) => {
+      const options = {
+        pathParams: [{ name: "petId", in: "path", value }],
+        headerParams: [{ name: "X-Value", in: "header", value }],
+        cookieParams: [{ name: "flag", in: "cookie", value }],
+      };
+      expect(pathVariable(options)).toBe(String(value));
+      expect(headers(options)).toContainEqual(["X-Value", String(value)]);
+      expect(cookie(options)).toContain(`flag=${String(value)}`);
+    }
+  );
+
+  it("excludes null and serializes raw objects and allowEmptyValue booleans", () => {
+    expect(
+      query({
+        queryParams: [
+          { name: "empty", in: "query", value: null },
+          { name: "extended", in: "query", allowEmptyValue: true, value: true },
+          {
+            name: "filter",
+            in: "query",
+            style: "form",
+            explode: false,
+            value: { a: 1 },
+          },
+        ],
+      })
+    ).toEqual([
+      ["extended", null],
+      ["filter", '{"a":1}'],
+    ]);
+  });
+
   describe("header parameters", () => {
     it("sets Content-Type and Accept", () => {
       expect(

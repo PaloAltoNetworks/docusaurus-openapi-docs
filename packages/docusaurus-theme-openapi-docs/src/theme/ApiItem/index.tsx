@@ -13,6 +13,7 @@ import { DocProvider } from "@docusaurus/plugin-content-docs/client";
 import { HtmlClassNameProvider } from "@docusaurus/theme-common";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import useIsBrowser from "@docusaurus/useIsBrowser";
+import { normalizeParamValue } from "@theme/ApiExplorer/normalizeParamValue";
 import { createAuth } from "@theme/ApiExplorer/Authorization/slice";
 import { createPersistenceMiddleware } from "@theme/ApiExplorer/persistenceMiddleware";
 import { createStorage } from "@theme/ApiExplorer/storage-utils";
@@ -136,9 +137,10 @@ export default function ApiItem(props: Props): JSX.Element {
           p.example ??
           p.schema?.example ??
           firstNamedExample;
+        const value = normalizeParamValue(prefill);
         const initialized =
-          prefill !== undefined
-            ? ({ ...param, value: prefill } as unknown as ParameterObject)
+          value !== undefined
+            ? ({ ...param, value } as unknown as ParameterObject)
             : (param as ParameterObject);
         paramsArray?.push(initialized);
       }
