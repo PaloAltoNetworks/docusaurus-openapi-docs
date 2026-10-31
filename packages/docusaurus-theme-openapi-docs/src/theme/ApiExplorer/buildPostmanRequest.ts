@@ -109,7 +109,11 @@ function setQueryParams(postman: sdk.Request, queryParams: Param[]) {
   }
 }
 
-function setPathParams(postman: sdk.Request, pathParams: Param[]) {
+function setPathParams(
+  postman: sdk.Request,
+  pathParams: Param[],
+  pathTemplate?: string
+) {
   // Map through the path parameters
   const source = pathParams.map((param) => {
     if (!param.value) {
@@ -155,10 +159,61 @@ function setPathParams(postman: sdk.Request, pathParams: Param[]) {
     });
   });
 
-  postman.url.variables.assimilate(
-    source.filter((v): v is sdk.Variable => v !== undefined),
-    false
+  const variables = source.filter(
+    (variable): variable is sdk.Variable =>
+      variable !== undefined && String(variable.value) !== ""
   );
+  if (pathTemplate === undefined) {
+    postman.url.variables.assimilate(variables, false);
+    return;
+  }
+
+  if (/\{[^{}]*$/.test(pathTemplate)) {
+    console.warn(
+      `Unable to resolve an unclosed path parameter in "${pathTemplate}". Using the converted request path.`
+    );
+    postman.url.variables.assimilate(variables, false);
+    return;
+  }
+
+  const path = pathTemplate.startsWith("/")
+    ? pathTemplate.slice(1)
+    : pathTemplate;
+  const segments = path.split("/");
+  const parameter = /\{\{[^{}]+\}\}|\{([^{}]+)\}/g;
+  const needsTemplatePath = segments.some((segment) =>
+    (segment.match(parameter) ?? []).some(
+      (token: string) =>
+        token.startsWith("{{") ||
+        token !== segment ||
+        token.slice(1, -1).includes(":")
+    )
+  );
+  if (!needsTemplatePath) {
+    // Ordinary standalone parameters retain the SDK's :name representation.
+    postman.url.variables.assimilate(variables, false);
+    return;
+  }
+
+  const values = new Map(
+    postman.url.variables
+      .all()
+      .map((variable) => [variable.key, variable.value])
+  );
+  variables.forEach((variable) => values.set(variable.key, variable.value));
+  postman.url.path = segments.map((segment) =>
+    segment.replace(parameter, (token, name) => {
+      // Complete collection-variable tokens are literal OpenAPI path text.
+      if (name === undefined) return token;
+      const value = values.get(name);
+      if (value !== undefined && value !== null && String(value) !== "") {
+        return String(value).replace(/[/?#]/g, encodeURIComponent);
+      }
+      return token === segment ? `:${name}` : `{{${name}}}`;
+    })
+  );
+  // Materialized segments must not be rebound when their value starts with :.
+  postman.url.variables.clear();
 }
 
 function buildCookie(cookieParams: Param[]) {
@@ -508,6 +563,8 @@ function setBody(
 
 // TODO: finish these types
 interface Options {
+  /** Use the authored path when parameters are embedded in a segment. */
+  pathTemplate?: string;
   server?: ServerObject;
   queryParams: Param[];
   pathParams: Param[];
@@ -533,6 +590,7 @@ function buildPostmanRequest(
     server,
     auth,
     encoding,
+    pathTemplate,
   }: Options
 ) {
   const clonedPostman = cloneDeep(postman);
@@ -646,7 +704,7 @@ function buildPostmanRequest(
 
   // Use the enhanced params that might include API keys
   setQueryParams(clonedPostman, enhancedQueryParams);
-  setPathParams(clonedPostman, pathParams);
+  setPathParams(clonedPostman, pathParams, pathTemplate);
 
   // Use enhanced cookie params that might include API keys
   const cookie = buildCookie(enhancedCookieParams);
