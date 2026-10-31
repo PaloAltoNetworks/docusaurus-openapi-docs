@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { clean, guard, Props, render } from "./utils";
+import { clean, guard, MarkdownParser, Props, render } from "./utils";
 
 function createAdmonition({ children }: Props) {
   return `:::caution[deprecated]\n\n${render(children)}\n\n:::`;
@@ -16,15 +16,15 @@ interface DeprecationNoticeProps {
   description?: string;
 }
 
-export function createDeprecationNotice({
-  deprecated,
-  description,
-}: DeprecationNoticeProps) {
+export function createDeprecationNotice(
+  { deprecated, description }: DeprecationNoticeProps,
+  parseMarkdown?: MarkdownParser
+) {
   return guard(deprecated, () =>
     createAdmonition({
       children:
         description && description.length > 0
-          ? clean(description)
+          ? clean(description, parseMarkdown)
           : "This endpoint has been deprecated and may be replaced or removed in future versions of the API.",
     })
   );
