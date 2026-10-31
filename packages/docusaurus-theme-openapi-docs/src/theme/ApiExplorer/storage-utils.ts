@@ -5,11 +5,12 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import crypto from "crypto-js";
+import { sha1 } from "@noble/hashes/legacy";
+import { bytesToHex, utf8ToBytes } from "@noble/hashes/utils";
 
 export function hashArray(arr: string[]) {
   function hash(message: string) {
-    return crypto.SHA1(message).toString();
+    return bytesToHex(sha1(utf8ToBytes(message)));
   }
   const hashed = arr.map((item) => hash(item));
   hashed.sort();
