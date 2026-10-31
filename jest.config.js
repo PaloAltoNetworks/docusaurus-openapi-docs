@@ -41,6 +41,8 @@ const config = {
 
 const bodyExamplesTest =
   "<rootDir>/packages/docusaurus-theme-openapi-docs/src/theme/ApiExplorer/Body/jsonExamples.test.ts";
+const requestTest =
+  "<rootDir>/packages/docusaurus-theme-openapi-docs/src/theme/ApiExplorer/Request/makeRequest.test.ts";
 const requestBodyTest =
   "<rootDir>/packages/docusaurus-theme-openapi-docs/src/theme/ApiExplorer/buildPostmanRequest.consumer.test.ts";
 const samplerModule =
@@ -56,8 +58,15 @@ module.exports = {
       testPathIgnorePatterns: [
         "/node_modules/",
         bodyExamplesTest.replace(/\./g, "\\.") + "$",
+        requestTest.replace(/\./g, "\\.") + "$",
         requestBodyTest.replace(/\./g, "\\.") + "$",
       ],
+    },
+    {
+      ...config,
+      displayName: "request",
+      testEnvironment: "jsdom",
+      testMatch: [requestTest],
     },
     {
       ...config,

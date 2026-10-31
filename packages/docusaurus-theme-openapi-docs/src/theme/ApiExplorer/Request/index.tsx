@@ -33,7 +33,12 @@ import type { ThemeConfig } from "docusaurus-theme-openapi-docs/src/types";
 import * as sdk from "postman-collection";
 import { FormProvider, useForm } from "react-hook-form";
 
-import makeRequest, { RequestError, RequestErrorType } from "./makeRequest";
+import makeRequest, {
+  isStreamingResponse,
+  readResponseBody,
+  RequestError,
+  RequestErrorType,
+} from "./makeRequest";
 
 function Request({ item }: { item: ApiItem }) {
   const postman = new sdk.Request(item.postman);
@@ -129,8 +134,9 @@ function Request({ item }: { item: ApiItem }) {
     }
   };
 
-  const handleResponse = async (res) => {
-    dispatch(setResponse(await res.text()));
+  const handleResponse = async (result) => {
+    const res = "downloadedBody" in result ? result.response : result;
+    dispatch(setResponse(await readResponseBody(result)));
     dispatch(setCode(res.status));
     res.headers && dispatch(setHeaders(Object.fromEntries(res.headers)));
   };
@@ -185,7 +191,7 @@ function Request({ item }: { item: ApiItem }) {
         requestCredentials,
         encoding
       );
-      if (res.headers.get("content-type")?.includes("text/event-stream")) {
+      if (!("downloadedBody" in res) && isStreamingResponse(res)) {
         await handleEventStream(res);
       } else {
         await handleResponse(res);
