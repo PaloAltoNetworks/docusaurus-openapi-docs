@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { getMediaType } from "./mediaType";
+import { getContentTypeHeader, getMediaType } from "./mediaType";
 
 it.each([
   [" Application/Problem+JSON ; charset=UTF-8", "application/problem+json"],
@@ -16,4 +16,24 @@ it.each([
   [undefined, ""],
 ])("gets the media type from %s", (contentType, expected) => {
   expect(getMediaType(contentType)).toBe(expected);
+});
+
+it.each([
+  ["application/json; charset=UTF-8", "application/json; charset=UTF-8"],
+  ["multipart/form-data; boundary=old", "multipart/form-data"],
+  [
+    "Multipart/Form-Data; charset=UTF-8; BOUNDARY=old",
+    "Multipart/Form-Data; charset=UTF-8",
+  ],
+  [
+    'multipart/form-data; profile="a;b"; boundary="old;value"',
+    'multipart/form-data; profile="a;b"',
+  ],
+  [
+    'multipart/form-data; profile="a;\\"b"; boundary=old',
+    'multipart/form-data; profile="a;\\"b"',
+  ],
+  ["text/plain; boundary=ordinary", "text/plain; boundary=ordinary"],
+])("removes only the multipart boundary from %s", (contentType, expected) => {
+  expect(getContentTypeHeader(contentType)).toBe(expected);
 });

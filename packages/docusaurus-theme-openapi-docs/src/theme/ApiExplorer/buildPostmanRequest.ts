@@ -7,14 +7,16 @@
 
 import { AuthState, Scheme } from "@theme/ApiExplorer/Authorization/slice";
 import { Body, Content } from "@theme/ApiExplorer/Body/slice";
+import {
+  getContentTypeHeader,
+  getMediaType,
+} from "@theme/ApiExplorer/utils/mediaType";
 import type {
   ParameterObject,
   ServerObject,
 } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import cloneDeep from "lodash/cloneDeep";
 import * as sdk from "postman-collection";
-
-import { getContentTypeHeader, getMediaType } from "./utils/mediaType";
 
 type Param = {
   value?: string | string[];
@@ -309,6 +311,8 @@ function setBodyMode(body: sdk.RequestBody, mode: string) {
   if (mode !== "file") body.file = undefined;
 }
 
+export class RequestBodyError extends Error {}
+
 // TODO: this is all a bit hacky
 function setBody(
   clonedPostman: sdk.Request,
@@ -316,19 +320,82 @@ function setBody(
   contentType: string,
   encoding?: Record<string, { contentType?: string }>
 ) {
+  const mediaType = getMediaType(contentType);
+  const mode =
+    mediaType === "multipart/form-data"
+      ? "formdata"
+      : mediaType === "application/x-www-form-urlencoded"
+        ? "urlencoded"
+        : undefined;
+
   if (clonedPostman.body === undefined) {
     return;
+  }
+
+  if (body.type === "raw" && body.content?.type === "file") {
+    if (mode !== "formdata") {
+      setBodyMode(clonedPostman.body, "file");
+      clonedPostman.body.file = { src: body.content.value.src };
+      return;
+    }
+
+    // Raw uploads carry no field name. Never assign one of several file fields.
+    const fileFields =
+      clonedPostman.body.formdata
+        ?.all()
+        .filter(
+          (param) =>
+            (param as sdk.FormParam & { type?: string }).type === "file" &&
+            param.key &&
+            !param.disabled
+        ) ?? [];
+    if (fileFields.length !== 1) {
+      throw new RequestBodyError(
+        "Choose a named file field in the multipart form before uploading a file."
+      );
+    }
+    body = { type: "form", content: { [fileFields[0].key!]: body.content } };
+  }
+
+  const hasEncoding = encoding && Object.keys(encoding).length > 0;
+  if (mode) {
+    // Capture examples before clearing the inactive urlencoded list.
+    const placeholders =
+      mode === "formdata" &&
+      body.type === "empty" &&
+      hasEncoding &&
+      clonedPostman.body.mode === "urlencoded"
+        ? (clonedPostman.body.urlencoded?.all() ?? [])
+        : [];
+    if (mode === "formdata" && clonedPostman.body.mode !== mode) {
+      clonedPostman.body.formdata?.clear();
+    }
+    setBodyMode(clonedPostman.body, mode);
+    if (mode === "formdata") {
+      clonedPostman.body.formdata ??= new sdk.PropertyList<sdk.FormParam>(
+        sdk.FormParam as any,
+        clonedPostman.body,
+        []
+      );
+      placeholders.forEach((param) => {
+        clonedPostman.body?.formdata?.add(
+          new sdk.FormParam({ ...param.toJSON(), key: param.key ?? undefined })
+        );
+      });
+    } else {
+      clonedPostman.body.urlencoded ??= new sdk.PropertyList<sdk.QueryParam>(
+        sdk.QueryParam as any,
+        clonedPostman.body,
+        []
+      );
+    }
   }
 
   if (body.type === "empty") {
     // When the original request has formdata and encoding is declared, keep the
     // placeholder params so the code snippet reflects the selected encoding even
     // before the user has uploaded a file.
-    if (
-      clonedPostman.body?.mode === "formdata" &&
-      encoding &&
-      Object.keys(encoding).length > 0
-    ) {
+    if (clonedPostman.body?.mode === "formdata" && hasEncoding) {
       const members: any[] =
         (clonedPostman.body.formdata as any)?.members ?? [];
       members.forEach((param: any) => {
@@ -343,32 +410,6 @@ function setBody(
     }
     clonedPostman.body = undefined;
     return;
-  }
-
-  if (body.type === "raw" && body.content?.type === "file") {
-    // treat it like file.
-    setBodyMode(clonedPostman.body, "file");
-    clonedPostman.body.file = { src: body.content.value.src };
-    return;
-  }
-
-  if (body.type === "form") {
-    const mediaType = getMediaType(contentType);
-    if (mediaType === "multipart/form-data") {
-      setBodyMode(clonedPostman.body, "formdata");
-      clonedPostman.body.formdata ??= new sdk.PropertyList<sdk.FormParam>(
-        sdk.FormParam as any,
-        clonedPostman.body,
-        []
-      );
-    } else if (mediaType === "application/x-www-form-urlencoded") {
-      setBodyMode(clonedPostman.body, "urlencoded");
-      clonedPostman.body.urlencoded ??= new sdk.PropertyList<sdk.QueryParam>(
-        sdk.QueryParam as any,
-        clonedPostman.body,
-        []
-      );
-    }
   }
 
   switch (clonedPostman.body.mode) {
@@ -622,6 +663,17 @@ function buildPostmanRequest(
   );
 
   return clonedPostman;
+}
+
+export function tryBuildPostmanRequest(postman: sdk.Request, options: Options) {
+  try {
+    return { request: buildPostmanRequest(postman, options), error: undefined };
+  } catch (error) {
+    if (error instanceof RequestBodyError) {
+      return { request: undefined, error: error.message };
+    }
+    throw error;
+  }
 }
 
 export default buildPostmanRequest;

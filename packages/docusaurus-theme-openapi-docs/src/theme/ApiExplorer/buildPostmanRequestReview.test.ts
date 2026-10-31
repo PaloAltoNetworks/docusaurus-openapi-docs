@@ -102,8 +102,9 @@ it.each(["raw", "formdata"])(
 );
 
 it.each(["file", "formdata"])(
-  "keeps the encoded multipart boundary when %s selects a raw file",
+  "keeps a supplied nonform boundary when %s selects a raw file",
   (originalMode) => {
+    const contentType = "application/octet-stream; boundary=encoded-boundary";
     const original = new sdk.Request({
       url: "https://example.com/pets",
       method: "POST",
@@ -129,14 +130,14 @@ it.each(["file", "formdata"])(
       pathParams: [],
       cookieParams: [],
       headerParams: [],
-      contentType: encodedContentType,
+      contentType,
       accept: "",
       body,
       auth: { data: {}, options: {} },
     });
     expect(request.body?.mode).toBe("file");
     expect(request.body?.file).toEqual({ src: "multipart.bin" });
-    expect(request.headers.get("Content-Type")).toBe(encodedContentType);
+    expect(request.headers.get("Content-Type")).toBe(contentType);
     expect(original.toJSON()).toEqual(before);
   }
 );
