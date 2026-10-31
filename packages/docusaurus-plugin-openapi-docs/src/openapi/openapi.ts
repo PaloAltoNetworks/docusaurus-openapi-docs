@@ -18,7 +18,12 @@ import { Collection } from "postman-collection";
 import * as sdk from "postman-collection";
 
 import { sampleRequestFromSchema } from "./createRequestExample";
-import { OpenApiObject, TagGroupObject, TagObject } from "./types";
+import {
+  MediaTypeObject,
+  OpenApiObject,
+  TagGroupObject,
+  TagObject,
+} from "./types";
 import { isURL } from "../index";
 import {
   ApiMetadata,
@@ -31,6 +36,19 @@ import {
 } from "../types";
 import { sampleResponseFromSchema } from "./createResponseExample";
 import { loadAndResolveSpec } from "./utils/loadAndResolveSpec";
+
+function getJsonRequestBodyExample(content?: Record<string, MediaTypeObject>) {
+  const contentTypes = Object.keys(content ?? {});
+  const mediaType = (contentType: string) =>
+    contentType.split(";", 1)[0].trim().toLowerCase();
+  const selected =
+    contentTypes.find((type) => mediaType(type) === "application/json") ??
+    contentTypes.find((type) => mediaType(type).endsWith("+json")) ??
+    contentTypes.find((type) => mediaType(type).startsWith("application/json"));
+  const schema =
+    selected === undefined ? undefined : content?.[selected].schema;
+  return schema === undefined ? undefined : sampleRequestFromSchema(schema);
+}
 
 /**
  * Convenience function for converting raw JSON to a Postman Collection object.
@@ -196,35 +214,9 @@ function createItems(
         }
       }
 
-      let jsonRequestBodyExample;
-      const content = operationObject.requestBody?.content;
-      let body;
-      for (let key in content) {
-        if (
-          key.toLowerCase() === "application/json" ||
-          key.toLowerCase() === "application/json; charset=utf-8"
-        ) {
-          body = content[key];
-          break;
-        }
-      }
-
-      if (body?.schema) {
-        jsonRequestBodyExample = sampleRequestFromSchema(body.schema);
-      }
-
-      // Handle vendor JSON media types
-      const bodyContent = operationObject.requestBody?.content;
-
-      if (bodyContent && Object.keys(bodyContent).length > 0) {
-        const firstBodyContentKey = Object.keys(bodyContent)[0];
-        if (firstBodyContentKey.endsWith("+json")) {
-          const firstBody = bodyContent[firstBodyContentKey];
-          if (firstBody?.schema) {
-            jsonRequestBodyExample = sampleRequestFromSchema(firstBody.schema);
-          }
-        }
-      }
+      const jsonRequestBodyExample = getJsonRequestBodyExample(
+        operationObject.requestBody?.content
+      );
 
       // TODO: Don't include summary temporarilly
       const { summary, ...defaults } = operationObject;
@@ -353,34 +345,9 @@ function createItems(
         }
       }
 
-      let jsonRequestBodyExample;
-      const content = operationObject.requestBody?.content;
-      let body;
-      for (let key in content) {
-        if (
-          key.toLowerCase() === "application/json" ||
-          key.toLowerCase() === "application/json; charset=utf-8"
-        ) {
-          body = content[key];
-          break;
-        }
-      }
-
-      if (body?.schema) {
-        jsonRequestBodyExample = sampleRequestFromSchema(body.schema);
-      }
-
-      // Handle vendor JSON media types
-      const bodyContent = operationObject.requestBody?.content;
-      if (bodyContent) {
-        const firstBodyContentKey = Object.keys(bodyContent)[0];
-        if (firstBodyContentKey.endsWith("+json")) {
-          const firstBody = bodyContent[firstBodyContentKey];
-          if (firstBody?.schema) {
-            jsonRequestBodyExample = sampleRequestFromSchema(firstBody.schema);
-          }
-        }
-      }
+      const jsonRequestBodyExample = getJsonRequestBodyExample(
+        operationObject.requestBody?.content
+      );
 
       // TODO: Don't include summary temporarilly
       const { summary, ...defaults } = operationObject;
