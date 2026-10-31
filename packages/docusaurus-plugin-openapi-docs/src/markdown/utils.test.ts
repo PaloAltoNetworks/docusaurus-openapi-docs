@@ -661,17 +661,25 @@ describe("review regressions: HTML and parser fallback", () => {
     }
   );
 
-  it("retries parser initialization after an unavailable VM import", async () => {
+  it("retries parser initialization after a loader failure", async () => {
     const { context, utils } = isolatedUtils();
+    const load = jest
+      .fn()
+      .mockRejectedValueOnce(new Error("native imports unavailable"))
+      .mockResolvedValueOnce([
+        { fromMarkdown: parseMarkdown },
+        { gfm: () => ({}) },
+        { gfmFromMarkdown: () => ({}) },
+      ]);
     context.Function = function () {
-      return () => Promise.reject(new Error("native imports unavailable"));
+      return load;
     };
     const failed = utils.loadMarkdownParser();
     await expect(failed).resolves.toBeUndefined();
-    context.Function = Function;
     const retried = utils.loadMarkdownParser();
     expect(retried).not.toBe(failed);
     const parser = await retried;
+    expect(load).toHaveBeenCalledTimes(2);
     expect(typeof parser).toBe("function");
     expect(utils.clean("See[^1]\n\n[^1]: {x}", parser)).toBe(
       "See[^1]\n\n[^1]: \\{x\\}"
