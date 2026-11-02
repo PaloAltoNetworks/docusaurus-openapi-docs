@@ -36,6 +36,11 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
         return String(r.test) === String(/\.s[ca]ss$/);
       });
       const { getStyleLoaders } = utils;
+      const excludeFaker =
+        new utils.currentBundler.instance.NormalModuleReplacementPlugin(
+          /[\\/]postman-collection[\\/]lib[\\/]superstring[\\/]dynamic-variables(\.js)?$/,
+          path.join(__dirname, "shims", "postman-dynamic-variables.js")
+        );
       // Avoid conflicts with docusaurus-plugin-sass
       if (sassLoaderRule.length === 0) {
         return {
@@ -50,6 +55,7 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
               process: require.resolve("process/browser"),
               Buffer: ["buffer", "Buffer"],
             }),
+            excludeFaker,
           ],
           module: {
             rules: [
@@ -80,6 +86,7 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
             process: require.resolve("process/browser"),
             Buffer: ["buffer", "Buffer"],
           }),
+          excludeFaker,
         ],
       };
     },
