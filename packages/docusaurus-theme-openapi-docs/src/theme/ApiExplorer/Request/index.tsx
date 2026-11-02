@@ -86,6 +86,7 @@ function Request({ item }: { item: ApiItem }) {
   const { request: postmanRequest, error: bodyError } = tryBuildPostmanRequest(
     postman,
     {
+      pathTemplate: item.path,
       queryParams,
       pathParams,
       cookieParams,

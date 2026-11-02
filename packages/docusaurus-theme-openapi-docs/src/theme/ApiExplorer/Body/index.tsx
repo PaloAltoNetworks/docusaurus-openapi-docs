@@ -23,6 +23,7 @@ import format from "xml-formatter";
 import FormBodyItem from "./FormBodyItem";
 import { resolveSchemaWithSelections } from "./resolveSchemaWithSelections";
 import { clearRawBody, setFileRawBody, setStringRawBody } from "./slice";
+import { getMediaType } from "../utils/mediaType";
 
 export interface Props {
   jsonRequestBodyExample: string;
@@ -89,6 +90,7 @@ function Body({
   // - multipart/form-data
   // - application/x-www-form-urlencoded
 
+  const mediaType = getMediaType(contentType);
   const rawSchema = requestBodyMetadata?.content?.[contentType]?.schema;
   const example = requestBodyMetadata?.content?.[contentType]?.example;
   const examples = requestBodyMetadata?.content?.[contentType]?.examples;
@@ -126,8 +128,8 @@ function Body({
       };
     }
     if (
-      (contentType === "multipart/form-data" ||
-        contentType === "application/x-www-form-urlencoded") &&
+      (mediaType === "multipart/form-data" ||
+        mediaType === "application/x-www-form-urlencoded") &&
       schema?.type === "object"
     ) {
       return {
@@ -152,8 +154,8 @@ function Body({
     }
 
     if (
-      contentType?.includes("application/json") ||
-      contentType?.endsWith("+json")
+      mediaType.startsWith("application/json") ||
+      mediaType.endsWith("+json")
     ) {
       const isStringSchema =
         schema?.type === "string" ||
@@ -205,7 +207,7 @@ function Body({
       lang = "json";
     }
 
-    if (contentType === "application/xml" || contentType?.endsWith("+xml")) {
+    if (mediaType === "application/xml" || mediaType.endsWith("+xml")) {
       const formatXmlBody = (body: string) => {
         try {
           return format(body, {
@@ -267,7 +269,7 @@ function Body({
     };
   }, [
     schema,
-    contentType,
+    mediaType,
     example,
     examples,
     schemaExamples,
@@ -320,8 +322,8 @@ function Body({
   }
 
   if (
-    (contentType === "multipart/form-data" ||
-      contentType === "application/x-www-form-urlencoded") &&
+    (mediaType === "multipart/form-data" ||
+      mediaType === "application/x-www-form-urlencoded") &&
     schema?.type === "object"
   ) {
     return (
