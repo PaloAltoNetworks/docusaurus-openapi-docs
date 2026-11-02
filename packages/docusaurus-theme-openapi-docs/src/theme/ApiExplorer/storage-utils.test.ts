@@ -21,7 +21,7 @@ describe("hashArray", () => {
     [["bearerAuth", "api_key"], "2f41b949399aa95c4aec28af2badea1e31646e0f"],
     [["clé", "🔑"], "836dd066370dd9a5553e2c77bc6ebb492a351fdd"],
     [[], "da39a3ee5e6b4b0d3255bfef95601890afd80709"],
-  ])("keeps the crypto-js storage key for %j", (arr, expected) => {
+  ])("keeps the crypto-js storage key (#1690) for %j", (arr, expected) => {
     expect(hashArray(arr)).toBe(expected);
   });
 

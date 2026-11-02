@@ -14,6 +14,7 @@ function sha1(message: string): string {
   const words = new Uint32Array((((bytes.length + 8) >> 6) + 1) * 16);
   bytes.forEach((b, i) => (words[i >> 2] |= b << (24 - (i % 4) * 8)));
   words[bytes.length >> 2] |= 0x80 << (24 - (bytes.length % 4) * 8);
+  words[words.length - 2] = Math.floor(bytes.length / 0x20000000);
   words[words.length - 1] = bytes.length * 8;
 
   const h = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xc3d2e1f0];
@@ -27,16 +28,27 @@ function sha1(message: string): string {
     }
     let [a, b, c, d, e] = h;
     for (let t = 0; t < 80; t++) {
-      const [f, k] =
-        t < 20
-          ? [(b & c) | (~b & d), 0x5a827999]
-          : t < 40
-            ? [b ^ c ^ d, 0x6ed9eba1]
-            : t < 60
-              ? [(b & c) | (b & d) | (c & d), 0x8f1bbcdc]
-              : [b ^ c ^ d, 0xca62c1d6];
+      let f: number;
+      let k: number;
+      if (t < 20) {
+        f = (b & c) | (~b & d);
+        k = 0x5a827999;
+      } else if (t < 40) {
+        f = b ^ c ^ d;
+        k = 0x6ed9eba1;
+      } else if (t < 60) {
+        f = (b & c) | (b & d) | (c & d);
+        k = 0x8f1bbcdc;
+      } else {
+        f = b ^ c ^ d;
+        k = 0xca62c1d6;
+      }
       const temp = (rotl(a, 5) + f + e + k + w[t]) >>> 0;
-      [e, d, c, b, a] = [d, c, rotl(b, 30), a, temp];
+      e = d;
+      d = c;
+      c = rotl(b, 30);
+      b = a;
+      a = temp;
     }
     h[0] = (h[0] + a) >>> 0;
     h[1] = (h[1] + b) >>> 0;
