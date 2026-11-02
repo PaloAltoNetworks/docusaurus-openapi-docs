@@ -24,3 +24,7 @@ updates:
     cooldown:
       default-days: 7
     rebase-strategy: disabled
+    groups:
+      codeql-action:
+        patterns:
+          - "github/codeql-action*"
