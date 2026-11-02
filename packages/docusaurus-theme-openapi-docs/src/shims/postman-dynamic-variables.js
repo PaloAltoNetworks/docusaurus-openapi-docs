@@ -5,6 +5,4 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-// Replaces postman-collection's {{$random*}} generators, which pull in
-// @faker-js/faker. The theme never resolves Postman dynamic variables.
 module.exports = {};

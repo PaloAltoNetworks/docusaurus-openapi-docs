@@ -35,46 +35,8 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
       const sassLoaderRule = rules.filter((r: any) => {
         return String(r.test) === String(/\.s[ca]ss$/);
       });
-      const { getStyleLoaders } = utils;
-      const excludeFaker =
-        new utils.currentBundler.instance.NormalModuleReplacementPlugin(
-          /[\\/]postman-collection[\\/]lib[\\/]superstring[\\/]dynamic-variables(\.js)?$/,
-          path.join(__dirname, "shims", "postman-dynamic-variables.js")
-        );
-      // Avoid conflicts with docusaurus-plugin-sass
-      if (sassLoaderRule.length === 0) {
-        return {
-          resolve: {
-            fallback: {
-              buffer: require.resolve("buffer/"),
-              path: require.resolve("path-browserify"),
-            },
-          },
-          plugins: [
-            new utils.currentBundler.instance.ProvidePlugin({
-              process: require.resolve("process/browser"),
-              Buffer: ["buffer", "Buffer"],
-            }),
-            excludeFaker,
-          ],
-          module: {
-            rules: [
-              {
-                test: /\.s[ac]ss$/,
-                include: path.resolve(__dirname, "..", "lib", "theme"),
-                use: [
-                  ...getStyleLoaders(isServer, {}),
-                  {
-                    loader: require.resolve("sass-loader"),
-                    options: {},
-                  },
-                ],
-              },
-            ],
-          },
-        };
-      }
-      return {
+      const { getStyleLoaders, currentBundler } = utils;
+      const config = {
         resolve: {
           fallback: {
             buffer: require.resolve("buffer/"),
@@ -82,12 +44,37 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
           },
         },
         plugins: [
-          new utils.currentBundler.instance.ProvidePlugin({
+          new currentBundler.instance.ProvidePlugin({
             process: require.resolve("process/browser"),
             Buffer: ["buffer", "Buffer"],
           }),
-          excludeFaker,
+          new currentBundler.instance.NormalModuleReplacementPlugin(
+            /[\\/]postman-collection[\\/]lib[\\/]superstring[\\/]dynamic-variables(\.js)?$/,
+            path.join(__dirname, "shims", "postman-dynamic-variables.js")
+          ),
         ],
+      };
+      // Avoid conflicts with docusaurus-plugin-sass
+      if (sassLoaderRule.length > 0) {
+        return config;
+      }
+      return {
+        ...config,
+        module: {
+          rules: [
+            {
+              test: /\.s[ac]ss$/,
+              include: path.resolve(__dirname, "..", "lib", "theme"),
+              use: [
+                ...getStyleLoaders(isServer, {}),
+                {
+                  loader: require.resolve("sass-loader"),
+                  options: {},
+                },
+              ],
+            },
+          ],
+        },
       };
     },
   };
