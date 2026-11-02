@@ -97,10 +97,13 @@ function createItems(
   const schemasOnly = options?.schemasOnly === true;
 
   // Only create an info page if we have a description/title AND showInfoPage is not false
-  if (
-    (openapiData.info.description || openapiData.info.title) &&
-    options?.showInfoPage !== false
-  ) {
+  const showInfoPage =
+    !!(openapiData.info.description || openapiData.info.title) &&
+    options?.showInfoPage !== false;
+  // Only link api/schema pages to the info page when it is generated
+  const infoPageId = showInfoPage ? infoId : "";
+
+  if (showInfoPage) {
     const infoDescription = openapiData.info?.description;
     let splitDescription: any;
     if (infoDescription) {
@@ -252,7 +255,7 @@ function createItems(
       const apiPage: PartialPage<ApiPageMetadata> = {
         type: "api",
         id: baseId,
-        infoId: infoId ?? "",
+        infoId: infoPageId,
         unversionedId: baseId,
         title: title ? title.replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'") : "",
         description: operationObject.description
@@ -408,7 +411,7 @@ function createItems(
       const apiPage: PartialPage<ApiPageMetadata> = {
         type: "api",
         id: baseId,
-        infoId: infoId ?? "",
+        infoId: infoPageId,
         unversionedId: baseId,
         title: title ? title.replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'") : "",
         description: operationObject.description
@@ -480,7 +483,7 @@ function createItems(
         const schemaPage: PartialPage<SchemaPageMetadata> = {
           type: "schema",
           id: baseId,
-          infoId: infoId ?? "",
+          infoId: infoPageId,
           unversionedId: baseId,
           title: schemaObject.title
             ? schemaObject.title.replace(/((?:^|[^\\])(?:\\{2})*)"/g, "$1'")
