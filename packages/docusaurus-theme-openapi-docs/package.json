@@ -43,7 +43,6 @@
   },
   "dependencies": {
     "@hookform/error-message": "^2.0.1",
-    "@noble/hashes": "^1.8.0",
     "@reduxjs/toolkit": "^2.8.2",
     "allof-merge": "^0.6.6",
     "buffer": "^6.0.3",
