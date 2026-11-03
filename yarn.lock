@@ -14088,9 +14088,9 @@ open@^10.0.3:
     wsl-utils "^0.1.0"
 
 openapi-to-postmanv2@^6.0.0:
-  version "6.3.3"
-  resolved "https://registry.yarnpkg.com/openapi-to-postmanv2/-/openapi-to-postmanv2-6.3.3.tgz#b249c923a3093f316bc0e191d92abf49bb3736b9"
-  integrity sha512-o0u6qqMMRLt7eAyFBpL/lCresQ1VqQFGe6/iPMBvNkWDXrpgGo5jo+YnP1e0MwF3tdUKLfkHssufGWMdojpPLg==
+  version "6.4.2"
+  resolved "https://registry.yarnpkg.com/openapi-to-postmanv2/-/openapi-to-postmanv2-6.4.2.tgz#a8bb09327197a155a271347a8d7084236aba1e86"
+  integrity sha512-g83aqNVQ2wLrNGs6JpRmtvzDfDPiq8n+tlxsJEMrAzBd5cp4nB9I87N24ac2YQ01BPAWBP+mEIyiBzV01VgCEw==
   dependencies:
     ajv "^8.11.0"
     ajv-draft-04 "1.0.0"
@@ -16456,9 +16456,9 @@ semver-diff@^4.0.0:
     semver "^7.3.5"
 
 "semver@2 || 3 || 4 || 5", semver@7.7.1, semver@7.7.2, semver@7.7.4, semver@7.x, semver@^6.3.0, semver@^6.3.1, semver@^7.0.0, semver@^7.1.1, semver@^7.3.2, semver@^7.3.4, semver@^7.3.5, semver@^7.3.7, semver@^7.5.2, semver@^7.5.3, semver@^7.5.4, semver@^7.6.3, semver@^7.7.2, semver@^7.7.3:
-  version "7.8.5"
-  resolved "https://registry.yarnpkg.com/semver/-/semver-7.8.5.tgz#39b646037dd50c14fb451e7e4cac58ed8b863f69"
-  integrity sha512-Y7/KDsb8LjooZpwaqGyulO6DQlksgCncchHGk+sZIY4SBvUocMBEFH5Ur1fI4dV+Jvl0w6cjvucaIi40puRioA==
+  version "7.8.6"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-7.8.6.tgz#67c0cda133a3ceb6f70b803e67625bf969000424"
+  integrity sha512-9lpSSU4Mly3mrtruwLs1eLK6+gzbzqeBFwRNjIjE+9LuDpWdYctrQlQ3ej1Ilgi7gknpsTRnPoLP8DpCHqHIJw==
 
 send@~0.19.0, send@~0.19.1:
   version "0.19.2"
