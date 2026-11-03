@@ -5,9 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { normalizeParamValue } from "@theme/ApiExplorer/normalizeParamValue";
 import { AuthState, Scheme } from "@theme/ApiExplorer/Authorization/slice";
 import { Body, Content } from "@theme/ApiExplorer/Body/slice";
+import { normalizeParamValue } from "@theme/ApiExplorer/normalizeParamValue";
+import {
+  getContentTypeHeader,
+  getMediaType,
+} from "@theme/ApiExplorer/utils/mediaType";
 import type {
   ParameterObject,
   ServerObject,
@@ -115,7 +119,11 @@ function setQueryParams(postman: sdk.Request, queryParams: NormalizedParam[]) {
   }
 }
 
-function setPathParams(postman: sdk.Request, pathParams: NormalizedParam[]) {
+function setPathParams(
+  postman: sdk.Request,
+  pathParams: NormalizedParam[],
+  pathTemplate?: string
+) {
   // Map through the path parameters
   const source = pathParams.map((param) => {
     if (!param.value) {
@@ -161,10 +169,61 @@ function setPathParams(postman: sdk.Request, pathParams: NormalizedParam[]) {
     });
   });
 
-  postman.url.variables.assimilate(
-    source.filter((v): v is sdk.Variable => v !== undefined),
-    false
+  const variables = source.filter(
+    (variable): variable is sdk.Variable =>
+      variable !== undefined && String(variable.value) !== ""
   );
+  if (pathTemplate === undefined) {
+    postman.url.variables.assimilate(variables, false);
+    return;
+  }
+
+  if (/\{[^{}]*$/.test(pathTemplate)) {
+    console.warn(
+      `Unable to resolve an unclosed path parameter in "${pathTemplate}". Using the converted request path.`
+    );
+    postman.url.variables.assimilate(variables, false);
+    return;
+  }
+
+  const path = pathTemplate.startsWith("/")
+    ? pathTemplate.slice(1)
+    : pathTemplate;
+  const segments = path.split("/");
+  const parameter = /\{\{[^{}]+\}\}|\{([^{}]+)\}/g;
+  const needsTemplatePath = segments.some((segment) =>
+    (segment.match(parameter) ?? []).some(
+      (token: string) =>
+        token.startsWith("{{") ||
+        token !== segment ||
+        token.slice(1, -1).includes(":")
+    )
+  );
+  if (!needsTemplatePath) {
+    // Ordinary standalone parameters retain the SDK's :name representation.
+    postman.url.variables.assimilate(variables, false);
+    return;
+  }
+
+  const values = new Map(
+    postman.url.variables
+      .all()
+      .map((variable) => [variable.key, variable.value])
+  );
+  variables.forEach((variable) => values.set(variable.key, variable.value));
+  postman.url.path = segments.map((segment) =>
+    segment.replace(parameter, (token, name) => {
+      // Complete collection-variable tokens are literal OpenAPI path text.
+      if (name === undefined) return token;
+      const value = values.get(name);
+      if (value !== undefined && value !== null && String(value) !== "") {
+        return String(value).replace(/[/?#]/g, encodeURIComponent);
+      }
+      return token === segment ? `:${name}` : `{{${name}}}`;
+    })
+  );
+  // Materialized segments must not be rebound when their value starts with :.
+  postman.url.variables.clear();
 }
 
 function buildCookie(cookieParams: NormalizedParam[]) {
@@ -228,7 +287,13 @@ function setHeaders(
   postman.headers.clear();
 
   if (contentType) {
-    postman.addHeader({ key: "Content-Type", value: contentType });
+    postman.addHeader({
+      key: "Content-Type",
+      value:
+        postman.body?.mode === "formdata"
+          ? getContentTypeHeader(contentType)
+          : contentType,
+    });
   }
 
   if (accept) {
@@ -297,25 +362,105 @@ function tryDecodeJsonParam(value: string): any {
   }
 }
 
+function setBodyMode(body: sdk.RequestBody, mode: string) {
+  body.mode = mode;
+  if (mode !== "raw") body.raw = undefined;
+  if (mode !== "urlencoded") {
+    body.urlencoded?.clear();
+    body.urlencoded = undefined;
+  }
+  if (mode !== "formdata") {
+    body.formdata?.clear();
+    body.formdata = undefined;
+  }
+  if (mode !== "file") body.file = undefined;
+}
+
+export class RequestBodyError extends Error {}
+
 // TODO: this is all a bit hacky
 function setBody(
   clonedPostman: sdk.Request,
   body: Body,
+  contentType: string,
   encoding?: Record<string, { contentType?: string }>
 ) {
+  const mediaType = getMediaType(contentType);
+  const mode =
+    mediaType === "multipart/form-data"
+      ? "formdata"
+      : mediaType === "application/x-www-form-urlencoded"
+        ? "urlencoded"
+        : undefined;
+
   if (clonedPostman.body === undefined) {
     return;
+  }
+
+  if (body.type === "raw" && body.content?.type === "file") {
+    if (mode !== "formdata") {
+      setBodyMode(clonedPostman.body, "file");
+      clonedPostman.body.file = { src: body.content.value.src };
+      return;
+    }
+
+    // Raw uploads carry no field name. Never assign one of several file fields.
+    const fileFields =
+      clonedPostman.body.formdata
+        ?.all()
+        .filter(
+          (param) =>
+            (param as sdk.FormParam & { type?: string }).type === "file" &&
+            param.key &&
+            !param.disabled
+        ) ?? [];
+    if (fileFields.length !== 1) {
+      throw new RequestBodyError(
+        "Choose a named file field in the multipart form before uploading a file."
+      );
+    }
+    body = { type: "form", content: { [fileFields[0].key!]: body.content } };
+  }
+
+  const hasEncoding = encoding && Object.keys(encoding).length > 0;
+  if (mode) {
+    // Capture examples before clearing the inactive urlencoded list.
+    const placeholders =
+      mode === "formdata" &&
+      body.type === "empty" &&
+      hasEncoding &&
+      clonedPostman.body.mode === "urlencoded"
+        ? (clonedPostman.body.urlencoded?.all() ?? [])
+        : [];
+    if (mode === "formdata" && clonedPostman.body.mode !== mode) {
+      clonedPostman.body.formdata?.clear();
+    }
+    setBodyMode(clonedPostman.body, mode);
+    if (mode === "formdata") {
+      clonedPostman.body.formdata ??= new sdk.PropertyList<sdk.FormParam>(
+        sdk.FormParam as any,
+        clonedPostman.body,
+        []
+      );
+      placeholders.forEach((param) => {
+        clonedPostman.body?.formdata?.add(
+          new sdk.FormParam({ ...param.toJSON(), key: param.key ?? undefined })
+        );
+      });
+    } else {
+      clonedPostman.body.urlencoded ??= new sdk.PropertyList<sdk.QueryParam>(
+        sdk.QueryParam as any,
+        clonedPostman.body,
+        []
+      );
+    }
   }
 
   if (body.type === "empty") {
     // When the original request has formdata and encoding is declared, keep the
     // placeholder params so the code snippet reflects the selected encoding even
     // before the user has uploaded a file.
-    if (
-      clonedPostman.body?.mode === "formdata" &&
-      encoding &&
-      Object.keys(encoding).length > 0
-    ) {
+    if (clonedPostman.body?.mode === "formdata" && hasEncoding) {
       const members: any[] =
         (clonedPostman.body.formdata as any)?.members ?? [];
       members.forEach((param: any) => {
@@ -332,15 +477,9 @@ function setBody(
     return;
   }
 
-  if (body.type === "raw" && body.content?.type === "file") {
-    // treat it like file.
-    clonedPostman.body.mode = "file";
-    clonedPostman.body.file = { src: body.content.value.src };
-    return;
-  }
-
   switch (clonedPostman.body.mode) {
     case "raw": {
+      setBodyMode(clonedPostman.body, "raw");
       // check file even though it should already be set from above
       if (
         body.type !== "raw" ||
@@ -354,10 +493,11 @@ function setBody(
       return;
     }
     case "formdata": {
+      setBodyMode(clonedPostman.body, "formdata");
       clonedPostman.body.formdata?.clear();
       if (body.type !== "form") {
         // treat it like raw.
-        clonedPostman.body.mode = "raw";
+        setBodyMode(clonedPostman.body, "raw");
         clonedPostman.body.raw = `${body.content?.value}`;
         return;
       }
@@ -402,10 +542,11 @@ function setBody(
       return;
     }
     case "urlencoded": {
+      setBodyMode(clonedPostman.body, "urlencoded");
       clonedPostman.body.urlencoded?.clear();
       if (body.type !== "form") {
         // treat it like raw.
-        clonedPostman.body.mode = "raw";
+        setBodyMode(clonedPostman.body, "raw");
         clonedPostman.body.raw = `${body.content?.value}`;
         return;
       }
@@ -432,6 +573,8 @@ function setBody(
 
 // TODO: finish these types
 interface Options {
+  /** Use the authored path when parameters are embedded in a segment. */
+  pathTemplate?: string;
   server?: ServerObject;
   queryParams: Param[];
   pathParams: Param[];
@@ -457,6 +600,7 @@ function buildPostmanRequest(
     server,
     auth,
     encoding,
+    pathTemplate,
   }: Options
 ) {
   const clonedPostman = cloneDeep(postman);
@@ -570,10 +714,12 @@ function buildPostmanRequest(
 
   // Use the enhanced params that might include API keys
   setQueryParams(clonedPostman, enhancedQueryParams);
-  setPathParams(clonedPostman, normalizeParams(pathParams));
+  setPathParams(clonedPostman, normalizeParams(pathParams), pathTemplate);
 
   // Use enhanced cookie params that might include API keys
   const cookie = buildCookie(enhancedCookieParams);
+
+  setBody(clonedPostman, body, contentType, encoding);
 
   setHeaders(
     clonedPostman,
@@ -584,9 +730,18 @@ function buildPostmanRequest(
     otherHeaders
   );
 
-  setBody(clonedPostman, body, encoding);
-
   return clonedPostman;
+}
+
+export function tryBuildPostmanRequest(postman: sdk.Request, options: Options) {
+  try {
+    return { request: buildPostmanRequest(postman, options), error: undefined };
+  } catch (error) {
+    if (error instanceof RequestBodyError) {
+      return { request: undefined, error: error.message };
+    }
+    throw error;
+  }
 }
 
 export default buildPostmanRequest;

@@ -5,12 +5,103 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import { runInThisContext } from "vm";
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { processOpenapiFile } from "docusaurus-plugin-openapi-docs/src/openapi/openapi";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import * as sdk from "postman-collection";
 
-import buildPostmanRequest from "./buildPostmanRequest";
+import buildPostmanRequest, {
+  RequestBodyError,
+  tryBuildPostmanRequest,
+} from "./buildPostmanRequest";
+import makeRequest from "./Request/makeRequest";
 
-type Options = { [K in keyof Parameters<typeof buildPostmanRequest>[1]]?: any };
+type Options = {
+  [K in keyof Parameters<typeof buildPostmanRequest>[1]]?: any;
+};
+const convertedRequests = new Map<
+  string,
+  Promise<ReturnType<sdk.Request["toJSON"]>>
+>();
+
+// Use the runtime's real Fetch API; Jest 27 does not expose these globals.
+const native = runInThisContext(
+  "({ Blob, FormData, Headers, Request, Response, URLSearchParams })"
+) as Pick<
+  typeof globalThis,
+  "Blob" | "FormData" | "Headers" | "Request" | "Response" | "URLSearchParams"
+>;
+
+async function sendRequest(
+  request: sdk.Request,
+  body: Parameters<typeof makeRequest>[2],
+  encoding?: Parameters<typeof makeRequest>[5]
+) {
+  const original = Object.fromEntries(
+    [...Object.keys(native), "fetch"].map((key) => [key, (global as any)[key]])
+  );
+  Object.assign(global, native);
+  const fetch = jest
+    .fn()
+    .mockResolvedValue(
+      new native.Response("ok", { headers: { "Content-Type": "text/plain" } })
+    );
+  (global as any).fetch = fetch;
+  try {
+    await makeRequest(request, undefined, body, 1000, undefined, encoding);
+    const [url, options] = fetch.mock.calls[0];
+    return new native.Request(url, options);
+  } finally {
+    for (const [key, value] of Object.entries(original)) {
+      if (value === undefined) delete (global as any)[key];
+      else (global as any)[key] = value;
+    }
+  }
+}
+
+async function sendForm(
+  request: sdk.Request,
+  body: Parameters<typeof makeRequest>[2],
+  encoding?: Parameters<typeof makeRequest>[5]
+) {
+  const wire = await sendRequest(request, body, encoding);
+  return {
+    contentType: wire.headers.get("Content-Type"),
+    form: await wire.formData(),
+  };
+}
+
+async function sendRawFile(
+  request: sdk.Request,
+  body: Parameters<typeof makeRequest>[2]
+) {
+  // Node has no FileReader. This adapter only reads the real Blob's bytes.
+  const originalReader = global.FileReader;
+  (global as any).FileReader = class {
+    result?: ArrayBuffer;
+    onload?: () => void;
+    readAsArrayBuffer(blob: Blob) {
+      void blob.arrayBuffer().then((bytes) => {
+        this.result = bytes;
+        this.onload?.();
+      });
+    }
+  };
+  try {
+    return await sendRequest(request, body);
+  } finally {
+    if (originalReader === undefined) delete (global as any).FileReader;
+    else global.FileReader = originalReader;
+  }
+}
+
+function formKeys(form: FormData) {
+  const keys: string[] = [];
+  form.forEach((_value, key) => keys.push(key));
+  return keys;
+}
 
 beforeAll(() => {
   (global as any).window = {
@@ -58,6 +149,44 @@ function pathVariable(options: Options, name = "petId") {
 
 function cookie(options: Options) {
   return build(options).headers.get("Cookie");
+}
+
+async function generatedRequest(template: string, names: string[]) {
+  const key = JSON.stringify([template, names]);
+  let converted = convertedRequests.get(key);
+  if (!converted) {
+    converted = (async () => {
+      const [items] = await processOpenapiFile(
+        {
+          openapi: "3.0.0",
+          info: { title: "Path API", version: "1.0.0" },
+          paths: {
+            [template]: {
+              get: {
+                operationId: "getPath",
+                parameters: names.map((name) => ({
+                  name,
+                  in: "path",
+                  required: true,
+                  schema: { type: "string" },
+                })),
+                responses: { "200": { description: "OK" } },
+              },
+            },
+          },
+        } as any,
+        { specPath: "dummy", outputDir: "build" } as any,
+        {} as any
+      );
+      const apiItem = items.find((item) => item.type === "api") as any;
+      expect(apiItem?.api.postman).toBeDefined();
+      return apiItem.api.postman.toJSON();
+    })();
+    convertedRequests.set(key, converted);
+  }
+  // Serialize across package boundaries; do not rely on SDK constructor identity.
+  const request = new sdk.Request(JSON.parse(JSON.stringify(await converted)));
+  return request;
 }
 
 describe("buildPostmanRequest", () => {
@@ -300,6 +429,529 @@ describe("buildPostmanRequest", () => {
   });
 
   describe("path parameters", () => {
+    describe("authoritative OpenAPI path templates", () => {
+      const request = (segment: string, fallback?: string | number | boolean) =>
+        new sdk.Request({
+          method: "GET",
+          url: {
+            protocol: "https",
+            host: ["example.com"],
+            path: ["records", segment, "items"],
+            variable:
+              fallback === undefined ? [] : [{ key: "id", value: fallback }],
+          },
+        });
+
+      it("materializes the stored path and every ordinary SDK serialization", () => {
+        const original = request("{{id}}:publish");
+        const before = original.toJSON();
+        const built = build(
+          {
+            pathTemplate: "/records/{id}:publish/items",
+            pathParams: [{ name: "id", in: "path", value: "9527" }],
+          },
+          original
+        );
+        expect(built.url.getPath()).toBe("/records/9527:publish/items");
+        expect(built.url.getPath({ unresolved: true })).toBe(
+          "/records/9527:publish/items"
+        );
+        expect(built.url.toString(true)).toContain(
+          "/records/9527:publish/items"
+        );
+        expect(built.toJSON().url).toMatchObject({
+          path: ["records", "9527:publish", "items"],
+        });
+        expect(built.url.variables.count()).toBe(0);
+        expect(original.toJSON()).toEqual(before);
+      });
+
+      it("keeps legacy SDK bindings for a standalone colon-leading value", () => {
+        const original = request(":id");
+        original.url.variables.add(
+          new sdk.Variable({ key: "other", value: "WRONG" })
+        );
+        const built = build(
+          {
+            pathTemplate: "/records/{id}/items",
+            pathParams: [{ name: "id", in: "path", value: ":other" }],
+          },
+          original
+        );
+        expect(built.url.getPath()).toBe("/records/:other/items");
+        expect(built.url.getPath({ unresolved: true })).toBe(
+          "/records/:id/items"
+        );
+        expect(built.toJSON().url).toMatchObject({
+          path: ["records", ":id", "items"],
+        });
+        expect(built.url.variables.get("id")).toBe(":other");
+      });
+
+      it("does not rewrite a literal collection token in the template", () => {
+        expect(
+          build(
+            {
+              pathTemplate: "/records/{{id}}/{id}:publish",
+              pathParams: [{ name: "id", in: "path", value: "9527" }],
+            },
+            request("{{id}}:publish")
+          ).url.getPath()
+        ).toBe("/records/{{id}}/9527:publish");
+      });
+
+      it("does not guess that collection tokens are path parameters without a template", () => {
+        expect(
+          build(
+            { pathParams: [{ name: "id", in: "path", value: "9527" }] },
+            request("{{id}}")
+          ).url.getPath()
+        ).toBe("/records/{{id}}/items");
+      });
+
+      it("leaves native-looking literal segments unbound", () => {
+        const original = request("{{id}}:publish");
+        original.url.path!.unshift(":__openapi_path_2");
+        expect(
+          build(
+            {
+              pathTemplate: "/:__openapi_path_2/records/{id}:publish/items",
+              pathParams: [{ name: "id", in: "path", value: "9527" }],
+            },
+            original
+          ).url.getPath()
+        ).toBe("/:__openapi_path_2/records/9527:publish/items");
+      });
+
+      it.each(["EXAMPLE", 0, false])(
+        "preserves native SDK and embedded-template fallback behavior for %p",
+        (fallback) => {
+          for (const [segment, template, expected] of [
+            [
+              ":id",
+              "/records/{id}/items",
+              typeof fallback === "string"
+                ? `/records/${fallback}/items`
+                : "/records/:id/items",
+            ],
+            [
+              "{{id}}:publish",
+              "/records/{id}:publish/items",
+              `/records/${fallback}:publish/items`,
+            ],
+          ]) {
+            expect(
+              build(
+                {
+                  pathTemplate: template,
+                  pathParams: [{ name: "id", in: "path", value: "" }],
+                },
+                request(segment, fallback)
+              ).url.getPath()
+            ).toBe(expected);
+          }
+        }
+      );
+
+      it.each([undefined, "", [], "{}"])(
+        "keeps a placeholder for an unfilled middle value %p",
+        (value) => {
+          expect(
+            build(
+              {
+                pathTemplate: "/records/{id}/items",
+                pathParams: [{ name: "id", in: "path", value }],
+              },
+              request(":id")
+            ).url.getPath()
+          ).toBe("/records/:id/items");
+        }
+      );
+
+      it("uses a nonempty fallback for an empty serialized user value", () => {
+        expect(
+          build(
+            {
+              pathTemplate: "/records/{id}/items",
+              pathParams: [{ name: "id", in: "path", value: [] }],
+            },
+            request(":id", "EXAMPLE")
+          ).url.getPath()
+        ).toBe("/records/EXAMPLE/items");
+      });
+
+      it("retains raw native tokens and SDK bindings for standalone-only paths", async () => {
+        const original = await generatedRequest("/pets/{petId}", ["petId"]);
+        const built = build(
+          {
+            pathTemplate: "/pets/{petId}",
+            pathParams: [{ name: "petId", in: "path", value: "9527" }],
+          },
+          original
+        );
+        expect(built.url.getPath()).toBe("/pets/9527");
+        expect(built.url.getPath({ unresolved: true })).toBe("/pets/:petId");
+        expect(built.url.toString(true)).toContain("/pets/9527");
+        expect(built.toJSON().url).toMatchObject({ path: ["pets", ":petId"] });
+        expect(built.url.variables.get("petId")).toBe("9527");
+      });
+
+      it("keeps an unfilled native parameter beside an embedded parameter", () => {
+        const built = build(
+          {
+            pathTemplate: "/records/{missing}/{id}:publish/items",
+            pathParams: [
+              { name: "missing", in: "path", value: "" },
+              { name: "id", in: "path", value: "9527" },
+            ],
+          },
+          request("{{id}}:publish")
+        );
+        expect(built.url.getPath()).toBe(
+          "/records/:missing/9527:publish/items"
+        );
+        expect(built.url.getPath({ unresolved: true })).toBe(
+          "/records/:missing/9527:publish/items"
+        );
+        expect(built.toJSON().url).toMatchObject({
+          path: ["records", ":missing", "9527:publish", "items"],
+        });
+      });
+
+      it.each([
+        ["a/b", "a%2Fb"],
+        ["a?b", "a%3Fb"],
+        ["a#b", "a%23b"],
+        ["%2F?x#y/z", "%2F%3Fx%23y%2Fz"],
+      ])(
+        "escapes reserved delimiters in embedded value %s",
+        (value, escaped) => {
+          const built = build(
+            {
+              pathTemplate: "/records/{id}:publish/items",
+              pathParams: [{ name: "id", in: "path", value }],
+              queryParams: [{ name: "q", in: "query", value: "keep" }],
+              server: { url: "https://example.com" },
+            },
+            request("{{id}}:publish")
+          );
+          const expected = `/records/${escaped}:publish/items`;
+          expect(built.url.getPath()).toBe(expected);
+          expect(built.url.getPath({ unresolved: true })).toBe(expected);
+          expect(built.url.toString()).toBe(
+            `https://example.com${expected}?q=keep`
+          );
+          expect(built.url.toString(true)).toContain(expected);
+          expect(built.toJSON().url).toMatchObject({
+            path: ["records", `${escaped}:publish`, "items"],
+          });
+          const parsed = new URL(built.url.toString());
+          expect(parsed.pathname).toBe(expected);
+          expect(parsed.search).toBe("?q=keep");
+          expect(parsed.hash).toBe("");
+        }
+      );
+
+      it.each([
+        ["/a/{{id}", "/a/{9527"],
+        ["/a/{id}}", "/a/9527}"],
+      ])(
+        "resolves the parameter next to a literal brace in %s",
+        (pathTemplate, expected) => {
+          const built = build(
+            {
+              pathTemplate,
+              pathParams: [{ name: "id", in: "path", value: "9527" }],
+            },
+            request("{{id}}")
+          );
+          expect(built.url.getPath()).toBe(expected);
+          expect(built.url.getPath({ unresolved: true })).toBe(expected);
+          expect(built.url.toString(true)).toContain(expected);
+          expect(built.url.variables.count()).toBe(0);
+        }
+      );
+
+      it("warns and retains the converted path for an unclosed parameter", async () => {
+        const pathTemplate = "/a/{{id";
+        const original = await generatedRequest(pathTemplate, ["id"]);
+        const warning = jest
+          .spyOn(console, "warn")
+          .mockImplementation(() => {});
+        try {
+          const built = build(
+            {
+              pathTemplate,
+              pathParams: [{ name: "id", in: "path", value: "9527" }],
+            },
+            original
+          );
+          expect(built.url.getPath()).toBe("/a/{{id");
+          expect(built.toJSON().url).toMatchObject({ path: ["a", "{{id"] });
+          expect(warning).toHaveBeenCalledWith(
+            `Unable to resolve an unclosed path parameter in "${pathTemplate}". Using the converted request path.`
+          );
+        } finally {
+          warning.mockRestore();
+        }
+      });
+
+      it("keeps a complete collection token literal even without embedded parameters", () => {
+        const pathTemplate = "/a/{{id}}";
+        const original = new sdk.Request({
+          method: "GET",
+          url: "https://example.com/a/:id",
+        });
+        expect(
+          build(
+            {
+              pathTemplate,
+              pathParams: [{ name: "id", in: "path", value: "9527" }],
+            },
+            original
+          ).url.getPath()
+        ).toBe("/a/{{id}}");
+      });
+
+      it("keeps literal empty segments in the authored path", () => {
+        expect(
+          build(
+            {
+              pathTemplate: "/records//{id}",
+              pathParams: [{ name: "id", in: "path", value: "9527" }],
+            },
+            new sdk.Request({
+              method: "GET",
+              url: {
+                protocol: "https",
+                host: ["example.com"],
+                path: ["records", "", ":id"],
+              },
+            })
+          ).url.getPath()
+        ).toBe("/records//9527");
+      });
+
+      it("preserves a server base path, server variables, query and fragment", () => {
+        const original = request("{{id}}:publish");
+        original.url.hash = "{{id}}";
+        const built = build(
+          {
+            pathTemplate: "/records/{id}:publish/items",
+            server: {
+              url: "https://{host}:8443/base/",
+              variables: { host: { default: "api.example.com" } },
+            },
+            pathParams: [{ name: "id", in: "path", value: "9527" }],
+            queryParams: [{ name: "q", in: "query", value: "{{id}}" }],
+          },
+          original
+        );
+        expect(built.url.toString()).toBe(
+          "https://api.example.com:8443/base/records/9527:publish/items?q={{id}}#{{id}}"
+        );
+      });
+    });
+
+    describe("embedded OpenAPI parameters", () => {
+      it.each([
+        ["/records/{id}:publish", { id: "9527" }, "/records/9527:publish"],
+        [
+          "/records/{id}:publish.json",
+          { id: "9527" },
+          "/records/9527:publish.json",
+        ],
+        [
+          "/files/{name}.{ext}",
+          { name: "report", ext: "pdf" },
+          "/files/report.pdf",
+        ],
+        ["/records/{id}{part}", { id: "one", part: "two" }, "/records/onetwo"],
+        [
+          "/records/{id}:{part}",
+          { id: "one", part: "two" },
+          "/records/one:two",
+        ],
+        [
+          "/records/{id:publish}:cancel",
+          { "id:publish": "exact" },
+          "/records/exact:cancel",
+        ],
+        [
+          "/records/{id}/{id2}:publish",
+          { id: "one", id2: "two" },
+          "/records/one/two:publish",
+        ],
+        [
+          "/records/{id}/{id}:publish",
+          { id: "one" },
+          "/records/one/one:publish",
+        ],
+        ["/records/prefix{id}", { id: "value" }, "/records/prefixvalue"],
+        [
+          "/records/{id}:publish",
+          { id: "\u03b1$&" },
+          "/records/\u03b1$&:publish",
+        ],
+        [
+          "/records/{id}:publish",
+          { id: "{{other}}" },
+          "/records/{{other}}:publish",
+        ],
+        ["/User/{id}/page:get", { id: "9527" }, "/User/9527/page:get"],
+        ["/records/{id:publish}", { "id:publish": "exact" }, "/records/exact"],
+      ] as [string, Record<string, string>, string][])(
+        "resolves %s through the converter and SDK",
+        async (template, values, expected) => {
+          const request = await generatedRequest(template, Object.keys(values));
+          expect(
+            build(
+              {
+                pathTemplate: template,
+                pathParams: Object.entries(values).map(([name, value]) => ({
+                  name,
+                  in: "path",
+                  value,
+                })),
+              },
+              request
+            ).url.getPath()
+          ).toBe(expected);
+        }
+      );
+
+      it("does not re-interpret a value starting with a colon as another parameter", async () => {
+        const request = await generatedRequest(
+          "/records/{other}/{id}:publish",
+          ["other", "id"]
+        );
+        expect(
+          build(
+            {
+              pathTemplate: "/records/{other}/{id}:publish",
+              pathParams: [
+                { name: "other", in: "path", value: "different" },
+                { name: "id", in: "path", value: ":other" },
+              ],
+            },
+            request
+          ).url.getPath()
+        ).toBe("/records/different/:other:publish");
+      });
+
+      it("preserves missing values in embedded parameters", async () => {
+        const request = await generatedRequest("/records/{id}:publish", ["id"]);
+        expect(
+          build(
+            {
+              pathTemplate: "/records/{id}:publish",
+              pathParams: [{ name: "id", in: "path", value: "" }],
+            },
+            request
+          ).url.getPath()
+        ).toBe("/records/{{id}}:publish");
+      });
+
+      it("preserves an unresolved adjacent parameter", async () => {
+        const request = await generatedRequest("/records/{id}{part}", [
+          "id",
+          "part",
+        ]);
+        expect(
+          build(
+            {
+              pathTemplate: "/records/{id}{part}",
+              pathParams: [{ name: "id", in: "path", value: "one" }],
+            },
+            request
+          ).url.getPath()
+        ).toBe("/records/one{{part}}");
+      });
+
+      it.each([[[]], ["{}"]])(
+        "keeps named placeholders for empty serialized values: %p",
+        async (value) => {
+          const request = await generatedRequest("/records/{a}{b}", ["a", "b"]);
+          expect(
+            build(
+              {
+                pathTemplate: "/records/{a}{b}",
+                pathParams: [
+                  { name: "a", in: "path", value },
+                  { name: "b", in: "path", value },
+                ],
+              },
+              request
+            ).url.getPath()
+          ).toBe("/records/{{a}}{{b}}");
+        }
+      );
+
+      it("avoids internal variable collisions", async () => {
+        const names = ["__openapi_path_2", "__openapi_path_2_", "id"];
+        const request = await generatedRequest(
+          "/{__openapi_path_2}/{__openapi_path_2_}/{id}:publish",
+          names
+        );
+        expect(
+          build(
+            {
+              pathTemplate:
+                "/{__openapi_path_2}/{__openapi_path_2_}/{id}:publish",
+              pathParams: names.map((name, index) => ({
+                name,
+                in: "path",
+                value: String(index),
+              })),
+            },
+            request
+          ).url.getPath()
+        ).toBe("/0/1/2:publish");
+      });
+
+      it("keeps repeated builds independent and leaves the original request unchanged", async () => {
+        const request = await generatedRequest("/records/{id}:publish", ["id"]);
+        request.body = new sdk.RequestBody({ mode: "raw", raw: "original" });
+        const original = request.toJSON();
+        const first = build(
+          {
+            pathTemplate: "/records/{id}:publish",
+            pathParams: [{ name: "id", in: "path", value: "first" }],
+            body: { type: "raw", content: { type: "string", value: "new" } },
+          },
+          request
+        );
+        const second = build(
+          {
+            pathTemplate: "/records/{id}:publish",
+            pathParams: [{ name: "id", in: "path", value: "second" }],
+          },
+          request
+        );
+        expect(first.url.getPath()).toBe("/records/first:publish");
+        expect(second.url.getPath()).toBe("/records/second:publish");
+        expect(request.toJSON()).toEqual(original);
+      });
+
+      it("keeps the server, port, query, and fragment outside path substitution", async () => {
+        const request = await generatedRequest("/records/{id}:publish", ["id"]);
+        request.url.hash = "{{id}}:publish";
+        expect(
+          build(
+            {
+              pathTemplate: "/records/{id}:publish",
+              server: { url: "https://api.example.com:8443/base" },
+              pathParams: [{ name: "id", in: "path", value: "9527" }],
+              queryParams: [{ name: "id", in: "query", value: "{{id}}" }],
+            },
+            request
+          ).url.toString()
+        ).toBe(
+          "https://api.example.com:8443/base/records/9527:publish?id={{id}}#{{id}}:publish"
+        );
+      });
+    });
+
     it.each([
       ["simple", "1,2"],
       ["label", ".1.2"],
@@ -517,6 +1169,52 @@ describe("buildPostmanRequest", () => {
       ).toEqual([["name", "Rex"]]);
     });
 
+    it.each([
+      [
+        "MULTIPART/FORM-DATA; boundary=x",
+        "urlencoded",
+        "formdata",
+        "MULTIPART/FORM-DATA",
+      ],
+      [
+        "Application/X-WWW-Form-Urlencoded; charset=UTF-8",
+        "formdata",
+        "urlencoded",
+        "Application/X-WWW-Form-Urlencoded; charset=UTF-8",
+      ],
+    ])(
+      "uses the selected %s form type with parameters",
+      (contentType, originalMode, expectedMode, expectedHeader) => {
+        const original = new sdk.Request({
+          url: "http://example.com/pets",
+          method: "POST",
+          body: {
+            mode: originalMode,
+            [originalMode]: [{ key: "stale", value: "original" }],
+          } as any,
+        });
+        const before = original.toJSON();
+        const request = build(
+          {
+            contentType,
+            body: {
+              type: "form",
+              content: { name: { type: "string", value: "Rex" } },
+            },
+          },
+          original
+        );
+        expect(request.body?.mode).toBe(expectedMode);
+        expect(
+          (request.body as any)[expectedMode]
+            .all()
+            .map(({ key, value }: any) => [key, value])
+        ).toEqual([["name", "Rex"]]);
+        expect(request.headers.get("Content-Type")).toBe(expectedHeader);
+        expect(original.toJSON()).toEqual(before);
+      }
+    );
+
     it("applies the encoding content type to form-data parts", () => {
       const request = build(
         {
@@ -534,6 +1232,673 @@ describe("buildPostmanRequest", () => {
         "{}",
         "application/json",
       ]);
+    });
+
+    describe("selected form content type", () => {
+      const multipart = "multipart/form-data";
+      const urlencoded = "application/x-www-form-urlencoded";
+      const fields = {
+        type: "form",
+        content: { name: { type: "string", value: "Rex" } },
+      };
+      const file = {
+        src: "/path/to/pets.csv",
+        content: new native.Blob(["id,name\n1,Rex\n"], { type: "text/csv" }),
+      };
+      const formFields = (request: sdk.Request) =>
+        request.body?.[request.body.mode as "formdata" | "urlencoded"]
+          ?.all()
+          .map(({ key, value }) => [key, value]);
+      const formRequest = (mode: string) =>
+        new sdk.Request({
+          url: "http://example.com/pets",
+          method: "POST",
+          body: { mode },
+        });
+
+      it.each(["urlencoded", "formdata"])(
+        "uploads a file from inline %s SDK metadata",
+        (originalMode) => {
+          const original = new sdk.Request({
+            url: "http://example.com/pets",
+            method: "POST",
+            body: {
+              mode: originalMode,
+              [originalMode]: [{ key: "file", value: "placeholder" }],
+            } as any,
+          });
+          const before = original.toJSON();
+          const request = build(
+            {
+              contentType: multipart,
+              body: {
+                type: "form",
+                content: {
+                  ...fields.content,
+                  file: { type: "file", value: file },
+                },
+              },
+            },
+            original
+          );
+          expect(request.body?.mode).toBe("formdata");
+          expect(formFields(request)).toEqual([
+            ["name", "Rex"],
+            ["file", file],
+          ]);
+          expect(original.toJSON()).toEqual(before);
+        }
+      );
+
+      it.each([
+        ["urlencoded", multipart, "formdata"],
+        ["formdata", urlencoded, "urlencoded"],
+        ["raw", multipart, "formdata"],
+        ["raw", urlencoded, "urlencoded"],
+      ])(
+        "switches %s to %s while preserving body metadata",
+        (from, contentType, mode) => {
+          const original = new sdk.Request({
+            url: "http://example.com/pets",
+            method: "POST",
+            body: {
+              mode: from,
+              [from]:
+                from === "raw"
+                  ? "old raw body"
+                  : [{ key: "old", value: "stale" }],
+              options: { raw: { language: "json" } },
+              disabled: true,
+              file: { src: "/path/to/retained.bin" },
+              graphql: { query: "query { node }" },
+            } as any,
+          });
+          const before = original.toJSON();
+          const request = build({ contentType, body: fields }, original);
+          expect(request.body?.mode).toBe(mode);
+          expect(formFields(request)).toEqual([["name", "Rex"]]);
+          expect(request.body?.raw).toBeUndefined();
+          expect(request.body?.file).toBeUndefined();
+          expect(
+            request.body?.[mode === "formdata" ? "urlencoded" : "formdata"]
+          ).toBeUndefined();
+          expect(request.body?.toJSON()).not.toHaveProperty("raw");
+          expect(request.body?.toJSON()).not.toHaveProperty("file");
+          expect(request.body?.toJSON()).not.toHaveProperty(
+            mode === "formdata" ? "urlencoded" : "formdata"
+          );
+          expect(request.body?.toJSON()).toMatchObject({
+            graphql: { query: "query { node }" },
+          });
+          expect(request.body?.toJSON()).toMatchObject({
+            options: { raw: { language: "json" } },
+            disabled: true,
+          });
+          expect(original.toJSON()).toEqual(before);
+        }
+      );
+
+      it("can switch back to urlencoded and rebuild from the original request", () => {
+        const original = formRequest("urlencoded");
+        const before = original.toJSON();
+        const uploaded = build(
+          {
+            contentType: multipart,
+            body: {
+              type: "form",
+              content: {
+                ...fields.content,
+                file: { type: "file", value: file },
+              },
+            },
+          },
+          original
+        );
+        const returned = build(
+          { contentType: urlencoded, body: fields },
+          uploaded
+        );
+        const repeated = build(
+          { contentType: urlencoded, body: fields },
+          original
+        );
+        expect(uploaded.body?.mode).toBe("formdata");
+        expect(uploaded.body?.formdata?.all()).toHaveLength(2);
+        expect(returned.body?.mode).toBe("urlencoded");
+        expect(returned.body?.formdata).toBeUndefined();
+        expect(returned.body?.toJSON()).not.toHaveProperty("formdata");
+        const emptyMultipart = build(
+          {
+            contentType: multipart,
+            encoding: { file: { contentType: "text/csv" } },
+          },
+          returned
+        );
+        expect(emptyMultipart.body?.formdata?.all()).toMatchObject([
+          { key: "name", value: "Rex" },
+        ]);
+        expect(emptyMultipart.body?.formdata?.all()).toHaveLength(1);
+        expect(formFields(returned)).toEqual([["name", "Rex"]]);
+        expect(formFields(repeated)).toEqual([["name", "Rex"]]);
+        expect(original.toJSON()).toEqual(before);
+      });
+
+      it("keeps individual files, file arrays, and per-part encodings", () => {
+        const second = {
+          src: "/path/to/more.csv",
+          content: new native.Blob(["id,name\n2,Spot\n"], { type: "text/csv" }),
+        };
+        const request = build(
+          {
+            contentType: multipart,
+            body: {
+              type: "form",
+              content: {
+                file: { type: "file", value: file },
+                files: { type: "file[]", value: [file, second] },
+                meta: { type: "string", value: "{}" },
+              },
+            },
+            encoding: {
+              file: { contentType: "text/csv" },
+              files: { contentType: "text/csv, text/plain" },
+              meta: { contentType: "application/json" },
+            },
+          },
+          formRequest("urlencoded")
+        );
+        expect(request.body?.mode).toBe("formdata");
+        expect(request.body?.formdata?.all()).toMatchObject([
+          { key: "file", value: file, contentType: "text/csv" },
+          { key: "files", value: file, contentType: "text/csv" },
+          {
+            key: "files",
+            value: second,
+            contentType: "text/csv",
+          },
+          {
+            key: "meta",
+            value: "{}",
+            contentType: "application/json",
+          },
+        ]);
+      });
+
+      it("keeps metadata when the mode is already correct", () => {
+        const original = formRequest("formdata");
+        original.body?.update({
+          mode: "formdata",
+          options: { raw: { language: "json" } },
+          disabled: true,
+        } as any);
+        const request = build(
+          { contentType: multipart, body: fields },
+          original
+        );
+        expect(formFields(request)).toEqual([["name", "Rex"]]);
+        expect(request.body?.toJSON()).toMatchObject({
+          options: { raw: { language: "json" } },
+          disabled: true,
+        });
+      });
+
+      it.each([
+        ["urlencoded", multipart],
+        ["formdata", urlencoded],
+      ])(
+        "keeps an empty %s body absent when selecting %s",
+        (mode, contentType) => {
+          expect(
+            build({ contentType }, formRequest(mode)).body
+          ).toBeUndefined();
+        }
+      );
+
+      it("preserves existing encoded placeholders before files are uploaded", () => {
+        const original = new sdk.Request({
+          url: "http://example.com/pets",
+          body: { mode: "formdata", formdata: [{ key: "meta", value: "{}" }] },
+        });
+        const request = build(
+          {
+            contentType: multipart,
+            encoding: { meta: { contentType: "application/json, text/plain" } },
+          },
+          original
+        );
+        expect(request.body?.mode).toBe("formdata");
+        expect(request.body?.formdata?.all()).toMatchObject([
+          { key: "meta", value: "{}", contentType: "application/json" },
+        ]);
+      });
+
+      it("does not create a body when the original request has none", () => {
+        expect(
+          build({ contentType: multipart, body: fields }).body
+        ).toBeUndefined();
+      });
+
+      it.each([
+        "",
+        "application/json",
+        "text/plain; profile=multipart/form-data",
+      ])(
+        "keeps the original form mode for unsupported selection %s",
+        (contentType) => {
+          const request = build(
+            { contentType, body: fields },
+            formRequest("urlencoded")
+          );
+          expect(request.body?.mode).toBe("urlencoded");
+          expect(formFields(request)).toEqual([["name", "Rex"]]);
+        }
+      );
+
+      it.each([
+        ["formdata", urlencoded],
+        ["urlencoded", multipart],
+      ])(
+        "keeps raw strings when selecting a form type from %s",
+        (mode, contentType) => {
+          const request = build(
+            {
+              contentType,
+              body: {
+                type: "raw",
+                content: { type: "string", value: "raw text" },
+              },
+            },
+            formRequest(mode)
+          );
+          expect(request.body?.mode).toBe("raw");
+          expect(request.body?.raw).toBe("raw text");
+        }
+      );
+
+      it.each([
+        [
+          "MULTIPART/FORM-DATA; charset=utf-8",
+          "formdata",
+          "MULTIPART/FORM-DATA; charset=utf-8",
+        ],
+        [
+          " multipart/form-data ; boundary=server",
+          "formdata",
+          " multipart/form-data ",
+        ],
+        [
+          "Application/X-WWW-Form-Urlencoded; charset=UTF-8",
+          "urlencoded",
+          "Application/X-WWW-Form-Urlencoded; charset=UTF-8",
+        ],
+      ])("normalizes selected form type %s", (contentType, mode, header) => {
+        const request = build(
+          { contentType, body: fields },
+          formRequest("raw")
+        );
+        expect(request.body?.mode).toBe(mode);
+        expect(formFields(request)).toEqual([["name", "Rex"]]);
+        expect(request.headers.get("Content-Type")).toBe(header);
+      });
+
+      it("drops multipart encoding placeholders for an empty urlencoded selection", async () => {
+        const original = new sdk.Request({
+          url: "http://example.com/pets",
+          method: "POST",
+          body: { mode: "formdata", formdata: [{ key: "meta", value: "{}" }] },
+        });
+        const before = original.toJSON();
+        const body = { type: "empty" as const };
+        const encoding = { meta: { contentType: "application/json" } };
+        const request = build(
+          { contentType: urlencoded, body, encoding },
+          original
+        );
+        expect(request.body).toBeUndefined();
+        const sent = await sendForm(request, body, encoding);
+        expect(sent.contentType).toBe(urlencoded);
+        expect(formKeys(sent.form)).toEqual([]);
+        expect(original.toJSON()).toEqual(before);
+      });
+
+      it.each([multipart, "MULTIPART/FORM-DATA; boundary=server"])(
+        "sends existing encoded placeholders when selecting %s before upload",
+        async (contentType) => {
+          const original = new sdk.Request({
+            url: "http://example.com/pets",
+            method: "POST",
+            body: {
+              mode: "urlencoded",
+              urlencoded: [{ key: "meta", value: "{}" }],
+            },
+          });
+          const before = original.toJSON();
+          const body = { type: "empty" as const };
+          const encoding = {
+            meta: { contentType: "application/json, text/plain" },
+          };
+          const request = build({ contentType, body, encoding }, original);
+          expect(request.body?.mode).toBe("formdata");
+          expect(request.body?.formdata?.all()).toMatchObject([
+            { key: "meta", value: "{}", contentType: "application/json" },
+          ]);
+          const sent = await sendForm(request, body, encoding);
+          expect(sent.contentType).toMatch(/^multipart\/form-data; boundary=/);
+          expect(sent.contentType).not.toContain("boundary=server");
+          const part = sent.form.get("meta");
+          if (!part || typeof part === "string")
+            throw new Error("Missing encoded part");
+          await expect(part.text()).resolves.toBe("{}");
+          expect(part.type).toBe("application/json");
+          expect(original.toJSON()).toEqual(before);
+        }
+      );
+
+      it.each(["urlencoded", "raw"])(
+        "rejects a raw multipart upload without a named file field in %s metadata",
+        (mode) => {
+          const body = {
+            type: "raw" as const,
+            content: { type: "file" as const, value: file },
+          };
+          expect(() =>
+            build({ contentType: multipart, body }, formRequest(mode))
+          ).toThrow(RequestBodyError);
+        }
+      );
+
+      it("uses the existing file placeholder's field name for a raw multipart upload", async () => {
+        const original = new sdk.Request({
+          url: "http://example.com/pets",
+          method: "POST",
+          body: {
+            mode: "formdata",
+            formdata: [{ key: "upload", type: "file", src: "/path/to/file" }],
+          } as any,
+        });
+        const before = original.toJSON();
+        const body = {
+          type: "raw" as const,
+          content: { type: "file" as const, value: file },
+        };
+        const encoding = {
+          upload: { contentType: "application/octet-stream, text/csv" },
+        };
+        const request = build(
+          { contentType: multipart, body, encoding },
+          original
+        );
+        expect(request.body?.mode).toBe("formdata");
+        expect(request.body?.formdata?.all()).toMatchObject([
+          { key: "upload", contentType: "application/octet-stream" },
+        ]);
+        const sent = await sendForm(request, body, encoding);
+        expect(formKeys(sent.form)).toEqual(["upload"]);
+        const part = sent.form.get("upload");
+        if (!part || typeof part === "string")
+          throw new Error("Missing uploaded file");
+        await expect(part.text()).resolves.toBe("id,name\n1,Rex\n");
+        expect(part.type).toBe("application/octet-stream");
+        expect(original.toJSON()).toEqual(before);
+      });
+
+      it("preserves a raw file's bytes when the selected type is urlencoded", async () => {
+        const bytes = [0, 255, 128, 65, 13, 10];
+        const body = {
+          type: "raw" as const,
+          content: {
+            type: "file" as const,
+            value: {
+              src: "/path/to/raw.bin",
+              content: new native.Blob([new Uint8Array(bytes)]),
+            },
+          },
+        };
+        const request = build(
+          { contentType: urlencoded, body },
+          formRequest("formdata")
+        );
+        expect(request.body?.mode).toBe("file");
+        expect(request.body?.file).toEqual({ src: body.content.value.src });
+        expect(request.body?.formdata).toBeUndefined();
+        expect(request.body?.urlencoded).toBeUndefined();
+        const wire = await sendRawFile(request, body);
+        expect(wire.headers.get("Content-Type")).toBe(urlencoded);
+        expect([...new Uint8Array(await wire.arrayBuffer())]).toEqual(bytes);
+      });
+
+      it.each([
+        { formdata: [] },
+        {
+          formdata: [
+            { key: "first", type: "file" },
+            { key: "second", type: "file" },
+          ],
+        },
+        { formdata: [{ key: "", type: "file" }] },
+        { formdata: [{ key: "disabled", type: "file", disabled: true }] },
+      ])(
+        "reports an ambiguous raw multipart upload without guessing: %j",
+        ({ formdata }) => {
+          const original = new sdk.Request({
+            url: "http://example.com/pets",
+            method: "POST",
+            body: { mode: "formdata", formdata } as any,
+          });
+          const before = original.toJSON();
+          const body = { type: "raw", content: { type: "file", value: file } };
+          expect(() =>
+            build({ contentType: multipart, body }, original)
+          ).toThrow(RequestBodyError);
+          const result = tryBuildPostmanRequest(original, {
+            queryParams: [],
+            pathParams: [],
+            cookieParams: [],
+            headerParams: [],
+            contentType: multipart,
+            accept: "",
+            body: body as any,
+            auth: { data: {}, options: {} },
+          });
+          expect(result.request).toBeUndefined();
+          expect(result.error).toMatch(/named file field/);
+          expect(original.toJSON()).toEqual(before);
+        }
+      );
+
+      it("ignores disabled and unnamed file placeholders when one field remains", async () => {
+        const original = new sdk.Request({
+          url: "http://example.com/pets",
+          method: "POST",
+          body: {
+            mode: "formdata",
+            formdata: [
+              { key: "wrong", type: "file", disabled: true },
+              { key: "", type: "file" },
+              { key: "upload", type: "file" },
+            ],
+          } as any,
+        });
+        const body = {
+          type: "raw" as const,
+          content: { type: "file" as const, value: file },
+        };
+        const encoding = {
+          upload: { contentType: "application/octet-stream, text/csv" },
+        };
+        const request = build(
+          { contentType: multipart, body, encoding },
+          original
+        );
+        expect(request.body?.formdata?.all()).toMatchObject([
+          {
+            key: "upload",
+            value: file,
+            contentType: "application/octet-stream",
+          },
+        ]);
+        const sent = await sendForm(request, body, encoding);
+        expect(formKeys(sent.form)).toEqual(["upload"]);
+        const part = sent.form.get("upload");
+        if (!part || typeof part === "string") throw new Error("Missing file");
+        await expect(part.text()).resolves.toBe("id,name\n1,Rex\n");
+        expect(part.type).toBe("application/octet-stream");
+      });
+
+      it.each([undefined, {}])(
+        "drops empty multipart placeholders without a nonempty encoding: %j",
+        (encoding) => {
+          const original = new sdk.Request({
+            url: "http://example.com/pets",
+            method: "POST",
+            body: {
+              mode: "urlencoded",
+              urlencoded: [{ key: "meta", value: "{}" }],
+            },
+          });
+          expect(
+            build({ contentType: multipart, encoding }, original).body
+          ).toBeUndefined();
+        }
+      );
+
+      it("removes every inactive collection when retaining encoded placeholders", () => {
+        const original = new sdk.Request({
+          url: "http://example.com/pets",
+          method: "POST",
+          body: {
+            mode: "urlencoded",
+            raw: "stale raw",
+            file: { src: "stale.bin" },
+            urlencoded: [{ key: "meta", value: "{}" }],
+            options: { raw: { language: "json" } },
+            disabled: true,
+          } as any,
+        });
+        const before = original.toJSON();
+        const request = build(
+          {
+            contentType: multipart,
+            encoding: { meta: { contentType: "application/json" } },
+          },
+          original
+        );
+        expect(request.body?.formdata?.all()).toMatchObject([
+          { key: "meta", value: "{}", contentType: "application/json" },
+        ]);
+        expect(request.body?.raw).toBeUndefined();
+        expect(request.body?.file).toBeUndefined();
+        expect(request.body?.urlencoded).toBeUndefined();
+        expect(request.body?.toJSON()).toMatchObject({
+          options: { raw: { language: "json" } },
+          disabled: true,
+        });
+        expect(original.toJSON()).toEqual(before);
+      });
+
+      it("replaces inactive multipart parts with the active urlencoded examples", () => {
+        const original = new sdk.Request({
+          url: "http://example.com/pets",
+          method: "POST",
+          body: {
+            mode: "urlencoded",
+            urlencoded: [{ key: "meta", value: "{}" }],
+            formdata: [{ key: "stale", type: "file", value: file }],
+          } as any,
+        });
+        const before = original.toJSON();
+        const request = build(
+          {
+            contentType: multipart,
+            encoding: { meta: { contentType: "application/json" } },
+          },
+          original
+        );
+        expect(request.body?.formdata?.all()).toMatchObject([
+          { key: "meta", value: "{}", contentType: "application/json" },
+        ]);
+        expect(request.body?.formdata?.all()).toHaveLength(1);
+        expect(request.body?.urlencoded).toBeUndefined();
+        expect(original.toJSON()).toEqual(before);
+      });
+
+      it("does not resurrect inactive urlencoded examples in an active empty multipart body", () => {
+        const original = new sdk.Request({
+          url: "http://example.com/pets",
+          method: "POST",
+          body: {
+            mode: "formdata",
+            formdata: [],
+            urlencoded: [{ key: "stale", value: "{}" }],
+          } as any,
+        });
+        const before = original.toJSON();
+        const request = build(
+          {
+            contentType: multipart,
+            encoding: { meta: { contentType: "application/json" } },
+          },
+          original
+        );
+        expect(request.body?.formdata?.all()).toEqual([]);
+        expect(request.body?.urlencoded).toBeUndefined();
+        expect(original.toJSON()).toEqual(before);
+      });
+
+      it.each(["raw", "file"])(
+        "preserves a pre-encoded multipart body's boundary from %s metadata",
+        async (mode) => {
+          const contentType = "multipart/form-data; boundary=encoded-boundary";
+          const payload =
+            '--encoded-boundary\r\nContent-Disposition: form-data; name="name"\r\n\r\nRex\r\n--encoded-boundary--\r\n';
+          const body = {
+            type: "raw" as const,
+            content: { type: "string" as const, value: payload },
+          };
+          const request = build({ contentType, body }, formRequest(mode));
+          expect(request.body?.mode).toBe("raw");
+          expect(request.body?.raw).toBe(payload);
+          expect(request.headers.get("Content-Type")).toBe(contentType);
+          const sent = await sendForm(request, body);
+          expect(sent.contentType).toBe(contentType);
+          expect(formKeys(sent.form)).toEqual(["name"]);
+          expect(sent.form.get("name")).toBe("Rex");
+        }
+      );
+
+      it("preserves a file upload's supplied nonform boundary header and bytes", async () => {
+        const contentType =
+          "application/octet-stream; boundary=encoded-boundary";
+        const bytes = [0, 255, 128, 65, 13, 10];
+        const body = {
+          type: "raw" as const,
+          content: {
+            type: "file" as const,
+            value: {
+              src: "/path/to/encoded.bin",
+              content: new native.Blob([new Uint8Array(bytes)]),
+            },
+          },
+        };
+        const request = build({ contentType, body }, formRequest("file"));
+        expect(request.body?.mode).toBe("file");
+        expect(request.headers.get("Content-Type")).toBe(contentType);
+        const wire = await sendRawFile(request, body);
+        expect(wire.headers.get("Content-Type")).toBe(contentType);
+        expect([...new Uint8Array(await wire.arrayBuffer())]).toEqual(bytes);
+      });
+
+      it("keeps raw file uploads for a nonform media type", () => {
+        const request = build(
+          {
+            contentType: "application/octet-stream",
+            body: { type: "raw", content: { type: "file", value: file } },
+          },
+          formRequest("urlencoded")
+        );
+        expect(request.body?.mode).toBe("file");
+        expect(request.body?.file).toEqual({ src: file.src });
+      });
     });
   });
 });

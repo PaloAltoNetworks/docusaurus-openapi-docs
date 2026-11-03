@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-module.exports = {
+const config = {
   preset: "ts-jest",
   testEnvironment: "node",
   globals: {
@@ -37,4 +37,71 @@ module.exports = {
     "^neotraverse/legacy$":
       "<rootDir>/node_modules/neotraverse/dist/legacy/legacy.cjs",
   },
+};
+
+const bodyExamplesTest =
+  "<rootDir>/packages/docusaurus-theme-openapi-docs/src/theme/ApiExplorer/Body/jsonExamples.test.ts";
+const bodyContentTypesTest =
+  "<rootDir>/packages/docusaurus-theme-openapi-docs/src/theme/ApiExplorer/Body/index.test.ts";
+const requestBodyTest =
+  "<rootDir>/packages/docusaurus-theme-openapi-docs/src/theme/ApiExplorer/buildPostmanRequest.consumer.test.ts";
+const samplerModule =
+  "docusaurus-plugin-openapi-docs/lib/openapi/createSchemaExample";
+const samplerSource =
+  "packages/docusaurus-plugin-openapi-docs/src/openapi/createSchemaExample.ts";
+
+const bodyConfig = {
+  ...config,
+  globals: {
+    "ts-jest": {
+      ...config.globals["ts-jest"],
+      tsconfig: {
+        ...config.globals["ts-jest"].tsconfig,
+        allowJs: true,
+        paths: {
+          ...config.globals["ts-jest"].tsconfig.paths,
+          [samplerModule]: [samplerSource],
+        },
+      },
+    },
+  },
+  transform: {
+    "[/\\\\]ApiExplorer[/\\\\]Body[/\\\\]json2xml\\.js$": "ts-jest",
+  },
+  moduleNameMapper: {
+    ...config.moduleNameMapper,
+    [`^${samplerModule}$`]: `<rootDir>/${samplerSource}`,
+  },
+};
+
+module.exports = {
+  projects: [
+    {
+      ...config,
+      displayName: "default",
+      testPathIgnorePatterns: [
+        "/node_modules/",
+        bodyExamplesTest.replace(/\./g, "\\.") + "$",
+        bodyContentTypesTest.replace(/\./g, "\\.") + "$",
+        requestBodyTest.replace(/\./g, "\\.") + "$",
+      ],
+    },
+    {
+      ...config,
+      displayName: "request-body",
+      testEnvironment: "jsdom",
+      testMatch: [requestBodyTest],
+    },
+    {
+      ...bodyConfig,
+      displayName: "body-examples",
+      testEnvironment: "jsdom",
+      testMatch: [bodyExamplesTest],
+    },
+    {
+      ...bodyConfig,
+      displayName: "body-content-types",
+      testMatch: [bodyContentTypesTest],
+    },
+  ],
 };
