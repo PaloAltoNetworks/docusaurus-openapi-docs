@@ -18,7 +18,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: preview
     permissions:
-      contents: read
       id-token: write
 
     steps:
