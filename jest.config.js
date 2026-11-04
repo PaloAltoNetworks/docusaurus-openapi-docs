@@ -51,6 +51,9 @@ const samplerModule =
   "docusaurus-plugin-openapi-docs/lib/openapi/createSchemaExample";
 const samplerSource =
   "packages/docusaurus-plugin-openapi-docs/src/openapi/createSchemaExample.ts";
+const markdownTests = [
+  "<rootDir>/packages/docusaurus-plugin-openapi-docs/src/markdown/utils.test.ts",
+];
 
 const bodyConfig = {
   ...config,
@@ -85,6 +88,7 @@ module.exports = {
         "/node_modules/",
         bodyExamplesTest.replace(/\./g, "\\.") + "$",
         requestTest.replace(/\./g, "\\.") + "$",
+        ...markdownTests.map((test) => test.replace(/\./g, "\\.") + "$"),
         bodyContentTypesTest.replace(/\./g, "\\.") + "$",
         requestBodyTest.replace(/\./g, "\\.") + "$",
       ],
@@ -111,6 +115,13 @@ module.exports = {
       ...bodyConfig,
       displayName: "body-content-types",
       testMatch: [bodyContentTypesTest],
+    },
+    {
+      ...config,
+      displayName: "markdown",
+      testMatch: markdownTests,
+      // Resolve the package's public conditional export from its importing module.
+      resolver: "<rootDir>/jest.markdown-resolver.js",
     },
   ],
 };

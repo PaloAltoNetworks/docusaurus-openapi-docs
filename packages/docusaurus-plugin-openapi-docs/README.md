@@ -218,6 +218,24 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 | `createTagPageMD`    | `function` | `null`  | _Optional:_ Returns a string of the raw markdown body for tag pages.<br/><br/>**Function type:** `(pageData: TagPageMetadata) => string`       |
 | `createSchemaPageMD` | `function` | `null`  | _Optional:_ Returns a string of the raw markdown body for schema pages.<br/><br/>**Function type:** `(pageData: SchemaPageMetadata) => string` |
 
+The default generators load a GFM-aware Markdown parser asynchronously, then render
+pages synchronously. Custom generators still receive one metadata argument and
+return a string.
+
+For custom code that imports `lib/markdown/utils`, the one-argument `clean(value)`
+form and the `codeFence` / `codeBlock` regex exports are deprecated and retain
+legacy regex behavior. They do not provide complete code-fence, footnote or table
+handling. In asynchronous setup code, create a cleaner once and call it
+synchronously when rendering descriptions:
+
+```js
+const {
+  createMarkdownCleaner,
+} = require("docusaurus-plugin-openapi-docs/lib/markdown/utils");
+const cleanDescription = await createMarkdownCleaner();
+const markdown = cleanDescription(description);
+```
+
 ### sidebarGenerators
 
 `sidebarGenerators` can be configured with the following options:

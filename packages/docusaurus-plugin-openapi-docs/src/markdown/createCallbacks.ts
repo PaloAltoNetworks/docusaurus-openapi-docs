@@ -9,7 +9,7 @@ import { createCallbackMethodEndpoint } from "./createCallbackMethodEndpoint";
 import { createDescription } from "./createDescription";
 import { createRequestBodyDetails } from "./createRequestBodyDetails";
 import { createStatusCodes } from "./createStatusCodes";
-import { create } from "./utils";
+import { create, MarkdownParser } from "./utils";
 import { MediaTypeObject } from "../openapi/types";
 import { ApiItem } from "../types";
 
@@ -28,7 +28,10 @@ interface RequestBodyProps {
   };
 }
 
-export function createCallbacks({ callbacks }: Props) {
+export function createCallbacks(
+  { callbacks }: Props,
+  parseMarkdown?: MarkdownParser
+) {
   if (callbacks === undefined) {
     return undefined;
   }
@@ -80,7 +83,7 @@ export function createCallbacks({ callbacks }: Props) {
                 children: [
                   createCallbackMethodEndpoint(method, path),
                   // TODO: add `deprecation notice` when markdown support is added
-                  createDescription(description),
+                  createDescription(description, parseMarkdown),
                   createRequestBodyDetails({
                     title: "Body",
                     body: requestBody,
