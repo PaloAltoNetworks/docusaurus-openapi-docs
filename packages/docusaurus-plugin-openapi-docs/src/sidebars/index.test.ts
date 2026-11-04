@@ -291,5 +291,17 @@ describe("generateSidebarSlice", () => {
       // The tagged operations are untouched.
       expect(labels(result)).toContain("Books");
     });
+
+    it("yields an empty slice when every operation is untagged and it is disabled", () => {
+      const result = generateSidebarSlice(
+        { groupPathsBy: "tag" },
+        { outputDir: "docs/test", specPath: "", showUntagged: false },
+        [untaggedItem],
+        [],
+        ""
+      );
+
+      expect(result).toEqual([]);
+    });
   });
 });
