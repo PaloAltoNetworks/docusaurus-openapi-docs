@@ -1,0 +1,50 @@
+name: "Cleanup Preview"
+
+on:
+  pull_request_target:
+    branches: [main]
+    types: [closed]
+
+permissions: {}
+
+concurrency:
+  group: deploy-preview-${{ github.event.number }}
+  cancel-in-progress: true
+
+jobs:
+  cleanup:
+    if: ${{ github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' && github.actor != 'dependabot[bot]' }}
+    name: Delete preview channels
+    runs-on: ubuntu-latest
+    environment: preview
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3.0.0
+        with:
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+          token_format: access_token
+          export_environment_variables: false
+          create_credentials_file: false
+
+      - name: Delete Firebase preview channels
+        run: |
+          base="https://firebasehosting.googleapis.com/v1beta1/projects/${PROJECT_ID}/sites/${SITE_ID}/channels"
+          for channel in "pr${PR_NUMBER}" "pr${PR_NUMBER}-diffs"; do
+            status=$(curl -sS -o response.json -w "%{http_code}" -X DELETE \
+              -H "Authorization: Bearer ${ACCESS_TOKEN}" "${base}/${channel}")
+            case "$status" in
+              200) echo "Deleted channel ${channel}" ;;
+              404) echo "Channel ${channel} does not exist" ;;
+              *) echo "::error::Failed to delete channel ${channel} (HTTP ${status})"; cat response.json; exit 1 ;;
+            esac
+          done
+        env:
+          ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+          PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          SITE_ID: docusaurus-openapi-36b86
+          PR_NUMBER: ${{ github.event.number }}
