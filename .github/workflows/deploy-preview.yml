@@ -276,7 +276,9 @@ jobs:
 
       - name: Count visual differences
         id: results
-        run: echo "mismatches=$(jq '.summary.mismatches' visual_diffs/results.json)" >> "$GITHUB_OUTPUT"
+        run: |
+          mismatches=$(jq -e '.summary.mismatches | numbers' visual_diffs/results.json)
+          echo "mismatches=$mismatches" >> "$GITHUB_OUTPUT"
 
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()

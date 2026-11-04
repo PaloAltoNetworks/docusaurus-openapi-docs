@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   cleanup:
-    if: ${{ github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' }}
+    if: ${{ github.repository == 'PaloAltoNetworks/docusaurus-openapi-docs' && github.actor != 'dependabot[bot]' }}
     name: Delete preview channels
     runs-on: ubuntu-latest
     environment: preview
