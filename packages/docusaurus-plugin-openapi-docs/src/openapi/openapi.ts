@@ -96,6 +96,7 @@ async function createPostmanCollection(
     delete pathItemObject.head?.servers;
     delete pathItemObject.patch?.servers;
     delete pathItemObject.trace?.servers;
+    delete pathItemObject.query?.servers;
   }
 
   return await jsonToCollection(data);
@@ -165,6 +166,7 @@ function createItems(
     "head",
     "patch",
     "trace",
+    "query",
   ]);
 
   for (let [path, pathObject] of Object.entries(openapiData.paths)) {

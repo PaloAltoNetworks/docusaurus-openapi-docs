@@ -65,6 +65,7 @@ export function createCallbacks({ callbacks }: Props) {
             ["patch", callbacks[name][path].patch],
             ["post", callbacks[name][path].post],
             ["put", callbacks[name][path].put],
+            ["query", callbacks[name][path].query],
             ["trace", callbacks[name][path].trace],
           ]);
 

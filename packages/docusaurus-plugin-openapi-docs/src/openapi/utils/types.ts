@@ -63,6 +63,7 @@ export interface OpenAPIPath {
   head?: OpenAPIOperation;
   patch?: OpenAPIOperation;
   trace?: OpenAPIOperation;
+  query?: OpenAPIOperation;
   servers?: OpenAPIServer[];
   parameters?: Array<Referenced<OpenAPIParameter>>;
   $ref?: string;

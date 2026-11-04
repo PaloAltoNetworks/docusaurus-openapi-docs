@@ -14087,10 +14087,10 @@ open@^10.0.3:
     is-inside-container "^1.0.0"
     wsl-utils "^0.1.0"
 
-openapi-to-postmanv2@^6.0.0:
-  version "6.3.3"
-  resolved "https://registry.yarnpkg.com/openapi-to-postmanv2/-/openapi-to-postmanv2-6.3.3.tgz#b249c923a3093f316bc0e191d92abf49bb3736b9"
-  integrity sha512-o0u6qqMMRLt7eAyFBpL/lCresQ1VqQFGe6/iPMBvNkWDXrpgGo5jo+YnP1e0MwF3tdUKLfkHssufGWMdojpPLg==
+openapi-to-postmanv2@^6.4.0:
+  version "6.4.2"
+  resolved "https://registry.yarnpkg.com/openapi-to-postmanv2/-/openapi-to-postmanv2-6.4.2.tgz#a8bb09327197a155a271347a8d7084236aba1e86"
+  integrity sha512-g83aqNVQ2wLrNGs6JpRmtvzDfDPiq8n+tlxsJEMrAzBd5cp4nB9I87N24ac2YQ01BPAWBP+mEIyiBzV01VgCEw==
   dependencies:
     ajv "^8.11.0"
     ajv-draft-04 "1.0.0"
