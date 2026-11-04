@@ -52,6 +52,8 @@ export interface APIOptions {
   proxy?: string;
   markdownGenerators?: MarkdownGenerator;
   showSchemas?: boolean;
+  /** Defaults to `true`. Set to `false` to leave the UNTAGGED category out of the sidebar. */
+  showUntagged?: boolean;
   showInfoPage?: boolean;
   schemasOnly?: boolean;
   disableCompression?: boolean;

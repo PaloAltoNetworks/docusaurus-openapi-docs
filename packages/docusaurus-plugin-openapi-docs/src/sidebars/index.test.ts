@@ -223,4 +223,85 @@ describe("generateSidebarSlice", () => {
       expect(labelsOf(result)).toContain("Cakes");
     });
   });
+
+  describe("showUntagged", () => {
+    const untaggedItem = {
+      type: "api",
+      id: "get-health",
+      unversionedId: "get-health",
+      title: "Get Health",
+      description: "",
+      source: "",
+      sourceDirName: "",
+      permalink: "/get-health",
+      frontMatter: {},
+      api: {
+        method: "get",
+        path: "/health",
+        jsonRequestBodyExample: "",
+        info: { title: "Test API", version: "1.0.0" },
+      },
+    } as ApiMetadata;
+
+    const taggedItem = {
+      type: "api",
+      id: "get-books",
+      unversionedId: "get-books",
+      title: "Get Books",
+      description: "",
+      source: "",
+      sourceDirName: "",
+      permalink: "/get-books",
+      frontMatter: {},
+      api: {
+        method: "get",
+        path: "/books",
+        tags: ["Books"],
+        jsonRequestBodyExample: "",
+        info: { title: "Test API", version: "1.0.0" },
+      },
+    } as ApiMetadata;
+
+    const tags: TagObject[][] = [[{ name: "Books" }]];
+
+    const labels = (items: unknown) =>
+      (items as { label?: string }[]).map((item) => item.label);
+
+    const sliceWith = (showUntagged?: boolean) =>
+      generateSidebarSlice(
+        { groupPathsBy: "tag" },
+        { outputDir: "docs/test", specPath: "", showUntagged },
+        [taggedItem, untaggedItem],
+        tags,
+        ""
+      );
+
+    it("keeps the UNTAGGED category by default", () => {
+      expect(labels(sliceWith())).toContain("UNTAGGED");
+    });
+
+    it("keeps the UNTAGGED category when explicitly enabled", () => {
+      expect(labels(sliceWith(true))).toContain("UNTAGGED");
+    });
+
+    it("omits the UNTAGGED category when disabled", () => {
+      const result = sliceWith(false);
+
+      expect(labels(result)).not.toContain("UNTAGGED");
+      // The tagged operations are untouched.
+      expect(labels(result)).toContain("Books");
+    });
+
+    it("yields an empty slice when every operation is untagged and it is disabled", () => {
+      const result = generateSidebarSlice(
+        { groupPathsBy: "tag" },
+        { outputDir: "docs/test", specPath: "", showUntagged: false },
+        [untaggedItem],
+        [],
+        ""
+      );
+
+      expect(result).toEqual([]);
+    });
+  });
 });
