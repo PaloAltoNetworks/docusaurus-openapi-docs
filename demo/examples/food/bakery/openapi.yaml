@@ -4,7 +4,8 @@ info:
   version: 1.0.0
   description: >-
     Demonstrates OpenAPI 3.2 hierarchical tags via the `tags[].parent` field,
-    rendered as nested sidebar categories with `groupPathsBy: "tagParent"`.
+    rendered as nested sidebar categories with `groupPathsBy: "tagParent"`,
+    and the OpenAPI 3.2 `query` operation (HTTP QUERY method, RFC 10008).
 paths:
   /cakes:
     get:
@@ -12,6 +13,30 @@ paths:
         - Cakes
       summary: List Cakes
       description: Return every cake we bake.
+      responses:
+        200:
+          description: OK
+  /cakes/search:
+    query:
+      tags:
+        - Cakes
+      summary: Search Cakes
+      description: >-
+        Return the cakes matching the criteria in the request body. Like GET,
+        QUERY is safe and idempotent, but it carries its criteria in the body.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                flavour:
+                  type: string
+                  example: chocolate
+                maxPrice:
+                  type: number
+                  example: 25
       responses:
         200:
           description: OK

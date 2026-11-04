@@ -133,6 +133,11 @@ These are the styles implemented on this very demo site.
   background-color: var(--openapi-code-orange);
 }
 
+.query > .menu__link::before {
+  content: "query";
+  background-color: var(--ifm-color-primary);
+}
+
 .head > .menu__link::before {
   content: "head";
   background-color: var(--ifm-color-secondary-darkest);
@@ -271,6 +276,13 @@ In [this issue](https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issu
   border-color: var(--ifm-color-success-dark);
 }
 
+.query > .menu__link::before {
+  content: "query";
+  background-color: var(--ifm-color-info-contrast-background);
+  color: var(--ifm-color-info-contrast-foreground);
+  border-color: var(--ifm-color-info-dark);
+}
+
 .head > .menu__link::before {
   content: "head";
   background-color: var(--ifm-color-secondary-contrast-background);
@@ -401,6 +413,11 @@ These styles are more similar to the ones found on https://pan.dev.
 .patch > .menu__link::before {
   content: "patch";
   color: var(--ifm-color-warning);
+}
+
+.query > .menu__link::before {
+  content: "query";
+  color: var(--ifm-color-info);
 }
 
 .head > .menu__link::before {
