@@ -3,8 +3,8 @@
 :root {
   --bash-background-color: transparent;
   --bash-border-radius: none;
-  --code-tab-logo-width: 24px;
-  --code-tab-logo-height: 24px;
+  --code-tab-logo-width: 16px;
+  --code-tab-logo-height: 16px;
 }
 
 [data-theme="dark"] {
@@ -35,14 +35,18 @@
 
   .openapi-tabs__code-item {
     display: flex;
-    flex-direction: column-reverse;
-    flex: 0 0 80px;
+    flex-direction: row-reverse;
+    flex: 0 0 auto;
     align-items: center;
-    padding: 0.5rem 0 !important;
+    gap: 0.375rem;
+    padding: 0.3125rem 0.625rem !important;
     margin-top: 0 !important;
-    margin-right: 0.5rem;
-    border: 1px solid transparent;
-    transition: 300ms;
+    margin-right: 0.375rem;
+    border: 1px solid var(--openapi-explorer-border-color);
+    border-radius: var(--ifm-global-radius);
+    transition:
+      border-color 150ms ease,
+      box-shadow 150ms ease;
 
     &:not(.active):hover {
       border: 1px solid var(--openapi-code-tab-border-color);
@@ -53,10 +57,15 @@
     }
 
     span {
-      padding-top: 0.5rem;
       color: var(--ifm-font-color-secondary);
-      font-size: 10px;
+      font-size: 0.6875rem;
+      font-weight: var(--ifm-font-weight-semibold);
+      letter-spacing: 0.02em;
       text-transform: uppercase;
+    }
+
+    &.active span {
+      color: var(--ifm-font-color-base);
     }
   }
 }
@@ -65,7 +74,9 @@
   display: flex;
   justify-content: flex-start;
   padding: 0.25rem;
-  padding-bottom: 0.6rem;
+  padding-bottom: 0.75rem;
+  overflow-x: auto;
+  scrollbar-width: thin;
 }
 
 .openapi-tabs__code-content {

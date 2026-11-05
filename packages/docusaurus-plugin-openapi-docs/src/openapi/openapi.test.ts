@@ -523,5 +523,37 @@ describe("openapi", () => {
       expect(apiItems).toHaveLength(1);
       expect((apiItems[0] as any).api.method).toBe("get");
     });
+
+    it("adds api_layout front matter when apiLayout is set", async () => {
+      const openapiData = {
+        openapi: "3.0.0",
+        info: { title: "Layout API", version: "1.0.0" },
+        paths: {
+          "/items": {
+            get: {
+              summary: "List items",
+              operationId: "listItems",
+              responses: { "200": { description: "OK" } },
+            },
+          },
+        },
+      };
+      const sidebarOptions = {} as SidebarOptions;
+
+      const [withLayout] = await processOpenapiFile(
+        openapiData as any,
+        { specPath: "dummy", outputDir: "build", apiLayout: "modern" },
+        sidebarOptions
+      );
+      const [withoutLayout] = await processOpenapiFile(
+        openapiData as any,
+        { specPath: "dummy", outputDir: "build" },
+        sidebarOptions
+      );
+
+      const api = (items: any[]) => items.find((item) => item.type === "api");
+      expect(api(withLayout).frontMatter.api_layout).toBe("modern");
+      expect(api(withoutLayout).frontMatter).not.toHaveProperty("api_layout");
+    });
   });
 });

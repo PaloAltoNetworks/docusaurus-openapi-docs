@@ -41,6 +41,8 @@ export interface APIOptions {
   schemaTemplate?: string;
   downloadUrl?: string;
   hideSendButton?: boolean;
+  /** Per-spec API page layout; overrides themeConfig.api.layout. */
+  apiLayout?: "classic" | "modern";
   showExtensions?: boolean;
   sidebarOptions?: SidebarOptions;
   version?: string;

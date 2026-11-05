@@ -7,10 +7,15 @@
 
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+export type RequestStatus = "idle" | "loading" | "success" | "error";
+
 export interface State {
   value?: string;
   code?: string;
   headers?: string;
+  status?: RequestStatus;
+  duration?: number;
+  size?: number;
 }
 
 const initialState: State = {} as any;
@@ -28,8 +33,21 @@ export const slice = createSlice({
     setHeaders: (state, action: PayloadAction<string>) => {
       state.headers = action.payload;
     },
+    setStatus: (state, action: PayloadAction<RequestStatus>) => {
+      state.status = action.payload;
+    },
+    setMetrics: (
+      state,
+      action: PayloadAction<{ duration?: number; size?: number }>
+    ) => {
+      state.duration = action.payload.duration;
+      state.size = action.payload.size;
+    },
     clearResponse: (state) => {
       state.value = undefined;
+      state.status = "idle";
+      state.duration = undefined;
+      state.size = undefined;
     },
     clearCode: (state) => {
       state.code = undefined;
@@ -47,6 +65,8 @@ export const {
   clearCode,
   setHeaders,
   clearHeaders,
+  setStatus,
+  setMetrics,
 } = slice.actions;
 
 export default slice.reducer;

@@ -20,11 +20,12 @@
   border: 1px solid transparent;
   margin-top: 0 !important;
   margin-right: 0.5rem;
-  font-weight: var(--ifm-font-weight-bold);
-  font-size: 10px;
-  text-transform: uppercase;
+  border-radius: var(--ifm-global-radius);
+  font-weight: var(--ifm-font-weight-semibold);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.75rem;
   white-space: nowrap;
-  transition: 300ms;
+  transition: border-color 150ms ease;
 
   &:hover {
     background-color: transparent;

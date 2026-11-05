@@ -42,9 +42,8 @@
   border-bottom: 1px solid var(--openapi-explorer-border-color);
   margin: 0;
   padding: 0.75rem var(--ifm-pre-padding);
-  text-transform: uppercase;
-  font-size: 12px;
-  font-weight: bold;
+  font-size: 0.875rem;
+  font-weight: var(--ifm-font-weight-semibold);
 }
 
 .openapi-explorer__expand-details-btn {
@@ -55,12 +54,13 @@
   cursor: pointer;
   border: 0px solid transparent;
   background-color: transparent;
-  text-transform: inherit;
+  color: var(--ifm-color-primary);
   font-weight: inherit;
-  font-size: inherit;
+  font-size: 0.8125rem;
 
   &:hover {
     cursor: pointer;
+    text-decoration: underline;
   }
 }
 
@@ -103,25 +103,103 @@
   }
 }
 
+.openapi-explorer__request-btn-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
 .openapi-explorer__request-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-height: 2.5rem;
   border: none;
   border-radius: var(--ifm-global-radius);
   padding: 0.5rem 1rem;
-  margin-top: 1rem;
-  background-color: var(--ifm-color-primary-light);
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 12px;
-  color: white;
+  background-color: var(--ifm-color-primary-darker);
+  font-weight: var(--ifm-font-weight-bold);
+  font-size: 0.875rem;
+  color: var(--ifm-color-white);
   cursor: pointer;
-  transition: 300ms;
+  transition:
+    background-color 150ms ease,
+    transform 150ms ease;
 
-  &:hover {
-    background-color: var(--ifm-color-primary-lightest);
+  &:hover:not(:disabled) {
+    background-color: var(--ifm-color-primary-darkest);
   }
 
-  &:active {
-    background-color: var(--ifm-color-primary-light);
+  &:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  &--loading:disabled {
+    cursor: progress;
+  }
+}
+
+[data-theme="dark"] .openapi-explorer__request-btn {
+  background-color: var(--ifm-color-primary-lighter);
+  color: var(--ifm-color-black);
+
+  &:hover:not(:disabled) {
+    background-color: var(--ifm-color-primary-lightest);
+  }
+}
+
+.openapi-explorer__request-btn-spinner {
+  width: 0.875rem;
+  height: 0.875rem;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: openapi-request-spin 0.7s linear infinite;
+}
+
+@keyframes openapi-request-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.openapi-explorer__request-shortcut {
+  font-size: 0.75rem;
+  white-space: nowrap;
+  color: var(--ifm-color-emphasis-700);
+}
+
+@media (hover: none) {
+  .openapi-explorer__request-shortcut {
+    display: none;
+  }
+}
+
+.openapi-explorer__request-btn:focus-visible,
+.openapi-explorer__expand-details-btn:focus-visible,
+.openapi-explorer__response-clear-btn:focus-visible,
+.openapi-explorer__details-summary:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+  border-radius: var(--ifm-global-radius);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .openapi-explorer__request-btn,
+  .openapi-explorer__request-form {
+    transition: none;
+  }
+
+  .openapi-explorer__request-btn-spinner {
+    animation-duration: 2s;
   }
 }
 
