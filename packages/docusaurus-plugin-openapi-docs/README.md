@@ -155,29 +155,30 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 
 `config` can be configured with the following options:
 
-| Name                 | Type      | Default | Description                                                                                                                                                    |
-| -------------------- | --------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `specPath`           | `string`  | `null`  | Designated URL or path to the source of an OpenAPI specification file or directory of multiple OpenAPI specification files.                                    |
-| `outputDir`          | `string`  | `null`  | Desired output path for generated MDX and sidebar files.                                                                                                       |
-| `proxy`              | `string`  | `null`  | _Optional:_ Proxy URL to prepend to base URL when performing API requests from browser. Overrides site-wide `themeConfig.api.proxy` if set.                    |
-| `template`           | `string`  | `null`  | _Optional:_ Customize MDX content with a desired template.                                                                                                     |
-| `infoTemplate`       | `string`  | `null`  | _Optional:_ Customize MDX content for **info** pages only.                                                                                                     |
-| `tagTemplate`        | `string`  | `null`  | _Optional:_ Customize MDX content for **tag** pages only.                                                                                                      |
-| `schemaTemplate`     | `string`  | `null`  | _Optional:_ Customize MDX content for **schema** pages only.                                                                                                   |
-| `downloadUrl`        | `string`  | `null`  | _Optional:_ Designated URL for downloading OpenAPI specification. (requires `info` section/doc)                                                                |
-| `hideSendButton`     | `boolean` | `null`  | _Optional:_ If set to `true`, hides the “Send API Request” button in the API demo panel.                                                                       |
-| `showExtensions`     | `boolean` | `null`  | _Optional:_ If set to `true`, renders operation‑level vendor‑extensions in descriptions.                                                                       |
-| `maskCredentials`    | `boolean` | `true`  | _Optional:_ If set to `false`, disables credential masking in generated code snippets. By default, credentials are masked for security.                        |
-| `sidebarOptions`     | `object`  | `null`  | _Optional:_ Set of options for sidebar configuration. See below for a list of supported options.                                                               |
-| `version`            | `string`  | `null`  | _Optional:_ Version assigned to a single or micro‑spec API specified in `specPath`.                                                                            |
-| `label`              | `string`  | `null`  | _Optional:_ Version label used when generating the version‑selector dropdown menu.                                                                             |
-| `baseUrl`            | `string`  | `null`  | _Optional:_ Base URL for versioned docs in the version‑selector dropdown.                                                                                      |
-| `versions`           | `object`  | `null`  | _Optional:_ Options for versioning configuration. See below for a list of supported options.                                                                   |
-| `markdownGenerators` | `object`  | `null`  | _Optional:_ Customize MDX content via generator functions. See below for a list of supported options.                                                          |
-| `showSchemas`        | `boolean` | `null`  | _Optional:_ If set to `true`, generates standalone schema pages and adds them to the sidebar.                                                                  |
-| `showInfoPage`       | `boolean` | `true`  | _Optional:_ If set to `false`, disables generation of the info page (overview page with API title and description).                                            |
-| `schemasOnly`        | `boolean` | `false` | _Optional:_ If set to `true`, generates only schema pages (no API endpoint pages). Also available as `--schemas-only` CLI flag.                                |
-| `externalJsonProps`  | `boolean` | `true`  | _Optional:_ If set to `false`, disables externalization of large JSON props. By default, large JSON is written to external files for better build performance. |
+| Name                 | Type      | Default | Description                                                                                                                                                              |
+| -------------------- | --------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `specPath`           | `string`  | `null`  | Designated URL or path to the source of an OpenAPI specification file or directory of multiple OpenAPI specification files.                                              |
+| `outputDir`          | `string`  | `null`  | Desired output path for generated MDX and sidebar files.                                                                                                                 |
+| `proxy`              | `string`  | `null`  | _Optional:_ Proxy URL to prepend to base URL when performing API requests from browser. Overrides site-wide `themeConfig.api.proxy` if set.                              |
+| `template`           | `string`  | `null`  | _Optional:_ Customize MDX content with a desired template.                                                                                                               |
+| `infoTemplate`       | `string`  | `null`  | _Optional:_ Customize MDX content for **info** pages only.                                                                                                               |
+| `tagTemplate`        | `string`  | `null`  | _Optional:_ Customize MDX content for **tag** pages only.                                                                                                                |
+| `schemaTemplate`     | `string`  | `null`  | _Optional:_ Customize MDX content for **schema** pages only.                                                                                                             |
+| `downloadUrl`        | `string`  | `null`  | _Optional:_ Designated URL for downloading OpenAPI specification. (requires `info` section/doc)                                                                          |
+| `hideSendButton`     | `boolean` | `null`  | _Optional:_ If set to `true`, hides the “Send API Request” button in the API demo panel.                                                                                 |
+| `apiLayout`          | `string`  | `null`  | _Optional:_ API page layout for this spec: `"classic"` or `"modern"`. Overrides the theme's `layout` option. Individual pages can also set `api_layout` in front matter. |
+| `showExtensions`     | `boolean` | `null`  | _Optional:_ If set to `true`, renders operation‑level vendor‑extensions in descriptions.                                                                                 |
+| `maskCredentials`    | `boolean` | `true`  | _Optional:_ If set to `false`, disables credential masking in generated code snippets. By default, credentials are masked for security.                                  |
+| `sidebarOptions`     | `object`  | `null`  | _Optional:_ Set of options for sidebar configuration. See below for a list of supported options.                                                                         |
+| `version`            | `string`  | `null`  | _Optional:_ Version assigned to a single or micro‑spec API specified in `specPath`.                                                                                      |
+| `label`              | `string`  | `null`  | _Optional:_ Version label used when generating the version‑selector dropdown menu.                                                                                       |
+| `baseUrl`            | `string`  | `null`  | _Optional:_ Base URL for versioned docs in the version‑selector dropdown.                                                                                                |
+| `versions`           | `object`  | `null`  | _Optional:_ Options for versioning configuration. See below for a list of supported options.                                                                             |
+| `markdownGenerators` | `object`  | `null`  | _Optional:_ Customize MDX content via generator functions. See below for a list of supported options.                                                                    |
+| `showSchemas`        | `boolean` | `null`  | _Optional:_ If set to `true`, generates standalone schema pages and adds them to the sidebar.                                                                            |
+| `showInfoPage`       | `boolean` | `true`  | _Optional:_ If set to `false`, disables generation of the info page (overview page with API title and description).                                                      |
+| `schemasOnly`        | `boolean` | `false` | _Optional:_ If set to `true`, generates only schema pages (no API endpoint pages). Also available as `--schemas-only` CLI flag.                                          |
+| `externalJsonProps`  | `boolean` | `true`  | _Optional:_ If set to `false`, disables externalization of large JSON props. By default, large JSON is written to external files for better build performance.           |
 
 ### sidebarOptions
 
@@ -270,13 +271,16 @@ petstore: {
 
 The `docusaurus-theme-openapi-docs` theme can be configured with the following options in `themeConfig.api`:
 
-| Name                 | Type     | Default            | Description                                                                                                                                                                                 |
-| -------------------- | -------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `proxy`              | `string` | `null`             | _Optional:_ Site-wide proxy URL to prepend to base URL when performing API requests. Can be overridden per-spec via plugin config.                                                          |
-| `authPersistence`    | `string` | `"sessionStorage"` | _Optional:_ Determines how auth credentials are persisted. Options: `"localStorage"`, `"sessionStorage"`, or `false` to disable persistence entirely.                                       |
-| `requestTimeout`     | `number` | `30000`            | _Optional:_ Request timeout in milliseconds for API requests made from the browser. Defaults to 30 seconds.                                                                                 |
-| `requestCredentials` | `string` | `"same-origin"`    | _Optional:_ Controls cookie behavior for API requests. Options: `"omit"`, `"same-origin"`, or `"include"`.                                                                                  |
-| `schemaExpansion`    | `object` | `null`             | _Optional:_ Controls the default expansion depth of nested request/response schema trees and (optionally) renders an inline depth control. See [`schemaExpansion`](#schemaexpansion) below. |
+| Name                  | Type      | Default            | Description                                                                                                                                                                                                                          |
+| --------------------- | --------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `proxy`               | `string`  | `null`             | _Optional:_ Site-wide proxy URL to prepend to base URL when performing API requests. Can be overridden per-spec via plugin config.                                                                                                   |
+| `authPersistence`     | `string`  | `"sessionStorage"` | _Optional:_ Determines how auth credentials are persisted. Options: `"localStorage"`, `"sessionStorage"`, or `false` to disable persistence entirely.                                                                                |
+| `requestTimeout`      | `number`  | `30000`            | _Optional:_ Request timeout in milliseconds for API requests made from the browser. Defaults to 30 seconds.                                                                                                                          |
+| `requestCredentials`  | `string`  | `"same-origin"`    | _Optional:_ Controls cookie behavior for API requests. Options: `"omit"`, `"same-origin"`, or `"include"`.                                                                                                                           |
+| `schemaExpansion`     | `object`  | `null`             | _Optional:_ Controls the default expansion depth of nested request/response schema trees and (optionally) renders an inline depth control. See [`schemaExpansion`](#schemaexpansion) below.                                          |
+| `sidebarMethodBadges` | `boolean` | `false`            | _Optional:_ Adds HTTP method badges (GET, POST, ...) to API items in the sidebar. The badge styles have zero specificity, so your own sidebar CSS always overrides them.                                                             |
+| `hideTableOfContents` | `boolean` | `false`            | _Optional:_ Hides the desktop table of contents on API and schema pages, so the request and response panels get more width.                                                                                                          |
+| `layout`              | `string`  | `"classic"`        | _Optional:_ API page layout. `"classic"` always shows the request form and response in the right panel. `"modern"` shows code samples and response examples in the right panel, and opens the request form in a "Try it" side panel. |
 
 Example:
 
@@ -289,6 +293,9 @@ Example:
       authPersistence: "localStorage",
       requestTimeout: 60000, // 60 seconds
       requestCredentials: "omit", // Prevent cookies from being sent with requests
+      sidebarMethodBadges: true, // Show GET/POST/... badges in the sidebar
+      hideTableOfContents: true, // Give API pages the full content width
+      layout: "modern", // Response examples on the page, request form in a "Try it" panel
       schemaExpansion: {
         enabled: true, // render the inline depth control next to each schema header
         default: 1,    // auto-expand the first level on page load

@@ -48,21 +48,25 @@ function FormTextInput({
 
   const showErrorMessage = errors?.[paramName]?.message;
 
+  const registered = paramName
+    ? register(paramName, {
+        required: isRequired
+          ? translate({
+              id: "theme.openapi.form.fieldRequired",
+              message: "This field is required",
+            })
+          : false,
+      })
+    : undefined;
+
   return (
     <>
       {label && (
         <FormLabel htmlFor={id} label={label} type={type} required={required} />
       )}
-      {paramName ? (
+      {paramName && registered ? (
         <input
-          {...register(paramName, {
-            required: isRequired
-              ? translate({
-                  id: "theme.openapi.form.fieldRequired",
-                  message: "This field is required",
-                })
-              : false,
-          })}
+          {...registered}
           id={label ? id : undefined}
           className={clsx("openapi-explorer__form-item-input", {
             error: showErrorMessage,
@@ -71,7 +75,10 @@ function FormTextInput({
           placeholder={placeholder}
           title={placeholder}
           value={value}
-          onChange={onChange}
+          onChange={(e) => {
+            registered.onChange(e);
+            onChange?.(e);
+          }}
           autoComplete="off"
         />
       ) : (

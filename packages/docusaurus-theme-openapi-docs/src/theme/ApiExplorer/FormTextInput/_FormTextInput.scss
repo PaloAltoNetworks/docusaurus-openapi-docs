@@ -3,7 +3,7 @@
 .openapi-explorer__form-item-input {
   margin-top: calc(var(--ifm-pre-padding) / 2);
   background-color: var(--openapi-input-background);
-  border: 1px solid transparent;
+  border: 1px solid var(--openapi-explorer-border-color);
   outline: none;
   width: 100%;
   color: var(--ifm-pre-color);
@@ -11,12 +11,13 @@
   border-radius: 4px;
 
   &:hover {
-    border: 1px solid var(--ifm-toc-border-color);
+    border-color: var(--ifm-color-emphasis-500);
   }
 
   &:focus {
-    border: 1px solid var(--ifm-color-primary);
-    box-shadow: none;
+    border-color: var(--ifm-color-primary);
+    box-shadow: 0 0 0 3px
+      color-mix(in srgb, var(--ifm-color-primary) 20%, transparent);
   }
 
   &.error {

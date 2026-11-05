@@ -74,3 +74,25 @@ describe("configureWebpack", () => {
     ]);
   });
 });
+
+describe("getClientModules", () => {
+  const clientModules = (api?: Record<string, unknown>) =>
+    (
+      docusaurusThemeOpenAPI({
+        siteConfig: { themeConfig: { api } },
+      } as any) as any
+    )
+      .getClientModules()
+      .map((m: string) => path.basename(m));
+
+  it("loads only the base styles by default", () => {
+    expect(clientModules()).toEqual(["styles.scss"]);
+  });
+
+  it("adds sidebar badge styles when sidebarMethodBadges is enabled", () => {
+    expect(clientModules({ sidebarMethodBadges: true })).toEqual([
+      "styles.scss",
+      "sidebar-badges.scss",
+    ]);
+  });
+});

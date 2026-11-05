@@ -19,14 +19,21 @@ import ContentType from "@theme/ApiExplorer/ContentType";
 import { useResolvedEncoding } from "@theme/ApiExplorer/EncodingSelection/useResolvedEncoding";
 import ParamOptions from "@theme/ApiExplorer/ParamOptions";
 import {
+  addHistoryEntry,
+  historyKey,
+} from "@theme/ApiExplorer/Response/history";
+import {
   setResponse,
   setCode,
   clearCode,
   setHeaders,
   clearHeaders,
+  setStatus,
+  setMetrics,
 } from "@theme/ApiExplorer/Response/slice";
 import Server from "@theme/ApiExplorer/Server";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
+import clsx from "clsx";
 import type { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import type { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 import type { ThemeConfig } from "docusaurus-theme-openapi-docs/src/types";
@@ -100,8 +107,12 @@ function Request({ item }: { item: ApiItem }) {
     }
   );
 
-  const delay = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
+  const isLoading = useTypedSelector(
+    (state: any) => state.response?.status === "loading"
+  );
+  const isMac =
+    typeof navigator !== "undefined" &&
+    /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
 
   const paramsObject = {
     path: [] as ParameterObject[],
@@ -120,9 +131,15 @@ function Request({ item }: { item: ApiItem }) {
 
   const methods = useForm({ shouldFocusError: false });
 
-  const handleEventStream = async (res) => {
-    res.headers && dispatch(setHeaders(Object.fromEntries(res.headers)));
+  const byteSize = (text: string) => new Blob([text]).size;
+
+  const endpointKey = historyKey(metadata.metadata?.id, item.method, item.path);
+
+  const handleEventStream = async (res, startedAt: number) => {
+    const headers = res.headers ? Object.fromEntries(res.headers) : undefined;
+    headers && dispatch(setHeaders(headers));
     dispatch(setCode(res.status));
+    dispatch(setStatus("success"));
 
     const reader = res.body.getReader();
     const decoder = new TextDecoder();
@@ -133,13 +150,40 @@ function Request({ item }: { item: ApiItem }) {
       result += decoder.decode(value, { stream: true });
       dispatch(setResponse(result));
     }
+    const metrics = {
+      duration: performance.now() - startedAt,
+      size: byteSize(result),
+    };
+    dispatch(setMetrics(metrics));
+    addHistoryEntry(endpointKey, {
+      status: "success",
+      value: result,
+      code: String(res.status),
+      headers,
+      ...metrics,
+    });
   };
 
-  const handleResponse = async (result) => {
+  const handleResponse = async (result, startedAt: number) => {
     const res = "downloadedBody" in result ? result.response : result;
-    dispatch(setResponse(await readResponseBody(result)));
+    const text = await readResponseBody(result);
+    const headers = res.headers ? Object.fromEntries(res.headers) : undefined;
+    const metrics = {
+      duration: performance.now() - startedAt,
+      size: byteSize(text),
+    };
+    dispatch(setResponse(text));
     dispatch(setCode(res.status));
-    res.headers && dispatch(setHeaders(Object.fromEntries(res.headers)));
+    headers && dispatch(setHeaders(headers));
+    dispatch(setMetrics(metrics));
+    dispatch(setStatus("success"));
+    addHistoryEntry(endpointKey, {
+      status: "success",
+      value: text,
+      code: String(res.status),
+      headers,
+      ...metrics,
+    });
   };
 
   const getErrorMessage = (errorType: RequestErrorType): string => {
@@ -173,17 +217,14 @@ function Request({ item }: { item: ApiItem }) {
   };
 
   const onSubmit = async (data) => {
-    if (!postmanRequest) return;
-    dispatch(
-      setResponse(
-        translate({
-          id: "theme.openapi.request.fetchingMessage",
-          message: "Fetching...",
-        })
-      )
-    );
+    if (!postmanRequest || isLoading) return;
+    dispatch(clearCode());
+    dispatch(clearHeaders());
+    dispatch(setMetrics({}));
+    dispatch(setResponse(""));
+    dispatch(setStatus("loading"));
+    const startedAt = performance.now();
     try {
-      await delay(1200);
       const res = await makeRequest(
         postmanRequest,
         proxy,
@@ -193,9 +234,9 @@ function Request({ item }: { item: ApiItem }) {
         encoding
       );
       if (!("downloadedBody" in res) && isStreamingResponse(res)) {
-        await handleEventStream(res);
+        await handleEventStream(res, startedAt);
       } else {
-        await handleResponse(res);
+        await handleResponse(res, startedAt);
       }
     } catch (e) {
       console.log(e);
@@ -213,6 +254,21 @@ function Request({ item }: { item: ApiItem }) {
       dispatch(setResponse(errorMessage));
       dispatch(clearCode());
       dispatch(clearHeaders());
+      const duration = performance.now() - startedAt;
+      dispatch(setMetrics({ duration }));
+      dispatch(setStatus("error"));
+      addHistoryEntry(endpointKey, {
+        status: "error",
+        value: errorMessage,
+        duration,
+      });
+    }
+  };
+
+  const onKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+    if (e.key === "Enter" && (e.metaKey || e.ctrlKey) && showRequestButton) {
+      e.preventDefault();
+      methods.handleSubmit(onSubmit)();
     }
   };
 
@@ -259,6 +315,8 @@ function Request({ item }: { item: ApiItem }) {
       <form
         className="openapi-explorer__request-form"
         onSubmit={methods.handleSubmit(onSubmit)}
+        onKeyDown={onKeyDown}
+        aria-busy={isLoading}
       >
         <div className="openapi-explorer__request-header-container">
           <span className="openapi-explorer__request-title">
@@ -420,16 +478,40 @@ function Request({ item }: { item: ApiItem }) {
             </p>
           )}
           {showRequestButton && item.method !== "event" && (
-            <button
-              className="openapi-explorer__request-btn"
-              type="submit"
-              disabled={!!bodyError}
-            >
-              {translate({
-                id: "theme.openapi.request.sendButton",
-                message: "Send API Request",
-              })}
-            </button>
+            <div className="openapi-explorer__request-btn-row">
+              <button
+                className={clsx("openapi-explorer__request-btn", {
+                  "openapi-explorer__request-btn--loading": isLoading,
+                })}
+                type="submit"
+                disabled={!!bodyError || isLoading}
+              >
+                {isLoading && (
+                  <span
+                    className="openapi-explorer__request-btn-spinner"
+                    aria-hidden="true"
+                  />
+                )}
+                {isLoading
+                  ? translate({
+                      id: "theme.openapi.request.sendingButton",
+                      message: "Sending…",
+                    })
+                  : translate({
+                      id: "theme.openapi.request.sendButton",
+                      message: "Send API Request",
+                    })}
+              </button>
+              <kbd
+                className="openapi-explorer__request-shortcut"
+                title={translate({
+                  id: "theme.openapi.request.shortcutHint",
+                  message: "Press Ctrl+Enter (⌘+Enter on macOS) to send",
+                })}
+              >
+                {isMac ? "⌘ ↵" : "Ctrl ↵"}
+              </kbd>
+            </div>
           )}
         </div>
       </form>
