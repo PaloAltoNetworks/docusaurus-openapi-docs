@@ -75,3 +75,8 @@
   content: "patch";
   background-color: var(--openapi-code-orange);
 }
+
+.query > .menu__link::before {
+  content: "query";
+  background-color: var(--ifm-color-primary);
+}
