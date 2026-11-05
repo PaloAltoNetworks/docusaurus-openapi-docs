@@ -20,12 +20,11 @@
   border: 1px solid transparent;
   margin-top: 0 !important;
   margin-right: 0.5rem;
-  border-radius: var(--ifm-global-radius);
-  font-weight: var(--ifm-font-weight-semibold);
-  font-family: var(--ifm-font-family-monospace);
-  font-size: 0.75rem;
+  font-weight: var(--ifm-font-weight-bold);
+  font-size: 10px;
+  text-transform: uppercase;
   white-space: nowrap;
-  transition: border-color 150ms ease;
+  transition: 300ms;
 
   &:hover {
     background-color: transparent;
@@ -68,4 +67,14 @@
     margin-top: var(--ifm-spacing-vertical);
     padding: 0;
   }
+}
+
+/* Modern layout: MIME types in their real (lowercase) form */
+:is(.openapi-layout--modern, .openapi-try-it) .openapi-tabs__mime-item {
+  border-radius: var(--ifm-global-radius);
+  font-weight: var(--ifm-font-weight-semibold);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.75rem;
+  text-transform: none;
+  transition: border-color 150ms ease;
 }

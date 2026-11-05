@@ -13,12 +13,11 @@
   border: 1px solid transparent;
   margin-top: 0 !important;
   margin-right: 0.5rem;
-  border-radius: var(--ifm-global-radius);
-  font-weight: var(--ifm-font-weight-semibold);
+  font-weight: var(--ifm-font-weight-bold);
   font-family: var(--ifm-font-family-monospace);
-  font-size: 0.75rem;
+  font-size: 10px;
   white-space: nowrap;
-  transition: border-color 150ms ease;
+  transition: 300ms;
 
   &:hover {
     background-color: transparent;
@@ -59,4 +58,12 @@
   display: flex;
   align-items: center;
   overflow: hidden;
+}
+
+/* Modern layout: readable schema tabs */
+:is(.openapi-layout--modern, .openapi-try-it) .openapi-tabs__schema-item {
+  border-radius: var(--ifm-global-radius);
+  font-weight: var(--ifm-font-weight-semibold);
+  font-size: 0.75rem;
+  transition: border-color 150ms ease;
 }

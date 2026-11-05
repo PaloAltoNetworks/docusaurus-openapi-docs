@@ -42,8 +42,9 @@
   border-bottom: 1px solid var(--openapi-explorer-border-color);
   margin: 0;
   padding: 0.75rem var(--ifm-pre-padding);
-  font-size: 0.875rem;
-  font-weight: var(--ifm-font-weight-semibold);
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: bold;
 }
 
 .openapi-explorer__expand-details-btn {
@@ -54,13 +55,12 @@
   cursor: pointer;
   border: 0px solid transparent;
   background-color: transparent;
-  color: var(--ifm-color-primary);
+  text-transform: inherit;
   font-weight: inherit;
-  font-size: 0.8125rem;
+  font-size: inherit;
 
   &:hover {
     cursor: pointer;
-    text-decoration: underline;
   }
 }
 

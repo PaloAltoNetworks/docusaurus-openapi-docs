@@ -19,6 +19,7 @@ import DocItemPaginator from "@theme/DocItem/Paginator";
 import DocItemTOCDesktop from "@theme/DocItem/TOC/Desktop";
 import DocItemTOCMobile from "@theme/DocItem/TOC/Mobile";
 import DocVersionBadge from "@theme/DocVersionBadge";
+import useApiLayout from "@theme/ApiExplorer/useApiLayout";
 import DocVersionBanner from "@theme/DocVersionBanner";
 import clsx from "clsx";
 import type { ThemeConfig } from "docusaurus-theme-openapi-docs/src/types";
@@ -62,8 +63,13 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
   const { frontMatter } = useDoc();
   const api = frontMatter.api;
   const schema = frontMatter.schema;
+  const layout = useApiLayout();
   return (
-    <div className="row">
+    <div
+      className={clsx("row", {
+        "openapi-layout--modern": (api || schema) && layout === "modern",
+      })}
+    >
       <div
         className={clsx(
           "col",
