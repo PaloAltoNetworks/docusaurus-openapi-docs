@@ -18,6 +18,7 @@ import { Collection } from "postman-collection";
 import * as sdk from "postman-collection";
 
 import { sampleRequestFromSchema } from "./createRequestExample";
+import { HTTP_METHODS, isHttpMethod } from "./httpMethods";
 import {
   MediaTypeObject,
   OpenApiObject,
@@ -88,15 +89,9 @@ async function createPostmanCollection(
   delete data.servers;
   for (let pathItemObject of Object.values(data.paths)) {
     delete pathItemObject.servers;
-    delete pathItemObject.get?.servers;
-    delete pathItemObject.put?.servers;
-    delete pathItemObject.post?.servers;
-    delete pathItemObject.delete?.servers;
-    delete pathItemObject.options?.servers;
-    delete pathItemObject.head?.servers;
-    delete pathItemObject.patch?.servers;
-    delete pathItemObject.trace?.servers;
-    delete pathItemObject.query?.servers;
+    for (const method of HTTP_METHODS) {
+      delete pathItemObject[method]?.servers;
+    }
   }
 
   return await jsonToCollection(data);
@@ -166,17 +161,6 @@ function createItems(
     items.push(infoPage);
   }
 
-  const HTTP_METHODS = new Set([
-    "get",
-    "put",
-    "post",
-    "delete",
-    "options",
-    "head",
-    "patch",
-    "trace",
-    "query",
-  ]);
   const queryMethodSupported = supportsQueryMethod(openapiData.openapi);
 
   for (let [path, pathObject] of Object.entries(openapiData.paths)) {
@@ -185,7 +169,7 @@ function createItems(
     for (let [method, operationObject] of Object.entries({ ...rest })) {
       const httpMethod = method.toLowerCase();
       if (
-        !HTTP_METHODS.has(httpMethod) ||
+        !isHttpMethod(httpMethod) ||
         (httpMethod === "query" && !queryMethodSupported)
       ) {
         continue;
