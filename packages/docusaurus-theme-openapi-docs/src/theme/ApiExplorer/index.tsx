@@ -51,7 +51,7 @@ function ApiExplorer({
 
   if (layout === "modern") {
     return (
-      <>
+      <div className="openapi-explorer--modern">
         {item.method !== "event" && (
           <button
             type="button"
@@ -69,7 +69,7 @@ function ApiExplorer({
         {item.method !== "event" && (
           <TryItDrawer item={item} infoPath={infoPath} />
         )}
-      </>
+      </div>
     );
   }
 
