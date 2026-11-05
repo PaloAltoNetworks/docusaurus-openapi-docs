@@ -54,7 +54,7 @@
     "mdast-util-gfm": "^3.0.0",
     "micromark-extension-gfm": "^3.0.0",
     "mustache": "^4.2.0",
-    "openapi-to-postmanv2": "^6.0.0",
+    "openapi-to-postmanv2": "^6.4.0",
     "postman-collection": "^5.0.2",
     "slugify": "^1.6.6",
     "swagger2openapi": "^7.0.8",

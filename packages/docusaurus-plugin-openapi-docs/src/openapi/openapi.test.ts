@@ -524,4 +524,93 @@ describe("openapi", () => {
       expect((apiItems[0] as any).api.method).toBe("get");
     });
   });
+
+  describe("QUERY method (RFC 10008)", () => {
+    const searchPets = () => ({
+      summary: "Search pets",
+      operationId: "searchPets",
+      servers: [{ url: "https://search.example.com" }],
+      requestBody: {
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              properties: { name: { type: "string" } },
+            },
+          },
+        },
+      },
+      responses: { "200": { description: "OK" } },
+    });
+
+    const options: APIOptions = {
+      specPath: "dummy",
+      outputDir: "build",
+    };
+    const sidebarOptions = {} as SidebarOptions;
+
+    it("creates a page bound to a QUERY request for OpenAPI 3.2 query operations", async () => {
+      const openapiData = {
+        openapi: "3.2.0",
+        info: { title: "Query API", version: "1.0.0" },
+        paths: {
+          "/pets/search": {
+            get: {
+              summary: "List pets",
+              operationId: "listPets",
+              responses: { "200": { description: "OK" } },
+            },
+            query: searchPets(),
+          },
+        },
+      };
+
+      const [items] = await processOpenapiFile(
+        openapiData as any,
+        options,
+        sidebarOptions
+      );
+
+      const apiItems = items.filter((item) => item.type === "api") as any[];
+      expect(apiItems).toHaveLength(2);
+
+      const queryItem = apiItems.find((item) => item.id === "search-pets");
+      expect(queryItem.api.method).toBe("query");
+      expect(queryItem.api.postman.method).toBe("QUERY");
+      expect(queryItem.api.postman.url.getPath({ unresolved: true })).toBe(
+        "/pets/search"
+      );
+
+      const getItem = apiItems.find((item) => item.id === "list-pets");
+      expect(getItem.api.postman.method).toBe("GET");
+    });
+
+    it("skips query operations before OpenAPI 3.2", async () => {
+      const openapiData = {
+        openapi: "3.1.0",
+        info: { title: "Query API", version: "1.0.0" },
+        paths: {
+          "/pets/search": {
+            get: {
+              summary: "List pets",
+              operationId: "listPets",
+              responses: { "200": { description: "OK" } },
+            },
+            query: searchPets(),
+          },
+        },
+      };
+
+      const [items] = await processOpenapiFile(
+        openapiData as any,
+        options,
+        sidebarOptions
+      );
+
+      const apiItems = items.filter((item) => item.type === "api") as any[];
+      expect(apiItems).toHaveLength(1);
+      expect(apiItems[0].id).toBe("list-pets");
+      expect(apiItems[0].api.postman.method).toBe("GET");
+    });
+  });
 });

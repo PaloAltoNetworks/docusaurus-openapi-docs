@@ -10,6 +10,7 @@ import { createDescription } from "./createDescription";
 import { createRequestBodyDetails } from "./createRequestBodyDetails";
 import { createStatusCodes } from "./createStatusCodes";
 import { create, MarkdownParser } from "./utils";
+import { HTTP_METHODS } from "../openapi/httpMethods";
 import { MediaTypeObject } from "../openapi/types";
 import { ApiItem } from "../types";
 
@@ -60,16 +61,12 @@ export function createCallbacks(
         className: "openapi-tabs__operation",
         children: callbacksNames.flatMap((name) => {
           const path = Object.keys(callbacks[name])[0];
-          const methods = new Map([
-            ["delete", callbacks[name][path].delete],
-            ["get", callbacks[name][path].get],
-            ["head", callbacks[name][path].head],
-            ["options", callbacks[name][path].options],
-            ["patch", callbacks[name][path].patch],
-            ["post", callbacks[name][path].post],
-            ["put", callbacks[name][path].put],
-            ["trace", callbacks[name][path].trace],
-          ]);
+          const methods = new Map(
+            HTTP_METHODS.map((method) => [
+              method,
+              callbacks[name][path][method],
+            ])
+          );
 
           return Array.from(methods).flatMap(([method, operationObject]) => {
             if (!operationObject) return [];
