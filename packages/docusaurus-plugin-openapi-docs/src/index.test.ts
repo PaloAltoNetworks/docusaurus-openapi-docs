@@ -35,21 +35,16 @@ async function settle(files: string[]) {
   await new Promise((resolve) => setTimeout(resolve, 20));
 }
 
-function cleanApiDocs(siteDir: string) {
+function runCli(siteDir: string, config: any, command: string, id: string) {
   const plugin: any = pluginOpenAPIDocs(
     { siteDir, siteConfig: { presets: [], plugins: [] } } as any,
-    {
-      id: "openapi",
-      config: {
-        petstore: { specPath: "petstore.yaml", outputDir: "docs/petstore" },
-      },
-    } as any
+    { id: "openapi", config } as any
   );
   const actions: Record<string, any> = {};
-  let command = "";
+  let name = "";
   const cli: any = {
-    command: (name: string) => {
-      command = name;
+    command: (cmd: string) => {
+      name = cmd;
       return cli;
     },
     description: () => cli,
@@ -57,12 +52,21 @@ function cleanApiDocs(siteDir: string) {
     arguments: () => cli,
     option: () => cli,
     action: (fn: any) => {
-      actions[command] = fn;
+      actions[name] = fn;
       return cli;
     },
   };
   plugin.extendCli(cli);
-  return actions["clean-api-docs"]("petstore", { opts: () => ({}) });
+  return actions[command](id, { opts: () => ({}) });
+}
+
+function cleanApiDocs(siteDir: string) {
+  return runCli(
+    siteDir,
+    { petstore: { specPath: "petstore.yaml", outputDir: "docs/petstore" } },
+    "clean-api-docs",
+    "petstore"
+  );
 }
 
 describe("clean-api-docs", () => {
@@ -139,4 +143,62 @@ describe("getInfoPath", () => {
       ).toBe(expected);
     }
   );
+});
+
+describe("gen-api-docs info_path", () => {
+  const spec = {
+    openapi: "3.0.0",
+    info: { title: "Minimal API", version: "1.0.0" },
+    paths: {
+      "/ping": {
+        get: {
+          summary: "Ping",
+          security: [{ ApiKey: [] }],
+          responses: { "200": { description: "OK" } },
+        },
+      },
+    },
+    components: {
+      securitySchemes: {
+        ApiKey: { type: "apiKey", in: "header", name: "X-API-KEY" },
+      },
+    },
+  };
+  let siteDir: string;
+
+  beforeEach(() => {
+    siteDir = fs.mkdtempSync(path.join(os.tmpdir(), "openapi-docs-"));
+    fs.writeFileSync(path.join(siteDir, "spec.json"), JSON.stringify(spec));
+  });
+
+  afterEach(() => fs.rmSync(siteDir, { recursive: true, force: true }));
+
+  async function generate(options: Record<string, unknown>) {
+    const outputDir = path.join(siteDir, "docs", "minimal");
+    await runCli(
+      siteDir,
+      {
+        minimal: {
+          specPath: path.join(siteDir, "spec.json"),
+          outputDir,
+          ...options,
+        },
+      },
+      "gen-api-docs",
+      "minimal"
+    );
+    const apiFile = path.join(outputDir, "ping.api.mdx");
+    for (let i = 0; i < 500 && !fs.existsSync(apiFile); i++) {
+      await new Promise((resolve) => setTimeout(resolve, 10));
+    }
+    return fs.readFileSync(apiFile, "utf8");
+  }
+
+  it("links api pages to the info page by default", async () => {
+    expect(await generate({})).toMatch(/^info_path: .*minimal-api$/m);
+  });
+
+  it("omits info_path when the info page is not generated", async () => {
+    expect(await generate({ showInfoPage: false })).not.toMatch(/info_path/);
+  });
 });

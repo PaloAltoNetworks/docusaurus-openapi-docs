@@ -353,6 +353,9 @@ custom_edit_url: null
         schema: schemaPageGenerator,
       };
 
+      // Only link api pages to the info page when one is generated
+      const hasInfoPage = loadedApi.some((item) => item.type === "info");
+
       loadedApi.map(async (item) => {
         if (downloadUrl) {
           item.downloadUrl = downloadUrl;
@@ -397,7 +400,7 @@ custom_edit_url: null
               item.infoId
             );
           }
-          if (item.infoId) item.infoPath = infoBasePath;
+          if (hasInfoPage && item.infoId) item.infoPath = infoBasePath;
         }
 
         const view = render(mdTemplate, item);
