@@ -102,6 +102,15 @@ async function createPostmanCollection(
   return await jsonToCollection(data);
 }
 
+/**
+ * `query` is a Path Item field only from OpenAPI 3.2, which is also the first
+ * version openapi-to-postmanv2 builds a QUERY request for.
+ */
+function supportsQueryMethod(openapi: string): boolean {
+  const [major, minor] = openapi.split(".").map(Number);
+  return major > 3 || (major === 3 && minor >= 2);
+}
+
 type PartialPage<T> = Omit<T, "permalink" | "source" | "sourceDirName">;
 
 function createItems(
@@ -168,12 +177,17 @@ function createItems(
     "trace",
     "query",
   ]);
+  const queryMethodSupported = supportsQueryMethod(openapiData.openapi);
 
   for (let [path, pathObject] of Object.entries(openapiData.paths)) {
     const { $ref, description, parameters, servers, summary, ...rest } =
       pathObject;
     for (let [method, operationObject] of Object.entries({ ...rest })) {
-      if (!HTTP_METHODS.has(method.toLowerCase())) {
+      const httpMethod = method.toLowerCase();
+      if (
+        !HTTP_METHODS.has(httpMethod) ||
+        (httpMethod === "query" && !queryMethodSupported)
+      ) {
         continue;
       }
 

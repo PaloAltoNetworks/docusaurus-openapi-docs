@@ -585,12 +585,17 @@ describe("openapi", () => {
       expect(getItem.api.postman.method).toBe("GET");
     });
 
-    it("creates a page without a request for query operations before OpenAPI 3.2", async () => {
+    it("skips query operations before OpenAPI 3.2", async () => {
       const openapiData = {
         openapi: "3.1.0",
         info: { title: "Query API", version: "1.0.0" },
         paths: {
           "/pets/search": {
+            get: {
+              summary: "List pets",
+              operationId: "listPets",
+              responses: { "200": { description: "OK" } },
+            },
             query: searchPets(),
           },
         },
@@ -604,8 +609,8 @@ describe("openapi", () => {
 
       const apiItems = items.filter((item) => item.type === "api") as any[];
       expect(apiItems).toHaveLength(1);
-      expect(apiItems[0].api.method).toBe("query");
-      expect(apiItems[0].api.postman).toBeUndefined();
+      expect(apiItems[0].id).toBe("list-pets");
+      expect(apiItems[0].api.postman.method).toBe("GET");
     });
   });
 });
