@@ -8,6 +8,7 @@
 import type { SidebarItemDoc } from "@docusaurus/plugin-content-docs/lib/sidebars/types";
 import Request from "postman-collection";
 
+import type { MarkdownParser } from "./markdown/utils";
 import {
   InfoObject,
   OperationObject,
@@ -65,10 +66,22 @@ export interface APIOptions {
 }
 
 export interface MarkdownGenerator {
-  createApiPageMD?: (pageData: ApiPageMetadata) => string;
-  createInfoPageMD?: (pageData: InfoPageMetadata) => string;
-  createTagPageMD?: (pageData: TagPageMetadata) => string;
-  createSchemaPageMD?: (pageData: SchemaPageMetadata) => string;
+  createApiPageMD?: (
+    pageData: ApiPageMetadata,
+    parseMarkdown?: MarkdownParser
+  ) => string;
+  createInfoPageMD?: (
+    pageData: InfoPageMetadata,
+    parseMarkdown?: MarkdownParser
+  ) => string;
+  createTagPageMD?: (
+    pageData: TagPageMetadata,
+    parseMarkdown?: MarkdownParser
+  ) => string;
+  createSchemaPageMD?: (
+    pageData: SchemaPageMetadata,
+    parseMarkdown?: MarkdownParser
+  ) => string;
 }
 
 export type ApiDocItemGenerator = (
@@ -103,10 +116,7 @@ export interface LoadedContent {
 }
 
 export type ApiMetadata =
-  | ApiPageMetadata
-  | InfoPageMetadata
-  | TagPageMetadata
-  | SchemaPageMetadata;
+  ApiPageMetadata | InfoPageMetadata | TagPageMetadata | SchemaPageMetadata;
 
 export interface ApiMetadataBase {
   sidebar?: string;

@@ -23,7 +23,7 @@ import { createStatusCodes } from "./createStatusCodes";
 import { createTermsOfService } from "./createTermsOfService";
 import { createVendorExtensions } from "./createVendorExtensions";
 import { createVersionBadge } from "./createVersionBadge";
-import { create, greaterThan, lessThan, render } from "./utils";
+import { create, MarkdownParser, render } from "./utils";
 import {
   ContactObject,
   LicenseObject,
@@ -48,23 +48,26 @@ interface RequestBodyProps {
   };
 }
 
-export function createApiPageMD({
-  title,
-  api: {
-    deprecated,
-    "x-deprecated-description": deprecatedDescription,
-    description,
-    method,
-    path,
-    extensions,
-    parameters,
-    requestBody,
-    responses,
-    callbacks,
-  },
-  infoPath,
-  frontMatter,
-}: ApiPageMetadata) {
+export function createApiPageMD(
+  {
+    title,
+    api: {
+      deprecated,
+      "x-deprecated-description": deprecatedDescription,
+      description,
+      method,
+      path,
+      extensions,
+      parameters,
+      requestBody,
+      responses,
+      callbacks,
+    },
+    infoPath,
+    frontMatter,
+  }: ApiPageMetadata,
+  parseMarkdown?: MarkdownParser
+) {
   return render([
     `import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";\n`,
     `import ParamsDetails from "@theme/ParamsDetails";\n`,
@@ -80,8 +83,11 @@ export function createApiPageMD({
     frontMatter.show_extensions
       ? createVendorExtensions(extensions)
       : undefined,
-    createDeprecationNotice({ deprecated, description: deprecatedDescription }),
-    createDescription(description),
+    createDeprecationNotice(
+      { deprecated, description: deprecatedDescription },
+      parseMarkdown
+    ),
+    createDescription(description, parseMarkdown),
     requestBody || parameters ? createRequestHeader("Request") : undefined,
     createParamsDetails({ parameters }),
     createRequestBodyDetails({
@@ -89,24 +95,27 @@ export function createApiPageMD({
       body: requestBody,
     } as RequestBodyProps),
     createStatusCodes({ responses }),
-    createCallbacks({ callbacks }),
+    createCallbacks({ callbacks }, parseMarkdown),
   ]);
 }
 
-export function createInfoPageMD({
-  info: {
-    title,
-    version,
-    description,
-    contact,
-    license,
-    termsOfService,
-    logo,
-    darkLogo,
-  },
-  securitySchemes,
-  downloadUrl,
-}: InfoPageMetadata) {
+export function createInfoPageMD(
+  {
+    info: {
+      title,
+      version,
+      description,
+      contact,
+      license,
+      termsOfService,
+      logo,
+      darkLogo,
+    },
+    securitySchemes,
+    downloadUrl,
+  }: InfoPageMetadata,
+  parseMarkdown?: MarkdownParser
+) {
   return render([
     `import ApiLogo from "@theme/ApiLogo";\n`,
     `import Heading from "@theme/Heading";\n`,
@@ -118,25 +127,34 @@ export function createInfoPageMD({
     createDownload(downloadUrl),
     createHeading(title),
     createLogo(logo, darkLogo),
-    createDescription(description),
-    createAuthentication(securitySchemes as unknown as SecuritySchemeObject),
+    createDescription(description, parseMarkdown),
+    createAuthentication(
+      securitySchemes as unknown as SecuritySchemeObject,
+      parseMarkdown
+    ),
     createContactInfo(contact as ContactObject),
     createTermsOfService(termsOfService),
     createLicense(license as LicenseObject),
   ]);
 }
 
-export function createTagPageMD({ tag: { description } }: TagPageMetadata) {
-  return render([createDescription(description)]);
+export function createTagPageMD(
+  { tag: { description } }: TagPageMetadata,
+  parseMarkdown?: MarkdownParser
+) {
+  return render([createDescription(description, parseMarkdown)]);
 }
 
-export function createSchemaPageMD({ schema }: SchemaPageMetadata) {
+export function createSchemaPageMD(
+  { schema }: SchemaPageMetadata,
+  parseMarkdown?: MarkdownParser
+) {
   const { title = "", description } = schema;
   return render([
     `import Schema from "@theme/Schema";\n`,
     `import Heading from "@theme/Heading";\n\n`,
     createHeading(title),
-    createDescription(description),
+    createDescription(description, parseMarkdown),
     create("Schema", {
       schema: schema,
       schemaType: "response",

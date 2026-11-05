@@ -35,7 +35,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: "22"
+          node-version: "24"
       - name: Upgrade npm for OIDC trusted publishing
         run: npm install -g npm@latest
       - name: Install dependencies
@@ -71,7 +71,7 @@ jobs:
         if: steps.packages_changed.outputs.changed == 'true'
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: "22"
+          node-version: "24"
       - name: Upgrade npm for OIDC trusted publishing
         if: steps.packages_changed.outputs.changed == 'true'
         run: npm install -g npm@latest

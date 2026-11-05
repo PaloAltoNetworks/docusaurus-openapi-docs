@@ -24,6 +24,7 @@ import {
 import {
   EXTERNALIZABLE_COMPONENTS,
   ExternalFile,
+  loadMarkdownParser,
   runWithExternalization,
 } from "./markdown/utils";
 import { processOpenapiFiles, readOpenapiFiles } from "./openapi";
@@ -168,6 +169,7 @@ export default function pluginOpenAPIDocs(
       : path.resolve(siteDir, specPath);
 
     try {
+      const parseMarkdown = await loadMarkdownParser();
       const openapiFiles = await readOpenapiFiles(contentPath);
       const [loadedApi, tags, tagGroups] = await processOpenapiFiles(
         openapiFiles,
@@ -347,10 +349,10 @@ custom_edit_url: null
           }[key]
         ) => string;
       } = {
-        api: apiPageGenerator,
-        info: infoPageGenerator,
-        tag: tagPageGenerator,
-        schema: schemaPageGenerator,
+        api: (pageData) => apiPageGenerator(pageData, parseMarkdown),
+        info: (pageData) => infoPageGenerator(pageData, parseMarkdown),
+        tag: (pageData) => tagPageGenerator(pageData, parseMarkdown),
+        schema: (pageData) => schemaPageGenerator(pageData, parseMarkdown),
       };
 
       loadedApi.map(async (item) => {

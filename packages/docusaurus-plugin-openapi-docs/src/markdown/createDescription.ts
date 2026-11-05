@@ -5,8 +5,11 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { clean } from "./utils";
+import { clean, MarkdownParser } from "./utils";
 
-export function createDescription(description: string | undefined) {
-  return `\n\n${clean(description)}\n\n`;
+export function createDescription(
+  description: string | undefined,
+  parseMarkdown?: MarkdownParser
+) {
+  return `\n\n${clean(description, parseMarkdown)}\n\n`;
 }
