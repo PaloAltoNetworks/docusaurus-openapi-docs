@@ -81,6 +81,8 @@ function groupByTags(
   tagGroupKey?: string
 ): ProcessedSidebar {
   let { outputDir, label, showSchemas } = options;
+  // Undefined means the option was never set, which keeps the category visible.
+  const showUntagged = options.showUntagged ?? true;
 
   // Remove trailing slash before proceeding
   outputDir = outputDir.replace(/\/$/, "");
@@ -243,16 +245,14 @@ function groupByTags(
     .filter(({ api }) => api.tags === undefined || api.tags.length === 0)
     .map((item) => createDocItemFn(item, createDocItemFnContext));
   let untagged: SidebarItemCategory[] = [];
-  if (untaggedItems.length > 0) {
+  if (showUntagged && untaggedItems.length > 0) {
     untagged = [
       {
         type: "category" as const,
         label: "UNTAGGED",
         collapsible: sidebarCollapsible!,
         collapsed: sidebarCollapsed!,
-        items: apiItems
-          .filter(({ api }) => api.tags === undefined || api.tags.length === 0)
-          .map((item) => createDocItemFn(item, createDocItemFnContext)),
+        items: untaggedItems,
       },
     ];
   }
