@@ -84,11 +84,18 @@ export function createAuth({
 
           data[schemeID][key] = persisted;
         }
-        options[id].push({
-          ...scheme,
-          key: schemeID,
-          scopes,
-        });
+        // OR alternatives that reuse the same scheme collapse to the same
+        // option id (e.g. two "bearer" entries with different scopes). Add
+        // each scheme to an option at most once, otherwise consumers such
+        // as buildPostmanRequest emit its header (e.g. Authorization)
+        // once per duplicate entry.
+        if (!options[id].some((existing) => existing.key === schemeID)) {
+          options[id].push({
+            ...scheme,
+            key: schemeID,
+            scopes,
+          });
+        }
       }
     }
   }
