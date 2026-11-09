@@ -33,7 +33,7 @@ export default function LayoutPicker({
   return (
     <div
       className={mobile ? styles.mobileRoot : styles.root}
-      role="radiogroup"
+      role="group"
       aria-label="API page layout"
     >
       {mobile && <span className={styles.mobileLabel}>API layout</span>}
@@ -42,8 +42,7 @@ export default function LayoutPicker({
           <button
             key={option.id}
             type="button"
-            role="radio"
-            aria-checked={option.id === active}
+            aria-pressed={option.id === active}
             className={`${styles.option} ${option.id === active ? styles.optionActive : ""}`}
             onClick={() => setLayout(option.id)}
           >
