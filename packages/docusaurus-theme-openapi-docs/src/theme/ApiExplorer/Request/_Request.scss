@@ -103,6 +103,43 @@
   }
 }
 
+.openapi-explorer__request-btn {
+  border: none;
+  border-radius: var(--ifm-global-radius);
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  background-color: var(--ifm-color-primary-light);
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 12px;
+  color: white;
+  cursor: pointer;
+  transition: 300ms;
+
+  &:hover {
+    background-color: var(--ifm-color-primary-lightest);
+  }
+
+  &:active {
+    background-color: var(--ifm-color-primary-light);
+  }
+}
+
+.openapi-security__summary-container {
+  background: var(--ifm-pre-background);
+  border-radius: var(--ifm-pre-border-radius);
+}
+
+// Prevent auto zoom on mobile iOS devices when focusing on input elmenents
+@media screen and (-webkit-min-device-pixel-ratio: 0) and (max-device-width: 1024px) {
+  .prism-code,
+  select,
+  input {
+    font-size: 1rem;
+  }
+}
+
+/* Modern layout (opt-in) */
 .openapi-explorer__request-btn-row {
   display: flex;
   align-items: center;
@@ -110,21 +147,19 @@
   margin-top: 1rem;
 }
 
-.openapi-explorer__request-btn {
+:is(.openapi-layout--modern, .openapi-try-it) .openapi-explorer__request-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   flex: 1;
   min-height: 2.5rem;
-  border: none;
-  border-radius: var(--ifm-global-radius);
-  padding: 0.5rem 1rem;
+  margin-top: 0;
   background-color: var(--ifm-color-primary-darker);
+  text-transform: none;
   font-weight: var(--ifm-font-weight-bold);
   font-size: 0.875rem;
   color: var(--ifm-color-white);
-  cursor: pointer;
   transition:
     background-color 150ms ease,
     transform 150ms ease;
@@ -134,6 +169,7 @@
   }
 
   &:active:not(:disabled) {
+    background-color: var(--ifm-color-primary-darker);
     transform: translateY(1px);
   }
 
@@ -147,12 +183,18 @@
   }
 }
 
-[data-theme="dark"] .openapi-explorer__request-btn {
+[data-theme="dark"]
+  :is(.openapi-layout--modern, .openapi-try-it)
+  .openapi-explorer__request-btn {
   background-color: var(--ifm-color-primary-lighter);
   color: var(--ifm-color-black);
 
   &:hover:not(:disabled) {
     background-color: var(--ifm-color-primary-lightest);
+  }
+
+  &:active:not(:disabled) {
+    background-color: var(--ifm-color-primary-lighter);
   }
 }
 
@@ -199,37 +241,24 @@
   }
 }
 
-.openapi-explorer__request-btn:focus-visible,
-.openapi-explorer__request-cancel-btn:focus-visible,
-.openapi-explorer__expand-details-btn:focus-visible,
-.openapi-explorer__response-clear-btn:focus-visible,
-.openapi-explorer__details-summary:focus-visible {
-  outline: 2px solid var(--ifm-color-primary);
-  outline-offset: 2px;
-  border-radius: var(--ifm-global-radius);
+:is(.openapi-layout--modern, .openapi-try-it) {
+  .openapi-explorer__request-btn:focus-visible,
+  .openapi-explorer__request-cancel-btn:focus-visible,
+  .openapi-explorer__expand-details-btn:focus-visible,
+  .openapi-explorer__response-clear-btn:focus-visible,
+  .openapi-explorer__details-summary:focus-visible {
+    outline: 2px solid var(--ifm-color-primary);
+    outline-offset: 2px;
+    border-radius: var(--ifm-global-radius);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .openapi-explorer__request-btn,
-  .openapi-explorer__request-form {
+  :is(.openapi-layout--modern, .openapi-try-it) .openapi-explorer__request-btn {
     transition: none;
   }
 
   .openapi-explorer__request-btn-spinner {
     animation-duration: 2s;
-  }
-}
-
-.openapi-security__summary-container {
-  background: var(--ifm-pre-background);
-  border-radius: var(--ifm-pre-border-radius);
-}
-
-// Prevent auto zoom on mobile iOS devices when focusing on input elmenents
-@media screen and (-webkit-min-device-pixel-ratio: 0) and (max-device-width: 1024px) {
-  .prism-code,
-  select,
-  input {
-    font-size: 1rem;
   }
 }

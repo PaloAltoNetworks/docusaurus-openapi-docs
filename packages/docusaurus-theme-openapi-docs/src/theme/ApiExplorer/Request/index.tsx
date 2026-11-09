@@ -19,22 +19,15 @@ import ContentType from "@theme/ApiExplorer/ContentType";
 import { useResolvedEncoding } from "@theme/ApiExplorer/EncodingSelection/useResolvedEncoding";
 import ParamOptions from "@theme/ApiExplorer/ParamOptions";
 import {
-  addHistoryEntry,
-  historyKey,
-} from "@theme/ApiExplorer/Response/history";
-import {
   setResponse,
   setCode,
   clearCode,
   setHeaders,
   clearHeaders,
-  setStatus,
-  setMetrics,
 } from "@theme/ApiExplorer/Response/slice";
 import Server from "@theme/ApiExplorer/Server";
 import useCanSendRequest from "@theme/ApiExplorer/useCanSendRequest";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
-import clsx from "clsx";
 import type { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import type { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 import type { ThemeConfig } from "docusaurus-theme-openapi-docs/src/types";
@@ -51,7 +44,8 @@ import makeRequest, {
 function Request({ item }: { item: ApiItem }) {
   const postman = new sdk.Request(item.postman);
   const metadata = useDoc();
-  const { proxy: frontMatterProxy } = metadata.frontMatter;
+  const { proxy: frontMatterProxy, hide_send_button: hideSendButton } =
+    metadata.frontMatter;
   const { siteConfig } = useDocusaurusContext();
   const themeConfig = siteConfig.themeConfig as ThemeConfig;
   const requestTimeout = themeConfig.api?.requestTimeout;
@@ -72,6 +66,12 @@ function Request({ item }: { item: ApiItem }) {
   const serverOptions = useTypedSelector((state: any) => state.server.options);
   const auth = useTypedSelector((state: any) => state.auth);
   const dispatch = useTypedDispatch();
+
+  const canSendRequest = useCanSendRequest(item.method);
+  const inFlightRef = useRef(false);
+  const abortRef = useRef<AbortController | undefined>(undefined);
+
+  useEffect(() => () => abortRef.current?.abort(), []);
 
   const [expandAccept, setExpandAccept] = useState(true);
   const [expandAuth, setExpandAuth] = useState(true);
@@ -107,16 +107,8 @@ function Request({ item }: { item: ApiItem }) {
     }
   );
 
-  const showRequestButton = useCanSendRequest(item.method);
-  const [inFlight, setInFlight] = useState(false);
-  const inFlightRef = useRef(false);
-  const abortRef = useRef<AbortController | undefined>(undefined);
-
-  useEffect(() => () => abortRef.current?.abort(), []);
-
-  const isMac =
-    typeof navigator !== "undefined" &&
-    /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+  const delay = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
 
   const paramsObject = {
     path: [] as ParameterObject[],
@@ -135,68 +127,26 @@ function Request({ item }: { item: ApiItem }) {
 
   const methods = useForm({ shouldFocusError: false });
 
-  const byteSize = (text: string) => new Blob([text]).size;
-
-  const endpointKey = historyKey(metadata.metadata?.id, item.method, item.path);
-
-  const handleEventStream = async (
-    res,
-    startedAt: number,
-    signal: AbortSignal
-  ) => {
-    const headers = res.headers ? Object.fromEntries(res.headers) : undefined;
-    headers && dispatch(setHeaders(headers));
+  const handleEventStream = async (res) => {
+    res.headers && dispatch(setHeaders(Object.fromEntries(res.headers)));
     dispatch(setCode(res.status));
-    dispatch(setStatus("success"));
 
     const reader = res.body.getReader();
     const decoder = new TextDecoder();
     let result = "";
-    try {
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        result += decoder.decode(value, { stream: true });
-        dispatch(setResponse(result));
-      }
-    } catch (e) {
-      // Keep the events received before the user cancelled the stream.
-      if (!signal.aborted) throw e;
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      result += decoder.decode(value, { stream: true });
+      dispatch(setResponse(result));
     }
-    const metrics = {
-      duration: performance.now() - startedAt,
-      size: byteSize(result),
-    };
-    dispatch(setMetrics(metrics));
-    addHistoryEntry(endpointKey, {
-      status: "success",
-      value: result,
-      code: String(res.status),
-      headers,
-      ...metrics,
-    });
   };
 
-  const handleResponse = async (result, startedAt: number) => {
+  const handleResponse = async (result) => {
     const res = "downloadedBody" in result ? result.response : result;
-    const text = await readResponseBody(result);
-    const headers = res.headers ? Object.fromEntries(res.headers) : undefined;
-    const metrics = {
-      duration: performance.now() - startedAt,
-      size: byteSize(text),
-    };
-    dispatch(setResponse(text));
+    dispatch(setResponse(await readResponseBody(result)));
     dispatch(setCode(res.status));
-    headers && dispatch(setHeaders(headers));
-    dispatch(setMetrics(metrics));
-    dispatch(setStatus("success"));
-    addHistoryEntry(endpointKey, {
-      status: "success",
-      value: text,
-      code: String(res.status),
-      headers,
-      ...metrics,
-    });
+    res.headers && dispatch(setHeaders(Object.fromEntries(res.headers)));
   };
 
   const getErrorMessage = (errorType: RequestErrorType): string => {
@@ -212,11 +162,6 @@ function Request({ item }: { item: ApiItem }) {
           id: "theme.openapi.request.error.network",
           message:
             "Unable to reach the server. Please check your network connection and verify the server URL is correct. If the server is running, this may be a CORS issue.",
-        });
-      case "abort":
-        return translate({
-          id: "theme.openapi.request.error.abort",
-          message: "The request was cancelled.",
         });
       case "cors":
         return translate({
@@ -239,14 +184,16 @@ function Request({ item }: { item: ApiItem }) {
     const controller = new AbortController();
     abortRef.current = controller;
     inFlightRef.current = true;
-    setInFlight(true);
-    dispatch(clearCode());
-    dispatch(clearHeaders());
-    dispatch(setMetrics({}));
-    dispatch(setResponse(""));
-    dispatch(setStatus("loading"));
-    const startedAt = performance.now();
+    dispatch(
+      setResponse(
+        translate({
+          id: "theme.openapi.request.fetchingMessage",
+          message: "Fetching...",
+        })
+      )
+    );
     try {
+      await delay(1200);
       const res = await makeRequest(
         postmanRequest,
         proxy,
@@ -257,17 +204,16 @@ function Request({ item }: { item: ApiItem }) {
         controller.signal
       );
       if (!("downloadedBody" in res) && isStreamingResponse(res)) {
-        await handleEventStream(res, startedAt, controller.signal);
+        await handleEventStream(res);
       } else {
-        await handleResponse(res, startedAt);
+        await handleResponse(res);
       }
     } catch (e) {
+      if (controller.signal.aborted) return;
       console.log(e);
 
       let errorMessage: string;
-      if (controller.signal.aborted) {
-        errorMessage = getErrorMessage("abort");
-      } else if (e instanceof RequestError) {
+      if (e instanceof RequestError) {
         errorMessage = getErrorMessage(e.type);
       } else {
         errorMessage = translate({
@@ -279,31 +225,16 @@ function Request({ item }: { item: ApiItem }) {
       dispatch(setResponse(errorMessage));
       dispatch(clearCode());
       dispatch(clearHeaders());
-      const duration = performance.now() - startedAt;
-      dispatch(setMetrics({ duration }));
-      dispatch(setStatus("error"));
-      addHistoryEntry(endpointKey, {
-        status: "error",
-        value: errorMessage,
-        duration,
-      });
     } finally {
       if (abortRef.current === controller) abortRef.current = undefined;
       inFlightRef.current = false;
-      setInFlight(false);
-    }
-  };
-
-  const onKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
-    if (e.key === "Enter" && (e.metaKey || e.ctrlKey) && showRequestButton) {
-      e.preventDefault();
-      methods.handleSubmit(onSubmit)();
     }
   };
 
   const showServerOptions = serverOptions.length > 0;
   const showAcceptOptions = acceptOptions.length > 1;
   const showRequestBody = contentType !== undefined;
+  const showRequestButton = (item.servers || proxy) && !hideSendButton;
   const showAuth = authSelected !== undefined;
   const showParams = allParams.length > 0;
   const requestBodyRequired = item.requestBody?.required;
@@ -343,8 +274,6 @@ function Request({ item }: { item: ApiItem }) {
       <form
         className="openapi-explorer__request-form"
         onSubmit={methods.handleSubmit(onSubmit)}
-        onKeyDown={onKeyDown}
-        aria-busy={inFlight}
       >
         <div className="openapi-explorer__request-header-container">
           <span className="openapi-explorer__request-title">
@@ -505,53 +434,17 @@ function Request({ item }: { item: ApiItem }) {
               })}
             </p>
           )}
-          {showRequestButton && (
-            <div className="openapi-explorer__request-btn-row">
-              <button
-                className={clsx("openapi-explorer__request-btn", {
-                  "openapi-explorer__request-btn--loading": inFlight,
-                })}
-                type="submit"
-                disabled={!!bodyError || inFlight}
-              >
-                {inFlight && (
-                  <span
-                    className="openapi-explorer__request-btn-spinner"
-                    aria-hidden="true"
-                  />
-                )}
-                {inFlight
-                  ? translate({
-                      id: "theme.openapi.request.sendingButton",
-                      message: "Sending…",
-                    })
-                  : translate({
-                      id: "theme.openapi.request.sendButton",
-                      message: "Send API Request",
-                    })}
-              </button>
-              {inFlight && (
-                <button
-                  type="button"
-                  className="openapi-explorer__request-cancel-btn"
-                  onClick={() => abortRef.current?.abort()}
-                >
-                  {translate({
-                    id: "theme.openapi.request.cancelButton",
-                    message: "Cancel",
-                  })}
-                </button>
-              )}
-              <kbd
-                className="openapi-explorer__request-shortcut"
-                title={translate({
-                  id: "theme.openapi.request.shortcutHint",
-                  message: "Press Ctrl+Enter (⌘+Enter on macOS) to send",
-                })}
-              >
-                {isMac ? "⌘ ↵" : "Ctrl ↵"}
-              </kbd>
-            </div>
+          {canSendRequest && (
+            <button
+              className="openapi-explorer__request-btn"
+              type="submit"
+              disabled={!!bodyError}
+            >
+              {translate({
+                id: "theme.openapi.request.sendButton",
+                message: "Send API Request",
+              })}
+            </button>
           )}
         </div>
       </form>

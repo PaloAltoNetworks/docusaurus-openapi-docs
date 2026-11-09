@@ -5,14 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React, { useEffect, useId, useState } from "react";
+import React from "react";
 
 import { useDoc } from "@docusaurus/plugin-content-docs/client";
 import { usePrismTheme } from "@docusaurus/theme-common";
 import Translate, { translate } from "@docusaurus/Translate";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import ApiCodeBlock from "@theme/ApiExplorer/ApiCodeBlock";
-import { statusTone } from "@theme/ApiExplorer/utils/endpoint";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
@@ -20,17 +19,7 @@ import clsx from "clsx";
 import type { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 import type { ThemeConfig } from "docusaurus-theme-openapi-docs/src/types";
 
-import { clearHistory, historyKey, HistoryEntry, useHistory } from "./history";
-import {
-  clearResponse,
-  clearCode,
-  clearHeaders,
-  setCode,
-  setHeaders,
-  setMetrics,
-  setResponse,
-  setStatus,
-} from "./slice";
+import { clearResponse, clearCode, clearHeaders } from "./slice";
 
 // Pretty-print a JSON string by re-indenting structural tokens only.
 // Numbers pass through verbatim, so values beyond Number.MAX_SAFE_INTEGER
@@ -103,49 +92,6 @@ function formatXml(xml: string) {
   return formatted.substring(1, formatted.length - 3);
 }
 
-const STATUS_TEXT: Record<number, string> = {
-  200: "OK",
-  201: "Created",
-  202: "Accepted",
-  204: "No Content",
-  301: "Moved Permanently",
-  302: "Found",
-  304: "Not Modified",
-  400: "Bad Request",
-  401: "Unauthorized",
-  403: "Forbidden",
-  404: "Not Found",
-  405: "Method Not Allowed",
-  409: "Conflict",
-  422: "Unprocessable Content",
-  429: "Too Many Requests",
-  500: "Internal Server Error",
-  502: "Bad Gateway",
-  503: "Service Unavailable",
-  504: "Gateway Timeout",
-};
-
-function formatDuration(ms?: number) {
-  if (ms === undefined) return undefined;
-  return ms < 1000 ? `${Math.round(ms)} ms` : `${(ms / 1000).toFixed(2)} s`;
-}
-
-function formatSize(bytes?: number) {
-  if (bytes === undefined) return undefined;
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-}
-
-function formatAge(timestamp: number, now: number) {
-  const seconds = Math.round((timestamp - now) / 1000);
-  const rtf = new Intl.RelativeTimeFormat(undefined, { numeric: "auto" });
-  if (Math.abs(seconds) < 60) return rtf.format(seconds, "second");
-  const minutes = Math.round(seconds / 60);
-  if (Math.abs(minutes) < 60) return rtf.format(minutes, "minute");
-  return rtf.format(Math.round(minutes / 60), "hour");
-}
-
 function Response({ item }: { item: ApiItem }) {
   const metadata = useDoc();
   const { siteConfig } = useDocusaurusContext();
@@ -156,40 +102,15 @@ function Response({ item }: { item: ApiItem }) {
   const code = useTypedSelector((state: any) => state.response.code);
   const headers = useTypedSelector((state: any) => state.response.headers);
   const response = useTypedSelector((state: any) => state.response.value);
-  const status = useTypedSelector((state: any) => state.response.status);
-  const duration = useTypedSelector((state: any) => state.response.duration);
-  const size = useTypedSelector((state: any) => state.response.size);
   const dispatch = useTypedDispatch();
-  const numericCode = code ? parseInt(code) : undefined;
-  const tone = numericCode !== undefined ? statusTone(numericCode) : undefined;
-  const isLoading = status === "loading";
-  const isError = status === "error";
-  const endpointKey = historyKey(metadata.metadata?.id, item.method, item.path);
-  const history = useHistory(endpointKey);
-  const historyLabelId = useId();
-  const latestId = history[0]?.id;
-  const [selectedId, setSelectedId] = useState<number | undefined>(latestId);
-
-  useEffect(() => {
-    setSelectedId(latestId);
-  }, [latestId]);
-
-  const restore = (entry: HistoryEntry) => {
-    dispatch(setResponse(entry.value ?? ""));
-    if (entry.code) {
-      dispatch(setCode(entry.code));
-    } else {
-      dispatch(clearCode());
-    }
-    if (entry.headers) {
-      dispatch(setHeaders(entry.headers));
-    } else {
-      dispatch(clearHeaders());
-    }
-    dispatch(setMetrics({ duration: entry.duration, size: entry.size }));
-    dispatch(setStatus(entry.status));
-    setSelectedId(entry.id);
-  };
+  const responseStatusClass =
+    code &&
+    "openapi-response__dot " +
+      (parseInt(code) >= 400
+        ? "openapi-response__dot--danger"
+        : parseInt(code) >= 200 && parseInt(code) < 300
+          ? "openapi-response__dot--success"
+          : "openapi-response__dot--info");
 
   if ((!item.servers && !proxy) || hideSendButton) {
     return null;
@@ -208,34 +129,8 @@ function Response({ item }: { item: ApiItem }) {
     }
   }
 
-  const placeholder = (
-    <p className="openapi-explorer__response-placeholder-message">
-      <Translate
-        id={"theme.openapi.response.placeholder"}
-        values={{
-          code: (
-            <code>
-              <Translate id={"theme.openapi.request.sendButton"}>
-                Send API Request
-              </Translate>
-            </code>
-          ),
-        }}
-      >
-        {"Click the {code} button above and see the response here!"}
-      </Translate>
-    </p>
-  );
-
-  const hasResult = !isLoading && !isError && code;
-  const language = response?.startsWith("<") ? `xml` : `json`;
-
   return (
-    <div
-      className={clsx("openapi-explorer__response-container", {
-        "openapi-explorer__response-container--error": isError,
-      })}
-    >
+    <div className="openapi-explorer__response-container">
       <div className="openapi-explorer__response-title-container">
         <span className="openapi-explorer__response-title">
           {translate({
@@ -246,215 +141,111 @@ function Response({ item }: { item: ApiItem }) {
         <button
           type="button"
           className="openapi-explorer__response-clear-btn"
-          disabled={isLoading}
           onClick={() => {
             dispatch(clearResponse());
             dispatch(clearCode());
             dispatch(clearHeaders());
-            setSelectedId(undefined);
           }}
         >
           {translate({ id: "theme.openapi.response.clear", message: "Clear" })}
         </button>
       </div>
-      <div aria-live="polite" aria-busy={isLoading}>
-        {hasResult && (
-          <div
-            className={clsx(
-              "openapi-explorer__response-status-bar",
-              `openapi-explorer__response-status-bar--${tone}`
-            )}
-          >
-            <span
-              className={clsx(
-                "openapi-explorer__response-status-badge",
-                `openapi-explorer__response-status-badge--${tone}`
-              )}
-            >
-              {code}
-              {numericCode !== undefined && STATUS_TEXT[numericCode]
-                ? ` ${STATUS_TEXT[numericCode]}`
-                : ""}
-            </span>
-            <span className="openapi-explorer__response-metrics">
-              {formatDuration(duration) && (
-                <span
-                  title={translate({
-                    id: "theme.openapi.response.duration",
-                    message: "Response time",
-                  })}
-                >
-                  {formatDuration(duration)}
-                </span>
-              )}
-              {formatSize(size) && (
-                <span
-                  title={translate({
-                    id: "theme.openapi.response.size",
-                    message: "Response size",
-                  })}
-                >
-                  {formatSize(size)}
-                </span>
-              )}
-            </span>
-          </div>
-        )}
-        <div
-          className="openapi-explorer__response-body"
-          style={{
-            backgroundColor: hasResult
+      <div
+        style={{
+          backgroundColor:
+            code && prettyResponse !== "Fetching..."
               ? prismTheme.plain.backgroundColor
               : "transparent",
-          }}
-        >
-          {hasResult ? (
-            <SchemaTabs lazy>
-              {/* @ts-ignore */}
-              <TabItem
-                label={translate({
-                  id: "theme.openapi.response.bodyTab",
-                  message: "Body",
-                })}
-                value="body"
-                default
-              >
-                {/* @ts-ignore */}
-                <ApiCodeBlock
-                  className="openapi-explorer__code-block openapi-response__status-code"
-                  language={language}
-                >
-                  {prettyResponse || placeholder}
-                </ApiCodeBlock>
-              </TabItem>
-              {/* @ts-ignore */}
-              <TabItem
-                label={translate({
-                  id: "theme.openapi.response.headersTab",
-                  message: "Headers",
-                })}
-                value="headers"
-              >
-                {/* @ts-ignore */}
-                <ApiCodeBlock
-                  className="openapi-explorer__code-block openapi-response__status-headers"
-                  language="json"
-                >
-                  {JSON.stringify(headers, undefined, 2)}
-                </ApiCodeBlock>
-              </TabItem>
-            </SchemaTabs>
-          ) : isLoading ? (
-            <div className="openapi-explorer__loading-container">
-              <div className="openapi-response__lds-ring" aria-hidden="true">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-              </div>
-              <span className="openapi-explorer__sr-only">
-                {translate({
-                  id: "theme.openapi.request.fetchingMessage",
-                  message: "Fetching...",
-                })}
-              </span>
-            </div>
-          ) : isError ? (
-            <div className="openapi-explorer__response-error" role="alert">
-              <strong className="openapi-explorer__response-error-title">
-                {translate({
-                  id: "theme.openapi.response.errorTitle",
-                  message: "Request failed",
-                })}
-                {formatDuration(duration) && (
-                  <span className="openapi-explorer__response-metrics">
-                    {formatDuration(duration)}
-                  </span>
-                )}
-              </strong>
-              <p>{response}</p>
-            </div>
-          ) : (
-            placeholder
-          )}
-        </div>
-      </div>
-      {history.length > 0 && (
-        <div className="openapi-explorer__history">
-          <div className="openapi-explorer__history-header">
-            <span id={historyLabelId}>
-              {translate({
-                id: "theme.openapi.response.historyTitle",
-                message: "Recent requests",
-              })}
-            </span>
-            <button
-              type="button"
-              className="openapi-explorer__response-clear-btn"
-              disabled={isLoading}
-              onClick={() => clearHistory(endpointKey)}
+          paddingLeft: "1rem",
+          paddingTop: "1rem",
+          ...((prettyResponse === "Fetching..." || !code) && {
+            paddingBottom: "1rem",
+          }),
+        }}
+      >
+        {code && prettyResponse !== "Fetching..." ? (
+          <SchemaTabs lazy>
+            {/* @ts-ignore */}
+            <TabItem
+              label={` ${code}`}
+              value="body"
+              attributes={{
+                className: clsx("openapi-response__dot", responseStatusClass),
+              }}
+              default
             >
-              {translate({
-                id: "theme.openapi.response.clearHistory",
-                message: "Clear history",
+              {/* @ts-ignore */}
+              <ApiCodeBlock
+                className="openapi-explorer__code-block openapi-response__status-code"
+                language={response.startsWith("<") ? `xml` : `json`}
+              >
+                {prettyResponse || (
+                  <p className="openapi-explorer__response-placeholder-message">
+                    <Translate
+                      id={"theme.openapi.response.placeholder"}
+                      values={{
+                        code: (
+                          <code>
+                            <Translate id={"theme.openapi.request.sendButton"}>
+                              Send API Request
+                            </Translate>
+                          </code>
+                        ),
+                      }}
+                    >
+                      {
+                        "Click the {code} button above and see the response here!"
+                      }
+                    </Translate>
+                  </p>
+                )}
+              </ApiCodeBlock>
+            </TabItem>
+            {/* @ts-ignore */}
+            <TabItem
+              label={translate({
+                id: "theme.openapi.response.headersTab",
+                message: "Headers",
               })}
-            </button>
+              value="headers"
+            >
+              {/* @ts-ignore */}
+              <ApiCodeBlock
+                className="openapi-explorer__code-block openapi-response__status-headers"
+                language={response.startsWith("<") ? `xml` : `json`}
+              >
+                {JSON.stringify(headers, undefined, 2)}
+              </ApiCodeBlock>
+            </TabItem>
+          </SchemaTabs>
+        ) : prettyResponse === "Fetching..." ? (
+          <div className="openapi-explorer__loading-container">
+            <div className="openapi-response__lds-ring">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
           </div>
-          <ul
-            className="openapi-explorer__history-list"
-            aria-labelledby={historyLabelId}
-          >
-            {history.map((entry) => {
-              const entryCode = entry.code ? parseInt(entry.code) : undefined;
-              const entryTone =
-                entryCode !== undefined ? statusTone(entryCode) : "danger";
-              const now = Date.now();
-              return (
-                <li key={entry.id}>
-                  <button
-                    type="button"
-                    className={clsx("openapi-explorer__history-item", {
-                      "openapi-explorer__history-item--active":
-                        entry.id === selectedId,
-                    })}
-                    aria-pressed={entry.id === selectedId}
-                    disabled={isLoading}
-                    onClick={() => restore(entry)}
-                  >
-                    <span
-                      className={clsx(
-                        "openapi-explorer__response-status-badge",
-                        `openapi-explorer__response-status-badge--${entryTone}`
-                      )}
-                    >
-                      {entry.code ??
-                        translate({
-                          id: "theme.openapi.response.historyError",
-                          message: "Error",
-                        })}
-                    </span>
-                    <span className="openapi-explorer__response-metrics">
-                      {formatDuration(entry.duration) && (
-                        <span>{formatDuration(entry.duration)}</span>
-                      )}
-                      {formatSize(entry.size) && (
-                        <span>{formatSize(entry.size)}</span>
-                      )}
-                    </span>
-                    <time
-                      className="openapi-explorer__history-time"
-                      dateTime={new Date(entry.timestamp).toISOString()}
-                      title={new Date(entry.timestamp).toLocaleString()}
-                    >
-                      {formatAge(entry.timestamp, now)}
-                    </time>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      )}
+        ) : (
+          <p className="openapi-explorer__response-placeholder-message">
+            <Translate
+              id={"theme.openapi.response.placeholder"}
+              values={{
+                code: (
+                  <code>
+                    <Translate id={"theme.openapi.request.sendButton"}>
+                      Send API Request
+                    </Translate>
+                  </code>
+                ),
+              }}
+            >
+              {"Click the {code} button above and see the response here!"}
+            </Translate>
+          </p>
+        )}
+      </div>
     </div>
   );
 }

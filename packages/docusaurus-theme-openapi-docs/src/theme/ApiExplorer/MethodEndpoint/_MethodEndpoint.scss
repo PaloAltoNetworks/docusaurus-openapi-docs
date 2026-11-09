@@ -1,30 +1,50 @@
 .openapi__method-endpoint {
   display: flex;
   align-items: center;
-  gap: 0.625rem;
   max-width: 100%;
   width: fit-content;
-  padding: 0.5rem 0.75rem;
+  padding: 0.65rem;
   border: 1px solid var(--ifm-toc-border-color);
-  border-radius: var(--ifm-global-radius);
-  background-color: var(--ifm-color-emphasis-100);
-  overflow-x: auto;
-
-  .badge {
-    flex-shrink: 0;
-    font-family: var(--ifm-font-family-monospace);
-    letter-spacing: 0.02em;
-  }
 }
 
 .openapi__method-endpoint-path {
   margin-bottom: 0;
-  font-size: 0.9375rem;
-  font-weight: 500;
-  line-height: 1.5;
+  margin-left: 0.5rem;
+  font-size: 12px;
+  font-weight: normal;
   font-family: var(--ifm-font-family-monospace);
-  white-space: nowrap;
-  color: var(--ifm-font-color-base);
+}
+
+.openapi__divider {
+  width: 100%;
+  margin: 1.5rem 0;
+  border-bottom: 1px solid var(--ifm-toc-border-color);
+}
+
+/* Modern layout (opt-in) */
+:is(.openapi-layout--modern, .openapi-try-it) {
+  .openapi__method-endpoint {
+    gap: 0.625rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--ifm-global-radius);
+    background-color: var(--ifm-color-emphasis-100);
+
+    .badge {
+      flex-shrink: 0;
+      font-family: var(--ifm-font-family-monospace);
+      letter-spacing: 0.02em;
+    }
+  }
+
+  .openapi__method-endpoint-path {
+    margin-left: 0;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    line-height: 1.5;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    color: var(--ifm-font-color-base);
+  }
 }
 
 .openapi__method-endpoint-param {
@@ -34,12 +54,6 @@
 
 [data-theme="dark"] .openapi__method-endpoint-param {
   color: var(--ifm-color-primary-lighter);
-}
-
-.openapi__divider {
-  width: 100%;
-  margin: 1.5rem 0;
-  border-bottom: 1px solid var(--ifm-toc-border-color);
 }
 
 .openapi__method-endpoint-row {
@@ -91,20 +105,6 @@
   &:focus-visible {
     outline: 2px solid var(--ifm-color-primary);
     outline-offset: 2px;
-  }
-}
-
-.openapi__method-endpoint-try {
-  display: none;
-
-  &--always {
-    display: inline-flex;
-  }
-}
-
-@media (max-width: 996px) {
-  .openapi__method-endpoint-try {
-    display: inline-flex;
   }
 }
 

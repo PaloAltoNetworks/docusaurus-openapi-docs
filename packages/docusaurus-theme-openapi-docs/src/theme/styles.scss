@@ -84,8 +84,8 @@
   --openapi-code-tab-shadow-color-php: rgba(97, 129, 182, 0.25);
   --openapi-code-tab-shadow-color-java: rgba(3, 116, 189, 0.25);
   --opeanpi-code-tab-shadow-color-powershell: rgba(3, 116, 189, 0.25);
-  --openapi-explorer-font-size-input: 0.875rem;
-  --openapi-explorer-font-size-code: 0.8125rem;
+  --openapi-explorer-font-size-input: 12px;
+  --openapi-explorer-font-size-code: 12px;
   --openapi-explorer-padding-input: 0.5rem;
   --openapi-explorer-border-color: var(--ifm-toc-border-color);
   --openapi-explorer-caret-bg: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path></svg>');
@@ -93,9 +93,6 @@
 }
 
 [data-theme="dark"] {
-  --openapi-required: var(--ifm-color-danger-lighter);
-  --openapi-deprecated: var(--ifm-color-warning-light);
-  --openapi-nullable: var(--ifm-color-info-light);
   --openapi-card-background-color: var(--ifm-color-gray-900) !important;
   --openapi-explorer-caret-bg: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" fill="white"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path></svg>') !important;
 }
@@ -230,4 +227,16 @@
 
 .openapi-skeleton.lg {
   height: 96.5%;
+}
+
+/* Modern layout (opt-in). The Try it drawer is portaled outside the layout. */
+:is(.openapi-layout--modern, .openapi-try-it) {
+  --openapi-explorer-font-size-input: 0.875rem;
+  --openapi-explorer-font-size-code: 0.8125rem;
+}
+
+[data-theme="dark"] :is(.openapi-layout--modern, .openapi-try-it) {
+  --openapi-required: var(--ifm-color-danger-lighter);
+  --openapi-deprecated: var(--ifm-color-warning-light);
+  --openapi-nullable: var(--ifm-color-info-light);
 }

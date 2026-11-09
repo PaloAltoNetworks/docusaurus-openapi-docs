@@ -10,8 +10,8 @@ import React, { useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { translate } from "@docusaurus/Translate";
-import Request from "@theme/ApiExplorer/Request";
-import Response from "@theme/ApiExplorer/Response";
+import Request from "@theme/ApiExplorer/Request/Modern";
+import Response from "@theme/ApiExplorer/Response/Modern";
 import SecuritySchemes from "@theme/ApiExplorer/SecuritySchemes";
 import { colorForMethod, renderPath } from "@theme/ApiExplorer/utils/endpoint";
 import type { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";

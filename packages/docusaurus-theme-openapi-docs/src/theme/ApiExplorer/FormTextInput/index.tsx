@@ -11,6 +11,7 @@ import React, { useId } from "react";
 import { translate } from "@docusaurus/Translate";
 import { ErrorMessage } from "@hookform/error-message";
 import FormLabel from "@theme/ApiExplorer/FormLabel";
+import useApiLayout from "@theme/ApiExplorer/useApiLayout";
 import clsx from "clsx";
 import { useFormContext } from "react-hook-form";
 
@@ -38,6 +39,7 @@ function FormTextInput({
   required,
 }: Props) {
   const id = useId();
+  const modern = useApiLayout() === "modern";
 
   placeholder = placeholder?.split("\n")[0];
 
@@ -75,10 +77,14 @@ function FormTextInput({
           placeholder={placeholder}
           title={placeholder}
           value={value}
-          onChange={(e) => {
-            registered.onChange(e);
-            onChange?.(e);
-          }}
+          onChange={
+            modern
+              ? (e) => {
+                  registered.onChange(e);
+                  onChange?.(e);
+                }
+              : onChange
+          }
           autoComplete="off"
         />
       ) : (

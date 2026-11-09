@@ -27,12 +27,20 @@ function isLayout(value: unknown): value is ApiLayout {
  * Resolves the API page layout. Precedence: ApiLayoutContext, then the
  * `api_layout` front matter, then `themeConfig.api.layout`, then "classic".
  */
+function usePageLayout(): unknown {
+  try {
+    return (useDoc().frontMatter as { api_layout?: unknown }).api_layout;
+  } catch {
+    // Outside a doc page (for example a component used in a standalone page).
+    return undefined;
+  }
+}
+
 export default function useApiLayout(): ApiLayout {
   const override = useContext(ApiLayoutContext);
-  const { frontMatter } = useDoc();
+  const fromPage = usePageLayout();
   const { siteConfig } = useDocusaurusContext();
   const configured = (siteConfig.themeConfig as ThemeConfig).api?.layout;
-  const fromPage = (frontMatter as { api_layout?: unknown }).api_layout;
 
   if (isLayout(override)) return override;
   if (isLayout(fromPage)) return fromPage;
