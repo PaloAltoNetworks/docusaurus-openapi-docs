@@ -12,6 +12,7 @@ import { usePrismTheme } from "@docusaurus/theme-common";
 import Translate, { translate } from "@docusaurus/Translate";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import ApiCodeBlock from "@theme/ApiExplorer/ApiCodeBlock";
+import { statusTone } from "@theme/ApiExplorer/utils/endpoint";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
@@ -143,12 +144,6 @@ function formatAge(timestamp: number, now: number) {
   const minutes = Math.round(seconds / 60);
   if (Math.abs(minutes) < 60) return rtf.format(minutes, "minute");
   return rtf.format(Math.round(minutes / 60), "hour");
-}
-
-function statusTone(code: number) {
-  if (code >= 200 && code < 300) return "success";
-  if (code >= 400) return "danger";
-  return "info";
 }
 
 function Response({ item }: { item: ApiItem }) {

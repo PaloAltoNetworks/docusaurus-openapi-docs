@@ -171,6 +171,22 @@
   }
 }
 
+.openapi-explorer__request-cancel-btn {
+  min-height: 2.5rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-global-radius);
+  padding: 0.5rem 1rem;
+  background: transparent;
+  font-size: 0.875rem;
+  font-weight: var(--ifm-font-weight-semibold);
+  color: var(--ifm-font-color-base);
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--ifm-color-emphasis-100);
+  }
+}
+
 .openapi-explorer__request-shortcut {
   font-size: 0.75rem;
   white-space: nowrap;
@@ -184,6 +200,7 @@
 }
 
 .openapi-explorer__request-btn:focus-visible,
+.openapi-explorer__request-cancel-btn:focus-visible,
 .openapi-explorer__expand-details-btn:focus-visible,
 .openapi-explorer__response-clear-btn:focus-visible,
 .openapi-explorer__details-summary:focus-visible {

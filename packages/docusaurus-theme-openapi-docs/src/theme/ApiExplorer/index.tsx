@@ -17,6 +17,7 @@ import SecuritySchemes from "@theme/ApiExplorer/SecuritySchemes";
 import TryItDrawer from "@theme/ApiExplorer/TryItDrawer";
 import { openTryIt } from "@theme/ApiExplorer/TryItDrawer/events";
 import useApiLayout from "@theme/ApiExplorer/useApiLayout";
+import useCanSendRequest from "@theme/ApiExplorer/useCanSendRequest";
 import type { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 import * as sdk from "postman-collection";
 
@@ -30,6 +31,7 @@ function ApiExplorer({
   const metadata = useDoc();
   const { mask_credentials } = metadata.frontMatter;
   const layout = useApiLayout();
+  const canSend = useCanSendRequest(item.method);
 
   const postman = new sdk.Request(
     item.postman
@@ -52,7 +54,7 @@ function ApiExplorer({
   if (layout === "modern") {
     return (
       <div className="openapi-explorer--modern">
-        {item.method !== "event" && (
+        {canSend && (
           <button
             type="button"
             className="openapi-explorer__try-it-btn"
@@ -66,9 +68,7 @@ function ApiExplorer({
         )}
         {snippets}
         <ResponsePreview responses={item.responses as any} />
-        {item.method !== "event" && (
-          <TryItDrawer item={item} infoPath={infoPath} />
-        )}
+        {canSend && <TryItDrawer item={item} infoPath={infoPath} />}
       </div>
     );
   }

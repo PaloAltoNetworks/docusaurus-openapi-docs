@@ -327,6 +327,9 @@ hide_table_of_contents: true
 {{/schema}}
 schema: true
 sample: {{{frontMatter.sample}}}
+{{#frontMatter.api_layout}}
+api_layout: {{{frontMatter.api_layout}}}
+{{/frontMatter.api_layout}}
 custom_edit_url: null
 ---
 

@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { useSyncExternalStore } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 
 export interface HistoryEntry {
   id: number;
@@ -24,6 +24,7 @@ const EMPTY: HistoryEntry[] = [];
 // Kept in memory only: responses can contain credentials or personal data.
 const entries = new Map<string, HistoryEntry[]>();
 const listeners = new Set<() => void>();
+const retained = new Map<string, number>();
 let nextId = 1;
 
 function emit() {
@@ -64,7 +65,28 @@ function subscribe(listener: () => void) {
   };
 }
 
+/**
+ * Keeps a key's history while at least one caller retains it. The returned
+ * function releases it; the last release clears the history.
+ */
+export function retainHistory(key: string): () => void {
+  retained.set(key, (retained.get(key) ?? 0) + 1);
+  let released = false;
+  return () => {
+    if (released) return;
+    released = true;
+    const count = (retained.get(key) ?? 1) - 1;
+    if (count > 0) {
+      retained.set(key, count);
+      return;
+    }
+    retained.delete(key);
+    clearHistory(key);
+  };
+}
+
 export function useHistory(key: string): HistoryEntry[] {
+  useEffect(() => retainHistory(key), [key]);
   return useSyncExternalStore(
     subscribe,
     () => getHistory(key),

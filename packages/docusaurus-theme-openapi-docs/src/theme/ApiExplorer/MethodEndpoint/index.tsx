@@ -12,47 +12,15 @@ import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import { translate } from "@docusaurus/Translate";
 import { openTryIt } from "@theme/ApiExplorer/TryItDrawer/events";
 import useApiLayout from "@theme/ApiExplorer/useApiLayout";
+import useCanSendRequest from "@theme/ApiExplorer/useCanSendRequest";
+import { copyToClipboard } from "@theme/ApiExplorer/utils/copyToClipboard";
+import { colorForMethod, renderPath } from "@theme/ApiExplorer/utils/endpoint";
 import { useTypedSelector } from "@theme/ApiItem/hooks";
-import copy from "copy-text-to-clipboard";
-
-function colorForMethod(method: string) {
-  switch (method.toLowerCase()) {
-    case "get":
-      return "primary";
-    case "post":
-      return "success";
-    case "delete":
-      return "danger";
-    case "put":
-      return "info";
-    case "patch":
-      return "warning";
-    case "head":
-      return "secondary";
-    case "event":
-      return "secondary";
-    default:
-      return undefined;
-  }
-}
-
-function renderPath(path: string) {
-  return path.split(/({[a-z0-9-_]+})/gi).map((segment, i) => {
-    const match = segment.match(/^{([a-z0-9-_]+)}$/i);
-    if (!match) return segment;
-    return (
-      <span key={i} className="openapi__method-endpoint-param">
-        :{match[1]}
-      </span>
-    );
-  });
-}
 
 function resolveServerUrl(serverValue: any): string {
   if (!serverValue?.url) return "";
-  let url: string = serverValue.url;
+  let url: string = serverValue.url.replace(/\/$/, "");
   if (serverValue.variables) {
-    url = url.replace(/\/$/, "");
     Object.keys(serverValue.variables).forEach((variable) => {
       url = url.replace(
         `{${variable}}`,
@@ -80,7 +48,7 @@ function scrollToExplorer() {
     ?.focus({ preventScroll: true });
 }
 
-function EndpointActions({ url }: { url: string }) {
+function EndpointActions({ url, canTry }: { url: string; canTry: boolean }) {
   const modern = useApiLayout() === "modern";
   const [copied, setCopied] = useState(false);
   const timeout = useRef<number | undefined>(undefined);
@@ -98,8 +66,8 @@ function EndpointActions({ url }: { url: string }) {
         className="openapi__method-endpoint-btn"
         aria-label={copyLabel}
         title={copyLabel}
-        onClick={() => {
-          copy(url);
+        onClick={async () => {
+          if (!(await copyToClipboard(url))) return;
           setCopied(true);
           window.clearTimeout(timeout.current);
           timeout.current = window.setTimeout(() => setCopied(false), 1500);
@@ -121,17 +89,19 @@ function EndpointActions({ url }: { url: string }) {
           </svg>
         )}
       </button>
-      <button
-        type="button"
-        className={
-          modern
-            ? "openapi__method-endpoint-btn openapi__method-endpoint-try openapi__method-endpoint-try--always"
-            : "openapi__method-endpoint-btn openapi__method-endpoint-try"
-        }
-        onClick={modern ? openTryIt : scrollToExplorer}
-      >
-        {translate({ id: "theme.openapi.endpoint.tryIt", message: "Try it" })}
-      </button>
+      {canTry && (
+        <button
+          type="button"
+          className={
+            modern
+              ? "openapi__method-endpoint-btn openapi__method-endpoint-try openapi__method-endpoint-try--always"
+              : "openapi__method-endpoint-btn openapi__method-endpoint-try"
+          }
+          onClick={modern ? openTryIt : scrollToExplorer}
+        >
+          {translate({ id: "theme.openapi.endpoint.tryIt", message: "Try it" })}
+        </button>
+      )}
     </div>
   );
 }
@@ -173,6 +143,7 @@ function ClientMethodEndpoint({ method, path, context }: Props) {
   const serverValue = useTypedSelector((state: any) => state.server.value);
   const isCallback = context === "callback";
   const serverUrl = isCallback ? "" : resolveServerUrl(serverValue);
+  const canTry = useCanSendRequest(method);
 
   return (
     <EndpointBar
@@ -184,7 +155,9 @@ function ClientMethodEndpoint({ method, path, context }: Props) {
       actions={
         !isCallback && method !== "event" ? (
           <BrowserOnly>
-            {() => <EndpointActions url={`${serverUrl}${path}`} />}
+            {() => (
+              <EndpointActions url={`${serverUrl}${path}`} canTry={canTry} />
+            )}
           </BrowserOnly>
         ) : undefined
       }

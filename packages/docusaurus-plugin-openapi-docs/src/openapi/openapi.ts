@@ -467,6 +467,7 @@ function createItems(
                   .replace(/\s+$/, "")
               : "",
             sample: JSON.stringify(sampleResponseFromSchema(schemaObject)),
+            ...(options?.apiLayout && { api_layout: options.apiLayout }),
           },
           schema: schemaObject,
         };

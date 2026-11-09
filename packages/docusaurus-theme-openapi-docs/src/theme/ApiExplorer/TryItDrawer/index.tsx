@@ -13,17 +13,10 @@ import { translate } from "@docusaurus/Translate";
 import Request from "@theme/ApiExplorer/Request";
 import Response from "@theme/ApiExplorer/Response";
 import SecuritySchemes from "@theme/ApiExplorer/SecuritySchemes";
+import { colorForMethod, renderPath } from "@theme/ApiExplorer/utils/endpoint";
 import type { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
 
 import { TRY_IT_EVENT } from "./events";
-
-const METHOD_BADGE: Record<string, string> = {
-  get: "primary",
-  post: "success",
-  delete: "danger",
-  put: "info",
-  patch: "warning",
-};
 
 const FOCUSABLE =
   'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -122,12 +115,12 @@ function TryItDrawer({ item, infoPath }: Props) {
       >
         <div className="openapi-try-it__header">
           <span
-            className={`badge badge--${METHOD_BADGE[item.method] ?? "secondary"}`}
+            className={`badge badge--${colorForMethod(item.method) ?? "secondary"}`}
           >
             {item.method.toUpperCase()}
           </span>
           <h2 id={titleId} className="openapi-try-it__title">
-            {item.path.replace(/{([a-z0-9-_]+)}/gi, ":$1")}
+            {renderPath(item.path)}
           </h2>
           <button
             type="button"

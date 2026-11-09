@@ -8,6 +8,7 @@
 import React, { useId, useMemo, useState } from "react";
 
 import { translate } from "@docusaurus/Translate";
+import { statusTone } from "@theme/ApiExplorer/utils/endpoint";
 import CodeBlock from "@theme/CodeBlock";
 import { json2xml } from "@theme/ResponseExamples";
 import clsx from "clsx";
@@ -78,12 +79,6 @@ function buildEntry(code: string, response: any): PreviewEntry {
   return entry;
 }
 
-function tone(code: string) {
-  if (code.startsWith("2")) return "success";
-  if (code.startsWith("4") || code.startsWith("5")) return "danger";
-  return "info";
-}
-
 export interface Props {
   responses?: Record<string, any>;
 }
@@ -132,7 +127,7 @@ function ResponsePreview({ responses }: Props) {
               tabIndex={i === selected ? 0 : -1}
               className={clsx(
                 "openapi-response-preview__tab",
-                `openapi-response-preview__tab--${tone(entry.code)}`,
+                `openapi-response-preview__tab--${statusTone(entry.code)}`,
                 { "openapi-response-preview__tab--active": i === selected }
               )}
               onClick={() => setSelected(i)}

@@ -6,7 +6,7 @@
  * ========================================================================== */
 
 // @ts-nocheck
-import React, { useState, useId } from "react";
+import React, { useEffect, useId, useRef, useState } from "react";
 
 import { useDoc } from "@docusaurus/plugin-content-docs/client";
 import { translate } from "@docusaurus/Translate";
@@ -32,6 +32,7 @@ import {
   setMetrics,
 } from "@theme/ApiExplorer/Response/slice";
 import Server from "@theme/ApiExplorer/Server";
+import useCanSendRequest from "@theme/ApiExplorer/useCanSendRequest";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import clsx from "clsx";
 import type { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
@@ -50,8 +51,7 @@ import makeRequest, {
 function Request({ item }: { item: ApiItem }) {
   const postman = new sdk.Request(item.postman);
   const metadata = useDoc();
-  const { proxy: frontMatterProxy, hide_send_button: hideSendButton } =
-    metadata.frontMatter;
+  const { proxy: frontMatterProxy } = metadata.frontMatter;
   const { siteConfig } = useDocusaurusContext();
   const themeConfig = siteConfig.themeConfig as ThemeConfig;
   const requestTimeout = themeConfig.api?.requestTimeout;
@@ -107,9 +107,13 @@ function Request({ item }: { item: ApiItem }) {
     }
   );
 
-  const isLoading = useTypedSelector(
-    (state: any) => state.response?.status === "loading"
-  );
+  const showRequestButton = useCanSendRequest(item.method);
+  const [inFlight, setInFlight] = useState(false);
+  const inFlightRef = useRef(false);
+  const abortRef = useRef<AbortController | undefined>(undefined);
+
+  useEffect(() => () => abortRef.current?.abort(), []);
+
   const isMac =
     typeof navigator !== "undefined" &&
     /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
@@ -135,7 +139,11 @@ function Request({ item }: { item: ApiItem }) {
 
   const endpointKey = historyKey(metadata.metadata?.id, item.method, item.path);
 
-  const handleEventStream = async (res, startedAt: number) => {
+  const handleEventStream = async (
+    res,
+    startedAt: number,
+    signal: AbortSignal
+  ) => {
     const headers = res.headers ? Object.fromEntries(res.headers) : undefined;
     headers && dispatch(setHeaders(headers));
     dispatch(setCode(res.status));
@@ -144,11 +152,16 @@ function Request({ item }: { item: ApiItem }) {
     const reader = res.body.getReader();
     const decoder = new TextDecoder();
     let result = "";
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      result += decoder.decode(value, { stream: true });
-      dispatch(setResponse(result));
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        result += decoder.decode(value, { stream: true });
+        dispatch(setResponse(result));
+      }
+    } catch (e) {
+      // Keep the events received before the user cancelled the stream.
+      if (!signal.aborted) throw e;
     }
     const metrics = {
       duration: performance.now() - startedAt,
@@ -200,6 +213,11 @@ function Request({ item }: { item: ApiItem }) {
           message:
             "Unable to reach the server. Please check your network connection and verify the server URL is correct. If the server is running, this may be a CORS issue.",
         });
+      case "abort":
+        return translate({
+          id: "theme.openapi.request.error.abort",
+          message: "The request was cancelled.",
+        });
       case "cors":
         return translate({
           id: "theme.openapi.request.error.cors",
@@ -217,7 +235,11 @@ function Request({ item }: { item: ApiItem }) {
   };
 
   const onSubmit = async (data) => {
-    if (!postmanRequest || isLoading) return;
+    if (!postmanRequest || inFlightRef.current) return;
+    const controller = new AbortController();
+    abortRef.current = controller;
+    inFlightRef.current = true;
+    setInFlight(true);
     dispatch(clearCode());
     dispatch(clearHeaders());
     dispatch(setMetrics({}));
@@ -231,10 +253,11 @@ function Request({ item }: { item: ApiItem }) {
         body,
         requestTimeout,
         requestCredentials,
-        encoding
+        encoding,
+        controller.signal
       );
       if (!("downloadedBody" in res) && isStreamingResponse(res)) {
-        await handleEventStream(res, startedAt);
+        await handleEventStream(res, startedAt, controller.signal);
       } else {
         await handleResponse(res, startedAt);
       }
@@ -242,7 +265,9 @@ function Request({ item }: { item: ApiItem }) {
       console.log(e);
 
       let errorMessage: string;
-      if (e instanceof RequestError) {
+      if (controller.signal.aborted) {
+        errorMessage = getErrorMessage("abort");
+      } else if (e instanceof RequestError) {
         errorMessage = getErrorMessage(e.type);
       } else {
         errorMessage = translate({
@@ -262,6 +287,10 @@ function Request({ item }: { item: ApiItem }) {
         value: errorMessage,
         duration,
       });
+    } finally {
+      if (abortRef.current === controller) abortRef.current = undefined;
+      inFlightRef.current = false;
+      setInFlight(false);
     }
   };
 
@@ -275,7 +304,6 @@ function Request({ item }: { item: ApiItem }) {
   const showServerOptions = serverOptions.length > 0;
   const showAcceptOptions = acceptOptions.length > 1;
   const showRequestBody = contentType !== undefined;
-  const showRequestButton = (item.servers || proxy) && !hideSendButton;
   const showAuth = authSelected !== undefined;
   const showParams = allParams.length > 0;
   const requestBodyRequired = item.requestBody?.required;
@@ -316,7 +344,7 @@ function Request({ item }: { item: ApiItem }) {
         className="openapi-explorer__request-form"
         onSubmit={methods.handleSubmit(onSubmit)}
         onKeyDown={onKeyDown}
-        aria-busy={isLoading}
+        aria-busy={inFlight}
       >
         <div className="openapi-explorer__request-header-container">
           <span className="openapi-explorer__request-title">
@@ -477,22 +505,22 @@ function Request({ item }: { item: ApiItem }) {
               })}
             </p>
           )}
-          {showRequestButton && item.method !== "event" && (
+          {showRequestButton && (
             <div className="openapi-explorer__request-btn-row">
               <button
                 className={clsx("openapi-explorer__request-btn", {
-                  "openapi-explorer__request-btn--loading": isLoading,
+                  "openapi-explorer__request-btn--loading": inFlight,
                 })}
                 type="submit"
-                disabled={!!bodyError || isLoading}
+                disabled={!!bodyError || inFlight}
               >
-                {isLoading && (
+                {inFlight && (
                   <span
                     className="openapi-explorer__request-btn-spinner"
                     aria-hidden="true"
                   />
                 )}
-                {isLoading
+                {inFlight
                   ? translate({
                       id: "theme.openapi.request.sendingButton",
                       message: "Sending…",
@@ -502,6 +530,18 @@ function Request({ item }: { item: ApiItem }) {
                       message: "Send API Request",
                     })}
               </button>
+              {inFlight && (
+                <button
+                  type="button"
+                  className="openapi-explorer__request-cancel-btn"
+                  onClick={() => abortRef.current?.abort()}
+                >
+                  {translate({
+                    id: "theme.openapi.request.cancelButton",
+                    message: "Cancel",
+                  })}
+                </button>
+              )}
               <kbd
                 className="openapi-explorer__request-shortcut"
                 title={translate({

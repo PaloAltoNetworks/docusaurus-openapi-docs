@@ -555,5 +555,42 @@ describe("openapi", () => {
       expect(api(withLayout).frontMatter.api_layout).toBe("modern");
       expect(api(withoutLayout).frontMatter).not.toHaveProperty("api_layout");
     });
+
+    it("adds api_layout front matter to schema pages", async () => {
+      const openapiData = {
+        openapi: "3.0.0",
+        info: { title: "Layout API", version: "1.0.0" },
+        paths: {},
+        components: {
+          schemas: {
+            Item: { type: "object", properties: { id: { type: "string" } } },
+          },
+        },
+      };
+      const sidebarOptions = {} as SidebarOptions;
+      const options = {
+        specPath: "dummy",
+        outputDir: "build",
+        showSchemas: true,
+      };
+
+      const [withLayout] = await processOpenapiFile(
+        openapiData as any,
+        { ...options, apiLayout: "modern" },
+        sidebarOptions
+      );
+      const [withoutLayout] = await processOpenapiFile(
+        openapiData as any,
+        options,
+        sidebarOptions
+      );
+
+      const schema = (items: any[]) =>
+        items.find((item) => item.type === "schema");
+      expect(schema(withLayout).frontMatter.api_layout).toBe("modern");
+      expect(schema(withoutLayout).frontMatter).not.toHaveProperty(
+        "api_layout"
+      );
+    });
   });
 });

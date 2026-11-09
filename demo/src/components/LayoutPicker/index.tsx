@@ -9,7 +9,7 @@ import React from "react";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import type { ApiLayout } from "@theme/ApiExplorer/useApiLayout";
 
-import { useDemoLayout } from "./context";
+import { useDemoLayout, usePageLayout } from "./context";
 import styles from "./styles.module.css";
 
 const OPTIONS: { id: ApiLayout; label: string }[] = [
@@ -23,11 +23,12 @@ export default function LayoutPicker({
   mobile?: boolean;
 }): JSX.Element {
   const [layout, setLayout] = useDemoLayout();
+  const pageLayout = usePageLayout();
   const { siteConfig } = useDocusaurusContext();
   const configured =
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ((siteConfig.themeConfig as any).api?.layout as ApiLayout) ?? "classic";
-  const active = layout ?? configured;
+  const active = layout ?? pageLayout ?? configured;
 
   return (
     <div

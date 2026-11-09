@@ -5,7 +5,12 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { addHistoryEntry, clearHistory, getHistory } from "./history";
+import {
+  addHistoryEntry,
+  clearHistory,
+  getHistory,
+  retainHistory,
+} from "./history";
 
 describe("request history", () => {
   afterEach(() => {
@@ -33,6 +38,27 @@ describe("request history", () => {
     clearHistory("a");
     expect(getHistory("a")).toHaveLength(0);
     expect(getHistory("b")).toHaveLength(1);
+  });
+
+  it("clears a key when its last holder releases it", () => {
+    const releaseFirst = retainHistory("a");
+    const releaseSecond = retainHistory("a");
+    addHistoryEntry("a", { status: "success" });
+    releaseFirst();
+    expect(getHistory("a")).toHaveLength(1);
+    releaseSecond();
+    expect(getHistory("a")).toHaveLength(0);
+  });
+
+  it("ignores a repeated release", () => {
+    const releaseFirst = retainHistory("a");
+    const releaseSecond = retainHistory("a");
+    releaseFirst();
+    releaseFirst();
+    addHistoryEntry("a", { status: "success" });
+    expect(getHistory("a")).toHaveLength(1);
+    releaseSecond();
+    expect(getHistory("a")).toHaveLength(0);
   });
 
   it("returns a stable empty array for unknown keys", () => {
