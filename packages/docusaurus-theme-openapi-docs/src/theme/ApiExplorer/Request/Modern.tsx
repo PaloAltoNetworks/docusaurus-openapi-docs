@@ -1,0 +1,562 @@
+/* ============================================================================
+ * Copyright (c) Palo Alto Networks
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ * ========================================================================== */
+
+// @ts-nocheck
+import React, { useEffect, useId, useRef, useState } from "react";
+
+import { useDoc } from "@docusaurus/plugin-content-docs/client";
+import { translate } from "@docusaurus/Translate";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import Accept from "@theme/ApiExplorer/Accept";
+import Authorization from "@theme/ApiExplorer/Authorization";
+import Body from "@theme/ApiExplorer/Body";
+import { tryBuildPostmanRequest } from "@theme/ApiExplorer/buildPostmanRequest";
+import ContentType from "@theme/ApiExplorer/ContentType";
+import { useResolvedEncoding } from "@theme/ApiExplorer/EncodingSelection/useResolvedEncoding";
+import ParamOptions from "@theme/ApiExplorer/ParamOptions";
+import {
+  addHistoryEntry,
+  historyKey,
+} from "@theme/ApiExplorer/Response/history";
+import {
+  setResponse,
+  setCode,
+  clearCode,
+  setHeaders,
+  clearHeaders,
+  setStatus,
+  setMetrics,
+} from "@theme/ApiExplorer/Response/slice";
+import Server from "@theme/ApiExplorer/Server";
+import useCanSendRequest from "@theme/ApiExplorer/useCanSendRequest";
+import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
+import clsx from "clsx";
+import type { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
+import type { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
+import type { ThemeConfig } from "docusaurus-theme-openapi-docs/src/types";
+import * as sdk from "postman-collection";
+import { FormProvider, useForm } from "react-hook-form";
+
+import makeRequest, {
+  isStreamingResponse,
+  readResponseBody,
+  RequestError,
+  RequestErrorType,
+} from "./makeRequest";
+
+function Request({ item }: { item: ApiItem }) {
+  const postman = new sdk.Request(item.postman);
+  const metadata = useDoc();
+  const { proxy: frontMatterProxy } = metadata.frontMatter;
+  const { siteConfig } = useDocusaurusContext();
+  const themeConfig = siteConfig.themeConfig as ThemeConfig;
+  const requestTimeout = themeConfig.api?.requestTimeout;
+  const requestCredentials = themeConfig.api?.requestCredentials;
+  // Frontmatter proxy (per-spec) takes precedence over theme config proxy (site-wide)
+  const proxy = frontMatterProxy ?? themeConfig.api?.proxy;
+
+  const pathParams = useTypedSelector((state: any) => state.params.path);
+  const queryParams = useTypedSelector((state: any) => state.params.query);
+  const cookieParams = useTypedSelector((state: any) => state.params.cookie);
+  const contentType = useTypedSelector((state: any) => state.contentType.value);
+  const headerParams = useTypedSelector((state: any) => state.params.header);
+  const body = useTypedSelector((state: any) => state.body);
+  const accept = useTypedSelector((state: any) => state.accept.value);
+  const acceptOptions = useTypedDispatch((state: any) => state.accept.options);
+  const authSelected = useTypedSelector((state: any) => state.auth.selected);
+  const server = useTypedSelector((state: any) => state.server.value);
+  const serverOptions = useTypedSelector((state: any) => state.server.options);
+  const auth = useTypedSelector((state: any) => state.auth);
+  const dispatch = useTypedDispatch();
+
+  const [expandAccept, setExpandAccept] = useState(true);
+  const [expandAuth, setExpandAuth] = useState(true);
+  const [expandBody, setExpandBody] = useState(true);
+  const [expandParams, setExpandParams] = useState(true);
+  const [expandServer, setExpandServer] = useState(true);
+
+  const serverLabelId = useId();
+
+  const allParams = [
+    ...pathParams,
+    ...queryParams,
+    ...cookieParams,
+    ...headerParams,
+  ];
+
+  const encoding = useResolvedEncoding(item.requestBody);
+
+  const { request: postmanRequest, error: bodyError } = tryBuildPostmanRequest(
+    postman,
+    {
+      pathTemplate: item.path,
+      queryParams,
+      pathParams,
+      cookieParams,
+      contentType,
+      accept,
+      headerParams,
+      body,
+      server,
+      auth,
+      encoding,
+    }
+  );
+
+  const showRequestButton = useCanSendRequest(item.method);
+  const [inFlight, setInFlight] = useState(false);
+  const inFlightRef = useRef(false);
+  const abortRef = useRef<AbortController | undefined>(undefined);
+
+  useEffect(() => () => abortRef.current?.abort(), []);
+
+  const isMac =
+    typeof navigator !== "undefined" &&
+    /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+
+  const paramsObject = {
+    path: [] as ParameterObject[],
+    query: [] as ParameterObject[],
+    header: [] as ParameterObject[],
+    cookie: [] as ParameterObject[],
+  };
+
+  item.parameters?.forEach(
+    (param: { in: "path" | "query" | "header" | "cookie" }) => {
+      const paramType = param.in;
+      const paramsArray: ParameterObject[] = paramsObject[paramType];
+      paramsArray?.push(param as ParameterObject);
+    }
+  );
+
+  const methods = useForm({ shouldFocusError: false });
+
+  const byteSize = (text: string) => new Blob([text]).size;
+
+  const endpointKey = historyKey(metadata.metadata?.id, item.method, item.path);
+
+  const handleEventStream = async (
+    res,
+    startedAt: number,
+    signal: AbortSignal
+  ) => {
+    const headers = res.headers ? Object.fromEntries(res.headers) : undefined;
+    headers && dispatch(setHeaders(headers));
+    dispatch(setCode(res.status));
+    dispatch(setStatus("success"));
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let result = "";
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        result += decoder.decode(value, { stream: true });
+        dispatch(setResponse(result));
+      }
+    } catch (e) {
+      // Keep the events received before the user cancelled the stream.
+      if (!signal.aborted) throw e;
+    }
+    const metrics = {
+      duration: performance.now() - startedAt,
+      size: byteSize(result),
+    };
+    dispatch(setMetrics(metrics));
+    addHistoryEntry(endpointKey, {
+      status: "success",
+      value: result,
+      code: String(res.status),
+      headers,
+      ...metrics,
+    });
+  };
+
+  const handleResponse = async (result, startedAt: number) => {
+    const res = "downloadedBody" in result ? result.response : result;
+    const text = await readResponseBody(result);
+    const headers = res.headers ? Object.fromEntries(res.headers) : undefined;
+    const metrics = {
+      duration: performance.now() - startedAt,
+      size: byteSize(text),
+    };
+    dispatch(setResponse(text));
+    dispatch(setCode(res.status));
+    headers && dispatch(setHeaders(headers));
+    dispatch(setMetrics(metrics));
+    dispatch(setStatus("success"));
+    addHistoryEntry(endpointKey, {
+      status: "success",
+      value: text,
+      code: String(res.status),
+      headers,
+      ...metrics,
+    });
+  };
+
+  const getErrorMessage = (errorType: RequestErrorType): string => {
+    switch (errorType) {
+      case "timeout":
+        return translate({
+          id: "theme.openapi.request.error.timeout",
+          message:
+            "The request timed out waiting for the server to respond. Please try again. If the issue persists, try using a different client (e.g., curl) with a longer timeout.",
+        });
+      case "network":
+        return translate({
+          id: "theme.openapi.request.error.network",
+          message:
+            "Unable to reach the server. Please check your network connection and verify the server URL is correct. If the server is running, this may be a CORS issue.",
+        });
+      case "abort":
+        return translate({
+          id: "theme.openapi.request.error.abort",
+          message: "The request was cancelled.",
+        });
+      case "cors":
+        return translate({
+          id: "theme.openapi.request.error.cors",
+          message:
+            "The request was blocked, possibly due to CORS restrictions. Ensure the server allows requests from this origin, or try using a proxy.",
+        });
+      case "unknown":
+      default:
+        return translate({
+          id: "theme.openapi.request.error.unknown",
+          message:
+            "An unexpected error occurred while making the request. Please try again.",
+        });
+    }
+  };
+
+  const onSubmit = async (data) => {
+    if (!postmanRequest || inFlightRef.current) return;
+    const controller = new AbortController();
+    abortRef.current = controller;
+    inFlightRef.current = true;
+    setInFlight(true);
+    dispatch(clearCode());
+    dispatch(clearHeaders());
+    dispatch(setMetrics({}));
+    dispatch(setResponse(""));
+    dispatch(setStatus("loading"));
+    const startedAt = performance.now();
+    try {
+      const res = await makeRequest(
+        postmanRequest,
+        proxy,
+        body,
+        requestTimeout,
+        requestCredentials,
+        encoding,
+        controller.signal
+      );
+      if (!("downloadedBody" in res) && isStreamingResponse(res)) {
+        await handleEventStream(res, startedAt, controller.signal);
+      } else {
+        await handleResponse(res, startedAt);
+      }
+    } catch (e) {
+      console.log(e);
+
+      let errorMessage: string;
+      if (controller.signal.aborted) {
+        errorMessage = getErrorMessage("abort");
+      } else if (e instanceof RequestError) {
+        errorMessage = getErrorMessage(e.type);
+      } else {
+        errorMessage = translate({
+          id: "theme.openapi.request.connectionFailed",
+          message: "Connection failed",
+        });
+      }
+
+      dispatch(setResponse(errorMessage));
+      dispatch(clearCode());
+      dispatch(clearHeaders());
+      const duration = performance.now() - startedAt;
+      dispatch(setMetrics({ duration }));
+      dispatch(setStatus("error"));
+      addHistoryEntry(endpointKey, {
+        status: "error",
+        value: errorMessage,
+        duration,
+      });
+    } finally {
+      if (abortRef.current === controller) abortRef.current = undefined;
+      inFlightRef.current = false;
+      setInFlight(false);
+    }
+  };
+
+  const onKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+    if (e.key === "Enter" && (e.metaKey || e.ctrlKey) && showRequestButton) {
+      e.preventDefault();
+      methods.handleSubmit(onSubmit)();
+    }
+  };
+
+  const showServerOptions = serverOptions.length > 0;
+  const showAcceptOptions = acceptOptions.length > 1;
+  const showRequestBody = contentType !== undefined;
+  const showAuth = authSelected !== undefined;
+  const showParams = allParams.length > 0;
+  const requestBodyRequired = item.requestBody?.required;
+
+  if (
+    !showAcceptOptions &&
+    !showAuth &&
+    !showParams &&
+    !showRequestBody &&
+    !showServerOptions &&
+    !showRequestButton
+  ) {
+    return null;
+  }
+
+  const expandAllDetails = () => {
+    setExpandAccept(true);
+    setExpandAuth(true);
+    setExpandBody(true);
+    setExpandParams(true);
+    setExpandServer(true);
+  };
+
+  const collapseAllDetails = () => {
+    setExpandAccept(false);
+    setExpandAuth(false);
+    setExpandBody(false);
+    setExpandParams(false);
+    setExpandServer(false);
+  };
+
+  const allDetailsExpanded =
+    expandParams && expandBody && expandServer && expandAuth && expandAccept;
+
+  return (
+    <FormProvider {...methods}>
+      <form
+        className="openapi-explorer__request-form"
+        onSubmit={methods.handleSubmit(onSubmit)}
+        onKeyDown={onKeyDown}
+        aria-busy={inFlight}
+      >
+        <div className="openapi-explorer__request-header-container">
+          <span className="openapi-explorer__request-title">
+            {translate({
+              id: "theme.openapi.request.title",
+              message: "Request",
+            })}
+          </span>
+          {allDetailsExpanded ? (
+            <button
+              type="button"
+              className="openapi-explorer__expand-details-btn"
+              onClick={collapseAllDetails}
+            >
+              {translate({
+                id: "theme.openapi.request.collapseAll",
+                message: "Collapse all",
+              })}
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="openapi-explorer__expand-details-btn"
+              onClick={expandAllDetails}
+            >
+              {translate({
+                id: "theme.openapi.request.expandAll",
+                message: "Expand all",
+              })}
+            </button>
+          )}
+        </div>
+        <div className="openapi-explorer__details-outer-container">
+          {showServerOptions && item.method !== "event" && (
+            <details
+              open={expandServer}
+              className="openapi-explorer__details-container"
+            >
+              <summary
+                id={serverLabelId}
+                className="openapi-explorer__details-summary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setExpandServer(!expandServer);
+                }}
+              >
+                {translate({
+                  id: "theme.openapi.request.baseUrl.title",
+                  message: "Base URL",
+                })}
+              </summary>
+              <Server labelId={serverLabelId} />
+            </details>
+          )}
+          {showAuth && (
+            <details
+              open={expandAuth}
+              className="openapi-explorer__details-container"
+            >
+              <summary
+                className="openapi-explorer__details-summary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setExpandAuth(!expandAuth);
+                }}
+              >
+                {translate({
+                  id: "theme.openapi.request.auth.title",
+                  message: "Auth",
+                })}
+              </summary>
+              <Authorization />
+            </details>
+          )}
+          {showParams && (
+            <details
+              open={
+                expandParams || Object.keys(methods.formState.errors).length
+              }
+              className="openapi-explorer__details-container"
+            >
+              <summary
+                className="openapi-explorer__details-summary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setExpandParams(!expandParams);
+                }}
+              >
+                {translate({
+                  id: "theme.openapi.request.parameters.title",
+                  message: "Parameters",
+                })}
+              </summary>
+              <ParamOptions />
+            </details>
+          )}
+          {showRequestBody && (
+            <details
+              open={expandBody}
+              className="openapi-explorer__details-container"
+            >
+              <summary
+                className="openapi-explorer__details-summary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setExpandBody(!expandBody);
+                }}
+              >
+                {translate({
+                  id: "theme.openapi.request.body.title",
+                  message: "Body",
+                })}
+                {requestBodyRequired && (
+                  <span className="openapi-schema__required">
+                    &nbsp;
+                    {translate({
+                      id: "theme.openapi.request.requiredLabel",
+                      message: "required",
+                    })}
+                  </span>
+                )}
+              </summary>
+              <>
+                <ContentType />
+                <Body
+                  jsonRequestBodyExample={item.jsonRequestBodyExample}
+                  requestBodyMetadata={item.requestBody}
+                  required={requestBodyRequired}
+                />
+              </>
+            </details>
+          )}
+          {showAcceptOptions && (
+            <details
+              open={expandAccept}
+              className="openapi-explorer__details-container"
+            >
+              <summary
+                className="openapi-explorer__details-summary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setExpandAccept(!expandAccept);
+                }}
+              >
+                {translate({
+                  id: "theme.openapi.request.accept.title",
+                  message: "Accept",
+                })}
+              </summary>
+              <Accept />
+            </details>
+          )}
+          {bodyError && (
+            <p role="alert">
+              {translate({
+                id: "theme.openapi.request.body.fileFieldError",
+                message: bodyError,
+              })}
+            </p>
+          )}
+          {showRequestButton && (
+            <div className="openapi-explorer__request-btn-row">
+              <button
+                className={clsx("openapi-explorer__request-btn", {
+                  "openapi-explorer__request-btn--loading": inFlight,
+                })}
+                type="submit"
+                disabled={!!bodyError || inFlight}
+              >
+                {inFlight && (
+                  <span
+                    className="openapi-explorer__request-btn-spinner"
+                    aria-hidden="true"
+                  />
+                )}
+                {inFlight
+                  ? translate({
+                      id: "theme.openapi.request.sendingButton",
+                      message: "Sending…",
+                    })
+                  : translate({
+                      id: "theme.openapi.request.sendButton",
+                      message: "Send API Request",
+                    })}
+              </button>
+              {inFlight && (
+                <button
+                  type="button"
+                  className="openapi-explorer__request-cancel-btn"
+                  onClick={() => abortRef.current?.abort()}
+                >
+                  {translate({
+                    id: "theme.openapi.request.cancelButton",
+                    message: "Cancel",
+                  })}
+                </button>
+              )}
+              <kbd
+                className="openapi-explorer__request-shortcut"
+                title={translate({
+                  id: "theme.openapi.request.shortcutHint",
+                  message: "Press Ctrl+Enter (⌘+Enter on macOS) to send",
+                })}
+              >
+                {isMac ? "⌘ ↵" : "Ctrl ↵"}
+              </kbd>
+            </div>
+          )}
+        </div>
+      </form>
+    </FormProvider>
+  );
+}
+
+export default Request;

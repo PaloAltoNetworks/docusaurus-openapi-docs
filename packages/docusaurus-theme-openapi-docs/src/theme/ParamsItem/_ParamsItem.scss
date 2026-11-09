@@ -52,3 +52,38 @@
 .openapi-schema__container {
   display: flex;
 }
+
+/* Modern layout: pill qualifiers and monospace types */
+:is(.openapi-layout--modern, .openapi-try-it) {
+  .openapi-schema__type {
+    opacity: 1;
+    padding-left: 0.375rem;
+    font-family: var(--ifm-font-family-monospace);
+    font-size: 0.8125rem;
+    color: var(--ifm-color-emphasis-700);
+  }
+
+  .openapi-schema__divider {
+    border-bottom-style: dashed;
+    margin: 0 0.5rem;
+  }
+
+  .openapi-schema__required {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    padding: 0 0.375rem;
+    border-radius: 999px;
+    font-size: 0.6875rem;
+    font-weight: var(--ifm-font-weight-bold);
+    letter-spacing: 0.02em;
+    line-height: 1.6;
+    text-transform: lowercase;
+    margin-left: 0.375rem;
+    background-color: color-mix(
+      in srgb,
+      var(--openapi-required) 12%,
+      transparent
+    );
+  }
+}

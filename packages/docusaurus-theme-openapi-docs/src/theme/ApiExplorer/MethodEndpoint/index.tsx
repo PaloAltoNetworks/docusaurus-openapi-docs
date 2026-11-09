@@ -9,6 +9,8 @@ import React from "react";
 
 import BrowserOnly from "@docusaurus/BrowserOnly";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
+import ModernMethodEndpoint from "@theme/ApiExplorer/MethodEndpoint/Modern";
+import useApiLayout from "@theme/ApiExplorer/useApiLayout";
 import { useTypedSelector } from "@theme/ApiItem/hooks";
 
 function colorForMethod(method: string) {
@@ -38,7 +40,7 @@ export interface Props {
   context?: "endpoint" | "callback";
 }
 
-function MethodEndpoint({ method, path, context }: Props) {
+function ClassicMethodEndpoint({ method, path, context }: Props) {
   // During SSR, render without Redux store access to avoid "Cannot read properties
   // of null (reading 'store')" errors caused by useSelector running outside a Provider.
   if (!ExecutionEnvironment.canUseDOM) {
@@ -59,6 +61,7 @@ function MethodEndpoint({ method, path, context }: Props) {
     );
   }
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks -- canUseDOM is constant per environment
   let serverValue = useTypedSelector((state: any) => state.server.value);
   let serverUrlWithVariables = "";
 
@@ -107,6 +110,13 @@ function MethodEndpoint({ method, path, context }: Props) {
       <div className="openapi__divider" />
     </>
   );
+}
+
+function MethodEndpoint(props: Props) {
+  if (useApiLayout() === "modern") {
+    return <ModernMethodEndpoint {...props} />;
+  }
+  return <ClassicMethodEndpoint {...props} />;
 }
 
 export default MethodEndpoint;

@@ -523,3 +523,39 @@ body[class="ReactModal__Body--open"] {
 .openapi-modal--open {
   background-color: rgba(0, 0, 0, 0.7) !important;
 }
+
+/* Compact language tabs for the modern layout */
+.openapi-explorer--modern {
+  --code-tab-logo-width: 16px;
+  --code-tab-logo-height: 16px;
+
+  .openapi-tabs__code-container .openapi-tabs__code-item {
+    flex-direction: row-reverse;
+    flex: 0 0 auto;
+    gap: 0.375rem;
+    padding: 0.3125rem 0.625rem !important;
+    margin-right: 0.375rem;
+    border: 1px solid var(--openapi-explorer-border-color);
+    border-radius: var(--ifm-global-radius);
+    transition:
+      border-color 150ms ease,
+      box-shadow 150ms ease;
+
+    span {
+      padding-top: 0;
+      font-size: 0.6875rem;
+      font-weight: var(--ifm-font-weight-semibold);
+      letter-spacing: 0.02em;
+    }
+
+    &.active span {
+      color: var(--ifm-font-color-base);
+    }
+  }
+
+  .openapi-tabs__code-list-container {
+    padding-bottom: 0.75rem;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+}
