@@ -4134,23 +4134,23 @@
     json-schema-traverse "^1.0.0"
     require-from-string "^2.0.2"
 
-"@redocly/config@^0.67.0":
-  version "0.67.0"
-  resolved "https://registry.yarnpkg.com/@redocly/config/-/config-0.67.0.tgz#1aa93c16bb513fcf53ae188e462c012664159dc4"
-  integrity sha512-3PSnuzaFHnBsFKwrSouBTfLua2tw1dC0G6TTrqt9XTsehp4OHHt9cYCOxkOIhBou5+TFnACZU1xl4xb/a4rcJA==
+"@redocly/config@^0.69.0":
+  version "0.69.1"
+  resolved "https://registry.yarnpkg.com/@redocly/config/-/config-0.69.1.tgz#412dceb49dea7fb84ed00ec7121a0411326ac392"
+  integrity sha512-8nnLeyBZquLNRMrIa9xJL+khPViSW0nfvXjHEJEVdzp9d1gp5r6ULbNT401uO5EaRt5VzY+5J9qtdCLnyNEn+g==
 
 "@redocly/openapi-core@^2.25.2":
-  version "2.71.0"
-  resolved "https://registry.yarnpkg.com/@redocly/openapi-core/-/openapi-core-2.71.0.tgz#00365e96ac1dbef46e70234ad6e1cc8960a8be0f"
-  integrity sha512-5b63LYOqDL/QBF8HEhvPPm4/PySeC0apT7+jpW2LoHWrjnmHQaAmdj3cNleiDwNhFVL+lY3E0PL1hC3cmrI8zQ==
+  version "2.72.1"
+  resolved "https://registry.yarnpkg.com/@redocly/openapi-core/-/openapi-core-2.72.1.tgz#2a8ae2189932da500fcb1900e24928ef052cf5dd"
+  integrity sha512-VcYW+Yq8Lu2rk16RrHlUAzRqu4tM5jRb0cVvNzPKb/Q0udTCprwoJEGEvdtVgvXhLokYRJcobXcDrSzpQeUccw==
   dependencies:
     "@redocly/ajv" "^8.18.3"
-    "@redocly/config" "^0.67.0"
+    "@redocly/config" "^0.69.0"
     ajv "npm:@redocly/ajv@^8.18.3"
     ajv-formats "^3.0.1"
     colorette "^1.2.0"
+    fastest-levenshtein "^1.0.16"
     graphql "^16.14.1"
-    js-levenshtein "^1.1.6"
     js-yaml "^5.2.2"
     json-schema-to-ts "^3.1.0"
     jsonpath-rfc9535 "1.3.0"
@@ -6197,11 +6197,11 @@ axe-core@^4.10.0:
   integrity sha512-BASOg+YwO2C+346x3LZOeoovTIoTrRqEsqMa6fmfAV0P+U9mFr9NsyOEpiYvFjbc64NMrSswhV50WdXzdb/Z5A==
 
 axios@1.18.1, axios@^1.15.0, axios@^1.16.0:
-  version "1.21.0"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.21.0.tgz#30c363a2652d9649e8b4d2645b34c64ca541ff67"
-  integrity sha512-YCzXMB53Q9PZBsh7yN7wtapit4WepwcHS2fP8QhGsBxSz5YtgYobV7GGlWlAJi+RxfU77GQTQi2DSLUma42EYA==
+  version "1.21.1"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.21.1.tgz#e15d57924d677aea9adb9f06b112b13b9ea0b9dd"
+  integrity sha512-6eI5Q/Y4u/Um9dDlsRoq5pY2rxnUTv+L4PpLitnbk/i4jb3MxLZ5CsN5Ih3IysbeRYK4pR+P7qfMsOQl9fwwFQ==
   dependencies:
-    follow-redirects "^1.16.0"
+    follow-redirects "^1.16.2"
     form-data "^4.0.6"
     https-proxy-agent "^5.0.1"
     proxy-from-env "^2.1.0"
@@ -9239,6 +9239,11 @@ fast-xml-parser@^5.5.7:
     strnum "^2.4.2"
     xml-naming "^0.3.0"
 
+fastest-levenshtein@^1.0.16:
+  version "1.0.16"
+  resolved "https://registry.yarnpkg.com/fastest-levenshtein/-/fastest-levenshtein-1.0.16.tgz#210e61b6ff181de91ea9b3d1b84fdedd47e034e5"
+  integrity sha512-eRnCtTTtGZFpQCwhJiUOuxPQWRXVKYDn0b2PeHfXL6/Zi53SLAzAHfVhVWK2AryC/WH05kGfxhFIPvTF0SXQzg==
+
 fastq@^1.6.0:
   version "1.20.1"
   resolved "https://registry.yarnpkg.com/fastq/-/fastq-1.20.1.tgz#ca750a10dc925bc8b18839fd203e3ef4b3ced675"
@@ -9401,10 +9406,15 @@ flatted@^3.2.9:
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-3.4.2.tgz#f5c23c107f0f37de8dbdf24f13722b3b98d52726"
   integrity sha512-PjDse7RzhcPkIJwy5t7KPWQSZ9cAbzQXcafsetQoD7sOJRQlGikNbx7yZp2OotDnJyrDcbyRq3Ttb18iYOqkxA==
 
-follow-redirects@1.16.0, follow-redirects@^1.0.0, follow-redirects@^1.15.6, follow-redirects@^1.16.0:
+follow-redirects@1.16.0, follow-redirects@^1.0.0, follow-redirects@^1.15.6:
   version "1.16.0"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.16.0.tgz#28474a159d3b9d11ef62050a14ed60e4df6d61bc"
   integrity sha512-y5rN/uOsadFT/JfYwhxRS5R7Qce+g3zG97+JrtFZlC9klX/W5hD7iiLzScI4nZqUS7DNUdhPgw4xI8W2LuXlUw==
+
+follow-redirects@^1.16.2:
+  version "1.16.3"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.16.3.tgz#62b60932427f616327014a5e401e8fc5e9027e9b"
+  integrity sha512-toOSoqN6d51Wjf1aOFJYcoVv1aND9rj/CwjLU0Vz40oDuSpWDayCeKe4JpL5NL0WdFvoOOCI3BRo69HahjbR1A==
 
 for-each@^0.3.3, for-each@^0.3.5:
   version "0.3.5"
@@ -11633,11 +11643,6 @@ js-base64@^2.5.1:
   version "2.6.4"
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.6.4.tgz#f4e686c5de1ea1f867dbcad3d46d969428df98c4"
   integrity sha512-pZe//GGmwJndub7ZghVHz7vjb2LgC1m8B07Au3eYqeqv9emhESByMXxaEgkUkEqJe87oBbSniGYoQNIBklc7IQ==
-
-js-levenshtein@^1.1.6:
-  version "1.1.6"
-  resolved "https://registry.yarnpkg.com/js-levenshtein/-/js-levenshtein-1.1.6.tgz#c6cee58eb3550372df8deb85fad5ce66ce01d59d"
-  integrity sha512-X2BB11YZtrRqY4EnQcLX5Rh373zbK4alC1FW7D7MBhL2gtcC17cTnr6DmfHZeS0s2rTHjUTMMHfG7gO8SSdw+g==
 
 js-tokens@^10.0.0:
   version "10.0.0"
