@@ -16,6 +16,7 @@ import {
   isArray,
   isBoolean,
 } from "./helpers";
+import { isHttpMethod } from "../../httpMethods";
 import { OpenAPIParser } from "../services/OpenAPIParser";
 import {
   OpenAPIEncoding,
@@ -71,19 +72,8 @@ export function getStatusCodeType(
   return res;
 }
 
-const operationNames = {
-  get: true,
-  post: true,
-  put: true,
-  head: true,
-  patch: true,
-  delete: true,
-  options: true,
-  $ref: true,
-};
-
 export function isOperationName(key: string): boolean {
-  return key in operationNames;
+  return key === "$ref" || isHttpMethod(key);
 }
 
 export function getOperationSummary(operation: any): string {

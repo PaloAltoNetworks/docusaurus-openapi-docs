@@ -220,6 +220,9 @@ article li a:hover,
 .patch > .menu__link::before {
   content: "patch";
 }
+.query > .menu__link::before {
+  content: "query";
+}
 
 /* HEAD / EVENT / SCHEMA — neutral colors, no theme needed */
 .head > .menu__link::before {
@@ -300,6 +303,12 @@ article li a:hover,
   color: var(--ifm-color-success-contrast-foreground);
   border-color: var(--ifm-color-success-dark);
 }
+.query-contrast > .menu__link::before {
+  content: "query";
+  background-color: var(--ifm-color-info-contrast-background);
+  color: var(--ifm-color-info-contrast-foreground);
+  border-color: var(--ifm-color-info-dark);
+}
 .head-contrast > .menu__link::before {
   content: "head";
   background-color: var(--ifm-color-secondary-contrast-background);
@@ -361,6 +370,10 @@ article li a:hover,
 .patch-simple > .menu__link::before {
   content: "patch";
   color: var(--ifm-color-warning);
+}
+.query-simple > .menu__link::before {
+  content: "query";
+  color: var(--ifm-color-info);
 }
 .head-simple > .menu__link::before {
   content: "head";
