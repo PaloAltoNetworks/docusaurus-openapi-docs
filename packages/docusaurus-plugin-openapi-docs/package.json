@@ -41,7 +41,7 @@
     "eslint-plugin-prettier": "^5.5.1"
   },
   "dependencies": {
-    "@apidevtools/json-schema-ref-parser": "^15.3.3",
+    "@apidevtools/json-schema-ref-parser": "^16.0.5",
     "@redocly/openapi-core": "^2.25.2",
     "allof-merge": "^0.6.6",
     "chalk": "^5.6.2",
