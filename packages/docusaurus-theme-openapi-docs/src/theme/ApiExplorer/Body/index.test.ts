@@ -226,6 +226,39 @@ describe("request body media types", () => {
     expect(editors[2].children).toContain("from schema examples");
   });
 
+  it("renders OpenAPI 3.2 dataValue and serializedValue examples", () => {
+    const { editors } = renderBody("application/xml", {
+      "application/xml": {
+        schema: {
+          type: "object" as const,
+          xml: { name: "Pet" },
+          properties: { name: { type: "string" as const } },
+        },
+        examples: {
+          data: { dataValue: { name: "Fluffy" } },
+          serialized: {
+            dataValue: { name: "ignored" },
+            serializedValue: "<Pet><name>Wire</name></Pet>",
+          },
+        },
+      },
+    });
+    expect(editors).toHaveLength(3);
+    expect(editors[1].children).toBe("<Pet>\n  <name>Fluffy</name>\n</Pet>");
+    expect(editors[2].children).toBe("<Pet>\n  <name>Wire</name>\n</Pet>");
+  });
+
+  it("renders OpenAPI 3.2 dataValue examples as JSON", () => {
+    const { editors } = renderBody("application/json", {
+      "application/json": {
+        schema,
+        examples: { data: { dataValue: { message: "from dataValue" } } },
+      },
+    });
+    expect(editors).toHaveLength(2);
+    expect(editors[1].children).toBe('{\n  "message": "from dataValue"\n}');
+  });
+
   it.each([
     "text/plain; note=application/json",
     "xapplication/json",
