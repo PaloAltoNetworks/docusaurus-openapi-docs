@@ -11,6 +11,7 @@ import { translate } from "@docusaurus/Translate";
 import { statusTone } from "@theme/ApiExplorer/utils/endpoint";
 import CodeBlock from "@theme/CodeBlock";
 import { json2xml } from "@theme/ResponseExamples";
+import { serializeExampleFields } from "@theme/ResponseExamples/serializeExample";
 import clsx from "clsx";
 import { sampleResponseFromSchema } from "docusaurus-plugin-openapi-docs/lib/openapi/createResponseExample";
 import format from "xml-formatter";
@@ -63,8 +64,11 @@ function buildEntry(code: string, response: any): PreviewEntry {
 
   const media = content[mimeType] ?? {};
   let value = media.example;
+  let serialized: string | undefined;
   if (value === undefined && media.examples) {
-    value = (Object.values(media.examples)[0] as any)?.value;
+    const first = Object.values(media.examples)[0] as any;
+    serialized = serializeExampleFields(first, mimeType, media.schema);
+    value = first?.value;
   }
   if (value === undefined && media.schema) {
     try {
@@ -73,7 +77,9 @@ function buildEntry(code: string, response: any): PreviewEntry {
       value = undefined;
     }
   }
-  if (value !== undefined) {
+  if (serialized !== undefined) {
+    entry.example = serialized;
+  } else if (value !== undefined) {
     entry.example = serialize(value, mimeType);
   }
   return entry;

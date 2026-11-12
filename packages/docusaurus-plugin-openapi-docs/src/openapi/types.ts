@@ -295,6 +295,10 @@ export interface ExampleObject {
   summary?: string;
   description?: string;
   value?: any;
+  /** OpenAPI 3.2: example data as a structured value. */
+  dataValue?: any;
+  /** OpenAPI 3.2: example as it appears serialized on the wire. */
+  serializedValue?: string;
   externalValue?: string;
 }
 
