@@ -179,7 +179,9 @@ export const sampleFromSchema = (
         type = "object";
       } else if (items) {
         type = "array";
-      } else {
+      } else if (constant === undefined && !schemaCopy.enum) {
+        // Nothing to infer a value from. An untyped `const` or `enum` still
+        // has one, so those fall through to the checks below.
         return;
       }
     }
@@ -228,7 +230,7 @@ export const sampleFromSchema = (
     }
 
     if (schemaCopy.enum) {
-      if (schemaCopy.default) {
+      if (schemaCopy.default !== undefined) {
         return schemaCopy.default;
       }
       return normalizeArray(schemaCopy.enum)[0];
@@ -238,7 +240,7 @@ export const sampleFromSchema = (
       return undefined;
     }
 
-    if (constant) {
+    if (constant !== undefined) {
       return constant;
     }
 
