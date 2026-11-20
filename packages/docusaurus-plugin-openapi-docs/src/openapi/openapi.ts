@@ -263,6 +263,7 @@ function createItems(
           ...(options?.hideSendButton && {
             hide_send_button: options.hideSendButton,
           }),
+          ...(options?.apiLayout && { api_layout: options.apiLayout }),
           ...(options?.showExtensions && {
             show_extensions: options.showExtensions,
           }),
@@ -394,6 +395,7 @@ function createItems(
           ...(options?.hideSendButton && {
             hide_send_button: options.hideSendButton,
           }),
+          ...(options?.apiLayout && { api_layout: options.apiLayout }),
           ...(options?.showExtensions && {
             show_extensions: options.showExtensions,
           }),
@@ -465,6 +467,7 @@ function createItems(
                   .replace(/\s+$/, "")
               : "",
             sample: JSON.stringify(sampleResponseFromSchema(schemaObject)),
+            ...(options?.apiLayout && { api_layout: options.apiLayout }),
           },
           schema: schemaObject,
         };

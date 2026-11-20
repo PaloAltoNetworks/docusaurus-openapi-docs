@@ -23,6 +23,8 @@ jest.mock(
   { virtual: true }
 );
 jest.mock("@docusaurus/BrowserOnly", () => () => null, { virtual: true });
+jest.mock("@theme/ApiExplorer/MethodEndpoint/Modern", () => () => null);
+jest.mock("@theme/ApiExplorer/useApiLayout", () => () => "classic");
 jest.mock("@theme/ApiItem/hooks", () => ({ useTypedSelector: jest.fn() }));
 
 describe("MethodEndpoint", () => {

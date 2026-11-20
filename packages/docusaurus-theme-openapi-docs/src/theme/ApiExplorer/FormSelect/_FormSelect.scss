@@ -41,3 +41,10 @@ html[data-theme="dark"] .openapi-explorer__select-input {
     box-shadow: inset 0px 0px 0px 2px var(--openapi-input-border);
   }
 }
+
+:is(.openapi-layout--modern, .openapi-try-it) .openapi-explorer__select-input,
+html[data-theme="dark"]
+  :is(.openapi-layout--modern, .openapi-try-it)
+  .openapi-explorer__select-input {
+  border: 1px solid var(--openapi-explorer-border-color);
+}

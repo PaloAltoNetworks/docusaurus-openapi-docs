@@ -93,6 +93,7 @@ const config: Config = {
             },
           ],
         },
+        { type: "custom-LayoutPicker", position: "right" },
         { type: "custom-PalettePicker", position: "right" },
         {
           href: "https://medium.com/palo-alto-networks-developer-blog",
@@ -272,6 +273,8 @@ const config: Config = {
       content: "v5.0.0 is now available! Requires Docusaurus 3.10.0+",
     },
     api: {
+      sidebarMethodBadges: true,
+      hideTableOfContents: true,
       schemaExpansion: {
         enabled: true,
         default: 1,

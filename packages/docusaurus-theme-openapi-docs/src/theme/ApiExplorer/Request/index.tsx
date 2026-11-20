@@ -6,7 +6,7 @@
  * ========================================================================== */
 
 // @ts-nocheck
-import React, { useState, useId } from "react";
+import React, { useEffect, useId, useRef, useState } from "react";
 
 import { useDoc } from "@docusaurus/plugin-content-docs/client";
 import { translate } from "@docusaurus/Translate";
@@ -26,6 +26,7 @@ import {
   clearHeaders,
 } from "@theme/ApiExplorer/Response/slice";
 import Server from "@theme/ApiExplorer/Server";
+import useCanSendRequest from "@theme/ApiExplorer/useCanSendRequest";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import type { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import type { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
@@ -65,6 +66,12 @@ function Request({ item }: { item: ApiItem }) {
   const serverOptions = useTypedSelector((state: any) => state.server.options);
   const auth = useTypedSelector((state: any) => state.auth);
   const dispatch = useTypedDispatch();
+
+  const canSendRequest = useCanSendRequest(item.method);
+  const inFlightRef = useRef(false);
+  const abortRef = useRef<AbortController | undefined>(undefined);
+
+  useEffect(() => () => abortRef.current?.abort(), []);
 
   const [expandAccept, setExpandAccept] = useState(true);
   const [expandAuth, setExpandAuth] = useState(true);
@@ -173,7 +180,10 @@ function Request({ item }: { item: ApiItem }) {
   };
 
   const onSubmit = async (data) => {
-    if (!postmanRequest) return;
+    if (!postmanRequest || inFlightRef.current) return;
+    const controller = new AbortController();
+    abortRef.current = controller;
+    inFlightRef.current = true;
     dispatch(
       setResponse(
         translate({
@@ -190,7 +200,8 @@ function Request({ item }: { item: ApiItem }) {
         body,
         requestTimeout,
         requestCredentials,
-        encoding
+        encoding,
+        controller.signal
       );
       if (!("downloadedBody" in res) && isStreamingResponse(res)) {
         await handleEventStream(res);
@@ -198,6 +209,7 @@ function Request({ item }: { item: ApiItem }) {
         await handleResponse(res);
       }
     } catch (e) {
+      if (controller.signal.aborted) return;
       console.log(e);
 
       let errorMessage: string;
@@ -213,6 +225,9 @@ function Request({ item }: { item: ApiItem }) {
       dispatch(setResponse(errorMessage));
       dispatch(clearCode());
       dispatch(clearHeaders());
+    } finally {
+      if (abortRef.current === controller) abortRef.current = undefined;
+      inFlightRef.current = false;
     }
   };
 
@@ -419,7 +434,7 @@ function Request({ item }: { item: ApiItem }) {
               })}
             </p>
           )}
-          {showRequestButton && item.method !== "event" && (
+          {canSendRequest && (
             <button
               className="openapi-explorer__request-btn"
               type="submit"

@@ -1,0 +1,90 @@
+/* ============================================================================
+ * Copyright (c) Palo Alto Networks
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ * ========================================================================== */
+
+/* Opt-in sidebar HTTP method badges (themeConfig.api.sidebarMethodBadges).
+ * Selectors are wrapped in :where() so any site CSS overrides them. */
+
+:root {
+  --openapi-badge-get: var(--ifm-color-primary);
+  --openapi-badge-post: var(--ifm-color-success);
+  --openapi-badge-put: var(--ifm-color-info);
+  --openapi-badge-patch: var(--ifm-color-warning);
+  --openapi-badge-delete: var(--ifm-color-danger);
+  --openapi-badge-neutral: var(--ifm-color-emphasis-600);
+}
+
+:where(.api-method, .schema) > :where(.menu__link) {
+  align-items: center;
+  justify-content: flex-start;
+}
+
+:where(.api-method, .schema) > :where(.menu__link)::before {
+  flex-shrink: 0;
+  width: 2.75rem;
+  margin-inline-end: 0.5rem;
+  padding: 0.0625rem 0;
+  border-radius: 0.25rem;
+  border: 1px solid currentColor;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.625rem;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--openapi-badge-color, var(--openapi-badge-neutral));
+  background-color: color-mix(
+    in srgb,
+    var(--openapi-badge-color, var(--openapi-badge-neutral)) 12%,
+    transparent
+  );
+}
+
+:where(.get) > :where(.menu__link)::before {
+  content: "get";
+  --openapi-badge-color: var(--openapi-badge-get);
+}
+
+:where(.post) > :where(.menu__link)::before {
+  content: "post";
+  --openapi-badge-color: var(--openapi-badge-post);
+}
+
+:where(.put) > :where(.menu__link)::before {
+  content: "put";
+  --openapi-badge-color: var(--openapi-badge-put);
+}
+
+:where(.patch) > :where(.menu__link)::before {
+  content: "patch";
+  --openapi-badge-color: var(--openapi-badge-patch);
+}
+
+:where(.delete) > :where(.menu__link)::before {
+  content: "del";
+  --openapi-badge-color: var(--openapi-badge-delete);
+}
+
+:where(.head) > :where(.menu__link)::before {
+  content: "head";
+}
+
+:where(.options) > :where(.menu__link)::before {
+  content: "opt";
+}
+
+:where(.event) > :where(.menu__link)::before {
+  content: "event";
+}
+
+:where(.schema) > :where(.menu__link)::before {
+  content: "schema";
+  width: 3.25rem;
+}
+
+:where(.menu__list-item--deprecated) > :where(.menu__link) {
+  text-decoration: line-through;
+}

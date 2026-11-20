@@ -34,3 +34,22 @@
     content: string.unquote('"\\26a0  "');
   }
 }
+
+:is(.openapi-layout--modern, .openapi-try-it)
+  .openapi-explorer__form-item-input {
+  border: 1px solid var(--openapi-explorer-border-color);
+
+  &:hover {
+    border-color: var(--ifm-color-emphasis-500);
+  }
+
+  &:focus {
+    border-color: var(--ifm-color-primary);
+    box-shadow: 0 0 0 3px
+      color-mix(in srgb, var(--ifm-color-primary) 20%, transparent);
+  }
+
+  &.error {
+    border-color: var(--openapi-required);
+  }
+}

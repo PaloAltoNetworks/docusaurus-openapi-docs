@@ -90,10 +90,14 @@ const DEFAULT_REQUEST_TIMEOUT = 30000; // 30 seconds
 function fetchWithtimeout(
   url: string,
   options: RequestInit,
-  timeout = DEFAULT_REQUEST_TIMEOUT
+  timeout = DEFAULT_REQUEST_TIMEOUT,
+  signal?: AbortSignal
 ): Promise<Response> {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
+  // Aborting the caller's signal also stops reading the response body.
+  if (signal?.aborted) controller.abort();
+  signal?.addEventListener("abort", () => controller.abort(), { once: true });
 
   return fetch(url, {
     ...options,
@@ -105,6 +109,10 @@ function fetchWithtimeout(
     })
     .catch((error) => {
       clearTimeout(timeoutId);
+
+      if (signal?.aborted) {
+        throw new RequestError("abort", "The request was cancelled.", error);
+      }
 
       // Check if it was an abort due to timeout
       if (error.name === "AbortError") {
@@ -173,7 +181,8 @@ async function makeRequest(
   _body: Body,
   timeout: number = DEFAULT_REQUEST_TIMEOUT,
   credentials?: RequestCredentials,
-  encoding?: Record<string, { contentType?: string }>
+  encoding?: Record<string, { contentType?: string }>,
+  signal?: AbortSignal
 ): Promise<RequestResponse> {
   const headers = request.toJSON().header;
 
@@ -335,7 +344,12 @@ async function makeRequest(
   }
 
   try {
-    const response = await fetchWithtimeout(finalUrl, requestOptions, timeout);
+    const response = await fetchWithtimeout(
+      finalUrl,
+      requestOptions,
+      timeout,
+      signal
+    );
     const contentType = getContentType(response);
     const disposition = response.headers.get("content-disposition");
     const attachment = isAttachment(disposition);

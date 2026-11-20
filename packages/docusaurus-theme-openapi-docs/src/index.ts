@@ -7,9 +7,16 @@
 
 import path from "path";
 
-import type { Plugin } from "@docusaurus/types";
+import type { LoadContext, Plugin } from "@docusaurus/types";
 
-export default function docusaurusThemeOpenAPI(): Plugin<void> {
+import type { ThemeConfig } from "./types";
+
+export default function docusaurusThemeOpenAPI(
+  context?: LoadContext
+): Plugin<void> {
+  const themeConfig = context?.siteConfig?.themeConfig as
+    ThemeConfig | undefined;
+
   return {
     name: "docusaurus-theme-openapi",
 
@@ -19,6 +26,13 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
           path.join(__dirname, "..", "lib", "theme", "styles.scss")
         ),
       ];
+      if (themeConfig?.api?.sidebarMethodBadges) {
+        modules.push(
+          require.resolve(
+            path.join(__dirname, "..", "lib", "theme", "sidebar-badges.scss")
+          )
+        );
+      }
       return modules;
     },
 
