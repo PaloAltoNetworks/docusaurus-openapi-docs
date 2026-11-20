@@ -143,11 +143,13 @@
  * Only color properties here; shape/content lives in custom.css.
  * ============================================================ */
 
-.get > .menu__link::before {
+.get > .menu__link::before,
+.query > .menu__link::before {
   background-color: rgba(34, 197, 94, 0.15);
   color: #15803d;
 }
-.get > .menu__link--active::before {
+.get > .menu__link--active::before,
+.query > .menu__link--active::before {
   background-color: #16a34a;
   color: #ffffff;
 }
@@ -189,11 +191,13 @@
 }
 
 /* Dark mode */
-[data-theme="dark"] .get > .menu__link::before {
+[data-theme="dark"] .get > .menu__link::before,
+[data-theme="dark"] .query > .menu__link::before {
   background-color: rgba(34, 197, 94, 0.15);
   color: #4ade80;
 }
-[data-theme="dark"] .get > .menu__link--active::before {
+[data-theme="dark"] .get > .menu__link--active::before,
+[data-theme="dark"] .query > .menu__link--active::before {
   background-color: #22c55e;
   color: #ffffff;
 }

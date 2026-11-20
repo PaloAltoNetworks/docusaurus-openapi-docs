@@ -13582,7 +13582,7 @@ open@^8.4.0:
     is-docker "^2.1.1"
     is-wsl "^2.2.0"
 
-openapi-to-postmanv2@^6.0.0:
+openapi-to-postmanv2@^6.4.0:
   version "6.4.2"
   resolved "https://registry.yarnpkg.com/openapi-to-postmanv2/-/openapi-to-postmanv2-6.4.2.tgz#a8bb09327197a155a271347a8d7084236aba1e86"
   integrity sha512-g83aqNVQ2wLrNGs6JpRmtvzDfDPiq8n+tlxsJEMrAzBd5cp4nB9I87N24ac2YQ01BPAWBP+mEIyiBzV01VgCEw==

@@ -16,6 +16,7 @@ import { useTypedSelector } from "@theme/ApiItem/hooks";
 function colorForMethod(method: string) {
   switch (method.toLowerCase()) {
     case "get":
+    case "query":
       return "primary";
     case "post":
       return "success";
