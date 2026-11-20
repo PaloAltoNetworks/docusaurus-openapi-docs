@@ -8,7 +8,14 @@
 module.exports = {
   plugins: ["cypress"],
   env: {
-    "cypress/globals": true,
+    mocha: true,
+  },
+  globals: {
+    cy: "readonly",
+    Cypress: "readonly",
+    expect: "readonly",
+    assert: "readonly",
+    chai: "readonly",
   },
   rules: {
     "testing-library/await-async-query": "off", // Cypress chains don't use promises

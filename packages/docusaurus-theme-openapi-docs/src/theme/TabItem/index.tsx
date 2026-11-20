@@ -18,8 +18,9 @@ import clsx from "clsx";
 
 import { type TabItemProps, useTabs } from "@theme/utils/tabsUtils";
 
-type Props = TabItemProps;
 import styles from "./styles.module.css";
+
+type Props = TabItemProps;
 
 function TabItemPanel({
   children,
