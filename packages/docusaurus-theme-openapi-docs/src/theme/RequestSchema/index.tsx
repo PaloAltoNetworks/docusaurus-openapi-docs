@@ -125,6 +125,7 @@ const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
                 {requestExamples &&
                   ResponseExamples({
                     responseExamples: requestExamples,
+                    schema: firstBody,
                     mimeType,
                   })}
                 {requestExample &&
@@ -211,6 +212,7 @@ const RequestSchemaComponent: React.FC<Props> = ({ title, body, style }) => {
           {requestExamples &&
             ResponseExamples({
               responseExamples: requestExamples,
+              schema: firstBody,
               mimeType: randomFirstKey,
             })}
           {requestExample &&

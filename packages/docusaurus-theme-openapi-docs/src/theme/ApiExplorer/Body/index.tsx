@@ -14,6 +14,7 @@ import FormItem from "@theme/ApiExplorer/FormItem";
 import LiveApp from "@theme/ApiExplorer/LiveEditor";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import Markdown from "@theme/Markdown";
+import { serializeExampleFields } from "@theme/ResponseExamples/serializeExample";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
 import { sampleFromSchema } from "docusaurus-plugin-openapi-docs/lib/openapi/createSchemaExample";
@@ -184,11 +185,14 @@ function Body({
       }
       if (examples) {
         for (const [key, ex] of Object.entries(examples)) {
-          if (ex.value === undefined) continue;
+          const body =
+            serializeExampleFields(ex, mediaType, schema) ??
+            (ex.value !== undefined ? stringifyExample(ex.value) : undefined);
+          if (body === undefined) continue;
 
           exBodies.push({
             label: key,
-            body: stringifyExample(ex.value),
+            body,
             summary: ex.summary,
           });
         }
@@ -239,11 +243,15 @@ function Body({
       }
       if (examples) {
         for (const [key, ex] of Object.entries(examples)) {
-          if (ex.value === undefined) continue;
+          const serialized = serializeExampleFields(ex, mediaType, schema);
+          if (serialized === undefined && ex.value === undefined) continue;
 
           exBodies.push({
             label: key,
-            body: formatExample(ex.value),
+            body:
+              serialized !== undefined
+                ? formatXmlBody(serialized)
+                : formatExample(ex.value),
             summary: ex.summary,
           });
         }

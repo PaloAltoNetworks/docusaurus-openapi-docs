@@ -14,6 +14,8 @@ import TabItem from "@theme/TabItem";
 import { sampleResponseFromSchema } from "docusaurus-plugin-openapi-docs/lib/openapi/createResponseExample";
 import format from "xml-formatter";
 
+import { serializeExampleFields } from "./serializeExample";
+
 export function json2xml(o: Record<string, any>, tab: string): string {
   const toXml = (v: any, name: string, ind: string): string => {
     let xml = "";
@@ -54,10 +56,12 @@ export function json2xml(o: Record<string, any>, tab: string): string {
 interface ResponseExamplesProps {
   responseExamples: any;
   mimeType: string;
+  schema?: any;
 }
 export const ResponseExamples: React.FC<ResponseExamplesProps> = ({
   responseExamples,
   mimeType,
+  schema,
 }): any => {
   let language = "shell";
   if (mimeType.endsWith("json")) language = "json";
@@ -66,10 +70,14 @@ export const ResponseExamples: React.FC<ResponseExamplesProps> = ({
   // Map response examples to an array of TabItem elements
   const examplesArray = Object.entries(responseExamples).map(
     ([exampleName, exampleValue]: any) => {
+      // OpenAPI 3.2 `serializedValue` / `dataValue` take precedence over the
+      // legacy `value` field.
       const isObject = typeof exampleValue.value === "object";
-      const responseExample = isObject
-        ? JSON.stringify(exampleValue.value, null, 2)
-        : exampleValue.value;
+      const responseExample =
+        serializeExampleFields(exampleValue, mimeType, schema) ??
+        (isObject
+          ? JSON.stringify(exampleValue.value, null, 2)
+          : exampleValue.value);
 
       return (
         // @ts-ignore
