@@ -81,6 +81,15 @@ export interface ThemeConfig {
      *   the request form opens in a "Try it" side panel.
      */
     layout?: "classic" | "modern";
+    /**
+     * When to show samples generated from the schema.
+     * - `"always"` (default): show them beside published examples.
+     * - `"fallback"`: show them only when no `example` or `examples` is
+     *   published.
+     * - `"never"`: never show them. Try-it starts with an empty body when no
+     *   example is published.
+     */
+    generateExamples?: "always" | "fallback" | "never";
   };
 }
 
