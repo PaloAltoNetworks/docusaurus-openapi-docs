@@ -7,6 +7,7 @@
 
 // @ts-nocheck
 import React, { useEffect, useId, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 import { useDoc } from "@docusaurus/plugin-content-docs/client";
 import { translate } from "@docusaurus/Translate";
@@ -48,7 +49,13 @@ import makeRequest, {
   RequestErrorType,
 } from "./makeRequest";
 
-function Request({ item }: { item: ApiItem }) {
+function Request({
+  item,
+  sendSlot,
+}: {
+  item: ApiItem;
+  sendSlot?: HTMLElement | null;
+}) {
   const postman = new sdk.Request(item.postman);
   const metadata = useDoc();
   const { proxy: frontMatterProxy } = metadata.frontMatter;
@@ -80,6 +87,7 @@ function Request({ item }: { item: ApiItem }) {
   const [expandServer, setExpandServer] = useState(true);
 
   const serverLabelId = useId();
+  const formId = useId();
 
   const allParams = [
     ...pathParams,
@@ -338,9 +346,65 @@ function Request({ item }: { item: ApiItem }) {
   const allDetailsExpanded =
     expandParams && expandBody && expandServer && expandAuth && expandAccept;
 
+  const sendRow = (
+    <div className="openapi-explorer__request-btn-row">
+      <button
+        className={clsx("openapi-explorer__request-btn", {
+          "openapi-explorer__request-btn--loading": inFlight,
+        })}
+        type="submit"
+        form={formId}
+        disabled={!!bodyError || inFlight}
+      >
+        {inFlight && (
+          <span
+            className="openapi-explorer__request-btn-spinner"
+            aria-hidden="true"
+          />
+        )}
+        {inFlight
+          ? translate({
+              id: "theme.openapi.request.sendingButton",
+              message: "Sending…",
+            })
+          : sendSlot
+            ? translate({
+                id: "theme.openapi.request.sendButtonShort",
+                message: "Send",
+              })
+            : translate({
+                id: "theme.openapi.request.sendButton",
+                message: "Send API Request",
+              })}
+      </button>
+      {inFlight && (
+        <button
+          type="button"
+          className="openapi-explorer__request-cancel-btn"
+          onClick={() => abortRef.current?.abort()}
+        >
+          {translate({
+            id: "theme.openapi.request.cancelButton",
+            message: "Cancel",
+          })}
+        </button>
+      )}
+      <kbd
+        className="openapi-explorer__request-shortcut"
+        title={translate({
+          id: "theme.openapi.request.shortcutHint",
+          message: "Press Ctrl+Enter (⌘+Enter on macOS) to send",
+        })}
+      >
+        {isMac ? "⌘ ↵" : "Ctrl ↵"}
+      </kbd>
+    </div>
+  );
+
   return (
     <FormProvider {...methods}>
       <form
+        id={formId}
         className="openapi-explorer__request-form"
         onSubmit={methods.handleSubmit(onSubmit)}
         onKeyDown={onKeyDown}
@@ -505,56 +569,10 @@ function Request({ item }: { item: ApiItem }) {
               })}
             </p>
           )}
-          {showRequestButton && (
-            <div className="openapi-explorer__request-btn-row">
-              <button
-                className={clsx("openapi-explorer__request-btn", {
-                  "openapi-explorer__request-btn--loading": inFlight,
-                })}
-                type="submit"
-                disabled={!!bodyError || inFlight}
-              >
-                {inFlight && (
-                  <span
-                    className="openapi-explorer__request-btn-spinner"
-                    aria-hidden="true"
-                  />
-                )}
-                {inFlight
-                  ? translate({
-                      id: "theme.openapi.request.sendingButton",
-                      message: "Sending…",
-                    })
-                  : translate({
-                      id: "theme.openapi.request.sendButton",
-                      message: "Send API Request",
-                    })}
-              </button>
-              {inFlight && (
-                <button
-                  type="button"
-                  className="openapi-explorer__request-cancel-btn"
-                  onClick={() => abortRef.current?.abort()}
-                >
-                  {translate({
-                    id: "theme.openapi.request.cancelButton",
-                    message: "Cancel",
-                  })}
-                </button>
-              )}
-              <kbd
-                className="openapi-explorer__request-shortcut"
-                title={translate({
-                  id: "theme.openapi.request.shortcutHint",
-                  message: "Press Ctrl+Enter (⌘+Enter on macOS) to send",
-                })}
-              >
-                {isMac ? "⌘ ↵" : "Ctrl ↵"}
-              </kbd>
-            </div>
-          )}
+          {showRequestButton && !sendSlot && sendRow}
         </div>
       </form>
+      {showRequestButton && sendSlot && createPortal(sendRow, sendSlot)}
     </FormProvider>
   );
 }

@@ -68,7 +68,9 @@ function ApiExplorer({
         )}
         {snippets}
         <ResponsePreview responses={item.responses as any} />
-        {canSend && <TryItDrawer item={item} infoPath={infoPath} />}
+        {canSend && (
+          <TryItDrawer item={item} infoPath={infoPath} snippets={snippets} />
+        )}
       </div>
     );
   }

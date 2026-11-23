@@ -92,11 +92,6 @@
     background-color 150ms ease,
     border-color 150ms ease;
 
-  svg {
-    width: 1rem;
-    height: 1rem;
-  }
-
   &:hover {
     background-color: var(--ifm-color-emphasis-100);
     border-color: var(--ifm-color-emphasis-400);
