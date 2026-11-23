@@ -183,7 +183,7 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 
 ### Markdown export
 
-Set `markdownExport: true` on a spec to give AI agents, headless browsers and other text-only clients a plain markdown version of every generated page. During `docusaurus build`, the plugin writes `<page>.md` next to each page route, for example `/docs/petstore/add-pet.md` for `/docs/petstore/add-pet`. The markdown includes everything that the page hides behind tabs or collapsed sections: all parameters, all request and response content types, every `oneOf`/`anyOf` option, and all nested fields with their full dotted paths. It includes examples from the spec, but not generated code samples.
+Set `markdownExport: true` on a spec to give AI agents, headless browsers and other text-only clients a plain markdown version of every generated page. During `docusaurus build`, the plugin writes `<page>.md` next to each page route, for example `/docs/petstore/add-pet.md` for `/docs/petstore/add-pet`. The markdown includes everything that the page hides behind tabs or collapsed sections: all parameters with their serialization style, all request and response content types, every `oneOf`/`anyOf` option and discriminator mapping, conditional rules, multipart encoding, response links, callbacks, and all nested fields with their full dotted paths. It includes examples from the spec, but not generated code samples.
 
 Info and tag pages list their operations with links to the operation markdown pages. If `downloadUrl` is set, API and info pages also link to the OpenAPI specification. Versions configured under `versions` inherit the setting.
 

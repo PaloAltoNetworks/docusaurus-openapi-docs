@@ -39,20 +39,7 @@ const DEMO_SPECS = [
  * Keywords that reach the markdown only through the generic fallback list.
  * Give a keyword a dedicated rule, then move it to FORMATTED_KEYWORDS.
  */
-const FALLBACK_KEYWORDS = new Set([
-  "contentEncoding",
-  "contentMediaType",
-  "dependentRequired",
-  "else",
-  "examples",
-  "externalDocs",
-  "if",
-  "not",
-  "patternProperties",
-  "prefixItems",
-  "propertyNames",
-  "then",
-]);
+const FALLBACK_KEYWORDS = new Set<string>([]);
 
 async function loadItems(specPath: string): Promise<ApiMetadata[]> {
   const files = await readOpenapiFiles(specPath);
@@ -69,7 +56,7 @@ async function loadItems(specPath: string): Promise<ApiMetadata[]> {
 
 function inlineCode(markdown: string): Set<string> {
   const withoutFences = markdown.replace(
-    /^(`{3,})[^\n]*\n[\s\S]*?^\1\s*$/gm,
+    /^[ \t]*(`{3,})[^\n]*\n[\s\S]*?^[ \t]*\1[ \t]*$/gm,
     ""
   );
   return new Set(
@@ -110,6 +97,7 @@ function missingFromMarkdown(item: ApiPageMetadata, markdown: string) {
   collectNames(api.parameters, found);
   collectNames(api.requestBody, found);
   collectNames(api.responses, found);
+  collectNames(api.callbacks, found);
 
   const missing: string[] = [];
   found.properties.forEach((name) => {

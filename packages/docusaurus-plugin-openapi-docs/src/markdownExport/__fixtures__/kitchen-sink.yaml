@@ -255,7 +255,7 @@ components:
           $ref: "#/components/schemas/Thing"
         longNote:
           type: string
-          example: This example is intentionally long so that it is longer than the inline example limit of one hundred twenty characters.
+          example: This example is intentionally long so that it is longer than the inline example limit of one hundred twenty characters, so it is shown as a separate code block.
         x-internal:
           type: string
           x-audience: internal

@@ -15,8 +15,12 @@ import {
 } from "./utils";
 import type {
   CallbackObject,
+  EncodingObject,
+  HeaderObject,
+  LinkObject,
   MediaTypeObject,
   ParameterObject,
+  ResponseObject,
   SecurityRequirementObject,
   SecuritySchemeObject,
   ServerObject,
@@ -62,6 +66,63 @@ function exampleBlocks(media: MediaTypeObject, mediaType: string): string[] {
   return blocks;
 }
 
+function indent(text: string, prefix: string): string {
+  return text
+    .split("\n")
+    .map((line) => (line === "" ? "" : `${prefix}${line}`))
+    .join("\n");
+}
+
+function headerLines(
+  headers: Record<string, HeaderObject> | undefined
+): string {
+  return Object.entries(headers ?? {})
+    .filter(([, header]) => !!header)
+    .map(([name, header]) =>
+      formatSchemaField(
+        name,
+        {
+          ...(header.schema ?? {}),
+          description: header.description ?? header.schema?.description,
+          deprecated: header.deprecated || header.schema?.deprecated,
+          example: header.example ?? header.schema?.example,
+        },
+        !!header.required
+      )
+    )
+    .join("\n");
+}
+
+function serializationDetails(
+  options: Pick<EncodingObject, "style" | "explode" | "allowReserved"> & {
+    allowEmptyValue?: boolean;
+  }
+): string[] {
+  return [
+    options.style ? `style: ${options.style}` : "",
+    options.explode !== undefined ? `explode: ${options.explode}` : "",
+    options.allowReserved ? "reserved characters allowed" : "",
+    options.allowEmptyValue ? "empty value allowed" : "",
+  ].filter(Boolean);
+}
+
+function encodingBlocks(
+  encoding: Record<string, EncodingObject> | undefined
+): string[] {
+  const entries = Object.entries(encoding ?? {}).filter(([, value]) => !!value);
+  if (entries.length === 0) return [];
+  const lines = entries.map(([name, value]) => {
+    const details = [
+      value.contentType ? `content type ${code(value.contentType)}` : "",
+      ...serializationDetails(value),
+    ].filter(Boolean);
+    const entry = `- ${code(name)}${details.length > 0 ? `: ${details.join(", ")}` : ""}`;
+    const headers = headerLines(value.headers);
+    return headers ? `${entry}\n  Headers:\n${indent(headers, "  ")}` : entry;
+  });
+  return ["Encoding of each part:", lines.join("\n")];
+}
+
 function contentBlocks(
   content: Record<string, MediaTypeObject> | undefined,
   level: string
@@ -73,6 +134,7 @@ function contentBlocks(
     if (media.schema !== undefined && media.schema !== null) {
       blocks.push(formatSchema(media.schema));
     }
+    blocks.push(...encodingBlocks(media.encoding));
     blocks.push(...exampleBlocks(media, mediaType));
   }
   return blocks;
@@ -165,7 +227,14 @@ function formatParameter(param: ParameterObject): string {
     "x-enumDescriptions":
       param["x-enumDescriptions"] ?? (schema as any)["x-enumDescriptions"],
   };
-  const lines = [formatSchemaField(param.name, merged, !!param.required)];
+  const lines = [
+    formatSchemaField(
+      param.name,
+      merged,
+      !!param.required,
+      serializationDetails(param as any)
+    ),
+  ];
   for (const [name, example] of Object.entries(param.examples ?? {})) {
     if (example?.value !== undefined) {
       lines.push(
@@ -176,63 +245,106 @@ function formatParameter(param: ParameterObject): string {
   return lines.join("\n");
 }
 
-function parameterBlocks(parameters: ParameterObject[] | undefined): string[] {
+function parameterBlocks(
+  parameters: ParameterObject[] | undefined,
+  level = "##"
+): string[] {
   const blocks: string[] = [];
   for (const [location, heading] of PARAMETER_LOCATIONS) {
     const params = (parameters ?? []).filter((p) => p?.in === location);
     if (params.length === 0) continue;
-    blocks.push(`### ${heading}`, params.map(formatParameter).join("\n"));
+    blocks.push(`${level}# ${heading}`, params.map(formatParameter).join("\n"));
   }
-  return blocks.length > 0 ? ["## Parameters", ...blocks] : [];
+  return blocks.length > 0 ? [`${level} Parameters`, ...blocks] : [];
 }
 
-function responseBlocks(api: ApiPageMetadata["api"]): string[] {
-  const blocks: string[] = ["## Responses"];
-  for (const [status, response] of Object.entries(api.responses ?? {})) {
-    blocks.push(`### ${status}`);
+function linkBlocks(links: Record<string, LinkObject> | undefined): string[] {
+  const entries = Object.entries(links ?? {}).filter(([, link]) => !!link);
+  if (entries.length === 0) return [];
+  const lines = entries.map(([name, link]) => {
+    const target = link.operationId
+      ? `operation ${code(link.operationId)}`
+      : link.operationRef
+        ? `operation ${code(link.operationRef)}`
+        : "";
+    const head = `- ${code(name)}${target ? `: ${target}` : ""}${link.description ? `. ${link.description.trim()}` : ""}`;
+    const params = Object.entries(link.parameters ?? {}).map(
+      ([param, value]) =>
+        `  - Parameter ${code(param)}: ${code(formatValue(value))}`
+    );
+    const body =
+      link.requestBody !== undefined
+        ? [`  - Request body: ${code(formatValue(link.requestBody))}`]
+        : [];
+    const server = link.server?.url
+      ? [`  - Server: ${code(link.server.url)}`]
+      : [];
+    return [head, ...params, ...body, ...server].join("\n");
+  });
+  return ["Links:", lines.join("\n")];
+}
+
+function responseBlocks(
+  responses: Record<string, ResponseObject> | undefined,
+  level: string
+): string[] {
+  const blocks: string[] = [];
+  for (const [status, response] of Object.entries(responses ?? {})) {
+    blocks.push(`${level} ${status}`);
     if (!response) continue;
     if (response.description) blocks.push(response.description.trim());
-    const headers = Object.entries(response.headers ?? {}).filter(
-      ([, header]) => !!header
-    );
-    if (headers.length > 0) {
-      blocks.push(
-        "Response headers:",
-        headers
-          .map(([name, header]) =>
-            formatSchemaField(
-              name,
-              {
-                ...(header.schema ?? {}),
-                description: header.description ?? header.schema?.description,
-              },
-              !!header.required
-            )
-          )
-          .join("\n")
-      );
-    }
-    blocks.push(...contentBlocks(response.content, "####"));
+    const headers = headerLines(response.headers);
+    if (headers) blocks.push("Response headers:", headers);
+    blocks.push(...contentBlocks(response.content, `${level}#`));
+    blocks.push(...linkBlocks(response.links));
   }
-  return blocks.length > 1 ? blocks : [];
+  return blocks;
 }
 
 function callbackBlocks(
   callbacks: Record<string, CallbackObject> | undefined
 ): string[] {
-  const entries = Object.entries(callbacks ?? {});
-  if (entries.length === 0) return [];
-  const lines = entries.flatMap(([name, callback]) =>
-    Object.entries(callback ?? {}).flatMap(([expression, pathItem]) =>
-      Object.entries(pathItem ?? {})
-        .filter(([, op]) => op && typeof op === "object" && "responses" in op)
-        .map(
-          ([method, op]: [string, any]) =>
-            `- ${code(name)}: ${code(`${method.toUpperCase()} ${expression}`)}${op.summary ? `: ${op.summary}` : ""}`
-        )
-    )
+  const blocks: string[] = [];
+  for (const [name, callback] of Object.entries(callbacks ?? {})) {
+    for (const [expression, pathItem] of Object.entries(callback ?? {})) {
+      for (const [method, op] of Object.entries(pathItem ?? {}) as [
+        string,
+        any,
+      ][]) {
+        if (!op || typeof op !== "object" || !("responses" in op)) continue;
+        blocks.push(
+          `### Callback ${code(name)}: ${code(`${method.toUpperCase()} ${expression}`)}`
+        );
+        if (op.summary) blocks.push(op.summary.trim());
+        if (op.description && op.description !== op.summary) {
+          blocks.push(op.description.trim());
+        }
+        blocks.push(...parameterBlocks(op.parameters, "####"));
+        if (op.requestBody) {
+          blocks.push(
+            `#### Request body${op.requestBody.required ? " (required)" : ""}`,
+            ...[op.requestBody.description?.trim()].filter(Boolean),
+            ...contentBlocks(op.requestBody.content, "#####")
+          );
+        }
+        const responses = responseBlocks(op.responses, "#####");
+        if (responses.length > 0) blocks.push("#### Responses", ...responses);
+      }
+    }
+  }
+  return blocks.length > 0 ? ["## Callbacks", ...blocks] : [];
+}
+
+function extensionBlocks(item: ApiPageMetadata): string[] {
+  const extensions = (item.api.extensions ?? []) as {
+    key: string;
+    value: unknown;
+  }[];
+  if (!item.frontMatter?.show_extensions || extensions.length === 0) return [];
+  const lines = extensions.map(
+    ({ key, value }) => `- ${code(key)}: ${code(formatValue(value))}`
   );
-  return lines.length > 0 ? ["## Callbacks", lines.join("\n")] : [];
+  return ["## Vendor extensions", lines.join("\n")];
 }
 
 export function createApiMarkdown(
@@ -240,13 +352,19 @@ export function createApiMarkdown(
   specUrl?: string
 ): string {
   const { api } = item;
+  const isWebhook = api.method === "event";
   const overview = [
-    `${code(`${api.method.toUpperCase()} ${api.path}`)}`,
+    isWebhook
+      ? "Webhook: the API sends this request to you."
+      : `${code(`${api.method.toUpperCase()} ${api.path}`)}`,
     api.operationId ? `Operation ID: ${code(api.operationId)}` : undefined,
     api.tags && api.tags.length > 0
       ? `Tags: ${api.tags.map((tag) => code(tag)).join(", ")}`
       : undefined,
     specUrl ? `OpenAPI specification: ${specUrl}` : undefined,
+    api.externalDocs?.url
+      ? `More information: ${api.externalDocs.description ? `${api.externalDocs.description} ` : ""}${api.externalDocs.url}`
+      : undefined,
   ]
     .filter(Boolean)
     .join("\n\n");
@@ -270,12 +388,14 @@ export function createApiMarkdown(
     item.description && item.description !== item.title
       ? item.description.trim()
       : undefined,
-    ...serverBlocks(api.servers),
+    ...(isWebhook ? [] : serverBlocks(api.servers)),
     ...securityBlocks(api.security, api.securitySchemes),
     ...parameterBlocks(api.parameters),
     ...(requestBody as string[]),
-    ...responseBlocks(api),
+    ...(Object.keys(api.responses ?? {}).length > 0 ? ["## Responses"] : []),
+    ...responseBlocks(api.responses, "###"),
     ...callbackBlocks(api.callbacks),
+    ...extensionBlocks(item),
   ]);
 }
 

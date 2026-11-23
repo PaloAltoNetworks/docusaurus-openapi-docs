@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import { code, formatValue, indentLines } from "./utils";
+import { code, fence, formatValue, indentLines } from "./utils";
 import { foldSiblingsIntoBranches, mergeAllOf } from "../markdown/createSchema";
 import { getSchemaName } from "../markdown/schema";
 import { SchemaObject } from "../openapi/types";
@@ -50,6 +50,22 @@ export const FORMATTED_KEYWORDS = new Set([
   "maxProperties",
   "pattern",
   "x-enumDescriptions",
+  "examples",
+  "externalDocs",
+  "contentMediaType",
+  "contentEncoding",
+  "not",
+  "prefixItems",
+  "patternProperties",
+  "propertyNames",
+  "if",
+  "then",
+  "else",
+  "dependentRequired",
+  "dependentSchemas",
+  "contains",
+  "minContains",
+  "maxContains",
 ]);
 
 /** Keywords that only affect naming or tooling, not the shape of the data. */
@@ -330,8 +346,96 @@ function qualifiers(schema: SchemaObject): string[] {
       result.push(`example: ${code(example)}`);
     }
   }
+  const examples = Array.isArray(s.examples) ? s.examples : [];
+  const shortExamples = examples
+    .map((value: unknown) => formatValue(value))
+    .filter((text: string) => text.length <= MAX_INLINE_EXAMPLE_LENGTH);
+  if (shortExamples.length > 0) {
+    result.push(
+      `examples: ${shortExamples.map((text: string) => code(text)).join(", ")}`
+    );
+  }
+  if (s.contentMediaType)
+    result.push(`media type: ${code(s.contentMediaType)}`);
+  if (s.contentEncoding) result.push(`encoding: ${code(s.contentEncoding)}`);
+  if (s.not !== undefined) {
+    result.push(`must not be: ${schemaSummary(s.not)}`);
+  }
+  if (s.propertyNames && typeof s.propertyNames === "object") {
+    result.push(`property names: ${schemaSummary(s.propertyNames)}`);
+  }
+  if (s.contains !== undefined) {
+    const bounds = [
+      s.minContains !== undefined && `at least ${s.minContains}`,
+      s.maxContains !== undefined && `at most ${s.maxContains}`,
+    ]
+      .filter(Boolean)
+      .join(" and ");
+    result.push(
+      `contains ${bounds || "at least one"} item(s) matching: ${schemaSummary(s.contains)}`
+    );
+  }
+  if (s.dependentRequired && typeof s.dependentRequired === "object") {
+    for (const [key, needs] of Object.entries(s.dependentRequired)) {
+      const list = (Array.isArray(needs) ? needs : [needs])
+        .map((name) => code(name))
+        .join(", ");
+      result.push(`${code(key)} requires ${list}`);
+    }
+  }
   result.push(...fallbackQualifiers(schema));
   return result;
+}
+
+/** One-line description of a schema, for keywords that take a schema. */
+function schemaSummary(schema: unknown): string {
+  const node = normalize(schema);
+  const target = circularTarget(node);
+  if (target !== undefined) return `circular reference to ${target}`;
+  const s = node as SchemaObject;
+  const parts = [
+    ...(s.type || s.format || s.items ? [typeLabel(s)] : []),
+    ...qualifiers(s),
+  ];
+  if (s.properties) {
+    parts.push(
+      `fields: ${Object.keys(s.properties)
+        .map((name) => code(name))
+        .join(", ")}`
+    );
+  }
+  return parts.length > 0 ? parts.join(", ") : "any value";
+}
+
+/** Examples too long for the field line, shown as code blocks below it. */
+function longExampleLines(schema: SchemaObject, indent: string): string[] {
+  const s = schema as any;
+  const values = [
+    ...(s.example !== undefined ? [s.example] : []),
+    ...(Array.isArray(s.examples) ? s.examples : []),
+  ];
+  return values
+    .filter((value) => formatValue(value).length > MAX_INLINE_EXAMPLE_LENGTH)
+    .flatMap((value) => {
+      const text =
+        typeof value === "string" ? value : JSON.stringify(value, null, 2);
+      return [
+        `${indent}Example:`,
+        "",
+        ...fence(text, typeof value === "string" ? "" : "json")
+          .split("\n")
+          .map((line) => `${indent}${line}`),
+        "",
+      ];
+    });
+}
+
+function externalDocsLines(schema: SchemaObject, indent: string): string[] {
+  const docs = schema.externalDocs;
+  if (!docs?.url) return [];
+  return [
+    `${indent}More information: ${docs.description ? `${docs.description} ` : ""}${docs.url}`,
+  ];
 }
 
 function enumDescriptionLines(schema: SchemaObject, indent: string): string[] {
@@ -385,6 +489,8 @@ function fieldLine(
   }
   lines.push(...enumDescriptionLines(s, `${indent}  `));
   lines.push(...inheritLines(s, `${indent}  `));
+  lines.push(...externalDocsLines(s, `${indent}  `));
+  lines.push(...longExampleLines(s, `${indent}  `));
   return lines;
 }
 
@@ -397,6 +503,21 @@ function childLines(
   if (depth > MAX_DEPTH) {
     return [`${indent}- Nested fields omitted (depth limit reached).`];
   }
+  return [
+    ...prefixItemLines(schema, path, indent, depth),
+    ...baseChildLines(schema, path, indent, depth),
+    ...patternPropertyLines(schema, path, indent, depth),
+    ...conditionalLines(schema, path, indent, depth),
+    ...dependentSchemaLines(schema, path, indent, depth),
+  ];
+}
+
+function baseChildLines(
+  schema: SchemaObject,
+  path: string,
+  indent: string,
+  depth: number
+): string[] {
   if (hasFields(schema)) {
     return propertyLines(schema, path, indent, depth);
   }
@@ -414,6 +535,99 @@ function childLines(
     }
   }
   return [];
+}
+
+function prefixItemLines(
+  schema: SchemaObject,
+  path: string,
+  indent: string,
+  depth: number
+): string[] {
+  const prefixItems = (schema as any).prefixItems;
+  if (!Array.isArray(prefixItems)) return [];
+  return prefixItems.flatMap((item: unknown, index: number) =>
+    fieldLines(`${path}[${index}]`, item, false, indent, depth, [
+      `item ${index + 1}`,
+    ])
+  );
+}
+
+function patternPropertyLines(
+  schema: SchemaObject,
+  path: string,
+  indent: string,
+  depth: number
+): string[] {
+  const patterns = (schema as any).patternProperties;
+  if (!patterns || typeof patterns !== "object") return [];
+  return Object.entries(patterns).flatMap(([pattern, property]) =>
+    fieldLines(
+      joinPath(path, `<key matching ${pattern}>`),
+      property,
+      false,
+      indent,
+      depth,
+      ["pattern property"]
+    )
+  );
+}
+
+/** A sub-schema shown as nested fields, or as a summary when it has none. */
+function subschemaLines(
+  schema: unknown,
+  path: string,
+  indent: string,
+  depth: number
+): string[] {
+  const node = normalize(schema);
+  const target = circularTarget(node);
+  if (target !== undefined) {
+    return [`${indent}- Circular reference to ${target}`];
+  }
+  const nested = childLines(node as SchemaObject, path, indent, depth + 1);
+  return nested.length > 0 ? nested : [`${indent}- ${schemaSummary(node)}`];
+}
+
+function conditionalLines(
+  schema: SchemaObject,
+  path: string,
+  indent: string,
+  depth: number
+): string[] {
+  const s = schema as any;
+  if (s.if === undefined) return [];
+  const lines = [
+    `${indent}- Conditional rule:`,
+    `${indent}  - If the value matches:`,
+    ...subschemaLines(s.if, path, `${indent}    `, depth),
+  ];
+  if (s.then !== undefined) {
+    lines.push(
+      `${indent}  - Then it must also match:`,
+      ...subschemaLines(s.then, path, `${indent}    `, depth)
+    );
+  }
+  if (s.else !== undefined) {
+    lines.push(
+      `${indent}  - Otherwise it must match:`,
+      ...subschemaLines(s.else, path, `${indent}    `, depth)
+    );
+  }
+  return lines;
+}
+
+function dependentSchemaLines(
+  schema: SchemaObject,
+  path: string,
+  indent: string,
+  depth: number
+): string[] {
+  const dependents = (schema as any).dependentSchemas;
+  if (!dependents || typeof dependents !== "object") return [];
+  return Object.entries(dependents).flatMap(([key, dependent]) => [
+    `${indent}- If ${code(joinPath(path, key))} is present, the value must also match:`,
+    ...subschemaLines(dependent, path, `${indent}  `, depth),
+  ]);
 }
 
 function fieldLines(
@@ -646,6 +860,10 @@ export function formatSchema(schema: unknown): string {
   const inherited = inheritLines(s, "");
   if (inherited.length > 0) {
     lines.push("", ...inherited);
+  }
+  const docs = externalDocsLines(s, "");
+  if (docs.length > 0) {
+    lines.push("", ...docs);
   }
 
   const fields = childLines(s, "", "", 0);
