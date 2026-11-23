@@ -320,7 +320,7 @@ Uses every OpenAPI feature the markdown export must cover.
 ## Operations
 
 - [Update a thing](/docs/kitchen-sink/update-thing.md): \`PUT /things/{thingId}\`
-- [Thing created](/docs/kitchen-sink/thing-created.md): \`EVENT webhook\`
+- [Thing created](/docs/kitchen-sink/thing-created.md): \`webhook\`
 "
 `;
 

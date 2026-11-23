@@ -414,7 +414,10 @@ export function createSchemaMarkdown(item: SchemaPageMetadata): string {
 function operationListBlocks(operations: OperationLink[]): string[] {
   if (operations.length === 0) return [];
   const lines = operations.map((op) => {
-    const label = `${op.method.toUpperCase()} ${op.path}`;
+    const label =
+      op.method === "event"
+        ? "webhook"
+        : `${op.method.toUpperCase()} ${op.path}`;
     const title = op.url ? `[${op.title}](${op.url})` : op.title;
     return `- ${title}: ${code(label)}`;
   });

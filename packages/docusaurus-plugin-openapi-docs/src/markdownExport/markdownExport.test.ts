@@ -182,6 +182,30 @@ describe("formatSchema", () => {
     expect(output).toContain("  - Option 1: circular reference to EmptyType");
   });
 
+  it("reports allOf members that cannot be merged", () => {
+    const output = formatSchema({
+      type: "object",
+      properties: {
+        numero: { allOf: [{ type: "string" }, { type: "integer" }] },
+      },
+    });
+    expect(output).toContain(
+      "- `numero` (all of: string, integer, conflicting allOf members, no value can match all of them)"
+    );
+  });
+
+  it("labels webhooks in operation lists", () => {
+    const output = createInfoMarkdown(
+      {
+        type: "info",
+        title: "Hooks",
+        info: { title: "Hooks", version: "1" },
+      } as unknown as InfoPageMetadata,
+      [{ title: "New pet", method: "event", path: "webhook" }]
+    );
+    expect(output).toContain("- New pet: `webhook`");
+  });
+
   it("merges allOf members", () => {
     const output = formatSchema({
       allOf: [

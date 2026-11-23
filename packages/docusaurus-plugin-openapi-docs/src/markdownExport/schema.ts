@@ -111,6 +111,7 @@ type SchemaNode = SchemaObject | string;
 
 const CIRCULAR_MARKER = "x-markdown-export-circular";
 const INHERITS_MARKER = "x-markdown-export-inherits";
+const CONFLICT_MARKER = "x-markdown-export-conflict";
 
 export function circularTarget(schema: unknown): string | undefined {
   if (schema && typeof schema === "object") {
@@ -237,10 +238,25 @@ function normalize(schema: unknown): SchemaNode {
     if (circularTarget(node) !== undefined) {
       return node;
     }
+    const members = node.allOf ?? [];
+    const conflicts: string[] = [];
     try {
-      node = mergeAllOf(node);
+      node = mergeAllOf(node, (message) => conflicts.push(message));
     } catch {
       // fall back to the unmerged schema
+    }
+    if (conflicts.length > 0) {
+      const labels = members
+        .map((member) => normalize(member))
+        .map((member) =>
+          circularTarget(member) !== undefined
+            ? `circular reference to ${circularTarget(member)}`
+            : typeLabel(member as SchemaObject)
+        );
+      node = {
+        ...node,
+        [CONFLICT_MARKER]: [...new Set(labels)],
+      } as SchemaObject;
     }
   }
   const branches = (node.oneOf ?? node.anyOf) as unknown[] | undefined;
@@ -259,6 +275,8 @@ function normalize(schema: unknown): SchemaNode {
 }
 
 function typeLabel(schema: SchemaObject): string {
+  const conflict = (schema as any)[CONFLICT_MARKER] as string[] | undefined;
+  if (conflict && !schema.type) return `all of: ${conflict.join(", ")}`;
   if (schema.oneOf) return "one of";
   if (schema.anyOf) return "any of";
   if (schema.const !== undefined && !schema.type) return "constant";
@@ -280,6 +298,9 @@ function qualifiers(schema: SchemaObject): string[] {
   const result: string[] = [];
   const s = schema as any;
 
+  if ((schema as any)[CONFLICT_MARKER]) {
+    result.push("conflicting allOf members, no value can match all of them");
+  }
   if (schema.deprecated) result.push("deprecated");
   if (schema.readOnly) result.push("read-only");
   if (schema.writeOnly) result.push("write-only");

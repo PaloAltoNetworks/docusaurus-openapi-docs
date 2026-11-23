@@ -130,17 +130,18 @@ function formatPage(
   }
 }
 
+/** Loads the pages of each spec file separately, one group per file. */
 async function loadItems(
   siteDir: string,
   apiOptions: APIOptions
-): Promise<ApiMetadata[]> {
+): Promise<ApiMetadata[][]> {
   const specPath = isURL(apiOptions.specPath)
     ? apiOptions.specPath
     : path.resolve(siteDir, apiOptions.specPath);
   const files = await readOpenapiFiles(specPath);
   return files
     .filter((file) => file.data !== undefined)
-    .flatMap((file) =>
+    .map((file) =>
       createItems(file.data, apiOptions, apiOptions.sidebarOptions ?? {})
     );
 }
@@ -167,9 +168,9 @@ export async function writeMarkdownExports({
   let written = 0;
 
   for (const apiOptions of configs) {
-    let items: ApiMetadata[];
+    let groups: ApiMetadata[][];
     try {
-      items = await loadItems(siteDir, apiOptions);
+      groups = await loadItems(siteDir, apiOptions);
     } catch (err) {
       console.error(
         chalk.red(`Markdown export failed to load "${apiOptions.specPath}"`),
@@ -184,36 +185,38 @@ export async function writeMarkdownExports({
       return doc ? toMarkdownUrl(doc.permalink) : undefined;
     };
 
-    const operations: OperationLink[] = items
-      .filter((item) => item.type === "api")
-      .map((item: any) => ({
-        title: item.title,
-        method: item.api.method,
-        path: item.api.path,
-        url: urlFor(item),
-        tags: item.api.tags,
-      }));
+    for (const items of groups) {
+      const operations: OperationLink[] = items
+        .filter((item) => item.type === "api")
+        .map((item: any) => ({
+          title: item.title,
+          method: item.api.method,
+          path: item.api.path,
+          url: urlFor(item),
+          tags: item.api.tags,
+        }));
 
-    for (const item of items) {
-      const url = urlFor(item);
-      if (!url) continue;
-      const relativeUrl = url.startsWith(baseUrl)
-        ? url.slice(baseUrl.length)
-        : url.replace(/^\/+/, "");
-      const filePath = path.join(outDir, relativeUrl);
-      try {
-        fs.mkdirSync(path.dirname(filePath), { recursive: true });
-        fs.writeFileSync(
-          filePath,
-          formatPage(item, operations, specUrl),
-          "utf8"
-        );
-        written += 1;
-      } catch (err) {
-        console.error(
-          chalk.red(`Failed to write markdown export "${filePath}"`),
-          chalk.yellow(err)
-        );
+      for (const item of items) {
+        const url = urlFor(item);
+        if (!url) continue;
+        const relativeUrl = url.startsWith(baseUrl)
+          ? url.slice(baseUrl.length)
+          : url.replace(/^\/+/, "");
+        const filePath = path.join(outDir, relativeUrl);
+        try {
+          fs.mkdirSync(path.dirname(filePath), { recursive: true });
+          fs.writeFileSync(
+            filePath,
+            formatPage(item, operations, specUrl),
+            "utf8"
+          );
+          written += 1;
+        } catch (err) {
+          console.error(
+            chalk.red(`Failed to write markdown export "${filePath}"`),
+            chalk.yellow(err)
+          );
+        }
       }
     }
   }

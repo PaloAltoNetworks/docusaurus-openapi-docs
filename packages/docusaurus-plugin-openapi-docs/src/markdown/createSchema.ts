@@ -93,11 +93,12 @@ function stripConflictingAdditionalProps(node: any): any {
 /**
  * Returns a merged representation of allOf array of schemas.
  */
-export function mergeAllOf(allOf: SchemaObject) {
-  const onMergeError = (msg: string) => {
+export function mergeAllOf(
+  allOf: SchemaObject,
+  onMergeError: (msg: string) => void = (msg) => {
     console.warn(msg);
-  };
-
+  }
+) {
   const mergedSchemas = merge(stripConflictingAdditionalProps(allOf), {
     onMergeError,
   }) as SchemaObject;
