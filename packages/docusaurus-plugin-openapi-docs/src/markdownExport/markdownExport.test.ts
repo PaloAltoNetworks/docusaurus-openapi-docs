@@ -99,6 +99,89 @@ describe("formatSchema", () => {
     expect(output).toContain("      - `pet.barks` (boolean)");
   });
 
+  it("lists every mapped schema of an object-level discriminator", () => {
+    const output = formatSchema({
+      type: "object",
+      discriminator: {
+        propertyName: "petType",
+        mapping: {
+          cat: {
+            title: "Cat",
+            allOf: [
+              "circular(Pet)",
+              {
+                type: "object",
+                properties: {
+                  petType: { type: "string" },
+                  meows: { type: "boolean" },
+                },
+              },
+            ],
+          },
+          dog: "#/components/schemas/Dog",
+        } as any,
+      },
+      properties: {
+        name: { type: "string" },
+        petType: { type: "string", description: "Type of a pet" },
+      },
+    });
+    expect(output).toContain(
+      "- `petType` (string, discriminator)\n  Type of a pet\n  - The value selects one of these schemas:"
+    );
+    expect(output).toContain("    - `cat`: Cat (object)");
+    expect(output).toContain(
+      "      Also includes all fields of Pet (circular reference, not repeated here)."
+    );
+    expect(output).toContain("      - `meows` (boolean)");
+    expect(output).not.toContain("      - `petType`");
+    expect(output).toContain("    - `dog`: Dog");
+    expect(output).toContain("- `name` (string)");
+  });
+
+  it("prints a oneOf discriminator once, not inside every option", () => {
+    const output = formatSchema({
+      type: "object",
+      properties: { type: { type: "string" } },
+      required: ["type"],
+      discriminator: {
+        propertyName: "type",
+        mapping: {
+          typeA: { title: "TypeA", type: "object" },
+          typeB: { title: "TypeB", type: "object" },
+        } as any,
+      },
+      oneOf: [
+        {
+          title: "TypeA",
+          type: "object",
+          properties: { propA: { type: "string" } },
+        },
+        {
+          title: "TypeB",
+          type: "object",
+          properties: { propB: { type: "number" } },
+        },
+      ],
+    });
+    expect(output.match(/The value selects/g)).toBeNull();
+    expect(output.match(/- Discriminator: `type`/g)?.length).toBe(1);
+    expect(output).toContain("  - `typeA` selects TypeA");
+    expect(output).toContain("  - Option 1: TypeA (object)");
+    expect(output).toContain("    - `type` (string, required)");
+    expect(output).toContain("    - `propA` (string)");
+  });
+
+  it("keeps shared properties when a oneOf branch is circular", () => {
+    const output = formatSchema({
+      type: "object",
+      properties: { type: { type: "string" } },
+      oneOf: ["circular(EmptyType)" as unknown as SchemaObject],
+    });
+    expect(output).toContain("- `type` (string)");
+    expect(output).toContain("  - Option 1: circular reference to EmptyType");
+  });
+
   it("merges allOf members", () => {
     const output = formatSchema({
       allOf: [

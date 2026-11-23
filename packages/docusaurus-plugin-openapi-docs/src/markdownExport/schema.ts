@@ -16,6 +16,7 @@ const MAX_INLINE_EXAMPLE_LENGTH = 120;
 type SchemaNode = SchemaObject | string;
 
 const CIRCULAR_MARKER = "x-markdown-export-circular";
+const INHERITS_MARKER = "x-markdown-export-inherits";
 
 export function circularTarget(schema: unknown): string | undefined {
   if (schema && typeof schema === "object") {
@@ -31,6 +32,8 @@ export function circularTarget(schema: unknown): string | undefined {
 /**
  * The allOf merge drops string members, which is how the spec loader marks
  * circular references. Replace them with marker objects that survive merging.
+ * An allOf that extends a circular parent keeps its own members and records
+ * the parent, so the extension's fields are not lost.
  */
 function protectCircular(schema: unknown, depth = 0): unknown {
   const target = circularTarget(schema);
@@ -45,11 +48,18 @@ function protectCircular(schema: unknown, depth = 0): unknown {
   }
   const node: any = { ...(schema as any) };
   if (Array.isArray(node.allOf)) {
-    const circular = node.allOf.find((member: unknown) =>
-      circularTarget(member)
-    );
-    if (circular !== undefined) {
-      return { [CIRCULAR_MARKER]: circularTarget(circular) };
+    const inherited = node.allOf
+      .map((member: unknown) => circularTarget(member))
+      .filter((target: string | undefined) => target !== undefined);
+    if (inherited.length > 0) {
+      const own = node.allOf.filter(
+        (member: unknown) => circularTarget(member) === undefined
+      );
+      if (own.length === 0) {
+        return { [CIRCULAR_MARKER]: inherited[0] };
+      }
+      node.allOf = own;
+      node[INHERITS_MARKER] = [...(node[INHERITS_MARKER] ?? []), ...inherited];
     }
   }
   for (const key of [
@@ -72,7 +82,52 @@ function protectCircular(schema: unknown, depth = 0): unknown {
       ])
     );
   }
+  const mapping = node.discriminator?.mapping;
+  if (mapping && typeof mapping === "object") {
+    node.discriminator = {
+      ...node.discriminator,
+      mapping: Object.fromEntries(
+        Object.entries(mapping).map(([value, target]) => [
+          value,
+          typeof target === "object"
+            ? protectCircular(target, depth + 1)
+            : target,
+        ])
+      ),
+    };
+  }
   return node;
+}
+
+function inheritLines(schema: SchemaObject, indent: string): string[] {
+  const inherited = (schema as any)[INHERITS_MARKER] as string[] | undefined;
+  if (!inherited || inherited.length === 0) return [];
+  const names = [...new Set(inherited)].join(", ");
+  return [
+    `${indent}Also includes all fields of ${names} (circular reference, not repeated here).`,
+  ];
+}
+
+function discriminatorMapping(
+  schema: SchemaObject
+): [string, unknown][] | undefined {
+  const mapping = schema.discriminator?.mapping as
+    Record<string, unknown> | undefined;
+  if (!schema.discriminator?.propertyName || !mapping) return undefined;
+  const entries = Object.entries(mapping);
+  return entries.length > 0 ? entries : undefined;
+}
+
+function withoutProperty(schema: SchemaObject, name: string): SchemaObject {
+  if (!schema.properties?.[name]) return schema;
+  const { [name]: _removed, ...properties } = schema.properties;
+  return {
+    ...schema,
+    properties,
+    required: Array.isArray(schema.required)
+      ? schema.required.filter((key) => key !== name)
+      : schema.required,
+  };
 }
 
 function normalize(schema: unknown): SchemaNode {
@@ -94,8 +149,17 @@ function normalize(schema: unknown): SchemaNode {
       // fall back to the unmerged schema
     }
   }
-  if ((node.oneOf || node.anyOf) && (node.properties || node.items)) {
+  const branches = (node.oneOf ?? node.anyOf) as unknown[] | undefined;
+  if (
+    branches &&
+    (node.properties || node.items) &&
+    !branches.some((branch) => circularTarget(branch) !== undefined)
+  ) {
+    const { discriminator } = node;
     node = foldSiblingsIntoBranches(node);
+    if (discriminator) {
+      node = { ...node, discriminator };
+    }
   }
   return node;
 }
@@ -213,7 +277,8 @@ function hasFields(schema: SchemaObject): boolean {
     (schema.additionalProperties &&
       typeof schema.additionalProperties === "object") ||
     schema.oneOf ||
-    schema.anyOf
+    schema.anyOf ||
+    discriminatorMapping(schema)
   );
 }
 
@@ -240,6 +305,7 @@ function fieldLine(
     lines.push(...indentLines(s.description, `${indent}  `));
   }
   lines.push(...enumDescriptionLines(s, `${indent}  `));
+  lines.push(...inheritLines(s, `${indent}  `));
   return lines;
 }
 
@@ -335,16 +401,85 @@ function variantLines(
       lines.push(`${indent}  - ${name}: circular reference to ${target}`);
       return;
     }
-    const s = node as SchemaObject;
+    let s = node as SchemaObject;
+    if (
+      s.discriminator?.propertyName &&
+      s.discriminator.propertyName === schema.discriminator?.propertyName
+    ) {
+      s = { ...s, discriminator: undefined };
+    }
     const heading = [name, s.title].filter(Boolean).join(": ");
     const details = [typeLabel(s), ...qualifiers(s)];
     lines.push(`${indent}  - ${heading} (${details.join(", ")})`);
     if (s.description) {
       lines.push(...indentLines(s.description, `${indent}    `));
     }
+    lines.push(...inheritLines(s, `${indent}    `));
     lines.push(...childLines(s, path, `${indent}    `, depth + 1));
   });
   return lines;
+}
+
+function mappingLines(
+  entries: [string, unknown][],
+  propertyName: string,
+  path: string,
+  indent: string,
+  depth: number
+): string[] {
+  const lines = [`${indent}  - The value selects one of these schemas:`];
+  for (const [value, target] of entries) {
+    const label = `${indent}    - ${code(value)}`;
+    if (typeof target === "string" && circularTarget(target) === undefined) {
+      lines.push(`${label}: ${target.split("/").pop()}`);
+      continue;
+    }
+    const node = normalize(target);
+    const circular = circularTarget(node);
+    if (circular !== undefined) {
+      lines.push(`${label}: circular reference to ${circular}`);
+      continue;
+    }
+    const s = withoutProperty(node as SchemaObject, propertyName);
+    lines.push(
+      `${label}: ${[s.title, `(${typeLabel(s)})`].filter(Boolean).join(" ")}`
+    );
+    if (s.description) {
+      lines.push(...indentLines(s.description, `${indent}      `));
+    }
+    lines.push(...inheritLines(s, `${indent}      `));
+    lines.push(...childLines(s, path, `${indent}      `, depth + 1));
+  }
+  return lines;
+}
+
+/**
+ * An object-level discriminator, rendered by the theme as one tab per mapping
+ * value. Lists every mapped schema under the discriminator property.
+ */
+function discriminatorPropertyLines(
+  schema: SchemaObject,
+  path: string,
+  indent: string,
+  depth: number
+): string[] {
+  const entries = discriminatorMapping(schema)!;
+  const name = schema.discriminator!.propertyName;
+  const required = Array.isArray(schema.required)
+    ? schema.required.includes(name)
+    : false;
+  const property = normalize(schema.properties?.[name] ?? {});
+  const field =
+    typeof property === "string" || circularTarget(property) !== undefined
+      ? fieldLine(joinPath(path, name), property, required, indent)
+      : fieldLine(
+          joinPath(path, name),
+          { ...(property as SchemaObject), oneOf: undefined, anyOf: undefined },
+          required,
+          indent,
+          ["discriminator"]
+        );
+  return [...field, ...mappingLines(entries, name, path, indent, depth)];
 }
 
 function propertyLines(
@@ -354,12 +489,33 @@ function propertyLines(
   depth: number
 ): string[] {
   if (schema.oneOf || schema.anyOf) {
-    return variantLines(schema, path, indent, depth);
+    const required = Array.isArray(schema.required) ? schema.required : [];
+    const shared = Object.entries(schema.properties ?? {}).flatMap(
+      ([name, property]) =>
+        fieldLines(
+          joinPath(path, name),
+          property,
+          required.includes(name),
+          indent,
+          depth
+        )
+    );
+    return [...shared, ...variantLines(schema, path, indent, depth)];
   }
 
   const lines: string[] = [];
   const required = Array.isArray(schema.required) ? schema.required : [];
+  const discriminatorName = discriminatorMapping(schema)
+    ? schema.discriminator!.propertyName
+    : undefined;
+  if (discriminatorName && !schema.properties?.[discriminatorName]) {
+    lines.push(...discriminatorPropertyLines(schema, path, indent, depth));
+  }
   for (const [name, property] of Object.entries(schema.properties ?? {})) {
+    if (name === discriminatorName) {
+      lines.push(...discriminatorPropertyLines(schema, path, indent, depth));
+      continue;
+    }
     lines.push(
       ...fieldLines(
         joinPath(path, name),
@@ -407,6 +563,10 @@ export function formatSchema(schema: unknown): string {
   const enumLines = enumDescriptionLines(s, "");
   if (enumLines.length > 0) {
     lines.push("", ...enumLines);
+  }
+  const inherited = inheritLines(s, "");
+  if (inherited.length > 0) {
+    lines.push("", ...inherited);
   }
 
   const fields = childLines(s, "", "", 0);
