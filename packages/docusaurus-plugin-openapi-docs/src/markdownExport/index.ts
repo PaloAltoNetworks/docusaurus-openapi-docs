@@ -182,7 +182,7 @@ export async function writeMarkdownExports({
     const specUrl = resolveSpecUrl(apiOptions.downloadUrl, baseUrl);
     const urlFor = (item: ApiMetadata): string | undefined => {
       const doc = docs.get(getDocSource(siteDir, apiOptions.outputDir, item));
-      return doc ? toMarkdownUrl(doc.permalink) : undefined;
+      return doc ? toMarkdownUrl(doc.permalink, baseUrl) : undefined;
     };
 
     for (const items of groups) {

@@ -10,12 +10,14 @@ import React, { useEffect, useRef, useState } from "react";
 import Head from "@docusaurus/Head";
 import { translate } from "@docusaurus/Translate";
 import useBaseUrl from "@docusaurus/useBaseUrl";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import useIsBrowser from "@docusaurus/useIsBrowser";
 
-export function toMarkdownUrl(permalink: string): string {
+export function toMarkdownUrl(permalink: string, baseUrl = "/"): string {
+  const base = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
   const withoutTrailingSlash = permalink.replace(/\/+$/, "");
-  return withoutTrailingSlash === ""
-    ? "/index.md"
+  return `${withoutTrailingSlash}/` === base || withoutTrailingSlash === ""
+    ? `${base}index.md`
     : `${withoutTrailingSlash}.md`;
 }
 
@@ -124,7 +126,8 @@ export default function MarkdownExport({
   permalink: string;
   downloadUrl?: string;
 }): React.JSX.Element {
-  const href = toMarkdownUrl(permalink);
+  const { siteConfig } = useDocusaurusContext();
+  const href = toMarkdownUrl(permalink, siteConfig.baseUrl);
   const specHref = useBaseUrl(downloadUrl ?? "");
   const isBrowser = useIsBrowser();
   const [status, setStatus] = useState<CopyStatus>("idle");
@@ -166,12 +169,29 @@ export default function MarkdownExport({
 
   const copy = async () => {
     closeMenu();
-    try {
-      const response = await fetch(href);
+    const text = fetch(href).then((response) => {
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}`);
       }
-      await navigator.clipboard.writeText(await response.text());
+      return response.text();
+    });
+    try {
+      // Safari requires the clipboard write to start inside the user gesture.
+      if (typeof ClipboardItem !== "undefined" && navigator.clipboard.write) {
+        try {
+          await navigator.clipboard.write([
+            new ClipboardItem({
+              "text/plain": text.then(
+                (value) => new Blob([value], { type: "text/plain" })
+              ),
+            }),
+          ]);
+        } catch {
+          await navigator.clipboard.writeText(await text);
+        }
+      } else {
+        await navigator.clipboard.writeText(await text);
+      }
       setStatus("copied");
     } catch {
       setStatus("error");

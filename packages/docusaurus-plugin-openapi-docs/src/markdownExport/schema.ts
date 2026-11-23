@@ -277,6 +277,7 @@ function normalize(schema: unknown): SchemaNode {
 function typeLabel(schema: SchemaObject): string {
   const conflict = (schema as any)[CONFLICT_MARKER] as string[] | undefined;
   if (conflict && !schema.type) return `all of: ${conflict.join(", ")}`;
+  if (schema.allOf) return "all of";
   if (schema.oneOf) return "one of";
   if (schema.anyOf) return "any of";
   if (schema.const !== undefined && !schema.type) return "constant";
@@ -290,6 +291,7 @@ function isEmptyObject(value: unknown): boolean {
   return (
     typeof value === "object" &&
     value !== null &&
+    !Array.isArray(value) &&
     Object.keys(value).length === 0
   );
 }
@@ -319,13 +321,19 @@ function qualifiers(schema: SchemaObject): string[] {
 
   if (typeof s.exclusiveMinimum === "number") {
     result.push(`> ${s.exclusiveMinimum}`);
-  } else if (schema.minimum !== undefined) {
-    result.push(`${s.exclusiveMinimum ? ">" : ">="} ${schema.minimum}`);
+  }
+  if (schema.minimum !== undefined) {
+    result.push(
+      `${s.exclusiveMinimum === true ? ">" : ">="} ${schema.minimum}`
+    );
   }
   if (typeof s.exclusiveMaximum === "number") {
     result.push(`< ${s.exclusiveMaximum}`);
-  } else if (schema.maximum !== undefined) {
-    result.push(`${s.exclusiveMaximum ? "<" : "<="} ${schema.maximum}`);
+  }
+  if (schema.maximum !== undefined) {
+    result.push(
+      `${s.exclusiveMaximum === true ? "<" : "<="} ${schema.maximum}`
+    );
   }
   if (schema.multipleOf !== undefined) {
     result.push(`multiple of ${schema.multipleOf}`);
@@ -480,6 +488,7 @@ function hasFields(schema: SchemaObject): boolean {
     schema.properties ||
     (schema.additionalProperties &&
       typeof schema.additionalProperties === "object") ||
+    schema.allOf ||
     schema.oneOf ||
     schema.anyOf ||
     discriminatorMapping(schema)
@@ -554,8 +563,25 @@ function baseChildLines(
     if (hasFields(itemSchema) || itemSchema.items !== undefined) {
       return childLines(itemSchema, `${path}[]`, indent, depth + 1);
     }
+    return scalarItemLines(itemSchema, `${path}[]`, indent);
   }
   return [];
+}
+
+/**
+ * Details of a scalar array item. The parent line already shows the item type
+ * and its possible values, so a line is added only when there is more.
+ */
+function scalarItemLines(
+  items: SchemaObject,
+  path: string,
+  indent: string
+): string[] {
+  const rest = { ...items };
+  delete rest.enum;
+  const lines = fieldLine(path, rest, false, indent);
+  const bare = `${indent}- ${code(path)} (${typeLabel(rest)})`;
+  return lines.length === 1 && lines[0] === bare ? [] : lines;
 }
 
 function prefixItemLines(
@@ -694,16 +720,19 @@ function variantLines(
   schema: SchemaObject,
   path: string,
   indent: string,
-  depth: number
+  depth: number,
+  kind: "allOf" | "oneOf" | "anyOf"
 ): string[] {
-  const kind = schema.oneOf ? "oneOf" : "anyOf";
   const branches = (schema[kind] ?? []) as unknown[];
-  const label =
-    kind === "oneOf"
-      ? "Exactly one of these options:"
-      : "One or more of these options:";
+  const label = {
+    allOf: "All of these must match:",
+    oneOf: "Exactly one of these options:",
+    anyOf: "One or more of these options:",
+  }[kind];
   const lines = [
-    ...discriminatorLines(schema, path, indent),
+    ...(kind === "oneOf" || (kind === "anyOf" && !schema.oneOf)
+      ? discriminatorLines(schema, path, indent)
+      : []),
     `${indent}- ${label}`,
   ];
 
@@ -802,7 +831,10 @@ function propertyLines(
   indent: string,
   depth: number
 ): string[] {
-  if (schema.oneOf || schema.anyOf) {
+  const kinds = (["allOf", "oneOf", "anyOf"] as const).filter(
+    (kind) => schema[kind]
+  );
+  if (kinds.length > 0) {
     const required = Array.isArray(schema.required) ? schema.required : [];
     const shared = Object.entries(schema.properties ?? {}).flatMap(
       ([name, property]) =>
@@ -814,7 +846,12 @@ function propertyLines(
           depth
         )
     );
-    return [...shared, ...variantLines(schema, path, indent, depth)];
+    return [
+      ...shared,
+      ...kinds.flatMap((kind) =>
+        variantLines(schema, path, indent, depth, kind)
+      ),
+    ];
   }
 
   const lines: string[] = [];

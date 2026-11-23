@@ -187,16 +187,7 @@ Set `markdownExport: true` on a spec to give AI agents, headless browsers and ot
 
 Info and tag pages list their operations with links to the operation markdown pages. If `downloadUrl` is set, API and info pages also link to the OpenAPI specification. Versions configured under `versions` inherit the setting.
 
-Each page also gets a `<link rel="alternate" type="text/markdown">` tag and a "Copy page" menu with "Copy page" and "View as Markdown" actions. If `downloadUrl` is set, the menu also has a "Download API spec" action on every page. These need the `markdown_export` and `download_url` front matter that `gen-api-docs` adds when the option is enabled, so regenerate the MDX files after you enable it. If you use custom `template`, `infoTemplate`, `tagTemplate` or `schemaTemplate` files, add this to their front matter:
-
-```
-{{#frontMatter.markdown_export}}
-markdown_export: true
-{{/frontMatter.markdown_export}}
-{{#frontMatter.download_url}}
-download_url: "{{{frontMatter.download_url}}}"
-{{/frontMatter.download_url}}
-```
+Each page also gets a `<link rel="alternate" type="text/markdown">` tag and a "Copy page" menu with "Copy page" and "View as Markdown" actions. If `downloadUrl` is set, the menu also has a "Download API spec" action on every page. These need the `markdown_export` and `download_url` front matter that `gen-api-docs` adds when the option is enabled, so regenerate the MDX files after you enable it. The keys are added to custom `template`, `infoTemplate`, `tagTemplate` and `schemaTemplate` output too.
 
 The markdown files are written only by `docusaurus build`. They are not available with `docusaurus start`.
 

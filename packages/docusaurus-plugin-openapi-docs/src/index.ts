@@ -28,6 +28,7 @@ import {
   runWithExternalization,
 } from "./markdown/utils";
 import { writeMarkdownExports } from "./markdownExport";
+import { withMarkdownExportFrontMatter } from "./markdownExport/utils";
 import { processOpenapiFiles, readOpenapiFiles } from "./openapi";
 import { OptionsSchema } from "./options";
 import generateSidebarSlice from "./sidebars";
@@ -270,12 +271,6 @@ show_extensions: true
 {{#frontMatter.mask_credentials_disabled}}
 mask_credentials: false
 {{/frontMatter.mask_credentials_disabled}}
-{{#frontMatter.markdown_export}}
-markdown_export: true
-{{/frontMatter.markdown_export}}
-{{#frontMatter.download_url}}
-download_url: "{{{frontMatter.download_url}}}"
-{{/frontMatter.download_url}}
 ---
 
 {{{markdown}}}
@@ -290,12 +285,6 @@ description: "{{{frontMatter.description}}}"
 sidebar_label: "{{{title}}}"
 hide_title: true
 custom_edit_url: null
-{{#frontMatter.markdown_export}}
-markdown_export: true
-{{/frontMatter.markdown_export}}
-{{#frontMatter.download_url}}
-download_url: "{{{frontMatter.download_url}}}"
-{{/frontMatter.download_url}}
 ---
 
 {{{markdown}}}
@@ -315,12 +304,6 @@ id: {{{id}}}
 title: "{{{frontMatter.description}}}"
 description: "{{{frontMatter.description}}}"
 custom_edit_url: null
-{{#frontMatter.markdown_export}}
-markdown_export: true
-{{/frontMatter.markdown_export}}
-{{#frontMatter.download_url}}
-download_url: "{{{frontMatter.download_url}}}"
-{{/frontMatter.download_url}}
 ---
 
 {{{markdown}}}
@@ -350,12 +333,6 @@ sample: {{{frontMatter.sample}}}
 api_layout: {{{frontMatter.api_layout}}}
 {{/frontMatter.api_layout}}
 custom_edit_url: null
-{{#frontMatter.markdown_export}}
-markdown_export: true
-{{/frontMatter.markdown_export}}
-{{#frontMatter.download_url}}
-download_url: "{{{frontMatter.download_url}}}"
-{{/frontMatter.download_url}}
 ---
 
 {{{markdown}}}
@@ -441,10 +418,14 @@ download_url: "{{{frontMatter.download_url}}}"
           if (item.infoId) item.infoPath = infoBasePath;
         }
 
-        const view = render(mdTemplate, item);
-        const utils = render(infoMdTemplate, item);
-        // eslint-disable-next-line testing-library/render-result-naming-convention
-        const tagUtils = render(tagMdTemplate, item);
+        const generatePage = (template: string) =>
+          withMarkdownExportFrontMatter(
+            render(template, item),
+            item.frontMatter
+          );
+        const view = generatePage(mdTemplate);
+        const utils = generatePage(infoMdTemplate);
+        const tagUtils = generatePage(tagMdTemplate);
 
         if (item.type === "api") {
           if (!fs.existsSync(`${outputDir}/${item.id}.api.mdx`)) {

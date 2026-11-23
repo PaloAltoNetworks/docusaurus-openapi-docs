@@ -17,6 +17,7 @@ import {
   resolveSpecUrl,
   toMarkdownUrl,
 } from ".";
+import { withMarkdownExportFrontMatter } from "./utils";
 import { SchemaObject } from "../openapi/types";
 import type {
   ApiPageMetadata,
@@ -267,6 +268,59 @@ describe("formatSchema", () => {
     );
   });
 
+  it("shows constraints of scalar array items", () => {
+    const output = formatSchema({
+      type: "object",
+      properties: {
+        tags: {
+          type: "array",
+          items: {
+            type: "string",
+            pattern: "^[a-z]+$",
+            maxLength: 20,
+            description: "Lowercase tag.",
+          },
+        },
+        ids: { type: "array", items: { type: "string" } },
+      },
+    });
+    expect(output).toContain(
+      "  - `tags[]` (string, max length: 20, pattern: `^[a-z]+$`)\n    Lowercase tag."
+    );
+    expect(output).not.toContain("`ids[]`");
+  });
+
+  it("shows minimum and maximum next to numeric exclusive bounds", () => {
+    expect(
+      formatSchema({
+        type: "integer",
+        minimum: 5,
+        exclusiveMinimum: 0,
+        maximum: 10,
+        exclusiveMaximum: 20,
+      })
+    ).toContain("> 0, >= 5, < 20, <= 10");
+  });
+
+  it("shows an empty array default", () => {
+    expect(
+      formatSchema({ type: "array", items: { type: "string" }, default: [] })
+    ).toContain("default: `[]`");
+  });
+
+  it("lists allOf members that could not be merged", () => {
+    const output = formatSchema({
+      allOf: [
+        { type: "object", properties: { a: { type: "string" } } },
+        { $ref: "#/components/schemas/Missing" },
+      ],
+    });
+    expect(output).toContain("Schema: `all of`");
+    expect(output).toContain("- All of these must match:");
+    expect(output).toContain("- `a` (string)");
+    expect(output).toContain("$ref: `#/components/schemas/Missing`");
+  });
+
   it("shows enum values and enum descriptions", () => {
     const output = formatSchema({
       type: "object",
@@ -477,6 +531,12 @@ describe("routing helpers", () => {
     expect(toMarkdownUrl("/")).toBe("/index.md");
   });
 
+  it("maps a permalink at the site baseUrl to index.md", () => {
+    expect(toMarkdownUrl("/docs/", "/docs/")).toBe("/docs/index.md");
+    expect(toMarkdownUrl("/docs", "/docs/")).toBe("/docs/index.md");
+    expect(toMarkdownUrl("/docs/shop", "/docs/")).toBe("/docs/shop.md");
+  });
+
   it("maps items to their generated MDX sources", () => {
     expect(
       getDocSource("/site", "docs/shop/", {
@@ -541,5 +601,34 @@ describe("routing helpers", () => {
       "docs/shop/1.0",
     ]);
     expect(configs[1].markdownExport).toBe(true);
+  });
+});
+
+describe("withMarkdownExportFrontMatter", () => {
+  const page = "---\nid: create-order\ntitle: Create order\n---\n\nBody\n";
+
+  it("adds the export keys to the front matter", () => {
+    expect(
+      withMarkdownExportFrontMatter(page, {
+        markdown_export: true,
+        download_url: "/shop.yaml",
+      })
+    ).toBe(
+      '---\nid: create-order\ntitle: Create order\nmarkdown_export: true\ndownload_url: "/shop.yaml"\n---\n\nBody\n'
+    );
+  });
+
+  it("keeps keys that the template already writes", () => {
+    const templated = page.replace("---\n\n", "markdown_export: true\n---\n\n");
+    expect(
+      withMarkdownExportFrontMatter(templated, { markdown_export: true })
+    ).toBe(templated);
+  });
+
+  it("leaves the page unchanged when the export is off", () => {
+    expect(withMarkdownExportFrontMatter(page, {})).toBe(page);
+    expect(
+      withMarkdownExportFrontMatter("Body", { markdown_export: true })
+    ).toBe("Body");
   });
 });
