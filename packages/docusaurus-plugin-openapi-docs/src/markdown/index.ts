@@ -113,6 +113,7 @@ export function createInfoPageMD(
     },
     securitySchemes,
     downloadUrl,
+    frontMatter,
   }: InfoPageMetadata,
   parseMarkdown?: MarkdownParser
 ) {
@@ -124,7 +125,7 @@ export function createInfoPageMD(
     `import Export from "@theme/ApiExplorer/Export";\n\n`,
 
     createVersionBadge(version),
-    createDownload(downloadUrl),
+    createDownload(frontMatter?.markdown_export ? undefined : downloadUrl),
     createHeading(title),
     createLogo(logo, darkLogo),
     createDescription(description, parseMarkdown),

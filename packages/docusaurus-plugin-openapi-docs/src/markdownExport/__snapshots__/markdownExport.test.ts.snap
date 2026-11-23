@@ -1,0 +1,88 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createApiMarkdown renders the full operation 1`] = `
+"# Create an order
+
+\`POST /orders/{storeId}\`
+
+Operation ID: \`createOrder\`
+
+Tags: \`orders\`
+
+Creates a new order.
+
+## Servers
+
+- \`https://api.example.com\`
+
+## Authentication
+
+This operation requires:
+
+- \`bearer\` (HTTP bearer)
+
+## Parameters
+
+### Path parameters
+
+- \`storeId\` (string, required)
+  Store ID.
+
+### Query parameters
+
+- \`dryRun\` (boolean, default: \`false\`)
+
+## Request body (required)
+
+### Content type: \`application/json\`
+
+Schema: \`object\`
+
+- \`id\` (string<ulid>, read-only)
+  ID.
+- \`orderItems\` (object[], required, min items: 1)
+  List of items to include in the order.
+  - \`orderItems[].quantity\` (integer, required, >= 1)
+    Quantity of the menu item.
+  - \`orderItems[].comment\` (string, max length: 500)
+
+Example:
+
+\`\`\`json
+{
+  \\"orderItems\\": [
+    {
+      \\"quantity\\": 2
+    }
+  ]
+}
+\`\`\`
+
+## Responses
+
+### 201
+
+Order created.
+
+Response headers:
+
+- \`X-Request-Id\` (string)
+  Request ID.
+
+#### Content type: \`application/json\`
+
+Schema: \`object\`
+
+- \`id\` (string<ulid>, read-only)
+  ID.
+- \`orderItems\` (object[], required, min items: 1)
+  List of items to include in the order.
+  - \`orderItems[].quantity\` (integer, required, >= 1)
+    Quantity of the menu item.
+  - \`orderItems[].comment\` (string, max length: 500)
+
+### 400
+
+Bad request.
+"
+`;

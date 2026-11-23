@@ -27,6 +27,7 @@ import {
   loadMarkdownParser,
   runWithExternalization,
 } from "./markdown/utils";
+import { writeMarkdownExports } from "./markdownExport";
 import { processOpenapiFiles, readOpenapiFiles } from "./openapi";
 import { OptionsSchema } from "./options";
 import generateSidebarSlice from "./sidebars";
@@ -269,6 +270,12 @@ show_extensions: true
 {{#frontMatter.mask_credentials_disabled}}
 mask_credentials: false
 {{/frontMatter.mask_credentials_disabled}}
+{{#frontMatter.markdown_export}}
+markdown_export: true
+{{/frontMatter.markdown_export}}
+{{#frontMatter.download_url}}
+download_url: "{{{frontMatter.download_url}}}"
+{{/frontMatter.download_url}}
 ---
 
 {{{markdown}}}
@@ -283,6 +290,12 @@ description: "{{{frontMatter.description}}}"
 sidebar_label: "{{{title}}}"
 hide_title: true
 custom_edit_url: null
+{{#frontMatter.markdown_export}}
+markdown_export: true
+{{/frontMatter.markdown_export}}
+{{#frontMatter.download_url}}
+download_url: "{{{frontMatter.download_url}}}"
+{{/frontMatter.download_url}}
 ---
 
 {{{markdown}}}
@@ -302,6 +315,12 @@ id: {{{id}}}
 title: "{{{frontMatter.description}}}"
 description: "{{{frontMatter.description}}}"
 custom_edit_url: null
+{{#frontMatter.markdown_export}}
+markdown_export: true
+{{/frontMatter.markdown_export}}
+{{#frontMatter.download_url}}
+download_url: "{{{frontMatter.download_url}}}"
+{{/frontMatter.download_url}}
 ---
 
 {{{markdown}}}
@@ -331,6 +350,12 @@ sample: {{{frontMatter.sample}}}
 api_layout: {{{frontMatter.api_layout}}}
 {{/frontMatter.api_layout}}
 custom_edit_url: null
+{{#frontMatter.markdown_export}}
+markdown_export: true
+{{/frontMatter.markdown_export}}
+{{#frontMatter.download_url}}
+download_url: "{{{frontMatter.download_url}}}"
+{{/frontMatter.download_url}}
 ---
 
 {{{markdown}}}
@@ -364,6 +389,14 @@ custom_edit_url: null
       loadedApi.map(async (item) => {
         if (downloadUrl) {
           item.downloadUrl = downloadUrl;
+        }
+
+        if (options.markdownExport) {
+          item.frontMatter = {
+            ...item.frontMatter,
+            markdown_export: true,
+            ...(downloadUrl && { download_url: downloadUrl }),
+          };
         }
 
         // Generate markdown, with externalization for API and schema pages
@@ -791,6 +824,24 @@ custom_edit_url: null
 
   return {
     name: `docusaurus-plugin-openapi-docs`,
+
+    async postBuild({ outDir, baseUrl, plugins: loadedPlugins }) {
+      const docsConfig: any = getDocsPluginConfig(
+        presetsPlugins,
+        docsPlugin,
+        docsPluginId
+      );
+      await writeMarkdownExports({
+        siteDir,
+        outDir,
+        baseUrl,
+        plugins: loadedPlugins,
+        options,
+        docsInstanceId: docsConfig
+          ? (docsConfig.id ?? "default")
+          : docsPluginId,
+      });
+    },
 
     extendCli(cli): void {
       cli

@@ -87,4 +87,8 @@ export interface ThemeConfig {
 export interface DocFrontMatter extends DocusaurusDocFrontMatter {
   /** Provides OpenAPI Docs with a reference path to their respective Info Doc */
   info_path?: string;
+  /** Set by the plugin when a markdown version of the page is built (`<page>.md`) */
+  markdown_export?: boolean;
+  /** OpenAPI spec URL shown in the page actions menu when markdown_export is set */
+  download_url?: string;
 }

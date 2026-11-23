@@ -113,7 +113,7 @@ export function mergeAllOf(allOf: SchemaObject) {
  *
  * See https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1218
  */
-function foldSiblingsIntoBranches(schema: SchemaObject): SchemaObject {
+export function foldSiblingsIntoBranches(schema: SchemaObject): SchemaObject {
   const branchKey = schema.oneOf ? "oneOf" : schema.anyOf ? "anyOf" : undefined;
   if (!branchKey) return schema;
 

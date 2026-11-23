@@ -21,6 +21,7 @@ import DocItemLayout from "@theme/ApiItem/Layout";
 import CodeBlock from "@theme/CodeBlock";
 import type { Props } from "@theme/DocItem";
 import DocItemMetadata from "@theme/DocItem/Metadata";
+import MarkdownExport from "@theme/MarkdownExport";
 import { SchemaExpansionProvider } from "@theme/SchemaExpansion";
 import SkeletonLoader from "@theme/SkeletonLoader";
 import clsx from "clsx";
@@ -71,7 +72,17 @@ export default function ApiItem(props: Props): JSX.Element {
   const docHtmlClassName = `docs-doc-id-${props.content.metadata.id}`;
   const MDXComponent = props.content;
   const { frontMatter } = MDXComponent;
-  const { info_path: infoPath } = frontMatter as DocFrontMatter;
+  const {
+    info_path: infoPath,
+    markdown_export: markdownExport,
+    download_url: downloadUrl,
+  } = frontMatter as DocFrontMatter;
+  const markdownExportLinks = markdownExport ? (
+    <MarkdownExport
+      permalink={props.content.metadata.permalink}
+      downloadUrl={downloadUrl}
+    />
+  ) : null;
   let { api } = frontMatter as ApiFrontMatter;
   const { schema } = frontMatter as SchemaFrontMatter;
   const { sample } = frontMatter as SampleFrontMatter;
@@ -195,6 +206,7 @@ export default function ApiItem(props: Props): JSX.Element {
               <SchemaExpansionProvider>
                 <div className={clsx("row", "theme-api-markdown")}>
                   <div className="col col--7 openapi-left-panel__container">
+                    {markdownExportLinks}
                     <MDXComponent />
                   </div>
                   <div className="col col--5 openapi-right-panel__container">
@@ -220,6 +232,7 @@ export default function ApiItem(props: Props): JSX.Element {
             <SchemaExpansionProvider>
               <div className={clsx("row", "theme-api-markdown")}>
                 <div className="col col--7 openapi-left-panel__container schema">
+                  {markdownExportLinks}
                   <MDXComponent />
                 </div>
                 <div className="col col--5 openapi-right-panel__container">
@@ -243,6 +256,7 @@ export default function ApiItem(props: Props): JSX.Element {
         <DocItemLayout>
           <div className="row">
             <div className="col col--12 markdown">
+              {markdownExportLinks}
               <MDXComponent />
             </div>
           </div>
