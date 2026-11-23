@@ -5,14 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 
 import BrowserOnly from "@docusaurus/BrowserOnly";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import { translate } from "@docusaurus/Translate";
 import { openTryIt } from "@theme/ApiExplorer/TryItDrawer/events";
 import useCanSendRequest from "@theme/ApiExplorer/useCanSendRequest";
-import { copyToClipboard } from "@theme/ApiExplorer/utils/copyToClipboard";
 import { colorForMethod, renderPath } from "@theme/ApiExplorer/utils/endpoint";
 import { useTypedSelector } from "@theme/ApiItem/hooks";
 
@@ -30,55 +29,17 @@ function resolveServerUrl(serverValue: any): string {
   return url;
 }
 
-function EndpointActions({ url, canTry }: { url: string; canTry: boolean }) {
-  const [copied, setCopied] = useState(false);
-  const timeout = useRef<number | undefined>(undefined);
-
-  useEffect(() => () => window.clearTimeout(timeout.current), []);
-
-  const copyLabel = copied
-    ? translate({ id: "theme.openapi.endpoint.copied", message: "Copied" })
-    : translate({ id: "theme.openapi.endpoint.copyUrl", message: "Copy URL" });
-
+function EndpointActions({ canTry }: { canTry: boolean }) {
+  if (!canTry) return null;
   return (
     <div className="openapi__method-endpoint-actions">
       <button
         type="button"
-        className="openapi__method-endpoint-btn"
-        aria-label={copyLabel}
-        title={copyLabel}
-        onClick={async () => {
-          if (!(await copyToClipboard(url))) return;
-          setCopied(true);
-          window.clearTimeout(timeout.current);
-          timeout.current = window.setTimeout(() => setCopied(false), 1500);
-        }}
+        className="openapi__method-endpoint-btn openapi__method-endpoint-try"
+        onClick={openTryIt}
       >
-        {copied ? (
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path
-              fill="currentColor"
-              d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
-            />
-          </svg>
-        ) : (
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path
-              fill="currentColor"
-              d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
-            />
-          </svg>
-        )}
+        {translate({ id: "theme.openapi.endpoint.tryIt", message: "Try it" })}
       </button>
-      {canTry && (
-        <button
-          type="button"
-          className="openapi__method-endpoint-btn openapi__method-endpoint-try"
-          onClick={openTryIt}
-        >
-          {translate({ id: "theme.openapi.endpoint.tryIt", message: "Try it" })}
-        </button>
-      )}
     </div>
   );
 }
@@ -131,11 +92,7 @@ function ClientMethodEndpoint({ method, path, context }: Props) {
       }
       actions={
         !isCallback && method !== "event" ? (
-          <BrowserOnly>
-            {() => (
-              <EndpointActions url={`${serverUrl}${path}`} canTry={canTry} />
-            )}
-          </BrowserOnly>
+          <BrowserOnly>{() => <EndpointActions canTry={canTry} />}</BrowserOnly>
         ) : undefined
       }
     />

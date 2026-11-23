@@ -16,7 +16,8 @@
 .openapi-try-it__backdrop {
   position: absolute;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.35);
+  background-color: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
   opacity: 0;
   transition: opacity 200ms ease;
 
@@ -27,19 +28,33 @@
 
 .openapi-try-it__panel {
   position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
+  top: 50%;
+  left: 50%;
   display: flex;
   flex-direction: column;
-  width: min(640px, 100vw);
+  width: min(1280px, calc(100vw - 4rem));
+  height: min(88vh, calc(100vh - 4rem));
+  border: 1px solid var(--ifm-toc-border-color);
+  border-radius: 0.75rem;
   background-color: var(--ifm-background-surface-color);
-  box-shadow: -12px 0 32px rgba(0, 0, 0, 0.18);
-  transform: translateX(100%);
-  transition: transform 200ms ease;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  opacity: 0;
+  transform: translate(-50%, -48%) scale(0.98);
+  transition:
+    opacity 150ms ease,
+    transform 150ms ease;
 
   .openapi-try-it--open & {
-    transform: translateX(0);
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  @media (max-width: 576px) {
+    width: 100vw;
+    height: 100dvh;
+    border: none;
+    border-radius: 0;
   }
 }
 
@@ -49,10 +64,28 @@
   gap: 0.625rem;
   padding: 0.875rem 1.25rem;
   border-bottom: 1px solid var(--ifm-toc-border-color);
+}
+
+.openapi-try-it__url {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 0.625rem;
+  min-width: 0;
+  padding: 0.375rem 0.625rem;
+  border: 1px solid var(--ifm-toc-border-color);
+  border-radius: var(--ifm-global-radius);
+  background-color: var(--ifm-color-emphasis-100);
 
   .badge {
     flex-shrink: 0;
     font-family: var(--ifm-font-family-monospace);
+  }
+
+  .openapi__method-endpoint-param {
+    padding: 0 0.25rem;
+    border: 1px solid currentColor;
+    border-radius: 0.25rem;
   }
 }
 
@@ -66,6 +99,29 @@
   font-weight: 500;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.openapi-try-it__header .openapi-try-it__send {
+  display: contents;
+
+  .openapi-explorer__request-btn-row {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+  }
+
+  .openapi-explorer__request-btn {
+    flex: none;
+    width: auto;
+    margin: 0;
+    padding: 0.5rem 1.25rem;
+  }
+
+  .openapi-explorer__request-shortcut {
+    display: none;
+  }
 }
 
 .openapi-try-it__close {
@@ -96,10 +152,39 @@
 }
 
 .openapi-try-it__body {
+  display: grid;
   flex: 1;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  min-height: 0;
+}
+
+.openapi-try-it__form,
+.openapi-try-it__aside {
+  min-height: 0;
   overflow-y: auto;
   padding: 1.25rem;
   overscroll-behavior: contain;
+}
+
+.openapi-try-it__aside {
+  border-left: 1px solid var(--ifm-toc-border-color);
+}
+
+@media (max-width: 996px) {
+  .openapi-try-it__body {
+    display: block;
+    overflow-y: auto;
+  }
+
+  .openapi-try-it__form,
+  .openapi-try-it__aside {
+    overflow: visible;
+  }
+
+  .openapi-try-it__aside {
+    border-top: 1px solid var(--ifm-toc-border-color);
+    border-left: none;
+  }
 }
 
 /* Right-panel entry point for the modern layout */

@@ -24,10 +24,12 @@ const FOCUSABLE =
 export interface Props {
   item: NonNullable<ApiItem>;
   infoPath: string;
+  snippets?: React.ReactNode;
 }
 
-function TryItDrawer({ item, infoPath }: Props) {
+function TryItDrawer({ item, infoPath, snippets }: Props) {
   const [open, setOpen] = useState(false);
+  const [sendSlot, setSendSlot] = useState<HTMLDivElement | null>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const returnFocus = useRef<HTMLElement | null>(null);
   const titleId = useId();
@@ -114,14 +116,17 @@ function TryItDrawer({ item, infoPath }: Props) {
         aria-labelledby={titleId}
       >
         <div className="openapi-try-it__header">
-          <span
-            className={`badge badge--${colorForMethod(item.method) ?? "secondary"}`}
-          >
-            {item.method.toUpperCase()}
-          </span>
-          <h2 id={titleId} className="openapi-try-it__title">
-            {renderPath(item.path)}
-          </h2>
+          <div className="openapi-try-it__url">
+            <span
+              className={`badge badge--${colorForMethod(item.method) ?? "secondary"}`}
+            >
+              {item.method.toUpperCase()}
+            </span>
+            <h2 id={titleId} className="openapi-try-it__title">
+              {renderPath(item.path)}
+            </h2>
+          </div>
+          <div ref={setSendSlot} className="openapi-try-it__send" />
           <button
             type="button"
             className="openapi-try-it__close"
@@ -140,9 +145,14 @@ function TryItDrawer({ item, infoPath }: Props) {
           </button>
         </div>
         <div className="openapi-try-it__body">
-          <SecuritySchemes infoPath={infoPath} />
-          <Request item={item} />
-          <Response item={item} />
+          <div className="openapi-try-it__form">
+            <SecuritySchemes infoPath={infoPath} />
+            <Request item={item} sendSlot={sendSlot} />
+          </div>
+          <div className="openapi-try-it__aside">
+            {snippets}
+            <Response item={item} />
+          </div>
         </div>
       </div>
     </div>,
