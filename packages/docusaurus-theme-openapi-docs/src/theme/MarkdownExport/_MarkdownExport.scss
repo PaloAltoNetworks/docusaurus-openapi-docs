@@ -1,0 +1,145 @@
+/* ============================================================================
+ * Copyright (c) Palo Alto Networks
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ * ========================================================================== */
+
+.openapi-page-actions {
+  position: relative;
+  z-index: 10;
+  float: right;
+  display: inline-flex;
+  align-items: stretch;
+  margin: 0 0 0.75rem 1rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 0.75rem;
+  background-color: var(--ifm-background-surface-color);
+  font-size: var(--ifm-font-size-small, 0.875rem);
+  line-height: 1.25;
+}
+
+.openapi-page-actions__primary,
+.openapi-page-actions__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.75rem;
+  color: var(--ifm-color-emphasis-800);
+  cursor: pointer;
+  transition: background-color 0.12s ease;
+
+  &:hover {
+    background-color: var(--ifm-color-emphasis-100);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--ifm-color-primary);
+    outline-offset: -2px;
+  }
+}
+
+.openapi-page-actions__primary {
+  appearance: none;
+  border: none;
+  border-radius: 0.75rem 0 0 0.75rem;
+  background: transparent;
+  font: inherit;
+}
+
+.openapi-page-actions__menu {
+  display: flex;
+
+  &[open] .openapi-page-actions__chevron {
+    transform: rotate(180deg);
+  }
+}
+
+.openapi-page-actions__toggle {
+  list-style: none;
+  border-radius: 0.75rem;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  .openapi-page-actions__primary + .openapi-page-actions__menu & {
+    border-left: 1px solid var(--ifm-color-emphasis-300);
+    border-radius: 0 0.75rem 0.75rem 0;
+    padding: 0.45rem 0.55rem;
+  }
+}
+
+.openapi-page-actions__chevron {
+  transition: transform 0.15s ease;
+}
+
+.openapi-page-actions__dropdown {
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 20rem;
+  padding: 0.4rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 0.9rem;
+  background-color: var(--ifm-background-surface-color);
+  box-shadow: var(--ifm-global-shadow-md);
+}
+
+.openapi-page-actions__item {
+  appearance: none;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 0.6rem;
+  background: transparent;
+  color: var(--ifm-font-color-base);
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background-color: var(--ifm-color-emphasis-100);
+    color: var(--ifm-font-color-base);
+    text-decoration: none;
+    outline: none;
+  }
+}
+
+.openapi-page-actions__item-icon {
+  display: inline-flex;
+  flex: 0 0 2rem;
+  align-items: center;
+  justify-content: center;
+  height: 2rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 0.5rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.openapi-page-actions__item-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.openapi-page-actions__item-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: var(--ifm-font-weight-semibold);
+}
+
+.openapi-page-actions__item-description {
+  color: var(--ifm-color-emphasis-600);
+  font-size: 0.8rem;
+}

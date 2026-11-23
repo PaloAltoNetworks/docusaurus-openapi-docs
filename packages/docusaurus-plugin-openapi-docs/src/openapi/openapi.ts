@@ -108,7 +108,7 @@ function supportsQueryMethod(openapi: string): boolean {
 
 type PartialPage<T> = Omit<T, "permalink" | "source" | "sourceDirName">;
 
-function createItems(
+export function createItems(
   openapiData: OpenApiObject,
   options: APIOptions,
   sidebarOptions: SidebarOptions

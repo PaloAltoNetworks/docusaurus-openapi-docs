@@ -179,6 +179,17 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 | `showInfoPage`       | `boolean` | `true`  | _Optional:_ If set to `false`, disables generation of the info page (overview page with API title and description).                                                      |
 | `schemasOnly`        | `boolean` | `false` | _Optional:_ If set to `true`, generates only schema pages (no API endpoint pages). Also available as `--schemas-only` CLI flag.                                          |
 | `externalJsonProps`  | `boolean` | `true`  | _Optional:_ If set to `false`, disables externalization of large JSON props. By default, large JSON is written to external files for better build performance.           |
+| `markdownExport`     | `boolean` | `false` | _Optional:_ If set to `true`, the build writes a markdown version of each generated page to `<page>.md`. See [Markdown export](#markdown-export).                        |
+
+### Markdown export
+
+Set `markdownExport: true` on a spec to give AI agents, headless browsers and other text-only clients a plain markdown version of every generated page. During `docusaurus build`, the plugin writes `<page>.md` next to each page route, for example `/docs/petstore/add-pet.md` for `/docs/petstore/add-pet`. The markdown includes everything that the page hides behind tabs or collapsed sections: all parameters with their serialization style, all request and response content types, every `oneOf`/`anyOf` option and discriminator mapping, conditional rules, multipart encoding, response links, callbacks, and all nested fields with their full dotted paths. It includes examples from the spec, but not generated code samples.
+
+Info and tag pages list their operations with links to the operation markdown pages. If `downloadUrl` is set, API and info pages also link to the OpenAPI specification. Versions configured under `versions` inherit the setting.
+
+Each page also gets a `<link rel="alternate" type="text/markdown">` tag and a "Copy page" menu with "Copy page" and "View as Markdown" actions. If `downloadUrl` is set, the menu also has a "Download API spec" action on every page. These need the `markdown_export` and `download_url` front matter that `gen-api-docs` adds when the option is enabled, so regenerate the MDX files after you enable it. The keys are added to custom `template`, `infoTemplate`, `tagTemplate` and `schemaTemplate` output too.
+
+The markdown files are written only by `docusaurus build`. They are not available with `docusaurus start`.
 
 ### sidebarOptions
 

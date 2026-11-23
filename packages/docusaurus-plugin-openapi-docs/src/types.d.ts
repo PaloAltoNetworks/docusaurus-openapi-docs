@@ -65,6 +65,12 @@ export interface APIOptions {
    * @see https://github.com/facebook/docusaurus/discussions/11664
    */
   externalJsonProps?: boolean;
+  /**
+   * When enabled, the build writes a plain markdown version of each generated
+   * page next to its HTML route (`<page>.md`), for AI agents and other clients
+   * that read text instead of rendered pages.
+   */
+  markdownExport?: boolean;
 }
 
 export interface MarkdownGenerator {

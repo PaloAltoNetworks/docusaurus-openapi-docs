@@ -54,6 +54,7 @@ export const OptionsSchema = Joi.object({
         disableCompression: Joi.boolean(),
         maskCredentials: Joi.boolean(),
         externalJsonProps: Joi.boolean().default(true),
+        markdownExport: Joi.boolean(),
         version: Joi.string().when("versions", {
           is: Joi.exist(),
           then: Joi.required(),

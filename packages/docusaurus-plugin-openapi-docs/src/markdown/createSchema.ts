@@ -93,11 +93,12 @@ function stripConflictingAdditionalProps(node: any): any {
 /**
  * Returns a merged representation of allOf array of schemas.
  */
-export function mergeAllOf(allOf: SchemaObject) {
-  const onMergeError = (msg: string) => {
+export function mergeAllOf(
+  allOf: SchemaObject,
+  onMergeError: (msg: string) => void = (msg) => {
     console.warn(msg);
-  };
-
+  }
+) {
   const mergedSchemas = merge(stripConflictingAdditionalProps(allOf), {
     onMergeError,
   }) as SchemaObject;
@@ -113,7 +114,7 @@ export function mergeAllOf(allOf: SchemaObject) {
  *
  * See https://github.com/PaloAltoNetworks/docusaurus-openapi-docs/issues/1218
  */
-function foldSiblingsIntoBranches(schema: SchemaObject): SchemaObject {
+export function foldSiblingsIntoBranches(schema: SchemaObject): SchemaObject {
   const branchKey = schema.oneOf ? "oneOf" : schema.anyOf ? "anyOf" : undefined;
   if (!branchKey) return schema;
 

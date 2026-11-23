@@ -1,0 +1,425 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`markdown export coverage renders the kitchen-sink spec: api thing-created 1`] = `
+"# Thing created
+
+Webhook: the API sends this request to you.
+
+Operation ID: \`thingCreated\`
+
+OpenAPI specification: /kitchen-sink.yaml
+
+## Request body
+
+### Content type: \`application/json\`
+
+Schema: \`object\`
+
+A thing
+
+More information: https://example.com/schemas/thing
+
+- \`id\` (string, read-only)
+- \`name\` (string, required, min length: 1, max length: 64, examples: \`Widget\`, \`Sprocket\`)
+- \`kind\` (string, required, discriminator)
+  - The value selects one of these schemas:
+    - \`gadget\`: Gadget (object)
+      - \`batteries\` (integer, >= 1)
+    - \`gizmo\`: Gizmo (object)
+      - \`gears\` (any of)
+        - One or more of these options:
+          - Option 1 (integer)
+          - Option 2 (string, pattern: \`^[0-9]+$\`)
+- \`size\` (integer | null, nullable, > 0, multiple of 5)
+- \`coordinates\` (array, min items: 2, max items: 2)
+  - \`coordinates[0]\` (number, item 1)
+    Latitude
+  - \`coordinates[1]\` (number, item 2)
+    Longitude
+- \`labels\` (object, property names: pattern: \`^[a-z-]+$\`)
+  - \`labels.<key matching ^x->\` (string, pattern property)
+- \`notThis\` (any, must not be: string)
+- \`shipping\` (object, \`postalCode\` requires \`country\`)
+  - \`shipping.country\` (string)
+  - \`shipping.postalCode\` (string)
+  - Conditional rule:
+    - If the value matches:
+      - \`shipping.country\` (constant, value: \`US\`)
+    - Then it must also match:
+      - \`shipping.postalCode\` (any, pattern: \`^[0-9]{5}$\`)
+    - Otherwise it must match:
+      - \`shipping.postalCode\` (any, pattern: \`^[A-Z0-9 ]+$\`)
+- \`status\` (string, possible values: \`active\`, \`retired\`, default: \`active\`)
+  - \`active\`: In use
+  - \`retired\`: No longer in use
+- \`owner\` (circular reference to Thing)
+- \`longNote\` (string)
+  Example:
+
+  \`\`\`
+  This example is intentionally long so that it is longer than the inline example limit of one hundred twenty characters, so it is shown as a separate code block.
+  \`\`\`
+
+- \`x-internal\` (string)
+
+## Responses
+
+### 200
+
+Webhook received
+"
+`;
+
+exports[`markdown export coverage renders the kitchen-sink spec: api update-thing 1`] = `
+"# Update a thing
+
+\`PUT /things/{thingId}\`
+
+Operation ID: \`updateThing\`
+
+Tags: \`things\`
+
+OpenAPI specification: /kitchen-sink.yaml
+
+More information: Update guide https://example.com/docs/update-thing
+
+> **Deprecated.** Use PATCH instead.
+
+Replaces a thing.
+
+## Servers
+
+- \`https://api.example.com/{region}\`: Regional server
+  - Variable \`region\` (default: \`us\`, possible values: \`us\`, \`eu\`): Deployment region
+
+## Authentication
+
+Use one of these options:
+
+- \`apiKey\` (API key in header \`X-API-Key\`)
+- \`oauth\` (OAuth 2.0: clientCredentials (token URL https://example.com/oauth/token), scopes: \`things:write\`)
+
+## Parameters
+
+### Path parameters
+
+- \`thingId\` (string<uuid>, required)
+  Thing ID
+
+### Query parameters
+
+- \`filter\` (object, style: deepObject, explode: true)
+  - \`filter.color\` (string)
+- \`tags\` (string[], style: pipeDelimited, explode: false, possible item values: \`red\`, \`green\`)
+
+### Header parameters
+
+- \`X-Trace\` (string, deprecated)
+  Example \`short\`: \`abc\`
+
+### Cookie parameters
+
+- \`session\` (string)
+
+## Request body (required)
+
+The new thing
+
+### Content type: \`application/json\`
+
+Schema: \`object\`
+
+A thing
+
+More information: https://example.com/schemas/thing
+
+- \`id\` (string, read-only)
+- \`name\` (string, required, min length: 1, max length: 64, examples: \`Widget\`, \`Sprocket\`)
+- \`kind\` (string, required, discriminator)
+  - The value selects one of these schemas:
+    - \`gadget\`: Gadget (object)
+      - \`batteries\` (integer, >= 1)
+    - \`gizmo\`: Gizmo (object)
+      - \`gears\` (any of)
+        - One or more of these options:
+          - Option 1 (integer)
+          - Option 2 (string, pattern: \`^[0-9]+$\`)
+- \`size\` (integer | null, nullable, > 0, multiple of 5)
+- \`coordinates\` (array, min items: 2, max items: 2)
+  - \`coordinates[0]\` (number, item 1)
+    Latitude
+  - \`coordinates[1]\` (number, item 2)
+    Longitude
+- \`labels\` (object, property names: pattern: \`^[a-z-]+$\`)
+  - \`labels.<key matching ^x->\` (string, pattern property)
+- \`notThis\` (any, must not be: string)
+- \`shipping\` (object, \`postalCode\` requires \`country\`)
+  - \`shipping.country\` (string)
+  - \`shipping.postalCode\` (string)
+  - Conditional rule:
+    - If the value matches:
+      - \`shipping.country\` (constant, value: \`US\`)
+    - Then it must also match:
+      - \`shipping.postalCode\` (any, pattern: \`^[0-9]{5}$\`)
+    - Otherwise it must match:
+      - \`shipping.postalCode\` (any, pattern: \`^[A-Z0-9 ]+$\`)
+- \`status\` (string, possible values: \`active\`, \`retired\`, default: \`active\`)
+  - \`active\`: In use
+  - \`retired\`: No longer in use
+- \`owner\` (circular reference to Thing)
+- \`longNote\` (string)
+  Example:
+
+  \`\`\`
+  This example is intentionally long so that it is longer than the inline example limit of one hundred twenty characters, so it is shown as a separate code block.
+  \`\`\`
+
+- \`x-internal\` (string)
+
+Example \`basic (A basic thing)\`:
+
+\`\`\`json
+{
+  \\"name\\": \\"Widget\\",
+  \\"kind\\": \\"gadget\\"
+}
+\`\`\`
+
+### Content type: \`multipart/form-data\`
+
+Schema: \`object\`
+
+- \`file\` (string, media type: \`image/png\`, encoding: \`base64\`)
+- \`meta\` (object)
+  - \`meta.label\` (string)
+
+Encoding of each part:
+
+- \`file\`: content type \`image/png, image/jpeg\`
+  Headers:
+  - \`X-Rate-Limit\` (integer)
+- \`meta\`: content type \`application/json\`
+
+## Responses
+
+### 200
+
+Updated thing
+
+Response headers:
+
+- \`ETag\` (string)
+  Version tag
+
+#### Content type: \`application/json\`
+
+Schema: \`object\`
+
+A thing
+
+More information: https://example.com/schemas/thing
+
+- \`id\` (string, read-only)
+- \`name\` (string, required, min length: 1, max length: 64, examples: \`Widget\`, \`Sprocket\`)
+- \`kind\` (string, required, discriminator)
+  - The value selects one of these schemas:
+    - \`gadget\`: Gadget (object)
+      - \`batteries\` (integer, >= 1)
+    - \`gizmo\`: Gizmo (object)
+      - \`gears\` (any of)
+        - One or more of these options:
+          - Option 1 (integer)
+          - Option 2 (string, pattern: \`^[0-9]+$\`)
+- \`size\` (integer | null, nullable, > 0, multiple of 5)
+- \`coordinates\` (array, min items: 2, max items: 2)
+  - \`coordinates[0]\` (number, item 1)
+    Latitude
+  - \`coordinates[1]\` (number, item 2)
+    Longitude
+- \`labels\` (object, property names: pattern: \`^[a-z-]+$\`)
+  - \`labels.<key matching ^x->\` (string, pattern property)
+- \`notThis\` (any, must not be: string)
+- \`shipping\` (object, \`postalCode\` requires \`country\`)
+  - \`shipping.country\` (string)
+  - \`shipping.postalCode\` (string)
+  - Conditional rule:
+    - If the value matches:
+      - \`shipping.country\` (constant, value: \`US\`)
+    - Then it must also match:
+      - \`shipping.postalCode\` (any, pattern: \`^[0-9]{5}$\`)
+    - Otherwise it must match:
+      - \`shipping.postalCode\` (any, pattern: \`^[A-Z0-9 ]+$\`)
+- \`status\` (string, possible values: \`active\`, \`retired\`, default: \`active\`)
+  - \`active\`: In use
+  - \`retired\`: No longer in use
+- \`owner\` (circular reference to Thing)
+- \`longNote\` (string)
+  Example:
+
+  \`\`\`
+  This example is intentionally long so that it is longer than the inline example limit of one hundred twenty characters, so it is shown as a separate code block.
+  \`\`\`
+
+- \`x-internal\` (string)
+
+Links:
+
+- \`GetThing\`: operation \`getThing\`. Fetch the updated thing
+  - Parameter \`thingId\`: \`$response.body#/id\`
+
+### 4XX
+
+Client error
+
+#### Content type: \`application/problem+json\`
+
+Schema: \`object\`
+
+Problem
+
+- \`type\` (string<uri>)
+- \`detail\` (string)
+
+## Callbacks
+
+### Callback \`thingChanged\`: \`POST {$request.body#/callbackUrl}\`
+
+Thing changed
+
+#### Request body
+
+##### Content type: \`application/json\`
+
+Schema: \`object\`
+
+- \`eventId\` (string)
+- \`changedFields\` (string[])
+
+#### Responses
+
+##### 204
+
+Callback received
+"
+`;
+
+exports[`markdown export coverage renders the kitchen-sink spec: info kitchen-sink 1`] = `
+"# Kitchen Sink
+
+Version: \`1.0.0\`
+
+OpenAPI specification: /kitchen-sink.yaml
+
+Uses every OpenAPI feature the markdown export must cover.
+
+## Authentication
+
+- \`apiKey\`: API key in header \`X-API-Key\`
+- \`oauth\`: OAuth 2.0: clientCredentials (token URL https://example.com/oauth/token)
+
+## Operations
+
+- [Update a thing](/docs/kitchen-sink/update-thing.md): \`PUT /things/{thingId}\`
+- [Thing created](/docs/kitchen-sink/thing-created.md): \`webhook\`
+"
+`;
+
+exports[`markdown export coverage renders the kitchen-sink spec: schema gadget 1`] = `
+"# Gadget
+
+Schema: \`object\`
+
+- \`kind\` (string)
+- \`batteries\` (integer, >= 1)
+"
+`;
+
+exports[`markdown export coverage renders the kitchen-sink spec: schema gizmo 1`] = `
+"# Gizmo
+
+Schema: \`object\`
+
+- \`kind\` (string)
+- \`gears\` (any of)
+  - One or more of these options:
+    - Option 1 (integer)
+    - Option 2 (string, pattern: \`^[0-9]+$\`)
+"
+`;
+
+exports[`markdown export coverage renders the kitchen-sink spec: schema problem 1`] = `
+"# Problem
+
+Schema: \`object\`
+
+- \`type\` (string<uri>)
+- \`detail\` (string)
+"
+`;
+
+exports[`markdown export coverage renders the kitchen-sink spec: schema thing 1`] = `
+"# Thing
+
+Schema: \`object\`
+
+A thing
+
+More information: https://example.com/schemas/thing
+
+- \`id\` (string, read-only)
+- \`name\` (string, required, min length: 1, max length: 64, examples: \`Widget\`, \`Sprocket\`)
+- \`kind\` (string, required, discriminator)
+  - The value selects one of these schemas:
+    - \`gadget\`: Gadget (object)
+      - \`batteries\` (integer, >= 1)
+    - \`gizmo\`: Gizmo (object)
+      - \`gears\` (any of)
+        - One or more of these options:
+          - Option 1 (integer)
+          - Option 2 (string, pattern: \`^[0-9]+$\`)
+- \`size\` (integer | null, nullable, > 0, multiple of 5)
+- \`coordinates\` (array, min items: 2, max items: 2)
+  - \`coordinates[0]\` (number, item 1)
+    Latitude
+  - \`coordinates[1]\` (number, item 2)
+    Longitude
+- \`labels\` (object, property names: pattern: \`^[a-z-]+$\`)
+  - \`labels.<key matching ^x->\` (string, pattern property)
+- \`notThis\` (any, must not be: string)
+- \`shipping\` (object, \`postalCode\` requires \`country\`)
+  - \`shipping.country\` (string)
+  - \`shipping.postalCode\` (string)
+  - Conditional rule:
+    - If the value matches:
+      - \`shipping.country\` (constant, value: \`US\`)
+    - Then it must also match:
+      - \`shipping.postalCode\` (any, pattern: \`^[0-9]{5}$\`)
+    - Otherwise it must match:
+      - \`shipping.postalCode\` (any, pattern: \`^[A-Z0-9 ]+$\`)
+- \`status\` (string, possible values: \`active\`, \`retired\`, default: \`active\`)
+  - \`active\`: In use
+  - \`retired\`: No longer in use
+- \`owner\` (circular reference to Thing)
+- \`longNote\` (string)
+  Example:
+
+  \`\`\`
+  This example is intentionally long so that it is longer than the inline example limit of one hundred twenty characters, so it is shown as a separate code block.
+  \`\`\`
+
+- \`x-internal\` (string)
+"
+`;
+
+exports[`markdown export coverage renders the kitchen-sink spec: tag things 1`] = `
+"# things
+
+Thing operations
+
+More information: https://example.com/things
+
+## Operations
+
+- [Update a thing](/docs/kitchen-sink/update-thing.md): \`PUT /things/{thingId}\`
+"
+`;
