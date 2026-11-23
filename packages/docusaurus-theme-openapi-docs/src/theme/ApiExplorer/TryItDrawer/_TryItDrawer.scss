@@ -182,6 +182,11 @@
   border-left: 1px solid var(--ifm-toc-border-color);
 }
 
+[data-theme="dark"] .openapi-try-it .openapi-tabs__code-container {
+  --openapi-explorer-border-color: var(--ifm-color-emphasis-300);
+  --openapi-code-tab-border-color: var(--ifm-color-emphasis-300);
+}
+
 @media (max-width: 996px) {
   .openapi-try-it__body {
     display: block;
