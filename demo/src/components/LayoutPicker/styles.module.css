@@ -52,3 +52,9 @@
   font-size: 0.875rem;
   font-weight: 500;
 }
+
+@media (max-width: 996px) {
+  .root {
+    display: none;
+  }
+}

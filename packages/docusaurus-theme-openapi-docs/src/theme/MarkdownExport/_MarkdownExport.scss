@@ -17,6 +17,13 @@
   background-color: var(--ifm-background-surface-color);
   font-size: var(--ifm-font-size-small, 0.875rem);
   line-height: 1.25;
+
+  @media (max-width: 576px) {
+    float: none;
+    display: flex;
+    width: fit-content;
+    margin: 0 0 1rem auto;
+  }
 }
 
 .openapi-page-actions__primary,

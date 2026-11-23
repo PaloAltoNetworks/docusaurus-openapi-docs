@@ -74,6 +74,24 @@
   gap: 0.375rem;
 }
 
+@media (max-width: 576px) {
+  .openapi__method-endpoint-row {
+    flex-wrap: wrap;
+
+    .openapi__method-endpoint {
+      flex: 1 1 100%;
+    }
+  }
+
+  .openapi__method-endpoint-actions {
+    flex-basis: 100%;
+
+    .openapi__method-endpoint-btn {
+      flex: 1;
+    }
+  }
+}
+
 .openapi__method-endpoint-btn {
   display: inline-flex;
   align-items: center;
