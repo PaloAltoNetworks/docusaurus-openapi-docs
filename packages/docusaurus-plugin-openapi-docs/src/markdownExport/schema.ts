@@ -12,6 +12,84 @@ import { SchemaObject } from "../openapi/types";
 
 const MAX_DEPTH = 15;
 const MAX_INLINE_EXAMPLE_LENGTH = 120;
+const MAX_FALLBACK_VALUE_LENGTH = 500;
+
+/** Keywords with a dedicated rule in this file. */
+export const FORMATTED_KEYWORDS = new Set([
+  "type",
+  "format",
+  "title",
+  "description",
+  "properties",
+  "required",
+  "items",
+  "additionalProperties",
+  "allOf",
+  "oneOf",
+  "anyOf",
+  "discriminator",
+  "enum",
+  "const",
+  "default",
+  "example",
+  "deprecated",
+  "readOnly",
+  "writeOnly",
+  "nullable",
+  "minLength",
+  "maxLength",
+  "minimum",
+  "maximum",
+  "exclusiveMinimum",
+  "exclusiveMaximum",
+  "multipleOf",
+  "minItems",
+  "maxItems",
+  "uniqueItems",
+  "minProperties",
+  "maxProperties",
+  "pattern",
+  "x-enumDescriptions",
+]);
+
+/** Keywords that only affect naming or tooling, not the shape of the data. */
+export const STRUCTURAL_KEYWORDS = new Set([
+  "$schema",
+  "$id",
+  "$anchor",
+  "$comment",
+  "$defs",
+  "definitions",
+  "xml",
+  "x-tags",
+]);
+
+function isOwnMarker(key: string): boolean {
+  return key.startsWith("x-markdown-export-");
+}
+
+/**
+ * Lists keywords that have no dedicated rule, so they are never dropped
+ * without a trace. Vendor extensions are left to their own option.
+ */
+function fallbackQualifiers(schema: SchemaObject): string[] {
+  return Object.entries(schema)
+    .filter(
+      ([key, value]) =>
+        value !== undefined &&
+        !FORMATTED_KEYWORDS.has(key) &&
+        !STRUCTURAL_KEYWORDS.has(key) &&
+        !isOwnMarker(key) &&
+        !key.startsWith("x-")
+    )
+    .map(([key, value]) => {
+      let text = formatValue(value);
+      if (text.length > MAX_FALLBACK_VALUE_LENGTH) {
+        text = `${text.slice(0, MAX_FALLBACK_VALUE_LENGTH)}... (truncated)`;
+      }
+      return `${key}: ${code(text)}`;
+    });
+}
 
 type SchemaNode = SchemaObject | string;
 
@@ -252,6 +330,7 @@ function qualifiers(schema: SchemaObject): string[] {
       result.push(`example: ${code(example)}`);
     }
   }
+  result.push(...fallbackQualifiers(schema));
   return result;
 }
 
