@@ -128,7 +128,11 @@ const ResponseSchemaComponent: React.FC<Props> = ({
                   })}
 
                 {responseExamples &&
-                  ResponseExamples({ responseExamples, mimeType })}
+                  ResponseExamples({
+                    responseExamples,
+                    mimeType,
+                    schema: firstBody,
+                  })}
 
                 {responseExample &&
                   ResponseExample({ responseExample, mimeType })}
