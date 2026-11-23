@@ -150,8 +150,8 @@ function TryItDrawer({ item, infoPath, snippets }: Props) {
             <Request item={item} sendSlot={sendSlot} />
           </div>
           <div className="openapi-try-it__aside">
-            {snippets}
             <Response item={item} />
+            {open && snippets}
           </div>
         </div>
       </div>

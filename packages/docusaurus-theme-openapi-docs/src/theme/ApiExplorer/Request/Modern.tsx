@@ -7,7 +7,6 @@
 
 // @ts-nocheck
 import React, { useEffect, useId, useRef, useState } from "react";
-// @ts-ignore react-dom is a peer dependency without bundled types
 import { createPortal } from "react-dom";
 
 import { useDoc } from "@docusaurus/plugin-content-docs/client";

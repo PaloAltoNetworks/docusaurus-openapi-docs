@@ -124,8 +124,20 @@
   }
 }
 
+@media (max-width: 576px) {
+  .openapi-try-it__header {
+    flex-wrap: wrap;
+  }
+
+  .openapi-try-it__url {
+    flex-basis: 100%;
+    order: 1;
+  }
+}
+
 .openapi-try-it__close {
   display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
   width: 2.25rem;

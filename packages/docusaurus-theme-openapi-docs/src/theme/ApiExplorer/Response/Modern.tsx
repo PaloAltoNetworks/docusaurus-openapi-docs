@@ -215,8 +215,8 @@ function Response({ item }: { item: ApiItem }) {
         values={{
           code: (
             <code>
-              <Translate id={"theme.openapi.request.sendButton"}>
-                Send API Request
+              <Translate id={"theme.openapi.request.sendButtonShort"}>
+                Send
               </Translate>
             </code>
           ),

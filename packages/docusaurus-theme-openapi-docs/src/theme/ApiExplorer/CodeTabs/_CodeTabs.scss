@@ -525,7 +525,8 @@ body[class="ReactModal__Body--open"] {
 }
 
 /* Compact language tabs for the modern layout */
-.openapi-explorer--modern {
+.openapi-explorer--modern,
+.openapi-try-it {
   --code-tab-logo-width: 16px;
   --code-tab-logo-height: 16px;
 
