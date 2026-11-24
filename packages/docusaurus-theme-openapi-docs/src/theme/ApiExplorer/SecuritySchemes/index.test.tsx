@@ -9,8 +9,11 @@ import React from "react";
 
 import SecuritySchemes from "./index";
 
-// react-dom ships no type declarations in this repo
-const { renderToStaticMarkup } = require("react-dom/server");
+const {
+  renderToStaticMarkup,
+}: {
+  renderToStaticMarkup: (children: React.ReactNode) => string;
+} = require("react-dom/server");
 
 const mockState = {
   auth: {

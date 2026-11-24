@@ -353,7 +353,6 @@ custom_edit_url: null
         schema: schemaPageGenerator,
       };
 
-      // Only link api pages to the info page when one is generated
       const hasInfoPage = loadedApi.some((item) => item.type === "info");
 
       loadedApi.map(async (item) => {

@@ -14,7 +14,6 @@ import { useTypedSelector } from "@theme/ApiItem/hooks";
 function SecuritySchemes(props: any) {
   const options = useTypedSelector((state: any) => state.auth.options);
   const selected = useTypedSelector((state: any) => state.auth.selected);
-  // Only link to the info page when one was generated (see `showInfoPage`)
   const infoAuthPath = props.infoPath
     ? `/${props.infoPath}#authentication`
     : undefined;
