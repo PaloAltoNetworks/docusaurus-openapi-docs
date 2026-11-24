@@ -363,6 +363,8 @@ custom_edit_url: null
         schema: (pageData) => schemaPageGenerator(pageData, parseMarkdown),
       };
 
+      const hasInfoPage = loadedApi.some((item) => item.type === "info");
+
       loadedApi.map(async (item) => {
         if (downloadUrl) {
           item.downloadUrl = downloadUrl;
@@ -415,7 +417,7 @@ custom_edit_url: null
               item.infoId
             );
           }
-          if (item.infoId) item.infoPath = infoBasePath;
+          if (hasInfoPage && item.infoId) item.infoPath = infoBasePath;
         }
 
         const generatePage = (template: string) =>

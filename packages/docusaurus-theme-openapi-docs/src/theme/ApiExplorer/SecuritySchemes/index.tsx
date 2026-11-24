@@ -14,7 +14,11 @@ import { useTypedSelector } from "@theme/ApiItem/hooks";
 function SecuritySchemes(props: any) {
   const options = useTypedSelector((state: any) => state.auth.options);
   const selected = useTypedSelector((state: any) => state.auth.selected);
-  const infoAuthPath = `/${props.infoPath}#authentication`;
+  const infoAuthPath = props.infoPath
+    ? `/${props.infoPath}#authentication`
+    : undefined;
+  const renderSchemeName = (label: string) =>
+    infoAuthPath ? <Link to={infoAuthPath}>{label}</Link> : label;
 
   if (selected === undefined) return null;
 
@@ -99,7 +103,7 @@ function SecuritySchemes(props: any) {
                         message: "name:",
                       })}
                     </strong>{" "}
-                    <Link to={infoAuthPath}>{name ?? key}</Link>
+                    {renderSchemeName(name ?? key)}
                   </span>
                   <span>
                     <strong>
@@ -146,7 +150,7 @@ function SecuritySchemes(props: any) {
                         message: "name:",
                       })}
                     </strong>{" "}
-                    <Link to={infoAuthPath}>{name ?? key}</Link>
+                    {renderSchemeName(name ?? key)}
                   </span>
                   <span>
                     <strong>
@@ -191,7 +195,7 @@ function SecuritySchemes(props: any) {
                       message: "name:",
                     })}
                   </strong>{" "}
-                  <Link to={infoAuthPath}>{auth.name ?? auth.key}</Link>
+                  {renderSchemeName(auth.name ?? auth.key)}
                 </span>
                 <span>
                   <strong>
@@ -234,7 +238,7 @@ function SecuritySchemes(props: any) {
                       message: "name:",
                     })}
                   </strong>{" "}
-                  <Link to={infoAuthPath}>{name ?? key}</Link>
+                  {renderSchemeName(name ?? key)}
                 </span>
                 <span>
                   <strong>
@@ -282,7 +286,7 @@ function SecuritySchemes(props: any) {
                       message: "name:",
                     })}
                   </strong>{" "}
-                  <Link to={infoAuthPath}>{name ?? key}</Link>
+                  {renderSchemeName(name ?? key)}
                 </span>
                 <span>
                   <strong>
@@ -343,7 +347,7 @@ function SecuritySchemes(props: any) {
                       message: "name:",
                     })}
                   </strong>{" "}
-                  <Link to={infoAuthPath}>{name ?? key}</Link>
+                  {renderSchemeName(name ?? key)}
                 </span>
                 <span>
                   <strong>
