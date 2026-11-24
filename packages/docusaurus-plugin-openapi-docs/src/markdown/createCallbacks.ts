@@ -9,7 +9,8 @@ import { createCallbackMethodEndpoint } from "./createCallbackMethodEndpoint";
 import { createDescription } from "./createDescription";
 import { createRequestBodyDetails } from "./createRequestBodyDetails";
 import { createStatusCodes } from "./createStatusCodes";
-import { create } from "./utils";
+import { create, MarkdownParser } from "./utils";
+import { HTTP_METHODS } from "../openapi/httpMethods";
 import { MediaTypeObject } from "../openapi/types";
 import { ApiItem } from "../types";
 
@@ -28,7 +29,10 @@ interface RequestBodyProps {
   };
 }
 
-export function createCallbacks({ callbacks }: Props) {
+export function createCallbacks(
+  { callbacks }: Props,
+  parseMarkdown?: MarkdownParser
+) {
   if (callbacks === undefined) {
     return undefined;
   }
@@ -57,16 +61,12 @@ export function createCallbacks({ callbacks }: Props) {
         className: "openapi-tabs__operation",
         children: callbacksNames.flatMap((name) => {
           const path = Object.keys(callbacks[name])[0];
-          const methods = new Map([
-            ["delete", callbacks[name][path].delete],
-            ["get", callbacks[name][path].get],
-            ["head", callbacks[name][path].head],
-            ["options", callbacks[name][path].options],
-            ["patch", callbacks[name][path].patch],
-            ["post", callbacks[name][path].post],
-            ["put", callbacks[name][path].put],
-            ["trace", callbacks[name][path].trace],
-          ]);
+          const methods = new Map(
+            HTTP_METHODS.map((method) => [
+              method,
+              callbacks[name][path][method],
+            ])
+          );
 
           return Array.from(methods).flatMap(([method, operationObject]) => {
             if (!operationObject) return [];
@@ -80,7 +80,7 @@ export function createCallbacks({ callbacks }: Props) {
                 children: [
                   createCallbackMethodEndpoint(method, path),
                   // TODO: add `deprecation notice` when markdown support is added
-                  createDescription(description),
+                  createDescription(description, parseMarkdown),
                   createRequestBodyDetails({
                     title: "Body",
                     body: requestBody,

@@ -120,6 +120,7 @@ export interface PathItemObject {
   head?: OperationObject;
   patch?: OperationObject;
   trace?: OperationObject;
+  query?: OperationObject;
   servers?: ServerObject[];
   parameters?: ParameterObject[];
 }
@@ -136,6 +137,7 @@ export interface PathItemObjectWithRef {
   head?: OperationObjectWithRef;
   patch?: OperationObjectWithRef;
   trace?: OperationObjectWithRef;
+  query?: OperationObjectWithRef;
   servers?: ServerObject[];
   parameters?: (ParameterObjectWithRef | ReferenceObject)[];
 }

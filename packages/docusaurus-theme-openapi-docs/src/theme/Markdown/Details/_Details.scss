@@ -120,3 +120,26 @@ details summary::-webkit-details-marker {
     cursor: pointer;
   }
 }
+
+/* Modern layout: normal-case section headers */
+:is(.openapi-layout--modern, .openapi-try-it) {
+  .openapi-left-panel__container > .openapi-markdown__details > summary,
+  .openapi-markdown__details.mime > summary,
+  .openapi-markdown__details.response > summary {
+    text-transform: none;
+    font-size: 0.9375rem;
+    font-weight: var(--ifm-font-weight-semibold);
+  }
+
+  .openapi-markdown__details-summary-header-params,
+  .openapi-markdown__details-summary-header-body {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+
+  .openapi-security__summary-header {
+    text-transform: none;
+    font-size: 0.875rem;
+    font-weight: var(--ifm-font-weight-semibold);
+  }
+}

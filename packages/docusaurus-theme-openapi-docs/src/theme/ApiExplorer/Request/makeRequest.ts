@@ -8,7 +8,10 @@
 import { Body } from "@theme/ApiExplorer/Body/slice";
 import * as sdk from "postman-collection";
 
+import { getDownloadFilename, isAttachment } from "./downloadFilename";
+
 // Custom error types for better error handling
+// prettier-ignore
 export type RequestErrorType =
   | "timeout"
   | "network"
@@ -28,15 +31,73 @@ export class RequestError extends Error {
   }
 }
 
+export type RequestResponse =
+  Response | { response: Response; downloadedBody: string };
+
+const MIME_EXTENSIONS: Record<
+  string,
+  { extension: string; attachmentOnly?: boolean }
+> = {
+  "application/pdf": { extension: ".pdf" },
+  "image/jpeg": { extension: ".jpg" },
+  "image/png": { extension: ".png" },
+  "image/gif": { extension: ".gif" },
+  "image/webp": { extension: ".webp" },
+  "video/mpeg": { extension: ".mpeg" },
+  "video/mp4": { extension: ".mp4" },
+  "audio/mpeg": { extension: ".mp3" },
+  "audio/ogg": { extension: ".ogg" },
+  "application/octet-stream": { extension: ".bin" },
+  "application/zip": { extension: ".zip" },
+  "text/csv": { extension: ".csv", attachmentOnly: true },
+  "text/plain": { extension: ".txt", attachmentOnly: true },
+  "application/json": { extension: ".json", attachmentOnly: true },
+  "application/xml": { extension: ".xml", attachmentOnly: true },
+  "text/xml": { extension: ".xml", attachmentOnly: true },
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+    extension: ".xlsx",
+    attachmentOnly: true,
+  },
+};
+
+function getContentType(response: Response): string {
+  return (
+    response.headers
+      .get("content-type")
+      ?.split(",", 1)[0]
+      .split(";", 1)[0]
+      .trim()
+      .toLowerCase() ?? ""
+  );
+}
+
+/** Stream bodies must reach the explorer's incremental response reader. */
+export function isStreamingResponse(response: Response): boolean {
+  return (
+    response.body !== null && getContentType(response) === "text/event-stream"
+  );
+}
+
+/** Downloaded binary bodies are never decoded into the response pane. */
+export function readResponseBody(response: RequestResponse): Promise<string> {
+  return "downloadedBody" in response
+    ? Promise.resolve(response.downloadedBody)
+    : response.text();
+}
+
 const DEFAULT_REQUEST_TIMEOUT = 30000; // 30 seconds
 
 function fetchWithtimeout(
   url: string,
   options: RequestInit,
-  timeout = DEFAULT_REQUEST_TIMEOUT
+  timeout = DEFAULT_REQUEST_TIMEOUT,
+  signal?: AbortSignal
 ): Promise<Response> {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
+  // Aborting the caller's signal also stops reading the response body.
+  if (signal?.aborted) controller.abort();
+  signal?.addEventListener("abort", () => controller.abort(), { once: true });
 
   return fetch(url, {
     ...options,
@@ -48,6 +109,10 @@ function fetchWithtimeout(
     })
     .catch((error) => {
       clearTimeout(timeoutId);
+
+      if (signal?.aborted) {
+        throw new RequestError("abort", "The request was cancelled.", error);
+      }
 
       // Check if it was an abort due to timeout
       if (error.name === "AbortError") {
@@ -116,8 +181,9 @@ async function makeRequest(
   _body: Body,
   timeout: number = DEFAULT_REQUEST_TIMEOUT,
   credentials?: RequestCredentials,
-  encoding?: Record<string, { contentType?: string }>
-) {
+  encoding?: Record<string, { contentType?: string }>,
+  signal?: AbortSignal
+): Promise<RequestResponse> {
   const headers = request.toJSON().header;
 
   let myHeaders = new Headers();
@@ -278,57 +344,44 @@ async function makeRequest(
   }
 
   try {
-    const response = await fetchWithtimeout(finalUrl, requestOptions, timeout);
-    const contentType = response.headers.get("content-type");
-    let fileExtension = "";
+    const response = await fetchWithtimeout(
+      finalUrl,
+      requestOptions,
+      timeout,
+      signal
+    );
+    const contentType = getContentType(response);
+    const disposition = response.headers.get("content-disposition");
+    const attachment = isAttachment(disposition);
+    const downloadType = MIME_EXTENSIONS[contentType];
 
-    if (contentType) {
-      if (contentType.includes("application/pdf")) {
-        fileExtension = ".pdf";
-      } else if (contentType.includes("image/jpeg")) {
-        fileExtension = ".jpg";
-      } else if (contentType.includes("image/png")) {
-        fileExtension = ".png";
-      } else if (contentType.includes("image/gif")) {
-        fileExtension = ".gif";
-      } else if (contentType.includes("image/webp")) {
-        fileExtension = ".webp";
-      } else if (contentType.includes("video/mpeg")) {
-        fileExtension = ".mpeg";
-      } else if (contentType.includes("video/mp4")) {
-        fileExtension = ".mp4";
-      } else if (contentType.includes("audio/mpeg")) {
-        fileExtension = ".mp3";
-      } else if (contentType.includes("audio/ogg")) {
-        fileExtension = ".ogg";
-      } else if (contentType.includes("application/octet-stream")) {
-        fileExtension = ".bin";
-      } else if (contentType.includes("application/zip")) {
-        fileExtension = ".zip";
-      }
+    if (
+      response.ok &&
+      !isStreamingResponse(response) &&
+      (attachment || (downloadType && !downloadType.attachmentOnly))
+    ) {
+      const extension = downloadType?.extension ?? "";
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = getDownloadFilename(
+        disposition,
+        `file${extension}`,
+        extension
+      );
 
-      if (fileExtension) {
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
+      // Appending the link is necessary to trigger downloads in Firefox.
+      link.style.display = "none";
+      document.body.appendChild(link);
+      link.click();
 
-        const link = document.createElement("a");
-        link.href = url;
-        // Now the file name includes the extension
-        link.setAttribute("download", `file${fileExtension}`);
+      setTimeout(() => {
+        link.remove();
+        window.URL.revokeObjectURL(url);
+      }, 1000);
 
-        // These two lines are necessary to make the link click in Firefox
-        link.style.display = "none";
-        document.body.appendChild(link);
-
-        link.click();
-
-        // After link is clicked, it's safe to remove it.
-        setTimeout(() => document.body.removeChild(link), 0);
-
-        return response;
-      } else {
-        return response;
-      }
+      return { response, downloadedBody: "Response body downloaded." };
     }
 
     return response;

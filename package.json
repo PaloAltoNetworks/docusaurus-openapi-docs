@@ -48,7 +48,7 @@
     "@typescript-eslint/eslint-plugin": "^8.67.0",
     "@typescript-eslint/parser": "^8.67.0",
     "babel-eslint": "^10.0.0",
-    "cypress": "^15.15.0",
+    "cypress": "^16.2.1",
     "cypress-plugin-snapshots": "^1.4.4",
     "eslint": "^8.0.0",
     "eslint-config-react-app": "^7.0.0",
@@ -65,7 +65,7 @@
     "fast-xml-parser": "^5.5.7",
     "husky": "^9.1.7",
     "jest": "^27.3.1",
-    "lerna": "^9.0.7",
+    "lerna": "^10.1.1",
     "lint-staged": "^17.0.4",
     "nodemon": "^3.1.14",
     "pixelmatch": "^8.0.0",
@@ -94,7 +94,7 @@
     "webpack-dev-server": "^5.2.1"
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=22"
   },
   "packageManager": "yarn@1.22.1"
 }

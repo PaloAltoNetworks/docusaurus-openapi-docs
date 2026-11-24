@@ -1,0 +1,289 @@
+openapi: 3.1.0
+info:
+  title: Kitchen Sink
+  version: 1.0.0
+  description: Uses every OpenAPI feature the markdown export must cover.
+servers:
+  - url: https://api.example.com/{region}
+    description: Regional server
+    variables:
+      region:
+        default: us
+        enum: [us, eu]
+        description: Deployment region
+tags:
+  - name: things
+    description: Thing operations
+    externalDocs:
+      url: https://example.com/things
+paths:
+  /things/{thingId}:
+    parameters:
+      - name: thingId
+        in: path
+        required: true
+        description: Thing ID
+        schema:
+          type: string
+          format: uuid
+    put:
+      operationId: updateThing
+      summary: Update a thing
+      description: Replaces a thing.
+      tags: [things]
+      deprecated: true
+      x-deprecated-description: Use PATCH instead.
+      externalDocs:
+        url: https://example.com/docs/update-thing
+        description: Update guide
+      security:
+        - apiKey: []
+        - oauth: [things:write]
+      parameters:
+        - name: filter
+          in: query
+          style: deepObject
+          explode: true
+          schema:
+            type: object
+            properties:
+              color:
+                type: string
+        - name: tags
+          in: query
+          style: pipeDelimited
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum: [red, green]
+        - name: X-Trace
+          in: header
+          deprecated: true
+          schema:
+            type: string
+          examples:
+            short:
+              value: abc
+        - name: session
+          in: cookie
+          schema:
+            type: string
+      requestBody:
+        required: true
+        description: The new thing
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Thing"
+            examples:
+              basic:
+                summary: A basic thing
+                value:
+                  name: Widget
+                  kind: gadget
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  contentMediaType: image/png
+                  contentEncoding: base64
+                meta:
+                  type: object
+                  properties:
+                    label:
+                      type: string
+            encoding:
+              file:
+                contentType: image/png, image/jpeg
+                headers:
+                  X-Rate-Limit:
+                    schema:
+                      type: integer
+              meta:
+                contentType: application/json
+      responses:
+        "200":
+          description: Updated thing
+          headers:
+            ETag:
+              description: Version tag
+              schema:
+                type: string
+          links:
+            GetThing:
+              operationId: getThing
+              description: Fetch the updated thing
+              parameters:
+                thingId: $response.body#/id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Thing"
+        "4XX":
+          description: Client error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+      callbacks:
+        thingChanged:
+          "{$request.body#/callbackUrl}":
+            post:
+              summary: Thing changed
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        eventId:
+                          type: string
+                        changedFields:
+                          type: array
+                          items:
+                            type: string
+              responses:
+                "204":
+                  description: Callback received
+webhooks:
+  thingCreated:
+    post:
+      operationId: thingCreated
+      summary: Thing created
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Thing"
+      responses:
+        "200":
+          description: Webhook received
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    oauth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://example.com/oauth/token
+          scopes:
+            things:write: Write things
+  schemas:
+    Thing:
+      type: object
+      title: Thing
+      description: A thing
+      externalDocs:
+        url: https://example.com/schemas/thing
+      required: [name, kind]
+      discriminator:
+        propertyName: kind
+        mapping:
+          gadget: "#/components/schemas/Gadget"
+          gizmo: "#/components/schemas/Gizmo"
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          minLength: 1
+          maxLength: 64
+          examples: [Widget, Sprocket]
+        kind:
+          type: string
+        size:
+          type: [integer, "null"]
+          exclusiveMinimum: 0
+          multipleOf: 5
+        coordinates:
+          type: array
+          prefixItems:
+            - type: number
+              description: Latitude
+            - type: number
+              description: Longitude
+          minItems: 2
+          maxItems: 2
+        labels:
+          type: object
+          patternProperties:
+            "^x-":
+              type: string
+          propertyNames:
+            pattern: "^[a-z-]+$"
+          additionalProperties: false
+        notThis:
+          not:
+            type: string
+        shipping:
+          type: object
+          properties:
+            country:
+              type: string
+            postalCode:
+              type: string
+          if:
+            properties:
+              country:
+                const: US
+          then:
+            properties:
+              postalCode:
+                pattern: "^[0-9]{5}$"
+          else:
+            properties:
+              postalCode:
+                pattern: "^[A-Z0-9 ]+$"
+          dependentRequired:
+            postalCode: [country]
+        status:
+          type: string
+          enum: [active, retired]
+          default: active
+          x-enumDescriptions:
+            active: In use
+            retired: No longer in use
+        owner:
+          $ref: "#/components/schemas/Thing"
+        longNote:
+          type: string
+          example: This example is intentionally long so that it is longer than the inline example limit of one hundred twenty characters, so it is shown as a separate code block.
+        x-internal:
+          type: string
+          x-audience: internal
+    Gadget:
+      type: object
+      title: Gadget
+      properties:
+        kind:
+          type: string
+        batteries:
+          type: integer
+          minimum: 1
+    Gizmo:
+      type: object
+      title: Gizmo
+      properties:
+        kind:
+          type: string
+        gears:
+          anyOf:
+            - type: integer
+            - type: string
+              pattern: "^[0-9]+$"
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        detail:
+          type: string

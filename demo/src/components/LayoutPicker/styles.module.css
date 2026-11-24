@@ -1,0 +1,54 @@
+.root {
+  display: flex;
+  align-items: center;
+  margin-right: 0.5rem;
+}
+
+.segmented {
+  display: inline-flex;
+  height: 32px;
+  padding: 2px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 6px;
+}
+
+.option {
+  padding: 0 10px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ifm-color-emphasis-700);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background 150ms,
+    color 150ms;
+}
+
+.option:hover {
+  color: var(--ifm-color-content);
+}
+
+.option:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 1px;
+}
+
+.optionActive {
+  background: var(--ifm-color-emphasis-200);
+  color: var(--ifm-color-content);
+}
+
+.mobileRoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem var(--ifm-menu-link-padding-horizontal, 0.75rem);
+}
+
+.mobileLabel {
+  font-size: 0.875rem;
+  font-weight: 500;
+}

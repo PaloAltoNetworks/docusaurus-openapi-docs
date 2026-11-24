@@ -65,6 +65,7 @@ jest.mock("@theme/ApiExplorer/Body", () => () => null);
 jest.mock("@theme/ApiExplorer/ContentType", () => () => null);
 jest.mock("@theme/ApiExplorer/ParamOptions", () => () => null);
 jest.mock("@theme/ApiExplorer/Server", () => () => null);
+jest.mock("@theme/ApiExplorer/useCanSendRequest", () => () => true);
 jest.mock("@theme/ApiExplorer/ApiCodeBlock", () => ({
   __esModule: true,
   default: ({ children }: any) => React.createElement("pre", {}, children),

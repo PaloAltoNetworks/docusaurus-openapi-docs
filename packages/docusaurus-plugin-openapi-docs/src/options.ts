@@ -44,6 +44,7 @@ export const OptionsSchema = Joi.object({
         schemaTemplate: Joi.string(),
         downloadUrl: Joi.string(),
         hideSendButton: Joi.boolean(),
+        apiLayout: Joi.string().valid("classic", "modern"),
         showExtensions: Joi.boolean(),
         sidebarOptions: sidebarOptions,
         markdownGenerators: markdownGenerators,
@@ -53,6 +54,7 @@ export const OptionsSchema = Joi.object({
         disableCompression: Joi.boolean(),
         maskCredentials: Joi.boolean(),
         externalJsonProps: Joi.boolean().default(true),
+        markdownExport: Joi.boolean(),
         version: Joi.string().when("versions", {
           is: Joi.exist(),
           then: Joi.required(),

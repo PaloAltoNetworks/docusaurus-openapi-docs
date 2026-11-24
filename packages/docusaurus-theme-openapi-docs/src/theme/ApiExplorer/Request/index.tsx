@@ -6,7 +6,7 @@
  * ========================================================================== */
 
 // @ts-nocheck
-import React, { useState, useId } from "react";
+import React, { useEffect, useId, useRef, useState } from "react";
 
 import { useDoc } from "@docusaurus/plugin-content-docs/client";
 import { translate } from "@docusaurus/Translate";
@@ -26,6 +26,7 @@ import {
   clearHeaders,
 } from "@theme/ApiExplorer/Response/slice";
 import Server from "@theme/ApiExplorer/Server";
+import useCanSendRequest from "@theme/ApiExplorer/useCanSendRequest";
 import { useTypedDispatch, useTypedSelector } from "@theme/ApiItem/hooks";
 import type { ParameterObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 import type { ApiItem } from "docusaurus-plugin-openapi-docs/src/types";
@@ -33,7 +34,12 @@ import type { ThemeConfig } from "docusaurus-theme-openapi-docs/src/types";
 import * as sdk from "postman-collection";
 import { FormProvider, useForm } from "react-hook-form";
 
-import makeRequest, { RequestError, RequestErrorType } from "./makeRequest";
+import makeRequest, {
+  isStreamingResponse,
+  readResponseBody,
+  RequestError,
+  RequestErrorType,
+} from "./makeRequest";
 
 function Request({ item }: { item: ApiItem }) {
   const postman = new sdk.Request(item.postman);
@@ -61,6 +67,12 @@ function Request({ item }: { item: ApiItem }) {
   const auth = useTypedSelector((state: any) => state.auth);
   const dispatch = useTypedDispatch();
 
+  const canSendRequest = useCanSendRequest(item.method);
+  const inFlightRef = useRef(false);
+  const abortRef = useRef<AbortController | undefined>(undefined);
+
+  useEffect(() => () => abortRef.current?.abort(), []);
+
   const [expandAccept, setExpandAccept] = useState(true);
   const [expandAuth, setExpandAuth] = useState(true);
   const [expandBody, setExpandBody] = useState(true);
@@ -81,6 +93,7 @@ function Request({ item }: { item: ApiItem }) {
   const { request: postmanRequest, error: bodyError } = tryBuildPostmanRequest(
     postman,
     {
+      pathTemplate: item.path,
       queryParams,
       pathParams,
       cookieParams,
@@ -129,8 +142,9 @@ function Request({ item }: { item: ApiItem }) {
     }
   };
 
-  const handleResponse = async (res) => {
-    dispatch(setResponse(await res.text()));
+  const handleResponse = async (result) => {
+    const res = "downloadedBody" in result ? result.response : result;
+    dispatch(setResponse(await readResponseBody(result)));
     dispatch(setCode(res.status));
     res.headers && dispatch(setHeaders(Object.fromEntries(res.headers)));
   };
@@ -166,7 +180,10 @@ function Request({ item }: { item: ApiItem }) {
   };
 
   const onSubmit = async (data) => {
-    if (!postmanRequest) return;
+    if (!postmanRequest || inFlightRef.current) return;
+    const controller = new AbortController();
+    abortRef.current = controller;
+    inFlightRef.current = true;
     dispatch(
       setResponse(
         translate({
@@ -183,14 +200,16 @@ function Request({ item }: { item: ApiItem }) {
         body,
         requestTimeout,
         requestCredentials,
-        encoding
+        encoding,
+        controller.signal
       );
-      if (res.headers.get("content-type")?.includes("text/event-stream")) {
+      if (!("downloadedBody" in res) && isStreamingResponse(res)) {
         await handleEventStream(res);
       } else {
         await handleResponse(res);
       }
     } catch (e) {
+      if (controller.signal.aborted) return;
       console.log(e);
 
       let errorMessage: string;
@@ -206,6 +225,9 @@ function Request({ item }: { item: ApiItem }) {
       dispatch(setResponse(errorMessage));
       dispatch(clearCode());
       dispatch(clearHeaders());
+    } finally {
+      if (abortRef.current === controller) abortRef.current = undefined;
+      inFlightRef.current = false;
     }
   };
 
@@ -412,7 +434,7 @@ function Request({ item }: { item: ApiItem }) {
               })}
             </p>
           )}
-          {showRequestButton && item.method !== "event" && (
+          {canSendRequest && (
             <button
               className="openapi-explorer__request-btn"
               type="submit"

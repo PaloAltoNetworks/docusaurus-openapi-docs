@@ -24,8 +24,11 @@ import {
 import {
   EXTERNALIZABLE_COMPONENTS,
   ExternalFile,
+  loadMarkdownParser,
   runWithExternalization,
 } from "./markdown/utils";
+import { writeMarkdownExports } from "./markdownExport";
+import { withMarkdownExportFrontMatter } from "./markdownExport/utils";
 import { processOpenapiFiles, readOpenapiFiles } from "./openapi";
 import { OptionsSchema } from "./options";
 import generateSidebarSlice from "./sidebars";
@@ -168,6 +171,7 @@ export default function pluginOpenAPIDocs(
       : path.resolve(siteDir, specPath);
 
     try {
+      const parseMarkdown = await loadMarkdownParser();
       const openapiFiles = await readOpenapiFiles(contentPath);
       const [loadedApi, tags, tagGroups] = await processOpenapiFiles(
         openapiFiles,
@@ -258,6 +262,9 @@ proxy: {{{frontMatter.proxy}}}
 {{#frontMatter.hide_send_button}}
 hide_send_button: true
 {{/frontMatter.hide_send_button}}
+{{#frontMatter.api_layout}}
+api_layout: {{{frontMatter.api_layout}}}
+{{/frontMatter.api_layout}}
 {{#frontMatter.show_extensions}}
 show_extensions: true
 {{/frontMatter.show_extensions}}
@@ -322,6 +329,9 @@ hide_table_of_contents: true
 {{/schema}}
 schema: true
 sample: {{{frontMatter.sample}}}
+{{#frontMatter.api_layout}}
+api_layout: {{{frontMatter.api_layout}}}
+{{/frontMatter.api_layout}}
 custom_edit_url: null
 ---
 
@@ -347,10 +357,10 @@ custom_edit_url: null
           }[key]
         ) => string;
       } = {
-        api: apiPageGenerator,
-        info: infoPageGenerator,
-        tag: tagPageGenerator,
-        schema: schemaPageGenerator,
+        api: (pageData) => apiPageGenerator(pageData, parseMarkdown),
+        info: (pageData) => infoPageGenerator(pageData, parseMarkdown),
+        tag: (pageData) => tagPageGenerator(pageData, parseMarkdown),
+        schema: (pageData) => schemaPageGenerator(pageData, parseMarkdown),
       };
 
       const hasInfoPage = loadedApi.some((item) => item.type === "info");
@@ -358,6 +368,14 @@ custom_edit_url: null
       loadedApi.map(async (item) => {
         if (downloadUrl) {
           item.downloadUrl = downloadUrl;
+        }
+
+        if (options.markdownExport) {
+          item.frontMatter = {
+            ...item.frontMatter,
+            markdown_export: true,
+            ...(downloadUrl && { download_url: downloadUrl }),
+          };
         }
 
         // Generate markdown, with externalization for API and schema pages
@@ -402,10 +420,14 @@ custom_edit_url: null
           if (hasInfoPage && item.infoId) item.infoPath = infoBasePath;
         }
 
-        const view = render(mdTemplate, item);
-        const utils = render(infoMdTemplate, item);
-        // eslint-disable-next-line testing-library/render-result-naming-convention
-        const tagUtils = render(tagMdTemplate, item);
+        const generatePage = (template: string) =>
+          withMarkdownExportFrontMatter(
+            render(template, item),
+            item.frontMatter
+          );
+        const view = generatePage(mdTemplate);
+        const utils = generatePage(infoMdTemplate);
+        const tagUtils = generatePage(tagMdTemplate);
 
         if (item.type === "api") {
           if (!fs.existsSync(`${outputDir}/${item.id}.api.mdx`)) {
@@ -785,6 +807,24 @@ custom_edit_url: null
 
   return {
     name: `docusaurus-plugin-openapi-docs`,
+
+    async postBuild({ outDir, baseUrl, plugins: loadedPlugins }) {
+      const docsConfig: any = getDocsPluginConfig(
+        presetsPlugins,
+        docsPlugin,
+        docsPluginId
+      );
+      await writeMarkdownExports({
+        siteDir,
+        outDir,
+        baseUrl,
+        plugins: loadedPlugins,
+        options,
+        docsInstanceId: docsConfig
+          ? (docsConfig.id ?? "default")
+          : docsPluginId,
+      });
+    },
 
     extendCli(cli): void {
       cli

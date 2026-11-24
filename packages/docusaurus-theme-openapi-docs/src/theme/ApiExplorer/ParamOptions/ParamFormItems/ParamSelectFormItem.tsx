@@ -10,6 +10,7 @@ import React, { useEffect } from "react";
 import { translate } from "@docusaurus/Translate";
 import { ErrorMessage } from "@hookform/error-message";
 import FormSelect from "@theme/ApiExplorer/FormSelect";
+import { normalizeEnumOptions } from "@theme/ApiExplorer/normalizeParamValue";
 import { getSchemaEnum } from "@theme/ApiExplorer/ParamOptions";
 import { Param, setParam } from "@theme/ApiExplorer/ParamOptions/slice";
 import { useTypedDispatch } from "@theme/ApiItem/hooks";
@@ -38,13 +39,10 @@ export default function ParamSelectFormItem({
 
   const dispatch = useTypedDispatch();
 
-  const options = getSchemaEnum(param.schema) ?? [];
+  const options = normalizeEnumOptions(getSchemaEnum(param.schema) ?? []);
 
   useEffect(() => {
-    if (
-      typeof param.value === "string" &&
-      (options as string[]).includes(param.value)
-    ) {
+    if (typeof param.value === "string" && options.includes(param.value)) {
       setValue("paramSelect", param.value);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -69,7 +67,7 @@ export default function ParamSelectFormItem({
             type={type}
             required={required}
             value={value ?? "---"}
-            options={["---", ...(options as string[])]}
+            options={["---", ...options]}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
               const val = e.target.value;
               dispatch(

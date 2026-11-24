@@ -68,3 +68,13 @@
     padding: 0;
   }
 }
+
+/* Modern layout: MIME types in their real (lowercase) form */
+:is(.openapi-layout--modern, .openapi-try-it) .openapi-tabs__mime-item {
+  border-radius: var(--ifm-global-radius);
+  font-weight: var(--ifm-font-weight-semibold);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.75rem;
+  text-transform: none;
+  transition: border-color 150ms ease;
+}

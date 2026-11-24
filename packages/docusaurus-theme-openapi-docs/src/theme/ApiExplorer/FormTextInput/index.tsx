@@ -11,6 +11,7 @@ import React, { useId } from "react";
 import { translate } from "@docusaurus/Translate";
 import { ErrorMessage } from "@hookform/error-message";
 import FormLabel from "@theme/ApiExplorer/FormLabel";
+import useApiLayout from "@theme/ApiExplorer/useApiLayout";
 import clsx from "clsx";
 import { useFormContext } from "react-hook-form";
 
@@ -38,6 +39,7 @@ function FormTextInput({
   required,
 }: Props) {
   const id = useId();
+  const modern = useApiLayout() === "modern";
 
   placeholder = placeholder?.split("\n")[0];
 
@@ -48,21 +50,25 @@ function FormTextInput({
 
   const showErrorMessage = errors?.[paramName]?.message;
 
+  const registered = paramName
+    ? register(paramName, {
+        required: isRequired
+          ? translate({
+              id: "theme.openapi.form.fieldRequired",
+              message: "This field is required",
+            })
+          : false,
+      })
+    : undefined;
+
   return (
     <>
       {label && (
         <FormLabel htmlFor={id} label={label} type={type} required={required} />
       )}
-      {paramName ? (
+      {paramName && registered ? (
         <input
-          {...register(paramName, {
-            required: isRequired
-              ? translate({
-                  id: "theme.openapi.form.fieldRequired",
-                  message: "This field is required",
-                })
-              : false,
-          })}
+          {...registered}
           id={label ? id : undefined}
           className={clsx("openapi-explorer__form-item-input", {
             error: showErrorMessage,
@@ -71,7 +77,14 @@ function FormTextInput({
           placeholder={placeholder}
           title={placeholder}
           value={value}
-          onChange={onChange}
+          onChange={
+            modern
+              ? (e) => {
+                  registered.onChange(e);
+                  onChange?.(e);
+                }
+              : onChange
+          }
           autoComplete="off"
         />
       ) : (

@@ -59,3 +59,11 @@
   align-items: center;
   overflow: hidden;
 }
+
+/* Modern layout: readable schema tabs */
+:is(.openapi-layout--modern, .openapi-try-it) .openapi-tabs__schema-item {
+  border-radius: var(--ifm-global-radius);
+  font-weight: var(--ifm-font-weight-semibold);
+  font-size: 0.75rem;
+  transition: border-color 150ms ease;
+}

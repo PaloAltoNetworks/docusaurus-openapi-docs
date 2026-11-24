@@ -178,6 +178,17 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 | `showInfoPage`       | `boolean` | `true`  | _Optional:_ If set to `false`, disables generation of the info page (overview page with API title and description).                                            |
 | `schemasOnly`        | `boolean` | `false` | _Optional:_ If set to `true`, generates only schema pages (no API endpoint pages). Also available as `--schemas-only` CLI flag.                                |
 | `externalJsonProps`  | `boolean` | `true`  | _Optional:_ If set to `false`, disables externalization of large JSON props. By default, large JSON is written to external files for better build performance. |
+| `markdownExport`     | `boolean` | `false` | _Optional:_ If set to `true`, the build writes a markdown version of each generated page to `<page>.md`. See [Markdown export](#markdown-export).              |
+
+### Markdown export
+
+Set `markdownExport: true` on a spec to give AI agents, headless browsers and other text-only clients a plain markdown version of every generated page. During `docusaurus build`, the plugin writes `<page>.md` next to each page route, for example `/docs/petstore/add-pet.md` for `/docs/petstore/add-pet`. The markdown includes everything that the page hides behind tabs or collapsed sections: all parameters with their serialization style, all request and response content types, every `oneOf`/`anyOf` option and discriminator mapping, conditional rules, multipart encoding, response links, callbacks, and all nested fields with their full dotted paths. It includes examples from the spec, but not generated code samples.
+
+Info and tag pages list their operations with links to the operation markdown pages. If `downloadUrl` is set, API and info pages also link to the OpenAPI specification. Versions configured under `versions` inherit the setting.
+
+Each page also gets a `<link rel="alternate" type="text/markdown">` tag and a "Copy page" menu with "Copy page" and "View as Markdown" actions. If `downloadUrl` is set, the menu also has a "Download API spec" action on every page. These need the `markdown_export` and `download_url` front matter that `gen-api-docs` adds when the option is enabled, so regenerate the MDX files after you enable it. The keys are added to custom `template`, `infoTemplate`, `tagTemplate` and `schemaTemplate` output too.
+
+The markdown files are written only by `docusaurus build`. They are not available with `docusaurus start`.
 
 ### sidebarOptions
 
@@ -211,12 +222,53 @@ The `docusaurus-plugin-openapi-docs` plugin can be configured with the following
 
 `markdownGenerators` can be configured with the following options:
 
-| Name                 | Type       | Default | Description                                                                                                                                    |
-| -------------------- | ---------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `createApiPageMD`    | `function` | `null`  | _Optional:_ Returns a string of the raw markdown body for API pages.<br/><br/>**Function type:** `(pageData: ApiPageMetadata) => string`       |
-| `createInfoPageMD`   | `function` | `null`  | _Optional:_ Returns a string of the raw markdown body for info pages.<br/><br/>**Function type:** `(pageData: InfoPageMetadata) => string`     |
-| `createTagPageMD`    | `function` | `null`  | _Optional:_ Returns a string of the raw markdown body for tag pages.<br/><br/>**Function type:** `(pageData: TagPageMetadata) => string`       |
-| `createSchemaPageMD` | `function` | `null`  | _Optional:_ Returns a string of the raw markdown body for schema pages.<br/><br/>**Function type:** `(pageData: SchemaPageMetadata) => string` |
+| Name                 | Type       | Default | Description                                                                                                                                                                    |
+| -------------------- | ---------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `createApiPageMD`    | `function` | `null`  | _Optional:_ Returns a string of the raw markdown body for API pages.<br/><br/>**Function type:** `(pageData: ApiPageMetadata, parseMarkdown?: MarkdownParser) => string`       |
+| `createInfoPageMD`   | `function` | `null`  | _Optional:_ Returns a string of the raw markdown body for info pages.<br/><br/>**Function type:** `(pageData: InfoPageMetadata, parseMarkdown?: MarkdownParser) => string`     |
+| `createTagPageMD`    | `function` | `null`  | _Optional:_ Returns a string of the raw markdown body for tag pages.<br/><br/>**Function type:** `(pageData: TagPageMetadata, parseMarkdown?: MarkdownParser) => string`       |
+| `createSchemaPageMD` | `function` | `null`  | _Optional:_ Returns a string of the raw markdown body for schema pages.<br/><br/>**Function type:** `(pageData: SchemaPageMetadata, parseMarkdown?: MarkdownParser) => string` |
+
+The default generators load a GFM-aware Markdown parser asynchronously, then render
+pages synchronously. Custom generators receive the page metadata and the optional parser, and return
+a string synchronously. A wrapper around a default generator should forward the
+parser as its second argument. If the runtime prevents parser loading, generation
+uses the legacy cleaner and a later run can retry the import.
+
+For custom code that imports `lib/markdown/utils`, the one-argument `clean(value)`
+form and the `codeFence` / `codeBlock` regex exports are deprecated and retain
+legacy regex behavior. They do not provide complete code-fence, footnote or table
+handling. In asynchronous setup code, create a cleaner once and call it
+synchronously when rendering descriptions:
+
+```js
+const {
+  createMarkdownCleaner,
+} = require("docusaurus-plugin-openapi-docs/lib/markdown/utils");
+module.exports = async function createConfig() {
+  const cleanDescription = await createMarkdownCleaner();
+  return {
+    // Other Docusaurus options...
+    plugins: [
+      [
+        "docusaurus-plugin-openapi-docs",
+        {
+          config: {
+            api: {
+              specPath: "openapi.yaml",
+              outputDir: "docs/api",
+              markdownGenerators: {
+                createInfoPageMD: (pageData) =>
+                  cleanDescription(pageData.description),
+              },
+            },
+          },
+        },
+      ],
+    ],
+  };
+};
+```
 
 ### sidebarGenerators
 

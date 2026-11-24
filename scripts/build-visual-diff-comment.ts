@@ -17,7 +17,8 @@
  * step matches against to decide between create vs update.
  *
  * Env:
- *   DIFFS_URL   base URL of the pr<N>-diffs Firebase channel (prod/preview/diff PNGs live under it)
+ *   DIFFS_URL   base URL of the pr<N>-diffs Firebase channel (prod/preview/diff PNGs live under it);
+ *               required only when there are mismatches
  *   PREVIEW_URL preview channel URL of the demo site
  *   RUN_URL     GitHub Actions run URL (used for the "download artifact" link)
  */
@@ -109,7 +110,9 @@ function build(
   );
   lines.push("");
   lines.push(`- **Preview:** ${previewUrl}`);
-  lines.push(`- **Diff images:** ${diffsUrl}/`);
+  if (diffsUrl) {
+    lines.push(`- **Diff images:** ${diffsUrl}/`);
+  }
   lines.push(
     `- **Full HTML report:** [download from run artifacts](${runUrl})`
   );
@@ -168,11 +171,14 @@ function main() {
     );
     process.exit(2);
   }
-  const diffsUrl = requireEnv("DIFFS_URL");
   const previewUrl = requireEnv("PREVIEW_URL");
   const runUrl = requireEnv("RUN_URL");
 
   const results: Results = JSON.parse(fs.readFileSync(inputFile, "utf8"));
+  const diffsUrl =
+    results.summary.mismatches > 0
+      ? requireEnv("DIFFS_URL")
+      : (process.env.DIFFS_URL ?? "").replace(/\/$/, "");
   const body = build(results, diffsUrl, previewUrl, runUrl);
 
   fs.mkdirSync(path.dirname(outputFile), { recursive: true });

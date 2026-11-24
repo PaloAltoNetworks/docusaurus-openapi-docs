@@ -41,12 +41,43 @@ const config = {
 
 const bodyExamplesTest =
   "<rootDir>/packages/docusaurus-theme-openapi-docs/src/theme/ApiExplorer/Body/jsonExamples.test.ts";
+const requestTest =
+  "<rootDir>/packages/docusaurus-theme-openapi-docs/src/theme/ApiExplorer/Request/makeRequest.test.ts";
+const bodyContentTypesTest =
+  "<rootDir>/packages/docusaurus-theme-openapi-docs/src/theme/ApiExplorer/Body/index.test.ts";
 const requestBodyTest =
   "<rootDir>/packages/docusaurus-theme-openapi-docs/src/theme/ApiExplorer/buildPostmanRequest.consumer.test.ts";
 const samplerModule =
   "docusaurus-plugin-openapi-docs/lib/openapi/createSchemaExample";
 const samplerSource =
   "packages/docusaurus-plugin-openapi-docs/src/openapi/createSchemaExample.ts";
+const markdownTests = [
+  "<rootDir>/packages/docusaurus-plugin-openapi-docs/src/markdown/utils.test.ts",
+];
+
+const bodyConfig = {
+  ...config,
+  globals: {
+    "ts-jest": {
+      ...config.globals["ts-jest"],
+      tsconfig: {
+        ...config.globals["ts-jest"].tsconfig,
+        allowJs: true,
+        paths: {
+          ...config.globals["ts-jest"].tsconfig.paths,
+          [samplerModule]: [samplerSource],
+        },
+      },
+    },
+  },
+  transform: {
+    "[/\\\\]ApiExplorer[/\\\\]Body[/\\\\]json2xml\\.js$": "ts-jest",
+  },
+  moduleNameMapper: {
+    ...config.moduleNameMapper,
+    [`^${samplerModule}$`]: `<rootDir>/${samplerSource}`,
+  },
+};
 
 module.exports = {
   projects: [
@@ -56,8 +87,17 @@ module.exports = {
       testPathIgnorePatterns: [
         "/node_modules/",
         bodyExamplesTest.replace(/\./g, "\\.") + "$",
+        requestTest.replace(/\./g, "\\.") + "$",
+        ...markdownTests.map((test) => test.replace(/\./g, "\\.") + "$"),
+        bodyContentTypesTest.replace(/\./g, "\\.") + "$",
         requestBodyTest.replace(/\./g, "\\.") + "$",
       ],
+    },
+    {
+      ...config,
+      displayName: "request",
+      testEnvironment: "jsdom",
+      testMatch: [requestTest],
     },
     {
       ...config,
@@ -66,30 +106,22 @@ module.exports = {
       testMatch: [requestBodyTest],
     },
     {
-      ...config,
+      ...bodyConfig,
       displayName: "body-examples",
       testEnvironment: "jsdom",
       testMatch: [bodyExamplesTest],
-      globals: {
-        "ts-jest": {
-          ...config.globals["ts-jest"],
-          tsconfig: {
-            ...config.globals["ts-jest"].tsconfig,
-            allowJs: true,
-            paths: {
-              ...config.globals["ts-jest"].tsconfig.paths,
-              [samplerModule]: [samplerSource],
-            },
-          },
-        },
-      },
-      transform: {
-        "[/\\\\]ApiExplorer[/\\\\]Body[/\\\\]json2xml\\.js$": "ts-jest",
-      },
-      moduleNameMapper: {
-        ...config.moduleNameMapper,
-        [`^${samplerModule}$`]: `<rootDir>/${samplerSource}`,
-      },
+    },
+    {
+      ...bodyConfig,
+      displayName: "body-content-types",
+      testMatch: [bodyContentTypesTest],
+    },
+    {
+      ...config,
+      displayName: "markdown",
+      testMatch: markdownTests,
+      // Resolve the package's public conditional export from its importing module.
+      resolver: "<rootDir>/jest.markdown-resolver.js",
     },
   ],
 };

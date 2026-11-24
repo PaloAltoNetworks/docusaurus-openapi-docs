@@ -142,11 +142,13 @@
  * Method badge colors — sidebar pills
  * ============================================================ */
 
-.get > .menu__link::before {
+.get > .menu__link::before,
+.query > .menu__link::before {
   background-color: rgba(163, 190, 140, 0.2);
   color: #5a7a3a;
 }
-.get > .menu__link--active::before {
+.get > .menu__link--active::before,
+.query > .menu__link--active::before {
   background-color: #a3be8c;
   color: #2e3440;
 }
@@ -188,11 +190,13 @@
 }
 
 /* Dark mode */
-[data-theme="dark"] .get > .menu__link::before {
+[data-theme="dark"] .get > .menu__link::before,
+[data-theme="dark"] .query > .menu__link::before {
   background-color: rgba(163, 190, 140, 0.15);
   color: #a3be8c;
 }
-[data-theme="dark"] .get > .menu__link--active::before {
+[data-theme="dark"] .get > .menu__link--active::before,
+[data-theme="dark"] .query > .menu__link--active::before {
   background-color: #a3be8c;
   color: #2e3440;
 }

@@ -9,6 +9,8 @@ import React, { type JSX } from "react";
 
 import { useDoc } from "@docusaurus/plugin-content-docs/client";
 import { useWindowSize } from "@docusaurus/theme-common";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import useApiLayout from "@theme/ApiExplorer/useApiLayout";
 import ContentVisibility from "@theme/ContentVisibility";
 import DocBreadcrumbs from "@theme/DocBreadcrumbs";
 import DocItemContent from "@theme/DocItem/Content";
@@ -20,6 +22,7 @@ import DocItemTOCMobile from "@theme/DocItem/TOC/Mobile";
 import DocVersionBadge from "@theme/DocVersionBadge";
 import DocVersionBanner from "@theme/DocVersionBanner";
 import clsx from "clsx";
+import type { ThemeConfig } from "docusaurus-theme-openapi-docs/src/types";
 
 import styles from "./styles.module.css";
 
@@ -29,6 +32,10 @@ import styles from "./styles.module.css";
 function useDocTOC() {
   const { frontMatter, toc } = useDoc();
   const windowSize = useWindowSize();
+  const { siteConfig } = useDocusaurusContext();
+  const themeConfig = siteConfig.themeConfig as ThemeConfig;
+  const isApiPage = Boolean(frontMatter.api || frontMatter.schema);
+  const hideDesktop = isApiPage && themeConfig.api?.hideTableOfContents;
 
   const hidden = frontMatter.hide_table_of_contents;
   const canRender = !hidden && toc.length > 0;
@@ -36,12 +43,15 @@ function useDocTOC() {
   const mobile = canRender ? <DocItemTOCMobile /> : undefined;
 
   const desktop =
-    canRender && (windowSize === "desktop" || windowSize === "ssr") ? (
+    canRender &&
+    !hideDesktop &&
+    (windowSize === "desktop" || windowSize === "ssr") ? (
       <DocItemTOCDesktop />
     ) : undefined;
 
   return {
     hidden,
+    hideDesktop,
     mobile,
     desktop,
   };
@@ -53,9 +63,19 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
   const { frontMatter } = useDoc();
   const api = frontMatter.api;
   const schema = frontMatter.schema;
+  const layout = useApiLayout();
   return (
-    <div className="row">
-      <div className={clsx("col", !docTOC.hidden && styles.docItemCol)}>
+    <div
+      className={clsx("row", {
+        "openapi-layout--modern": (api || schema) && layout === "modern",
+      })}
+    >
+      <div
+        className={clsx(
+          "col",
+          !docTOC.hidden && !docTOC.hideDesktop && styles.docItemCol
+        )}
+      >
         <ContentVisibility metadata={metadata} />
         <DocVersionBanner />
         <div className={styles.docItemContainer}>

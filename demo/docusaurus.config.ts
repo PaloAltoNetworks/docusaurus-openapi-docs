@@ -93,6 +93,7 @@ const config: Config = {
             },
           ],
         },
+        { type: "custom-LayoutPicker", position: "right" },
         { type: "custom-PalettePicker", position: "right" },
         {
           href: "https://medium.com/palo-alto-networks-developer-blog",
@@ -272,6 +273,8 @@ const config: Config = {
       content: "v5.0.0 is now available! Requires Docusaurus 3.10.0+",
     },
     api: {
+      sidebarMethodBadges: true,
+      hideTableOfContents: true,
       schemaExpansion: {
         enabled: true,
         default: 1,
@@ -290,6 +293,7 @@ const config: Config = {
           petstore_versioned: {
             maskCredentials: false,
             specPath: "examples/petstore.yaml",
+            markdownExport: true,
             outputDir: "docs/petstore_versioned", // No trailing slash
             sidebarOptions: {
               groupPathsBy: "tag",
@@ -326,9 +330,11 @@ const config: Config = {
             downloadUrl: "/petstore.yaml",
             hideSendButton: false,
             showSchemas: true,
+            markdownExport: true,
           } satisfies OpenApiPlugin.Options,
           petstore31: {
             specPath: "examples/petstore-3.1.yaml",
+            markdownExport: true,
             proxy: "https://cors.pan.dev",
             outputDir: "docs/petstore31",
             sidebarOptions: {
@@ -342,6 +348,7 @@ const config: Config = {
           } satisfies OpenApiPlugin.Options,
           cos: {
             specPath: "examples/openapi-cos.json",
+            markdownExport: true,
             outputDir: "docs/cos",
             sidebarOptions: {
               groupPathsBy: "tag",
@@ -350,15 +357,18 @@ const config: Config = {
           burgers: {
             maskCredentials: true,
             specPath: "examples/food/burgers/openapi.yaml",
+            markdownExport: true,
             outputDir: "docs/food/burgers",
           } satisfies OpenApiPlugin.Options,
           yogurt: {
             maskCredentials: false,
             specPath: "examples/food/yogurtstore/openapi.yaml",
+            markdownExport: true,
             outputDir: "docs/food/yogurtstore",
           } satisfies OpenApiPlugin.Options,
           restaurant: {
             specPath: "examples/food/restaurant/openapi.yaml",
+            markdownExport: true,
             outputDir: "docs/restaurant",
             sidebarOptions: {
               groupPathsBy: "tagGroup",
@@ -367,6 +377,7 @@ const config: Config = {
           } satisfies OpenApiPlugin.Options,
           bakery: {
             specPath: "examples/food/bakery/openapi.yaml",
+            markdownExport: true,
             outputDir: "docs/food/bakery",
             sidebarOptions: {
               groupPathsBy: "tagParent",
@@ -374,6 +385,7 @@ const config: Config = {
           } satisfies OpenApiPlugin.Options,
           httpbin: {
             specPath: "examples/httpbin.yaml",
+            markdownExport: true,
             outputDir: "docs/httpbin",
             sidebarOptions: {
               groupPathsBy: "tag",
@@ -383,6 +395,7 @@ const config: Config = {
           } satisfies OpenApiPlugin.Options,
           tests: {
             specPath: "examples/tests",
+            markdownExport: true,
             outputDir: "docs/tests",
             sidebarOptions: {
               groupPathsBy: "tag",

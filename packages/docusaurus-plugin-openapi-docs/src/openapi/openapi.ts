@@ -18,7 +18,13 @@ import { Collection } from "postman-collection";
 import * as sdk from "postman-collection";
 
 import { sampleRequestFromSchema } from "./createRequestExample";
-import { OpenApiObject, TagGroupObject, TagObject } from "./types";
+import { HTTP_METHODS, isHttpMethod } from "./httpMethods";
+import {
+  MediaTypeObject,
+  OpenApiObject,
+  TagGroupObject,
+  TagObject,
+} from "./types";
 import { isURL } from "../index";
 import {
   ApiMetadata,
@@ -31,6 +37,19 @@ import {
 } from "../types";
 import { sampleResponseFromSchema } from "./createResponseExample";
 import { loadAndResolveSpec } from "./utils/loadAndResolveSpec";
+
+function getJsonRequestBodyExample(content?: Record<string, MediaTypeObject>) {
+  const contentTypes = Object.keys(content ?? {});
+  const mediaType = (contentType: string) =>
+    contentType.split(";", 1)[0].trim().toLowerCase();
+  const selected =
+    contentTypes.find((type) => mediaType(type) === "application/json") ??
+    contentTypes.find((type) => mediaType(type).endsWith("+json")) ??
+    contentTypes.find((type) => mediaType(type).startsWith("application/json"));
+  const schema =
+    selected === undefined ? undefined : content?.[selected].schema;
+  return schema === undefined ? undefined : sampleRequestFromSchema(schema);
+}
 
 /**
  * Convenience function for converting raw JSON to a Postman Collection object.
@@ -70,22 +89,26 @@ async function createPostmanCollection(
   delete data.servers;
   for (let pathItemObject of Object.values(data.paths)) {
     delete pathItemObject.servers;
-    delete pathItemObject.get?.servers;
-    delete pathItemObject.put?.servers;
-    delete pathItemObject.post?.servers;
-    delete pathItemObject.delete?.servers;
-    delete pathItemObject.options?.servers;
-    delete pathItemObject.head?.servers;
-    delete pathItemObject.patch?.servers;
-    delete pathItemObject.trace?.servers;
+    for (const method of HTTP_METHODS) {
+      delete pathItemObject[method]?.servers;
+    }
   }
 
   return await jsonToCollection(data);
 }
 
+/**
+ * `query` is a Path Item field only from OpenAPI 3.2, which is also the first
+ * version openapi-to-postmanv2 builds a QUERY request for.
+ */
+function supportsQueryMethod(openapi: string): boolean {
+  const [major, minor] = openapi.split(".").map(Number);
+  return major > 3 || (major === 3 && minor >= 2);
+}
+
 type PartialPage<T> = Omit<T, "permalink" | "source" | "sourceDirName">;
 
-function createItems(
+export function createItems(
   openapiData: OpenApiObject,
   options: APIOptions,
   sidebarOptions: SidebarOptions
@@ -138,22 +161,17 @@ function createItems(
     items.push(infoPage);
   }
 
-  const HTTP_METHODS = new Set([
-    "get",
-    "put",
-    "post",
-    "delete",
-    "options",
-    "head",
-    "patch",
-    "trace",
-  ]);
+  const queryMethodSupported = supportsQueryMethod(openapiData.openapi);
 
   for (let [path, pathObject] of Object.entries(openapiData.paths)) {
     const { $ref, description, parameters, servers, summary, ...rest } =
       pathObject;
     for (let [method, operationObject] of Object.entries({ ...rest })) {
-      if (!HTTP_METHODS.has(method.toLowerCase())) {
+      const httpMethod = method.toLowerCase();
+      if (
+        !isHttpMethod(httpMethod) ||
+        (httpMethod === "query" && !queryMethodSupported)
+      ) {
         continue;
       }
 
@@ -196,35 +214,9 @@ function createItems(
         }
       }
 
-      let jsonRequestBodyExample;
-      const content = operationObject.requestBody?.content;
-      let body;
-      for (let key in content) {
-        if (
-          key.toLowerCase() === "application/json" ||
-          key.toLowerCase() === "application/json; charset=utf-8"
-        ) {
-          body = content[key];
-          break;
-        }
-      }
-
-      if (body?.schema) {
-        jsonRequestBodyExample = sampleRequestFromSchema(body.schema);
-      }
-
-      // Handle vendor JSON media types
-      const bodyContent = operationObject.requestBody?.content;
-
-      if (bodyContent && Object.keys(bodyContent).length > 0) {
-        const firstBodyContentKey = Object.keys(bodyContent)[0];
-        if (firstBodyContentKey.endsWith("+json")) {
-          const firstBody = bodyContent[firstBodyContentKey];
-          if (firstBody?.schema) {
-            jsonRequestBodyExample = sampleRequestFromSchema(firstBody.schema);
-          }
-        }
-      }
+      const jsonRequestBodyExample = getJsonRequestBodyExample(
+        operationObject.requestBody?.content
+      );
 
       // TODO: Don't include summary temporarilly
       const { summary, ...defaults } = operationObject;
@@ -271,6 +263,7 @@ function createItems(
           ...(options?.hideSendButton && {
             hide_send_button: options.hideSendButton,
           }),
+          ...(options?.apiLayout && { api_layout: options.apiLayout }),
           ...(options?.showExtensions && {
             show_extensions: options.showExtensions,
           }),
@@ -353,34 +346,9 @@ function createItems(
         }
       }
 
-      let jsonRequestBodyExample;
-      const content = operationObject.requestBody?.content;
-      let body;
-      for (let key in content) {
-        if (
-          key.toLowerCase() === "application/json" ||
-          key.toLowerCase() === "application/json; charset=utf-8"
-        ) {
-          body = content[key];
-          break;
-        }
-      }
-
-      if (body?.schema) {
-        jsonRequestBodyExample = sampleRequestFromSchema(body.schema);
-      }
-
-      // Handle vendor JSON media types
-      const bodyContent = operationObject.requestBody?.content;
-      if (bodyContent) {
-        const firstBodyContentKey = Object.keys(bodyContent)[0];
-        if (firstBodyContentKey.endsWith("+json")) {
-          const firstBody = bodyContent[firstBodyContentKey];
-          if (firstBody?.schema) {
-            jsonRequestBodyExample = sampleRequestFromSchema(firstBody.schema);
-          }
-        }
-      }
+      const jsonRequestBodyExample = getJsonRequestBodyExample(
+        operationObject.requestBody?.content
+      );
 
       // TODO: Don't include summary temporarilly
       const { summary, ...defaults } = operationObject;
@@ -427,6 +395,7 @@ function createItems(
           ...(options?.hideSendButton && {
             hide_send_button: options.hideSendButton,
           }),
+          ...(options?.apiLayout && { api_layout: options.apiLayout }),
           ...(options?.showExtensions && {
             show_extensions: options.showExtensions,
           }),
@@ -498,6 +467,7 @@ function createItems(
                   .replace(/\s+$/, "")
               : "",
             sample: JSON.stringify(sampleResponseFromSchema(schemaObject)),
+            ...(options?.apiLayout && { api_layout: options.apiLayout }),
           },
           schema: schemaObject,
         };

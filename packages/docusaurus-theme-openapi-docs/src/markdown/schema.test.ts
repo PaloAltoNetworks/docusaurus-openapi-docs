@@ -5,6 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  * ========================================================================== */
 
+import { getSchemaName } from "./schema";
+import { SchemaObject } from "../types";
+
 jest.mock(
   "@docusaurus/Translate",
   () => ({
@@ -12,9 +15,6 @@ jest.mock(
   }),
   { virtual: true }
 );
-
-import { getSchemaName } from "./schema";
-import { SchemaObject } from "../types";
 
 describe("getSchemaName", () => {
   it("returns the type for a primitive schema", () => {

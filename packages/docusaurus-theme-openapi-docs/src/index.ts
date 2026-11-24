@@ -7,9 +7,16 @@
 
 import path from "path";
 
-import type { Plugin } from "@docusaurus/types";
+import type { LoadContext, Plugin } from "@docusaurus/types";
 
-export default function docusaurusThemeOpenAPI(): Plugin<void> {
+import type { ThemeConfig } from "./types";
+
+export default function docusaurusThemeOpenAPI(
+  context?: LoadContext
+): Plugin<void> {
+  const themeConfig = context?.siteConfig?.themeConfig as
+    ThemeConfig | undefined;
+
   return {
     name: "docusaurus-theme-openapi",
 
@@ -19,6 +26,13 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
           path.join(__dirname, "..", "lib", "theme", "styles.scss")
         ),
       ];
+      if (themeConfig?.api?.sidebarMethodBadges) {
+        modules.push(
+          require.resolve(
+            path.join(__dirname, "..", "lib", "theme", "sidebar-badges.scss")
+          )
+        );
+      }
       return modules;
     },
 
@@ -35,40 +49,8 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
       const sassLoaderRule = rules.filter((r: any) => {
         return String(r.test) === String(/\.s[ca]ss$/);
       });
-      const { getStyleLoaders } = utils;
-      // Avoid conflicts with docusaurus-plugin-sass
-      if (sassLoaderRule.length === 0) {
-        return {
-          resolve: {
-            fallback: {
-              buffer: require.resolve("buffer/"),
-              path: require.resolve("path-browserify"),
-            },
-          },
-          plugins: [
-            new utils.currentBundler.instance.ProvidePlugin({
-              process: require.resolve("process/browser"),
-              Buffer: ["buffer", "Buffer"],
-            }),
-          ],
-          module: {
-            rules: [
-              {
-                test: /\.s[ac]ss$/,
-                include: path.resolve(__dirname, "..", "lib", "theme"),
-                use: [
-                  ...getStyleLoaders(isServer, {}),
-                  {
-                    loader: require.resolve("sass-loader"),
-                    options: {},
-                  },
-                ],
-              },
-            ],
-          },
-        };
-      }
-      return {
+      const { getStyleLoaders, currentBundler } = utils;
+      const config = {
         resolve: {
           fallback: {
             buffer: require.resolve("buffer/"),
@@ -76,11 +58,37 @@ export default function docusaurusThemeOpenAPI(): Plugin<void> {
           },
         },
         plugins: [
-          new utils.currentBundler.instance.ProvidePlugin({
+          new currentBundler.instance.ProvidePlugin({
             process: require.resolve("process/browser"),
             Buffer: ["buffer", "Buffer"],
           }),
+          new currentBundler.instance.NormalModuleReplacementPlugin(
+            /[\\/]postman-collection[\\/]lib[\\/]superstring[\\/]dynamic-variables(\.js)?$/,
+            path.join(__dirname, "shims", "postman-dynamic-variables.js")
+          ),
         ],
+      };
+      // Avoid conflicts with docusaurus-plugin-sass
+      if (sassLoaderRule.length > 0) {
+        return config;
+      }
+      return {
+        ...config,
+        module: {
+          rules: [
+            {
+              test: /\.s[ac]ss$/,
+              include: path.resolve(__dirname, "..", "lib", "theme"),
+              use: [
+                ...getStyleLoaders(isServer, {}),
+                {
+                  loader: require.resolve("sass-loader"),
+                  options: {},
+                },
+              ],
+            },
+          ],
+        },
       };
     },
   };

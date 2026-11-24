@@ -8,6 +8,7 @@
 import type { SidebarItemDoc } from "@docusaurus/plugin-content-docs/lib/sidebars/types";
 import Request from "postman-collection";
 
+import type { MarkdownParser } from "./markdown/utils";
 import {
   InfoObject,
   OperationObject,
@@ -40,6 +41,8 @@ export interface APIOptions {
   schemaTemplate?: string;
   downloadUrl?: string;
   hideSendButton?: boolean;
+  /** Per-spec API page layout; overrides themeConfig.api.layout. */
+  apiLayout?: "classic" | "modern";
   showExtensions?: boolean;
   sidebarOptions?: SidebarOptions;
   version?: string;
@@ -62,13 +65,31 @@ export interface APIOptions {
    * @see https://github.com/facebook/docusaurus/discussions/11664
    */
   externalJsonProps?: boolean;
+  /**
+   * When enabled, the build writes a plain markdown version of each generated
+   * page next to its HTML route (`<page>.md`), for AI agents and other clients
+   * that read text instead of rendered pages.
+   */
+  markdownExport?: boolean;
 }
 
 export interface MarkdownGenerator {
-  createApiPageMD?: (pageData: ApiPageMetadata) => string;
-  createInfoPageMD?: (pageData: InfoPageMetadata) => string;
-  createTagPageMD?: (pageData: TagPageMetadata) => string;
-  createSchemaPageMD?: (pageData: SchemaPageMetadata) => string;
+  createApiPageMD?: (
+    pageData: ApiPageMetadata,
+    parseMarkdown?: MarkdownParser
+  ) => string;
+  createInfoPageMD?: (
+    pageData: InfoPageMetadata,
+    parseMarkdown?: MarkdownParser
+  ) => string;
+  createTagPageMD?: (
+    pageData: TagPageMetadata,
+    parseMarkdown?: MarkdownParser
+  ) => string;
+  createSchemaPageMD?: (
+    pageData: SchemaPageMetadata,
+    parseMarkdown?: MarkdownParser
+  ) => string;
 }
 
 export type ApiDocItemGenerator = (
@@ -103,10 +124,7 @@ export interface LoadedContent {
 }
 
 export type ApiMetadata =
-  | ApiPageMetadata
-  | InfoPageMetadata
-  | TagPageMetadata
-  | SchemaPageMetadata;
+  ApiPageMetadata | InfoPageMetadata | TagPageMetadata | SchemaPageMetadata;
 
 export interface ApiMetadataBase {
   sidebar?: string;

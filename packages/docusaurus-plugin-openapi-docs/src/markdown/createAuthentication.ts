@@ -6,10 +6,13 @@
  * ========================================================================== */
 
 import { createDescription } from "./createDescription";
-import { create, guard } from "./utils";
+import { create, guard, MarkdownParser } from "./utils";
 import { OAuthFlowObject, SecuritySchemeObject } from "../openapi/types";
 
-export function createAuthentication(securitySchemes: SecuritySchemeObject) {
+export function createAuthentication(
+  securitySchemes: SecuritySchemeObject,
+  parseMarkdown?: MarkdownParser
+) {
   if (!securitySchemes || !Object.keys(securitySchemes).length) return "";
 
   const createAuthenticationTable = (securityScheme: any) => {
@@ -197,7 +200,7 @@ export function createAuthentication(securitySchemes: SecuritySchemeObject) {
               ),
               value: `${schemeKey}`,
               children: [
-                createDescription(schemeObj.description),
+                createDescription(schemeObj.description, parseMarkdown),
                 createAuthenticationTable(schemeObj),
               ],
             })

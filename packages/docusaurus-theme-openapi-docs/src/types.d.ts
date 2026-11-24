@@ -61,10 +61,34 @@ export interface ThemeConfig {
      * side, preserving existing behavior).
      */
     hideGeneratedSnippets?: boolean;
+    /**
+     * When `true`, adds HTTP method badges (GET, POST, ...) to API items in
+     * the sidebar. Badge styles have zero specificity, so site CSS can
+     * override them. Defaults to `false`.
+     */
+    sidebarMethodBadges?: boolean;
+    /**
+     * When `true`, hides the desktop table of contents on API and schema
+     * pages so the request and response panels get more width. Defaults to
+     * `false`.
+     */
+    hideTableOfContents?: boolean;
+    /**
+     * API page layout.
+     * - `"classic"` (default): the request form and response always show in
+     *   the right panel.
+     * - `"modern"`: the right panel shows code samples and response examples;
+     *   the request form opens in a "Try it" side panel.
+     */
+    layout?: "classic" | "modern";
   };
 }
 
 export interface DocFrontMatter extends DocusaurusDocFrontMatter {
   /** Provides OpenAPI Docs with a reference path to their respective Info Doc */
   info_path?: string;
+  /** Set by the plugin when a markdown version of the page is built (`<page>.md`) */
+  markdown_export?: boolean;
+  /** OpenAPI spec URL shown in the page actions menu when markdown_export is set */
+  download_url?: string;
 }
