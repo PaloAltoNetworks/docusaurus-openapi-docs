@@ -4098,21 +4098,21 @@
     json-schema-traverse "^1.0.0"
     require-from-string "^2.0.2"
 
-"@redocly/config@^0.69.0":
-  version "0.69.1"
-  resolved "https://registry.yarnpkg.com/@redocly/config/-/config-0.69.1.tgz#412dceb49dea7fb84ed00ec7121a0411326ac392"
-  integrity sha512-8nnLeyBZquLNRMrIa9xJL+khPViSW0nfvXjHEJEVdzp9d1gp5r6ULbNT401uO5EaRt5VzY+5J9qtdCLnyNEn+g==
+"@redocly/config@^0.74.0":
+  version "0.74.0"
+  resolved "https://registry.yarnpkg.com/@redocly/config/-/config-0.74.0.tgz#9d1c48ca71e4ad9f3845dde640c3846cea14d632"
+  integrity sha512-r5HYSG/3aCOoihxZiqFXfHAQmrwdenxHUPhwZuIDZBMHyd8zZkyc1hiBuHh8r0V7ido9Y4dAShfv6neK42pCjw==
 
 "@redocly/openapi-core@^2.25.2":
-  version "2.72.1"
-  resolved "https://registry.yarnpkg.com/@redocly/openapi-core/-/openapi-core-2.72.1.tgz#2a8ae2189932da500fcb1900e24928ef052cf5dd"
-  integrity sha512-VcYW+Yq8Lu2rk16RrHlUAzRqu4tM5jRb0cVvNzPKb/Q0udTCprwoJEGEvdtVgvXhLokYRJcobXcDrSzpQeUccw==
+  version "2.79.0"
+  resolved "https://registry.yarnpkg.com/@redocly/openapi-core/-/openapi-core-2.79.0.tgz#2d985b5cf43ae5446f5c82fc18dde9ebb3a634dd"
+  integrity sha512-Y7SVu2Pke7IolUh8QOacMjj+2tYnMIWt4z27vj1Rzf8t4hjOhnxlL4/Djdxz5g9KoBDwNEbCkQPr0E5QBBF0oA==
   dependencies:
     "@redocly/ajv" "^8.18.3"
-    "@redocly/config" "^0.69.0"
+    "@redocly/config" "^0.74.0"
     ajv "npm:@redocly/ajv@^8.18.3"
     ajv-formats "^3.0.1"
-    colorette "^1.2.0"
+    colorette "^2.0.20"
     fastest-levenshtein "^1.0.16"
     graphql "^16.14.1"
     js-yaml "^5.2.2"
@@ -6986,11 +6986,6 @@ colord@^2.9.3:
   version "2.10.0"
   resolved "https://registry.yarnpkg.com/colord/-/colord-2.10.0.tgz#56c9050e6b06b4b6c62ddec366a48d65ef57e860"
   integrity sha512-AidJptpBJmjTclAp9BkLwJi0T93fo5epJnbaZslpg6QVzpHjAiveF55mE9AcUJiGMqRHgMDY8soMsQtuNYMHfw==
-
-colorette@^1.2.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/colorette/-/colorette-1.4.0.tgz#5190fbb87276259a86ad700bff2c6d6faa3fca40"
-  integrity sha512-Y2oEozpomLn7Q3HFP7dpww7AtMJplbM9lGZP6RDfHqmbeRjiwRg4n6VM6j4KLmRke85uWEI7JqF17f3pqdRA0g==
 
 colorette@^2.0.10, colorette@^2.0.20:
   version "2.0.20"
