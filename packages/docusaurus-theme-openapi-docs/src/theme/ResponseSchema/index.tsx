@@ -24,6 +24,11 @@ import SkeletonLoader from "@theme/SkeletonLoader";
 import TabItem from "@theme/TabItem";
 import type { MediaTypeObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 
+import {
+  showExampleFromSchema,
+  useGenerateExamples,
+} from "../utils/generateExamples";
+
 interface Props {
   style?: React.CSSProperties;
   title: string;
@@ -41,6 +46,8 @@ const ResponseSchemaComponent: React.FC<Props> = ({
   body,
   style,
 }): any => {
+  const generateExamples = useGenerateExamples();
+
   if (
     body === undefined ||
     body.content === undefined ||
@@ -60,6 +67,11 @@ const ResponseSchemaComponent: React.FC<Props> = ({
           const responseExamples = mediaTypeObject?.examples;
           const responseExample = mediaTypeObject?.example;
           const firstBody = mediaTypeObject?.schema;
+          const showSchemaSample = showExampleFromSchema(
+            generateExamples,
+            firstBody,
+            Boolean(responseExample || responseExamples)
+          );
 
           if (
             !firstBody ||
@@ -122,6 +134,7 @@ const ResponseSchemaComponent: React.FC<Props> = ({
                   </Details>
                 </TabItem>
                 {firstBody &&
+                  showSchemaSample &&
                   ExampleFromSchema({
                     schema: firstBody,
                     mimeType: mimeType,

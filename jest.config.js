@@ -28,6 +28,8 @@ const config = {
     "<rootDir>/packages/docusaurus-theme-openapi-docs/src",
   ],
   moduleNameMapper: {
+    // Docusaurus classic theme components, listed before the package mapping.
+    "^@theme/Details$": "<rootDir>/__mocks__/@theme/Details.js",
     "^@theme/(.*)$":
       "<rootDir>/packages/docusaurus-theme-openapi-docs/src/theme/$1",
     "^chalk$": "<rootDir>/__mocks__/chalk.js",
@@ -51,6 +53,8 @@ const samplerModule =
   "docusaurus-plugin-openapi-docs/lib/openapi/createSchemaExample";
 const samplerSource =
   "packages/docusaurus-plugin-openapi-docs/src/openapi/createSchemaExample.ts";
+const generateExamplesTest =
+  "<rootDir>/packages/docusaurus-theme-openapi-docs/src/theme/utils/generateExamples.test.ts";
 const markdownTests = [
   "<rootDir>/packages/docusaurus-plugin-openapi-docs/src/markdown/utils.test.ts",
 ];
@@ -91,7 +95,17 @@ module.exports = {
         ...markdownTests.map((test) => test.replace(/\./g, "\\.") + "$"),
         bodyContentTypesTest.replace(/\./g, "\\.") + "$",
         requestBodyTest.replace(/\./g, "\\.") + "$",
+        generateExamplesTest.replace(/\./g, "\\.") + "$",
       ],
+    },
+    {
+      ...config,
+      // RequestSchema type-checks under the package's strict tsconfig only.
+      globals: {
+        "ts-jest": { ...config.globals["ts-jest"], isolatedModules: true },
+      },
+      displayName: "generate-examples",
+      testMatch: [generateExamplesTest],
     },
     {
       ...config,

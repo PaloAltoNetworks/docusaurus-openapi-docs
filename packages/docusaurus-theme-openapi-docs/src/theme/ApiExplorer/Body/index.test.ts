@@ -42,6 +42,9 @@ jest.mock(
   () => ({ translate: ({ message }: { message: string }) => message }),
   { virtual: true }
 );
+jest.mock("@docusaurus/theme-common", () => ({ useThemeConfig: () => ({}) }), {
+  virtual: true,
+});
 jest.mock("@theme/ApiExplorer/LiveEditor", () => ({
   __esModule: true,
   default: (props: any) => mockEditor(props),
