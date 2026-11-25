@@ -24,7 +24,7 @@ import FormBodyItem from "./FormBodyItem";
 import { resolveSchemaWithSelections } from "./resolveSchemaWithSelections";
 import { clearRawBody, setFileRawBody, setStringRawBody } from "./slice";
 import {
-  showGeneratedExample,
+  showExampleFromSchema,
   useGenerateExamples,
 } from "../../utils/generateExamples";
 import { getMediaType } from "../utils/mediaType";
@@ -117,13 +117,7 @@ function Body({
 
   // Compute the default body based on content type and schema
   // This needs to be computed before early returns so the useEffect can use it
-  const {
-    defaultBody,
-    exampleBody,
-    examplesBodies,
-    language,
-    hasSchemaExample,
-  } = useMemo(() => {
+  const { defaultBody, exampleBody, examplesBodies, language } = useMemo(() => {
     let lang = "plaintext";
     let defBody = "";
     let exBody;
@@ -136,7 +130,6 @@ function Body({
         exampleBody: exBody,
         examplesBodies: exBodies,
         language: lang,
-        hasSchemaExample: false,
       };
     }
     if (
@@ -149,7 +142,6 @@ function Body({
         exampleBody: exBody,
         examplesBodies: exBodies,
         language: lang,
-        hasSchemaExample: false,
       };
     }
 
@@ -279,7 +271,6 @@ function Body({
       exampleBody: exBody,
       examplesBodies: exBodies,
       language: lang,
-      hasSchemaExample,
     };
   }, [
     schema,
@@ -299,10 +290,11 @@ function Body({
 
   const hasPublishedExample =
     exampleBody !== undefined || examplesBodies.length > 0;
-  // A schema-level example makes the schema tab a published example too.
-  const showSchemaTab =
-    hasSchemaExample ||
-    showGeneratedExample(generateExamples, hasPublishedExample);
+  const showSchemaTab = showExampleFromSchema(
+    generateExamples,
+    schema,
+    hasPublishedExample
+  );
 
   // Update body in Redux when content type or schema selection changes.
   // Without the schema tab, the selected example's editor sets the body.

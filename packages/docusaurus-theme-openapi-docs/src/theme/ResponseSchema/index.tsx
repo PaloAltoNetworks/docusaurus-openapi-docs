@@ -25,7 +25,7 @@ import TabItem from "@theme/TabItem";
 import type { MediaTypeObject } from "docusaurus-plugin-openapi-docs/src/openapi/types";
 
 import {
-  showGeneratedExample,
+  showExampleFromSchema,
   useGenerateExamples,
 } from "../utils/generateExamples";
 
@@ -67,8 +67,9 @@ const ResponseSchemaComponent: React.FC<Props> = ({
           const responseExamples = mediaTypeObject?.examples;
           const responseExample = mediaTypeObject?.example;
           const firstBody = mediaTypeObject?.schema;
-          const showExampleFromSchema = showGeneratedExample(
+          const showSchemaSample = showExampleFromSchema(
             generateExamples,
+            firstBody,
             Boolean(responseExample || responseExamples)
           );
 
@@ -133,7 +134,7 @@ const ResponseSchemaComponent: React.FC<Props> = ({
                   </Details>
                 </TabItem>
                 {firstBody &&
-                  showExampleFromSchema &&
+                  showSchemaSample &&
                   ExampleFromSchema({
                     schema: firstBody,
                     mimeType: mimeType,
